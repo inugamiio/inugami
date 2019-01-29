@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ======================================================================= 
+    = MAVEN
+    ======================================================================== -->
+    <prerequisites>
+        <maven>3.2.3</maven>
+    </prerequisites>
+
+    <!-- ======================================================================= 
+    = PARENT
+    ======================================================================== -->
+    <parent>
+        <groupId>org.inugami.monitoring</groupId>
+        <artifactId>inugami_monitoring</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+
+    <!-- ======================================================================= 
+    = PROJECT
+    ======================================================================== -->
+    <groupId>org.inugami.monitoring.sensors</groupId>
+    <artifactId>inugami_monitoring_sensors</artifactId>
+    <packaging>pom</packaging>
+
+    
+    <!-- ======================================================================= 
+    = DEPENDENCIES
+    ======================================================================== -->
+    <modules>
+        <module>inugami_monitoring_sensors_default</module>
+    </modules>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.inugami.monitoring</groupId>
+            <artifactId>inugami_monitoring_api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.inugami</groupId>
+            <artifactId>inugami_commons</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+
+    </dependencies>
+
+</project>

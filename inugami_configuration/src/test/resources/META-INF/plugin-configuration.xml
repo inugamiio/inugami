@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <!--========================================================================
+    =   GAV
+    =========================================================================-->
+    <gav>
+        <groupId>org.inugami</groupId>
+        <artifactId>inugami_configuration</artifactId>
+        <version>x.y.z</version>
+    </gav>
+    
+
+    <!--========================================================================
+    =   LISTENERS
+    =========================================================================-->
+    <listeners>
+        <listener name="testListener" className="org.inugami.configuration.listener.Listener">
+            <config key="data" value="FoobarData" />
+            <config key="title" value="Hello the world" />
+        </listener>
+    </listeners>
+
+</plugin>

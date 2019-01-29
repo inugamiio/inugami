@@ -1,0 +1,14 @@
+{
+    "properties":{
+        "date":                 {"type":"date","format":"basic_date_time"},
+        "uid":                  {"type":"text"},
+        "instance":             {"type":"keyword"},
+        "asset":                {"type":"keyword"},
+        "hostname":             {"type":"keyword"},
+        "nbSockets":            {"type":"integer"},
+        "cpuUsage":             {"type":"double"},
+        "memoryUsage":          {"type":"long"},
+        "nbThreads":            {"type":"integer"},
+        "nbUsers":              {"type":"integer"}
+    }
+}

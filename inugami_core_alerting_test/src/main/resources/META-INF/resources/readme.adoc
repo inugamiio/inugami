@@ -1,0 +1,211 @@
+= INUGAMI ALERTING TEST
+:encoding: UTF-8
+:toc: macro
+:toclevels: 4
+
+toc::[4]
+
+
+
+== Informations Globales :
+Le module *inugami_core_alerting_test* a pour but de faciliter les  tests unitaires sur les API d'alerting. 
+Les alertes dans inugami sont gérer via des scripts JavaScript exécutés par le moteur js intégré dans Java8 
+(Nashorn). 
+
+Les scripts d'alerting peuvent donc utiliser les spécificités du language JavaScript (approche par prototype, namespaces,
+etc...). Cependant certaines API exposées dans l'alerting sont des fonctions interne d'Inugami, par exemple les appels
+à un provider de données. Les API proposés ici permettent de simuler les différentes fonctionnalités interne. 
+
+Pour rappel, les scripts d'alerting sont exécutés lors de la récupération des données (après que le provider ait renvoyé
+la donnée). 
+
+
+== Création d'un test :
+Les tests sont réalisés via le framework QUnit. Ce framework s'apparente à JUnit mais pour le language JavaScript.
+Le framework QUnit est conçu pour s'exécuté sur un navigateur. Cette approche permet de profiter de l'environement de débug de ces derniers pour la réalisation de nos scripts d'alertes.
+(https://qunitjs.com/[QUnit]) 
+
+[quote]
+""
+    Il est à noté qu'il existe une API en java afin de manipuler le moteur 
+    d'alerting d'Inugami. Cette approche est un peu plus complexe mais 
+    permet une validation plus fine et est intégré dans le build-process Maven.
+""
+
+
+Pour définit un nouveau test il est nécessaire de créer un bloc d'instruction *QUnit.test* comme suivant :
+[source,js]
+----
+QUnit.test("[artifactId du projet] titre du cas de test", function( assert ) {
+
+    assert.ok(true , "message en cas de succès" );
+
+});
+----
+
+
+
+
+
+== API :
+
+=== Utilitaire pour les tests unitaires :
+
+==== String.format : 
+Afin de faciliter l'écriture de message, une méthode format est rajouté au prototype String. Cela nous permet de
+formater du text de la sorte :
+[source,js]
+----
+"My label: {0}, {1}!".format("Hello the world", "Joe");
+
+// -> "My label: Hello the world, Joe!"
+----
+
+
+=== http :
+L'API d'alerting propose la possibilité de réaliser des appels HTTP. 
+
+==== l'API
+[source,js]
+----
+var resultGet  = http.get("http://mon-server.org/rest/api");
+var resultPost = http.post("http://mon-server.org/rest/api", {"data":"json data"});
+----
+
+Une fois l'appel réaliser (ou si la durée excède la limite authorisé), l'API va nous renvoyer un résultat. 
+Ce résultat est de la forme :
+[source,js]
+----
+{
+    "status"     : number,
+    "message"    : string,
+    "data"       : jsonData,
+    "responseAt" : number,
+    "delais"	 : number
+}
+----
+
+l'API http prend également en charge les headers, pour cela  il suffit de lui passer une structure en paramètre :
+[source,js]
+----
+var resultGet  = http.get("http://mon-server.org/rest/api" , {"Authorization":"Token iBJMSK-JYWlekYqcaU1bcLO9NEFU"});
+var resultPost = http.post("http://mon-server.org/rest/api", {"data":"json data"},{"Authorization":"Token iBJMSK-JYWlekYqcaU1bcLO9NEFU"});
+----
+
+Les headers peuvent contenir différentes informations, comme un token d'identification,
+préférences utilisateurs, cookies, etc...
+
+
+==== Mock
+Afin de tester unitairement notre API il est indispensable de simuler l'appel.
+Pour cela, l'objet httpMock va nous permettre d'initialiser les bouchons HTTP.
+
+exemple :
+[source,js]
+----
+httpMock.addGet(httpMock.buildData("Hello the world"), "http://mon-server.org/rest/api" );
+
+httpMock.addPost(httpMock.buildData({"obj":"my-object", "time":1}), "http://mon-server.org/rest/api",  null,{"time":1});
+----
+
+Le mock est constitué de deux partie :
+* Les méthodes d'ajout de données, permettant de décrire les différents cas fonctionnels.
+* L'api interne qui est manipuler par le mock de l'api http simulant le comportement interne d'Inugami.
+
+
+Le mock a plusieurs méthodes pour ajouter les données :
+* addGet    (data, url, header, json)
+* addPost   (data, url, header, json)
+* addPut    (data, url, header, json)
+* addDelete (data, url, header, json)
+* add       (verbe, data, url, header, json)
+
+[quote]
+""
+    Les méthodes spécifique à un verbe sont des raccourcis pour invoquer la méthode add.
+""
+
+Les données à fournir doit correspondre au données qui seront renvoyées par le mock. Ce formalisme doit être identique à la
+réponse qu'effectue la vrai API http dans Inugami.
+
+L'objet *httpMock* contient la méthode *buildData*  pour aider à sa construction.
+[source,js]
+----
+httpMock.httpMock.buildData(jsonData, httpCode,message, responseAt , delais)
+----
+[cols="1,1,1" options="header"]
+|=======================================================================================================================
+| jsonData         | value par défaut | Description
+| httpCode         | 200              | code HTTP (https://fr.wikipedia.org/wiki/Liste_des_codes_HTTP)
+| message          | null             | potentiel message émit par le serveur (en cas d'erreur généralement)
+| responseAt       | Date.now()       | date de reception 
+| delais           | null             | temps de traitement du serveur appelé
+|=======================================================================================================================
+
+
+Exemple d'utilisation : 
+[source,js]
+----
+// Pour définir uniquement la donnée de retour:
+httpMock.buildData({"obj":"my-object", "time":1})
+
+// définition d'une réponse en erreur :
+httpMock.buildData("ERR-500",500,"internal error")
+----
+
+
+
+== org.inugami.builders :
+Les API dans l'objet *org.inugami.builders* permettent la construction de structure complexe (alert, événement, etc...)
+
+
+=== org.inugami.builders.alert :
+Le builder alert permet de construire des alertes. 
+[source,js]
+----
+org.inugami.builders.alert(level, message, data);
+----
+
+La structure résultante est du type :
+[source,js]
+----
+{
+    "alerteName"  : string,
+    "level"       : string,
+    "levelType"   : string,
+    "levelNumber" : number,
+    "message"     : string,
+    "subLabel"    : string,
+    "created"     : number,
+    "duration"    : number,
+    "data"        : Object,
+    "channel"     : string
+}
+----
+
+Afin de faciliter la création des différents niveaux d'alerte disponible, des 
+fonctions spécifique sont implémentées :
+
+* org.inugami.builders.alertTrace(message, data)
+* org.inugami.builders.alertDebug(message, data)
+* org.inugami.builders.alertInfo(message, data)
+* org.inugami.builders.alertWarn(message, data)
+* org.inugami.builders.alertError(message, data)
+* org.inugami.builders.alertFatal(message, data)
+
+
+Les alertes ont un type (levelType) et un poid (levelNumber) définit via une énumération:
+[cols="1,1" options="header"]
+|===============================================================================
+| levelType   | levelNumber 
+| FATAL       | 1000000         
+| ERROR       |  100000         
+| WARN        |   10000         
+| INFO        |    1000         
+| DEBUG       |     100         
+| TRACE       |      10         
+| OFF         |       0         
+| UNDEFINE    |       1
+|===============================================================================
+
+Par défaut les alertes sont de type *UNDEFINE* avec un poid de *1*.

@@ -1,0 +1,85 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "@angular/common@4.0.1",
+        "scope": "@angular",
+        "escapedName": "@angular%2fcommon",
+        "name": "@angular/common",
+        "rawSpec": "4.0.1",
+        "spec": "4.0.1",
+        "type": "version"
+      }
+    ]
+  ],
+  "_from": "@angular/common@4.0.1",
+  "_id": "@angular/common@4.0.1",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/@angular/common",
+  "_nodeVersion": "6.9.5",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/common-4.0.1.tgz_1490830634745_0.4446282829158008"
+  },
+  "_npmUser": {
+    "name": "angular",
+    "email": "angular-core+npm@google.com"
+  },
+  "_npmVersion": "3.10.10",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "@angular/common@4.0.1",
+    "scope": "@angular",
+    "escapedName": "@angular%2fcommon",
+    "name": "@angular/common",
+    "rawSpec": "4.0.1",
+    "spec": "4.0.1",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@angular/common/-/common-4.0.1.tgz",
+  "_shasum": "df488eada842b2d841ded750712292b18387b5b0",
+  "_shrinkwrap": null,
+  "_spec": "@angular/common@4.0.1",
+  "author": {
+    "name": "angular"
+  },
+  "bugs": {
+    "url": "https://github.com/angular/angular/issues"
+  },
+  "dependencies": {},
+  "description": "Angular - commonly needed directives and services",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "df488eada842b2d841ded750712292b18387b5b0",
+    "tarball": "https://registry.npmjs.org/@angular/common/-/common-4.0.1.tgz"
+  },
+  "es2015": "./@angular/common.js",
+  "homepage": "https://github.com/angular/angular#readme",
+  "license": "MIT",
+  "main": "./bundles/common.umd.js",
+  "maintainers": [
+    {
+      "name": "angular",
+      "email": "angular-core+npm@google.com"
+    }
+  ],
+  "module": "./@angular/common.es5.js",
+  "name": "@angular/common",
+  "optionalDependencies": {},
+  "peerDependencies": {
+    "@angular/core": "4.0.1"
+  },
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angular/angular.git"
+  },
+  "scripts": {},
+  "typings": "./common.d.ts",
+  "version": "4.0.1"
+}

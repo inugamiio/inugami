@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <!--========================================================================
+    =   GAV
+    =========================================================================-->
+    <gav>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>${project.artifactId}</artifactId>
+        <version>0.2.0-SNAPSHOT</version>
+    </gav>
+    
+    
+
+    
+    <!--========================================================================
+    =   RESOURCES
+    =========================================================================-->
+    <resources>
+        <css path="${project.artifactId}/css/" name="theme.css" />
+        <javascript path="${project.artifactId}/js/" name="main.js" />
+        <page path="${project.artifactId}/" name="index.html" />
+    </resources>
+    
+    
+    
+    <!--========================================================================
+    =   PROVIDERS
+    =========================================================================-->
+    <providers>
+        <provider name="foobar.system" type="system" className="org.inugami.configuration.test.MockCaller">
+            <config key="data" value="FoobarData" />
+        </provider>
+    </providers>
+    
+    <!--========================================================================
+    =   PROCESSORS
+    =========================================================================-->
+    <processors>
+        <processor name="foo" className="org.inugami.configuration.test.PluginProcessor" />
+    </processors>
+    
+    <!--========================================================================
+    =   LISTENERS
+    =========================================================================-->
+    <listeners>
+        <listener name="customListener" className="org.inugami.configuration.test.PluginListener">
+            <config key="prefix" value="[foobar]" />
+        </listener>
+    </listeners>
+    
+    <!--========================================================================
+    =   EVENTS FILES
+    =========================================================================-->
+    <events-files>
+        <events-file name="event-config.xml" />
+    </events-files>
+
+
+</plugin>

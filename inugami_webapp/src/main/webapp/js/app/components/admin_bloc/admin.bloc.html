@@ -1,0 +1,10 @@
+<div [ngStyle]="style" class="admin-bloc">
+  <div [ngClass]="styleClass">
+    <div class="admin-bloc-title" *ngIf="title">{{title}}</div>
+
+    <div class="admin-bloc-content">
+        <ng-content></ng-content>
+        <div class="clear"></div>
+    </div>
+  </div>
+</div>

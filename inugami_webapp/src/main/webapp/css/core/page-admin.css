@@ -1,0 +1,208 @@
+/*******************************************************************************
+* page-admin
+*******************************************************************************/
+.page-admin{
+    margin-bottom: 5em;
+  }
+  .page-admin .page-admin-menu{
+    float: left;
+    width: 10%;
+    min-width: 30px;
+  }
+  .page-admin .page-admin-content{
+    float: right;
+    width: 89%;
+  }
+  .page-admin menu.page-admin-menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+  }
+  
+  .page-admin menu.page-admin-menu ul li.not-active a{
+    color: #292d34;
+  }
+  
+  .page-admin menu.page-admin-menu ul li .label,
+  .page-admin menu.page-admin-menu ul li .icon{
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+  .page-admin menu.page-admin-menu ul li .label{
+    font-size: 120%;
+    color:#292d34;
+  }
+  .page-admin menu.page-admin-menu ul li .icon{
+    font-family: Font Awesome\ 5 Free;
+    font-size: 250%;
+  }
+  
+  .page-admin menu.page-admin-menu ul li .icon.health:before{
+    content:"\f21e";
+  }
+  .page-admin menu.page-admin-menu ul li .icon.plugins:before{
+    content:"\f12e";
+  }
+  .page-admin menu.page-admin-menu ul li .icon.caches:before{
+    content:"\f1c0";
+  }
+  .page-admin menu.page-admin-menu ul li .icon.actions:before{
+    content:"\f013";
+  }
+  .page-admin menu.page-admin-menu ul li .icon.events:before{
+    content:"\f079";
+  }
+  
+  .page-admin menu.page-admin-menu ul li .icon.alerts:before{
+    content:"\f0f3";
+  }
+  
+  .page-admin .downtime .server-health .show-state dd{
+    font-weight: bold;
+    color: #c12534;
+  }
+  .page-admin .uptime .server-health .show-state dd{
+    font-weight: bold;
+    color: #40770e;
+  }
+  
+  
+  .page-admin .admin-event-running{
+    width: 100%;
+  }
+  .page-admin .admin-event-running .running{
+    color:#25599d;
+  }
+  
+  
+  .page-admin .server-info ul{
+    margin: none;
+    padding: none;
+    list-style: none;
+    margin-top: 2em;
+    margin-bottom: 3em;  
+  }
+  .page-admin .server-info ul li{
+    float: left;
+    margin-right: 5%;
+  }
+  
+  
+  
+  .page-admin ul.caches-list li{
+    padding-bottom: 1em;
+  }
+  
+  .tip div.hidden{
+    display: none;
+  }
+  .tip div.show{
+    position: fixed;
+    background: #1a1c21;
+    color: #ffffff;
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    border-radius: 0.5em;
+    font-size: 150%;
+    opacity: 0.8;
+    z-index: 5000;
+  }
+  
+  
+  .page-admin .admin-view-alerts .btn-group{
+    float: right;
+    margin-right: 1em;
+  }
+  
+  .admin-view-alert-edit-end{
+    clear: both;
+  }
+
+
+.page-admin .alert-edit .data-display textarea{
+  width: 100%;
+  height: 15em;
+  background-color: #ffffff;
+  font-family: monospace;
+  border: none;
+  border-left: 1px solid gray;
+  padding-left: 1em;
+}
+
+
+.page-admin .konami{
+  background: #0c0c0c;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  z-index: 50000;
+  opacity: 0.90;
+}
+.page-admin .konami .konami-content{
+  opacity: 1;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+.page-admin .konami .actions{
+  margin: auto;
+  width: 40%;
+  margin-top: 10%;
+}
+.page-admin .konami .actions button{
+  height: 256px;
+  width: 256px;
+}
+
+.page-admin .konami .konami-cancel{
+  position: fixed;
+  bottom: 2em;
+  right: 2em;
+}
+
+.page-admin .konami  .msg-konami{
+  font-size: 200%;
+  color: #ffffff;
+  text-align: center;
+  margin-top: 3em;
+}
+
+
+.page-admin .connected-users .users .user-main-infos{
+  font-size: 120%;
+  background: #e3e3e3;
+  padding: 0.5em;
+}
+
+.page-admin .connected-users .users .user-main-infos .user-login::before{
+  content:"login: ";
+}
+.page-admin .connected-users .users .user-main-infos .user-login{
+
+}
+.page-admin .connected-users .users .user-main-infos .user-last-connection::before{
+  content:"(";
+}
+.page-admin .connected-users .users .user-main-infos .user-last-connection::after{
+  content:")";
+}
+
+
+
+.page-admin .connected-users .users  li{
+  width: 100%;
+}
+.page-admin .connected-users .users  .conections{
+  width: 100%;
+}
+.page-admin .connected-users .users  th{
+  font-weight: bold;
+}
+.page-admin .connected-users .users  td{
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}

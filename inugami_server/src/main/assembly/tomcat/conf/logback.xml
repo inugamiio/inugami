@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration > 
+
+    <!-- ======================================================================= 
+    = APPENDERS
+    ======================================================================== -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{dd/MM HH:mm:ss}|%logger|%-5level|%thread| %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="CACHE">
+        <File>${super.inugami.plugin.folder.logs}/cache.log</File>
+        <Append>true</Append>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${super.inugami.plugin.folder.logs}/cache.log.%i</fileNamePattern>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd/MM HH:mm:ss}|%logger|%-5level|%thread| %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="CONFIG">
+        <File>${super.inugami.plugin.folder.logs}/config.log</File>
+        <Append>true</Append>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${super.inugami.plugin.folder.logs}/config.log.%i</fileNamePattern>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd/MM HH:mm:ss}|%logger|%-5level|%thread| %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="PLUGINS">
+        <File>${super.inugami.plugin.folder.logs}/plugins.log</File>
+        <Append>true</Append>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${super.inugami.plugin.folder.logs}/plugins.log.%i</fileNamePattern>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd/MM HH:mm:ss}|%logger|%-5level|%thread| %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="XLLOG">
+        <File>${super.inugami.plugin.folder.logs}/xllog.log</File>
+        <Append>true</Append>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${super.inugami.plugin.folder.logs}/xllog.log.%i</fileNamePattern>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd/MM HH:mm:ss}|%logger|%-5level|%thread| %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="INITIALIZE">
+        <File>${super.inugami.plugin.folder.logs}/initialize.log</File>
+        <Append>true</Append>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${super.inugami.plugin.folder.logs}/initialize.log.%i</fileNamePattern>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd/MM HH:mm:ss}|%logger|%-5level|%thread| %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="DEBUGLOG">
+        <File>${super.inugami.plugin.folder.logs}/debuglog.log</File>
+        <Append>true</Append>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${super.inugami.plugin.folder.logs}/debuglog.log.%i</fileNamePattern>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd/MM HH:mm:ss}|%logger|%-5level|%thread| %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="PROVIDER">
+        <File>${super.inugami.plugin.folder.logs}/provider.log</File>
+        <Append>true</Append>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${super.inugami.plugin.folder.logs}/provider.log.%i</fileNamePattern>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd/MM HH:mm:ss}|%logger|%-5level|%thread| %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="IO_ACCESS">
+        <File>${super.inugami.plugin.folder.logs}/io_access.log</File>
+        <Append>true</Append>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${super.inugami.plugin.folder.logs}/io_access.log.%i</fileNamePattern>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd/MM HH:mm:ss}|%logger|%-5level|%thread| %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="SSE">
+        <File>${super.inugami.plugin.folder.logs}/sse.log</File>
+        <Append>true</Append>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${super.inugami.plugin.folder.logs}/sse.log.%i</fileNamePattern>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd/MM HH:mm:ss}|%logger|%-5level|%thread| %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="METRICS">
+        <File>${super.inugami.plugin.folder.logs}/metrics.log</File>
+        <Append>true</Append>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${super.inugami.plugin.folder.logs}/metrics.log.%i</fileNamePattern>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd/MM HH:mm:ss}|%logger|%-5level|%thread| %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="SYSTEM">
+        <File>${super.inugami.plugin.folder.logs}/system.log</File>
+        <Append>true</Append>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${super.inugami.plugin.folder.logs}/system.log.%i</fileNamePattern>
+            <maxIndex>2</maxIndex>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd/MM HH:mm:ss}|%logger|%-5level| %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="MetricsEventsSenderSse">
+        <File>${super.inugami.plugin.folder.logs}/metricsEventsSenderSse.log</File>
+        <Append>true</Append>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>5MB</maxFileSize>
+        </triggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${super.inugami.plugin.folder.logs}/metricsEventsSenderSse.log.%i</fileNamePattern>
+            <maxIndex>2</maxIndex>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd/MM HH:mm:ss}|%msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="JAVA_SCRIPT">
+        <File>${super.inugami.plugin.folder.logs}/javascript.log</File>
+        <Append>true</Append>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>20MB</maxFileSize>
+        </triggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${super.inugami.plugin.folder.logs}/javascript.log.%i</fileNamePattern>
+            <maxIndex>2</maxIndex>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{dd/MM HH:mm:ss}|%msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- ======================================================================= 
+    = LOGGERS LEVELS
+    ======================================================================== -->
+    <logger additivity="false" name="org.jboss.resteasy.resteasy_jaxrs.i18n">
+        <level value="OFF" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    
+     <logger additivity="false" name="CACHE">
+        <level value="info" />
+        <appender-ref ref="CACHE" />
+    </logger>
+
+    <logger additivity="false" name="CONFIG">
+        <level value="info" />
+        <appender-ref ref="CONFIG" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger additivity="false" name="PLUGINS">
+        <level value="info" />
+        <appender-ref ref="PLUGINS" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger additivity="false" name="XLLOG">
+        <level value="info" />
+        <appender-ref ref="XLLOG" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger additivity="false" name="INITIALIZE">
+        <level value="info" />
+        <appender-ref ref="INITIALIZE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger additivity="false" name="DEBUGLOG">
+        <level value="debug" />
+        <appender-ref ref="DEBUGLOG" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger additivity="false" name="PROVIDER">
+        <level value="info" />
+        <appender-ref ref="PROVIDER" />
+    </logger>
+
+
+    <logger additivity="false" name="IO_ACCESS">
+        <level value="info" />
+        <appender-ref ref="IO_ACCESS" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+
+    <logger additivity="false" name="SSE">
+        <level value="info" />
+        <appender-ref ref="SSE" />
+    </logger>
+
+
+    <logger additivity="false" name="METRICS">
+        <level value="info" />
+        <appender-ref ref="METRICS" />
+    </logger>
+    
+    <logger additivity="false" name="SYSTEM">
+        <level value="INFO" />
+        <appender-ref ref="SYSTEM" />
+    </logger>
+        
+
+    <logger additivity="false" name="MetricsEventsSenderSse">
+        <level value="INFO" />
+        <appender-ref ref="MetricsEventsSenderSse" />
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

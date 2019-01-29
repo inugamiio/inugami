@@ -1,0 +1,18 @@
+{
+  "name": "primeui",
+  "description": "PrimeUI PrimeUI is a collection of rich javascript widgets and web components based on jQuery UI API",
+  "dependencies": {
+    "jquery": ">=1.11.0",
+    "jqueryui": ">=1.11.0",
+    "fontawesome": ">=4.3.0"
+  },
+  "keywords": [
+    "jquery",
+    "ui",
+    "web-components"
+  ],
+  "authors": [
+    "PrimeTek"
+  ],
+  "license": "Apache*"
+}

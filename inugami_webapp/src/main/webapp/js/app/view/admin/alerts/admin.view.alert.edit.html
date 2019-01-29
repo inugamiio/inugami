@@ -1,0 +1,58 @@
+<div  [ngClass]="' alert-edit '" [class]="styleClass">
+    <div class="form-group row" *ngIf="innerValue">
+            <div class="col-3">
+                <input-bloc [(ngModel)]="innerValue.alerteName"
+                            [validator]="validators.notEmptyString"
+                            [disabled]="edit"
+                            label="alert.edit.alert.name"></input-bloc>
+            </div>
+            <div class="col-2">
+                <input-bloc [(ngModel)]="innerValue.duration"
+                            [validator]="validators.notNegativeNumber"
+                            label="alert.edit.alert.duration"
+                            type="number"></input-bloc>
+            </div>
+            
+            <div class="col-2">
+                    <input-bloc [(ngModel)]="innerValue.channel"
+                                label="alert.edit.alert.channel"
+                                [validator]="validators.notEmptyString"></input-bloc>
+                </div>
+
+            <div class="col-5">
+                <input-bloc [(ngModel)]="innerValue.level"
+                            label="alert.edit.alert.level"
+                            [validator]="validators.notEmptyString"></input-bloc>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <input-bloc [(ngModel)]="innerValue.label"
+                        label="alert.edit.alert.label"
+                        [validator]="validators.notEmptyString"></input-bloc>
+        
+            <input-bloc [(ngModel)]="innerValue.subLabel"
+                        label="alert.edit.alert.sub.label"></input-bloc>
+        </div>
+        
+        <div class="form-group data-display" >
+            <label>Data</label>
+            <textarea disabled="disabled">{{detailData}}</textarea>
+        </div>
+
+
+        <div class="btn-group" role="group">
+            <button (click)="close()" class="btn btn-danger">
+                    <msg key="action.cancel"></msg>
+            </button>
+        
+            <button (click)="saveAlertAndClose()" class="btn btn-primary">
+                    <msg key="action.save"></msg>
+            </button>
+        
+            <button (click)="saveAlert()" class="btn btn-success" *ngIf="isNotEdit">
+                <msg key="action.save.and.continue"></msg>
+            </button>
+        </div>
+        <div class="admin-view-alert-edit-end"></div>
+</div>

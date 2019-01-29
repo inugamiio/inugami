@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration enable="false">
+
+    <simple-event name="joe-pourcentage" provider="graphite.bigdata">
+        <query>scale(summarize(avg(org.foo.bar.*.joe), '24h', 'avg', true),100)</query>
+    </simple-event>
+
+</configuration>

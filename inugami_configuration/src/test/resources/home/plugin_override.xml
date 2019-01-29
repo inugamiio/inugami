@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+	<!--========================================================================
+    =   GAV
+    =========================================================================-->
+    <gav>
+        <groupId>org.inugami</groupId>
+        <artifactId>inugami_configuration</artifactId>
+        <version>x.y.z</version>
+    </gav>
+    
+    
+    
+    <!--========================================================================
+    =   RESOURCES
+    =========================================================================-->
+    <resources>
+        <css path="inugami_plugin/css/" name="theme2.css" />
+        <javascript path="inugami_plugin/js/" name="formatter2.js" />
+        <javascript path="inugami_plugin/js/" name="loader2.js" />
+        <page path="inugami_plugin/" name="index2.html" />
+    </resources>
+    
+    
+
+    
+    
+
+</plugin>

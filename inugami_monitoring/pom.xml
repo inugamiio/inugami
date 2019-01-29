@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ======================================================================= 
+    = MAVEN
+    ======================================================================== -->
+    <prerequisites>
+        <maven>3.2.3</maven>
+    </prerequisites>
+
+    <!-- ======================================================================= 
+    = PARENT
+    ======================================================================== -->
+    <parent>
+        <groupId>org.inugami</groupId>
+        <artifactId>inugami</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <!-- ======================================================================= 
+    = PROJECT
+    ======================================================================== -->
+    <groupId>org.inugami.monitoring</groupId>
+    <artifactId>inugami_monitoring</artifactId>
+    <packaging>pom</packaging>
+
+    
+    <!-- ======================================================================= 
+    = DEPENDENCIES
+    ======================================================================== -->
+    <modules>
+        <module>inugami_monitoring_api</module>
+        <module>inugami_monitoring_config</module>
+        <module>inugami_monitoring_sensors</module>
+        <module>inugami_monitoring_providers</module>
+        <module>inugami_monitoring_core</module>
+    </modules>
+
+</project>

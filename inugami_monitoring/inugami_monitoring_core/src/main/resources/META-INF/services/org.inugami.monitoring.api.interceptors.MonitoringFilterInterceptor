@@ -1,0 +1,2 @@
+org.inugami.monitoring.core.interceptors.spi.IoLogInterceptor
+org.inugami.monitoring.core.interceptors.spi.ServiceCounterInterceptor

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--========================================================================
+=   Components
+=========================================================================-->
+<components>
+    <gav groupId="foo" artifactId="bar" version="0.0.1" />
+    
+    <component name="rich.text">
+        <views>
+            <view type="display" selector="r-rich-text"  />
+            <view type="form"    selector="r-rich-text-form"/>
+        </views>
+        
+        <descriptions>
+            <description type="default" path="/js/app/plugins/rastackware-front-plugins-commons/components/rich_text/rich.text.description.html" /> 
+            <description type="pl" path="/js/app/plugins/rastackware-front-plugins-commons/components/rich_text/rich.text.description_pl.html" /> 
+            
+            <screenshot path="/js/app/plugins/rastackware-front-plugins-commons/components/rich_text/rich.text.screenshot_1.png"/>
+            <screenshot path="/js/app/plugins/rastackware-front-plugins-commons/components/rich_text/rich.text.screenshot_2.png"/>
+        </descriptions>
+        
+
+        <models>
+            <field name="styleClass" type="string" defaultValue="foo" description="_rich.text.fields.styleClass.description"/>
+            <field name="style"      type="string" defaultValue="bar" description="_rich.text.fields.style.description"/>
+        </models>
+
+
+        <events>
+            <event name="onChange" type="emit"     description="_rich.text.fields.events.onChange.description"/>
+            <event name="refresh"  type="listener" description="_rich.text.fields.events.refresh.description"/>
+        </events>
+        
+        
+  
+    </component>
+
+</components>

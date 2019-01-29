@@ -1,0 +1,106 @@
+.properties-editor{
+
+}
+
+.properties-editor .list-properties{
+    list-style: none;
+}
+.properties-editor .list-properties li{
+    margin-bottom: 0.5em;
+}
+
+.property-dot
+.properties-editor .list-properties .property-content .property{
+    float: left;
+}
+
+
+.properties-editor .list-properties .property-content .property-dot{
+    background-color: black;
+    width: 0.5em;
+    height: 0.5em;
+    float: left;
+    margin-top: 0.5em;
+    transition        : height 0.25s, width 0.15s, background-color 0.15s; 
+    -webkit-transition: height 0.25s, width 0.15s, background-color 0.15s; 
+    -moz-transition   : height 0.25s, width 0.15s, background-color 0.15s; 
+    -ms-transition    : height 0.25s, width 0.15s, background-color 0.15s; 
+    -o-transition     : height 0.25s, width 0.15s, background-color 0.15s; 
+}
+
+.properties-editor .list-properties .property-content .property-dot.edit{
+    width: 0.2em;
+    height: 5em;
+}
+.properties-editor .list-properties .property-content .property-dot.focus{
+    background-color:#17a2b8;
+}
+.properties-editor .list-properties .property-content .property{
+    float: left;
+    margin-left: 0.5em;
+}
+
+
+.properties-editor .list-properties .property-content .property.edit-mode{
+    width: 90%;
+}
+
+.properties-editor .list-properties .property-content .property.display-mode label::after{
+    content:" : ";
+}
+
+
+.properties-editor .list-properties .actions{
+    float: right;
+    font-size: 130%;
+}
+.properties-editor .list-properties .actions .remove-property:hover{
+    color:#dc3545;
+}
+
+.properties-editor .list-properties .actions .validate{
+    margin-left: 1em;
+}
+.properties-editor .list-properties .actions .validate,
+.properties-editor  a.add-property{
+    color: #28a745;
+    border-radius: 100%;
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    line-height: 0;
+}
+
+.properties-editor .list-properties .actions .validate,
+.properties-editor  .add-property{
+    transition        : box-shadow 0.15s; 
+    -webkit-transition: -webkit-box-shadow 0.15s; 
+    -moz-transition   : -moz-box-shadow 0.15s; 
+    -ms-transition    : -ms-box-shadow 0.15s; 
+    -o-transition     : -o-box-shadow 0.15s; 
+}
+
+.properties-editor .list-properties .actions .validate:hover,
+.properties-editor  .add-property:hover{
+    -webkit-box-shadow: 0px 0px 0.5em 0px #bfbfbf;
+    -moz-box-shadow: 0px 0px 0.5em 0px  #bfbfbf;
+    box-shadow: 0px 0px 0.5em 0px  #bfbfbf;
+}
+
+.properties-editor .property-content-end{
+    clear: both;
+}
+
+.properties-editor a.add-property{
+    font-size: 160%;
+}
+.properties-editor a.add-property i.fa-plus-circle{
+    color: #28a745;
+}
+
+.properties li label{
+    font-weight: bold;
+}
+.properties li label::after{
+    content:" : ";
+}

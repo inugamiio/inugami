@@ -1,0 +1,25 @@
+<div [ngClass]="'evolution-value'"
+     [class]="getStyleClass()">
+  <div *ngIf="currentValueStr">
+
+    <div class="current-value">
+      <div class="current-value-number">{{currentValueStr}}<span class="current-value-unit" *ngIf="unit">{{unit}}</span></div>
+      <div class="clear"></div>
+    </div>
+
+
+
+    <div *ngIf="diffPreviousStr"
+         [ngClass]="'evolution'"
+         [class]="diffEvol">
+
+
+      <div class="evolution-arrow">
+          <i aria-hidden="true" [class]="diffEvolIcon"></i>
+      </div>
+      <div class="evolution-diff">{{diffPreviousStr}}</div>
+      <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>

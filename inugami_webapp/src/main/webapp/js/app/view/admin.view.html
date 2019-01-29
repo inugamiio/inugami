@@ -1,0 +1,270 @@
+<section [ngClass]="' page-admin '" [class]="adminCustomStyle">
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  + MENU
+  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+  <menu class="page-admin-menu">
+    <ul>
+        <li *ngFor="let item of menuItems" [class]="isActiveSection(item.name)">
+            <a (click)="changeSection(item.name)" >
+                <span [ngClass]="'fa icon '" [class]="item.name"></span>
+                <span class="label">{{item.label}}</span>
+            </a>
+        </li>
+    </ul>
+  </menu>
+
+  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  + CONTENT
+  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+  <div class="page-admin-content">
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    :: Server Health
+    :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+    <article [class]="getUpTimeClass()" *ngIf="sectionToDisplay =='health'" >
+      <header>
+      <h2>Server Health</h2>
+      </header>
+      <div class="page-admin-bloc-content list-defs server-health">
+
+        <dl class="show-state">
+              <dt>Server state</dt>
+              <dd *ngIf="!serverUp">DOWN</dd>
+              <dd *ngIf="serverUp">UP</dd>
+              <div class="dd-end"></div>
+        </dl>
+
+        <dl class="show-state">
+              <dt *ngIf="serverUp">Up time</dt>
+              <dt *ngIf="!serverUp">Down time</dt>
+              <dd>{{upTime}}</dd>
+              <div class="dd-end"></div>
+        </dl>
+
+        <dl class="system-os">
+            <dt>Server OS</dt>
+            <dd>{{os}}</dd>
+            <div class="dd-end"></div>
+        </dl>
+
+        <dl class="system-instance">
+            <dt>Instance</dt>
+            <dd>{{instance}}</dd>
+            <div class="dd-end"></div>
+        </dl>
+
+        <dl class="system-application-name">
+            <dt>ApplicationName</dt>
+            <dd>{{applicationName}}</dd>
+            <div class="dd-end"></div>
+        </dl>
+
+        <dl class="system-application-host-name">
+            <dt>applicationHostName</dt>
+            <dd>{{applicationHostName}}</dd>
+            <div class="dd-end"></div>
+        </dl>
+
+      </div>
+      <div class="page-admin-bloc-content server-info">
+          <ul>
+              <li>
+                <value-bloc [(ngModel)]="cpu"
+                            title="CPU"
+                            unit="%"
+                            [extractor]="simpleExtractor"
+                            [formatter]="percentFormatter"
+                            [alertHandler]="percentAlertHandler">
+                </value-bloc>
+              </li>
+              <li>
+                  <value-bloc [(ngModel)]="memory"
+                              title="Memory"
+                              unit="%"
+                              [extractor]="simpleExtractor"
+                              [formatter]="percentFormatter"
+                              [alertHandler]="percentAlertHandler">
+                  </value-bloc>
+              <li>
+                  <value-bloc [(ngModel)]="nbThreads"
+                              title="Threads"
+                              [extractor]="simpleExtractor"
+                              [formatter]="noFormatNumber"
+                              [alertHandler]="threadAlertHandler">
+                  </value-bloc>
+              <li>
+                  <value-bloc [(ngModel)]="socketsOpen"
+                              title="SSE SOCKETS"
+                              [extractor]="simpleExtractor"
+                              [formatter]="noFormatNumber"
+                              [alertHandler]="socketsAlertHandler">
+                  </value-bloc>
+              </li>
+              <div class="clear"></div>
+          </ul>
+
+          <fieldset class="connected-users"> 
+            <legend>Connected Users</legend>
+
+            <ul *ngIf="users" class="users">
+                <li *ngFor="let user of users;let i = index">
+                    <div class="user-main-infos">
+                        <span class="user-login">{{user.login}}</span>
+                        <span class="user-last-connection">{{user.lastConnection}}</span>
+                    </div>
+                    <div class="user-details-infos">
+                        <table class="conections">
+                            <thead>
+                                <tr>
+                                    <th class="connection-date">Date</th>
+                                    <th class="connection-ip">Ip</th>
+                                    <th class="connection-agents">User Agent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let connection of user.connections">
+                                    <td >{{connection.date}}</td>
+                                    <td >{{connection.ip}}</td>
+                                    <td >{{connection.agents}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="clear"></div>
+                    </div>
+                </li>
+            </ul>
+          </fieldset>
+      </div>
+    </article>
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    :: Plugins
+    :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+    <article  *ngIf="sectionToDisplay =='plugins'">
+        <header>
+            <h2>Plugins</h2>
+        </header>
+        <div class="page-admin-bloc-content">
+          <ul class="list-without-deco">
+            <li *ngFor="let value of plugins; let i = index">
+                <plugin-infos [(ngModel)]="plugins[i]"></plugin-infos>
+            </li>
+          </ul>
+        </div>
+    </article>
+
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    :: Caches
+    :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+    <article  *ngIf="sectionToDisplay =='caches'">
+        <header>
+            <h2>Caches</h2>
+        </header>
+        <div class="page-admin-bloc-content">
+            
+            <ul class="list-without-deco caches-list">
+              <li>
+                    <button (click)="clearAllCaches()" class="btn btn-danger">Clear all caches</button>
+              </li>
+              <li *ngFor="let cache of caches">
+                    <button (click)="clearCache(cache)" class="btn btn-warning">{{cache}}</button>
+              </li>
+            </ul>
+          </div>
+    </article>
+
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    :: Alerts
+    :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+    <article  *ngIf="sectionToDisplay =='alerts'">
+            <header>
+                <h2>Alerts</h2>
+            </header>
+            <div class="page-admin-bloc-content">
+               <admin-view-alerts ></admin-view-alerts>
+            </div>
+        </article>
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    :: Running Events
+    :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+    <article *ngIf="sectionToDisplay =='events'">
+        <header>
+            <h2>Running Events</h2>
+        </header>
+        <div class="page-admin-bloc-content">
+          <table *ngIf="pluginsEventsRunning" class="admin-event-running">
+            <thead>
+              <tr>
+                <th>Duration</th>
+                <th>Last start</th>
+                <th>Event name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let value of pluginsEventsRunning; let i = index" [class.running]="value.running">
+                <td class="duration">
+                  <span *ngIf="!value.running">{{value.delais}}ms</span>
+                </td>
+                <td class="start">{{formatMillisTime(value.start)}}</td>
+                <td class="title">{{value.eventName}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+    </article>
+
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    :: Actions
+    :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+    <article *ngIf="sectionToDisplay =='actions'">
+        <header>
+            <h2>Actions</h2>
+        </header>
+
+        <div class="list-defs">
+          <dl class="show-state">
+                <dt>Actions</dt>
+                <dd>
+                    <button (click)="forceRunEvents()" class="btn btn-success">Force Run events</button>
+                    <button (click)="runEvents()" class="btn btn-success">Run events</button>
+                    <button (click)="forceRefresh()" class="btn btn-success">Force Refresh</button>
+                </dd>
+                <div class="dd-end"></div>
+
+                <dt>Update</dt>
+                <dd>
+                    <button (click)="beginUpdate()" class="btn btn-success">Begin update</button>
+                    <button (click)="endUpdate()" class="btn btn-success">End update</button>
+                </dd>
+                <div class="dd-end"></div>
+          </dl>
+
+        </div>
+
+
+        
+    </article>
+
+
+
+
+  </div>
+  <div class="clear"></div>
+
+  <div *ngIf="konamiMode" class="konami">
+    <div class="konami-content">
+            <div class="actions">
+                    <button (click)="runOperation(1)" class="action-konami-1"></button>
+                    <button (click)="runOperation(2)" class="action-konami-2"></button>
+            </div>
+            <div *ngIf="msgKonami" class="msg-konami">{{msgKonami}}</div>
+            <button (click)="closeKonami()" class="btn btn-danger konami-cancel">cancel</button>
+    </div>
+  </div>
+</section>

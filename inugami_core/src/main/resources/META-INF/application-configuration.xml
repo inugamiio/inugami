@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+
+    <!--========================================================================
+    =   PROPERTIES
+    =========================================================================-->
+    <properties>
+        <property key="foo" value="bar" />
+        <property key="security.max.level" value="1000" />
+    </properties>
+
+    <!--========================================================================
+    =   CONTEXT APPLICATION
+    =========================================================================-->
+    <applicationName>inugami</applicationName>
+    <timeout>120000</timeout>
+    <maxPluginRunning>5</maxPluginRunning>
+    <maxPluginRunningStandalone>20</maxPluginRunningStandalone>
+    <maxRunningEvents>5</maxRunningEvents>
+    <alertingEnable>true</alertingEnable>
+    <maxThreads>1500</maxThreads>
+	
+	<!--========================================================================
+    =   HTTP DEFAULT CONFIG
+    =========================================================================-->
+    <httpDefaultConfig>
+        <timeout>65000</timeout>
+        <socketTimeout>60000</socketTimeout>
+        <ttl>30000</ttl>
+        <maxConnections>300</maxConnections>
+        <maxPerRoute>50</maxPerRoute>
+        <headerFields>
+            <field name="APPLICATION-NAME" value="inugami" />
+            <field name="APPLICATION-HOSTNAME" value="instanceName" />
+        </headerFields>
+    </httpDefaultConfig>
+
+    <!--========================================================================
+    =   DATA STORAGE
+    =========================================================================-->
+    <dataStorage>
+        <driver>org.h2.Driver</driver>
+        <dialect>org.hibernate.dialect.H2Dialect</dialect>
+        <url>jdbc:h2:mem:inugami</url>
+        <user>sa</user>
+        <password></password>
+    </dataStorage>
+    
+    <!--========================================================================
+    =   SECURITY CONFIG
+    =========================================================================-->
+    <security name="technical">
+        <users>
+            <user login="admin" password="NU9VtiyCzXHMqEudCTioZA"
+                token="iBJMSKJYWlekYqcaU1bcLO9NEFU-J4tBTrE9iR3gg6iI557ZtQ-YtBrpursJ2zRvAIUBUaHNQ"
+                firstName="Joe" lastName="Administrator">
+                <userRoles>
+                    <userRole>admin</userRole>
+                    <userRole>user</userRole>
+                </userRoles>
+            </user>
+            <user login="user" password="NU9VtiyCzXHMqEudCTioZA"
+                token="ocqUxw-iBkrVInVDn8yGXb5WB2M-Q2HA4-692EmFPNU4MuOtFA-j8p_ULZpWXx3uygHw0W5Bw"
+                firstName="Joe" lastName="User">
+                <userRoles>
+                    <userRole>user</userRole>
+                </userRoles>
+            </user>
+        </users>
+    </security>
+</application>

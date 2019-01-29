@@ -1,0 +1,3 @@
+org.inugami.monitoring.sensors.defaults.CpuSensor
+org.inugami.monitoring.sensors.defaults.MemorySensor
+org.inugami.monitoring.sensors.defaults.ThreadsSensor

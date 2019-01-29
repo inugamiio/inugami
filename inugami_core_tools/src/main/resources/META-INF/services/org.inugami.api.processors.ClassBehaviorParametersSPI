@@ -1,0 +1,3 @@
+org.inugami.api.processors.ClassBehavior
+org.inugami.configuration.services.ConfigHandlerHashMap
+org.inugami.core.providers.MultiThreadedProviderRunner

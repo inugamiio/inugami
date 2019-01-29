@@ -1,0 +1,9 @@
+.curve-chart .axis .axis-y-mask{
+    fill: #ffffff;
+}
+
+.curve-chart  .data-curves .curve{
+    fill:transparent;
+    stroke: #9f9c9c;
+    stroke-width: 2px;
+}

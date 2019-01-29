@@ -1,0 +1,32 @@
+<div class="plugin-infos-behaviors list-defs" *ngIf="showComponent">
+  <admin-bloc [title]="title">
+    <dd *ngFor="let value of innerValue; let i = index">
+        <dl class="plugin-infos-behaviors-name">
+              <dt>Name</dt>
+              <dd>{{value.name}}</dd>
+              <div class="dd-end"></div>
+        </dl>
+        <dl class="plugin-infos-behaviors-class-name">
+              <dt>Class name</dt>
+              <dd>{{value.className}}</dd>
+              <div class="dd-end"></div>
+        </dl>
+
+        <dl class="plugin-infos-behaviors-config">
+              <dt>Configuration</dt>
+              <dd>
+                  <div *ngFor="let behaviorConfig of value.configs">
+                      <dl>
+                          <dt>{{behaviorConfig.key}}</dt>
+                          <dd>{{behaviorConfig.value}}</dd>
+                          <div class="dd-end"></div>
+                      </dl>
+                  </div>
+                  <div class="end-dd"></div>
+              </dd>
+        </dl>
+        <div class="dd-end"></div>
+    </dd>
+  </admin-bloc>
+  <div class="plugin-infos-behaviors-end"></div>
+</div>

@@ -1,0 +1,20 @@
+{
+	"pluginBaseName": "foobar_plugin",
+	"module": {
+		"className": "FoobarModule",
+		"file":"./view/foobar_plugin/foo.bar.module.ts"
+	},
+	"router": [
+		{
+			"path": "home",
+			"component": "HomeView"
+		}
+	],
+	"menuLinks": [
+		{
+			"path": "/home",
+			"title": "dashboard",
+			"styleClass":"foobar-home"
+		}
+	]
+}

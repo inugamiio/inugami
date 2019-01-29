@@ -1,0 +1,25 @@
+{
+    "properties":{
+    	"asset":  			{"type":"keyword"},
+    	"environment":  	{"type":"keyword"},
+     	"instanceName":  	{"type":"keyword"},
+        "instanceNumber": 	{"type":"keyword"},
+    	"counterType": 	 	{"type":"keyword"},
+    	"device":  			{"type":"keyword"},
+    	"callType":  		{"type":"keyword"},
+    	"service":			{"type":"keyword"},
+        "subService":		{"type":"keyword"},
+     	"valueType": 		{"type":"keyword"},
+        "timeUnit": 		{"type":"keyword"},    
+        "date":             {"type":"date","format":"basic_date_time"},
+        "time": 			{"type":"long"},
+        "errorCode":		{"type":"keyword"},   
+        "errorType":		{"type":"keyword"},     
+        "error": 			{"type":"boolean"},
+        "path": 			{"type":"text"},
+        "uid": 				{"type":"keyword"},
+        "uidSet": 			{"type":"boolean"},
+        "value": 			{"type":"double"},
+        "data":             {"type":"text"}
+    }
+}

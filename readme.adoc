@@ -1,0 +1,10 @@
+= Inugami
+:encoding: UTF-8
+:toc: macro
+:toclevels: 4
+
+toc::[4]
+
+==  Globals Informations :
+
+

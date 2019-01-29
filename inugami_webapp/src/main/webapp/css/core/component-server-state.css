@@ -1,0 +1,14 @@
+.dashboard-vmo-new nav .server-state,
+.dashboard-vmo nav .server-state {
+    float: right;
+    margin-top: 1.68em;
+    position: relative;
+    list-style: none;
+}
+
+.dashboard-vmo-new nav .server-state .button-state-up, .dashboard-vmo-new nav .server-state .button-state-down,
+.dashboard-vmo nav .server-state .button-state-up, .dashboard-vmo nav .server-state .button-state-down {
+    border-radius: 50%;
+    height: 1.4em;
+    width: 1.4em;
+}

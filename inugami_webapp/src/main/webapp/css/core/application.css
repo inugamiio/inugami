@@ -1,0 +1,220 @@
+/*******************************************************************************
+********************************************************************************
+**
+** 								               GLOBALE
+**
+********************************************************************************
+color: {
+    blue1 : 2F6B9C,
+    blue2 (ligther) : 66849C
+    blue3 (darker)  : 2C4050
+    orange : 9C6C20
+    orange (darker) : 503B1A
+}
+(https://color.adobe.com/fr/create/color-wheel/?base=2&rule=Complementary&selected=4&name=Mon%20th%C3%A8me%20Color&mode=rgb&rgbvalues=0.18320522123823202,0.4198828732962048,0.6137254901960785,0.39892156862745104,0.5170095925264733,0.6137254901960785,0.17254901960784316,0.2501605003995328,0.3137254901960784,0.6137254901960785,0.4229491702476714,0.12710155564165268,0.3137254901960784,0.23072637910696708,0.10201496965754411&swatchOrder=0,1,2,3,4)
+*******************************************************************************/
+body{
+    font-family: 'Avenir', Sans-serif;
+    font-style : normal;
+    font-size: 12px;
+}
+
+body, menu{
+  padding: 0;
+  margin: 0;
+}
+
+a:hover{
+  text-decoration: none;
+}
+/*******************************************************************************
+BASIC COLOR
+*******************************************************************************/
+/** grapefruit ****/
+.grapefruit           {color           : #c12534;}
+.grapefruit-bg        {background-color: #c12534;fill:#c12534;color:#f5f7fa}
+.grapefruit-ligh      {color           : #ED5565;}
+.grapefruit-ligh-bg   {background-color: #ED5565;fill:#ED5565;color:#1a1c21}
+
+/** sunflower ****/
+.sunflower            {color           : #c9952b;}
+.sunflower-bg         {background-color: #c9952b;fill:#c9952b;color:#f5f7fa}
+.sunflower-ligh       {color           : #FFCE54;}
+.sunflower-ligh-bg    {background-color: #FFCE54;fill:#FFCE54;color:#1a1c21}
+
+/** mint ****/
+.mint                 {color           : #288870;}
+.mint-bg              {background-color: #288870;fill:#288870;color:#f5f7fa}
+.mint-ligh            {color           : #48CFAD;}
+.mint-ligh-bg         {background-color: #48CFAD;fill:#48CFAD;color:#1a1c21}
+
+
+/** blue ****/
+.blue                 {color           : #25599d;}
+.blue-bg              {background-color: #25599d;fill:#25599d;color:#f5f7fa}
+.blue-ligh            {color           : #5d9cec;}
+.blue-ligh-bg         {background-color: #5d9cec;fill:#5d9cec;color:#1a1c21}
+
+/** pink ****/
+.pink                 {color           : #b84589;}
+.pink-bg              {background-color: #b84589;fill:#b84589;color:#f5f7fa}
+.pink-ligh            {color           : #EC87c0;}
+.pink-ligh-bg         {background-color: #EC87c0;fill:#EC87c0;color:#1a1c21}
+
+/** pumpkin ****/
+.pumpkin              {color           : #dc6d00;}
+.pumpkin-bg           {background-color: #dc6d00;fill:#dc6d00;color:#f5f7fa}
+.pumpkin-ligh         {color           : #f7922f;}
+.pumpkin-ligh-bg      {background-color: #f7922f;fill:#f7922f;color:#1a1c21}
+
+/** bittersweet ****/
+.bittersweet          {color           : #e94b32;}
+.bittersweet-bg       {background-color: #e94b32;fill:#e94b32;color:#f5f7fa}
+.bittersweet-light    {color           : #FC6E51;}
+.bittersweet-light-bg {background-color: #FC6E51;fill:#FC6E51;color:#1a1c21}
+
+/** grass ****/
+.grass-light          {color           : #A0D468;}
+.grass-light-bg       {background-color: #A0D468;fill:#A0D468;color:#1a1c21}
+.grass                {color           : #40770e;}
+.grass-bg             {background-color: #40770e;fill:#40770e;color:#f5f7fa}
+
+
+
+/** aqua ****/
+.aqua                 {color           : #258fb6;}
+.aqua-bg              {background-color: #258fb6;fill:#258fb6;color:#f5f7fa}
+.aqua-light           {color           : #4fc1e9;}
+.aqua-light-bg        {background-color: #4fc1e9;fill:#4fc1e9;color:#1a1c21}
+
+/** lavander ****/
+.lavander             {color           : #6d4cc1;}
+.lavander-bg          {background-color: #6d4cc1;fill:#6d4cc1;color:#f5f7fa}
+.lavander-light       {color           : #ac92ec;}
+.lavander-light-bg    {background-color: #ac92ec;fill:#ac92ec;color:#1a1c21}
+
+
+/** gray ****/
+.gray-light           {color           : #f5f7fa;}
+.gray-light-bg        {background-color: #f5f7fa;fill:#f5f7fa;color:#1a1c21}
+.gray                 {color           : #d0d3d6;}
+.gray-bg              {background-color: #d0d3d6;fill:#d0d3d6;color:#1a1c21}
+.gray-medium          {color           : #aab2bd;}
+.gray-medium-bg       {background-color: #aab2bd;fill:#aab2bd;color:#1a1c21}
+.gray-dark            {color           : #292d34;}
+.gray-dark-bg         {background-color: #292d34;fill:#292d34;color:#f5f7fa}
+.gray-darker          {color           : #1a1c21;}
+.gray-darker-bg       {background-color: #1a1c21;fill:#1a1c21;color:#f5f7fa}
+
+
+
+
+/*******************************************************************************
+LOADING
+*******************************************************************************/
+.inugami .loading{
+    background-color: #20272a;
+    color:#ecf0f1;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    font-weight: bolder;
+}
+.inugami .loading .info{
+   width: 400px;
+   margin: auto;
+   padding-top: 5em;
+   text-align: center;
+}
+
+.inugami .dashboard{
+   margin-top: 3em;
+}
+/*******************************************************************************
+LAYOUT
+*******************************************************************************/
+/******************************
+GENERIC
+******************************/
+.clear{
+  clear: both;
+}
+.float-left{
+  float: left;
+}
+.float-right{
+  float: right;
+}
+/******************************
+HEADER MENU
+******************************/
+.dashboard .main-header::before{
+  clear: both;
+}
+.dashboard .main-header{
+  font-size: 120%;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 1.5em;
+  padding-top: 0.2em;
+  font-weight: bold;
+  box-shadow: 0 0 0.3em;
+}
+
+
+.dashboard .main-header{
+  transition-property: visibility, opacity;
+  transition-duration: 0s, 1s;
+}
+.dashboard .main-header.hidden-menu{
+    opacity: 0;
+    visibility: hidden;
+    transition-property: opacity, visibility;
+    transition-duration: 1s, 0s;
+    transition-delay: 0s, 1s;
+}
+
+.dashboard .main-header menu ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.dashboard .main-header menu li{
+  float: left;
+}
+.dashboard .main-header menu li:first-child{
+  float: right;
+}
+.dashboard .main-header menu li a{
+  padding: 0.5em;
+  color:#e5e9ea;
+}
+
+.dashboard .main-header menu li a:hover{
+  color:#ffffff;
+}
+
+
+/******************************
+CONTENT
+******************************/
+.vinugami .content{
+  margin-top: 1.85em;
+}
+
+.inugami .content.hidden-menu{
+  margin-top: 0em;
+}
+
+.inugami .content .container-fluid{
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.inugami .content .dashboard-content{
+
+}
+
+
+

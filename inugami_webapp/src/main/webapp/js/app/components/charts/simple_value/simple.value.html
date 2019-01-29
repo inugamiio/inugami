@@ -1,0 +1,33 @@
+<div [ngClass]="'simple-value'"
+     [class]="getStyleClass()"
+     #container>
+
+    
+        <div *ngIf="title" class="title">{{title}}</div>
+
+        <div class="simple-value-infos" *ngIf="innerValue">
+            
+            <div class="value-area" *ngIf="inverseOrderData; then inverseOrderBlock; else normalOrderBlock"></div>
+            <ng-template #normalOrderBlock>
+                <span class="normal">
+                    <span *ngIf="alerts" class="alert-icon"></span>
+                    <span class="value">&nbsp;{{valueStr}}</span>
+                    <span class="unit">{{unit}}</span>
+                    <span class="value-area-end"></span>
+                </span>
+            </ng-template>
+
+            <ng-template #inverseOrderBlock>
+                <span class="inverse">
+                    <span *ngIf="alerts" class="alert-icon"></span>
+                    <span class="unit">{{unit}}</span>  
+                    <span class="value">&nbsp;{{valueStr}}</span>
+                    <span class="value-area-end"></span>
+                </span>
+            </ng-template>
+
+            <div class="time">{{time}}</div>
+            <div class="simple-value-infos-end"></div>
+        </div>
+        <div class="simple-value-end"></div>
+</div>

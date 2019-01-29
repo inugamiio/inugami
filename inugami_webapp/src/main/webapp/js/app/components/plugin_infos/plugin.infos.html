@@ -1,0 +1,83 @@
+<article *ngIf="innerValue"
+           class="plugin-infos"
+           [class.enable]="innerValue.enable">
+    <header class="gray-light-bg">
+        <span class="state-icon"></span>
+        <h3>
+            <span class="gav-group-id">{{innerValue.config.gav.groupId}}</span>
+            <span class="gav-artifact-id">{{innerValue.config.gav.artifactId}}</span>
+            <span class="gav-version"   *ngIf="innerValue.config.gav.version">{{innerValue.config.gav.version}}</span>
+            <span class="gav-qualifier" *ngIf="innerValue.config.gav.qualifier">{{innerValue.config.gav.qualifier}}</span>
+        </h3>
+        <div class="clear"></div>
+    </header>
+
+    <div class="plugin-infos-content">
+        <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        + CONFIGURATION
+        +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+        <fieldset class="plugin-infos-content-config">
+          <legend>Configuration</legend>
+          <div class="list-defs">
+            <!--::: config file :::::::::::::::::::::::::::::::::::::::::::::-->
+            <admin-bloc title="Globale configuration">
+              <dl>
+                <dt>Configuration file</dt>
+                <dd>{{innerValue.config.configFile}}</dd>
+                <div class="dd-end"></div>
+              </dl>
+            </admin-bloc>
+
+            <!--::: config file :::::::::::::::::::::::::::::::::::::::::::::-->
+            <admin-bloc title="Frontal configuration"  *ngIf="innerValue.config.frontConfig.present">
+              <dl>
+                <dt>Plugin base name</dt>
+                <dd>{{innerValue.config.frontConfig.data.pluginBaseName}}</dd>
+                <div class="dd-end"></div>
+              </dl>
+
+              <dl>
+                <dt>Angular Router module</dt>
+                <dd>{{innerValue.config.frontConfig.data.routerModuleName}}</dd>
+                <div class="dd-end"></div>
+              </dl>
+            </admin-bloc>
+          </div>
+
+
+
+        </fieldset>
+
+        <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        + BEHAVIORS
+        +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+        <fieldset>
+          <legend>Behaviors</legend>
+          <plugin-infos-behaviors title="Providers"
+                                  styleClass="providers"
+                                  [(ngModel)]="innerValue.config.providers">
+          </plugin-infos-behaviors>
+
+          <plugin-infos-behaviors title="Listeners"
+                                  styleClass="listeners"
+                                  [(ngModel)]="innerValue.config.listeners">
+          </plugin-infos-behaviors>
+
+          <plugin-infos-behaviors title="Processors"
+                                  styleClass="processors"
+                                  [(ngModel)]="innerValue.config.processors">
+          </plugin-infos-behaviors>
+        </fieldset>
+
+        <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        + EVENTS
+        +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+        <fieldset *ngIf="hasEvents">
+          <legend>Events</legend>
+
+          <div *ngFor="let event of innerValue.events.data; let eventIndex = index">
+            <event-infos [(ngModel)]="innerValue.events.data[eventIndex]" ></event-infos>
+          </div>
+        </fieldset>
+    </div>
+</article>

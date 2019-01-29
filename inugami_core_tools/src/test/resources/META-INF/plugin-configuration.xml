@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <!--========================================================================
+    =   GAV
+    =========================================================================-->
+    <gav>
+        <groupId>org.inugami</groupId>
+        <artifactId>inugami_core_test</artifactId>
+        <version>x.y.z</version>
+    </gav>
+    
+    
+    <!--========================================================================
+    =   PROVIDERS
+    =========================================================================-->
+    <providers>
+        <provider name="graphite.bigdata" className="org.inugami.core.providers.graphite.GraphiteProvider">
+            <config key="url" value="https://graphiteapp.org/render" />
+        </provider>
+    </providers>
+
+    <handlers>
+        <handler name="hesperides.handler" className="org.inugami.core.handlers.hesperides.HesperidesHandler">
+            <config key="hesperides.host" value="hesperides" />
+            <config key="realm" value="https" />
+            <config key="port"  value="1234"/>
+
+            <config key="userId" value="foobar_joz" />
+            <config key="password" value="abcd12345" />
+
+            <config key="maxThread" value="10" />
+
+            <config key="timeout" value="10000" />
+            <config key="httpTimeout" value="9000" />
+            <config key="httpTTL" value="500" />
+            <config key="httpMaxConnection" value="10" />
+            <config key="httpMaxPerRoute" value="50" />
+
+        </handler>
+    </handlers>
+
+
+    <!--========================================================================
+    =   EVENTS-FILES
+    =========================================================================-->
+    <events-files>
+        <events-file name="plugin_core_test_events.xml" />
+    </events-files>
+
+
+</plugin>
