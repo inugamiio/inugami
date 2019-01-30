@@ -154,7 +154,7 @@ public class GraphiteSender implements MonitoringSender, ApplyIfNotNull {
             applyIfNotNull(data.getTimeUnit(), parts::add);
             
             final String target = prefix + String.join(".", parts);
-            graphite.send(target, data.getValue().rendering(), data.getTime());
+            graphite.send(target, data.getValue().rendering(), data.getTime() / 1000);
         }
     }
     
