@@ -30,4 +30,8 @@ public interface ApplyIfNotNull {
             consumer.accept(data);
         }
     }
+    
+    default <T> void applyIfNotNull(final T data, final T defaultValue, final Consumer<T> consumer) {
+        consumer.accept(data == null ? defaultValue : data);
+    }
 }

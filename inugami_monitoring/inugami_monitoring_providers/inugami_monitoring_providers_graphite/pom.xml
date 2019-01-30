@@ -14,8 +14,8 @@
     = PARENT
     ======================================================================== -->
     <parent>
-        <groupId>org.inugami.monitoring</groupId>
-        <artifactId>inugami_monitoring</artifactId>
+        <groupId>org.inugami.monitoring.providers</groupId>
+        <artifactId>inugami_monitoring_providers</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -23,25 +23,21 @@
     <!-- ======================================================================= 
     = PROJECT
     ======================================================================== -->
-    <groupId>org.inugami.monitoring.providers</groupId>
-    <artifactId>inugami_monitoring_providers</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>inugami_monitoring_providers_graphite</artifactId>
 
     
     <!-- ======================================================================= 
     = DEPENDENCIES
     ======================================================================== -->
-    <modules>
-        <module>inugami_monitoring_providers_els</module>
-        <module>inugami_monitoring_providers_log</module>
-        <module>inugami_monitoring_providers_graphite</module>
-    </modules>
-
-
     <dependencies>
         <dependency>
-            <groupId>org.inugami.monitoring</groupId>
-            <artifactId>inugami_monitoring_api</artifactId>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-graphite</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.inugami</groupId>
+            <artifactId>inugami_commons</artifactId>
         </dependency>
     </dependencies>
 
