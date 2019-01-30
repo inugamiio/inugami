@@ -60,7 +60,7 @@ public class LogSender implements MonitoringSender {
     @Override
     public void process(final List<GenericMonitoringModel> data) throws MonitoringSenderException {
         for (final GenericMonitoringModel item : data) {
-            logger.info("{}", item.convertToJson());
+            logger.info(item.convertToJson());
         }
     }
     
