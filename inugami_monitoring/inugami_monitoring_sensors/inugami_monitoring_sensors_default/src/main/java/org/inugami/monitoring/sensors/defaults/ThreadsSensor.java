@@ -22,17 +22,13 @@ import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
 
 import org.inugami.api.models.data.graphite.number.LongNumber;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.api.tools.Comparators;
 import org.inugami.monitoring.api.data.GenericMonitoringModel;
 import org.inugami.monitoring.api.data.GenericMonitoringModelBuilder;
 import org.inugami.monitoring.api.sensors.MonitoringSensor;
 import org.inugami.monitoring.api.tools.GenericMonitoringModelTools;
-import org.inugami.monitoring.api.tools.IntervalValues;
 
 /**
  * ThreadsSensor
@@ -45,49 +41,124 @@ public class ThreadsSensor implements MonitoringSensor {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final long                           interval;
+    private final long    interval;
     
-    private final IntervalValues<ThreadsCounter> values;
+    private final String  timeUnit;
     
-    private final String                         timeUnit;
+    private final boolean enableThreadsDump;
     
-    private final boolean                        enableThreadsDump;
+    private final int     maxDepth;
     
-    private final int                            maxDepth;
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
     public ThreadsSensor() {
         interval = -1;
-        values = null;
         timeUnit = null;
         enableThreadsDump = true;
         maxDepth = 25;
     }
     
-    public ThreadsSensor(long interval, String query, ConfigHandler<String, String> configuration) {
+    public ThreadsSensor(final long interval, final String query, final ConfigHandler<String, String> configuration) {
         super();
         this.interval = interval;
-        values = new IntervalValues<>(this::extractThreadsUsage, configuration.grab("intervalValuesDelais", 1000));
         timeUnit = configuration.grabOrDefault("timeUnit", "");
         enableThreadsDump = configuration.grabBoolean("enableThreadsDump", true);
         maxDepth = configuration.grabInt("maxDepth", 25);
     }
     
     @Override
-    public MonitoringSensor buildInstance(long interval, String query, ConfigHandler<String, String> configuration) {
+    public MonitoringSensor buildInstance(final long interval, final String query,
+                                          final ConfigHandler<String, String> configuration) {
         return new ThreadsSensor(interval, query, configuration);
     }
     
     // =========================================================================
     // METHODS
     // =========================================================================
-    private ThreadsCounter extractThreadsUsage() {
-        ThreadsCounter counter = new ThreadsCounter();
-        final ThreadMXBean threadMxBean = ManagementFactory.getThreadMXBean();
-        final List<ThreadInfo> rawThreadsInfos = Arrays.asList(threadMxBean.getThreadInfo(threadMxBean.getAllThreadIds()));
+    
+    @Override
+    public List<GenericMonitoringModel> process() {
+        final List<GenericMonitoringModel> result = new ArrayList<>();
+        final GenericMonitoringModelBuilder builder = GenericMonitoringModelTools.initResultBuilder();
+        builder.setCounterType("system");
+        builder.setService("threads");
+        if ((timeUnit == null) || timeUnit.isEmpty()) {
+            builder.setTimeUnit(String.format("%sms", interval));
+        }
+        else {
+            builder.setTimeUnit(timeUnit);
+        }
         
-        for (ThreadInfo info : rawThreadsInfos) {
+        final ThreadMXBean threadMxBean = ManagementFactory.getThreadMXBean();
+        //@formatter:off
+        final List<ThreadInfo> rawThreadsInfos = Arrays.asList(threadMxBean.getThreadInfo(threadMxBean.getAllThreadIds(),
+                                                                                          enableThreadsDump ? maxDepth: 0));
+        //@formatter:on
+        
+        final ThreadsCounter data = extractThreadsUsage(rawThreadsInfos);
+        // ALL //--------------------------------------------------------------
+        builder.setSubService("all");
+        builder.setValue(new LongNumber(data.count()));
+        if (enableThreadsDump) {
+            builder.setData(buildStackTrace(rawThreadsInfos, null));
+        }
+        result.add(builder.build());
+        
+        // NEW //--------------------------------------------------------------
+        builder.setSubService("newThreads");
+        builder.setValue(new LongNumber(data.getNewThreads()));
+        if (enableThreadsDump) {
+            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.NEW));
+        }
+        result.add(builder.build());
+        
+        // RUNNABLE //---------------------------------------------------------
+        builder.setSubService("runable");
+        builder.setValue(new LongNumber(data.getRunnable()));
+        if (enableThreadsDump) {
+            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.RUNNABLE));
+        }
+        result.add(builder.build());
+        
+        // BLOCKED //----------------------------------------------------------
+        builder.setSubService("blocked");
+        builder.setValue(new LongNumber(data.getBlocked()));
+        if (enableThreadsDump) {
+            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.BLOCKED));
+        }
+        result.add(builder.build());
+        
+        // WAITING //----------------------------------------------------------
+        builder.setSubService("waiting");
+        builder.setValue(new LongNumber(data.getWaitting()));
+        if (enableThreadsDump) {
+            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.WAITING));
+        }
+        result.add(builder.build());
+        
+        // TIMED_WAITING //----------------------------------------------------
+        builder.setSubService("timedWaiting");
+        builder.setValue(new LongNumber(data.getTimedWaiting()));
+        if (enableThreadsDump) {
+            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.TIMED_WAITING));
+        }
+        result.add(builder.build());
+        
+        // TERMINATED //-------------------------------------------------------
+        builder.setSubService("terminated");
+        builder.setValue(new LongNumber(data.getTerminated()));
+        if (enableThreadsDump) {
+            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.TERMINATED));
+        }
+        result.add(builder.build());
+        return result;
+        
+    }
+    
+    private ThreadsCounter extractThreadsUsage(final List<ThreadInfo> rawThreadsInfos) {
+        final ThreadsCounter counter = new ThreadsCounter();
+        for (final ThreadInfo info : rawThreadsInfos) {
             switch (info.getThreadState()) {
                 case BLOCKED:
                     counter.addBlocked();
@@ -115,97 +186,11 @@ public class ThreadsSensor implements MonitoringSensor {
         return counter;
     }
     
-    @Override
-    public List<GenericMonitoringModel> process() {
-        List<GenericMonitoringModel> result = new ArrayList<>();
-        final List<ThreadsCounter> data = values.poll();
-        final GenericMonitoringModelBuilder builder = GenericMonitoringModelTools.initResultBuilder();
-        builder.setCounterType("system");
-        builder.setService("threads");
-        if (timeUnit == null || timeUnit.isEmpty()) {
-            builder.setTimeUnit(String.format("%sms", interval));
-        }
-        else {
-            builder.setTimeUnit(timeUnit);
-        }
+    private String buildStackTrace(final List<ThreadInfo> rawThreadsInfos, final Thread.State state) {
+        final StringBuilder result = new StringBuilder();
         
-        final ThreadMXBean threadMxBean = ManagementFactory.getThreadMXBean();
-        final List<ThreadInfo> rawThreadsInfos = Arrays.asList(threadMxBean.getThreadInfo(threadMxBean.getAllThreadIds(),
-                                                                                          enableThreadsDump ? maxDepth: 0));
-        
-        // ALL //--------------------------------------------------------------
-        builder.setSubService("all");
-        builder.setValue(new LongNumber(sumAllValues(data, ThreadsCounter::count)));
-        if (enableThreadsDump) {
-            builder.setData(buildStackTrace(rawThreadsInfos, null));
-        }
-        result.add(builder.build());
-        
-        // NEW //--------------------------------------------------------------
-        builder.setSubService("newThreads");
-        builder.setValue(new LongNumber(sumAllValues(data, ThreadsCounter::getNewThreads)));
-        if (enableThreadsDump) {
-            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.NEW));
-        }
-        result.add(builder.build());
-        
-        // RUNNABLE //---------------------------------------------------------
-        builder.setSubService("runable");
-        builder.setValue(new LongNumber(sumAllValues(data, ThreadsCounter::getRunnable)));
-        if (enableThreadsDump) {
-            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.RUNNABLE));
-        }
-        result.add(builder.build());
-        
-        // BLOCKED //----------------------------------------------------------
-        builder.setSubService("blocked");
-        builder.setValue(new LongNumber(sumAllValues(data, ThreadsCounter::getBlocked)));
-        if (enableThreadsDump) {
-            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.BLOCKED));
-        }
-        result.add(builder.build());
-        
-        // WAITING //----------------------------------------------------------
-        builder.setSubService("waiting");
-        builder.setValue(new LongNumber(sumAllValues(data, ThreadsCounter::getWaitting)));
-        if (enableThreadsDump) {
-            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.WAITING));
-        }
-        result.add(builder.build());
-        
-        // TIMED_WAITING //----------------------------------------------------
-        builder.setSubService("timedWaiting");
-        builder.setValue(new LongNumber(sumAllValues(data, ThreadsCounter::getTimedWaiting)));
-        if (enableThreadsDump) {
-            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.TIMED_WAITING));
-        }
-        result.add(builder.build());
-        
-        // TERMINATED //-------------------------------------------------------
-        builder.setSubService("terminated");
-        builder.setValue(new LongNumber(sumAllValues(data, ThreadsCounter::getTerminated)));
-        if (enableThreadsDump) {
-            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.TERMINATED));
-        }
-        result.add(builder.build());
-        return result;
-        
-    }
-    
-    private long sumAllValues(List<ThreadsCounter> data, Function<ThreadsCounter, Long> exractor) {
-        List<Long> result = new ArrayList<>();
-        for (ThreadsCounter item : Optional.ofNullable(data).orElse(new ArrayList<>())) {
-            result.add(exractor.apply(item));
-        }
-        
-        return GenericMonitoringModelTools.getPercentilValues(result, 1, Comparators.longComparator);
-    }
-    
-    private String buildStackTrace(List<ThreadInfo> rawThreadsInfos, Thread.State state) {
-        StringBuilder result = new StringBuilder();
-        
-        for (ThreadInfo info : rawThreadsInfos) {
-            if (state == null || state == info.getThreadState()) {
+        for (final ThreadInfo info : rawThreadsInfos) {
+            if ((state == null) || (state == info.getThreadState())) {
                 renderStackTrace(info, result);
                 result.append("\n");
             }
@@ -213,7 +198,7 @@ public class ThreadsSensor implements MonitoringSensor {
         return result.toString();
     }
     
-    private String renderStackTrace(ThreadInfo info, StringBuilder result) {
+    private String renderStackTrace(final ThreadInfo info, final StringBuilder result) {
         result.append(info.getThreadState());
         result.append(" - ");
         result.append(info.getThreadName());
@@ -231,15 +216,10 @@ public class ThreadsSensor implements MonitoringSensor {
                 break;
         }
         result.append("\n\t");
-        for (StackTraceElement stack : info.getStackTrace()) {
+        for (final StackTraceElement stack : info.getStackTrace()) {
             result.append("\t\t\t").append(stack.toString()).append("\n");
         }
         return result.toString();
-    }
-    
-    @Override
-    public void shutdown() {
-        values.shutdown(null);
     }
     
     // =========================================================================
