@@ -159,28 +159,33 @@ public class ThreadsSensor implements MonitoringSensor {
     private ThreadsCounter extractThreadsUsage(final List<ThreadInfo> rawThreadsInfos) {
         final ThreadsCounter counter = new ThreadsCounter();
         for (final ThreadInfo info : rawThreadsInfos) {
-            switch (info.getThreadState()) {
-                case BLOCKED:
-                    counter.addBlocked();
-                    break;
-                case NEW:
-                    counter.addNewThreads();
-                    break;
-                case RUNNABLE:
-                    counter.addRunnable();
-                    break;
-                case TERMINATED:
-                    counter.addterminated();
-                    break;
-                case TIMED_WAITING:
-                    counter.addTimedWaitting();
-                    break;
-                case WAITING:
-                    counter.addWaitting();
-                    break;
-                default:
-                    break;
+            final Thread.State state = info == null ? null : info.getThreadState();
+            
+            if (state != null) {
+                switch (state) {
+                    case BLOCKED:
+                        counter.addBlocked();
+                        break;
+                    case NEW:
+                        counter.addNewThreads();
+                        break;
+                    case RUNNABLE:
+                        counter.addRunnable();
+                        break;
+                    case TERMINATED:
+                        counter.addterminated();
+                        break;
+                    case TIMED_WAITING:
+                        counter.addTimedWaitting();
+                        break;
+                    case WAITING:
+                        counter.addWaitting();
+                        break;
+                    default:
+                        break;
+                }
             }
+            
         }
         
         return counter;
