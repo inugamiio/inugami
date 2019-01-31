@@ -20,7 +20,6 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.inugami.api.models.data.graphite.number.LongNumber;
@@ -92,7 +91,7 @@ public class ThreadsSensor implements MonitoringSensor {
         
         final ThreadMXBean threadMxBean = ManagementFactory.getThreadMXBean();
         //@formatter:off
-        final List<ThreadInfo> rawThreadsInfos = Arrays.asList(threadMxBean.getThreadInfo(threadMxBean.getAllThreadIds(),
+        final List<ThreadInfo> rawThreadsInfos = buildList(threadMxBean.getThreadInfo(threadMxBean.getAllThreadIds(),
                                                                                           enableThreadsDump ? maxDepth: 0));
         //@formatter:on
         
@@ -156,10 +155,20 @@ public class ThreadsSensor implements MonitoringSensor {
         
     }
     
+    private List<ThreadInfo> buildList(final ThreadInfo[] threadInfo) {
+        final List<ThreadInfo> result = new ArrayList<>();
+        for (int i = threadInfo.length - 1; i >= 0; i--) {
+            if (threadInfo[i] != null) {
+                result.add(threadInfo[i]);
+            }
+        }
+        return result;
+    }
+    
     private ThreadsCounter extractThreadsUsage(final List<ThreadInfo> rawThreadsInfos) {
         final ThreadsCounter counter = new ThreadsCounter();
         for (final ThreadInfo info : rawThreadsInfos) {
-            final Thread.State state = info == null ? null : info.getThreadState();
+            final Thread.State state = info.getThreadState();
             
             if (state != null) {
                 switch (state) {
