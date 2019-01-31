@@ -41,7 +41,6 @@ import org.inugami.api.dao.Dao;
 import org.inugami.api.dao.DaoEntityNotFoundException;
 import org.inugami.api.dao.DaoEntityNullException;
 import org.inugami.api.dao.DaoException;
-import org.inugami.api.dao.DaoValidatorException;
 import org.inugami.api.dao.Identifiable;
 import org.inugami.api.dao.SaveEntitiesResult;
 import org.inugami.api.dao.event.BeforeMerge;
@@ -51,6 +50,7 @@ import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.JsonBuilder;
 import org.inugami.commons.security.SecurityTools;
 import org.inugami.core.cdi.services.dao.transactions.TransactionRunner;
+import org.inugami.data.commons.exceptions.DaoValidatorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -641,7 +641,7 @@ public class DaoSql implements Dao {
         sql.append(type.getName());
         sql.append(" e ");
         
-        if (filters != null && !filters.isEmpty()) {
+        if ((filters != null) && !filters.isEmpty()) {
             sql.append(" WHERE ");
             
             final Iterator<String> iterator = filters.keySet().iterator();

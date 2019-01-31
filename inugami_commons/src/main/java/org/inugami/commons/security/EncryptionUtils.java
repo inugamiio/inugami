@@ -19,7 +19,9 @@ package org.inugami.commons.security;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,9 +48,8 @@ import org.inugami.api.constants.JvmKeyValues;
 import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.exceptions.FatalException;
 import org.inugami.api.exceptions.TechnicalException;
+import org.inugami.api.loggers.Loggers;
 import org.inugami.commons.files.FilesUtils;
-
-import com.google.common.hash.Hashing;
 
 /**
  * EncryptionUtils
@@ -193,8 +194,17 @@ public class EncryptionUtils {
      * @throws TechnicalException the technical exception
      */
     private static String encodeToSha1(final String value) {
-        return Hashing.sha512().hashString(value, Charsets.UTF_8).toString();
-        
+        String result = null;
+        try {
+            final MessageDigest md = MessageDigest.getInstance("SHA-512");
+            md.update(loadSecretKey());
+            final byte[] bytes = md.digest(value.getBytes(StandardCharsets.UTF_8));
+            result = Hex.encodeHexString(bytes);
+        }
+        catch (final NoSuchAlgorithmException e) {
+            Loggers.DEBUG.error(e.getMessage(), e);
+        }
+        return result;
     }
     
     /**

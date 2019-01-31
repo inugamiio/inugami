@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.inugami.api.dao;
+package org.inugami.data.commons.exceptions;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -22,6 +22,8 @@ import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 
+import org.inugami.api.dao.DaoException;
+import org.inugami.api.dao.Identifiable;
 import org.inugami.api.models.JsonBuilder;
 
 /**

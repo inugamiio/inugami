@@ -20,11 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Priority;
-
 import org.inugami.api.models.data.graphite.number.GraphiteNumber;
 import org.inugami.api.models.data.graphite.number.LongNumber;
 import org.inugami.api.processors.ConfigHandler;
+import org.inugami.api.spi.SpiPriority;
 import org.inugami.monitoring.api.data.GenericMonitoringModel;
 import org.inugami.monitoring.api.data.GenericMonitoringModelBuilder;
 import org.inugami.monitoring.api.tools.GenericMonitoringModelTools;
@@ -37,20 +36,20 @@ import org.inugami.monitoring.core.sensors.services.ServicesSensorAggregator;
  * @author patrickguillerm
  * @since Jan 18, 2019
  */
-@Priority(0)
+@SpiPriority(0)
 public class ServicesSensorAggregatorHits implements ServicesSensorAggregator {
     
     // =========================================================================
     // METHODS
     // =========================================================================
     @Override
-    public boolean accept(GenericMonitoringModel data, ConfigHandler<String, String> configuration) {
+    public boolean accept(final GenericMonitoringModel data, final ConfigHandler<String, String> configuration) {
         return ServiceValueTypes.HITS.getKeywork().equals(data.getCounterType());
     }
     
     @Override
-    public List<GenericMonitoringModel> compute(GenericMonitoringModel data, List<GraphiteNumber> values,
-                                                ConfigHandler<String, String> configuration) {
+    public List<GenericMonitoringModel> compute(final GenericMonitoringModel data, final List<GraphiteNumber> values,
+                                                final ConfigHandler<String, String> configuration) {
         final String timeUnit = configuration.grabOrDefault("timeUnit", "min");
         final GenericMonitoringModelBuilder builder = new GenericMonitoringModelBuilder(data);
         
@@ -64,9 +63,9 @@ public class ServicesSensorAggregatorHits implements ServicesSensorAggregator {
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================
-    private GraphiteNumber sum(List<GraphiteNumber> values) {
+    private GraphiteNumber sum(final List<GraphiteNumber> values) {
         long result = 0;
-        for (GraphiteNumber value : Optional.ofNullable(values).orElse(new ArrayList<>())) {
+        for (final GraphiteNumber value : Optional.ofNullable(values).orElse(new ArrayList<>())) {
             result += value.toLong();
         }
         return new LongNumber(result);

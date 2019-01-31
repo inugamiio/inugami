@@ -18,11 +18,9 @@ package org.inugami.monitoring.core.interceptors;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
 
@@ -55,7 +53,7 @@ class RequestCallBackInterceptor implements InvocationHandler {
     // METHODS
     // =========================================================================
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
         if (METHOD_TO_INTERCEPT.equals(method.getName())) {
             return data;
         }
@@ -67,22 +65,8 @@ class RequestCallBackInterceptor implements InvocationHandler {
     private class ServletBuffer extends ServletInputStream {
         private final ByteArrayInputStream data;
         
-        public ServletBuffer(byte[] content) {
+        public ServletBuffer(final byte[] content) {
             data = new ByteArrayInputStream(content);
-        }
-        
-        @Override
-        public boolean isFinished() {
-            return data.available() == 0;
-        }
-        
-        @Override
-        public boolean isReady() {
-            return true;
-        }
-        
-        @Override
-        public void setReadListener(ReadListener readListener) {
         }
         
         @Override

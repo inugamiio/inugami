@@ -16,15 +16,15 @@
  */
 package org.inugami.commons.spi;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
 
-import javax.inject.Named;
-
 import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.spi.NamedSpi;
+import org.inugami.commons.tools.AnnotationTools;
 
 /**
  * SpiLoader
@@ -33,6 +33,11 @@ import org.inugami.api.spi.NamedSpi;
  * @since 6 juin 2017
  */
 public class SpiLoader {
+    
+    // =========================================================================
+    // METHODS
+    // =========================================================================
+    private static final String JAVAX_BEAN_NAMED = "javax.inject.Named";
     
     // =========================================================================
     // METHODS
@@ -112,7 +117,7 @@ public class SpiLoader {
             else if ((service instanceof NamedSpi) && name.equals(((NamedSpi) service).getName())) {
                 result = service;
             }
-            else if (classHasNamedAnnotation(serviceClass, name)) {
+            else if (classHasNamedAnnotation(serviceClass)) {
                 result = service;
             }
             else if (serviceClass.getSimpleName().equalsIgnoreCase(name)) {
@@ -129,8 +134,12 @@ public class SpiLoader {
         return result;
     }
     
-    private boolean classHasNamedAnnotation(final Class<?> serviceClass, final String name) {
-        final Named named = serviceClass.getAnnotation(Named.class);
-        return named == null ? false : named.value().equals(name);
+    private boolean classHasNamedAnnotation(final Class<?> serviceClass) {
+        final String result = null;
+        
+        final Annotation namedAnnotation = AnnotationTools.searchAnnotation(serviceClass.getDeclaredAnnotations(),
+                                                                            JAVAX_BEAN_NAMED);
+        return namedAnnotation != null;
     }
+    
 }

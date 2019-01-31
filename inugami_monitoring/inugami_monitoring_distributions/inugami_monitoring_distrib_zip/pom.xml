@@ -14,42 +14,44 @@
     = PARENT
     ======================================================================== -->
     <parent>
-        <groupId>org.inugami</groupId>
-        <artifactId>inugami</artifactId>
+        <groupId>org.inugami.monitoring.distributions</groupId>
+        <artifactId>inugami_monitoring_distributions</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+
 
     <!-- ======================================================================= 
     = PROJECT
     ======================================================================== -->
-    <groupId>org.inugami.data</groupId>
-    <artifactId>inugami_data</artifactId>
+    <artifactId>inugami_monitoring_distib_zip</artifactId>
     <packaging>pom</packaging>
     
-    <!-- ======================================================================= 
-    = MODULES
-    ======================================================================== -->
-    <modules>
-        <module>inugami_data_commons</module>
-        <module>inugami_data_sql</module>
-        <module>inugami_data_sql_h2</module>
-    </modules>
+  
+
     
     <!-- ======================================================================= 
-    = DEPENDENCIES
+    = BUILD
     ======================================================================== -->
-    <dependencies>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/resources/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

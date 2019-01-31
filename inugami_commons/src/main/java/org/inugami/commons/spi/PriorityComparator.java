@@ -16,9 +16,14 @@
  */
 package org.inugami.commons.spi;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Comparator;
 
-import javax.annotation.Priority;
+import org.inugami.api.loggers.Loggers;
+import org.inugami.api.spi.SpiPriority;
+import org.inugami.commons.tools.AnnotationTools;
 
 /**
  * PriorityComparator
@@ -27,6 +32,10 @@ import javax.annotation.Priority;
  * @since 28 déc. 2018
  */
 public class PriorityComparator<T> implements Comparator<T> {
+    // =========================================================================
+    // ATTRIBUTES
+    // =========================================================================
+    private static final String JAVAX_PRIORITY = "javax.annotation.Priority";
     
     // =========================================================================
     // METHODS
@@ -38,15 +47,29 @@ public class PriorityComparator<T> implements Comparator<T> {
         return new Integer(refPriority).compareTo(valuePriority);
     }
     
-    private int loadPriority(final T ref) {
-        int result = 0;
+    private int loadPriority(final T object) {
         
-        Priority priority = null;
-        if (ref != null) {
-            priority = ref.getClass().getAnnotation(Priority.class);
+        Annotation[] annotations = null;
+        if (object != null) {
+            annotations = object.getClass().getDeclaredAnnotations();
         }
-        if (priority != null) {
-            result = priority.value();
+        
+        final Annotation priorityAnnotation = AnnotationTools.searchAnnotation(annotations, JAVAX_PRIORITY,
+                                                                               SpiPriority.class.getName());
+        final Method getValue = AnnotationTools.searchMethod(priorityAnnotation, "value");
+        
+        return AnnotationTools.invoke(getValue, priorityAnnotation);
+    }
+    
+    private int invokeGetValue(final Annotation priorityAnnotation, final Method getValue) {
+        int result = 0;
+        if (getValue != null) {
+            try {
+                result = (int) getValue.invoke(priorityAnnotation);
+            }
+            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                Loggers.DEBUG.error(e.getMessage(), e);
+            }
         }
         return result;
     }

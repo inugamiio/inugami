@@ -16,8 +16,7 @@
  */
 package org.inugami.monitoring.core.interceptable;
 
-import javax.annotation.Priority;
-
+import org.inugami.api.spi.SpiPriority;
 import org.inugami.monitoring.api.resolvers.Interceptable;
 
 /**
@@ -26,7 +25,7 @@ import org.inugami.monitoring.api.resolvers.Interceptable;
  * @author patrickguillerm
  * @since Jan 8, 2019
  */
-@Priority(1)
+@SpiPriority(1)
 public class DefaultInterceptableIdentifier implements Interceptable {
     
     // =========================================================================
@@ -44,11 +43,11 @@ public class DefaultInterceptableIdentifier implements Interceptable {
     // OVERRIDES
     // =========================================================================
     @Override
-    public boolean isInterceptable(String uri) {
+    public boolean isInterceptable(final String uri) {
         return !isResource(uri);
     }
     
-    protected boolean isResource(String uri) {
+    protected boolean isResource(final String uri) {
         boolean result = false;
         if (uri == null) {
             return result;
@@ -57,8 +56,8 @@ public class DefaultInterceptableIdentifier implements Interceptable {
         result = "/".equals(uri);
         
         if (!result) {
-            String path = uri.split("[?]")[0];
-            for (String ext : RESOURCES_EXT) {
+            final String path = uri.split("[?]")[0];
+            for (final String ext : RESOURCES_EXT) {
                 result = path.endsWith(ext);
                 if (result) {
                     break;

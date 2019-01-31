@@ -18,7 +18,6 @@ package org.inugami.monitoring.core.interceptors;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -28,10 +27,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.inugami.api.exceptions.FatalException;
-import org.inugami.commons.tools.ProxyBuilder;
-
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
 
 /**
  * ResponseWrapper
@@ -51,13 +46,13 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    ResponseWrapper(ServletResponse response) {
+    ResponseWrapper(final ServletResponse response) {
         this.response = (HttpServletResponse) response;
         
         try {
             this.outputWrapper = new OutputWriterWrapper(response.getOutputStream());
         }
-        catch (IOException e) {
+        catch (final IOException e) {
             throw new FatalException(e.getMessage(), e);
         }
     }
@@ -93,27 +88,22 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     }
     
     @Override
-    public void setCharacterEncoding(String charset) {
+    public void setCharacterEncoding(final String charset) {
         response.setCharacterEncoding(charset);
     }
     
     @Override
-    public void setContentLength(int len) {
+    public void setContentLength(final int len) {
         response.setContentLength(len);
     }
     
     @Override
-    public void setContentLengthLong(long len) {
-        response.setContentLengthLong(len);
-    }
-    
-    @Override
-    public void setContentType(String type) {
+    public void setContentType(final String type) {
         response.setContentType(type);
     }
     
     @Override
-    public void setBufferSize(int size) {
+    public void setBufferSize(final int size) {
         response.setBufferSize(size);
     }
     
@@ -143,7 +133,7 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     }
     
     @Override
-    public void setLocale(Locale loc) {
+    public void setLocale(final Locale loc) {
         response.setLocale(loc);
     }
     
@@ -153,94 +143,94 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     }
     
     @Override
-    public void addCookie(Cookie cookie) {
+    public void addCookie(final Cookie cookie) {
         response.addCookie(cookie);
     }
     
     @Override
-    public boolean containsHeader(String name) {
+    public boolean containsHeader(final String name) {
         return response.containsHeader(name);
     }
     
     @Override
-    public String encodeURL(String url) {
+    public String encodeURL(final String url) {
         return response.encodeURL(url);
     }
     
     @Override
-    public String encodeRedirectURL(String url) {
+    public String encodeRedirectURL(final String url) {
         return response.encodeRedirectURL(url);
     }
     
     @Deprecated
     @Override
-    public String encodeUrl(String url) {
+    public String encodeUrl(final String url) {
         return response.encodeUrl(url);
     }
     
     @Deprecated
     @Override
-    public String encodeRedirectUrl(String url) {
+    public String encodeRedirectUrl(final String url) {
         return response.encodeRedirectUrl(url);
     }
     
     @Override
-    public void sendError(int sc, String msg) throws IOException {
+    public void sendError(final int sc, final String msg) throws IOException {
         response.sendError(sc, msg);
     }
     
     @Override
-    public void sendError(int sc) throws IOException {
+    public void sendError(final int sc) throws IOException {
         response.sendError(sc);
     }
     
     @Override
-    public void sendRedirect(String location) throws IOException {
+    public void sendRedirect(final String location) throws IOException {
         response.sendRedirect(location);
     }
     
     @Override
-    public void setDateHeader(String name, long date) {
+    public void setDateHeader(final String name, final long date) {
         response.setDateHeader(name, date);
         
     }
     
     @Override
-    public void addDateHeader(String name, long date) {
+    public void addDateHeader(final String name, final long date) {
         response.addDateHeader(name, date);
         
     }
     
     @Override
-    public void setHeader(String name, String value) {
+    public void setHeader(final String name, final String value) {
         response.setHeader(name, value);
         
     }
     
     @Override
-    public void addHeader(String name, String value) {
+    public void addHeader(final String name, final String value) {
         response.setHeader(name, value);
     }
     
     @Override
-    public void setIntHeader(String name, int value) {
+    public void setIntHeader(final String name, final int value) {
         response.setIntHeader(name, value);
     }
     
     @Override
-    public void addIntHeader(String name, int value) {
+    public void addIntHeader(final String name, final int value) {
         response.addIntHeader(name, value);
         
     }
     
     @Override
-    public void setStatus(int sc) {
+    public void setStatus(final int sc) {
         response.setStatus(sc);
     }
     
     @Deprecated
     @Override
-    public void setStatus(int sc, String sm) {
+    public void setStatus(final int sc, final String sm) {
         response.setStatus(sc, sm);
     }
     
@@ -250,12 +240,12 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     }
     
     @Override
-    public String getHeader(String name) {
+    public String getHeader(final String name) {
         return response.getHeader(name);
     }
     
     @Override
-    public Collection<String> getHeaders(String name) {
+    public Collection<String> getHeaders(final String name) {
         return response.getHeaders(name);
     }
     

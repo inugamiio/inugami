@@ -16,12 +16,9 @@
  */
 package org.inugami.monitoring.core.interceptors;
 
-import java.io.CharConversionException;
 import java.io.IOException;
-import java.text.MessageFormat;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.WriteListener;
 
 /**
  * OutputWriterWrapper
@@ -41,7 +38,7 @@ final class OutputWriterWrapper extends ServletOutputStream {
     // METHODS
     // =========================================================================
     
-    public OutputWriterWrapper(ServletOutputStream outputStream) {
+    public OutputWriterWrapper(final ServletOutputStream outputStream) {
         this.outputStream = outputStream;
     }
     
@@ -49,22 +46,13 @@ final class OutputWriterWrapper extends ServletOutputStream {
     // OVERRIDES
     // =========================================================================
     @Override
-    public boolean isReady() {
-        return outputStream.isReady();
-    }
-    
-    @Override
-    public void setWriteListener(WriteListener writeListener) {
-        outputStream.setWriteListener(writeListener);
-    }
-    
-    @Override
-    public void write(int b) throws IOException {
+    public void write(final int b) throws IOException {
         outputStream.write(b);
         
     }
     
-    public void write(byte b[], int off, int len) throws IOException {
+    @Override
+    public void write(final byte b[], final int off, final int len) throws IOException {
         buffer.append(new String(b));
         super.write(b, off, len);
     }

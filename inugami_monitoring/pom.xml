@@ -35,6 +35,7 @@
         <module>inugami_monitoring_sensors</module>
         <module>inugami_monitoring_providers</module>
         <module>inugami_monitoring_core</module>
+        <module>inugami_monitoring_distributions</module>
     </modules>
 
 </project>

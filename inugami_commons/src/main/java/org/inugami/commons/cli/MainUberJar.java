@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.inugami.api.exceptions.Asserts;
+import org.inugami.api.monitoring.BootstrapMonitoringSpi;
 import org.inugami.commons.files.FilesUtils;
 import org.inugami.commons.spi.SpiLoader;
 import org.inugami.commons.writer.RapportWriter;
@@ -38,18 +39,30 @@ public class MainUberJar {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final static Logger LOGGER = LoggerFactory.getLogger("ROOT");
+    private final static Logger                 LOGGER               = LoggerFactory.getLogger("ROOT");
+    
+    private final static BootstrapMonitoringSpi BOOTSTRAP_MONITORING = new SpiLoader().loadSpiSingleService(BootstrapMonitoringSpi.class);
     
     // =========================================================================
     // METHODS
     // =========================================================================
     public static void main(final String[] args) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (BOOTSTRAP_MONITORING != null) {
+                BOOTSTRAP_MONITORING.shutdown();
+            }
+        }));
+        
         try {
             process(args);
+            
         }
         catch (final Exception e) {
             LOGGER.error(e.getMessage(), e);
             System.exit(1);
+        }
+        finally {
+            BOOTSTRAP_MONITORING.shutdown();
         }
     }
     
@@ -60,6 +73,9 @@ public class MainUberJar {
     private static void process(final String[] args) throws Exception {
         CliHelper.drawDeco("CLI PROCESSING", "#", LOGGER);
         drawArguments(args);
+        if (BOOTSTRAP_MONITORING != null) {
+            BOOTSTRAP_MONITORING.startup();
+        }
         
         final DefaultOptions defaultOptions = new DefaultOptions(args);
         

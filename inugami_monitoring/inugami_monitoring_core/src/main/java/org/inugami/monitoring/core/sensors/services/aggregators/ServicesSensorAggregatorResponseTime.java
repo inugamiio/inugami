@@ -20,12 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Priority;
-
 import org.inugami.api.models.data.graphite.number.FloatNumber;
 import org.inugami.api.models.data.graphite.number.GraphiteNumber;
 import org.inugami.api.models.data.graphite.number.LongNumber;
 import org.inugami.api.processors.ConfigHandler;
+import org.inugami.api.spi.SpiPriority;
 import org.inugami.monitoring.api.data.GenericMonitoringModel;
 import org.inugami.monitoring.api.data.GenericMonitoringModelBuilder;
 import org.inugami.monitoring.core.sensors.services.ServiceValueTypes;
@@ -37,20 +36,20 @@ import org.inugami.monitoring.core.sensors.services.ServicesSensorAggregator;
  * @author patrickguillerm
  * @since Jan 18, 2019
  */
-@Priority(0)
+@SpiPriority(0)
 public class ServicesSensorAggregatorResponseTime implements ServicesSensorAggregator {
     
     // =========================================================================
     // OVERRIDES
     // =========================================================================
     @Override
-    public boolean accept(GenericMonitoringModel data, ConfigHandler<String, String> configuration) {
+    public boolean accept(final GenericMonitoringModel data, final ConfigHandler<String, String> configuration) {
         return ServiceValueTypes.RESPONSE_TIME.getKeywork().equals(data.getCounterType());
     }
     
     @Override
-    public List<GenericMonitoringModel> compute(GenericMonitoringModel data, List<GraphiteNumber> values,
-                                                ConfigHandler<String, String> configuration) {
+    public List<GenericMonitoringModel> compute(final GenericMonitoringModel data, final List<GraphiteNumber> values,
+                                                final ConfigHandler<String, String> configuration) {
         final String timeUnit = configuration.grabOrDefault("timeUnit", "min");
         final List<GenericMonitoringModel> result = new ArrayList<>();
         final GenericMonitoringModelBuilder builder = new GenericMonitoringModelBuilder(data);
@@ -97,9 +96,9 @@ public class ServicesSensorAggregatorResponseTime implements ServicesSensorAggre
         return result;
     }
     
-    private List<Long> sortsValues(List<GraphiteNumber> values) {
+    private List<Long> sortsValues(final List<GraphiteNumber> values) {
         final List<Long> result = new ArrayList<>();
-        for (GraphiteNumber value : Optional.ofNullable(values).orElse(new ArrayList<>())) {
+        for (final GraphiteNumber value : Optional.ofNullable(values).orElse(new ArrayList<>())) {
             if (value != null) {
                 result.add(value.toLong());
             }
@@ -109,7 +108,7 @@ public class ServicesSensorAggregatorResponseTime implements ServicesSensorAggre
         return result;
     }
     
-    private int percentil(double percentil, int size) {
+    private int percentil(final double percentil, final int size) {
         int result = 0;
         if (percentil < 0.000001) {
             result = 0;
@@ -127,13 +126,13 @@ public class ServicesSensorAggregatorResponseTime implements ServicesSensorAggre
         return result;
     }
     
-    private double average(List<Long> sortedValues) {
+    private double average(final List<Long> sortedValues) {
         long sumValues = 0;
-        for (Long item : sortedValues) {
+        for (final Long item : sortedValues) {
             sumValues += item;
         }
         
-        double size = 0.0 + sortedValues.size();
+        final double size = 0.0 + sortedValues.size();
         return sumValues / size;
     }
     

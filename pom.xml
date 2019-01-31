@@ -158,7 +158,7 @@
         <org.jboss.resteasy.version>4.0.0.Beta1</org.jboss.resteasy.version>
         <org.jboss.async-http-servlet.version>3.1.0.Beta2</org.jboss.async-http-servlet.version>
         <org.picketlink.version>2.7.1.Final</org.picketlink.version>
-
+        <com.jackson-annotations.version>2.9.2</com.jackson-annotations.version>
 
 
         <org.hibernate.ogm.version>5.1.0.Final</org.hibernate.ogm.version>
@@ -365,6 +365,11 @@
             <!--[ Project data ]+++++++++++++++++++++++++++++++++++++++++++++-->
             <dependency>
                 <groupId>org.inugami.data</groupId>
+                <artifactId>inugami_data_commons</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.inugami.data</groupId>
                 <artifactId>inugami_data_sql</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -410,6 +415,12 @@
             <dependency>
                 <groupId>org.inugami.monitoring.providers</groupId>
                 <artifactId>inugami_monitoring_providers_log</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.inugami.monitoring.providers</groupId>
+                <artifactId>inugami_monitoring_providers_graphite</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -510,6 +521,11 @@
                 <version>${org.jboss.resteasy.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${com.jackson-annotations.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>javax.servlet</groupId>

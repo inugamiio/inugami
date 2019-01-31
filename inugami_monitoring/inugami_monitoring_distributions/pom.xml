@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ======================================================================= 
+    = MAVEN
+    ======================================================================== -->
+    <prerequisites>
+        <maven>3.2.3</maven>
+    </prerequisites>
+
+    <!-- ======================================================================= 
+    = PARENT
+    ======================================================================== -->
+    <parent>
+        <groupId>org.inugami.monitoring</groupId>
+        <artifactId>inugami_monitoring</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <!-- ======================================================================= 
+    = PROJECT
+    ======================================================================== -->
+    <groupId>org.inugami.monitoring.distributions</groupId>
+    <artifactId>inugami_monitoring_distributions</artifactId>
+    <packaging>pom</packaging>
+
+    
+    <!-- ======================================================================= 
+    = DEPENDENCIES
+    ======================================================================== -->
+    <modules>
+        <module>inugami_monitoring_distrib_zip</module>
+        <module>inugami_monitoring_distrib_nondep</module>
+    </modules>
+
+
+    
+    <!-- ======================================================================= 
+    = DEPENDENCIES
+    ======================================================================== -->
+    <dependencies>
+        <dependency>
+            <groupId>org.inugami.monitoring</groupId>
+            <artifactId>inugami_monitoring_core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.yahoo.platform.yui</groupId>
+                    <artifactId>yuicompressor</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.ant</groupId>
+                    <artifactId>ant</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>animal-sniffer-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <artifactId>inugami_monitoring_providers_els</artifactId>
+            <groupId>org.inugami.monitoring.providers</groupId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.inugami.monitoring.providers</groupId>
+            <artifactId>inugami_monitoring_providers_graphite</artifactId>
+        </dependency>
+
+    </dependencies>
+</project>
