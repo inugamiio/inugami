@@ -57,8 +57,8 @@ public class PriorityComparator<T> implements Comparator<T> {
         final Annotation priorityAnnotation = AnnotationTools.searchAnnotation(annotations, JAVAX_PRIORITY,
                                                                                SpiPriority.class.getName());
         final Method getValue = AnnotationTools.searchMethod(priorityAnnotation, "value");
-        
-        return AnnotationTools.invoke(getValue, priorityAnnotation);
+        final Integer result = AnnotationTools.invoke(getValue, priorityAnnotation);
+        return result == null ? 0 : result;
     }
     
     private int invokeGetValue(final Annotation priorityAnnotation, final Method getValue) {
