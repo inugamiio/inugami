@@ -17,11 +17,9 @@
 package org.inugami.commons.spi;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Comparator;
 
-import org.inugami.api.loggers.Loggers;
 import org.inugami.api.spi.SpiPriority;
 import org.inugami.commons.tools.AnnotationTools;
 
@@ -61,16 +59,4 @@ public class PriorityComparator<T> implements Comparator<T> {
         return result == null ? 0 : result;
     }
     
-    private int invokeGetValue(final Annotation priorityAnnotation, final Method getValue) {
-        int result = 0;
-        if (getValue != null) {
-            try {
-                result = (int) getValue.invoke(priorityAnnotation);
-            }
-            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                Loggers.DEBUG.error(e.getMessage(), e);
-            }
-        }
-        return result;
-    }
 }
