@@ -153,7 +153,7 @@
         <javax.javaee-api.version>8.0</javax.javaee-api.version>
         <javax.cdi-api.version>2.0</javax.cdi-api.version>
         <javax.mail-api.version>1.6.1</javax.mail-api.version>
-        <javax.servlet.version>3.0.1</javax.servlet.version>
+        <javax.servlet.version>3.1.0</javax.servlet.version>
         <org.jboss.weld.version>3.0.2.Final</org.jboss.weld.version>
         <org.jboss.resteasy.version>4.0.0.Beta1</org.jboss.resteasy.version>
         <org.jboss.async-http-servlet.version>3.1.0.Beta2</org.jboss.async-http-servlet.version>

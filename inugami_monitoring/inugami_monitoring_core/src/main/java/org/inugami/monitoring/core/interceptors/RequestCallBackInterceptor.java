@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
 
@@ -67,6 +68,20 @@ class RequestCallBackInterceptor implements InvocationHandler {
         
         public ServletBuffer(final byte[] content) {
             data = new ByteArrayInputStream(content);
+        }
+        
+        @Override
+        public boolean isFinished() {
+            return data.available() == 0;
+        }
+        
+        @Override
+        public boolean isReady() {
+            return true;
+        }
+        
+        @Override
+        public void setReadListener(final ReadListener readListener) {
         }
         
         @Override

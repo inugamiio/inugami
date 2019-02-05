@@ -98,6 +98,11 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     }
     
     @Override
+    public void setContentLengthLong(final long len) {
+        response.setContentLengthLong(len);
+    }
+    
+    @Override
     public void setContentType(final String type) {
         response.setContentType(type);
     }
