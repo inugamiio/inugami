@@ -97,7 +97,7 @@ public class GenericContext<T> implements BootstrapContext<T> {
     }
     
     private synchronized ThreadsExecutorService createThreadsExecutor(final String name, final int nbMaxThreads) {
-        final ThreadsExecutorService result = new ThreadsExecutorService(name, nbMaxThreads, true);
+        final ThreadsExecutorService result = new ThreadsExecutorService(name, nbMaxThreads, false);
         EXECUTORS.put(name, result);
         return result;
     }

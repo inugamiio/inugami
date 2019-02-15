@@ -75,7 +75,7 @@ public class MultiThreadedProviderRunner implements ProviderRunner, ThreadFactor
     }
     
     private ThreadsExecutorService initThreadsExecutor() {
-        return new ThreadsExecutorService("MultiThreadedProviderRunner.default", 1, true);
+        return new ThreadsExecutorService("MultiThreadedProviderRunner.default", 1, false);
     }
     
     // =========================================================================
