@@ -69,7 +69,13 @@ public class ConfigTemplateValues {
     
     private String replacePropertyValue(final String result, final String key, final String propValue) {
         final String realKey = new StringBuilder("[{]{2}").append(key).append("[}]{2}").toString();
-        return result.replaceAll(realKey, propValue);
+        final String property = propValue == null ? "" : propValue;
+        if (property.contains("\\")) {
+            return result.replaceAll(realKey, propValue.replaceAll("\\\\", "\\\\\\\\"));
+        }
+        else {
+            return result.replaceAll(realKey, propValue);
+        }
     }
     
     protected List<String> searchKeys(final String value) {
