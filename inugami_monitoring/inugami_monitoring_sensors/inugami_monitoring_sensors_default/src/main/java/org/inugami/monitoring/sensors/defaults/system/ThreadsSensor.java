@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.inugami.monitoring.sensors.defaults;
+package org.inugami.monitoring.sensors.defaults.system;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;

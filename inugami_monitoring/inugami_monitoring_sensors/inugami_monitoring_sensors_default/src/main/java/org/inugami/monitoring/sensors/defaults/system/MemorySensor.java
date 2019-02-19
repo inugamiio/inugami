@@ -14,15 +14,11 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.inugami.monitoring.sensors.defaults;
+package org.inugami.monitoring.sensors.defaults.system;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.data.graphite.number.FloatNumber;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.api.tools.Comparators;
@@ -33,102 +29,102 @@ import org.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 import org.inugami.monitoring.api.tools.IntervalValues;
 
 /**
- * CpuSensor
+ * MemorySensor
  * 
  * @author patrickguillerm
  * @since Jan 17, 2019
  */
-public class CpuSensor implements MonitoringSensor {
+public class MemorySensor implements MonitoringSensor {
     
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final long                   interval;
+    private final static long          MEGA = 1024 * 1024;
+    private final long                 interval;
     
-    private final double                 percentil;
+    private final double               percentil;
     
-    private final IntervalValues<Double> values;
+    private final IntervalValues<Long> values;
     
-    private final String                 timeUnit;
-    
-    private final OperatingSystemMXBean  jmx = ManagementFactory.getOperatingSystemMXBean();
-    
-    private final Method                 getProcessCpuLoad;
+    private final String               timeUnit;
     
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    public CpuSensor() {
+    public MemorySensor() {
         interval = -1;
         percentil = -1;
         values = null;
         timeUnit = null;
-        getProcessCpuLoad = null;
     }
     
-    public CpuSensor(long interval, String query, ConfigHandler<String, String> configuration) {
+    public MemorySensor(long interval, String query, ConfigHandler<String, String> configuration) {
         super();
         this.interval = interval;
         this.percentil = configuration.grab("percentil", 0.95);
-        values = new IntervalValues<>(this::extractCpuUsage, configuration.grab("intervalValuesDelais", 1000));
+        values = new IntervalValues<>(this::extractMemoryUsage, configuration.grab("intervalValuesDelais", 1000));
         timeUnit = configuration.grabOrDefault("timeUnit", "");
-        
-        Method cpuloadMethod = null;
-        for (Method method : jmx.getClass().getDeclaredMethods()) {
-            if ("getProcessCpuLoad".equals(method.getName())) {
-                cpuloadMethod = method;
-                cpuloadMethod.setAccessible(true);
-                break;
-            }
-        }
-        getProcessCpuLoad = cpuloadMethod;
-        
     }
     
     @Override
     public MonitoringSensor buildInstance(long interval, String query, ConfigHandler<String, String> configuration) {
-        return new CpuSensor(interval, query, configuration);
+        return new MemorySensor(interval, query, configuration);
     }
     
     // =========================================================================
     // METHODS
     // =========================================================================
-    private Double extractCpuUsage() {
-        Double result = null;
-        if (getProcessCpuLoad != null) {
-            try {
-                result = (Double) getProcessCpuLoad.invoke(jmx);
-            }
-            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                Loggers.DEBUG.error(e.getMessage(), e);
-            }
-        }
-        
-        if (result == null) {
-            result = jmx.getSystemLoadAverage();
-        }
-        return result * 100;
+    private Long extractMemoryUsage() {
+        long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        return used / MEGA;
     }
     
     @Override
     public List<GenericMonitoringModel> process() {
-        final List<Double> cpuValues = values.poll();
-        final Double resultValue = GenericMonitoringModelTools.getPercentilValues(cpuValues, percentil,
-                                                                                  Comparators.doubleComparator);
-        return resultValue == null ? null : buildGenericMonitoringModel(resultValue);
+        final List<Long> data = values.poll();
+        data.sort(Comparators.longComparator);
+        return buildGenericMonitoringModel(data);
     }
     
-    private List<GenericMonitoringModel> buildGenericMonitoringModel(Double resultValue) {
+    private List<GenericMonitoringModel> buildGenericMonitoringModel(List<Long> data) {
+        List<GenericMonitoringModel> result = new ArrayList<>();
         final GenericMonitoringModelBuilder builder = GenericMonitoringModelTools.initResultBuilder();
+        final Long resultValue = GenericMonitoringModelTools.getPercentilValues(data, percentil);
         
         builder.setCounterType("system");
-        builder.setService("cpu");
+        builder.setService("memory");
         
-        builder.setValue(resultValue);
         builder.setTimeUnit(GenericMonitoringModelTools.buildTimeUnit(timeUnit, interval));
-        builder.setValueType("percent");
         
-        return GenericMonitoringModelTools.buildSingleResult(builder);
+        builder.setValue(GenericMonitoringModelTools.getPercentilValues(data, 0));
+        builder.setValueType("min");
+        result.add(builder.build());
+        
+        builder.setValue(GenericMonitoringModelTools.getPercentilValues(data, 1));
+        builder.setValueType("max");
+        result.add(builder.build());
+        
+        builder.setValue(GenericMonitoringModelTools.getPercentilValues(data, 0.95));
+        builder.setValueType("p95");
+        result.add(builder.build());
+        
+        builder.setValue(GenericMonitoringModelTools.getPercentilValues(data, 0.90));
+        builder.setValueType("p90");
+        result.add(builder.build());
+        
+        builder.setValue(GenericMonitoringModelTools.getPercentilValues(data, 0.75));
+        builder.setValueType("p75");
+        result.add(builder.build());
+        
+        builder.setValue(GenericMonitoringModelTools.getPercentilValues(data, 0.5));
+        builder.setValueType("p50");
+        result.add(builder.build());
+        
+        builder.setValue(data.stream().mapToLong(item -> item).average().orElse(0));
+        builder.setValueType("avg");
+        result.add(builder.build());
+        
+        return result;
     }
     
     @Override
@@ -141,12 +137,11 @@ public class CpuSensor implements MonitoringSensor {
     // =========================================================================
     @Override
     public String getName() {
-        return "cpu";
+        return "memory";
     }
     
     @Override
     public long getInterval() {
         return interval;
     }
-    
 }
