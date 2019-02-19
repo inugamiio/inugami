@@ -62,7 +62,7 @@ final class MonitoringDataBuilder {
     // =========================================================================
     // METHODS
     // =========================================================================
-    static Monitoring build(MonitoringConfig config, ConfigHandler<String, String> configHandler) {
+    static Monitoring build(final MonitoringConfig config, final ConfigHandler<String, String> configHandler) {
         Asserts.notNull("monitoring configuration is mandatory", config);
         Asserts.notNull("configuration handler is mandatory", configHandler);
         final SpiLoader spiloader = new SpiLoader();
@@ -92,11 +92,12 @@ final class MonitoringDataBuilder {
     // =========================================================================
     // BUILD HEADERS
     // =========================================================================
-    private static Headers buildHeaders(HeaderInformationsConfig config, ConfigHandler<String, String> configHandler) {
+    private static Headers buildHeaders(final HeaderInformationsConfig config,
+                                        final ConfigHandler<String, String> configHandler) {
         
         final Set<String> specificHeaders = new HashSet<>();
-        if (config.getSpecificHeader() != null && config.getSpecificHeader().getSpecificHeader() != null) {
-            for (SpecificHeader item : config.getSpecificHeader().getSpecificHeader()) {
+        if ((config.getSpecificHeader() != null) && (config.getSpecificHeader().getSpecificHeader() != null)) {
+            for (final SpecificHeader item : config.getSpecificHeader().getSpecificHeader()) {
                 specificHeaders.add(configHandler.applyProperties(item.getName()));
             }
         }
@@ -126,9 +127,9 @@ final class MonitoringDataBuilder {
     // =========================================================================
     // BUILD INTERCEPTOR
     // =========================================================================
-    private static List<MonitoringFilterInterceptor> buildInterceptors(InterceptorsConfig interceptors,
-                                                                       ConfigHandler<String, String> configHandler,
-                                                                       SpiLoader spiloader) {
+    private static List<MonitoringFilterInterceptor> buildInterceptors(final InterceptorsConfig interceptors,
+                                                                       final ConfigHandler<String, String> configHandler,
+                                                                       final SpiLoader spiloader) {
         final InterceptorsConfig interceptorsConfig = interceptors == null ? new InterceptorsConfig() : interceptors;
         //@formatter:off
         return interceptorsConfig.getInterceptors()
@@ -139,11 +140,11 @@ final class MonitoringDataBuilder {
         //@formatter:on
     }
     
-    private static MonitoringFilterInterceptor buildInterceptor(InterceptorConfig config,
-                                                                ConfigHandler<String, String> configHandler,
-                                                                SpiLoader spiloader) {
-        MonitoringFilterInterceptor spiInstance = loadSpiInstance(config.getName(), MonitoringFilterInterceptor.class,
-                                                                  spiloader);
+    private static MonitoringFilterInterceptor buildInterceptor(final InterceptorConfig config,
+                                                                final ConfigHandler<String, String> configHandler,
+                                                                final SpiLoader spiloader) {
+        final MonitoringFilterInterceptor spiInstance = loadSpiInstance(config.getName(),
+                                                                        MonitoringFilterInterceptor.class, spiloader);
         //@formatter:off
         return spiInstance == null ? null
                                    : spiInstance.buildInstance(buildCongifHandler(config.getProperties(),configHandler));
@@ -153,9 +154,9 @@ final class MonitoringDataBuilder {
     // =========================================================================
     // BUILD SENDERS
     // =========================================================================
-    private static List<MonitoringSender> buildSenders(MonitoringSendersConfig monitoringSendersConfig,
-                                                       ConfigHandler<String, String> configHandler,
-                                                       SpiLoader spiloader) {
+    private static List<MonitoringSender> buildSenders(final MonitoringSendersConfig monitoringSendersConfig,
+                                                       final ConfigHandler<String, String> configHandler,
+                                                       final SpiLoader spiloader) {
         
         final MonitoringSendersConfig sendersConfig = monitoringSendersConfig == null ? new MonitoringSendersConfig()
                                                                                       : monitoringSendersConfig;
@@ -170,9 +171,9 @@ final class MonitoringDataBuilder {
     
     private static MonitoringSender buildSender(final MonitoringSenderConfig senderConfig,
                                                 final ConfigHandler<String, String> configHandler,
-                                                SpiLoader spiloader) {
+                                                final SpiLoader spiloader) {
         //@formatter:off
-        MonitoringSender spiInstance = loadSpiInstance(senderConfig.getName(), MonitoringSender.class, spiloader);
+        final MonitoringSender spiInstance = loadSpiInstance(senderConfig.getName(), MonitoringSender.class, spiloader);
         return spiInstance == null ? null
                                    : spiInstance.buildInstance(buildCongifHandler(senderConfig.getProperties(), configHandler));
         //@formatter:on
@@ -181,9 +182,9 @@ final class MonitoringDataBuilder {
     // =========================================================================
     // BUILD SENSORS
     // =========================================================================
-    private static List<MonitoringSensor> buildSensors(SensorsConfig sensorsConfig,
-                                                       ConfigHandler<String, String> configHandler,
-                                                       SpiLoader spiloader) {
+    private static List<MonitoringSensor> buildSensors(final SensorsConfig sensorsConfig,
+                                                       final ConfigHandler<String, String> configHandler,
+                                                       final SpiLoader spiloader) {
         
         final SensorsConfig sensors = sensorsConfig == null ? new SensorsConfig() : sensorsConfig;
         //@formatter:off
@@ -197,11 +198,11 @@ final class MonitoringDataBuilder {
     
     private static MonitoringSensor buildSensor(final MonitoringSensorConfig sensorConfig,
                                                 final ConfigHandler<String, String> configHandler,
-                                                SpiLoader spiloader) {
+                                                final SpiLoader spiloader) {
         
         //@formatter:off
         MonitoringSensor result =null;
-        MonitoringSensor spiInstance = loadSpiInstance(sensorConfig.getName(), MonitoringSensor.class, spiloader);
+        final MonitoringSensor spiInstance = loadSpiInstance(sensorConfig.getName(), MonitoringSensor.class, spiloader);
         if(spiInstance !=null) {
             final ConfigHandler<String, String> localConfig = buildCongifHandler(sensorConfig.getProperties(),configHandler);
             String interval = localConfig.applyProperties(sensorConfig.getInterval());
@@ -209,11 +210,7 @@ final class MonitoringDataBuilder {
                 interval = "60000";
             }
             
-            String query = null;
-            if(sensorConfig.getQuery() != null) {
-                query = localConfig.applyProperties(sensorConfig.getQuery());
-            }
-            result=spiInstance.buildInstance(Long.parseLong(interval), query,localConfig) ;
+            result=spiInstance.buildInstance(Long.parseLong(interval), sensorConfig.getQuery(),localConfig) ;
         }
         return result;
         //@formatter:on
@@ -222,13 +219,14 @@ final class MonitoringDataBuilder {
     // =========================================================================
     // TOOLS
     // =========================================================================
-    private static <T> T loadSpiInstance(final String name, final Class<? extends T> spiClass, SpiLoader spiloader) {
+    private static <T> T loadSpiInstance(final String name, final Class<? extends T> spiClass,
+                                         final SpiLoader spiloader) {
         return name == null ? null : spiloader.loadSpiService(name, spiClass, false);
     }
     
-    private static ConfigHandler<String, String> buildCongifHandler(PropertiesConfig properties,
-                                                                    ConfigHandler<String, String> baseConfig) {
-        if (properties == null || properties.getProperties().isEmpty()) {
+    private static ConfigHandler<String, String> buildCongifHandler(final PropertiesConfig properties,
+                                                                    final ConfigHandler<String, String> baseConfig) {
+        if ((properties == null) || properties.getProperties().isEmpty()) {
             return baseConfig;
         }
         final Map<String, String> config = new HashMap<>();
