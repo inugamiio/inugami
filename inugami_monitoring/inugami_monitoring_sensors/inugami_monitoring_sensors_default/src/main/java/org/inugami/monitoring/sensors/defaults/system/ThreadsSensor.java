@@ -63,7 +63,7 @@ public class ThreadsSensor implements MonitoringSensor {
         this.interval = interval;
         timeUnit = configuration.grabOrDefault("timeUnit", "");
         enableThreadsDump = configuration.grabBoolean("enableThreadsDump", true);
-        maxDepth = configuration.grabInt("maxDepth", 25);
+        maxDepth = configuration.grabInt("maxDepth", 10);
     }
     
     @Override
