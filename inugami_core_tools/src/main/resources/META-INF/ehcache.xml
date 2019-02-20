@@ -8,11 +8,11 @@
         <ehcache:key-type>java.lang.String</ehcache:key-type>
         <ehcache:value-type>java.io.Serializable</ehcache:value-type>
         <ehcache:expiry>
-            <ehcache:ttl unit="seconds">30</ehcache:ttl>
+            <ehcache:ttl unit="seconds">10</ehcache:ttl>
         </ehcache:expiry>
 
         <ehcache:resources>
-            <ehcache:heap unit="entries">100</ehcache:heap>
+            <ehcache:heap unit="MB">10</ehcache:heap>
         </ehcache:resources>
     </ehcache:cache>
 
@@ -20,11 +20,12 @@
         <ehcache:key-type>java.lang.String</ehcache:key-type>
         <ehcache:value-type>java.io.Serializable</ehcache:value-type>
         <ehcache:expiry>
-            <ehcache:ttl unit="days">7</ehcache:ttl>
+            <ehcache:ttl unit="days">1</ehcache:ttl>
         </ehcache:expiry>
 
         <ehcache:resources>
-            <ehcache:heap unit="entries">1000</ehcache:heap>
+            <ehcache:heap unit="MB">50</ehcache:heap>
+            <ehcache:disk unit="MB">500</ehcache:disk>
         </ehcache:resources>
     </ehcache:cache>
 
@@ -37,39 +38,13 @@
         </ehcache:expiry>
 
         <ehcache:resources>
-            <ehcache:heap unit="entries">1000</ehcache:heap>
+            <ehcache:heap unit="MB">50</ehcache:heap>
+            <ehcache:disk unit="MB">500</ehcache:disk>
         </ehcache:resources>
     </ehcache:cache>
 
 
-
-    <ehcache:cache alias="TEN_SECOND">
-        <ehcache:key-type>java.lang.String</ehcache:key-type>
-        <ehcache:value-type>java.io.Serializable</ehcache:value-type>
-        <ehcache:expiry>
-            <ehcache:ttl unit="seconds">10</ehcache:ttl>
-        </ehcache:expiry>
-
-        <ehcache:resources>
-            <ehcache:heap unit="entries">100</ehcache:heap>
-        </ehcache:resources>
-    </ehcache:cache>
-
-
-
-    <ehcache:cache alias="HALF_MINUTE">
-        <ehcache:key-type>java.lang.String</ehcache:key-type>
-        <ehcache:value-type>java.io.Serializable</ehcache:value-type>
-        <ehcache:expiry>
-            <ehcache:ttl unit="seconds">30</ehcache:ttl>
-        </ehcache:expiry>
-
-        <ehcache:resources>
-            <ehcache:heap unit="entries">100</ehcache:heap>
-        </ehcache:resources>
-    </ehcache:cache>
-
-    <ehcache:cache alias="MINUTE">
+    <ehcache:cache alias="MINUTELY">
         <ehcache:key-type>java.lang.String</ehcache:key-type>
         <ehcache:value-type>java.io.Serializable</ehcache:value-type>
         <ehcache:expiry>
@@ -77,12 +52,13 @@
         </ehcache:expiry>
 
         <ehcache:resources>
-            <ehcache:heap unit="entries">100</ehcache:heap>
+            <ehcache:heap unit="MB">30</ehcache:heap>
+            <ehcache:disk unit="MB">200</ehcache:disk>
         </ehcache:resources>
     </ehcache:cache>
 
 
-    <ehcache:cache alias="TEN_MINUTES">
+    <ehcache:cache alias="TEN_MINUTELY">
         <ehcache:key-type>java.lang.String</ehcache:key-type>
         <ehcache:value-type>java.io.Serializable</ehcache:value-type>
         <ehcache:expiry>
@@ -90,7 +66,8 @@
         </ehcache:expiry>
 
         <ehcache:resources>
-            <ehcache:heap unit="entries">100</ehcache:heap>
+            <ehcache:heap unit="MB">30</ehcache:heap>
+            <ehcache:disk unit="MB">200</ehcache:disk>
         </ehcache:resources>
     </ehcache:cache>
 
@@ -102,7 +79,8 @@
         </ehcache:expiry>
 
         <ehcache:resources>
-            <ehcache:heap unit="entries">100</ehcache:heap>
+            <ehcache:heap unit="MB">10</ehcache:heap>
+            <ehcache:disk unit="MB">100</ehcache:disk>
         </ehcache:resources>
     </ehcache:cache>
 
@@ -114,7 +92,8 @@
         </ehcache:expiry>
 
         <ehcache:resources>
-            <ehcache:heap unit="entries">100</ehcache:heap>
+            <ehcache:heap unit="MB">10</ehcache:heap>
+            <ehcache:disk unit="MB">300</ehcache:disk>
         </ehcache:resources>
     </ehcache:cache>
 
