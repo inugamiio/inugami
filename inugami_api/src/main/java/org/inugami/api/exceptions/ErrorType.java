@@ -39,6 +39,8 @@ public class ErrorType implements Serializable {
     
     private final String                                  message;
     
+    private final String                                  errorType;
+    
     @JsonIgnore
     private final transient BiConsumer<String, Exception> errorHandler;
     
@@ -47,16 +49,27 @@ public class ErrorType implements Serializable {
     // =========================================================================
     public ErrorType(final int httpCode, final String errorCode, final String message) {
         this(httpCode, errorCode, message, (msg, error) -> {
-        });
+        }, null);
+    }
+    
+    public ErrorType(final int httpCode, final String errorCode, final String message, final String errorType) {
+        this(httpCode, errorCode, message, (msg, error) -> {
+        }, null);
     }
     
     public ErrorType(final int httpCode, final String errorCode, final String message,
                      final BiConsumer<String, Exception> errorHandler) {
+        this(httpCode, errorCode, message, errorHandler, null);
+    }
+    
+    public ErrorType(final int httpCode, final String errorCode, final String message,
+                     final BiConsumer<String, Exception> errorHandler, final String errorType) {
         super();
         this.httpCode = httpCode;
         this.errorCode = errorCode;
         this.message = message;
         this.errorHandler = errorHandler;
+        this.errorType = "technical";
     }
     
     // =========================================================================
@@ -64,7 +77,17 @@ public class ErrorType implements Serializable {
     // =========================================================================
     @Override
     public String toString() {
-        return "ErrorType [httpCode=" + httpCode + ", errorCode=" + errorCode + ", message=" + message + "]";
+        final StringBuilder builder = new StringBuilder();
+        builder.append("ErrorType [httpCode=");
+        builder.append(httpCode);
+        builder.append(", errorCode=");
+        builder.append(errorCode);
+        builder.append(", message=");
+        builder.append(message);
+        builder.append(", errorType=");
+        builder.append(errorType);
+        builder.append("]");
+        return builder.toString();
     }
     
     // =========================================================================
@@ -84,6 +107,10 @@ public class ErrorType implements Serializable {
     
     public BiConsumer<String, Exception> getErrorHandler() {
         return errorHandler;
+    }
+    
+    public String getErrorType() {
+        return errorType;
     }
     
 }
