@@ -25,7 +25,6 @@
 
         <ehcache:resources>
             <ehcache:heap unit="MB">50</ehcache:heap>
-            <ehcache:disk unit="MB">500</ehcache:disk>
         </ehcache:resources>
     </ehcache:cache>
 
@@ -39,7 +38,6 @@
 
         <ehcache:resources>
             <ehcache:heap unit="MB">50</ehcache:heap>
-            <ehcache:disk unit="MB">500</ehcache:disk>
         </ehcache:resources>
     </ehcache:cache>
 
@@ -53,7 +51,6 @@
 
         <ehcache:resources>
             <ehcache:heap unit="MB">30</ehcache:heap>
-            <ehcache:disk unit="MB">200</ehcache:disk>
         </ehcache:resources>
     </ehcache:cache>
 
@@ -67,7 +64,6 @@
 
         <ehcache:resources>
             <ehcache:heap unit="MB">30</ehcache:heap>
-            <ehcache:disk unit="MB">200</ehcache:disk>
         </ehcache:resources>
     </ehcache:cache>
 
@@ -80,7 +76,6 @@
 
         <ehcache:resources>
             <ehcache:heap unit="MB">10</ehcache:heap>
-            <ehcache:disk unit="MB">100</ehcache:disk>
         </ehcache:resources>
     </ehcache:cache>
 
@@ -93,7 +88,6 @@
 
         <ehcache:resources>
             <ehcache:heap unit="MB">10</ehcache:heap>
-            <ehcache:disk unit="MB">300</ehcache:disk>
         </ehcache:resources>
     </ehcache:cache>
 
