@@ -132,14 +132,16 @@ public enum JvmKeyValues {
     HEADER_KEY_COUNTRY("header.key.country"),
     
     MONITORING_ENABLE("monitoring.enable"),
-    DEV_FILTER_BAN_URI_REGEX("dev.filter.ban.uri.regex");
+    DEV_FILTER_BAN_URI_REGEX("dev.filter.ban.uri.regex"),
+    
+    CACHE_CONFIG_PATH("cache.configuration.path");
     
     public static final String DEFAUKLT_APPLICATION_NAME = "inugami";
     
     // =========================================================================
     // ENUM COMPOSITE
     // =========================================================================
-    private String             key;
+    private String key;
     
     private JvmKeyValues(final String key) {
         this.key = key;

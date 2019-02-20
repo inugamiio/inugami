@@ -16,7 +16,9 @@
  */
 package org.inugami.core.services.cache;
 
+import java.io.File;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +37,10 @@ import org.ehcache.spi.loaderwriter.BulkCacheWritingException;
 import org.ehcache.spi.loaderwriter.CacheLoadingException;
 import org.ehcache.spi.loaderwriter.CacheWritingException;
 import org.ehcache.xml.XmlConfiguration;
+import org.inugami.api.constants.JvmKeyValues;
 import org.inugami.api.loggers.Loggers;
+import org.inugami.commons.files.FilesUtils;
+import org.inugami.configuration.exceptions.FatalConfigurationException;
 
 /**
  * CacheService
@@ -58,7 +63,7 @@ public class CacheService {
     }
     
     private CacheService(final URL cacheConfig) {
-        final URL url = cacheConfig == null ? this.getClass().getResource("/META-INF/ehcache.xml") : cacheConfig;
+        final URL url = cacheConfig == null ? resolveCacheConfigurationFile() : cacheConfig;
         final Configuration xmlConfig = new XmlConfiguration(url);
         final CacheManager manager = CacheManagerBuilder.newCacheManager(xmlConfig);
         manager.init();
@@ -69,6 +74,23 @@ public class CacheService {
             caches.put(type, cache);
         }
         
+    }
+    
+    private URL resolveCacheConfigurationFile() {
+        URL result = this.getClass().getResource("/META-INF/ehcache.xml");
+        
+        final String configPath = JvmKeyValues.CACHE_CONFIG_PATH.get();
+        if (configPath != null) {
+            final File configFile = new File(configPath);
+            FilesUtils.assertCanRead(configFile);
+            try {
+                result = configFile.toURI().toURL();
+            }
+            catch (final MalformedURLException e) {
+                throw new FatalConfigurationException(e.getMessage(), e);
+            }
+        }
+        return result;
     }
     
     // =========================================================================
