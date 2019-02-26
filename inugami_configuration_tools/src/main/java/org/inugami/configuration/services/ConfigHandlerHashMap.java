@@ -69,25 +69,37 @@ public class ConfigHandlerHashMap extends HashMap<String, String>
     }
     
     public ConfigHandlerHashMap(final Map<String, String> map) {
+        this(map, true);
+    }
+    
+    private ConfigHandlerHashMap(final Map<String, String> map, boolean enableFunction,
+                                 final ProviderAttributFunction... functions) {
         super(map);
         this.serviceName = null;
-        optional = new ConfigHandlerOptionalHashMap();
+        enableFunction = functions.length > 0;
+        optional = new ConfigHandlerOptionalHashMap(map, functions);
         optional.putAll(map);
-        functions = new FunctionsServices(new SpiLoader().loadSpiService(ProviderAttributFunction.class), this);
+        this.functions = new FunctionsServices(functions, this);
     }
     
     public ConfigHandlerHashMap(final List<Config> configs) {
         this(convertToMap(configs));
     }
     
-    private static Map<String, String> convertToMap(final List<Config> configs) {
-        final Map<String, String> result = new HashMap<>();
-        if (configs != null) {
-            for (final Config entry : configs) {
-                result.put(entry.getKey(), entry.getValue());
-            }
-        }
-        return result;
+    // =========================================================================
+    // BUILDERS
+    // =========================================================================
+    public static ConfigHandlerHashMap buildWithoutFunction() {
+        return new ConfigHandlerHashMap(new HashMap<>(), false, new ProviderAttributFunction[] {});
+    }
+    
+    public static ConfigHandlerHashMap buildWithoutFunction(final Map<String, String> map) {
+        return new ConfigHandlerHashMap(map, false, new ProviderAttributFunction[] {});
+    }
+    
+    public static ConfigHandlerHashMap buildWithSpecificFunctions(final Map<String, String> map,
+                                                                  final ProviderAttributFunction... functions) {
+        return new ConfigHandlerHashMap(map, false, functions);
     }
     
     // =========================================================================
@@ -266,6 +278,16 @@ public class ConfigHandlerHashMap extends HashMap<String, String>
             }
             throw new IllegalArgumentException(msg);
         }
+    }
+    
+    private static Map<String, String> convertToMap(final List<Config> configs) {
+        final Map<String, String> result = new HashMap<>();
+        if (configs != null) {
+            for (final Config entry : configs) {
+                result.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return result;
     }
     
     // =========================================================================

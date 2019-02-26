@@ -58,7 +58,23 @@ public class ConfigHandlerOptionalHashMap extends HashMap<String, String> implem
     // =========================================================================
     public ConfigHandlerOptionalHashMap() {
         super();
-        functions = new FunctionsServices(new SpiLoader().loadSpiService(ProviderAttributFunction.class), this);
+        final List<ProviderAttributFunction> attributFunctions = new SpiLoader().loadSpiService(ProviderAttributFunction.class);
+        functions = new FunctionsServices(attributFunctions, this);
+    }
+    
+    public ConfigHandlerOptionalHashMap(final boolean enableFunction) {
+        super();
+        final List<ProviderAttributFunction> attributFunctions = new ArrayList<>();
+        if (enableFunction) {
+            new SpiLoader().loadSpiService(ProviderAttributFunction.class);
+        }
+        
+        functions = new FunctionsServices(attributFunctions, this);
+    }
+    
+    public ConfigHandlerOptionalHashMap(final Map<String, String> map, final ProviderAttributFunction[] functions) {
+        super();
+        this.functions = new FunctionsServices(functions, this);
     }
     
     // =========================================================================

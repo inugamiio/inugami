@@ -17,6 +17,7 @@
 package org.inugami.configuration.services.functions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,13 +51,25 @@ public class FunctionsServices {
     // CONSTRUCTORS
     // =========================================================================
     protected FunctionsServices() {
-        this(null, null);
+        this(new ProviderAttributFunction[] {}, null);
+    }
+    
+    public FunctionsServices(final ConfigHandler<String, String> config) {
+        super();
+        this.functions = new ArrayList<>();
+        this.config = config;
     }
     
     public FunctionsServices(final List<ProviderAttributFunction> functions,
                              final ConfigHandler<String, String> config) {
         super();
         this.functions = functions;
+        this.config = config;
+    }
+    
+    public FunctionsServices(final ProviderAttributFunction[] functions, final ConfigHandler<String, String> config) {
+        super();
+        this.functions = functions == null ? new ArrayList<>() : Arrays.asList(functions);
         this.config = config;
     }
     

@@ -54,7 +54,7 @@ public class FunctionsServicesTest {
     
     @Test
     public void testExtractData() {
-        final FunctionsServices services = new FunctionsServices(null, iniConfig());
+        final FunctionsServices services = new FunctionsServices(iniConfig());
         
         final List<FunctionData> dataGrp = services.extractData("#{startHourAt(06:00,-1d)}");
         assertNotNull(dataGrp);

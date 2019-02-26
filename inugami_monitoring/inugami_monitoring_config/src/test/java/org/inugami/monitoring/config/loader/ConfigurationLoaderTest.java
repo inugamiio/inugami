@@ -87,7 +87,7 @@ public class ConfigurationLoaderTest implements TestUnitResources {
             }
         }
         assertNotNull(sensor);
-        assertEquals("MBean:java.lang.Compilation.TotalCompilationTime", sensor.getQuery());
+        assertEquals("MBean:{{path}}", sensor.getQuery());
         assertEquals("java.lang.Compilation.TotalCompilationTime", sensor.getPath());
     }
 }
