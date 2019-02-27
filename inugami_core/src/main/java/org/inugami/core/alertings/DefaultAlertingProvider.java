@@ -363,7 +363,8 @@ public class DefaultAlertingProvider implements AlertingProvider {
         
         String rawResult = null;
         try {
-            rawResult = engine.execute(preload, function, functionName, gav, event, data.getData().orElseGet(null));
+            final String script = String.join("\n", preload == null ? "" : preload, function);
+            rawResult = engine.execute(script, functionName, gav, event, data.getData().orElseGet(null));
         }
         catch (final ScriptException e) {
             Loggers.ALERTING.error(e.getMessage(), e);

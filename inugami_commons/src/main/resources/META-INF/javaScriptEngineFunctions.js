@@ -9,6 +9,21 @@ var JSON = {
 		return _tools.stringify(data);
 	}
 }
+//=========================================================================
+//COMPARATORS
+//=========================================================================
+function lt(ref, value){
+	return ref > value;
+}
+function le(ref, value){
+	return ref >= value;
+}
+function gt(ref, value){
+	return ref < value;
+}
+function ge(ref, value){
+	return ref <= value;
+}
 
 //=========================================================================
 // CONSOLE
