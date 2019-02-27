@@ -48,44 +48,50 @@ public class MonitoringContext implements BootstrapContext<Void> {
     // =========================================================================
     // BOOSTRAP
     // =========================================================================
-    public void bootrap(Void ctx) {
-        RequestContext.initializeConfig(CONFIG);
-        if (CONFIG.isEnable()) {
-            managersTasks.putAll(buildSensorsTasks(CONFIG.getSensors()));
+    @Override
+    public void bootrap(final Void ctx) {
+        if (CONFIG != null) {
+            RequestContext.initializeConfig(CONFIG);
+            if (CONFIG.isEnable()) {
+                managersTasks.putAll(buildSensorsTasks(CONFIG.getSensors()));
+            }
+            
+            //@formatter:off
+            managersTasks.entrySet()
+                         .stream()
+                         .map(Map.Entry::getValue)
+                         .forEach(task -> task.bootrap(this));
+            //@formatter:on
         }
-        
-        //@formatter:off
-        managersTasks.entrySet()
-                     .stream()
-                     .map(Map.Entry::getValue)
-                     .forEach(task -> task.bootrap(this));
-        //@formatter:on
     };
     
     // =========================================================================
     // SHUTDOWN
     // =========================================================================
-    public void shutdown(Void ctx) {
+    @Override
+    public void shutdown(final Void ctx) {
         //@formatter:off
-        managersTasks.entrySet()
-                     .stream()
-                     .map(Map.Entry::getValue)
-                     .forEach(task -> task.shutdown(this));
-        
-        CONFIG.getSenders().forEach(MonitoringSender::shutdown);
+        if(CONFIG != null) {
+            managersTasks.entrySet()
+                         .stream()
+                         .map(Map.Entry::getValue)
+                         .forEach(task -> task.shutdown(this));
+
+            CONFIG.getSenders().forEach(MonitoringSender::shutdown);
+        }
         //@formatter:on
     };
     
     // =========================================================================
     // BUILDER
     // =========================================================================
-    private Map<Long, SensorsIntervalManagerTask> buildSensorsTasks(List<MonitoringSensor> sensors) {
-        Map<Long, SensorsIntervalManagerTask> result = new HashMap<>();
+    private Map<Long, SensorsIntervalManagerTask> buildSensorsTasks(final List<MonitoringSensor> sensors) {
+        final Map<Long, SensorsIntervalManagerTask> result = new HashMap<>();
         if (sensors == null) {
             return result;
         }
         
-        for (MonitoringSensor sensor : sensors) {
+        for (final MonitoringSensor sensor : sensors) {
             SensorsIntervalManagerTask task = result.get(sensor.getInterval());
             if (task == null) {
                 if (sensor.getInterval() > 100) {

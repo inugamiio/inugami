@@ -106,20 +106,24 @@ public final class ConfigurationLoader {
             result = loadConfiguration(configFile);
         }
         
-        ConfigHandler<String, String> configHandler = buildConfigHandler(result);
+        if (result == null) {
+            return null;
+        }
+        
+        final ConfigHandler<String, String> configHandler = buildConfigHandler(result);
         try {
             result.postProcessing(configHandler);
         }
-        catch (TechnicalException e) {
+        catch (final TechnicalException e) {
             throw new FatalException(e.getMessage(), e);
         }
         
         return MonitoringDataBuilder.build(result, configHandler);
     }
     
-    protected static MonitoringConfig loadConfiguration(File configFile) {
+    protected static MonitoringConfig loadConfiguration(final File configFile) {
         MonitoringConfig result = null;
-        if (configFile != null && configFile.exists() && configFile.canRead()) {
+        if ((configFile != null) && configFile.exists() && configFile.canRead()) {
             result = (MonitoringConfig) XSTREAM_MAIN.fromXML(configFile);
         }
         return result;
@@ -134,7 +138,7 @@ public final class ConfigurationLoader {
         if (specificFile != null) {
             result = new File(specificFile);
         }
-        else if (specificFile == null && JvmKeyValues.JVM_HOME_PATH.get() != null) {
+        else if ((specificFile == null) && (JvmKeyValues.JVM_HOME_PATH.get() != null)) {
             result = FilesUtils.buildFile(new File(JvmKeyValues.JVM_HOME_PATH.get()), "monitoring.xml");
         }
         else {
@@ -146,11 +150,11 @@ public final class ConfigurationLoader {
     // =========================================================================
     // BUILDER
     // =========================================================================
-    private static ConfigHandler<String, String> buildConfigHandler(MonitoringConfig config) {
+    private static ConfigHandler<String, String> buildConfigHandler(final MonitoringConfig config) {
         final Map<String, String> result = new HashMap<>();
         
         //@formatter:off
-        PropertiesConfig properties = config.getProperties()==null?new PropertiesConfig():config.getProperties();
+        final PropertiesConfig properties = config.getProperties()==null?new PropertiesConfig():config.getProperties();
         properties.getProperties()
                   .stream()
                   .filter(item -> item.getKey() !=null)
