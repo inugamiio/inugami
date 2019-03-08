@@ -18,8 +18,11 @@ package org.inugami.commons.engine.js.objects;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+
+import org.inugami.api.models.data.basic.RawJsonObject;
 
 /**
  * JsList
@@ -32,7 +35,9 @@ public class JsList<E> extends ArrayList<E> {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    protected int length;
+    private static final long serialVersionUID = 7740900495327036807L;
+    
+    protected int             length;
     
     // =========================================================================
     // OVERRIDES
@@ -123,5 +128,19 @@ public class JsList<E> extends ArrayList<E> {
     public void replaceAll(final UnaryOperator<E> operator) {
         super.replaceAll(operator);
         length = size();
+    }
+    
+    public String join(final String charSeparator) {
+        final List<String> values = new ArrayList<>();
+        for (final E item : this) {
+            if (item instanceof RawJsonObject) {
+                values.add(((RawJsonObject) item).convertToJson());
+            }
+            else {
+                values.add(String.valueOf(item));
+            }
+            
+        }
+        return String.join(charSeparator == null ? "," : charSeparator, values);
     }
 }

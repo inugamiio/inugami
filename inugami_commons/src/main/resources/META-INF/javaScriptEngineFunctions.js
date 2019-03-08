@@ -212,3 +212,10 @@ builders = {}
 builders.timeValue = function(path, value, time){
 	return _toolsBuilders.timeValue(path, value, time);
 }
+
+
+
+//=========================================================================
+//Array	
+//=========================================================================
+var Array = Java.type('com.vsct.dwrm.tools.dashboard.tv.commons.engine.js.objects.JsList');
