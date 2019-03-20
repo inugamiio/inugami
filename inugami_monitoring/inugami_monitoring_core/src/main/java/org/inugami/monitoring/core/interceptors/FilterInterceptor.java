@@ -73,7 +73,7 @@ public class FilterInterceptor implements Filter {
     // LIFECYCLE
     // =========================================================================
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(final FilterConfig filterConfig) throws ServletException {
     }
     
     @Override
@@ -84,15 +84,15 @@ public class FilterInterceptor implements Filter {
     // METHODS
     // =========================================================================
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-                                                                                              ServletException {
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
+    public void doFilter(final ServletRequest request, final ServletResponse response,
+                         final FilterChain chain) throws IOException, ServletException {
+        final HttpServletRequest httpRequest = (HttpServletRequest) request;
         final String currentPath = buildCurrentPath(httpRequest);
         if (mustIntercept(currentPath)) {
             try {
                 processIntercepting(request, response, chain, httpRequest);
             }
-            catch (Exception e) {
+            catch (final Exception e) {
                 throw new IOException(e.getMessage(), e);
             }
         }
@@ -101,15 +101,15 @@ public class FilterInterceptor implements Filter {
         }
     }
     
-    private void processIntercepting(ServletRequest request, ServletResponse response, FilterChain chain,
-                                     HttpServletRequest httpRequest) throws Exception {
+    private void processIntercepting(final ServletRequest request, final ServletResponse response,
+                                     final FilterChain chain, final HttpServletRequest httpRequest) throws Exception {
         byte[] data = null;
         String content = null;
         try {
             data = readInput(httpRequest.getInputStream());
             content = data == null ? null : ObfuscatorTools.applyObfuscators(new String(data));
         }
-        catch (IOException e) {
+        catch (final IOException e) {
             Loggers.DEBUG.error(e.getMessage(), e);
             Loggers.METRICS.error(e.getMessage());
         }
@@ -125,7 +125,7 @@ public class FilterInterceptor implements Filter {
         try {
             chain.doFilter(buildRequestProxy(request, data), responseWrapper);
         }
-        catch (Exception e) {
+        catch (final Exception e) {
             error = e;
             throw e;
         }
@@ -136,7 +136,7 @@ public class FilterInterceptor implements Filter {
         }
     }
     
-    private ServletRequest buildRequestProxy(ServletRequest request, final byte[] content) {
+    private ServletRequest buildRequestProxy(final ServletRequest request, final byte[] content) {
         final Class<?>[] types = { ServletRequest.class, HttpServletRequest.class };
         //@formatter:off
         final ServletRequest proxy = (ServletRequest) Proxy.newProxyInstance(this.getClass().getClassLoader(),
@@ -147,16 +147,16 @@ public class FilterInterceptor implements Filter {
         return proxy;
     }
     
-    private String buildCurrentPath(HttpServletRequest httpRequest) {
+    private String buildCurrentPath(final HttpServletRequest httpRequest) {
         return httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
     }
     
-    private boolean mustIntercept(String currentPath) {
+    private boolean mustIntercept(final String currentPath) {
         Boolean result = INTERCEPTABLE_RESOLVED.get(currentPath);
         if (result == null) {
-            for (Interceptable resolver : INTERCEPTABLE_RESOLVER) {
+            for (final Interceptable resolver : INTERCEPTABLE_RESOLVER) {
                 result = resolver.isInterceptable(currentPath);
-                if (result) {
+                if (!result) {
                     break;
                 }
             }
@@ -169,22 +169,23 @@ public class FilterInterceptor implements Filter {
     // =========================================================================
     // LIFECYCLE
     // =========================================================================
-    private void onBegin(HttpServletRequest httpRequest, Map<String, String> headers, String content) {
+    private void onBegin(final HttpServletRequest httpRequest, final Map<String, String> headers,
+                         final String content) {
         
         final ResquestData requestData = convertToRequestData(httpRequest, headers, content);
-        for (MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
+        for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
             interceptor.onBegin(requestData);
         }
     }
     
-    private void onEnd(HttpServletRequest httpRequest, ResponseWrapper httpResponse, ErrorResult error, long duration,
-                       String content) {
+    private void onEnd(final HttpServletRequest httpRequest, final ResponseWrapper httpResponse,
+                       final ErrorResult error, final long duration, final String content) {
         RequestInformationInitializer.appendResponseHeaderInformation(httpResponse);
         RequestContext.getInstance();
         final Map<String, String> headers = RequestInformationInitializer.buildHeadersMap(httpResponse);
         final ResquestData requestData = convertToRequestData(httpRequest, headers, content);
         final ResponseData responseData = convertToResponseData(httpResponse, duration);
-        for (MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
+        for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
             interceptor.onDone(requestData, responseData, error);
         }
     }
@@ -192,8 +193,8 @@ public class FilterInterceptor implements Filter {
     // =========================================================================
     // CONVERTERS
     // =========================================================================
-    private ResquestData convertToRequestData(HttpServletRequest httpRequest, Map<String, String> headers,
-                                              String content) {
+    private ResquestData convertToRequestData(final HttpServletRequest httpRequest, final Map<String, String> headers,
+                                              final String content) {
         final ResquestDataBuilder builder = new ResquestDataBuilder();
         
         builder.setMethod(httpRequest.getMethod());
@@ -201,16 +202,16 @@ public class FilterInterceptor implements Filter {
         builder.setContextPath(httpRequest.getContextPath());
         builder.setContentType(httpRequest.getContentType());
         builder.setHearder(headers);
-        builder.setContent(content==null?null:content.trim());
+        builder.setContent(content == null ? null : content.trim());
         return builder.build();
     }
     
-    private byte[] readInput(ServletInputStream inputStream) {
+    private byte[] readInput(final ServletInputStream inputStream) {
         
         final StringBuilder result = new StringBuilder();
         final ByteArrayOutputStream out = new ByteArrayOutputStream(64 * KILO);
         final int bufferSize = 16 * KILO;
-        byte[] buffer = new byte[bufferSize];
+        final byte[] buffer = new byte[bufferSize];
         int cursor = 0;
         
         int hasNext = 0;
@@ -223,7 +224,7 @@ public class FilterInterceptor implements Filter {
                 }
                 cursor++;
             }
-            catch (IOException e) {
+            catch (final IOException e) {
             }
             
         }
@@ -232,7 +233,7 @@ public class FilterInterceptor implements Filter {
         return out.toByteArray();
     }
     
-    private ResponseData convertToResponseData(ResponseWrapper httpResponse, long duration) {
+    private ResponseData convertToResponseData(final ResponseWrapper httpResponse, final long duration) {
         final String content = ObfuscatorTools.applyObfuscators(httpResponse.getData());
         return new ResponseData(httpResponse.getStatus(), content, httpResponse.getContentType(), duration,
                                 CalendarTools.buildCalendar().getTimeInMillis());
@@ -241,9 +242,9 @@ public class FilterInterceptor implements Filter {
     // =========================================================================
     // ERROR RESOLVER
     // =========================================================================
-    private ErrorResult resolveError(Exception error) {
+    private ErrorResult resolveError(final Exception error) {
         ErrorResult result = null;
-        for (ExceptionResolver resolver : EXCEPTION_RESOLVER) {
+        for (final ExceptionResolver resolver : EXCEPTION_RESOLVER) {
             result = resolver.resolve(error);
             if (result != null) {
                 break;
