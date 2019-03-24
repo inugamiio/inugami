@@ -247,12 +247,24 @@
     = SCM
     ======================================================================== -->
     <scm>
-        <url>https://github.com/inugamiio/inugami</url>
-        <connection>git@github.com:inugamiio/inugami.git</connection>
-        <developerConnection>git@github.com:inugamiio/inugami.git</developerConnection>
+        <url>https://github.com/inugamiio/inugami-maven-plugin</url>
+        <connection>scm:git:git@github.com:inugamiio/inugami.git</connection>
+        <developerConnection>scm:git:git@github.com:inugamiio/inugami.git</developerConnection>
         <tag>v0.0.0</tag>
     </scm>
 
+    <distributionManagement>
+        <repository>
+            <id>inugami-release</id>
+            <name>inugami-release</name>
+            <url>http://inugami.io/artifactory/inugami-release</url>
+        </repository>
+        <snapshotRepository>
+            <id>inugami-snapshot</id>
+            <name>inugami-snapshot</name>
+            <url>http://inugami.io/artifactory/inugami-snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 
     <!-- ======================================================================= 
