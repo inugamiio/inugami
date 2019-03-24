@@ -535,17 +535,16 @@ public class HttpBasicConnector {
             result.addStatusCode(httpResult.getStatusLine().getStatusCode());
             result.addMessage(httpResult.getStatusLine().getReasonPhrase());
             
-            if (200 == httpResult.getStatusLine().getStatusCode()) {
-                final HttpEntity httpEntity = httpResult.getEntity();
-                result.addContenType(httpEntity.getContentType().getValue());
-                if (httpEntity.getContentEncoding() != null) {
-                    result.addEncoding(httpEntity.getContentEncoding().getValue());
-                }
-                assertDataLength(url.toString(), httpEntity.getContentLength());
-                
-                final InputStream content = httpEntity.getContent();
-                result.addData(readData(content, httpEntity.getContentLength(), url));
+            final HttpEntity httpEntity = httpResult.getEntity();
+            result.addContenType(httpEntity.getContentType().getValue());
+            if (httpEntity.getContentEncoding() != null) {
+                result.addEncoding(httpEntity.getContentEncoding().getValue());
             }
+            assertDataLength(url.toString(), httpEntity.getContentLength());
+            
+            final InputStream content = httpEntity.getContent();
+            result.addData(readData(content, httpEntity.getContentLength(), url));
+            
         }
         catch (final Exception e) {
             handlingError("GET", String.valueOf(url), e);
