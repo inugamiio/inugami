@@ -143,7 +143,6 @@ public class MockJsonHelper {
     // INIT
     // =========================================================================
     public final void loadFiles() {
-        final FilesUtils fileUtils = new FilesUtils();
         
         try {
             for (final String file : files) {
@@ -151,7 +150,7 @@ public class MockJsonHelper {
                 String content = null;
                 if (absoluteFiles) {
                     final File currentFile = new File(fileName);
-                    content = fileUtils.read(currentFile);
+                    content = FilesUtils.readContent(currentFile);
                     
                     final String key = cleanFileName(currentFile.getName());
                     if (data.containsKey(key)) {
@@ -160,7 +159,7 @@ public class MockJsonHelper {
                     data.put(key, content);
                 }
                 else {
-                    content = new String(fileUtils.readFromClassLoader(fileName));
+                    content = new String(FilesUtils.readFromClassLoader(fileName));
                     final String key = cleanFileName(fileName);
                     if (data.containsKey(key)) {
                         data.remove(key);
