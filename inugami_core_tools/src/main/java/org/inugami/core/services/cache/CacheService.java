@@ -38,6 +38,7 @@ import org.ehcache.spi.loaderwriter.CacheLoadingException;
 import org.ehcache.spi.loaderwriter.CacheWritingException;
 import org.ehcache.xml.XmlConfiguration;
 import org.inugami.api.constants.JvmKeyValues;
+import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.commons.files.FilesUtils;
 import org.inugami.configuration.exceptions.FatalConfigurationException;
@@ -158,7 +159,9 @@ public class CacheService {
     }
     
     public Cache<String, Serializable> getCache(final CacheTypes type) {
-        return caches.get(type);
+        Cache<String, Serializable> result = caches.get(type);
+        Asserts.notNull("unable to find cache : " + type, result);
+        return result;
     }
     
     public List<CacheTypes> cacheTypes() {
