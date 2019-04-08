@@ -103,23 +103,6 @@ public class PluginsRest {
     final String gav, @QueryParam("exclude")
     final String excludeRegex) throws ProcessingRunningException {
         
-        final String key = buildCacheKey(gav, excludeRegex);
-        
-        final CacheService cache = context.getCache();
-        List<ProviderFutureResultFront> result = cache.get(CacheTypes.TEN_SECOND, key);
-        
-        if (result == null) {
-            allowToProcessEventsData();
-            result = processEventsData(gav, excludeRegex, key, cache);
-            
-        }
-        
-        return result;
-    }
-    
-    private synchronized List<ProviderFutureResultFront> processEventsData(final String gav, final String excludeRegex,
-                                                                           final String key, final CacheService cache) {
-        isProcessEventsDataRunning.set(true);
         List<ProviderFutureResultFront> result;
         result = new ArrayList<>();
         List<ProviderFutureResult> savedData = null;
@@ -133,21 +116,10 @@ public class PluginsRest {
                 
             }
         }
-        cache.put(CacheTypes.TEN_SECOND, key, (ArrayList) result);
-        isProcessEventsDataRunning.set(false);
         return result;
     }
-    
-    private void allowToProcessEventsData() throws ProcessingRunningException {
-        if (isProcessEventsDataRunning.get()) {
-            throw new ProcessingRunningException();
-        }
-    }
-    
-    private String buildCacheKey(final String gav, final String excludeRegex) {
-        return String.join("_", PluginsRest.class.getName(), gav, excludeRegex);
-    }
-    
+
+
     @GET
     @Path(SseService.ALL_PLUGINS_DATA)
     public List<ProviderFutureResultFront> allPluginData() {
