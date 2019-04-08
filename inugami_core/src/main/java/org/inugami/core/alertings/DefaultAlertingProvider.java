@@ -337,7 +337,8 @@ public class DefaultAlertingProvider implements AlertingProvider {
                 result = engine.execute(preload, alert.grabFunction().get(), gav, event, jsonObj);
             }
             catch (final Exception e) {
-                Loggers.ALERTING.error(e.getMessage(), e);
+                Loggers.ALERTING.error("unable to process alerting check on {} - {} : ",gav.getHash(),event.getName(), e.getMessage());
+                Loggers.DEBUG.error(e.getMessage(),e);
             }
             return result;
         };
