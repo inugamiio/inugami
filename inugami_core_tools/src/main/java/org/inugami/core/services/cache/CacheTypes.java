@@ -23,7 +23,7 @@ package org.inugami.core.services.cache;
  * @since 17 janv. 2017
  */
 public enum CacheTypes {
-    IO_QUERIES, TEN_SECOND, HALF_MINUTE, MINUTE, TEN_MINUTES, HOURLY, DAILY, EVENTS, SCHEDULED;
+    IO_QUERIES, TEN_SECOND, HALF_MINUTE, MINUTE, TEN_MINUTES, HALF_HOUR, HOURLY, DAILY, EVENTS, SCHEDULED;
     
     public synchronized static CacheTypes getEnum(final String name) {
         CacheTypes result = null;
