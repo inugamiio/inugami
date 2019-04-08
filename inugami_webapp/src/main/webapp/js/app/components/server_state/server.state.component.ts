@@ -26,6 +26,9 @@ export class ServerStateComponent{
             self.serverUp = false;
           });
       
+        org.inugami.events.addEventListener(org.inugami.sse.events.OPEN, function(event){
+            self.serverUp = true;
+        });
         org.inugami.events.addEventListener(org.inugami.sse.events.OPEN_OR_ALREADY_OPEN, function(event){
             self.serverUp = true;
         });
