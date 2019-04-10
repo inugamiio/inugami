@@ -1,0 +1,15 @@
+<div [class]="styleClass"
+     [ngClass]="'gitlab-merge-requests'">
+  
+    <ul class="gitlab-merge-requests" *ngIf="data">
+        <li *ngFor="let mergeRequest of data" class="gitlab-merge-request">
+            <div class="title">{{mergeRequest.title}}</div>
+            <div class="votes">
+                <div class="vote-up" *ngIf="mergeRequest.upvotes"><span class="vote-icon"></span><span class="vote-score">{{mergeRequest.upvotes}}</span></div>
+                <div class="vote-down" *ngIf="mergeRequest.downvotes"><span class="vote-icon"></span><span class="vote-score">{{ mergeRequest.downvotes}}</span></div>
+            </div>
+            
+            <div class="author">{{mergeRequest.author.name}}</div>
+        </li>
+    </ul>
+</div>
