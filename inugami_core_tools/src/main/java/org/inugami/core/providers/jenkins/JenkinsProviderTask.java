@@ -113,7 +113,7 @@ public class JenkinsProviderTask implements ProviderTask {
         return buildResult(event, httpResult);
     }
     
-    protected HttpConnectorResult callJenkins(String request) throws ConnectorException {
+    /*package*/ HttpConnectorResult callJenkins(String request) throws ConnectorException {
        
         return httpConnector.get(request, credentials);
     }

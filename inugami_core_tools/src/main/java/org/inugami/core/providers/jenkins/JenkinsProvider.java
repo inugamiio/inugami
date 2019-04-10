@@ -36,17 +36,17 @@ public class JenkinsProvider extends AbstractProvider implements Provider, Provi
     // =========================================================================
     private static final String                    TYPE                        = "JENKINS";
     
-    private static final String                    CONFIG_JENKINS_PROTOCOL     = "jenkins.protocol";
+    public static final String                     CONFIG_JENKINS_PROTOCOL     = "jenkins.protocol";
     
-    private static final String                    CONFIG_JENKINS_REALM        = "jenkins.realm";
+    public static final String                     CONFIG_JENKINS_REALM        = "jenkins.realm";
     
-    private static final String                    CONFIG_JENKINS_HOST         = "jenkins.host";
+    public static final String                     CONFIG_JENKINS_HOST         = "jenkins.host";
     
-    private static final String                    CONFIG_JENKINS_CONTEXT_PATH = "jenkins.context.path";
+    public static final String                     CONFIG_JENKINS_CONTEXT_PATH = "jenkins.context.path";
     
-    private static final String                    CONFIG_JENKINS_USER_ID      = "jenkins.userId";
+    public static final String                     CONFIG_JENKINS_USER_ID      = "jenkins.userId";
     
-    private static final String                    CONFIG_JENKINS_TOKEN        = "jenkins.apiToken";
+    public static final String                     CONFIG_JENKINS_TOKEN        = "jenkins.apiToken";
     
     private final FutureData<ProviderFutureResult> futureDataRef;
     
@@ -77,13 +77,7 @@ public class JenkinsProvider extends AbstractProvider implements Provider, Provi
         builder.append(config.grabOrDefault(CONFIG_JENKINS_CONTEXT_PATH, "/jenkins/api/json"));
         url = builder.toString();
         
-        final AuthScope scope = new AuthScope(host, AuthScope.ANY_PORT,
-                                              config.grabOrDefault(CONFIG_JENKINS_REALM, "http"));
-        
-        credentials = new BasicCredentialsProvider();
-        credentials.setCredentials(scope, new UsernamePasswordCredentials(this.config.grab(CONFIG_JENKINS_USER_ID),
-                                                                          this.config.grab(CONFIG_JENKINS_TOKEN)));
-        
+        this.credentials = buildCredentials(config, host);
         //@formatter:off
         httpConnector = ctx.getHttpConnector(classBehavior.getName(),
                                                   getMaxConnections(config,   5),
@@ -94,6 +88,17 @@ public class JenkinsProvider extends AbstractProvider implements Provider, Provi
         //@formatter:on
         
         futureDataRef = FutureDataBuilder.buildDefaultFuture(this.timeout);
+    }
+    
+    public static CredentialsProvider buildCredentials(ConfigHandler<String, String> config, String host) {
+        final AuthScope scope = new AuthScope(host, AuthScope.ANY_PORT,
+                                              config.grabOrDefault(CONFIG_JENKINS_REALM, "http"));
+        
+        CredentialsProvider result = new BasicCredentialsProvider();
+        result.setCredentials(scope, new UsernamePasswordCredentials(config.grab(CONFIG_JENKINS_USER_ID),
+                                                                     config.grab(CONFIG_JENKINS_TOKEN)));
+        
+        return result;
     }
     
     @Override
