@@ -41,6 +41,7 @@ org.inugami.sse = {
 
 	_inner_handler : {
 		dispatcher : function(event) {
+			org.inugami.events.fireEvent(org.inugami.sse.events.OPEN_OR_ALREADY_OPEN);
 			org.inugami.sse.lastIncommingData = Date.now();
 
 			if (org.inugami.sse.enableLogger) {
@@ -129,7 +130,7 @@ org.inugami.sse = {
 		error : function(event) {
 			org.inugami.sse.state="close";
 			org.inugami.sse.closeSocket();
-			console.error("SSE error : "+event.type);
+			console.error("SSE error : "+JSON.stringify(event));
 			org.inugami.events.fireEvent(org.inugami.sse.events.ERROR, event);
 			setTimeout(org.inugami.sse.reconnect._forceReconnect, 5000);
 		}

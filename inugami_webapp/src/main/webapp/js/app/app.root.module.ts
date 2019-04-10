@@ -28,6 +28,8 @@ import {AlertingTab}                    from './components/alerting_tab/alerting
 import {InputBloc}                      from './components/forms/input.bloc';
 import {Carousel}                       from './components/carousel/carousel';
 import {PropertiesEditor}               from './components/properties_editor/properties.editor';
+import {ClockComponent}                 from './components/clock/clock.component';
+import {ServerStateComponent}           from './components/server_state/server.state.component';
 
 import {BarChart}                       from './components/charts/bar_chart/bar.chart';
 import {BubbleLegend}                   from './components/charts/bubble_legend/bubble_legend';
@@ -98,7 +100,9 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     TimeHandler,
     Value,
     ValueBloc,
-    ValueChart
+    ValueChart,
+    ClockComponent,
+    ServerStateComponent
 
   ],
   entryComponents: [],
@@ -124,7 +128,9 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     Value,
     ValueBloc,
     ValueChart,
-    PropertiesEditor
+    PropertiesEditor,
+    ClockComponent,
+    ServerStateComponent
   ],
   providers: [
     PluginsService,
@@ -149,7 +155,9 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     Value,
     ValueBloc,
     ValueChart,
-    Carousel
+    Carousel,
+    ClockComponent,
+    ServerStateComponent
   ],
   bootstrap: []
 })
@@ -170,6 +178,9 @@ PLUGINS_COMPONENTS['value']           = Value;
 PLUGINS_COMPONENTS['value-bloc']      = ValueBloc;
 PLUGINS_COMPONENTS['value-chart']     = ValueChart;
 PLUGINS_COMPONENTS['carousel']        = Carousel;
+PLUGINS_COMPONENTS['clock']           = ClockComponent;
+PLUGINS_COMPONENTS['server-state']    = ServerStateComponent;
+
 
 
 const  AppRootModuleRoutesConfig: Routes = [

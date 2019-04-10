@@ -49,7 +49,7 @@ export class DoubleBubble implements ControlValueAccessor,AfterViewInit {
     private mainPreviousValue           : number = 0;
     private secondPreviousValue         : number = 0;
 
-    private valueStr                    : string;
+    private valueStr                    : string = "";
     private previousStr                 : string;
     private previousStyleClass          : string;
     private previousUnit                : string;
@@ -129,8 +129,12 @@ export class DoubleBubble implements ControlValueAccessor,AfterViewInit {
                                500,
                                self.mainPreviousValue,
                                self.values.currentValue.current,
-                               (data)  =>{self.valueStr = org.inugami.formatters.truncateNumber(data ,self.nbDigit) },
-                               (onDone)=>{self.mainPreviousValue=self.values.currentValue.current}
+                               (data)  =>{
+                                 self.valueStr = org.inugami.formatters.truncateNumber(data ,self.nbDigit)
+                                },
+                               (onDone)=>{
+                                 self.mainPreviousValue=self.values.currentValue.current
+                                }
                               );
       }
       
@@ -205,7 +209,8 @@ export class DoubleBubble implements ControlValueAccessor,AfterViewInit {
        let result = null;
        if(isNotNull(this.innerValue) && Array.isArray(this.innerValue)){
         for(let target of this.innerValue){
-            if(target.target.includes(targetName)){
+          let currentTargetName = this.extractTargetName(target);
+            if(isNotNull(currentTargetName) && currentTargetName.includes(targetName)){
               result = target; 
               break;
             }
@@ -214,6 +219,13 @@ export class DoubleBubble implements ControlValueAccessor,AfterViewInit {
        return result;
     }
     
+    private extractTargetName(target){
+       let result = target.target;
+       if(isNull(result)){
+         result = target.path;
+       }
+       return result;
+    }
     getStyleClass(){
       return org.inugami.rendering.alertsStyles(this.styleClass,this.alerts); 
     }

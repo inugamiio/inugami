@@ -6,7 +6,7 @@
     <div *ngIf="title" class="title">{{title}}</div>
     <div *ngIf="subtitle" class="subtitle">{{subtitle}}</div>
     
-    <div *ngIf="valueStr" class="value-area">
+    <div  class="value-area" *ngIf="valueStr">
 
         <div class="main-value">
             <div class="value">{{valueStr}}<span *ngIf="unit" class="unit">{{unit}}</span></div>

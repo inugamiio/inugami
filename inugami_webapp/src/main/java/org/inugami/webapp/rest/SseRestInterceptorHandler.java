@@ -22,6 +22,9 @@ import org.inugami.monitoring.api.resolvers.Interceptable;
 @SpiPriority(2)
 public class SseRestInterceptorHandler implements Interceptable {
     
+    public SseRestInterceptorHandler() {
+    }
+
     @Override
     public boolean isInterceptable(final String uri) {
         return !uri.contains("/sse");
