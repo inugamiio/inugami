@@ -206,29 +206,23 @@ public class FilterInterceptor implements Filter {
         return builder.build();
     }
     
-    private byte[] readInput(final ServletInputStream inputStream) {
+    private byte[] readInput(ServletInputStream inputStream) {
         
         final StringBuilder result = new StringBuilder();
         final ByteArrayOutputStream out = new ByteArrayOutputStream(64 * KILO);
-        final int bufferSize = 16 * KILO;
-        final byte[] buffer = new byte[bufferSize];
-        int cursor = 0;
         
-        int hasNext = 0;
-        do {
-            try {
-                hasNext = inputStream.read(buffer);
-                if (hasNext != -1) {
-                    result.append(new String(buffer));
-                    out.write(buffer, cursor * bufferSize, bufferSize);
-                }
-                cursor++;
+        final int bufferSize = 16 * KILO;
+        byte[] buffer = new byte[bufferSize];
+        
+        int bytesLeft;
+        try {
+            while (-1 != (bytesLeft = inputStream.read(buffer))) {
+                out.write(buffer, 0, bytesLeft);
             }
-            catch (final IOException e) {
-            }
-            
         }
-        while (hasNext != -1);
+        catch (IOException e) {
+            Loggers.DEBUG.error(e.getMessage(), e);
+        }
         
         return out.toByteArray();
     }
