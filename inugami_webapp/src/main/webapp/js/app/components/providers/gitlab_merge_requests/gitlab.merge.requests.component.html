@@ -3,13 +3,31 @@
   
     <ul class="gitlab-merge-requests" *ngIf="data">
         <li *ngFor="let mergeRequest of data" class="gitlab-merge-request">
-            <div class="title">{{mergeRequest.title}}</div>
-            <div class="votes">
-                <div class="vote-up" *ngIf="mergeRequest.upvotes"><span class="vote-icon"></span><span class="vote-score">{{mergeRequest.upvotes}}</span></div>
-                <div class="vote-down" *ngIf="mergeRequest.downvotes"><span class="vote-icon"></span><span class="vote-score">{{ mergeRequest.downvotes}}</span></div>
-            </div>
-            
-            <div class="author">{{mergeRequest.author.name}}</div>
+            <article>
+                <header>
+                    <div class="project">{{mergeRequest.projectName}}</div>
+                </header>
+                <div class="more-informations">
+                    <div class="created">{{formatDate(mergeRequest.created_at)}}</div>
+                    <div class="author">{{mergeRequest.author.name}}</div>
+                    <div class="votes">
+                        <div class="vote vote-up" *ngIf="mergeRequest.upvotes">
+                            <span class="vote-icon"></span>
+                            <span class="vote-score">{{mergeRequest.upvotes}}</span>
+                            <span class="vote-score-end"></span>
+                        </div>
+                        <div class="vote vote-down" *ngIf="mergeRequest.downvotes">
+                            <span class="vote-icon"></span>
+                            <span class="vote-score">{{ mergeRequest.downvotes}}</span>
+                            <span class="vote-score-end"></span>
+                        </div>
+                        <div class="votes-end"></div>
+                    </div>
+                    <div class="more-informations-end"></div>
+                </div>
+
+                <div class="title">{{mergeRequest.title}}</div>
+            </article>
         </li>
     </ul>
 </div>

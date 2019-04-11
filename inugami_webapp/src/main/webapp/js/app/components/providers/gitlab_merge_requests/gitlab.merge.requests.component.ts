@@ -29,4 +29,12 @@ export class GitlabMergeRequestsComponent implements AfterContentInit {
             this.data = event.detail.data.values.mergeRequests;            
         }
     }
+
+    public formatDate(date:string){
+        let result = "";
+        if(isNotNull(date)){
+            result = date.split('T')[0];
+        }
+        return result;
+    }
 }
