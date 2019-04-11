@@ -22,6 +22,7 @@ import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -63,10 +64,10 @@ public class FilterInterceptor implements Filter {
     // =========================================================================
     //@formatter:off
     private final static SpiLoader SPI_LOADER = new SpiLoader();
-    private final static List<ExceptionResolver>           EXCEPTION_RESOLVER     = SPI_LOADER.loadSpiServicesByPriority(ExceptionResolver.class,new FilterInterceptorErrorResolver());
-    private final static List<Interceptable>               INTERCEPTABLE_RESOLVER = SPI_LOADER.loadSpiServicesByPriority(Interceptable.class);
-    private final static Map<String, Boolean>              INTERCEPTABLE_RESOLVED = new HashMap<>();
-    private final static int KILO                                                 = 1024;
+    private final static List<Interceptable>               INTERCEPTABLE_RESOLVER     = SPI_LOADER.loadSpiServicesByPriority(Interceptable.class);
+    private final static List<ExceptionResolver>           EXCEPTION_RESOLVER         = SPI_LOADER.loadSpiServicesByPriority(ExceptionResolver.class,new FilterInterceptorErrorResolver());
+    private final static Map<String, Boolean>              INTERCEPTABLE_URI_RESOLVED = new ConcurrentHashMap<>();
+    private final static int KILO                                                     = 1024;
     //@formatter:on
     
     // =========================================================================
@@ -152,7 +153,7 @@ public class FilterInterceptor implements Filter {
     }
     
     private boolean mustIntercept(final String currentPath) {
-        Boolean result = INTERCEPTABLE_RESOLVED.get(currentPath);
+        Boolean result = INTERCEPTABLE_URI_RESOLVED.get(currentPath);
         if (result == null) {
             for (final Interceptable resolver : INTERCEPTABLE_RESOLVER) {
                 result = resolver.isInterceptable(currentPath);
@@ -160,7 +161,7 @@ public class FilterInterceptor implements Filter {
                     break;
                 }
             }
-            INTERCEPTABLE_RESOLVED.put(currentPath, result);
+            INTERCEPTABLE_URI_RESOLVED.put(currentPath, result);
         }
         
         return result;
