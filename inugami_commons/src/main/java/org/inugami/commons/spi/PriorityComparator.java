@@ -42,7 +42,7 @@ public class PriorityComparator<T> implements Comparator<T> {
     public int compare(final T ref, final T value) {
         final int refPriority = loadPriority(ref);
         final int valuePriority = loadPriority(value);
-        return new Integer(valuePriority).compareTo(refPriority);
+        return Integer.compare(valuePriority, refPriority);
     }
     
     private int loadPriority(final T object) {
