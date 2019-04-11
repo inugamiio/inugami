@@ -69,6 +69,7 @@
             <groupId>org.inugami.monitoring</groupId>
             <artifactId>inugami_monitoring_core</artifactId>
         </dependency>
+        
         <!-- :::::::::::: JAVA EE :::::::::::::::::::::::::::::::::::::: -->
         <dependency>
             <groupId>javax</groupId>
