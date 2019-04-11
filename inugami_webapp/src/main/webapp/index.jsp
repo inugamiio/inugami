@@ -9,7 +9,7 @@
 	<meta http-equiv='cache-control' content='no-cache'>
 	<meta http-equiv='expires' content='0'>
 	<meta http-equiv='pragma' content='no-cache'>
-
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 	<base href="<%=request.getContextPath()%>/">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
