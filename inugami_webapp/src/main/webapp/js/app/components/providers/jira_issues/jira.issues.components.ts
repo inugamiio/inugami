@@ -13,6 +13,7 @@ export class JiraIssuesComponent implements OnInit, AfterContentInit{
     @Input() event                          : string;
     @Input() pluginName                     : string;
     @Input() transformer                    : any;
+    @Input() baseUrl                        : string;
     private issuesList                      : any[];
 
     /**************************************************************************
@@ -27,7 +28,6 @@ export class JiraIssuesComponent implements OnInit, AfterContentInit{
     /**************************************************************************
     * METHODS
     **************************************************************************/
-
     private injectData(event){
         if (isNotNull(event.detail.data) && isNotNull(event.detail.data.values)) {
             if(isNotNull(this.transformer)){
@@ -36,5 +36,21 @@ export class JiraIssuesComponent implements OnInit, AfterContentInit{
                 throw "jira transformer is mandatory";
             }
         }
+    }
+
+    public buildJiraUrl(issue){
+        let result = "#";
+        if(isNotNull(this.baseUrl) && isNotNull(issue.id)){
+            let buffer = [];
+            if(this.baseUrl.endsWith('/')){
+                buffer.push(this.baseUrl);
+            }else{
+                buffer.push(this.baseUrl);
+                buffer.push('/');
+            }
+            buffer.push(issue.id);
+            result = buffer.join('');
+        }
+        return result;
     }
 }

@@ -1,0 +1,71 @@
+.jira-issues>ul{
+  list-style: none;
+  margin: 0;
+  padding: 1em;
+}
+
+
+.jira-issues ul article{
+  clear: both;
+  margin-bottom: 1.5em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #e0d7d7;
+}
+
+.jira-issues ul article .issue-id{
+  font-weight: bold;
+  display: block;
+  width: 6em;
+  float: left;
+}
+
+.jira-issues ul article .issue-status{
+  border: 1px solid;
+  border-radius: 6em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  float: left;
+}
+
+
+.jira-issues ul article .issue-title{
+  font-weight: 500;
+  float: left;
+  clear: both;
+}
+
+.jira-issues ul article .jira-issue-content{
+  clear: both;
+}
+
+.jira-issue article .issue-custom-fields,
+.jira-issue article .issue-affected-versions{
+    font-size: 80%;
+    color: #636363;
+    width: 45%;
+}
+.jira-issue article .issue-custom-fields{
+    float: right;
+}
+
+
+.jira-issue article .issue-custom-fields>ul,
+.jira-issue article .issue-affected-versions>ul{
+    margin: 0;
+    padding: 0;
+    margin-left: 2em;
+}
+
+.jira-issue article .jira-issue-link{
+    color: black;
+    -webkit-transition: color 0.25s;
+    transition: color 0.25s;
+}
+
+.jira-issue article .jira-issue-link:hover{
+    color: #0275d8;
+}
+
+.jira-issue article header{
+    height: 3em;
+}
