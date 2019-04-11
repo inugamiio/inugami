@@ -132,7 +132,7 @@
       -moz-box-shadow: 0px 0px 0px 0px #2574A9;
       -webkit-box-shadow: 0px 0px 0px 0px #2574A9;
       -o-box-shadow: 0px 0px 0px 0px #2574A9;
-      box-shadow: 0px 0px 0px 0px #2574A9;
+      box-shadow: 0 0 0 0 #2574A9;
     }
     50%{
       -moz-box-shadow: 0px 0px 0.5em 0px #2574A9;
