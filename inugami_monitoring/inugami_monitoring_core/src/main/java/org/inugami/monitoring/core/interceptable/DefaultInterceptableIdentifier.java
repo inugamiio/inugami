@@ -25,7 +25,7 @@ import org.inugami.monitoring.api.resolvers.Interceptable;
  * @author patrickguillerm
  * @since Jan 8, 2019
  */
-@SpiPriority(1)
+@SpiPriority(10000)
 public class DefaultInterceptableIdentifier implements Interceptable {
     
     // =========================================================================
@@ -53,7 +53,7 @@ public class DefaultInterceptableIdentifier implements Interceptable {
             return result;
         }
         
-        result = "/".equals(uri);
+        result = uri.trim().isEmpty() || uri.endsWith("/");
         
         if (!result) {
             final String path = uri.split("[?]")[0];

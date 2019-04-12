@@ -45,6 +45,8 @@ public final class Loggers {
     
     public static final Logger CONFIG        = LoggerFactory.getLogger("CONFIG");
     
+    public static final Logger CHRONOLOG     = LoggerFactory.getLogger("CHRONOLOG");
+    
     public static final Logger PLUGINS       = LoggerFactory.getLogger("PLUGINS");
     
     public static final Logger EVENTSLOG     = LoggerFactory.getLogger("EVENTSLOG");

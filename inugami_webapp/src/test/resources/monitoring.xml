@@ -19,8 +19,8 @@
     == INTERCEPTORS
     ========================================================================= -->
     <interceptors>
-        <interceptor name="iolog" />
-        <interceptor name="servicesCounter" />
+<!--         <interceptor name="iolog" /> -->
+<!--         <interceptor name="servicesCounter" /> -->
 
     </interceptors>
     <!-- =========================================================================
@@ -48,7 +48,7 @@
         </sensor>
         <sensor name="threads" interval="10000" />
         <sensor name="memory"  />
-        <sensor name="servicesSensor" />
+<!--         <sensor name="servicesSensor" /> -->
     </sensors>
 
 </monitoring>

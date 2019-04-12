@@ -1,29 +1,5 @@
-.dashboard-vmo-new nav .clock,
-.dashboard-vmo nav .clock {
-    float: right;
-    margin-top: 1.1em;
-    position: relative;
-    list-style: none;
-    margin-right: 1em;
-}
-
-.dashboard-vmo-new nav .clock .time,
-.dashboard-vmo nav .clock .time {
+.clock .time{
     font-size: 1.7em;
     font-weight: bold;
 }
 
-.dashboard-vmo-new nav .server-state,
-.dashboard-vmo nav .server-state {
-    float: right;
-    margin-top: 1.68em;
-    position: relative;
-    list-style: none;
-}
-
-.dashboard-vmo-new nav .server-state .button-state-up, .dashboard-vmo nav .server-state .button-state-down
-.dashboard-vmo nav .server-state .button-state-up, .dashboard-vmo nav .server-state .button-state-down {
-    border-radius: 50%;
-    height: 1.4em;
-    width: 1.4em;
-}

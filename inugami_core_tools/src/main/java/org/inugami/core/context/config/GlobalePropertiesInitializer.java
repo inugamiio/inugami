@@ -29,6 +29,7 @@ import org.inugami.core.providers.els.ElasticSearchWriter;
 import org.inugami.core.providers.files.FilesJsonProvider;
 import org.inugami.core.providers.gitlab.GitlabProvider;
 import org.inugami.core.providers.graphite.GraphiteProvider;
+import org.inugami.core.providers.jenkins.JenkinsProvider;
 import org.inugami.core.providers.jira.JiraProvider;
 import org.inugami.core.providers.kibana.KibanaProvider;
 import org.inugami.core.providers.mock.MockJsonProvider;
@@ -57,6 +58,8 @@ public class GlobalePropertiesInitializer implements PropertiesProducerSpi {
                    JiraProvider.class,
                    GitlabProvider.class,
                    CsvProvider.class,
+                   JenkinsProvider.class,
+                   
                    //handlers
                    HesperidesHandler.class,
                    
