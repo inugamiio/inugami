@@ -43,6 +43,10 @@ import {Value}                          from './components/charts/value/value';
 import {ValueBloc}                      from './components/charts/value_bloc/value.bloc';
 import {ValueChart}                     from './components/charts/value_chart/value.chart';
 
+import {JenkinsJobsComponent}           from './components/providers/jenkins_jobs/jenkins.jobs.component';
+import {GitlabMergeRequestsComponent}   from './components/providers/gitlab_merge_requests/gitlab.merge.requests.component';
+import {JiraIssuesComponent}            from './components/providers/jira_issues/jira.issues.components';
+
 // VIEWS -----------------------------------------------------------------------
 import {HomeView}                       from './view/home.view';
 import {HelpView}                       from './view/help.view';
@@ -102,8 +106,11 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     ValueBloc,
     ValueChart,
     ClockComponent,
-    ServerStateComponent
+    ServerStateComponent,
 
+    JenkinsJobsComponent,
+    GitlabMergeRequestsComponent,
+    JiraIssuesComponent
   ],
   entryComponents: [],
   exports: [
@@ -130,7 +137,11 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     ValueChart,
     PropertiesEditor,
     ClockComponent,
-    ServerStateComponent
+    ServerStateComponent,
+
+    JenkinsJobsComponent,
+    GitlabMergeRequestsComponent,
+    JiraIssuesComponent
   ],
   providers: [
     PluginsService,
@@ -157,7 +168,10 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     ValueChart,
     Carousel,
     ClockComponent,
-    ServerStateComponent
+    ServerStateComponent,
+    JenkinsJobsComponent,
+    GitlabMergeRequestsComponent,
+    JiraIssuesComponent
   ],
   bootstrap: []
 })
@@ -165,22 +179,24 @@ export class AppRootModule {
 }
 
 
-PLUGINS_COMPONENTS['image']           = Image;
-PLUGINS_COMPONENTS['bar-chart']       = BarChart;
-PLUGINS_COMPONENTS['bubble-legend']   = BubbleLegend;
-PLUGINS_COMPONENTS['curve-chart']     = CurveChart;
-PLUGINS_COMPONENTS['double-bubble']   = DoubleBubble;
-PLUGINS_COMPONENTS['evolution-value'] = EvolutionValue;
-PLUGINS_COMPONENTS['simple-graph']    = SimpleGraph;
-PLUGINS_COMPONENTS['simple-value']    = SimpleValue;
-PLUGINS_COMPONENTS['time-handler']    = TimeHandler;
-PLUGINS_COMPONENTS['value']           = Value;
-PLUGINS_COMPONENTS['value-bloc']      = ValueBloc;
-PLUGINS_COMPONENTS['value-chart']     = ValueChart;
-PLUGINS_COMPONENTS['carousel']        = Carousel;
-PLUGINS_COMPONENTS['clock']           = ClockComponent;
-PLUGINS_COMPONENTS['server-state']    = ServerStateComponent;
-
+PLUGINS_COMPONENTS['image']                 = Image;
+PLUGINS_COMPONENTS['bar-chart']             = BarChart;
+PLUGINS_COMPONENTS['bubble-legend']         = BubbleLegend;
+PLUGINS_COMPONENTS['curve-chart']           = CurveChart;
+PLUGINS_COMPONENTS['double-bubble']         = DoubleBubble;
+PLUGINS_COMPONENTS['evolution-value']       = EvolutionValue;
+PLUGINS_COMPONENTS['simple-graph']          = SimpleGraph;
+PLUGINS_COMPONENTS['simple-value']          = SimpleValue;
+PLUGINS_COMPONENTS['time-handler']          = TimeHandler;
+PLUGINS_COMPONENTS['value']                 = Value;
+PLUGINS_COMPONENTS['value-bloc']            = ValueBloc;
+PLUGINS_COMPONENTS['value-chart']           = ValueChart;
+PLUGINS_COMPONENTS['carousel']              = Carousel;
+PLUGINS_COMPONENTS['clock']                 = ClockComponent;
+PLUGINS_COMPONENTS['server-state']          = ServerStateComponent;
+PLUGINS_COMPONENTS['jenkins-jobs']          = JenkinsJobsComponent;
+PLUGINS_COMPONENTS['gitlab-merge-requests'] = GitlabMergeRequestsComponent;
+PLUGINS_COMPONENTS['jira-issues']           = JiraIssuesComponent;
 
 
 const  AppRootModuleRoutesConfig: Routes = [

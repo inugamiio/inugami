@@ -8,7 +8,12 @@
 @import "components_properties_editor.css";
 @import "components_carousel.css";
 @import "component-curve-chart.css";
+@import "component-server-state.css";
+@import "component-clock.css";
 
+@import "components-jira-issues.css";
+@import "component-gitlab.css";
+@import "component-jenkins.css";
 
 #page-ruler-toolbar.page-ruler-top{
   top : 20px !important;
