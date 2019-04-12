@@ -162,8 +162,7 @@ public final class ConfigurationLoader {
                   .forEach(item-> result.put(item.getKey(), item.getValue()));
         //@formatter:on
         
-        System.getProperties().forEach(entry -> result.put(String.valueOf(entry.getKey()),
-                                                                      String.valueOf(entry.getValue())));
+        System.getProperties().forEach((key, value) -> result.put(String.valueOf(key), String.valueOf(value)));
         
         return new ConfigHandlerHashMap(result);
     }
