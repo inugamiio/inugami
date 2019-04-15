@@ -76,16 +76,16 @@ export class SvgGenericMap extends SvgComponent implements ControlValueAccessor,
       this.compos
           .svg
           .selectAll(this.bddSelector)
-          .on("click"     , function(){self.onClick(this)})
-          .on("mouseover" , function(){self.onMouseover(this)})
-          .on("mouseout" , function(){self.onMouseout(this)});
+          .on("click"     , function(){self.onClick(this,"bdd")})
+          .on("mouseover" , function(){self.onMouseover(this,"bdd")})
+          .on("mouseout" , function(){self.onMouseout(this,"bdd")});
 
       this.compos
           .svg
           .selectAll(this.connectorsSelector)
-          .on("click"     , function(){self.onClick(this)})
-          .on("mouseover" , function(){self.onMouseover(this)})
-          .on("mouseout" , function(){self.onMouseout(this)});
+          .on("click"     , function(){self.onClick(this,"connector")})
+          .on("mouseover" , function(){self.onMouseover(this,"connector")})
+          .on("mouseout" , function(){self.onMouseout(this,"connector")});
           
     }
   }
@@ -94,15 +94,17 @@ export class SvgGenericMap extends SvgComponent implements ControlValueAccessor,
   /*****************************************************************************
   * EVENTS
   *****************************************************************************/
-  private onClick(node){
-    this.click.emit(new SvgGenericMapMouseEvent(this.compos.svg,node));
+  private onClick(node,type){
+    this.click.emit(new SvgGenericMapMouseEvent(this.compos.svg,node,type));
   }
-  private onMouseover(node){
-    this.onHover.emit(new SvgGenericMapMouseEvent(this.compos.svg,node));
+  private onMouseover(node,type){
+    node.attributes.class.value = 'on-over '+node.attributes.class.value;
+    this.onHover.emit(new SvgGenericMapMouseEvent(this.compos.svg,node,type));
   }
   
-  private onMouseout(node){
-    this.onFocusOut.emit(new SvgGenericMapMouseEvent(this.compos.svg,node));
+  private onMouseout(node,type){
+    node.attributes.class.value = node.attributes.class.value.split('on-over ').join('');
+    this.onFocusOut.emit(new SvgGenericMapMouseEvent(this.compos.svg,node,type));
   }
   /*****************************************************************************
   * TOOLS

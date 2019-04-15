@@ -131,3 +131,39 @@
   stroke-miterlimit:4;
   stroke-dasharray:none;stroke-opacity:1
 }
+
+
+
+
+
+.i-svg-generic-map .on-over .top,
+.i-svg-generic-map .on-over .top-border{
+  fill:#d6dad1;
+}
+
+.i-svg-generic-map .on-over .light,
+.i-svg-generic-map .on-over .light-border{
+  fill:#fcfcfa;
+}
+
+.i-svg-generic-map .on-over .shadow,
+.i-svg-generic-map .on-over .shadow-border{
+  fill:#7c8079;
+}
+
+
+.i-svg-generic-map .on-over .top-in-compo{
+  fill:#c3c9bd;
+}
+
+.i-svg-generic-map .on-over .top-in-compo-border,
+.i-svg-generic-map .on-over .shadow-in-compo{
+  fill:#414b4e;
+}
+
+.i-svg-generic-map .on-over .light-in-compo{
+  fill:#f5f5f3;
+}
+.i-svg-generic-map  .on-over.path-connector{
+  stroke:#0d42b6;
+}
