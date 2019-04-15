@@ -1,11 +1,9 @@
 import {Component,
-  Inject,
-  OnInit,
   Input,
   Output,
+  EventEmitter,
   forwardRef,
   AfterViewInit,
-  ViewChild,
   ElementRef}                                         from '@angular/core';
 
 import * as d3 from 'd3';
@@ -13,7 +11,9 @@ import {NG_VALUE_ACCESSOR,ControlValueAccessor}       from '@angular/forms';
 import {SvgComponent}                                 from './../svg_component/svg.component';
 import {HttpServices}                                 from './../../../services/http/http.services';
 import {Http}                                         from '@angular/http';
-import {SvgGenericMapEventIncomming}                  from './sgv.generic.map.event.incomming';
+import {SvgGenericMapEventIncomming}                  from './svg.generic.map.event.incomming';
+import {SvgGenericMapMouseEvent}                      from './svg.generic.map.mouse.event';
+
 
 export const SvgGenericMap_ACCESSOR: any = {
 provide: NG_VALUE_ACCESSOR,
@@ -36,11 +36,14 @@ export class SvgGenericMap extends SvgComponent implements ControlValueAccessor,
   @Input() src                           : string;
   @Input() cleanSvgStyle                 : boolean = true;
   @Input() handler                       : any = null;
+  @Input() bddSelector                   : any = "g.bdd";
+  @Input() connectorsSelector            : any = "path.path-connector";
 
   public  componentBaseStyleClass        : string = "i-svg-generic-map";
   private innerValue                     : any    = null;
-  
-
+  @Output() click                        : EventEmitter<any> = new EventEmitter();
+  @Output() onHover                      : EventEmitter<any> = new EventEmitter();
+  @Output() onFocusOut                   : EventEmitter<any> = new EventEmitter();
  
   /*****************************************************************************
   * INIT
@@ -67,9 +70,40 @@ export class SvgGenericMap extends SvgComponent implements ControlValueAccessor,
       if(isNotNull(viewBox)){
         this.compos.svg.attr('viewBox',viewBox);
       }
+
+      let self = this;
+      
+      this.compos
+          .svg
+          .selectAll(this.bddSelector)
+          .on("click"     , function(){self.onClick(this)})
+          .on("mouseover" , function(){self.onMouseover(this)})
+          .on("mouseout" , function(){self.onMouseout(this)});
+
+      this.compos
+          .svg
+          .selectAll(this.connectorsSelector)
+          .on("click"     , function(){self.onClick(this)})
+          .on("mouseover" , function(){self.onMouseover(this)})
+          .on("mouseout" , function(){self.onMouseout(this)});
+          
     }
   }
 
+
+  /*****************************************************************************
+  * EVENTS
+  *****************************************************************************/
+  private onClick(node){
+    this.click.emit(new SvgGenericMapMouseEvent(this.compos.svg,node));
+  }
+  private onMouseover(node){
+    this.onHover.emit(new SvgGenericMapMouseEvent(this.compos.svg,node));
+  }
+  
+  private onMouseout(node){
+    this.onFocusOut.emit(new SvgGenericMapMouseEvent(this.compos.svg,node));
+  }
   /*****************************************************************************
   * TOOLS
   *****************************************************************************/
