@@ -42,6 +42,7 @@ import {TimeHandler}                    from './components/charts/time_handler/t
 import {Value}                          from './components/charts/value/value';
 import {ValueBloc}                      from './components/charts/value_bloc/value.bloc';
 import {ValueChart}                     from './components/charts/value_chart/value.chart';
+import {SvgGenericMap}                  from './components/charts/svg_generic_map/svg.generic.map';
 
 import {JenkinsJobsComponent}           from './components/providers/jenkins_jobs/jenkins.jobs.component';
 import {GitlabMergeRequestsComponent}   from './components/providers/gitlab_merge_requests/gitlab.merge.requests.component';
@@ -107,6 +108,7 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     ValueChart,
     ClockComponent,
     ServerStateComponent,
+    SvgGenericMap,
 
     JenkinsJobsComponent,
     GitlabMergeRequestsComponent,
@@ -138,6 +140,7 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     PropertiesEditor,
     ClockComponent,
     ServerStateComponent,
+    SvgGenericMap,
 
     JenkinsJobsComponent,
     GitlabMergeRequestsComponent,
@@ -197,6 +200,8 @@ PLUGINS_COMPONENTS['server-state']          = ServerStateComponent;
 PLUGINS_COMPONENTS['jenkins-jobs']          = JenkinsJobsComponent;
 PLUGINS_COMPONENTS['gitlab-merge-requests'] = GitlabMergeRequestsComponent;
 PLUGINS_COMPONENTS['jira-issues']           = JiraIssuesComponent;
+PLUGINS_COMPONENTS['i-svg-generic-map']           = SvgGenericMap;
+
 
 
 const  AppRootModuleRoutesConfig: Routes = [

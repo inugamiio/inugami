@@ -14,6 +14,8 @@
 @import "components-jira-issues.css";
 @import "component-gitlab.css";
 @import "component-jenkins.css";
+@import "component-svg-generic-map.css";
+
 
 #page-ruler-toolbar.page-ruler-top{
   top : 20px !important;
