@@ -26,6 +26,9 @@ import {SvgComponent}                   from './components/charts/svg_component/
 import {SystemNotification}             from './components/system_notification/system.notification';
 import {AlertingTab}                    from './components/alerting_tab/alerting.tab';
 import {InputBloc}                      from './components/forms/input.bloc';
+import {InputSwitch}                    from './components/forms/input.switch';
+import {InputTimeSlots}                 from './components/forms/input.time.slots';
+import {InputDaysSelector}              from './components/forms/input.days.selector';
 import {Carousel}                       from './components/carousel/carousel';
 import {PropertiesEditor}               from './components/properties_editor/properties.editor';
 import {ClockComponent}                 from './components/clock/clock.component';
@@ -67,6 +70,7 @@ import {GenericCrudServices}            from './services/http/generic.crud.servi
 import {AlertsCrudServices}             from './services/http/alerts.crud.services';
 
 
+
 // MODULE ----------------------------------------------------------------------
 @NgModule({
   imports: [CommonModule, BrowserModule, ReactiveFormsModule,FormsModule, HttpModule,RouterModule,BrowserAnimationsModule,PrimeNgModule],
@@ -91,6 +95,9 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     AdminViewAlerts,
     AdminViewAlertEdit,
     InputBloc,
+    InputTimeSlots,
+    InputSwitch,
+    InputDaysSelector,
     Carousel,
     PropertiesEditor,
 
@@ -122,6 +129,9 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     AlertingTab,
     Msg,
     InputBloc,
+    InputSwitch,
+    InputTimeSlots,
+    InputDaysSelector,
     Carousel, 
 
     BarChart,

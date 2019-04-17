@@ -1,32 +1,27 @@
-import { Component, OnInit, forwardRef, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, forwardRef, Input, Output, EventEmitter, ChangeDetectorRef, NgModule } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
-export const INPUTSWITCH_VALUE_ACCESSOR: any = {
+export const INPUT_DAYS_SELECTOR_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => InputSwitch),
+    useExisting: forwardRef(() => InputDaysSelector),
     multi: true
 }; 
 
 @Component({
-    selector: 'input-switch',
-    providers: [INPUTSWITCH_VALUE_ACCESSOR],
+    selector: 'input-days-selector',
+    providers: [INPUT_DAYS_SELECTOR_VALUE_ACCESSOR],
     template: `
-    <div [ngClass]="getBaseStyleClass()" 
-    [ngStyle]="style" [class]="styleClass" (click)="onClick($event, cb)" role="checkbox" [attr.aria-checked]="checked">
-        <div class="ui-helper-hidden-accessible">
-        <input #cb type="checkbox" [attr.id]="inputId" [attr.name]="name" [attr.tabindex]="tabindex" [checked]="checked" (change)="onInputChange($event)"
-                (focus)="onCompoFocused($event)" (blur)="onBlur($event)" [disabled]="disabled" />
-        </div>
-        <span class="background inugami-visible-switch ">
-            <span class="slider">
-                <span class="icon"></span>
-            </span>
+    <div [ngClass]="{'inugami-input-days-selector':true,readonly : readonly}" >
+      <span [ngClass]="{'days':true}">
+        <span *ngFor="let day of daysList; index as i" [ngClass]="getDayClass(day)" 
+        (click)="onClick(day) ">
+        <span [class]="'label'">{{labelList[i]}}</span>
         </span>
-        <span [ngClass]="{'switch-label': true}" [class.show]="displayLabel()">{{displayedLabel}}</span>
+      </span>
     </div>
   `
 })
-export class InputSwitch implements OnInit, ControlValueAccessor {
+export class InputDaysSelector implements OnInit, ControlValueAccessor {
 
     /*****************************************************************************
     * ATTRIBUTES
@@ -41,9 +36,9 @@ export class InputSwitch implements OnInit, ControlValueAccessor {
 
     @Input() name                   : string;
 
-    @Input() disabled               : boolean           = false;
+    @Input() disabled               : boolean = false; 
 
-    @Input() readonly               : boolean           = false;
+    @Input() readonly               : boolean = false;
 
     @Input() labelOn                : string;
 
@@ -55,42 +50,41 @@ export class InputSwitch implements OnInit, ControlValueAccessor {
 
     @Output() onChange              : EventEmitter<any> = new EventEmitter();
 
-    onModelChange                   : Function          = () => { };
+    onModelChange                   : Function = () => { };
 
-    onModelTouched                  : Function          = () => { };
-
-    displayedLabel                  : string;
+    onModelTouched                  : Function = () => { };
 
     styleClasses                    : string[];
 
     focused                         : boolean;
 
-    checked                         : boolean           = false;
+    valid                           :  boolean = true;
 
-    valid                           : boolean           = true;
+    enableValidator                 : boolean = false;
 
-    enableValidator                 : boolean           = false;
+    daysModel                       : string[] = [];
+
+    daysList                        : string[] = [];
+
+    labelList                       : string[] = [];
+
 
     /*****************************************************************************
     * INIT
     *****************************************************************************/
 
     ngOnInit() {
-        this.checked = true;
-        this.styleClasses = []
-        this.displayedLabel = this.labelOn;
+       
+       this.daysList = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+       this.labelList = org.inugami.formatters.message("days.selector.first.letters").split(" ");
     }
     constructor(private cd: ChangeDetectorRef) { }
 
     /****************** ***********************************************************
      * IMPLEMENTS ControlValueAccessor
      *****************************************************************************/
-
-
-    writeValue(checked: any): void {
-        this.checked = checked;
-        this.displayedLabel = checked ? this.labelOn : this.labelOff;
-        this.cd.markForCheck();
+    writeValue(daysModel: any): void {
+        this.daysModel = daysModel;
     }
 
     registerOnChange(fn: Function): void {
@@ -108,33 +102,7 @@ export class InputSwitch implements OnInit, ControlValueAccessor {
     * METHODS
     *****************************************************************************/
 
-
-    toggle(event: Event) {
-        this.updateModel(event, !this.checked);
-    }
-
     updateModel(event: Event, value: boolean) {
-        this.checked = value;
-        this.processValidator();
-        this.displayedLabel = value ? this.labelOn : this.labelOff;
-        this.onModelChange(this.checked);
-        this.onChange.emit({
-            originalEvent: event,
-            checked: this.checked
-        });
-    }
-
-    getBaseStyleClass(){
-        let result= ["inugami-input-switch-button"];
-        if(!this.valid){
-            result.push("validation-error");
-        }
-        if(this.checked){
-            result.push("state-on");
-        }else{
-            result.push("state-off");
-        }
-        return result.join(" ");
     }
     /*****************************************************************************
      * HANDLERS
@@ -146,16 +114,22 @@ export class InputSwitch implements OnInit, ControlValueAccessor {
             })
         }
         this.focused = true;
-    }
 
-    onClick(event: Event, cb: HTMLInputElement) {
+    }
+    onClick(day : string) {
         if (!this.disabled && !this.readonly) {
-            this.toggle(event)
-            cb.focus()
+          this.processValidator();
+            if(this.daysModel.indexOf(day) > -1){
+              this.daysModel.splice(this.daysModel.indexOf(day),1);
+            }else{
+              this.daysModel.push(day);
+            }
+            
         }
     }
 
     onBlur($event) {
+      this.processValidator();
         this.focused = false;
     }
 
@@ -168,12 +142,7 @@ export class InputSwitch implements OnInit, ControlValueAccessor {
       *****************************************************************************/
     private processValidator() {
         if (this.enableValidator && this.isNotNull(this.validator)) {
-            let error = this.validator(this.checked);
-            if (this.isNotNull(error)) {
-                this.valid = false;
-            } else {
-                this.valid = true;
-            }
+          let error = this.validator(this.daysModel);
         }
     }
     /*****************************************************************************
@@ -182,4 +151,12 @@ export class InputSwitch implements OnInit, ControlValueAccessor {
     isNotNull(value) {
         return (value != undefined && value != null)
     }
+
+    getDayClass(day : string){
+      let selected = this.daysModel.indexOf(day) > -1 ? "selected" : "";
+      return "day-"+day+" "+selected ;
+    }
+
 }
+
+

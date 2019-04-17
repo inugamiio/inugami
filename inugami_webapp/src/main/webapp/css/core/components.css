@@ -11,6 +11,10 @@
 @import "component-server-state.css";
 @import "component-clock.css";
 
+@import "component-forms-input.switch.css";
+@import "component-forms-input.time.slots.css";
+@import "component-forms-input.days.selector.css";
+
 @import "components-jira-issues.css";
 @import "component-gitlab.css";
 @import "component-jenkins.css";
