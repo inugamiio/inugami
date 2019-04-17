@@ -30,7 +30,7 @@ export const INPUT_TIME_SLOTS_VALUE_ACCESSOR: any = {
           (keyup.space)="removeSlot(i)" 
           (focus)="onCompoFocused($event)" 
           [tabindex]="tabindex +i*3+2">
-            <span class="'icon'"></span>
+            <i class="fas fa-minus-circle"></i>
           </span>
         </span>
       </span>  
@@ -40,7 +40,9 @@ export const INPUT_TIME_SLOTS_VALUE_ACCESSOR: any = {
       (keyup.space)="addSlot()" 
       (focus)="onCompoFocused($event)" 
       [tabindex]="tabindex + timeSlotsModel.length*3" >
-        <span class="'icon'"></span>
+        <span class="icon">
+        <i class="fas fa-plus"></i>
+        </span>
       </span>
     </div>
   `
