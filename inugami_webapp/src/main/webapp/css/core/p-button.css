@@ -1,0 +1,83 @@
+.active-action.ui-button, .active-action.ui-button:focus, .active-action.ui-button:enabled:hover{
+    background-color: white;
+    border-radius: 2em;
+    border-style: solid;
+    border-color: rgb(219, 92, 33);
+    
+}
+
+.active-action.ui-button .ui-button-text { 
+    color : rgb(219, 92, 33);
+}
+
+.active-action.ui-button.ui-button:enabled:active{
+    background-color: rgb(240, 169, 104); 
+}
+
+.active-action [class*=ui-button-icon] {
+    color: rgb(219, 92, 33);
+}
+
+.active-action[label] [class*=ui-button-icon] {
+    font-size: inherit;
+}
+
+
+.default-action.ui-button , .default-action.ui-button:focus, .default-action.ui-button:enabled:hover{
+    background-color: white;
+    border-radius: 2em;
+    border-style: solid;
+    border-color: black;
+    
+}
+
+.default-action.ui-button.ui-button:enabled:active{
+    background-color: rgb(240, 169, 104); 
+}
+
+.default-action .ui-button-text {
+    color : black;
+}
+
+.default-action:not([label]) [class*=ui-button-icon],.active-action:not([label]) [class*=ui-button-icon],.full-active-action:not([label]) [class*=ui-button-icon] {
+    font-size: 2em;
+}
+
+.default-action [class*=ui-button-icon] {
+    color: black;
+    
+}
+
+.full-active-action.ui-button, .full-active-action.ui-button:focus, .full-active-action.ui-button:enabled:hover{
+    background-color: rgb(129, 21, 39);
+    border-radius: 2em;
+    border-style: solid;
+    border-color: rgb(129, 21, 39);
+}
+
+.full-active-action.ui-button-text { 
+    color : white;
+}
+
+.full-active-action.ui-button.ui-button:enabled:active{
+    background-color: rgb(240, 169, 104); 
+}
+
+.full-active-action [class*=ui-button-icon] {
+    color: white;
+}
+
+.ui-button:not([label]){
+    width: 3em;
+    height: 3em;;
+}
+
+
+.round.small-button.ui-button {
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.small-button.ui-button .ui-button-icon-left{
+    font-size: 1em;
+}
