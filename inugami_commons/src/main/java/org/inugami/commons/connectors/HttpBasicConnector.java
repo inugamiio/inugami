@@ -82,8 +82,6 @@ import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.Tuple;
 import org.inugami.api.models.tools.Chrono;
 import org.inugami.api.providers.concurrent.ThreadSleep;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * HttpConnector.
@@ -126,8 +124,6 @@ public class HttpBasicConnector {
     
     /** <strong>-Dhttp.connector.socket.timeout=60000</strong> */
     public static final String                       SOCKET_TIMEOUT              = "http.connector.socket.timeout";
-    
-    private static final Logger                      LOGGER                      = LoggerFactory.getLogger(HttpBasicConnector.class);
     
     private static final String                      APPLICATION_JSON            = "application/json";
     
@@ -766,7 +762,6 @@ public class HttpBasicConnector {
         request.setEntity(urlEncodedFormEntity);
         
         Loggers.IO.info("[POST] call request:{} - {}", url, urlEncodedData.toString());
-        LOGGER.info("POST to url : {}", url);
         
         return executePost(request, httpclient, realUrl, url, resultBuilder);
     }
@@ -782,7 +777,6 @@ public class HttpBasicConnector {
             resultBuilder.addStatusCode(response.getStatusLine().getStatusCode());
             resultBuilder.addMessage(response.getStatusLine().getReasonPhrase());
             
-            LOGGER.info("reading result");
             assertDataLength(url, response.getEntity().getContentLength());
             
             if (response.getStatusLine().getStatusCode() == 200) {
@@ -831,8 +825,8 @@ public class HttpBasicConnector {
                 output.write(buffer, 0, length);
                 size = size + length;
                 
-                if ((size % LOG_STEP) == 0) {
-                    LOGGER.info("reading result ... {} - {}", size, url);
+                if (Loggers.DEBUG.isDebugEnabled() && (size % LOG_STEP) == 0) {
+                    Loggers.DEBUG.debug("reading result ... {} - {}", size, url);
                 }
             }
         }

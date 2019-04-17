@@ -18,6 +18,13 @@ export class SessionScope {
     /**************************************************************************
     * ACTIONS
     **************************************************************************/
+    public toggleMainMenu(){
+      if(this.showMainMenu){
+        this.closeMainMenu();
+      }else{
+        this.openMainMenu();
+      }
+    }
     public closeMainMenu(){
       if(this.showMainMenu){
         this.showMainMenu =false;

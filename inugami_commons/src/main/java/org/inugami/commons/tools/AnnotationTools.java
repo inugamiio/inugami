@@ -37,7 +37,7 @@ public final class AnnotationTools {
         final Annotation result = null;
         if (annotations != null) {
             for (int i = annotations.length - 1; i >= 0; i--) {
-                final String className = annotations[i].getClass().getName();
+                final String className = annotations[i].annotationType().getCanonicalName();
                 
                 for (final String name : names) {
                     if (name.equals(className)) {

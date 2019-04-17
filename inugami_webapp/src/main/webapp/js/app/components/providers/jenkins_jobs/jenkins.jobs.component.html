@@ -1,0 +1,19 @@
+<div [class]="styleClass" [ngClass]="'jenkins-jobs'">
+    <ul class="column-list">
+        <div class="state-message" *ngIf="!receivedData">
+                {{ dataMessage }}
+        </div>
+        <div class="state-message" *ngIf="(jobsData?.length === 0)">
+                {{ eventEmptyMessage }}
+        </div>
+        <li *ngFor="let item of jobsData | slice:0:jobsLimit"
+            [ngClass]="'job-state'"
+            [class]="item.color">
+            <a [href]="item.url" target="_blank">
+                <span class="item-icon"></span>
+                <span class="item-name">{{ item.name }}</span>
+                <span class="item-end"></span>
+            </a>
+        </li>
+    </ul>
+</div>

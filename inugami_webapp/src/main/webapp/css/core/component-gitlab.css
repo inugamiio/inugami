@@ -1,0 +1,105 @@
+
+.gitlab-merge-requests>ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.gitlab-merge-requests article{
+    clear: both;
+    margin-bottom: 0;
+    font-size: 90%;
+    padding-bottom: 0.2em;
+    border-bottom: 1px solid #e0d7d7;
+    padding-left: 0.5em;
+}
+
+
+.gitlab-merge-requests article header .project{
+    font-weight: bold;
+}
+
+.gitlab-merge-requests article  .title{
+    font-size: 80%;
+}
+
+.gitlab-merge-requests article .more-informations{
+    font-size: 70%;
+    color: #888888;
+}
+
+.gitlab-merge-requests article .created,
+.gitlab-merge-requests article .author{
+    float: left;
+}
+.gitlab-merge-requests article .created{
+
+}
+
+.gitlab-merge-requests article .author::before{
+    content:" : ";
+}
+
+
+.gitlab-merge-requests article .votes{
+    float: right;
+}
+
+.gitlab-merge-requests article .votes .vote{
+    border: 1px solid gray;
+    display: block;
+    text-align: right;
+    border-radius: 1em;
+    float: right;
+    margin-right: 0.5em;
+}
+
+.gitlab-merge-requests article .votes .vote-icon{
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+    font-family: Font Awesome\ 5 Free;
+    font-weight: 400;
+    margin-top: 0.15em;
+    margin-left: 0.5em;
+}
+
+.gitlab-merge-requests article .votes .vote-up .vote-icon::before{
+    content: "\f164";
+}
+.gitlab-merge-requests article .votes .vote-up{
+    background-color: #009900;
+    border-color: #009900;
+    color: #ffffff;
+}
+.gitlab-merge-requests article .votes .vote-down .vote-icon::before{
+    content: "\f165";
+}
+.gitlab-merge-requests article .votes .vote-down{
+    background-color: #ff3300;
+    border-color: #ff3300;
+    color: #ffffff;
+}
+
+.gitlab-merge-requests article .votes .vote-icon,
+.gitlab-merge-requests article .votes .vote-score{
+    float: left;
+}
+
+
+.gitlab-merge-requests article .votes .vote-score-end{
+    clear: both;
+}
+
+.gitlab-merge-requests article .votes .vote-score{
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.gitlab-merge-requests article .votes .votes-end,
+.gitlab-merge-requests article .more-informations-end{
+    clear: both;
+}
