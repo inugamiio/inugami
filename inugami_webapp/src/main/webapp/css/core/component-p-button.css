@@ -72,8 +72,16 @@
     height: 3em;;
 }
 
+.small-button.ui-button[label] {
+    
+    height: 1.5em;
+}
+.small-button.ui-button[label] .ui-button-text {
+    position: relative;
+    bottom: 0.5em;
+}
 
-.round.small-button.ui-button {
+.small-button.ui-button:not([label]) {
     width: 1.5em;
     height: 1.5em;
 }
