@@ -16,6 +16,7 @@
 @import "component-jenkins.css";
 @import "component-svg-generic-map.css";
 
+@import "component-forms-input.days.selector.css";
 
 #page-ruler-toolbar.page-ruler-top{
   top : 20px !important;
