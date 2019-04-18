@@ -26,6 +26,7 @@ import {SvgComponent}                   from './components/charts/svg_component/
 import {SystemNotification}             from './components/system_notification/system.notification';
 import {AlertingTab}                    from './components/alerting_tab/alerting.tab';
 import {InputBloc}                      from './components/forms/input.bloc';
+import {InputSwitch}                    from './components/forms/input.switch';
 import {Carousel}                       from './components/carousel/carousel';
 import {PropertiesEditor}               from './components/properties_editor/properties.editor';
 import {ClockComponent}                 from './components/clock/clock.component';
@@ -92,6 +93,7 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     AdminViewAlerts,
     AdminViewAlertEdit,
     InputBloc,
+    InputSwitch,
     Carousel,
     PropertiesEditor,
 
@@ -124,6 +126,7 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     AlertingTab,
     Msg,
     InputBloc,
+    InputSwitch,
     Carousel, 
 
     BarChart,
