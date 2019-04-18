@@ -1,6 +1,8 @@
 import { Component, OnInit, forwardRef, Input, Output, EventEmitter, ChangeDetectorRef, NgModule } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
+import {DaysSelectorChange} from '../../models/days.selector.change';
+
 export const INPUT_DAYS_SELECTOR_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => InputDaysSelector),
@@ -76,7 +78,11 @@ export class InputDaysSelector implements OnInit, ControlValueAccessor {
     ngOnInit() {
        
        this.daysList = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-       this.labelList = org.inugami.formatters.message("days.selector.first.letters").split(" ");
+       let labelProperty = org.inugami.formatters.message("days.selector.first.letters")
+       
+       org.inugami.asserts.isFalse(labelProperty === "??days.selector.first.letters??");
+       this.labelList = labelProperty.split(" ");
+       
     }
     constructor(private cd: ChangeDetectorRef) { }
 
@@ -109,9 +115,7 @@ export class InputDaysSelector implements OnInit, ControlValueAccessor {
      *****************************************************************************/
     onCompoFocused($event) {
         if (this.focused === false) {
-            this.onFocus.emit({
-                originalEvent: event
-            })
+            this.onFocus.emit();
         }
         this.focused = true;
 
@@ -124,7 +128,7 @@ export class InputDaysSelector implements OnInit, ControlValueAccessor {
             }else{
               this.daysModel.push(day);
             }
-            
+            this.onChange.emit(new DaysSelectorChange(this.daysModel) )
         }
     }
 

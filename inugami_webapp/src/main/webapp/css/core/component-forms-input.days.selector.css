@@ -1,5 +1,5 @@
 .inugami-input-days-selector{
-    position: relative;
+   
     display: inline-block;
     box-sizing: border-box;
 }
@@ -11,21 +11,21 @@
     border-radius: 50%;
     border-style: solid;
     border-width: 0.1em;
-    border-color: rgb(201, 84, 16);
+    border-color: #c12534;
     margin-left: 0.3em;
     display:inline-block;
 }
 
 
 .inugami-input-days-selector .days [class^="day"].selected{
-    background-color: rgb(201, 84, 16);
+    background-color:  #ED5565;
 }
 
 .inugami-input-days-selector .days [class^="day"] .label{
     position: relative;
     top:0.3em;
     left:0.6em;
-    color:rgb(201, 84, 16);
+    color:#c12534;
 }
 .inugami-input-days-selector .days [class^="day"].selected .label{
     color: whitesmoke;
