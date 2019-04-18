@@ -1,21 +1,23 @@
-.active-action.ui-button, .active-action.ui-button:focus, .active-action.ui-button:enabled:hover{
+.active-action.ui-button, .active-action.ui-button:focus {
     background-color: white;
     border-radius: 2em;
     border-style: solid;
-    border-color: rgb(219, 92, 33);
+    border-color: #c12534;
     
 }
-
+.active-action.ui-button:enabled:hover{
+    background-color: #ffe2c6;
+}
 .active-action.ui-button .ui-button-text { 
-    color : rgb(219, 92, 33);
+    color : #c12534;
 }
 
 .active-action.ui-button.ui-button:enabled:active{
-    background-color: rgb(240, 169, 104); 
+    background-color: #ef9640; 
 }
 
 .active-action [class*=ui-button-icon] {
-    color: rgb(219, 92, 33);
+    color: #c12534;
 }
 
 .active-action[label] [class*=ui-button-icon] {
@@ -23,7 +25,7 @@
 }
 
 
-.default-action.ui-button , .default-action.ui-button:focus, .default-action.ui-button:enabled:hover{
+.default-action.ui-button , .default-action.ui-button:focus{
     background-color: white;
     border-radius: 2em;
     border-style: solid;
@@ -31,8 +33,12 @@
     
 }
 
+.default-action.ui-button:enabled:hover{
+    background-color:#ffe2c6; 
+}
+
 .default-action.ui-button.ui-button:enabled:active{
-    background-color: rgb(240, 169, 104); 
+    background-color: #ef9640; 
 }
 
 .default-action .ui-button-text {
@@ -48,26 +54,30 @@
     
 }
 
-.full-active-action.ui-button, .full-active-action.ui-button:focus, .full-active-action.ui-button:enabled:hover{
-    background-color: rgb(129, 21, 39);
+.full-active-action.ui-button, .full-active-action.ui-button:focus{
+    background-color: #771d11;
     border-radius: 2em;
     border-style: solid;
-    border-color: rgb(129, 21, 39);
+    border-color: #771d11;
+}
+.full-active-action.ui-button:enabled:hover{
+    background-color: #b52e1c;
 }
 
 .full-active-action.ui-button-text { 
     color : white;
+    
 }
 
 .full-active-action.ui-button.ui-button:enabled:active{
-    background-color: rgb(240, 169, 104); 
+    background-color: #ef9640; 
 }
 
 .full-active-action [class*=ui-button-icon] {
     color: white;
 }
 
-.ui-button:not([label]){
+.full-active-action.ui-button:not([label]),.default-action:not([label]), .active-action:not([label]) {
     width: 3em;
     height: 3em;;
 }
