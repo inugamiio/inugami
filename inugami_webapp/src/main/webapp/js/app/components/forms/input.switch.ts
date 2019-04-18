@@ -1,6 +1,8 @@
 import { Component, OnInit, forwardRef, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
+import {SwitchUpdate}                               from '../../models/switch.update'
+
 export const INPUTSWITCH_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => InputSwitch),
@@ -118,10 +120,7 @@ export class InputSwitch implements OnInit, ControlValueAccessor {
         this.processValidator();
         this.displayedLabel = value ? this.labelOn : this.labelOff;
         this.onModelChange(this.checked);
-        this.onChange.emit({
-            originalEvent: event,
-            checked: this.checked
-        });
+        this.onChange.emit(new SwitchUpdate(this.checked));
     }
 
     getBaseStyleClass(){
@@ -141,9 +140,7 @@ export class InputSwitch implements OnInit, ControlValueAccessor {
      *****************************************************************************/
     onCompoFocused($event) {
         if (this.focused === false) {
-            this.onFocus.emit({
-                originalEvent: event
-            })
+            this.onFocus.emit();
         }
         this.focused = true;
     }

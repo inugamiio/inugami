@@ -6,7 +6,7 @@
     box-sizing: border-box;
 }
 
-.inugami-visible-switch {
+.inugami-input-switch-button .inugami-visible-switch {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -18,7 +18,7 @@
     border-radius: 30px;
 }
 
-.slider {
+.inugami-input-switch-button .slider {
     background-color: whitesmoke;
     position: absolute;
     content: "";
@@ -38,17 +38,17 @@
     transform: translateX(2.26em);
 }
 .inugami-input-switch-button.validation-error .slider{
-    background-color: rgb(141, 13, 28);
+    background-color: r#c9952b;
 }
 
 .inugami-input-switch-button .background{
-    background-color: #e04616;
+    background-color: #c12534;
 }
 
-.ui-helper-hidden {
+.inugami-input-switch-button .ui-helper-hidden {
     display: none ;
 }
-.ui-helper-hidden-accessible {
+.inugami-input-switch-button .ui-helper-hidden-accessible {
     border: 0;
     clip-path: rect(0 0 0 0);
     height: 1px;
@@ -61,7 +61,7 @@
 
 
 
-.switch-label{
+.inugami-input-switch-button .switch-label{
     position: absolute;
     color: transparent;
     top: 0.30em;
