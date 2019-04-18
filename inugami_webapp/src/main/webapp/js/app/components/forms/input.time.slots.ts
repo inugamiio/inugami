@@ -1,6 +1,11 @@
 import { Component, OnInit, forwardRef, Input, Output, EventEmitter } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
+import {TimeSlot} from '../../models/time.slot';
+
+import {TimeSlotAdd} from '../../models/time.slot.add';
+import {TimeSlotRemove} from '../../models/time.slot.remove';
+import {TimeSlotChanged} from '../../models/time.slot.changed';
 
 export const INPUT_TIME_SLOTS_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -92,7 +97,7 @@ export class InputTimeSlots implements OnInit, ControlValueAccessor {
 
     enableValidator                 : boolean = false;
 
-    timeSlotsModel                  : any[] = [];
+    timeSlotsModel                  : TimeSlot[] = [];
 
     separator                       : string;
 
@@ -103,12 +108,12 @@ export class InputTimeSlots implements OnInit, ControlValueAccessor {
     *****************************************************************************/
 
     ngOnInit() {
+      this.separator= org.inugami.formatters.message("time.slots.to");
+      org.inugami.asserts.isFalse("??time.slots.to??"===this.separator, "property time.slots.to not found");
        if(this.timeSlotsModel.length == 0){
-         let initialTimeSlot = new TimeSlotBuilder().withFrom("00:00")
-                                                    .withTo("23:59")
-                                                    .build();
+         let initialTimeSlot = new TimeSlot("00:00","23:59"); 
          this.timeSlotsModel.push(initialTimeSlot);
-         this.separator= org.inugami.formatters.message("time.slots.to");
+         
        }
     }
     constructor() { }
@@ -137,12 +142,9 @@ export class InputTimeSlots implements OnInit, ControlValueAccessor {
 
     addSlot(from = "00:00", to = "23:59"){
       if(!this.readonly && !this.disabled){
-        let newSlot = new TimeSlotBuilder().withFrom(from)
-                                          .withTo(to)
-                                          .build();
+        let newSlot = new TimeSlot(from,to); 
         this.timeSlotsModel.push(newSlot);
-        let addEventResponse = {"added":newSlot,
-                                "data":this.timeSlotsModel} 
+        let addEventResponse = new TimeSlotAdd(newSlot,this.timeSlotsModel); 
         this.onAdd.emit(addEventResponse);
       }
     }
@@ -151,8 +153,7 @@ export class InputTimeSlots implements OnInit, ControlValueAccessor {
         let removedSlot = this.timeSlotsModel[index];
         this.timeSlotsModel.splice(index,1);
 
-        let removeEventResponse = {"deleted":removedSlot,
-                                "data":this.timeSlotsModel} 
+        let removeEventResponse = new TimeSlotRemove(removedSlot,this.timeSlotsModel);
         this.onDelete.emit(removeEventResponse);
       }
     }
@@ -185,8 +186,7 @@ export class InputTimeSlots implements OnInit, ControlValueAccessor {
 
     onSlotChange($event,i){
       this.processValidator();
-      let changedElement = {"index":i,
-                            "data":this.timeSlotsModel};
+      let changedElement = new TimeSlotChanged(i,this.timeSlotsModel);
       this.onChange.emit(changedElement);
       
     }
@@ -209,25 +209,4 @@ export class InputTimeSlots implements OnInit, ControlValueAccessor {
     isNotNull(value) {
         return (value != undefined && value != null)
     }
-}
-
-class TimeSlotBuilder{
-   from : string;
-   to   : string;
-
-   withFrom(from : string = ""){
-     this.from = from;
-     return this;
-   }
-   withTo(to : string=""){
-     this.to = to;
-     return this;
-   }
-
-   build(){
-     return {
-       "from":this.from,
-       "to":this.to
-     }
-   }
 }
