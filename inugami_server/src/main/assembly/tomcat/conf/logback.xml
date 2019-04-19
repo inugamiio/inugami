@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration > 
+<configuration> 
 
     <!-- ======================================================================= 
     = APPENDERS
@@ -194,7 +194,7 @@
             <pattern>%d{dd/MM HH:mm:ss}|%msg%n</pattern>
         </encoder>
     </appender>
-    
+
     <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="JAVA_SCRIPT">
         <File>${super.inugami.plugin.folder.logs}/javascript.log</File>
         <Append>true</Append>
@@ -209,7 +209,7 @@
             <pattern>%d{dd/MM HH:mm:ss}|%msg%n</pattern>
         </encoder>
     </appender>
-    
+
     <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="CHRONOLOG">
         <File>${super.inugami.plugin.folder.logs}/chrono.log</File>
         <Append>true</Append>
@@ -231,8 +231,8 @@
         <level value="OFF" />
         <appender-ref ref="STDOUT" />
     </logger>
-    
-     <logger additivity="false" name="CACHE">
+
+    <logger additivity="false" name="CACHE">
         <level value="info" />
         <appender-ref ref="CACHE" />
     </logger>
@@ -290,25 +290,36 @@
         <level value="info" />
         <appender-ref ref="METRICS" />
     </logger>
-    
+
     <logger additivity="false" name="SYSTEM">
         <level value="INFO" />
         <appender-ref ref="SYSTEM" />
     </logger>
-        
+
 
     <logger additivity="false" name="MetricsEventsSenderSse">
         <level value="INFO" />
         <appender-ref ref="MetricsEventsSenderSse" />
     </logger>
-    
+
     <logger additivity="false" name="CHRONOLOG">
         <level value="INFO" />
         <appender-ref ref="CHRONOLOG" />
     </logger>
-    
-    
-    
+
+    <logger additivity="false" name="org.jboss.weld">
+        <level value="INFO" />
+        <appender-ref ref="INITIALIZE" />
+    </logger>
+
+    <logger additivity="false" name="org.jboss.resteasy">
+        <level value="INFO" />
+        <appender-ref ref="DEBUGLOG" />
+    </logger>
+
+ 
+
+
     <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>
