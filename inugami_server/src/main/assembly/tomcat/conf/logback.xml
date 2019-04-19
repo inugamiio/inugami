@@ -317,7 +317,12 @@
         <appender-ref ref="DEBUGLOG" />
     </logger>
 
- 
+    <logger additivity="false" name="org.picketlink.http">
+        <level value="WARN" />
+        <appender-ref ref="DEBUGLOG" />
+    </logger>
+
+
 
 
     <root level="INFO">
