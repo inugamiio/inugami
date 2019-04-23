@@ -1,0 +1,35 @@
+.ui-chips.test {
+
+height: 3em;
+display: inline-block;
+
+}
+
+.ui-chips.test .ui-inputtext {
+    border-style: none;
+    position: relative;
+    height: 3em;
+    top: 1em;
+}
+
+.ui-chips.test .ui-chips-token {
+    height: 2em;
+    background-color: white; 
+    border-style: solid; 
+    border-width: 1px;
+    border-color: black;
+    border-radius: 2em;
+    color: black;
+    font-size: 1.25em;
+    
+}
+
+.ui-chips.test .ui-chips-token-label{
+    padding-right: 3em;
+}
+
+.ui-chips.test .ui-chips-token .ui-chips-token-icon {
+    
+    color: black;
+   
+}
