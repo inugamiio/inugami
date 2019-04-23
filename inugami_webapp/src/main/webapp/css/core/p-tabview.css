@@ -15,7 +15,7 @@ body .ui-tabview.ui-tabview-top .ui-tabview-nav li{
 }
 
 body .ui-tabview.ui-tabview-top .ui-tabview-nav li .ui-tabview-title{
-    color: grey;
+    color: #999999;
 }
 
 body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active,
@@ -23,10 +23,10 @@ body .ui-tabview.ui-tabview-bottom .ui-tabview-nav li.ui-state-active,
 body .ui-tabview.ui-tabview-left .ui-tabview-nav li.ui-state-active,
 body .ui-tabview.ui-tabview-right .ui-tabview-nav li.ui-state-active{
     background-color: #ffffff;
-    color: black;
+    color: #000000;
    border-color: #ffffff;
 
 }
 body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active .ui-tabview-title {
-    color: black;
+    color: #000000;
 }
