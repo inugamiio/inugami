@@ -1,0 +1,32 @@
+
+
+body .ui-tabview.ui-tabview-top .ui-tabview-nav,
+ body .ui-tabview.ui-tabview-bottom .ui-tabview-nav,
+  body .ui-tabview.ui-tabview-left .ui-tabview-nav,
+   body .ui-tabview.ui-tabview-right .ui-tabview-nav {
+       border-style:none; 
+       background-color:#ededed;
+   }
+
+
+
+body .ui-tabview.ui-tabview-top .ui-tabview-nav li{
+    background-color:  #f8f8f8	;
+}
+
+body .ui-tabview.ui-tabview-top .ui-tabview-nav li .ui-tabview-title{
+    color: grey;
+}
+
+body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active,
+body .ui-tabview.ui-tabview-bottom .ui-tabview-nav li.ui-state-active,
+body .ui-tabview.ui-tabview-left .ui-tabview-nav li.ui-state-active,
+body .ui-tabview.ui-tabview-right .ui-tabview-nav li.ui-state-active{
+    background-color: #ffffff;
+    color: black;
+   border-color: #ffffff;
+
+}
+body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active .ui-tabview-title {
+    color: black;
+}
