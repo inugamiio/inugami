@@ -159,7 +159,7 @@ public class SecurityTokenService implements TechnicalAccountInitializer {
     }
     
     public Account getUser(final String token) {
-        final String login = TOKEN_REFS.get(token);
+        final String login = token == null ? null : TOKEN_REFS.get(token);
         return login == null ? null : USERS_REFS.get(login);
     }
     
