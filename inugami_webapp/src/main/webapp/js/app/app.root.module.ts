@@ -26,6 +26,7 @@ import {SvgComponent}                   from './components/charts/svg_component/
 import {SystemNotification}             from './components/system_notification/system.notification';
 import {AlertingTab}                    from './components/alerting_tab/alerting.tab';
 import {InputBloc}                      from './components/forms/input.bloc';
+import {InputSwitch}                    from './components/forms/input.switch';
 import {InputTimeSlots}                 from './components/forms/input.time.slots';
 import {Carousel}                       from './components/carousel/carousel';
 import {PropertiesEditor}               from './components/properties_editor/properties.editor';
@@ -93,6 +94,7 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     AdminViewAlerts,
     AdminViewAlertEdit,
     InputBloc,
+    InputSwitch,
     InputTimeSlots,
     Carousel,
     PropertiesEditor,
@@ -126,6 +128,7 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     AlertingTab,
     Msg,
     InputBloc,
+    InputSwitch,
     InputTimeSlots,
     Carousel, 
 
@@ -203,7 +206,7 @@ PLUGINS_COMPONENTS['server-state']          = ServerStateComponent;
 PLUGINS_COMPONENTS['jenkins-jobs']          = JenkinsJobsComponent;
 PLUGINS_COMPONENTS['gitlab-merge-requests'] = GitlabMergeRequestsComponent;
 PLUGINS_COMPONENTS['jira-issues']           = JiraIssuesComponent;
-PLUGINS_COMPONENTS['i-svg-generic-map']           = SvgGenericMap;
+PLUGINS_COMPONENTS['i-svg-generic-map']     = SvgGenericMap;
 
 
 
