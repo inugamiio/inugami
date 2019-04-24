@@ -25,9 +25,12 @@ import {Image}                          from './components/display/image/image';
 import {SvgComponent}                   from './components/charts/svg_component/svg.component';
 import {SystemNotification}             from './components/system_notification/system.notification';
 import {AlertingTab}                    from './components/alerting_tab/alerting.tab';
+
 import {InputBloc}                      from './components/forms/input.bloc';
+import {InputDaysSelector}              from './components/forms/input.days.selector';
 import {InputSwitch}                    from './components/forms/input.switch';
 import {InputTimeSlots}                 from './components/forms/input.time.slots';
+
 import {Carousel}                       from './components/carousel/carousel';
 import {PropertiesEditor}               from './components/properties_editor/properties.editor';
 import {ClockComponent}                 from './components/clock/clock.component';
@@ -96,6 +99,7 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     InputBloc,
     InputSwitch,
     InputTimeSlots,
+    InputDaysSelector,
     Carousel,
     PropertiesEditor,
 
@@ -129,6 +133,7 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     Msg,
     InputBloc,
     InputSwitch,
+    InputDaysSelector,
     InputTimeSlots,
     Carousel, 
 
