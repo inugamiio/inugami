@@ -16,7 +16,10 @@
 @import "component-jenkins.css";
 @import "component-svg-generic-map.css";
 
+
 @import "component-forms-input.switch.css";
+@import "component-forms-input.time.slots.css";
+@import "component-p-button.css";
 
 #page-ruler-toolbar.page-ruler-top{
   top : 20px !important;
