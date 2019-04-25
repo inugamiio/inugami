@@ -103,7 +103,7 @@ public class TeamsSenderService implements Sender<TeamsModel>, Serializable {
         
         url = urlBuilder.toString();
         
-        final String proxyConfig = grabConfig(SlackSender.class, "proxy.host", config);
+        final String proxyConfig = grabConfig(TeamsSender.class, "proxy.host", config);
         HttpProxy proxy = null;
         
         if (proxyConfig != null) {

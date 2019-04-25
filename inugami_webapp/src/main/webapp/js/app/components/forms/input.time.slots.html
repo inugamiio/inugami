@@ -1,0 +1,24 @@
+<div [ngClass]="{'inugami-input-time-slots': true}">
+    <span class="time-slots">
+        <span *ngFor="let timeSlots of timeSlotsModel; index as i; " (focus)="onCompoFocused($event)"
+            (blur)="onBlur($event)" [ngClass]="{'time-slot':true, 'first': i==0,'odd':i%2===1,'even':i%2===0}">
+            <input name="input-time-slot-from-{{i}}" [ngClass]="{'from': true, 'input':true}" type="time"
+                [(ngModel)]="timeSlots.from" [disabled]="disabled" [readonly]="readonly"
+                (change)="onSlotChange($event,i)" (focus)="onCompoFocused($event)" [tabindex]="tabindex + i*3" />
+            <span [class]="'separator'">{{separator}}</span>
+            <input name="input-time-slot-to-{{i}}" [ngClass]="{'to': true, 'input':true}" type="time"
+                [(ngModel)]="timeSlots.to" [disabled]="disabled" [readonly]="readonly" (change)="onSlotChange($event,i)"
+                (focus)="onCompoFocused($event)" [tabindex]="tabindex +i*3+1" />
+            <span [class]="'action delete'" (click)="removeSlot(i)" (keyup.enter)="removeSlot(i)"
+                (keyup.space)="removeSlot(i)" (focus)="onCompoFocused($event)" [tabindex]="tabindex +i*3+2">
+                <i class="fas fa-minus-circle"></i>
+            </span>
+        </span>
+    </span>
+    <span [class]="'action add'" (click)="addSlot()" (keyup.enter)="addSlot()" (keyup.space)="addSlot()"
+        (focus)="onCompoFocused($event)" [tabindex]="tabindex + timeSlotsModel.length*3">
+        <span class="icon">
+            <i class="fas fa-plus"></i>
+        </span>
+    </span>
+</div>
