@@ -1,317 +1,228 @@
-import {
-  Component,
-  Input,
-  ViewChild,
-  ViewEncapsulation,
-  ElementRef,
-  AfterViewInit
-} from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import {Component, ElementRef, Input}                 from '@angular/core';
+import {ControlValueAccessor}                         from '@angular/forms';
 
+import {SvgComponent}                                 from 'js/app/components/charts/svg_component/svg.component.ts';
 
-import * as d3 from 'd3';
-import { createContext } from 'vm';
 @Component({
-  templateUrl: 'js/app/components/forms/dynamic-levels.html',
-  directives: [],
-  encapsulation: ViewEncapsulation.None,
-  selector: 'dynamic-levels',
-})
-export class DynamicLevels implements ControlValueAccessor {
-  /***************************************************************************
-   * ATTRIBUTES
-   ***************************************************************************/
-  @ViewChild('container') chartContainer: ElementRef;
+    templateUrl: 'js/app/components/forms/dynamic-levels.html',
+    selector: 'dynamic-levels',
+  })
+  export class DynamicLevels extends SvgComponent implements ControlValueAccessor {
 
-  componentBaseStyleClass: string;
-  @Input() styleClass: string;
+    @Input() width                              : number;
+    @Input() height                             : number;
+
+    private heightPx                            : any;
+    private widthPx                             : any;
+
+    private groups                              : any;
+    private position                            : any;
+    private elementSize                         : any;
+    private elementRatio                        : any;
+
+    /**************************************************************************
+     * CONSTRUCTORS
+     **************************************************************************/
+    constructor(private el: ElementRef) {
+        super(el);
+
+        this.groups = {
+            axisXgroup              : {},
+            axisYgroup              : {},
+            axisX                   : {},
+            axisY                   : {},
+            axisYPoints             : [],
+            axisXPoints             : [],
+            axisYPointsGroup        : {},
+            axisXPointsGroup        : {},
+            dataPointsGroup         : {},
+            dataPoints              : [],
+        }
+    }
+
+    private afterContentInit() {
+
+        this.position = {
+            axisX                   : {},
+            axisY                   : {},
+            axisXPoints             : [],
+            axisYPoints             : [],
+            dataPoints              : [],
+        }
+
+        this.elementRatio = {
+            axisX               : 0.8,
+            axisXLeftMargin     : 0.1,
+            axisXRightMargin    : 0.1,
 
 
-  @Input() width: string;
-  @Input() height: string;
+            axisY               : 0.8,
+            axisYUpMargin       : 0.1,
+            axisYDownMargin     : 0.1
+        }
+        
+        this._initElementRatio();
 
-  @Input() pluginName: string;
-  @Input() event: string;
+        this.elementSize = { 
+            axisX : 0,
+            axisY : 0,
+        }
+    }
 
-  private componentName: string = "compo";
-  private ratios: any;
-  private size: any;
-  private compos: any;
+    /***************************************************************************
+     * RENDER
+     ***************************************************************************/
+    private renderLayout(svgComponentChild: any){        
+        this._computeSizeTable();
+        this._initPositionTable();
 
-  private _isAbsoluteWidth: boolean = false;
-  private _isAbsoluteHeight: boolean = false;
+        this.renderXAxis(svgComponentChild);
+        this.renderYAxis(svgComponentChild);
+    }
 
-  private position: any;
+    private renderXAxis(svgComponentChild){
+        let axisXGroup =  svgComponentChild.append("g").attr("class","axisXGroup");
+        let axisX = axisXGroup.append("line").attr("x1", this.position.axisX.x1)
+                                            .attr("y1", this.position.axisX.y1)
+                                            .attr("x2", this.position.axisX.x2)
+                                            .attr("y2", this.position.axisX.y2)
+                                            .attr("stroke-width", 1)
+                                            .attr("stroke", "black");
+        let axisXPoints = axisXGroup.append("g").attr("class","axisXPoints");
+        for (let i = 0;   i < this.position.axisXPoints.length; i++) {
+            let axisXPoint = axisXPoints.append("circle").attr("cx", this.position.axisXPoints[i].x)
+            .attr("cy", this.position.axisXPoints[i].y)
+            .attr("r", 2);
+            this.groups.axisXPoints.push(axisXPoint);
+        }
 
-  private selectedDataPoint : any = false;
+        this.groups.axisXGroup          = axisXGroup;
+        this.groups.axisX               = axisX;
+        this.groups.axisXPointsGroup    = axisXPoints 
+    }
+
+    private renderYAxis(svgComponentChild){
+        let axisYGroup =  svgComponentChild.append("g").attr("class","axisYGroup");
+        let axisY = axisYGroup.append("line").attr("x1", this.position.axisY.x1)
+                                            .attr("y1", this.position.axisY.y1)
+                                            .attr("x2", this.position.axisY.x2)
+                                            .attr("y2", this.position.axisY.y2)
+                                            .attr("stroke-width", 1)
+                                            .attr("stroke", "black");
+        let axisYPoints = axisYGroup.append("g").attr("class","axisYPoints");
+        for (let i = 0;   i < this.position.axisYPoints.length; i++) {
+           let axisYPoint = axisYPoints.append("circle").attr("cx", this.position.axisYPoints[i].x)
+            .attr("cy", this.position.axisYPoints[i].y)
+            .attr("r", 2);
+            this.groups.axisYPoints.push(axisYPoint);
+        }
+        this.groups.axisYGroup          = axisYGroup;
+        this.groups.axisY               = axisY;
+        this.groups.axisYPointsGroup    = axisYPoints 
+    }
 
 
-  /***************************************************************************
-  * CONSTRUCTOR
-  ***************************************************************************/
-  constructor(private el: ElementRef) {
-    let self = this;
+    /***************************************************************************
+     * INITIALIZATION
+     ***************************************************************************/
 
-    this.ratios = {
-      svg: {
-        height: 0,
-        width: 0
-      },
-      margin: {
-        top: 0, bottom: 0, left: 0, right: 0
-      }
+    private _initElementRatio() {
+
+    }
+
+    private _initPositionTable(){
+        this.position.axisX.x1 = this.elementSize.axisLeftMargin;
+        this.position.axisX.x2 = this.elementSize.axisX + this.position.axisX.x1;
+        
+        this.position.axisY.y1 = this.elementSize.axisUpMargin;
+        this.position.axisY.y2 = this.elementSize.axisY + this.position.axisY.y1;
+
+        this.position.axisX.y1 = this.position.axisY.y2;
+        this.position.axisX.y2 = this.position.axisX.y1;
+
+        this.position.axisY.x1 = this.position.axisX.x1;
+        this.position.axisY.x2 = this.position.axisX.x1;
+
+        this._initAxisXPointsPosition();
+        this._initAxisYPointsPosition();
+    }
+
+    private _initAxisXPointsPosition(){
+        this.position.axisXPoints = [];
+        for(let i = 1; i <= 24; i++){
+            this.position.axisXPoints.push({
+                x: this.elementSize.axisLeftMargin + i * this.elementSize.axisXPointsMargin,
+                y: this.position.axisX.y1,
+              });
+        }
+    }
+    private _initAxisYPointsPosition(){
+        this.position.axisYPoints = [];
+        for(let i = 12 ; i >= 0; i-- ){
+            this.position.axisYPoints.push({
+                x: this.position.axisY.x1,
+                y: this.elementSize.axisUpMargin + i * this.elementSize.axisYPointsMargin,
+              });
+        }
+    }
+
+    private _computeSizeTable() {
+        this.elementSize.axisX              = this.elementRatio.axisX * this.widthPx;
+        this.elementSize.axisY              = this.elementRatio.axisY * this.heightPx;
+        this.elementSize.axisXPointsMargin  = this.elementSize.axisX / 24;
+        this.elementSize.axisYPointsMargin  = this.elementSize.axisY / 13;
+        this.elementSize.axisUpMargin       = this.elementRatio.axisYUpMargin * this.heightPx;
+        this.elementSize.axisLeftMargin     = this.elementRatio.axisXLeftMargin * this.widthPx;
+         
+    }
+
+    /***************************************************************************
+     * REFRESH
+     ***************************************************************************/
+    public processRefresh(){
+        this._computeSizeTable();
+        this._initPositionTable();
+        this._refreshValues();
+
+    }
+
+    private _refreshValues(){
+        this._refreshAxisValues();
+        this._refreshAxisXPointsValues();
+        this._refreshAxisYPointsValues();
+    }
+
+    private _refreshAxisValues(){
+        this.groups.axisX.attr("x1", this.position.axisX.x1)
+                        .attr("y1", this.position.axisX.y1)
+                        .attr("x2", this.position.axisX.x2)
+                        .attr("y2", this.position.axisX.y2);
+
+        this.groups.axisY.attr("x1", this.position.axisY.x1)
+                        .attr("y1", this.position.axisY.y1)
+                        .attr("x2", this.position.axisY.x2)
+                        .attr("y2", this.position.axisY.y2);                
+    }
+
+    private _refreshAxisXPointsValues(){
+        for(let i = 0;i < this.groups.axisXPoints.length; i++){
+            this.groups.axisXPoints[i].attr("cx",this.position.axisXPoints[i].x);
+            this.groups.axisXPoints[i].attr("cy",this.position.axisXPoints[i].y);
+        }
+    }
+    private _refreshAxisYPointsValues(){
+        for(let i = 0;i < this.groups.axisYPoints.length; i++){
+            this.groups.axisYPoints[i].attr("cx",this.position.axisYPoints[i].x);
+            this.groups.axisYPoints[i].attr("cy",this.position.axisYPoints[i].y);
+        }
+    }
+    /***************************************************************************
+     * COMPUTE POSITION
+     ***************************************************************************/
+    public computeSize(svgContainerSize){
+        this.heightPx = svgContainerSize.height;
+        this.widthPx = svgContainerSize.width;
     };
 
-    this.size = {
-      svg: {
-        height: null,
-        width: null
-      },
-      margin: {
-        top: 0, bottom: 0, left: 0, right: 0
-      }
-    };
-
-    this.compos = {
-      svg: null,
-      child: null
-    };
-
-    this.position = {
-      axisX: {},
-      axisY: {},
-      axisXPoints: [],
-      axisYPoints: [],
-      dataPoints: [],
-    }
-  }
-
-  // -------------------------------------------------------------------------
-  // @PostConstruct
-  // -------------------------------------------------------------------------
-  ngAfterContentInit() {
-    this.afterContentInit();
-    let self = this;
-    if (isNull(this.width) || "" == this.width) {
-      this.width = 1;
-    }
-    if (isNull(this.height) || "" == this.height) {
-      this.height = 1;
-    }
-
-
-    if (isNaN(this.width)) {
-      this._isAbsoluteWidth = this.width.endsWith("px");
-    }
-
-    if (isNaN(this.height)) {
-      this._isAbsoluteHeight = this.height.endsWith("px");
-    }
-
-
-    org.inugami.events.addEventListener(org.inugami.events.type.RESIZE, function (data) {
-      self._computeSize(data.detail);
-      self.updateComponentSize(self.size.svg);
-      self._processRefresh();
-    });
-
-
-    this.postConstruct();
-    this._computeRatio();
-    this._computeSize(org.inugami.values.screen);
-    this._computePosition();
-    this._renderLayout();
-    this.updateComponentSize(this.size.svg);
-    this._processRefresh();
-  }
-
-
-  public afterContentInit() { };
-  public postConstruct() { };
-
-
-  /***************************************************************************
-  * COMPUTE RATIO
-  ***************************************************************************/
-  private _computeRatio() {
-    let parents = svg.components.searchParent(this.el.nativeElement.parentElement, "BLOC");
-    let localHeight = this._isAbsoluteHeight ? 1 : this.height;
-    let localWidtht = this._isAbsoluteWidth ? 1 : this.width;
-
-    this.ratios.svg = svg.math.computeDimension(parents, localHeight, localWidtht);
-
-    this.computeRatio();
-  }
-
-  public computeRatio() { };
-  public updateComponentSize(size) { };
-
-  /***************************************************************************
-  * COMPUTE SIZE
-  ***************************************************************************/
-  private _computeSize(dimension) {
-
-    let localWidth = this._convertToNumber(this.width);
-    let localHeight = this._convertToNumber(this.height);
-
-    if (this._isAbsoluteWidth) {
-      this.size.svg.width = localWidth;
-    } else {
-      this.size.svg.width = dimension.width * this.ratios.svg.width;
-    }
-
-    if (this._isAbsoluteHeight) {
-      this.size.svg.height = localHeight;
-    } else {
-      this.size.svg.height = dimension.height * this.ratios.svg.height;
-    }
-
-
-    this.computeSize(this.size.svg);
-  }
-  public computeSize(svgContainerSize) { };
-
-  /***************************************************************************
-  * RENDER
-  ***************************************************************************/
-  private _renderLayout() {
-    let container = this.chartContainer.nativeElement;
-    this.compos.svg = svg.builder.svgContainer(container, this.size.height, this.size.width);
-    this.compos.child = this.compos.svg.append("g").attr("class", "child");
-
-    this.renderLayout(this.compos.child);
-  }
-  public renderLayout(svg: any) {
-    this.renderYaxis(svg);
-    this.renderXaxis(svg);
-
-    this.renderDataPoints(svg);
 
   }
-  public renderYaxis(svg: any) {
-    svg.append("line").attr("x1", this.position.axisY.x1).attr("y1", this.position.axisY.y1)
-      .attr("x2", this.position.axisY.x2).attr("y2", this.position.axisY.y2).attr("stroke-width", 1).attr("stroke", "black");
-    for (let i = 0; i < this.position.axisYPoints.length; i ++) {
-      svg.append("circle").attr("cx", this.position.axisYPoints[i].x)
-        .attr("cy",  this.position.axisYPoints[i].y)
-        .attr("r", 2);
-    }
-
-
-
-  }
-
-  public renderXaxis(svg: any) {
-    svg.append("line").attr("x1", 10).attr("y1", 300).attr("x2", 600).attr("y2", 300).attr("stroke-width", 1).attr("stroke", "black");
-    for (let i = 0;   i < this.position.axisXPoints.length; i++) {
-      svg.append("circle").attr("cx", this.position.axisXPoints[i].x)
-        .attr("cy", this.position.axisXPoints[i].y)
-        .attr("r", 2);
-    }
-  }
-
-  public renderDataPoints(svg: any) {
-    //let dragHandler = d3.drag().on("drag",function(){
-      
-   // })
-    let svgDataPoints = svg.append("g").attr("class","dataPoints ");
-    for(let points of this.position.dataPoints){
-      let dataPoint = svgDataPoints.append("circle")
-                                    .attr("cx",points.x).attr("cy",points.y)
-                                    .attr("r",5)
-                                    .call(d3.drag().on("drag",function(){   }));
-    }
-  }
-
-
-
-  /***************************************************************************
-  * PROCESS REFRESH
-  ***************************************************************************/
-  private _processRefresh() {
-    this.compos.svg.attr('height', this.size.svg.height);
-    this.compos.svg.attr('width', this.size.svg.width);
-
-    this.processRefresh();
-  }
-
-  public processRefresh() { };
-  /***************************************************************************
-  * COMPUTE POSITION
-  ***************************************************************************/
-  public _computePosition() {
-    this.computeAxisXPosition();
-    this.computeAxisYPosition();
-    this.computeaxisXPointsPosition();
-    this.computeaxisYPointsPosition();
-
-    this.computeDataPointsPosition();
-  }
-  public computeAxisXPosition() {
-    this.position.axisX.x1 = 10;
-    this.position.axisX.y1 = 300;
-    this.position.axisX.x2 = 600;
-    this.position.axisX.y2 = this.position.axisX.y1;
-  }
-
-  public computeAxisYPosition() {
-    this.position.axisY.x1 = this.position.axisX.x1;
-    this.position.axisY.y1 = 10;
-    this.position.axisY.x2 = this.position.axisX.x1;
-    this.position.axisY.y2 = this.position.axisX.y1;
-  }
-  public computeaxisXPointsPosition() {
-
-    let leftMargin = this.position.axisX.x1;
-    let upMargin = this.position.axisX.y1;
-    let spacing = (this.position.axisX.x2 - this.position.axisX.x1) / 24
-    for (let i = 0; i < 24; i++) {
-      this.position.axisXPoints.push({
-        x: leftMargin + i * spacing,
-        y: upMargin
-      });
-    }
-  }
-  public computeaxisYPointsPosition() {
-    let leftMargin = this.position.axisX.x1;
-    let upMargin = this.position.axisY.y1;
-    let spacing = (this.position.axisY.y2 - this.position.axisY.y1) / 13
-    for (let i = 13; i > 0; i--) {
-      this.position.axisYPoints.push({
-        x: leftMargin,
-        y: upMargin + i * spacing
-      });
-    }
-  }
-
-  //methode juste pour tester un premier affichag et manip de point, faudra extraire la logique pour pouvoir rajouter des points dynamiquement 
-  public computeDataPointsPosition(){
-    let self = this;
-    this.position.axisXPoints.forEach(element => {
-      self.position.dataPoints.push({x:element.x,
-                                        y:self.position.axisYPoints[2].y})
-    });
-  }
-
-  /***************************************************************************
-  * COMPUTE
-  ***************************************************************************/
-  public onData(event: any) { }
-
-  private _handlerOnData(event) {
-    this.onData(event);
-    this.computeSize(this.size.svg)
-    this._processRefresh();
-  }
-
-
-  /***************************************************************************
-  * TOOLS
-  ***************************************************************************/
-  private _convertToNumber(value: any): number {
-    return isNaN(value) ? Number(value.replace("px", "")) : value;
-  }
-
-
-}
-
