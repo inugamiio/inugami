@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.inugami.monitoring.providers</groupId>
         <artifactId>inugami_monitoring_providers</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
 
 
