@@ -20,6 +20,12 @@ import {SvgComponent}                                 from 'js/app/components/ch
     private elementSize                         : any;
     private elementRatio                        : any;
 
+    private data                                : any;
+    private staticMode                          : boolean;
+
+    private selectedDataPoint                   : any;
+    private selectedDataPointsLine              : any;
+
     /**************************************************************************
      * CONSTRUCTORS
      **************************************************************************/
@@ -27,6 +33,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
         super(el);
 
         this.groups = {
+            svgComponentChild       : {},
             axisXgroup              : {},
             axisYgroup              : {},
             axisX                   : {},
@@ -64,23 +71,35 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this._initElementRatio();
 
         this.elementSize = { 
-            axisX : 0,
-            axisY : 0,
+            axisX               : 0,
+            axisY               : 0,
+            axisLeftMargin      : 0,
+            axisUpMargin        : 0,
+            axisRightMargin     : 0,
+            axisDownMargin      : 0,
+            axisXPointsMargin   : 0,
+            axisYPointsMargin   : 0,
         }
+
+        // FAIRE GAFFE A CA , SI ON LNENVOIT VIA DU BINDING FAUT QUE LE BIDNIG PRENNE LE DESSUS
+        this.staticMode = true;
     }
 
     /***************************************************************************
      * RENDER
      ***************************************************************************/
-    private renderLayout(svgComponentChild: any){        
+    private renderLayout(svgComponentChild: any){
+        this.groups.svgComponentChild = svgComponentChild;        
         this._computeSizeTable();
         this._initPositionTable();
 
-        this.renderXAxis(svgComponentChild);
-        this.renderYAxis(svgComponentChild);
+        this._renderXAxis(svgComponentChild);
+        this._renderYAxis(svgComponentChild);
+
+        this._initEvent();
     }
 
-    private renderXAxis(svgComponentChild){
+    private _renderXAxis(svgComponentChild){
         let axisXGroup =  svgComponentChild.append("g").attr("class","axisXGroup");
         let axisX = axisXGroup.append("line").attr("x1", this.position.axisX.x1)
                                             .attr("y1", this.position.axisX.y1)
@@ -101,7 +120,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this.groups.axisXPointsGroup    = axisXPoints 
     }
 
-    private renderYAxis(svgComponentChild){
+    private _renderYAxis(svgComponentChild){
         let axisYGroup =  svgComponentChild.append("g").attr("class","axisYGroup");
         let axisY = axisYGroup.append("line").attr("x1", this.position.axisY.x1)
                                             .attr("y1", this.position.axisY.y1)
@@ -172,8 +191,121 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this.elementSize.axisXPointsMargin  = this.elementSize.axisX / 24;
         this.elementSize.axisYPointsMargin  = this.elementSize.axisY / 13;
         this.elementSize.axisUpMargin       = this.elementRatio.axisYUpMargin * this.heightPx;
+        this.elementSize.axisDownMargin     = this.elementRatio.axisYDownMargin * this.heightPx;
         this.elementSize.axisLeftMargin     = this.elementRatio.axisXLeftMargin * this.widthPx;
+        this.elementSize.axisRightMargin    = this.elementRatio.axisXRightMargin * this.widthPx;
          
+    }
+
+    private _initEvent(){
+        this.compos.svg._groups[0][0].addEventListener('mousemove',event => { this._moveDataPoints(event.clientY);});
+                                                                            //console.log("pos svg : "+this.compos.svg._groups[0][0].getBoundingClientRect() )})
+        
+        document.body.onmouseup = event => {this._setSelectedDataPoint(null)
+                                            this._setSelectedDataPointsLine(null);}
+    }
+
+    /***************************************************************************
+     * NEW DATA LINE 
+     ***************************************************************************/
+    public addNewData(lineLevel : string){
+        //should check if line with same level already exist 
+
+
+        console.log("new data");
+        let targetPoint = 0;
+        for(let i = 0; i < this.groups.axisYPoints.length; i++){
+            if( targetPoint !== 0 ){
+                if(this._canAdd(i)){
+                    targetPoint = i;
+                }
+            }
+        }
+        let dataPointGroup = this.groups.svgComponentChild.append("g")
+                                                            .attr("class",lineLevel);
+        this.groups.dataPoints[lineLevel] = [];
+        for(let i = 0; i < this.groups.axisXPoints.length; i++){
+            let dataPoint = dataPointGroup.append("circle")
+                                            .attr("r",2)
+                                            .attr("cy",this.position.axisYPoints[targetPoint].y)
+                                            .attr("cx",this.position.axisXPoints[i].x)
+                                            .attr("stroke","black")
+                                            .attr("level",lineLevel);
+            this.groups.dataPoints[lineLevel].push(dataPoint);
+        }
+        for(let dataPoint of this.groups.dataPoints[lineLevel]){
+            this._addMouseDownEvent(dataPoint,this.groups.dataPoints[lineLevel]);
+        }
+        //faut penser a mettre ces donne dans le modèle 
+    }
+
+    // pour checker si la ligne est vide et donc si on peut ajouter ici la nouvelle 
+    private _canAdd(indexY){
+        return true;
+    }
+
+    private _addMouseDownEvent(dataPoint,dataPointsLine){
+        let self = this;
+        dataPoint.on('mousedown',function(){
+            self._mouseDown(dataPoint,dataPointsLine)});
+    }
+    
+    private _mouseDown(dataPoint,dataPointsLine){
+        this._setSelectedDataPoint(dataPoint);
+        this._setSelectedDataPointsLine(dataPointsLine);
+    }
+
+    /***************************************************************************
+     * MOVE DATA POINTS
+    ***************************************************************************/
+
+    private _setSelectedDataPoint(dataPoint : any){
+        this.selectedDataPoint = dataPoint;
+    }
+    private _setSelectedDataPointsLine(dataPointsLine : any){
+        this.selectedDataPointsLine = dataPointsLine;
+    }
+
+     
+    private _moveDataPoints( yPos : any){
+        if(this._positionIsInBound(yPos)){
+            if(this.staticMode){
+                this._moveDataPointsLine(yPos);
+            }else{
+                this._moveSingleDataPoint(yPos);
+            }
+        }
+    }
+
+    private _moveDataPointsLine(yPos){
+         if(isNotNull(this.selectedDataPoint)){
+            let pos = this.transformMouseCoord(yPos);
+            for(let datapoint of this.selectedDataPointsLine){
+                datapoint.attr("cy",pos);
+            }
+        }
+         
+    }
+    private _moveSingleDataPoint(yPos){
+        if(isNotNull(this.selectedDataPoint)){
+            let pos = this.transformMouseCoord(yPos);
+            this.selectedDataPoint.attr("cy",pos);
+        }
+    }
+
+    private transformMouseCoord(y) {
+        var CTM = this.compos.svg._groups[0][0].getScreenCTM();
+        return y = (y - CTM.f) / CTM.d;
+    }
+
+    private _positionIsInBound(yPos : any){
+        let clientRect = this.compos.svg._groups[0][0].getBoundingClientRect();
+        if( yPos > (clientRect.top + this.elementSize.axisUpMargin)         &&
+            yPos < (clientRect.bottom - this.elementSize.axisDownMargin - this.elementSize.axisYPointsMargin)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /***************************************************************************
