@@ -81,6 +81,8 @@ import {SvgComponent}                                 from 'js/app/components/ch
             axisYPointsMargin   : 0,
         }
 
+        this.data = [];
+
         // FAIRE GAFFE A CA , SI ON LNENVOIT VIA DU BINDING FAUT QUE LE BIDNIG PRENNE LE DESSUS
         this.staticMode = true;
     }
@@ -209,32 +211,33 @@ import {SvgComponent}                                 from 'js/app/components/ch
      * NEW DATA LINE 
      ***************************************************************************/
     public addNewData(lineLevel : string){
-        //should check if line with same level already exist 
-
-
-        console.log("new data");
-        let targetPoint = 0;
-        for(let i = 0; i < this.groups.axisYPoints.length; i++){
-            if( targetPoint !== 0 ){
-                if(this._canAdd(i)){
-                    targetPoint = i;
+        if(isNull(this.data.find(function(element){
+            return element.name == lineLevel;
+        }))){
+            this.data.push({name : lineLevel})
+            let targetPoint = 0;
+            for(let i = 0; i < this.groups.axisYPoints.length; i++){
+                if( targetPoint !== 0 ){
+                    if(this._canAdd(i)){
+                        targetPoint = i;
+                    }
                 }
             }
-        }
-        let dataPointGroup = this.groups.svgComponentChild.append("g")
-                                                            .attr("class",lineLevel);
-        this.groups.dataPoints[lineLevel] = [];
-        for(let i = 0; i < this.groups.axisXPoints.length; i++){
-            let dataPoint = dataPointGroup.append("circle")
-                                            .attr("r",2)
-                                            .attr("cy",this.position.axisYPoints[targetPoint].y)
-                                            .attr("cx",this.position.axisXPoints[i].x)
-                                            .attr("stroke","black")
-                                            .attr("level",lineLevel);
-            this.groups.dataPoints[lineLevel].push(dataPoint);
-        }
-        for(let dataPoint of this.groups.dataPoints[lineLevel]){
-            this._addMouseDownEvent(dataPoint,this.groups.dataPoints[lineLevel]);
+            let dataPointGroup = this.groups.svgComponentChild.append("g")
+                                                                .attr("class",lineLevel);
+            this.groups.dataPoints[lineLevel] = [];
+            for(let i = 0; i < this.groups.axisXPoints.length; i++){
+                let dataPoint = dataPointGroup.append("circle")
+                                                .attr("r",2)
+                                                .attr("cy",this.position.axisYPoints[targetPoint].y)
+                                                .attr("cx",this.position.axisXPoints[i].x)
+                                                .attr("stroke","black")
+                                                .attr("level",lineLevel);
+                this.groups.dataPoints[lineLevel].push(dataPoint);
+            }
+            for(let dataPoint of this.groups.dataPoints[lineLevel]){
+                this._addMouseDownEvent(dataPoint,this.groups.dataPoints[lineLevel]);
+            }
         }
         //faut penser a mettre ces donne dans le modèle 
     }
