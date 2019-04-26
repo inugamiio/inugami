@@ -15,7 +15,7 @@
     ======================================================================== -->
     <groupId>org.inugami</groupId>
     <artifactId>inugami</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <packaging>pom</packaging>
 
 
@@ -249,7 +249,7 @@
         <url>https://github.com/inugamiio/inugami-maven-plugin</url>
         <connection>scm:git:git@github.com:inugamiio/inugami.git</connection>
         <developerConnection>scm:git:git@github.com:inugamiio/inugami.git</developerConnection>
-        <tag>v0.0.0</tag>
+        <tag>inugami-1.0.2</tag>
     </scm>
 
     <distributionManagement>
