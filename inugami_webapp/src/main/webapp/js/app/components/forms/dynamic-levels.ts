@@ -243,11 +243,13 @@ import {SvgComponent}                                 from 'js/app/components/ch
                                                 .attr("r",4)
                                                 .attr("cy",initialYposition)
                                                 .attr("cx",this.position.axisXPoints[i].x)
-                                                .attr("stroke","black")
+                                                //.attr("stroke","black")
                                                 .attr("level",lineLevel)
                                                 .attr("hour",i)
                                                 .attr("class","hour-"+i+" "+lineLevel);
                 this.groups.dataPoints[lineLevel].push(dataPoint);
+                let tooltip = dataPointGroup.append("g").attr("class","tooltips");
+                tooltip.append("text").text("TEST DE TEXT").attr("x",this.position.axisXPoints[i].x).attr("y",initialYposition);
                 dataObject.data.push({"hour" : i,
                                       "level": this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
                                         initialYposition,this.minValue,this.maxValue)});
