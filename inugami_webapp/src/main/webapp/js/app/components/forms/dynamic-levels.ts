@@ -21,6 +21,8 @@ import {SvgComponent}                                 from 'js/app/components/ch
     private elementRatio                        : any;
 
     private data                                : any;
+    private maxValue                            : any;
+    private minValue                            : any;
     private staticMode                          : boolean;
 
     private selectedDataPoint                   : any;
@@ -82,9 +84,12 @@ import {SvgComponent}                                 from 'js/app/components/ch
         }
 
         this.data = [];
+        
 
         // FAIRE GAFFE A CA , SI ON LNENVOIT VIA DU BINDING FAUT QUE LE BIDNIG PRENNE LE DESSUS
-        this.staticMode = true;
+        this.staticMode         = true;
+        this.minValue           = 0;
+        this.maxValue           = 100;
     }
 
     /***************************************************************************
@@ -201,8 +206,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
 
     private _initEvent(){
         this.compos.svg._groups[0][0].addEventListener('mousemove',event => { this._moveDataPoints(event.clientY);});
-                                                                            //console.log("pos svg : "+this.compos.svg._groups[0][0].getBoundingClientRect() )})
-        
+        this.compos.svg._groups[0][0].addEventListener('mouseleave',event => {this.selectedDataPoint = null});
         document.body.onmouseup = event => {this._setSelectedDataPoint(null)
                                             this._setSelectedDataPointsLine(null);}
     }
@@ -214,7 +218,11 @@ import {SvgComponent}                                 from 'js/app/components/ch
         if(isNull(this.data.find(function(element){
             return element.name == lineLevel;
         }))){
-            this.data.push({name : lineLevel})
+            let dataObject =  {"name" : lineLevel,
+                               "data" : []};
+            dataObject["data"] = [];
+            this.data.push(dataObject);
+            
             let targetPoint = 0;
             for(let i = 0; i < this.groups.axisYPoints.length; i++){
                 if( targetPoint !== 0 ){
@@ -226,20 +234,27 @@ import {SvgComponent}                                 from 'js/app/components/ch
             let dataPointGroup = this.groups.svgComponentChild.append("g")
                                                                 .attr("class",lineLevel);
             this.groups.dataPoints[lineLevel] = [];
+            let initialYposition = this.computeDataPointsPosition(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin
+                                                                    ,0,this.minValue,this.maxValue);
             for(let i = 0; i < this.groups.axisXPoints.length; i++){
                 let dataPoint = dataPointGroup.append("circle")
-                                                .attr("r",2)
-                                                .attr("cy",this.position.axisYPoints[targetPoint].y)
+                                                .attr("r",4)
+                                                .attr("cy",initialYposition)
                                                 .attr("cx",this.position.axisXPoints[i].x)
                                                 .attr("stroke","black")
-                                                .attr("level",lineLevel);
+                                                .attr("level",lineLevel)
+                                                .attr("hour",i)
+                                                .attr("class","hour-"+i+" "+lineLevel);
                 this.groups.dataPoints[lineLevel].push(dataPoint);
+                dataObject.data.push({"hour" : i,
+                                      "level": this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
+                                        initialYposition,this.minValue,this.maxValue)});
+                console.log(JSON.stringify(dataObject));
             }
             for(let dataPoint of this.groups.dataPoints[lineLevel]){
                 this._addMouseDownEvent(dataPoint,this.groups.dataPoints[lineLevel]);
-            }
+            } 
         }
-        //faut penser a mettre ces donne dans le modèle 
     }
 
     // pour checker si la ligne est vide et donc si on peut ajouter ici la nouvelle 
@@ -271,44 +286,86 @@ import {SvgComponent}                                 from 'js/app/components/ch
 
      
     private _moveDataPoints( yPos : any){
-        if(this._positionIsInBound(yPos)){
+        org.inugami.asserts.isTrue(this.minValue < this.maxValue, "min value should be lower than max value");
+        if(isNotNull(this.selectedDataPoint)){
+            
             if(this.staticMode){
                 this._moveDataPointsLine(yPos);
             }else{
                 this._moveSingleDataPoint(yPos);
             }
+            this._readjustPosition();
         }
     }
 
     private _moveDataPointsLine(yPos){
-         if(isNotNull(this.selectedDataPoint)){
-            let pos = this.transformMouseCoord(yPos);
-            for(let datapoint of this.selectedDataPointsLine){
-                datapoint.attr("cy",pos);
-            }
-        }
          
-    }
-    private _moveSingleDataPoint(yPos){
-        if(isNotNull(this.selectedDataPoint)){
-            let pos = this.transformMouseCoord(yPos);
-            this.selectedDataPoint.attr("cy",pos);
+        let pos = this.transformMouseCoordToSVG(yPos);
+        for(let datapoint of this.selectedDataPointsLine){
+            datapoint.attr("cy",pos);
+
+            let lineLevel  = this.selectedDataPoint.attr("level");
+            let lineData = this.data.find(function(element){
+                return element.name == lineLevel;
+            })
+            org.inugami.asserts.notNull(lineData,"no line with level same as selected point found");
+
+            let self = this;
+            
+            for(let pointData of lineData.data){
+                pointData.level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
+                    this.selectedDataPoint.attr("cy"),this.minValue,this.maxValue);
+            }
+
+            
+           
         }
     }
 
-    private transformMouseCoord(y) {
+    private _moveSingleDataPoint(yPos){
+        
+            let pos = this.transformMouseCoordToSVG(yPos);
+            
+            this.selectedDataPoint.attr("cy",pos);
+
+            let lineLevel  = this.selectedDataPoint.attr("level");
+            let lineData = this.data.find(function(element){
+                return element.name == lineLevel;
+            })
+            org.inugami.asserts.notNull(lineData,"no line with level same as selected point found");
+
+            let self = this;
+            let pointData = lineData.data.find(function(element){
+                return element.hour == self.selectedDataPoint.attr("hour");
+            })
+            org.inugami.asserts.notNull(pointData,"no datapoint with same hour as selected point found");
+
+            
+            pointData.level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
+                this.selectedDataPoint.attr("cy"),this.minValue,this.maxValue);
+           
+    }
+
+    private transformMouseCoordToSVG(y) {
         var CTM = this.compos.svg._groups[0][0].getScreenCTM();
         return y = (y - CTM.f) / CTM.d;
     }
+    private transformMouseCoordToscreen(y) {
+        var CTM = this.compos.svg._groups[0][0].getScreenCTM();
+        return y = (y* CTM.d) - CTM.f;
+    }
 
-    private _positionIsInBound(yPos : any){
-        let clientRect = this.compos.svg._groups[0][0].getBoundingClientRect();
-        if( yPos > (clientRect.top + this.elementSize.axisUpMargin)         &&
-            yPos < (clientRect.bottom - this.elementSize.axisDownMargin - this.elementSize.axisYPointsMargin)){
-            return true;
-        }else{
-            return false;
+    private _readjustPosition(){
+        for(let dataPointsLine of this.data){
+            for(let datapoint of dataPointsLine.data){
+                if(datapoint.level > this.maxValue){
+                    datapoint.level = this.maxValue;
+                }else if(datapoint.level < this.minValue){
+                    datapoint.level = this.minValue;
+                }
+            }
         }
+        this._refreshDataPointsPosition();
     }
 
     /***************************************************************************
@@ -325,6 +382,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this._refreshAxisValues();
         this._refreshAxisXPointsValues();
         this._refreshAxisYPointsValues();
+        this._refreshDataPointsPosition();
     }
 
     private _refreshAxisValues(){
@@ -351,6 +409,16 @@ import {SvgComponent}                                 from 'js/app/components/ch
             this.groups.axisYPoints[i].attr("cy",this.position.axisYPoints[i].y);
         }
     }
+
+    private _refreshDataPointsPosition(){
+        for(let i = 0; i < this.data.length; i++ ){
+            for(let j = 0; j < this.data[i].data.length; j++ ){
+                let yPos = this.computeDataPointsPosition(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,this.data[i].data[j].level,this.minValue,this.maxValue);
+                this.groups.dataPoints[this.data[i].name][j].attr("cy",yPos)
+                                                            .attr("cx",this.position.axisXPoints[j].x);
+            }
+        }
+    }
     /***************************************************************************
      * COMPUTE POSITION
      ***************************************************************************/
@@ -359,5 +427,15 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this.widthPx = svgContainerSize.width;
     };
 
+    /***************************************************************************
+     * TOOLS
+     ***************************************************************************/
+
+     public computeDataPointsPosition(y1,y2,dataValue,dataMin,dataMax){
+        return (((y2-y1) * (dataMax - dataValue)) / (dataMax - dataMin)) + y1;
+     }
+     public computeDataPointsValue(y1,y2,dataY,dataMin,dataMax){
+        return (((dataMax - dataMin) * (y2 - dataY)) / (y2 - y1)) + dataMin;
+     }
 
   }
