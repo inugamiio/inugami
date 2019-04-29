@@ -28,6 +28,8 @@ import {SvgComponent}                                 from 'js/app/components/ch
     private selectedDataPoint                   : any;
     private selectedDataPointsLine              : any;
 
+
+    private dblClick                            : boolean;
     /**************************************************************************
      * CONSTRUCTORS
      **************************************************************************/
@@ -252,7 +254,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
                 console.log(JSON.stringify(dataObject));
             }
             for(let dataPoint of this.groups.dataPoints[lineLevel]){
-                this._addMouseDownEvent(dataPoint,this.groups.dataPoints[lineLevel]);
+                this._addMouse(dataPoint,this.groups.dataPoints[lineLevel]);
             } 
         }
     }
@@ -262,10 +264,12 @@ import {SvgComponent}                                 from 'js/app/components/ch
         return true;
     }
 
-    private _addMouseDownEvent(dataPoint,dataPointsLine){
+    private _addMouse(dataPoint,dataPointsLine){
         let self = this;
         dataPoint.on('mousedown',function(){
             self._mouseDown(dataPoint,dataPointsLine)});
+        dataPoint._groups[0][0].addEventListener("click", event => {this._alignAfter(event,dataPoint)});
+        dataPoint._groups[0][0].addEventListener("dblclick", event => {this._alignBefore(event,dataPoint)})
     }
     
     private _mouseDown(dataPoint,dataPointsLine){
@@ -273,6 +277,32 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this._setSelectedDataPointsLine(dataPointsLine);
     }
 
+    private _alignAfter(event,dataPoint){
+        if(event.shiftKey){
+            
+            if(!this.dblClick){
+                this.dblClick = true;
+                let self = this;
+                setTimeout(function(){
+                    if(self.dblClick){
+                        self._moveAllPointsAfter(dataPoint);
+                        self._readjustPosition();
+                        self.dblClick = false;
+                    }
+                },300);
+            }else{
+                this.dblClick = false;
+            }
+            
+        }
+    }
+
+    private _alignBefore(event,dataPoint){
+        if(event.shiftKey){
+            this._moveAllPointsBefore(dataPoint);
+            this._readjustPosition();
+        }
+    }
     /***************************************************************************
      * MOVE DATA POINTS
     ***************************************************************************/
@@ -316,18 +346,12 @@ import {SvgComponent}                                 from 'js/app/components/ch
                 pointData.level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
                     this.selectedDataPoint.attr("cy"),this.minValue,this.maxValue);
             }
-
-            
-           
         }
     }
 
     private _moveSingleDataPoint(yPos){
-        
             let pos = this.transformMouseCoordToSVG(yPos);
-            
             this.selectedDataPoint.attr("cy",pos);
-
             let lineLevel  = this.selectedDataPoint.attr("level");
             let lineData = this.data.find(function(element){
                 return element.name == lineLevel;
@@ -344,6 +368,40 @@ import {SvgComponent}                                 from 'js/app/components/ch
             pointData.level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
                 this.selectedDataPoint.attr("cy"),this.minValue,this.maxValue);
            
+    }
+
+    private _moveAllPointsAfter(dataPoint){
+        let lineLevel  = dataPoint.attr("level");
+        let lineData = this.data.find(function(element){
+            return element.name == lineLevel;
+        })
+        org.inugami.asserts.notNull(lineData,"no line with level same as selected point found");
+
+        let self = this;
+            
+        for(let pointData of lineData.data){
+            if(pointData.hour > dataPoint.attr("hour")){
+                pointData.level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
+                    dataPoint.attr("cy"),this.minValue,this.maxValue);
+            }
+        }
+    }
+
+    private _moveAllPointsBefore(dataPoint){
+        let lineLevel  = dataPoint.attr("level");
+        let lineData = this.data.find(function(element){
+            return element.name == lineLevel;
+        })
+        org.inugami.asserts.notNull(lineData,"no line with level same as selected point found");
+
+        let self = this;
+            
+        for(let pointData of lineData.data){
+            if(pointData.hour < dataPoint.attr("hour")){
+                pointData.level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
+                    dataPoint.attr("cy"),this.minValue,this.maxValue);
+            }
+        }
     }
 
     private transformMouseCoordToSVG(y) {
