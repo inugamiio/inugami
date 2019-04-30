@@ -2,6 +2,7 @@ new data:<p-checkbox (click)="addNewData('test')"></p-checkbox>
 static : <p-checkbox binary="true" [(ngModel)]="staticMode"></p-checkbox> 
 min : <input type="number" [(ngModel)]="minValue">
 max : <input type="number" [(ngModel)]="maxValue">
+delete : <input type="button" (click)="deleteLine('test')">
 <div class="svg-component">
     <div [ngClass]="componentBaseStyleClass" [class]="styleClass" >
         <div class="svg-container"  

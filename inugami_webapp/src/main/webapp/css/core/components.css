@@ -16,6 +16,8 @@
 @import "component-jenkins.css";
 @import "component-svg-generic-map.css";
 
+@import "component-forms-dynamic-levels.css";
+
 
 #page-ruler-toolbar.page-ruler-top{
   top : 20px !important;
