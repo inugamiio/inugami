@@ -58,6 +58,9 @@ import {SvgComponent}                                 from 'js/app/components/ch
             tooltip                 : [],
             tooltipText             : {},
             tooltipBackground       : {},
+            path                    : {},
+            axisXLabel              : {},
+            axisYLabel              : {},
         }
     }
 
@@ -98,6 +101,8 @@ import {SvgComponent}                                 from 'js/app/components/ch
             tooltipHourLeftMargin   : 0,
             tooltipValueUpMargin    : 0,
             tooltipValueLeftMargin  : 0,
+            axisXLabelUpMargin      : 0,
+            axisYLabelRightMargin   : 0,
         }
 
         this.data = [];
@@ -121,16 +126,18 @@ import {SvgComponent}                                 from 'js/app/components/ch
 
         this._renderXAxis(svgComponentChild);
         this._renderYAxis(svgComponentChild);
+        this._renderXAxisLabel();
+        this._renderYAxisLabel();
 
         this._initEvent();
     }
 
     private _renderXAxis(svgComponentChild){
         let axisXGroup =  svgComponentChild.append("g").attr("class","axisXGroup");
-        let axisX = axisXGroup.append("line").attr("x1", this.position.axisX.x1)
+        let axisX = axisXGroup.append("line")/*.attr("x1", this.position.axisX.x1)
                                             .attr("y1", this.position.axisX.y1)
                                             .attr("x2", this.position.axisX.x2)
-                                            .attr("y2", this.position.axisX.y2)
+                                            .attr("y2", this.position.axisX.y2)*/
                                             .attr("stroke-width", 1)
                                             .attr("stroke", "black");
         let axisXPoints = axisXGroup.append("g").attr("class","axisXPoints");
@@ -139,6 +146,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
             .attr("cy", this.position.axisXPoints[i].y)
             .attr("r", 2);
             this.groups.axisXPoints.push(axisXPoint);
+
         }
 
         this.groups.axisXGroup          = axisXGroup;
@@ -148,15 +156,15 @@ import {SvgComponent}                                 from 'js/app/components/ch
 
     private _renderYAxis(svgComponentChild){
         let axisYGroup =  svgComponentChild.append("g").attr("class","axisYGroup");
-        let axisY = axisYGroup.append("line").attr("x1", this.position.axisY.x1)
+        let axisY = axisYGroup.append("line")/*.attr("x1", this.position.axisY.x1)
                                             .attr("y1", this.position.axisY.y1)
                                             .attr("x2", this.position.axisY.x2)
-                                            .attr("y2", this.position.axisY.y2)
+                                            .attr("y2", this.position.axisY.y2)*/
                                             .attr("stroke-width", 1)
                                             .attr("stroke", "black");
         let axisYPoints = axisYGroup.append("g").attr("class","axisYPoints");
         for (let i = 0;   i < this.position.axisYPoints.length; i++) {
-           let axisYPoint = axisYPoints.append("circle").attr("cx", this.position.axisYPoints[i].x)
+           let axisYPoint = axisYPoints.append("circle")//.attr("cx", this.position.axisYPoints[i].x)
             .attr("cy", this.position.axisYPoints[i].y)
             .attr("r", 2);
             this.groups.axisYPoints.push(axisYPoint);
@@ -166,6 +174,40 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this.groups.axisYPointsGroup    = axisYPoints 
     }
 
+    private _renderYAxisLabel(){
+        this.groups.axisYLabel = {};
+        for( let i = 0 ; i < this.groups.axisYPoints.length; i++){
+            if(i == 0 || i==5|| i== 10 ){
+                let label = this.groups.axisYGroup.append("text").text((this.maxValue - this.minValue)*i/(this.groups.axisYPoints.length - 1)); // A CONTINUER PAS SUR QUE CA MARCH POUR TOUS
+                
+                let textWidth = label.node().getBoundingClientRect().width;
+                let textHeight = label.node().getBoundingClientRect().height;
+                
+                //label.attr("x",this.position.axisYPoints[i].x - textWidth).attr("y",this.position.axisYPoints[i].y + textHeight/2);
+                this.groups.axisYLabel[i] = label;
+
+            }
+            
+        }
+    }
+
+    //on pourrait juste ajouter la node et mettre la position dans refresh, on pourait faire ca pour tout 
+    private _renderXAxisLabel(){
+        this.groups.axisXLabel = {};
+        for( let i = 0 ; i < this.groups.axisXPoints.length; i++){
+            if(i == 6 || i == 0 || i==12 || i == 23){
+                let label = this.groups.axisXGroup.append("text").text(i+"h");
+                
+                let textWidth = label.node().getBoundingClientRect().width;
+                let textHeight = label.node().getBoundingClientRect().height;
+                
+                //label.attr("x",this.position.axisXPoints[i].x - textWidth/2).attr("y",this.position.axisXPoints[i].y + textHeight);
+
+                this.groups.axisXLabel[i] = label;
+            }
+            
+        }
+    }
 
     /***************************************************************************
      * INITIALIZATION
@@ -203,7 +245,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
     }
     private _initAxisYPointsPosition(){
         this.position.axisYPoints = [];
-        for(let i = 9 ; i >= 0; i-- ){
+        for(let i = 10 ; i >= 0; i-- ){
             this.position.axisYPoints.push({
                 x: this.position.axisY.x1,
                 y: this.elementSize.axisUpMargin + i * this.elementSize.axisYPointsMargin,
@@ -212,21 +254,22 @@ import {SvgComponent}                                 from 'js/app/components/ch
     }
 
     private _computeSizeTable() {
-        this.elementSize.axisX                  = this.elementRatio.axisX * this.widthPx;
-        this.elementSize.axisY                  = this.elementRatio.axisY * this.heightPx;
-        this.elementSize.axisXPointsMargin      = this.elementSize.axisX / 24;
-        this.elementSize.axisYPointsMargin      = this.elementSize.axisY / 10;
-        this.elementSize.axisUpMargin           = this.elementRatio.axisYUpMargin * this.heightPx;
-        this.elementSize.axisDownMargin         = this.elementRatio.axisYDownMargin * this.heightPx;
-        this.elementSize.axisLeftMargin         = this.elementRatio.axisXLeftMargin * this.widthPx;
-        this.elementSize.axisRightMargin        = this.elementRatio.axisXRightMargin * this.widthPx;
-        this.elementSize.tooltipLeftMargin      = - this.elementSize.axisXPointsMargin / 4;
-        this.elementSize.tooltipUpMargin        = this.elementSize.axisYPointsMargin;
-        this.elementSize.tooltipHourLeftMargin  = 0;
-        this.elementSize.tooltipHourUpMargin    = this.elementSize.axisYPointsMargin / 4;
-        this.elementSize.tooltipValueLeftMargin = this.elementSize.axisXPointsMargin;
-        this.elementSize.tooltipValueUpMargin   = this.elementSize.axisYPointsMargin / 4;
-       
+        this.elementSize.axisX                          = this.elementRatio.axisX * this.widthPx;
+        this.elementSize.axisY                          = this.elementRatio.axisY * this.heightPx;
+        this.elementSize.axisXPointsMargin              = this.elementSize.axisX / 24;
+        this.elementSize.axisYPointsMargin              = this.elementSize.axisY / 11;
+        this.elementSize.axisUpMargin                   = this.elementRatio.axisYUpMargin * this.heightPx;
+        this.elementSize.axisDownMargin                 = this.elementRatio.axisYDownMargin * this.heightPx;
+        this.elementSize.axisLeftMargin                 = this.elementRatio.axisXLeftMargin * this.widthPx;
+        this.elementSize.axisRightMargin                = this.elementRatio.axisXRightMargin * this.widthPx;
+        this.elementSize.tooltipLeftMargin              =  - this.elementSize.axisXPointsMargin / 4;
+        this.elementSize.tooltipUpMargin                = this.elementSize.axisYPointsMargin;
+        this.elementSize.tooltipHourLeftMargin          = 0;
+        this.elementSize.tooltipHourUpMargin            = this.elementSize.axisYPointsMargin / 4;
+        this.elementSize.tooltipValueLeftMargin         = this.elementSize.axisXPointsMargin;
+        this.elementSize.tooltipValueUpMargin           = this.elementSize.axisYPointsMargin / 4;
+        this.elementSize.axisXLabelUpMargin             = this.elementSize.axisXPointsMargin / 5;
+        this.elementSize.axisYLabelRightMargin          = this.elementSize.axisYPointsMargin / 5;
     }
 
     private _initEvent(){
@@ -280,11 +323,13 @@ import {SvgComponent}                                 from 'js/app/components/ch
                 this.groups.tooltipText[lineLevel] = [];
                 this.groups.tooltipBackground[lineLevel] = [];
                 this.groups.tooltip[lineLevel] = [];
+
+                let pathValues = [];
                 for(let i = 0; i < this.groups.axisXPoints.length; i++){
                     let dataPoint = dataPointGroup.append("circle")
-                                                    .attr("r",4)
-                                                    .attr("cy",initialYposition)
-                                                    .attr("cx",this.position.axisXPoints[i].x)
+                                                    .attr("r",4) // magic number to put ass variable
+                                                    //.attr("cy",initialYposition)
+                                                    //.attr("cx",this.position.axisXPoints[i].x)
                                                     //.attr("stroke","black")
                                                     .attr("level",lineLevel)
                                                     .attr("hour",i)
@@ -294,16 +339,24 @@ import {SvgComponent}                                 from 'js/app/components/ch
                     this.groups.dataPointsGroup[lineLevel] = dataPointGroup;
     
                     let level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
-                                                            initialYposition,this.minValue,this.maxValue)
-    
+                                                            initialYposition,this.minValue,this.maxValue);
+                    
+                    let previousXVal = 0;
+                    let previousYVal = 0;  
+                    pathValues.push(this.position.axisXPoints[i].x);
+                    pathValues.push(initialYposition); 
                     this._newTooltips(dataPointGroup,lineLevel,level,initialYposition,i);
     
-                    dataObject.data.push({"hour" : i,
+                    dataObject["data"].push({"hour" : i,
                                           "level": level});
                 }
                 for(let dataPoint of this.groups.dataPoints[lineLevel]){
                     this._addMouse(dataPoint,this.groups.dataPoints[lineLevel]);
-                } 
+                }
+
+                this._newPath(dataPointGroup,lineLevel,pathValues);
+
+                this.processRefresh();
             }
         }
         
@@ -312,15 +365,11 @@ import {SvgComponent}                                 from 'js/app/components/ch
     private _newTooltips(dataPointGroup,lineLevel,level,initialYposition,i){        
         let tooltip = dataPointGroup.append("g").attr("class","tooltips");
         let tooltipBackground = tooltip.append("rect");
-        let tooltipLevelText  = tooltip.append("text").text(lineLevel)
-                                                        .attr("x",this.position.axisXPoints[i].x + this.elementSize.tooltipLeftMargin)
-                                                        .attr("y",initialYposition + this.elementSize.tooltipUpMargin);
-        let tooltipHourText  = tooltip.append("text").text(this._convertToHour(i))
-                                                        .attr("x",this.position.axisXPoints[i].x + this.elementSize.tooltipLeftMargin + this.elementSize.tooltipHourLeftMargin)
-                                                        .attr("y",initialYposition + this.elementSize.tooltipUpMargin + this.elementSize.tooltipHourUpMargin + tooltipLevelText.node().getBoundingClientRect().height);
-        let tooltipValueText  = tooltip.append("text").text(level)
-                                                        .attr("x",this.position.axisXPoints[i].x + this.elementSize.tooltipLeftMargin + this.elementSize.tooltipValueLeftMargin + tooltipLevelText.node().getBoundingClientRect().width)
-                                                        .attr("y",initialYposition + this.elementSize.tooltipUpMargin + this.elementSize.tooltipValueUpMargin);
+        let tooltipLevelText  = tooltip.append("text").text(lineLevel);
+                                                        
+        let tooltipHourText  = tooltip.append("text").text(this._convertToHour(i));
+        let tooltipValueText  = tooltip.append("text").text(level);
+                                                        
        
        let tooltipTextGroup = { "level" :tooltipLevelText,
                                 "hour"  :tooltipHourText,
@@ -328,13 +377,6 @@ import {SvgComponent}                                 from 'js/app/components/ch
         
         
         this.groups.tooltipText[lineLevel].push(tooltipTextGroup);
-       
-
-       tooltipBackground.attr("x",this.position.axisXPoints[i].x + this.elementSize.tooltipLeftMargin)
-                                .attr("y",initialYposition + this.elementSize.tooltipUpMargin - tooltipLevelText.node().getBoundingClientRect().height)
-                                .attr("width",tooltipLevelText.node().getBoundingClientRect().width + this.elementSize.tooltipValueLeftMargin + tooltipValueText.node().getBoundingClientRect().width)
-                                .attr("height",tooltipLevelText.node().getBoundingClientRect().width + this.elementSize.tooltipHourUpMargin + tooltipHourText.node().getBoundingClientRect().height);
-
         this.groups.tooltipBackground[lineLevel].push(tooltipBackground);
         this.groups.tooltip[lineLevel].push(tooltip);
     }
@@ -342,6 +384,19 @@ import {SvgComponent}                                 from 'js/app/components/ch
     // pour checker si la ligne est vide et donc si on peut ajouter ici la nouvelle 
     private _canAdd(indexY){
         return true;
+    }
+
+    private _newPath(dataPointGroup,lineLevel,pathValues){
+        pathValues = this._formatPathValues(pathValues);
+        let path = dataPointGroup.append("path").attr("d",pathValues)
+                                    .attr("stroke","black").attr("fill","none");
+        path.lower();
+
+        if(this.groups.path[lineLevel] === undefined){
+            this.groups.path[lineLevel] = {};
+        }
+        this.groups.path[lineLevel] = path;
+
     }
 
     private _addMouse(dataPoint,dataPointsLine){
@@ -392,7 +447,8 @@ import {SvgComponent}                                 from 'js/app/components/ch
      * DELETE LINE 
      ***************************************************************************/
 
-     public deleteLine(lineLevel){
+    public deleteLine(lineLevel){
+
         let index = this.data.findIndex(function(element){
             return element.name == lineLevel;
         })
@@ -403,9 +459,10 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this.groups.tooltip[lineLevel]              = [];
         this.groups.tooltipText[lineLevel]          = [];
         this.groups.tooltipBackground[lineLevel]    = [];
+        this.groups.path[lineLevel]                 = {};
 
         this.groups.dataPointsGroup[lineLevel].remove();
-     }
+    }
 
     /***************************************************************************
      * MOVE DATA POINTS
@@ -443,8 +500,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
             }
            
             this._readjustPosition();
-            this._refreshTooltipsValue();
-            this._refreshTooltipsPosition();
+            this.processRefresh();
         }
         if(isNotNull(this.onChange)){
             this.onChange(this.data);
@@ -455,8 +511,6 @@ import {SvgComponent}                                 from 'js/app/components/ch
          
         let pos = this.transformMouseCoordToSVG(yPos);
         for(let datapoint of this.selectedDataPointsLine){
-            datapoint.attr("cy",pos);
-
             let lineLevel  = this.selectedDataPoint.attr("level");
             let lineData = this.data.find(function(element){
                 return element.name == lineLevel;
@@ -467,9 +521,10 @@ import {SvgComponent}                                 from 'js/app/components/ch
             
             for(let pointData of lineData.data){
                 pointData.level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
-                    this.selectedDataPoint.attr("cy"),this.minValue,this.maxValue);
+                    pos,this.minValue,this.maxValue);
             }
         }
+        this.processRefresh();
         if(isNotNull(this.onChange)){
             this.onChange(this.data);
         }
@@ -477,24 +532,22 @@ import {SvgComponent}                                 from 'js/app/components/ch
     }
 
     private _moveSingleDataPoint(yPos){
-            let pos = this.transformMouseCoordToSVG(yPos);
-            this.selectedDataPoint.attr("cy",pos);
-            let lineLevel  = this.selectedDataPoint.attr("level");
-            let lineData = this.data.find(function(element){
-                return element.name == lineLevel;
-            })
-            org.inugami.asserts.notNull(lineData,"no line with level same as selected point found");
+        let pos = this.transformMouseCoordToSVG(yPos);
+        let lineLevel  = this.selectedDataPoint.attr("level");
+        let lineData = this.data.find(function(element){
+            return element.name == lineLevel;
+        })
+        org.inugami.asserts.notNull(lineData,"no line with level same as selected point found");
 
-            let self = this;
-            let pointData = lineData.data.find(function(element){
-                return element.hour == self.selectedDataPoint.attr("hour");
-            })
-            org.inugami.asserts.notNull(pointData,"no datapoint with same hour as selected point found");
+        let self = this;
+        let pointData = lineData.data.find(function(element){
+            return element.hour == self.selectedDataPoint.attr("hour");
+        })
+        org.inugami.asserts.notNull(pointData,"no datapoint with same hour as selected point found");
 
             
-            pointData.level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
-                this.selectedDataPoint.attr("cy"),this.minValue,this.maxValue);
-           
+        pointData.level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
+            pos,this.minValue,this.maxValue);
     }
 
     private _moveAllPointsAfter(dataPoint){
@@ -560,7 +613,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this._computeSizeTable();
         this._initPositionTable();
         this._refreshValues();
-
+        
     }
 
     private _refreshValues(){
@@ -569,7 +622,10 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this._refreshAxisYPointsValues();
         this._refreshDataPointsPosition();
         this._refreshTooltipsValue();
-        this._refreshTooltipsPosition()
+        this._refreshTooltipsPosition();
+        this._refreshPathPosition();
+        this._refreshXAxisLabel();
+        this._refreshYAxisLabel();
     }
 
     private _refreshAxisValues(){
@@ -620,8 +676,8 @@ import {SvgComponent}                                 from 'js/app/components/ch
                 let tooltipText = this.groups.tooltipText[dataLine.name][dataPoint.hour];
                 let x = this.position.axisXPoints[dataPoint.hour].x + this.elementSize.tooltipLeftMargin;
                 let y = parseFloat(this.groups.dataPoints[dataLine.name][dataPoint.hour].attr("cy")) + this.elementSize.tooltipUpMargin;
-                tooltipText.level.attr("x",this.position.axisXPoints[dataPoint.hour].x + this.elementSize.tooltipLeftMargin)
-                                .attr("y",parseFloat(this.groups.dataPoints[dataLine.name][dataPoint.hour].attr("cy")) + this.elementSize.tooltipUpMargin);
+                tooltipText.level.attr("x",x)
+                                .attr("y",y);
                 tooltipText.hour.attr("x",parseFloat(tooltipText.level.attr("x")) + this.elementSize.tooltipHourLeftMargin)
                                 .attr("y",parseFloat(tooltipText.level.attr("y")) + this.elementSize.tooltipHourUpMargin + tooltipText.level.node().getBoundingClientRect().height);
                 tooltipText.value.attr("x",parseFloat(tooltipText.level.attr("x")) + this.elementSize.tooltipValueLeftMargin + tooltipText.level.node().getBoundingClientRect().width)
@@ -629,10 +685,26 @@ import {SvgComponent}                                 from 'js/app/components/ch
                                 
                 let tooltipBackground = this.groups.tooltipBackground[dataLine.name][dataPoint.hour];
                 let width = tooltipText.level.node().getBoundingClientRect().width + this.elementSize.tooltipValueLeftMargin + tooltipText.value.node().getBoundingClientRect().width;
+                let height = tooltipText.level.node().getBoundingClientRect().width + this.elementSize.tooltipHourUpMargin + tooltipText.hour.node().getBoundingClientRect().height
                 tooltipBackground.attr("x",x)
                                     .attr("y",y - tooltipText.level.node().getBoundingClientRect().height)
                                     .attr("width",width)
+                                    .attr("height",height);
             }
+        }
+    }
+
+    private _refreshPathPosition(){
+        for(let dataLine of this.data){
+            let pathValues = [];
+            for(let dataPoint of dataLine.data){
+                pathValues.push(this.position.axisXPoints[dataPoint.hour].x)
+                pathValues.push(this.computeDataPointsPosition(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,dataPoint.level
+                    ,this.minValue,this.maxValue));
+
+            }
+            let path = this.groups.path[dataLine.name];
+            path.attr("d",this._formatPathValues(pathValues));
         }
     }
 
@@ -654,6 +726,24 @@ import {SvgComponent}                                 from 'js/app/components/ch
         }
     }
 
+    private _refreshXAxisLabel(){
+        for(let key of Object.keys(this.groups.axisXLabel)){
+            let textWidth = this.groups.axisXLabel[key].node().getBoundingClientRect().width;
+            let textHeight = this.groups.axisXLabel[key].node().getBoundingClientRect().height;   
+            this.groups.axisXLabel[key].attr("x",this.position.axisXPoints[key].x - textWidth/2).attr("y",this.position.axisXPoints[key].y + textHeight + this.elementSize.axisXLabelUpMargin);
+        }
+    }
+
+    private _refreshYAxisLabel(){
+        for(let key of Object.keys(this.groups.axisYLabel)){
+            let label =  this.groups.axisYLabel[key];
+            let textWidth = label.node().getBoundingClientRect().width;
+            let textHeight = label.node().getBoundingClientRect().height;   
+            label.attr("x",this.position.axisYPoints[key].x - textWidth - this.elementSize.axisYLabelRightMargin)
+                .attr("y",this.position.axisYPoints[key].y + textHeight/2)
+                .text((this.maxValue - this.minValue)*parseInt(key)/(this.groups.axisYPoints.length - 1))
+        }
+    }
 
     /***************************************************************************
      * COMPUTE POSITION
@@ -688,6 +778,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
      * TOOLS
      ***************************************************************************/
 
+     // take only the value , get other val from this
      public computeDataPointsPosition(y1,y2,dataValue,dataMin,dataMax){
         return (((y2-y1) * (dataMax - dataValue)) / (dataMax - dataMin)) + y1;
      }
@@ -716,5 +807,13 @@ import {SvgComponent}                                 from 'js/app/components/ch
          }else{
              return false;
          }
+     }
+
+     private _formatPathValues(pathValues){
+        for(let i = pathValues.length - 1; i > 1; i--){
+            pathValues[i] = pathValues[i] - pathValues[i - 2];
+        }
+        let pathval = svg.builder.path(pathValues,false);
+        return pathval;
      }
   }
