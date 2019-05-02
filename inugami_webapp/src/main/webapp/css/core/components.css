@@ -16,8 +16,11 @@
 @import "component-jenkins.css";
 @import "component-svg-generic-map.css";
 
+@import "component-forms-input.days.selector.css";
+@import "component-forms-input.switch.css";
+@import "component-forms-input.time.slots.css";
+@import "component-p-button.css";
 @import "component-forms-dynamic-levels.css";
-
 
 #page-ruler-toolbar.page-ruler-top{
   top : 20px !important;
@@ -711,4 +714,3 @@ nav.dynamic-sections .dynamic-sections-end{
 .alerting.fatal{
   color : #ff0000;
 }
-
