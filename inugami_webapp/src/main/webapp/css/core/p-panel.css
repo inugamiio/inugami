@@ -1,0 +1,7 @@
+body .ui-panel {
+    background-color: #f5f5f5
+}
+
+body .ui-panel .ui-panel-titlebar{
+    border : none;
+}
