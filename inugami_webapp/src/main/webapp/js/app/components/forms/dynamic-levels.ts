@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input}                 from '@angular/core';
+import {Component, ElementRef, Input,Output,EventEmitter}                 from '@angular/core';
 import {ControlValueAccessor}                         from '@angular/forms';
 
 import {SvgComponent}                                 from 'js/app/components/charts/svg_component/svg.component.ts';
@@ -15,9 +15,15 @@ import {SvgComponent}                                 from 'js/app/components/ch
     @Input() formatter                          : any;
     @Input() disabled                           : boolean;
     @Input() readonly                           : boolean;
+    @Input() validator                          : any;
+    @Input() tabindex                           : number;
+    @Input() name                               : string;
+
+    @Output() onChange                          = new EventEmitter<any>();
+    @Output() onClick                           = new EventEmitter<any>();
 
     private onTouched                           : any;
-    private onChange                            : any;
+    private onChangeAccessor                    : any;
 
     private heightPx                            : any;
     private widthPx                             : any;
@@ -61,6 +67,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
             path                    : {},
             axisXLabel              : {},
             axisYLabel              : {},
+            dataGroup               : {},
         }
     }
 
@@ -99,8 +106,9 @@ import {SvgComponent}                                 from 'js/app/components/ch
             tooltipUpMargin         : 0,
             tooltipHourUpMargin     : 0,
             tooltipHourLeftMargin   : 0,
-            tooltipValueUpMargin    : 0,
-            tooltipValueLeftMargin  : 0,
+            tooltipLevelpMargin     : 0,
+            tooltipLevelLeftMargin  : 0,
+            tooltipBackgroundMargin : 0,
             axisXLabelUpMargin      : 0,
             axisYLabelRightMargin   : 0,
         }
@@ -108,43 +116,49 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this.data = [];
         
 
+        
         // FAIRE GAFFE A CA , SI ON LNENVOIT VIA DU BINDING FAUT QUE LE BIDNIG PRENNE LE DESSUS
         this.staticMode             = true;
         this.minValue               = 0;
         this.maxValue               = 100;
         this.disabled = false;
         this.readonly = false;
+        this.tabindex = 1;
     }
 
     /***************************************************************************
      * RENDER
      ***************************************************************************/
     private renderLayout(svgComponentChild: any){
-        this.groups.svgComponentChild = svgComponentChild;        
+        this.groups.svgComponentChild = svgComponentChild;
+        this.groups.dataGroup = this.groups.svgComponentChild.append("g").attr("class","data");        
         this._computeSizeTable();
         this._initPositionTable();
 
-        this._renderXAxis(svgComponentChild);
-        this._renderYAxis(svgComponentChild);
+        this._renderAxis(svgComponentChild);
         this._renderXAxisLabel();
         this._renderYAxisLabel();
 
         this._initEvent();
     }
 
-    private _renderXAxis(svgComponentChild){
-        let axisXGroup =  svgComponentChild.append("g").attr("class","axisXGroup");
-        let axisX = axisXGroup.append("line")/*.attr("x1", this.position.axisX.x1)
-                                            .attr("y1", this.position.axisX.y1)
-                                            .attr("x2", this.position.axisX.x2)
-                                            .attr("y2", this.position.axisX.y2)*/
-                                            .attr("stroke-width", 1)
-                                            .attr("stroke", "black");
+    private _renderAxis(svgComponentChild){
+        let axisGroup = svgComponentChild.append("g").attr("class","layout");
+        this._renderXAxis(axisGroup);
+        this._renderYAxis(axisGroup);
+    }
+
+    private _renderXAxis(svg){
+        let axisXGroup =  svg.append("g").attr("class","axis-x");
+        let axisX = axisXGroup.append("line")
+                                .attr("stroke-width", 1)
+                                .attr("stroke", "black");
         let axisXPoints = axisXGroup.append("g").attr("class","axisXPoints");
         for (let i = 0;   i < this.position.axisXPoints.length; i++) {
             let axisXPoint = axisXPoints.append("circle").attr("cx", this.position.axisXPoints[i].x)
             .attr("cy", this.position.axisXPoints[i].y)
-            .attr("r", 2);
+            .attr("r", 2)
+            .attr("class","tick")
             this.groups.axisXPoints.push(axisXPoint);
 
         }
@@ -154,19 +168,17 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this.groups.axisXPointsGroup    = axisXPoints 
     }
 
-    private _renderYAxis(svgComponentChild){
-        let axisYGroup =  svgComponentChild.append("g").attr("class","axisYGroup");
-        let axisY = axisYGroup.append("line")/*.attr("x1", this.position.axisY.x1)
-                                            .attr("y1", this.position.axisY.y1)
-                                            .attr("x2", this.position.axisY.x2)
-                                            .attr("y2", this.position.axisY.y2)*/
-                                            .attr("stroke-width", 1)
-                                            .attr("stroke", "black");
+    private _renderYAxis(svg){
+        let axisYGroup =  svg.append("g").attr("class","axis-y");
+        let axisY = axisYGroup.append("line")
+                                .attr("stroke-width", 1)
+                                .attr("stroke", "black");
         let axisYPoints = axisYGroup.append("g").attr("class","axisYPoints");
         for (let i = 0;   i < this.position.axisYPoints.length; i++) {
-           let axisYPoint = axisYPoints.append("circle")//.attr("cx", this.position.axisYPoints[i].x)
-            .attr("cy", this.position.axisYPoints[i].y)
-            .attr("r", 2);
+           let axisYPoint = axisYPoints.append("circle")
+                                        .attr("cy", this.position.axisYPoints[i].y)
+                                        .attr("r", 2)
+                                        .attr("class","tick");
             this.groups.axisYPoints.push(axisYPoint);
         }
         this.groups.axisYGroup          = axisYGroup;
@@ -178,16 +190,15 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this.groups.axisYLabel = {};
         for( let i = 0 ; i < this.groups.axisYPoints.length; i++){
             if(i == 0 || i==5|| i== 10 ){
-                let label = this.groups.axisYGroup.append("text").text((this.maxValue - this.minValue)*i/(this.groups.axisYPoints.length - 1)); // A CONTINUER PAS SUR QUE CA MARCH POUR TOUS
+                let label = this.groups.axisYGroup.append("text")
+                                                .attr("class","tick-label")
+                                                .text((this.maxValue - this.minValue)*i/(this.groups.axisYPoints.length - 1) + this.minValue); // A CONTINUER PAS SUR QUE CA MARCH POUR TOUS
                 
                 let textWidth = label.node().getBoundingClientRect().width;
                 let textHeight = label.node().getBoundingClientRect().height;
-                
-                //label.attr("x",this.position.axisYPoints[i].x - textWidth).attr("y",this.position.axisYPoints[i].y + textHeight/2);
                 this.groups.axisYLabel[i] = label;
 
             }
-            
         }
     }
 
@@ -196,13 +207,12 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this.groups.axisXLabel = {};
         for( let i = 0 ; i < this.groups.axisXPoints.length; i++){
             if(i == 6 || i == 0 || i==12 || i == 23){
-                let label = this.groups.axisXGroup.append("text").text(i+"h");
+                let label = this.groups.axisXGroup.append("text")
+                                                    .attr("class","tick-label")
+                                                    .text(i+"h");
                 
                 let textWidth = label.node().getBoundingClientRect().width;
                 let textHeight = label.node().getBoundingClientRect().height;
-                
-                //label.attr("x",this.position.axisXPoints[i].x - textWidth/2).attr("y",this.position.axisXPoints[i].y + textHeight);
-
                 this.groups.axisXLabel[i] = label;
             }
             
@@ -266,10 +276,12 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this.elementSize.tooltipUpMargin                = this.elementSize.axisYPointsMargin;
         this.elementSize.tooltipHourLeftMargin          = 0;
         this.elementSize.tooltipHourUpMargin            = this.elementSize.axisYPointsMargin / 4;
-        this.elementSize.tooltipValueLeftMargin         = this.elementSize.axisXPointsMargin;
-        this.elementSize.tooltipValueUpMargin           = this.elementSize.axisYPointsMargin / 4;
+        this.elementSize.tooltipLevelLeftMargin         = this.elementSize.axisXPointsMargin;
+        this.elementSize.tooltipLevelUpMargin           = this.elementSize.axisYPointsMargin / 4;
+        this.elementSize.tooltipBackgroundMargin        = this.elementSize.axisXPointsMargin / 3;
         this.elementSize.axisXLabelUpMargin             = this.elementSize.axisXPointsMargin / 5;
         this.elementSize.axisYLabelRightMargin          = this.elementSize.axisYPointsMargin / 5;
+        
     }
 
     private _initEvent(){
@@ -281,14 +293,14 @@ import {SvgComponent}                                 from 'js/app/components/ch
     /***************************************************************************
      * NEW DATA LINE 
      ***************************************************************************/
-    public addNewData(lineLevel : string){
+    public addNewData(name : string){
         if(!this.disabled && !this.readonly){
             let line = this.data.find(function(element){
-                return element.name == lineLevel;
+                return element.name == name;
             });
             
             if(this._emptyOrNull(line)){
-                let dataObject =  {"name" : lineLevel,
+                let dataObject =  {"name" : name,
                                    "data" : []};
                 dataObject["data"] = [];
                 this.data.push(dataObject);
@@ -303,9 +315,9 @@ import {SvgComponent}                                 from 'js/app/components/ch
                         }
                     }
                 }
-                let dataPointGroup = this.groups.svgComponentChild.append("g")
-                                                                    .attr("class",lineLevel);
-                this.groups.dataPoints[lineLevel] = [];
+                let dataPointGroup = this.groups.dataGroup.append("g")
+                                                            .attr("class","level "+name);
+                this.groups.dataPoints[name] = [];
                 let initialYposition = this.computeDataPointsPosition(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin
                                                                         ,0,this.minValue,this.maxValue);
                 if(this.groups.tooltipText === undefined){
@@ -320,65 +332,56 @@ import {SvgComponent}                                 from 'js/app/components/ch
                 if(this.groups.dataPointGroup === undefined){
                     this.groups.dataPointsGroup = {};
                 }
-                this.groups.tooltipText[lineLevel] = [];
-                this.groups.tooltipBackground[lineLevel] = [];
-                this.groups.tooltip[lineLevel] = [];
+                this.groups.tooltipText[name] = [];
+                this.groups.tooltipBackground[name] = [];
+                this.groups.tooltip[name] = [];
 
                 let pathValues = [];
+                let dotsGroup = dataPointGroup.append("g").attr("class","dots");
+                let level = this.computeDataPointsLevel(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
+                    initialYposition,this.minValue,this.maxValue);
                 for(let i = 0; i < this.groups.axisXPoints.length; i++){
-                    let dataPoint = dataPointGroup.append("circle")
-                                                    .attr("r",4) // magic number to put ass variable
-                                                    //.attr("cy",initialYposition)
-                                                    //.attr("cx",this.position.axisXPoints[i].x)
-                                                    //.attr("stroke","black")
-                                                    .attr("level",lineLevel)
+                    let dataPoint = dotsGroup.append("circle")
+                                                    .attr("r",4) // magic number to put as variable
+                                                    .attr("lineName",name)
                                                     .attr("hour",i)
-                                                    .attr("class","hour-"+i+" "+lineLevel);
-                    this.groups.dataPoints[lineLevel].push(dataPoint);
+                                                    .attr("class","dot hour-"+i+" "+name);
+                    this.groups.dataPoints[name].push(dataPoint);
                     dataPoint.lower();
-                    this.groups.dataPointsGroup[lineLevel] = dataPointGroup;
-    
-                    let level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
-                                                            initialYposition,this.minValue,this.maxValue);
-                    
-                    let previousXVal = 0;
-                    let previousYVal = 0;  
+                    this.groups.dataPointsGroup[name] = dataPointGroup;
                     pathValues.push(this.position.axisXPoints[i].x);
                     pathValues.push(initialYposition); 
-                    this._newTooltips(dataPointGroup,lineLevel,level,initialYposition,i);
+                    this._newTooltips(dataPointGroup,name,level,i);
     
                     dataObject["data"].push({"hour" : i,
                                           "level": level});
                 }
-                for(let dataPoint of this.groups.dataPoints[lineLevel]){
-                    this._addMouse(dataPoint,this.groups.dataPoints[lineLevel]);
+                for(let dataPoint of this.groups.dataPoints[name]){
+                    this._addMouse(dataPoint,this.groups.dataPoints[name]);
                 }
-
-                this._newPath(dataPointGroup,lineLevel,pathValues);
-
+                this._newPath(dataPointGroup,name,pathValues);
                 this.processRefresh();
             }
         }
-        
     }
 
-    private _newTooltips(dataPointGroup,lineLevel,level,initialYposition,i){        
+    private _newTooltips(dataPointGroup,name,level,i){        
         let tooltip = dataPointGroup.append("g").attr("class","tooltips");
         let tooltipBackground = tooltip.append("rect");
-        let tooltipLevelText  = tooltip.append("text").text(lineLevel);
+        let tooltipNameText  = tooltip.append("text").text(name);
                                                         
         let tooltipHourText  = tooltip.append("text").text(this._convertToHour(i));
-        let tooltipValueText  = tooltip.append("text").text(level);
+        let tooltipLevelText  = tooltip.append("text").text(level);
                                                         
        
-       let tooltipTextGroup = { "level" :tooltipLevelText,
+       let tooltipTextGroup = { "name" :tooltipNameText,
                                 "hour"  :tooltipHourText,
-                                "value" :tooltipValueText,};
+                                "level" :tooltipLevelText,};
         
         
-        this.groups.tooltipText[lineLevel].push(tooltipTextGroup);
-        this.groups.tooltipBackground[lineLevel].push(tooltipBackground);
-        this.groups.tooltip[lineLevel].push(tooltip);
+        this.groups.tooltipText[name].push(tooltipTextGroup);
+        this.groups.tooltipBackground[name].push(tooltipBackground);
+        this.groups.tooltip[name].push(tooltip);
     }
 
     // pour checker si la ligne est vide et donc si on peut ajouter ici la nouvelle 
@@ -386,24 +389,26 @@ import {SvgComponent}                                 from 'js/app/components/ch
         return true;
     }
 
-    private _newPath(dataPointGroup,lineLevel,pathValues){
+    private _newPath(dataPointGroup,name,pathValues){
         pathValues = this._formatPathValues(pathValues);
-        let path = dataPointGroup.append("path").attr("d",pathValues)
-                                    .attr("stroke","black").attr("fill","none");
+        let path = dataPointGroup.append("path")
+                                    .attr("d",pathValues)
+                                    .attr("stroke","black")
+                                    .attr("fill","none")
+                                    .attr("class","curve");
         path.lower();
 
-        if(this.groups.path[lineLevel] === undefined){
-            this.groups.path[lineLevel] = {};
+        if(this.groups.path[name] === undefined){
+            this.groups.path[name] = {};
         }
-        this.groups.path[lineLevel] = path;
-
+        this.groups.path[name] = path;
     }
 
     private _addMouse(dataPoint,dataPointsLine){
         let self = this;
         dataPoint.on('mousedown',function(){
             self._mouseDown(dataPoint,dataPointsLine)});
-        dataPoint.node().addEventListener("click", event => {if(!this.readonly && !this.disabled){this._alignAfter(event,dataPoint)}});
+        dataPoint.node().addEventListener("click", event => {if(!this.readonly && !this.disabled){this._alignAfter(event,dataPoint);this._emitPointInfo(dataPoint)}});
         dataPoint.node().addEventListener("dblclick", event => {if(!this.readonly && !this.disabled){this._alignBefore(event,dataPoint)}});
         dataPoint.node().addEventListener("mouseenter",event => {if(!this.disabled){this._showTooltips(dataPoint)}});
         dataPoint.node().addEventListener("mouseleave",event => {if(!this.disabled){this._hideTooltips(dataPoint)}});
@@ -432,7 +437,6 @@ import {SvgComponent}                                 from 'js/app/components/ch
             }else{
                 this.dblClick = false;
             }
-            
         }
     }
 
@@ -440,28 +444,45 @@ import {SvgComponent}                                 from 'js/app/components/ch
         if(event.shiftKey){
             this._moveAllPointsBefore(dataPoint);
             this._readjustPosition();
+            this.processRefresh();
         }
     }
 
+    private _emitPointInfo(dataPoint){
+        let dataline = this.data.find(function(element){
+            return element.name == dataPoint.attr("lineName");
+        });
+
+        let pointData = dataline.data.find(function(element){
+            return element.hour == dataPoint.attr("hour");
+        })
+
+        let emitedObject = {
+            "name"  : dataline.name,
+            "hour"  : pointData.hour,
+            "level" : pointData.level,
+        };
+        this.onClick.emit(emitedObject);
+    }
     /***************************************************************************
      * DELETE LINE 
      ***************************************************************************/
 
-    public deleteLine(lineLevel){
-
+    public deleteLine(name){
         let index = this.data.findIndex(function(element){
-            return element.name == lineLevel;
+            return element.name == name;
         })
         if(index > -1){
             this.data.splice(index,1);
         }
-        this.groups.dataPoints[lineLevel]           = [];
-        this.groups.tooltip[lineLevel]              = [];
-        this.groups.tooltipText[lineLevel]          = [];
-        this.groups.tooltipBackground[lineLevel]    = [];
-        this.groups.path[lineLevel]                 = {};
+        this.groups.dataPoints[name]           = [];
+        this.groups.tooltip[name]              = [];
+        this.groups.tooltipText[name]          = [];
+        this.groups.tooltipBackground[name]    = [];
+        this.groups.path[name]                 = {};
 
-        this.groups.dataPointsGroup[lineLevel].remove();
+        this.groups.dataPointsGroup[name].remove();
+        this.processRefresh();
     }
 
     /***************************************************************************
@@ -502,40 +523,33 @@ import {SvgComponent}                                 from 'js/app/components/ch
             this._readjustPosition();
             this.processRefresh();
         }
-        if(isNotNull(this.onChange)){
-            this.onChange(this.data);
-        }
     }
 
     private _moveDataPointsLine(yPos){
          
         let pos = this.transformMouseCoordToSVG(yPos);
         for(let datapoint of this.selectedDataPointsLine){
-            let lineLevel  = this.selectedDataPoint.attr("level");
+            let name  = this.selectedDataPoint.attr("lineName");
             let lineData = this.data.find(function(element){
-                return element.name == lineLevel;
+                return element.name == name;
             })
             org.inugami.asserts.notNull(lineData,"no line with level same as selected point found");
 
             let self = this;
             
             for(let pointData of lineData.data){
-                pointData.level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
+                pointData.level = this.computeDataPointsLevel(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
                     pos,this.minValue,this.maxValue);
             }
         }
-        this.processRefresh();
-        if(isNotNull(this.onChange)){
-            this.onChange(this.data);
-        }
-        
+        this.processRefresh();    
     }
 
     private _moveSingleDataPoint(yPos){
         let pos = this.transformMouseCoordToSVG(yPos);
-        let lineLevel  = this.selectedDataPoint.attr("level");
+        let name  = this.selectedDataPoint.attr("lineName");
         let lineData = this.data.find(function(element){
-            return element.name == lineLevel;
+            return element.name == name;
         })
         org.inugami.asserts.notNull(lineData,"no line with level same as selected point found");
 
@@ -546,14 +560,14 @@ import {SvgComponent}                                 from 'js/app/components/ch
         org.inugami.asserts.notNull(pointData,"no datapoint with same hour as selected point found");
 
             
-        pointData.level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
+        pointData.level = this.computeDataPointsLevel(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
             pos,this.minValue,this.maxValue);
     }
 
     private _moveAllPointsAfter(dataPoint){
-        let lineLevel  = dataPoint.attr("level");
+        let name  = dataPoint.attr("lineName");
         let lineData = this.data.find(function(element){
-            return element.name == lineLevel;
+            return element.name == name;
         })
         org.inugami.asserts.notNull(lineData,"no line with level same as selected point found");
 
@@ -561,16 +575,17 @@ import {SvgComponent}                                 from 'js/app/components/ch
             
         for(let pointData of lineData.data){
             if(pointData.hour > dataPoint.attr("hour")){
-                pointData.level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
+                pointData.level = this.computeDataPointsLevel(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
                     dataPoint.attr("cy"),this.minValue,this.maxValue);
             }
         }
+        this.processRefresh();
     }
 
     private _moveAllPointsBefore(dataPoint){
-        let lineLevel  = dataPoint.attr("level");
+        let name  = dataPoint.attr("lineName");
         let lineData = this.data.find(function(element){
-            return element.name == lineLevel;
+            return element.name == name;
         })
         org.inugami.asserts.notNull(lineData,"no line with level same as selected point found");
 
@@ -578,7 +593,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
             
         for(let pointData of lineData.data){
             if(pointData.hour < dataPoint.attr("hour")){
-                pointData.level = this.computeDataPointsValue(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
+                pointData.level = this.computeDataPointsLevel(this.position.axisY.y1,this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
                     dataPoint.attr("cy"),this.minValue,this.maxValue);
             }
         }
@@ -603,7 +618,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
                 }
             }
         }
-        this._refreshDataPointsPosition();
+        this.processRefresh();
     }
 
     /***************************************************************************
@@ -613,7 +628,13 @@ import {SvgComponent}                                 from 'js/app/components/ch
         this._computeSizeTable();
         this._initPositionTable();
         this._refreshValues();
-        
+        if(isNotNull(this.validator)){
+            this.validator(this.data);
+        }
+        if(isNotNull(this.onChangeAccessor)){
+            this.onChangeAccessor(this.data);
+        }
+        this.onChange.emit(this.data)
     }
 
     private _refreshValues(){
@@ -665,7 +686,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
     private  _refreshTooltipsValue(){
         for(let dataLine of this.data){
             for(let dataPoint of dataLine.data){
-                this.groups.tooltipText[dataLine.name][dataPoint.hour].value.text(dataPoint.level);
+                this.groups.tooltipText[dataLine.name][dataPoint.hour].level.text(dataPoint.level);
             }
         }
     }
@@ -676,20 +697,20 @@ import {SvgComponent}                                 from 'js/app/components/ch
                 let tooltipText = this.groups.tooltipText[dataLine.name][dataPoint.hour];
                 let x = this.position.axisXPoints[dataPoint.hour].x + this.elementSize.tooltipLeftMargin;
                 let y = parseFloat(this.groups.dataPoints[dataLine.name][dataPoint.hour].attr("cy")) + this.elementSize.tooltipUpMargin;
-                tooltipText.level.attr("x",x)
+                tooltipText.name.attr("x",x)
                                 .attr("y",y);
-                tooltipText.hour.attr("x",parseFloat(tooltipText.level.attr("x")) + this.elementSize.tooltipHourLeftMargin)
-                                .attr("y",parseFloat(tooltipText.level.attr("y")) + this.elementSize.tooltipHourUpMargin + tooltipText.level.node().getBoundingClientRect().height);
-                tooltipText.value.attr("x",parseFloat(tooltipText.level.attr("x")) + this.elementSize.tooltipValueLeftMargin + tooltipText.level.node().getBoundingClientRect().width)
-                                .attr("y",parseFloat(tooltipText.level.attr("y"))+ this.elementSize.tooltipValueUpMargin);
+                tooltipText.hour.attr("x",parseFloat(tooltipText.name.attr("x")) + this.elementSize.tooltipHourLeftMargin)
+                                .attr("y",parseFloat(tooltipText.name.attr("y")) + this.elementSize.tooltipHourUpMargin + tooltipText.name.node().getBoundingClientRect().height);
+                tooltipText.level.attr("x",parseFloat(tooltipText.name.attr("x")) + this.elementSize.tooltipLevelLeftMargin + tooltipText.name.node().getBoundingClientRect().width)
+                                .attr("y",parseFloat(tooltipText.name.attr("y")) + this.elementSize.tooltipLevelUpMargin);
                                 
                 let tooltipBackground = this.groups.tooltipBackground[dataLine.name][dataPoint.hour];
-                let width = tooltipText.level.node().getBoundingClientRect().width + this.elementSize.tooltipValueLeftMargin + tooltipText.value.node().getBoundingClientRect().width;
-                let height = tooltipText.level.node().getBoundingClientRect().width + this.elementSize.tooltipHourUpMargin + tooltipText.hour.node().getBoundingClientRect().height
-                tooltipBackground.attr("x",x)
-                                    .attr("y",y - tooltipText.level.node().getBoundingClientRect().height)
-                                    .attr("width",width)
-                                    .attr("height",height);
+                let width = tooltipText.name.node().getBoundingClientRect().width + this.elementSize.tooltipLevelLeftMargin + tooltipText.level.node().getBoundingClientRect().width;
+                let height = tooltipText.name.node().getBoundingClientRect().height + this.elementSize.tooltipHourUpMargin + tooltipText.hour.node().getBoundingClientRect().height
+                tooltipBackground.attr("x",x - this.elementSize.tooltipBackgroundMargin)
+                                    .attr("y",y - tooltipText.name.node().getBoundingClientRect().height - this.elementSize.tooltipBackgroundMargin)
+                                    .attr("width",width + 2* this.elementSize.tooltipBackgroundMargin)
+                                    .attr("height",height + 2 * this.elementSize.tooltipBackgroundMargin );
             }
         }
     }
@@ -710,19 +731,19 @@ import {SvgComponent}                                 from 'js/app/components/ch
 
     private _showTooltips(datapoint){
         let index = datapoint.attr("hour");
-        let level = datapoint.attr("level");
+        let name = datapoint.attr("lineName");
 
-        let selectedClass = this.groups.tooltip[level][index].attr("class").replace(" show","");
+        let selectedClass = this.groups.tooltip[name][index].attr("class").replace(" show","");
         selectedClass = selectedClass+" show";
-        this.groups.tooltip[level][index].attr("class",selectedClass);
+        this.groups.tooltip[name][index].attr("class",selectedClass);
     }
 
     private _hideTooltips(datapoint){
         if(datapoint != this.selectedDataPoint){
             let index = datapoint.attr("hour");
-            let level = datapoint.attr("level");
-            let selectedClass = this.groups.tooltip[level][index].attr("class").replace(" show","");
-            this.groups.tooltip[level][index].attr("class",selectedClass);
+            let name = datapoint.attr("lineName");
+            let selectedClass = this.groups.tooltip[name][index].attr("class").replace(" show","");
+            this.groups.tooltip[name][index].attr("class",selectedClass);
         }
     }
 
@@ -741,7 +762,7 @@ import {SvgComponent}                                 from 'js/app/components/ch
             let textHeight = label.node().getBoundingClientRect().height;   
             label.attr("x",this.position.axisYPoints[key].x - textWidth - this.elementSize.axisYLabelRightMargin)
                 .attr("y",this.position.axisYPoints[key].y + textHeight/2)
-                .text((this.maxValue - this.minValue)*parseInt(key)/(this.groups.axisYPoints.length - 1))
+                .text((this.maxValue - this.minValue)*parseInt(key)/(this.groups.axisYPoints.length - 1) + this.minValue);
         }
     }
 
@@ -782,12 +803,12 @@ import {SvgComponent}                                 from 'js/app/components/ch
      public computeDataPointsPosition(y1,y2,dataValue,dataMin,dataMax){
         return (((y2-y1) * (dataMax - dataValue)) / (dataMax - dataMin)) + y1;
      }
-     public computeDataPointsValue(y1,y2,dataY,dataMin,dataMax){
-         let value = (((dataMax - dataMin) * (y2 - dataY)) / (y2 - y1)) + dataMin;
+     public computeDataPointsLevel(y1,y2,dataY,dataMin,dataMax){
+         let level = (((dataMax - dataMin) * (y2 - dataY)) / (y2 - y1)) + dataMin;
         if(isNull(this.formatter)){
-            return Math.round( value * 100 + Number.EPSILON ) / 100
+            return Math.round( level * 100 + Number.EPSILON ) / 100
         }else{
-            return this.formatter(value);
+            return this.formatter(level);
         }
      }
 
