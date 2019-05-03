@@ -451,10 +451,42 @@
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 + input-bloc
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+body .ui-panel .ui-panel-content {
+  background-color: #f5f5f5
+}
+
+body .ui-panel .ui-panel-titlebar{
+  border : none;
+}
+body .ui-panel .input-bloc{
+  border-style: none;
+  
+}
+body .ui-panel .input-bloc.error{
+  border-style: none;
+
+}
+.input-bloc{
+  box-sizing: unset;
+}
+
+.input-bloc .content-rectangle{
+  border-style: solid;
+  border-radius: 1em;
+  border-width: 0.1em;
+  display: inline-block;
+  background-color: white;
+}
+
 .input-bloc .input-bloc-label,
 .input-bloc .input-bloc-data{
   width: 100%;
-  float: left;
+  float: mo;
+}
+.input-bloc .input-bloc-data{
+  padding-left: 1em;  
+  padding-right: 1em; 
 }
 .input-bloc .input-bloc-end{
   clear: both;
@@ -463,7 +495,7 @@
 .input-bloc .input-bloc-label{
   color: transparent;
   position: relative;
-  left: -0.7em;
+  left: 0.7em;
   -webkit-transition: color 0.25s;
   transition: color 0.25s;
 }
@@ -488,7 +520,7 @@
 .input-bloc input{
   border: 0;
   width: 100%;
-  border-bottom: 1px solid;
+  /*border-bottom: 1px solid;*/
   border-color:  #b5b5b5;
   outline:0;
 }
@@ -501,7 +533,7 @@
   border-color:  #d30202;
   color:#d30202;
 }
-.input-bloc.error input{
+.input-bloc.error {
   border-color:  #990000;
   color:#990000;
 }
