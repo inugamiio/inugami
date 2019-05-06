@@ -1,7 +1,7 @@
-.test .tooltips:not(.show){
+ .tooltips:not(.show){
     visibility: hidden; 
 }
-.test .tooltips.show{
+ .tooltips.show{
     stroke: whitesmoke;
     
     font-size: 1em;
