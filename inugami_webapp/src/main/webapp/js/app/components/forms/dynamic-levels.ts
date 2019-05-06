@@ -23,14 +23,21 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     @Input() formatter                  : any;
     @Input() disabled                   : boolean;
     @Input() readonly                   : boolean;
-    @Input() validator                  : any ;
+    @Input() validator                  : any;
     @Input() tabindex                   : number;
     @Input() name                       : string;
+    @Input() style                      : string;
+    @Input() styleClass                 : string;
+    @Input() inputId                    : string;
 
     @Output() onChange                  = new EventEmitter<any>();
     @Output() onClick                   = new EventEmitter<any>();
 
     @HostBinding('class') cssClass      = "inugami-input-dynamic-levels";
+    //@HostBinding('name') rootName       = name;
+    @HostBinding('id') rootId           = this.inputId;
+    @HostBinding('tabindex') rootindex  = this.tabindex;
+    
     private onTouched                   : any;
     private onChangeAccessor            : any;
 
@@ -58,80 +65,74 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         super(el);
 
         this.groups = {
-            svgComponentChild: {},
-            axisXgroup: {},
-            axisYgroup: {},
-            axisX: {},
-            axisY: {},
-            axisYPoints: [],
-            axisXPoints: [],
-            axisYPointsGroup: {},
-            axisXPointsGroup: {},
-            dataPointsGroup: {},
-            dataPoints: [],
-            tooltip: [],
-            tooltipText: {},
-            tooltipBackground: {},
-            path: {},
-            axisXLabel: {},
-            axisYLabel: {},
-            dataGroup: {},
+            svgComponentChild   : {},
+            axisXgroup          : {},
+            axisYgroup          : {},
+            axisX               : {},
+            axisY               : {},
+            axisYPoints         : [],
+            axisXPoints         : [],
+            axisYPointsGroup    : {},
+            axisXPointsGroup    : {},
+            dataPointsGroup     : {},
+            dataPoints          : [],
+            tooltip             : [],
+            tooltipText         : {},
+            tooltipBackground   : {},
+            path                : {},
+            axisXLabel          : {},
+            axisYLabel          : {},
+            dataGroup           : {},
         }
     }
 
     private afterContentInit() {
 
         this.position = {
-            axisX: {},
-            axisY: {},
-            axisXPoints: [],
-            axisYPoints: [],
+            axisX               : {},
+            axisY               : {},
+            axisXPoints         : [],
+            axisYPoints         : [],
         }
 
         this.elementRatio = {
-            axisX: 0.8,
-            axisXLeftMargin: 0.1,
-            axisXRightMargin: 0.1,
+            axisX               : 0.8,
+            axisXLeftMargin     : 0.1,
+            axisXRightMargin    : 0.1,
 
 
-            axisY: 0.8,
-            axisYUpMargin: 0.1,
-            axisYDownMargin: 0.1
+            axisY               : 0.8,
+            axisYUpMargin       : 0.1,
+            axisYDownMargin     : 0.1
         }
 
         this._initElementRatio();
 
         this.elementSize = {
-            axisX: 0,
-            axisY: 0,
-            axisLeftMargin: 0,
-            axisUpMargin: 0,
-            axisRightMargin: 0,
-            axisDownMargin: 0,
-            axisXPointsMargin: 0,
-            axisYPointsMargin: 0,
-            tooltipLeftMargin: 0,
-            tooltipUpMargin: 0,
-            tooltipHourUpMargin: 0,
-            tooltipHourLeftMargin: 0,
-            tooltipLevelpMargin: 0,
-            tooltipLevelLeftMargin: 0,
-            tooltipBackgroundMargin: 0,
-            axisXLabelUpMargin: 0,
-            axisYLabelRightMargin: 0,
+            axisX                       : 0,
+            axisY                       : 0,
+            axisLeftMargin              : 0,
+            axisUpMargin                : 0,
+            axisRightMargin             : 0,
+            axisDownMargin              : 0,
+            axisXPointsMargin           : 0,
+            axisYPointsMargin           : 0,
+            tooltipLeftMargin           : 0,
+            tooltipUpMargin             : 0,
+            tooltipHourUpMargin         : 0,
+            tooltipHourLeftMargin       : 0,
+            tooltipLevelpMargin         : 0,
+            tooltipLevelLeftMargin      : 0,
+            tooltipBackgroundMargin     : 0,
+            axisXLabelUpMargin          : 0,
+            axisYLabelRightMargin       : 0,
         }
 
         this.data = [];
-
-
-
-        // FAIRE GAFFE A CA , SI ON LNENVOIT VIA DU BINDING FAUT QUE LE BIDNIG PRENNE LE DESSUS
-        this.staticMode         = true;
         this.minValue           = 0;
         this.maxValue           = 100;
-        this.disabled           = false;
-        this.readonly           = false;
-        this.tabindex           = 1;
+
+        
     }
 
     /***************************************************************************
@@ -295,8 +296,8 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     }
 
     private _initEvent() {
-        this.compos.svg.node().addEventListener('mousemove', event => { if (!this.readonly && !this.disabled) { this._moveDataPoints(event.clientY); } });
-        this.compos.svg.node().addEventListener('mouseleave', event => { if (!this.readonly && !this.disabled) { this._unselectDataPoint() } });
+        this.compos.svg.node().addEventListener('mousemove', event => { if (!this.readonly && !this.disabled) { this._moveDataPoints(event.clientY); }});
+        this.compos.svg.node().addEventListener('mouseleave', event => { if (!this.readonly && !this.disabled) { this._unselectDataPoint()}});
         document.body.onmouseup = event => { this._unselectDataPoint() };
     }
 
@@ -316,7 +317,6 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
                 };
                 dataObject["data"] = [];
                 this.data.push(dataObject);
-                //a checker, quest ce que ca fait
                 let targetPoint = - 1;
                 for (let i = 0; i < this.groups.axisYPoints.length; i++) {
                     if (targetPoint == - 1 ) {
@@ -403,15 +403,23 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     }
 
     private _canAdd(indexY) {
-       for(let dataLine of this.data){
-           for(let datapoint of dataLine.data){
-            if(datapoint.level != ((indexY) * ((this.maxValue - this.minValue)/(this.groups.axisYPoints.length - 1)) ) + this.minValue){
-                return true;
-           }else{
-               return false;
+        let canAdd = true;
+        let isFree = [];
+        for(let i = 0; i < 24; i++){
+            isFree[i] = true;
+            for(let dataLine of this.data){
+                for(let datapoint of dataLine.data){
+                    if(datapoint.level == ((indexY) * ((this.maxValue - this.minValue)/(this.groups.axisYPoints.length - 1)) ) + this.minValue){
+                        isFree[i] = false;        
+                    }  
+                }
             }
-       }
-       return true;
+        }
+        if(isFree.indexOf(true) == -1){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     private _newPath(dataPointGroup, name, pathValues) {
@@ -852,7 +860,6 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
      * TOOLS
      ***************************************************************************/
 
-    // take only the value , get other val from this
     public computeDataPointsPosition(y1, y2, dataValue, dataMin, dataMax) {
         return (((y2 - y1) * (dataMax - dataValue)) / (dataMax - dataMin)) + y1;
     }
