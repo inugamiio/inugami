@@ -481,7 +481,7 @@ body .ui-panel .input-bloc.error{
 
 .input-bloc .input-bloc-label,
 .input-bloc .input-bloc-data{
-  width: 100%;
+  /* width: 100%; */
   float: mo;
 }
 .input-bloc .input-bloc-data{
@@ -501,7 +501,6 @@ body .ui-panel .input-bloc.error{
 }
 .input-bloc .input-bloc-label.show{
   color: #4d4d4d;
-  
 }
 .input-bloc .input-bloc-label .input-bloc-label-txt{
   display: none;
@@ -519,10 +518,12 @@ body .ui-panel .input-bloc.error{
 
 .input-bloc input{
   border: 0;
-  width: 100%;
-  /*border-bottom: 1px solid;*/
+  font-size: 1.5em;
   border-color:  #b5b5b5;
   outline:0;
+}
+.input-bloc input[type^=number]{
+  width: 3em;
 }
 
 .input-bloc input:focus{
