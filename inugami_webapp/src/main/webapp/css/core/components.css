@@ -463,7 +463,7 @@ body .ui-panel .input-bloc{
   border-style: none;
 }
 body .ui-panel .input-bloc.error{
-  border-style: solid;
+  /*border-style: solid;*/
 
 }
 .input-bloc{
@@ -480,6 +480,10 @@ body .ui-panel .input-bloc.error{
 
 p-panel .input-bloc .content-rectangle{
   border-style: none; 
+}
+
+p-panel .input-bloc.error .content-rectangle{
+  border-style: solid; 
 }
 
 .input-bloc .input-bloc-label,
