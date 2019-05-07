@@ -10,3 +10,45 @@ body .ui-datatable .ui-datatable-data tr.ui-datatable-even.ui-state-highlight{
     background-color: #c4c4c4;
 }
 
+body .ui-paginator .ui-paginator-first,
+body .ui-paginator .ui-paginator-prev,
+body .ui-paginator .ui-paginator-next,
+body .ui-paginator .ui-paginator-last{
+
+    color: #c12534;
+}
+
+body .ui-paginator .ui-paginator-pages .ui-paginator-page:hover.ui-state-active,
+body .ui-paginator .ui-paginator-pages .ui-paginator-page:hover.ui-state-default,
+body .ui-paginator .ui-paginator-pages .ui-paginator-element.ui-state-active,
+body .ui-paginator .ui-paginator-pages .ui-paginator-element.ui-state-default{
+    background: initial;
+    color: #c12534
+}
+
+
+body .ui-paginator .ui-paginator-pages{
+    border-style: solid;
+    border-color: #c12534;
+    border-width: 0.1em;
+    border-radius: 50%;
+    width : 2.5em;   
+    height: 2.5em;
+}
+
+body .ui-paginator .ui-paginator-rpp-options{
+    background-color: initial;
+    color: #c12534 ;
+    border-color: #c12534;
+}
+
+body .ui-datatable thead th.ui-state-active{
+    background: #c4c4c4;
+    color: black;
+}
+
+body .ui-datatable .ui-cell-data input-switch{
+    position: relative;
+    margin-left: 7em;
+    top: 0.5em;
+}
