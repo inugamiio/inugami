@@ -461,10 +461,9 @@ body .ui-panel .ui-panel-titlebar{
 }
 body .ui-panel .input-bloc{
   border-style: none;
-  
 }
 body .ui-panel .input-bloc.error{
-  border-style: none;
+  border-style: solid;
 
 }
 .input-bloc{
@@ -479,9 +478,12 @@ body .ui-panel .input-bloc.error{
   background-color: white;
 }
 
+p-panel .input-bloc .content-rectangle{
+  border-style: none; 
+}
+
 .input-bloc .input-bloc-label,
 .input-bloc .input-bloc-data{
-  /* width: 100%; */
   float: mo;
 }
 .input-bloc .input-bloc-data{
@@ -516,7 +518,7 @@ body .ui-panel .input-bloc.error{
   display: inline;
 }
 
-.input-bloc input{
+body .input-bloc input{
   border: 0;
   font-size: 1.5em;
   border-color:  #b5b5b5;
