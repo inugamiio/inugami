@@ -23,7 +23,11 @@ body .ui-paginator .ui-paginator-pages .ui-paginator-page:hover.ui-state-default
 body .ui-paginator .ui-paginator-pages .ui-paginator-element.ui-state-active,
 body .ui-paginator .ui-paginator-pages .ui-paginator-element.ui-state-default{
     background: initial;
-    color: #c12534
+    color: #c12534;
+}
+body .ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-active{
+    font-weight: bold;
+    font-size: 1.1em;
 }
 
 
@@ -31,15 +35,18 @@ body .ui-paginator .ui-paginator-pages{
     border-style: solid;
     border-color: #c12534;
     border-width: 0.1em;
-    border-radius: 50%;
-    width : 2.5em;   
-    height: 2.5em;
+    border-radius: 2em;
+ 
 }
 
 body .ui-paginator .ui-paginator-rpp-options{
     background-color: initial;
     color: #c12534 ;
     border-color: #c12534;
+}
+
+body .ui-paginator .ui-paginator-rpp-options .ui-paginator-element.ui-state-default.ui-state-active{
+    color: black;
 }
 
 body .ui-datatable thead th.ui-state-active{
