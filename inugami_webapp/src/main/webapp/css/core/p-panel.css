@@ -5,3 +5,7 @@ body .ui-panel {
 body .ui-panel .ui-panel-titlebar{
     border : none;
 }
+
+body .ui-panel .ui-panel-title{
+    font-size: 2em;
+}
