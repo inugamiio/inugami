@@ -16,6 +16,7 @@
 @import "component-jenkins.css";
 @import "component-svg-generic-map.css";
 
+@import "p-checkbox.css";
 @import "p-tabview.css";
 @import "component-forms-input.days.selector.css";
 @import "component-forms-input.switch.css";
