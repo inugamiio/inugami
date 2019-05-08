@@ -24,6 +24,7 @@ import java.util.concurrent.Future;
 
 import org.inugami.api.alertings.AlertingProvider;
 import org.inugami.api.alertings.AlertingResult;
+import org.inugami.api.constants.JvmKeyValues;
 import org.inugami.api.handlers.Handler;
 import org.inugami.api.listeners.EngineListenerProcessor;
 import org.inugami.api.models.Gav;
@@ -71,6 +72,10 @@ public interface ApplicationContext {
     
     boolean isTechnicalUser(String loginName);
     
+    default boolean isDevMode() {
+        return "dev".equalsIgnoreCase(JvmKeyValues.ENVIRONMENT.or("prod"));
+    }
+    
     // =========================================================================
     // LISTENERS
     // =========================================================================
@@ -109,6 +114,23 @@ public interface ApplicationContext {
     void disablePlugin(final Gav gav);
     
     void enablePlugin(final Gav gav);
+    
+    default Plugin getPlugin(final String groupId, final String artifactId) {
+        Plugin result = null;
+        
+        final Optional<List<Plugin>> allPlugins = getPlugins();
+        if ((groupId != null) && (artifactId != null) && allPlugins.isPresent()) {
+            //@formatter:off
+            result= allPlugins.get()
+                              .stream()
+                              .filter(plugin-> groupId.equals(plugin.getGav().getGroupId()) && 
+                                            artifactId.equals(plugin.getGav().getArtifactId()))
+                              .findFirst()
+                              .orElse(null);
+            //@formatter:on
+        }
+        return result;
+    }
     
     // =========================================================================
     // ALERTS
