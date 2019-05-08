@@ -71,10 +71,8 @@
             <p-column field="label"      [header]="msgLabels.label"     [sortable]="true" [filter]="true" filterMatchMode="contains"></p-column>
             <p-column field="label"      [header]="msgLabels.actions">
                 <ng-template let-alert="rowData" pTemplate="body">
-                    <a (click)="deleteAlert(alert)">
-                        <i class="far fa-trash-alt"></i>
-                    </a>
-                    <p-inputSwitch [(ngModel)]="alert.enable" (onChange)="onAlertActivationChange(alert)"></p-inputSwitch>
+                    <input-switch [(ngModel)]="alert.enable" (onChange)="onAlertActivationChange(alert)" labelOn="on" labelOff="off"></input-switch>
+                    <button pButton type="button" (click)="deleteAlert(alert)" icon="far fa-trash-alt" class="active-action" ></button>
                 </ng-template>
             </p-column>
 

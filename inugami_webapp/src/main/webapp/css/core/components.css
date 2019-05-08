@@ -16,10 +16,13 @@
 @import "component-jenkins.css";
 @import "component-svg-generic-map.css";
 
+@import "p-tabview.css";
 @import "component-forms-input.days.selector.css";
 @import "component-forms-input.switch.css";
 @import "component-forms-input.time.slots.css";
 @import "component-p-button.css";
+
+@import "p-table.css";
 
 #page-ruler-toolbar.page-ruler-top{
   top : 20px !important;
@@ -545,7 +548,6 @@ nav.dynamic-sections ul{
 }
 
 
-
 nav.dynamic-sections li{
   float: left;
  
@@ -571,12 +573,9 @@ nav.dynamic-sections li{
   border-top-left-radius: 0.5em;
   border-top-right-radius: 0.5em;
 }
-
-
 nav.dynamic-sections li.active{
   border-bottom: 2px solid #ffffff;
-  background: #ffffff;
-   
+  background-color: #ffffff;
 }
 
 nav.dynamic-sections .dynamic-sections-end{
@@ -734,4 +733,3 @@ nav.dynamic-sections .dynamic-sections-end{
 .alerting.fatal{
   color : #ff0000;
 }
-
