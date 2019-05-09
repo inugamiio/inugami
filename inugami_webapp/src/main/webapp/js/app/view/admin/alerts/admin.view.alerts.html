@@ -15,12 +15,12 @@
 <nav class="dynamic-sections">
     <ul>
         <li [class.active]="isActiveSection('table')" (click)="setActiveSection('table')">
-            <i class="fas fa-table"></i>
+            <i class="far fa-bell"></i>
             <msg key="alert.table.action.title"></msg>
         </li>
 
         <li [class.active]="isActiveSection('createView')" (click)="setActiveSection('createView')">
-            <i class="fas fa-plus-circle"></i>
+            <i class="fas fa-plus"></i>
             <msg key="alert.create.action.title"></msg>
         </li>
         <div class="dynamic-sections-end"></div>
@@ -71,10 +71,8 @@
             <p-column field="label"      [header]="msgLabels.label"     [sortable]="true" [filter]="true" filterMatchMode="contains"></p-column>
             <p-column field="label"      [header]="msgLabels.actions">
                 <ng-template let-alert="rowData" pTemplate="body">
-                    <a (click)="deleteAlert(alert)">
-                        <i class="far fa-trash-alt"></i>
-                    </a>
-                    <p-inputSwitch [(ngModel)]="alert.enable" (onChange)="onAlertActivationChange(alert)"></p-inputSwitch>
+                    <input-switch [(ngModel)]="alert.enable" (onChange)="onAlertActivationChange(alert)" labelOn="on" labelOff="off"></input-switch>
+                    <button pButton type="button" (click)="deleteAlert(alert)" icon="far fa-trash-alt" class="active-action" ></button>
                 </ng-template>
             </p-column>
 
