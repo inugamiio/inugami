@@ -29,28 +29,51 @@
             <label>Data</label>
             <textarea disabled="disabled">{{detailData}}</textarea>
         </div>
+        <div class="channel-selector">
+            <msg key="edit.alert.channel"></msg>:
+            <span *ngFor="let channel of channels" class="channel">
+                <p-checkbox [(ngModel)]=channelsData value={{channel}}></p-checkbox>{{channel}}
+            </span>
+        </div>
         <p-panel header="Sources">
-
+            <div>
+                <input-bloc  label="edit.alert.sources.data.provider"></input-bloc>
+                <input-bloc  label="edit.alert.sources.data.interval"></input-bloc>
+            </div>
+            <div>
+                <input-bloc  label="edit.alert.sources.from"></input-bloc>
+                <input-bloc  label="edit.alert.sources.to"></input-bloc>
+            </div>
+            <div class="ui-float-label">
+                <textarea  [rows]="5" [cols]="80" pInputTextarea autoResize="autoResize"></textarea>
+                <label>test</label>
+                <msg key="edit.alert.query"></msg>
+            </div>             
         </p-panel>
     </div>
 
 
     <div class="right-panel">
         <p-panel header="Activation">
-            Jour(s)<!--a internationalser tout le texte-->
-            <div *ngFor="let lineData of activationDaysData; index as i" >
+            <msg key="edit.alert.activation.days"></msg>
+            <div *ngFor="let lineData of activationDaysData; index as i" class="day-and-time-line">
                 <input-days-selector [(ngModel)]="lineData.days"></input-days-selector>
                 <input-time-slots [(ngModel)]="lineData.timeSlots"></input-time-slots>
                 <button pButton type="button"  class="active-action" icon="fa fa-trash-alt" (click)="removeDaysLine(i)" ></button>
-            </div><!--faire un ngfor pour afficher tous les input time/days selector avec poubelle-->
-            <button pButton type="button" label="Ajouter" class="active-action" (click)="addDaysLine()"></button>
+            </div>
+            <button pButton type="button"  class="active-action" (click)="addDaysLine()" msg>
+                <msg key="edit.alert.activation.add"></msg>
+            </button>
             <p-tabView>
                 <p-tabPanel header="Seuil">
-                    <p-checkbox></p-checkbox> Dynamique 
-                    <input-bloc label="Minimum" type="number"></input-bloc>
-                    <input-bloc label="Maximum" type="number"></input-bloc>
-                    <div></div> <!-- ngfor pour level et points avant declanchement-->
-                    <!--dynamic level -->
+                    <p-checkbox></p-checkbox> <msg key="edit.alert.dynamic.levels.dynamic"></msg>
+                    <input-bloc label="edit.alert.dynamic.levels.minValue" type="number"></input-bloc>
+                    <input-bloc label="edit.alert.dynamic.levels.maxValue" type="number"></input-bloc>
+                    <div class="dynamic-levels-levels" *ngFor="let level of dynamicLevelsLevels; index as i">
+                        <input-bloc label="edit.alert.dynamic.levels.points.before.triggered" [(ngModel)]="level.pointsBeforeTriggered"></input-bloc>
+                        <input-bloc label="edit.alert.dynamic.levels.add.level" [(ngModel)]="level.name"></input-bloc>
+                    </div>
+                    <button pButton type="button"  class="active-action" icon="fas fa-plus" (click)="addDynamicLevelsLevel()" ></button>
                 </p-tabPanel>
                 <p-tabPanel header="Scripts">
                     dfdfd

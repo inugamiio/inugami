@@ -143,6 +143,18 @@
   width: 60%
 }
 
+.page-admin .alert-edit .right-panel .ui-panel .ui-panel-content .day-and-time-line{
+  display: flex;
+}
+
+.page-admin .alert-edit .right-panel .ui-panel .ui-panel-content .day-and-time-line input-time-slots{
+  margin-right: 1em; 
+}
+
+.page-admin .alert-edit .right-panel .ui-panel .ui-panel-content .day-and-time-line input-days-selector{
+  flex-shrink: 0;
+  margin-right: 1em;
+}
 
 .page-admin .konami{
   background: #0c0c0c;

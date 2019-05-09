@@ -35,6 +35,9 @@ export class AdminViewAlertEdit implements AfterViewInit{
     private isNotEdit                   : boolean;
 
     private activationDaysData          : any;
+    private dynamicLevelsLevels         : any;
+    private channels                    : any;
+    private channelsData                : string[];    
 
     @Output() onClose                   : EventEmitter<any> = new EventEmitter();
     @Output() onError                   : EventEmitter<any> = new EventEmitter();
@@ -92,6 +95,13 @@ export class AdminViewAlertEdit implements AfterViewInit{
             }
 
             this.activationDaysData = [lineData];
+        }
+        if(isNull(this.dynamicLevelsLevels)){
+            this.dynamicLevelsLevels = [];
+        }
+        if(isNull(this.channels)){
+            this.channels = ["OpsGenie","Teams","SSE","Mail"];
+            this.channelsData = [];
         }
     }
     
@@ -156,6 +166,9 @@ export class AdminViewAlertEdit implements AfterViewInit{
 
     addDaysLine(){
         this.activationDaysData.push({});
+    }
+    addDynamicLevelsLevel(){
+        this.dynamicLevelsLevels.push({});
     }
 
  /*****************************************************************************
