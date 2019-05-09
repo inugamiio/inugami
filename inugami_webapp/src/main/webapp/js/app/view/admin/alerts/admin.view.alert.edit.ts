@@ -34,6 +34,8 @@ export class AdminViewAlertEdit implements AfterViewInit{
     private innerValue                  : AlertEntity; 
     private isNotEdit                   : boolean;
 
+    private activationDaysData          : any;
+
     @Output() onClose                   : EventEmitter<any> = new EventEmitter();
     @Output() onError                   : EventEmitter<any> = new EventEmitter();
     @Output() onSuccess                 : EventEmitter<any> = new EventEmitter();
@@ -80,6 +82,16 @@ export class AdminViewAlertEdit implements AfterViewInit{
             this.detailData =  strJson.split("\\u0022").join("\""); 
             
             
+        }
+        if(isNull(this.activationDaysData)){
+            let timeSlots = []
+            let days = [];
+            let lineData = {
+                days:days,
+                timeSlots:timeSlots
+            }
+
+            this.activationDaysData = [lineData];
         }
     }
     
@@ -136,6 +148,14 @@ export class AdminViewAlertEdit implements AfterViewInit{
     close(){
         this.initValue();
         this.onClose.emit();
+    }
+
+    removeDaysLine(index){
+        this.activationDaysData.splice(index,1);
+    }
+
+    addDaysLine(){
+        this.activationDaysData.push({});
     }
 
  /*****************************************************************************

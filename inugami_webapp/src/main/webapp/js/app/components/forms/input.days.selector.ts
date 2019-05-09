@@ -82,6 +82,7 @@ export class InputDaysSelector implements OnInit, ControlValueAccessor {
        
        org.inugami.asserts.isFalse(labelProperty === "??days.selector.first.letters??");
        this.labelList = labelProperty.split(" ");
+       this.daysModel = []
        
     }
     constructor(private cd: ChangeDetectorRef) { }
@@ -90,6 +91,9 @@ export class InputDaysSelector implements OnInit, ControlValueAccessor {
      * IMPLEMENTS ControlValueAccessor
      *****************************************************************************/
     writeValue(daysModel: any): void {
+      if(isNull(daysModel)){
+        daysModel = [];
+      }
         this.daysModel = daysModel;
     }
 

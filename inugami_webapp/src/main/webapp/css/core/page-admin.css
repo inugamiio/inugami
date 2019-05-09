@@ -134,18 +134,15 @@
 
 .page-admin .alert-edit .left-panel{
   float: left;
-  width: 50%
+  width: 40%
 }
 
 
 .page-admin .alert-edit .right-panel{
   float: right;
-  width: 50%
+  width: 60%
 }
-.page-admin .alert-edit .right-panel p-panel .active-action{
-  position: relative;
-  left: 50em;
-}
+
 
 .page-admin .konami{
   background: #0c0c0c;

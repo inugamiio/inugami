@@ -38,15 +38,19 @@
     <div class="right-panel">
         <p-panel header="Activation">
             Jour(s)<!--a internationalser tout le texte-->
-            <div></div><!--faire un ngfor pour afficher tous les input time/days selector avec poubelle-->
-            <button pButton type="button" label="Ajouter" class="active-action"></button>
+            <div *ngFor="let lineData of activationDaysData; index as i" >
+                <input-days-selector [(ngModel)]="lineData.days"></input-days-selector>
+                <input-time-slots [(ngModel)]="lineData.timeSlots"></input-time-slots>
+                <button pButton type="button"  class="active-action" icon="fa fa-trash-alt" (click)="removeDaysLine(i)" ></button>
+            </div><!--faire un ngfor pour afficher tous les input time/days selector avec poubelle-->
+            <button pButton type="button" label="Ajouter" class="active-action" (click)="addDaysLine()"></button>
             <p-tabView>
                 <p-tabPanel header="Seuil">
                     <p-checkbox></p-checkbox> Dynamique 
                     <input-bloc label="Minimum" type="number"></input-bloc>
                     <input-bloc label="Maximum" type="number"></input-bloc>
-                    <!--  ici un ngfor avec les points avant decl et level  -->
-                    <!-- ici le graph-->
+                    <div></div> <!-- ngfor pour level et points avant declanchement-->
+                    <!--dynamic level -->
                 </p-tabPanel>
                 <p-tabPanel header="Scripts">
                     dfdfd

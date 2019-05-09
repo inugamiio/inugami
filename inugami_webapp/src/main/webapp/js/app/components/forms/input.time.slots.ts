@@ -88,6 +88,9 @@ export class InputTimeSlots implements OnInit, ControlValueAccessor {
      * IMPLEMENTS ControlValueAccessor
      *****************************************************************************/
     writeValue(timeSlots: any): void {
+      if(isNull(timeSlots)){
+        timeSlots = [];
+      }
         this.timeSlotsModel = timeSlots;
     }
 
