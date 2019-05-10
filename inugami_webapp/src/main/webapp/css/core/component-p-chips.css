@@ -1,18 +1,18 @@
-.ui-chips.test {
+.ui-chips {
 
 height: 3em;
 display: inline-block;
 
 }
-
-.ui-chips.test .ui-inputtext {
+.ui-chips .ui-inputtext,
+.ui-chips .ui-inputtext.ui-state-focus {
     border-style: none;
     position: relative;
     height: 3em;
     top: 1em;
 }
 
-.ui-chips.test .ui-chips-token {
+.ui-chips .ui-chips-token {
     height: 2em;
     background-color: white; 
     border-style: solid; 
@@ -24,12 +24,13 @@ display: inline-block;
     
 }
 
-.ui-chips.test .ui-chips-token-label{
-    padding-right: 3em;
+.ui-chips .ui-chips-token-label{
+    padding-right: 1em;
 }
 
-.ui-chips.test .ui-chips-token .ui-chips-token-icon {
-    
+.ui-chips .ui-chips-token .ui-chips-token-icon:before {
+    content: "\f00d";
+    font-size: 1em;
     color: black;
    
 }
