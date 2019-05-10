@@ -23,6 +23,7 @@ import static org.inugami.api.tools.ConfigHandlerTools.grabConfigInt;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -37,7 +38,6 @@ import org.inugami.api.exceptions.services.ConnectorException;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.commons.connectors.HttpProxy;
-import org.inugami.core.alertings.senders.slack.sender.SlackSender;
 import org.inugami.core.alertings.senders.teams.sender.models.TeamsModel;
 import org.inugami.core.context.ApplicationContext;
 import org.inugami.core.services.connectors.HttpConnector;
@@ -64,6 +64,8 @@ public class TeamsSenderService implements Sender<TeamsModel>, Serializable {
     
     private String                       url;
     
+    private final Map<String, String>    configurations   = new LinkedHashMap<>();
+    
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -87,53 +89,78 @@ public class TeamsSenderService implements Sender<TeamsModel>, Serializable {
         final String urlToken         = grabConfig(TeamsSender.class, "url.token", config);
         final String urlIncomingToken = grabConfig(TeamsSender.class, "url.incomingToken", config);
         //@formatter:on
+        configurations.put("url_base", urlBase);
+        configurations.put("url_context", urlContext);
+        configurations.put("url_token", urlToken);
+        configurations.put("url_incomingToken", urlIncomingToken);
         
-        Asserts.notNull("base url is mandatory!", urlBase);
-        Asserts.notNull("context url is mandatory!", urlContext);
-        Asserts.notNull("token is mandatory!", urlToken);
-        Asserts.notNull("incoming token is mandatory!", urlIncomingToken);
+        if (enable) {
+            Asserts.notNull("base url is mandatory!", urlBase);
+            Asserts.notNull("context url is mandatory!", urlContext);
+            Asserts.notNull("token is mandatory!", urlToken);
+            Asserts.notNull("incoming token is mandatory!", urlIncomingToken);
+        }
+        if ((urlBase != null) && (urlContext != null) && (urlToken != null) && (urlIncomingToken != null)) {
+            final StringBuilder urlBuilder = new StringBuilder();
+            urlBuilder.append(urlBase);
+            urlBuilder.append(urlContext);
+            urlBuilder.append("/");
+            urlBuilder.append(urlToken);
+            urlBuilder.append("/IncomingWebhook/");
+            urlBuilder.append(urlIncomingToken);
+            
+            url = urlBuilder.toString();
+        }
         
-        final StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(urlBase);
-        urlBuilder.append(urlContext);
-        urlBuilder.append("/");
-        urlBuilder.append(urlToken);
-        urlBuilder.append("/IncomingWebhook/");
-        urlBuilder.append(urlIncomingToken);
-        
-        url = urlBuilder.toString();
+        configurations.put("url", url);
         
         final String proxyConfig = grabConfig(TeamsSender.class, "proxy.host", config);
         HttpProxy proxy = null;
         
         if (proxyConfig != null) {
-           //@formatter:off
-           proxy=new HttpProxy(proxyConfig,
-                               buildProxyPort(config),
-                               grabConfig(TeamsSender.class, "proxy.user", config),
-                               grabConfig(TeamsSender.class, "proxy.password", config)
-                               );
-           //@formatter:off
-       }
-       
-       
+            final String proxyUser = grabConfig(TeamsSender.class, "proxy.user", config);
+            final String proxyPassword = grabConfig(TeamsSender.class, "proxy.password", config);
+            proxy = new HttpProxy(proxyConfig, buildProxyPort(config), proxyUser, proxyPassword);
+            configurations.put("proxy_host", proxyConfig);
+            configurations.put("proxy_user", proxyUser);
+            configurations.put("proxy_password", proxyPassword);
+        }
+        
        //@formatter:off
+       final int maxConnection= grabConfigInt(TeamsSender.class, "maxConnection", config, 20);
+       final int timeout = grabConfigInt(TeamsSender.class, "timeout", config, 5000);
+       final int ttl =grabConfigInt(TeamsSender.class, "ttl", config, 500);
+       final int maxPerRoute =  grabConfigInt(TeamsSender.class, "maxPerRoute", config, 50);
+       final int socketTimeout =grabConfigInt(TeamsSender.class, "socketTimeout", config, 5000);
+        
        httpConnector = context.getHttpConnector(TeamsSender.class.getSimpleName(),
-                                                grabConfigInt(TeamsSender.class, "maxConnection", config, 20),
-                                                grabConfigInt(TeamsSender.class, "timeout", config, 5000),
-                                                grabConfigInt(TeamsSender.class, "ttl", config, 500),
-                                                grabConfigInt(TeamsSender.class, "maxPerRoute", config, 50),
-                                                grabConfigInt(TeamsSender.class, "socketTimeout", config, 5000));
+                                                maxConnection,
+                                                timeout,
+                                                ttl,
+                                                maxPerRoute,
+                                                socketTimeout);
        //@formatter:on
+        configurations.put("max_connection", String.valueOf(maxConnection));
+        configurations.put("timeout", String.valueOf(timeout));
+        configurations.put("ttl", String.valueOf(ttl));
+        configurations.put("max_per_route", String.valueOf(maxPerRoute));
+        configurations.put("socket_timeout", String.valueOf(socketTimeout));
         
         if (proxy != null) {
             httpConnector.setProxy(proxy);
         }
     }
     
+    @Override
+    public Map<String, String> getConfiguration() {
+        return configurations;
+    }
+    
     private int buildProxyPort(final ConfigHandler<String, String> config) {
         final String port = grabConfig(TeamsSender.class, "proxy.port", config);
-        return port == null ? 80 : Integer.parseInt(port);
+        final int result = port == null ? 80 : Integer.parseInt(port);
+        configurations.put("proxy_port", String.valueOf(result));
+        return result;
     }
     
     @Override
