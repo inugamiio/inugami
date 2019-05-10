@@ -1,0 +1,83 @@
+.inugami-input-switch-button {
+    position: relative;
+    display: inline-block;
+    width: 4em;
+    height: 1.75em;
+    box-sizing: border-box;
+}
+
+.inugami-input-switch-button .inugami-visible-switch {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-transition: .3s;
+    transition: .3s;
+    border-radius: 30px;
+}
+
+.inugami-input-switch-button .slider {
+    background-color: whitesmoke;
+    position: absolute;
+    content: "";
+    height: 1.75em;
+    width: 1.75em;
+   
+    
+    border-radius: 50%;
+    -webkit-transition: .3s;
+    transition: .3s;
+    z-index: 1;
+}
+
+.inugami-input-switch-button.state-on  .slider{
+    -webkit-transform: translateX(2.26em);
+    -ms-transform: translateX(2.26em);
+    transform: translateX(2.26em);
+}
+.inugami-input-switch-button.validation-error .slider{
+    background-color: r#c9952b;
+}
+
+.inugami-input-switch-button .background{
+    background-color: #cccccc;
+}
+
+.inugami-input-switch-button.state-on .background{
+    background-color: #c12534;
+}
+
+.inugami-input-switch-button .ui-helper-hidden {
+    display: none ;
+}
+.inugami-input-switch-button .ui-helper-hidden-accessible {
+    border: 0;
+    clip-path: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+
+
+.inugami-input-switch-button .switch-label{
+    position: absolute;
+    color: transparent;
+    top: 0.30em;
+}
+.inugami-input-switch-button.state-on .switch-label{
+    left: 0.5em;
+}
+
+.inugami-input-switch-button.state-off .switch-label{
+    left: 2em;
+}
+
+.inugami-input-switch-button .switch-label.show{
+color: whitesmoke;
+}

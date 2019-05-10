@@ -16,7 +16,6 @@
  */
 package org.inugami.api.tools;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -35,13 +34,6 @@ public interface StringDataCleaner {
     String clean(String data);
     
     default String replaceAll(final Pattern regex, final String data, final String replacement) {
-        String result = data;
-        final Matcher matcher = regex.matcher(data);
-        
-        if (matcher.find()) {
-            result = matcher.replaceAll(replacement);
-        }
-        
-        return result;
+        return StringTools.replaceAll(regex, data, replacement);
     }
 }

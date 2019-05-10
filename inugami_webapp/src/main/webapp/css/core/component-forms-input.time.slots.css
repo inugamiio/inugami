@@ -1,0 +1,66 @@
+.inugami-input-time-slots {
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+.inugami-input-time-slots .action.add {
+    left:0.6em;
+    position: relative;
+    width: 2em;
+    height: 2em;
+    background-color: whitesmoke;
+    margin-left: 2em;
+    border-radius: 50%;
+    border-width: 1px;
+    border-color: #c12534;
+
+    border-style: solid;
+    display: inline-block;
+}
+
+.inugami-input-time-slots .action.add .icon {
+    display: inline-block;
+    position: relative;
+    left: 0.45em;
+    top:0.27em;
+    color: #c12534;
+}
+.inugami-input-time-slots .time-slots{
+    position: relative;
+}
+
+.inugami-input-time-slots .time-slots .time-slot .action.delete {
+    position: relative;
+    width: 1em;
+    height: 1em;
+    right:0.5em;
+    top:-0.7em;
+    border-radius: 50%;
+    
+    
+}
+.inugami-input-time-slots .time-slots .time-slot .action.delete .icon {
+    color: black;
+}
+
+.inugami-input-time-slots .time-slots .time-slot{
+    position: relative;
+    margin-left: 2em;
+}
+
+.inugami-input-time-slots .time-slots .time-slot.first{
+    margin-left: 0em;
+}
+
+.inugami-input-time-slots .time-slots .time-slot .separator{
+    margin-left: 0em;
+    margin-right: 0em;
+}
+.inugami-input-time-slots .time-slots .time-slot .input{
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 0.1em;
+    border-color: #c12534;
+    
+}
