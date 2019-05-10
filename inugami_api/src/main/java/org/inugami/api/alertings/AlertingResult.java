@@ -16,6 +16,9 @@
  */
 package org.inugami.api.alertings;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.inugami.api.models.JsonBuilder;
 import org.inugami.api.models.data.JsonObject;
 
@@ -57,6 +60,8 @@ public class AlertingResult implements JsonObject {
     private String                 channel          = "@all";
     
     private boolean                multiAlerts;
+    
+    private List<String>           providers;
     
     // =========================================================================
     // CONSTRUCTORS
@@ -231,4 +236,23 @@ public class AlertingResult implements JsonObject {
         this.url = url;
     }
     
+    public List<String> getProviders() {
+        return providers;
+    }
+    
+    public void setProviders(final List<String> providers) {
+        this.providers = providers;
+    }
+    
+    public AlertingResult addProvider(final String provider) {
+        if (providers == null) {
+            providers = new ArrayList<>();
+        }
+        
+        if ((provider != null) && !providers.contains(provider)) {
+            providers.add(provider);
+        }
+        
+        return this;
+    }
 }
