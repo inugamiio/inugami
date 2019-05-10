@@ -156,6 +156,18 @@
   margin-right: 1em;
 }
 
+.page-admin .alert-edit .left-panel .query-text-area{
+  position: relative;
+}
+.page-admin .alert-edit .left-panel .query-text-area textarea{
+  width: -webkit-fill-available;
+  margin-top: 1em;
+}
+.page-admin .alert-edit .left-panel .query-text-area msg{
+  position: absolute;
+  top:-0.5em;
+}
+
 .page-admin .konami{
   background: #0c0c0c;
   position: fixed;

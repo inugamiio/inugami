@@ -44,9 +44,8 @@
                 <input-bloc  label="edit.alert.sources.from"></input-bloc>
                 <input-bloc  label="edit.alert.sources.to"></input-bloc>
             </div>
-            <div class="ui-float-label">
-                <textarea  [rows]="5" [cols]="80" pInputTextarea autoResize="autoResize"></textarea>
-                <label>test</label>
+            <div class="query-text-area">
+                <textarea pInputTextarea></textarea>
                 <msg key="edit.alert.query"></msg>
             </div>             
         </p-panel>
@@ -70,9 +69,12 @@
                     <input-bloc label="edit.alert.dynamic.levels.minValue" type="number"></input-bloc>
                     <input-bloc label="edit.alert.dynamic.levels.maxValue" type="number"></input-bloc>
                     <div class="dynamic-levels-levels" *ngFor="let level of dynamicLevelsLevels; index as i">
-                        <input-bloc label="edit.alert.dynamic.levels.points.before.triggered" [(ngModel)]="level.pointsBeforeTriggered"></input-bloc>
-                        <input-bloc label="edit.alert.dynamic.levels.add.level" [(ngModel)]="level.name"></input-bloc>
+                        <span class="points">{{level.pointsBeforeTriggered}}</span>
+                        <span class="name">{{level.name}}</span>
+                        <span class="delete"><button pButton type="button"  class="active-action" icon="fas fa-minus" (click)="removeDynamicLevelsLevel(level.name)" ></button></span>
                     </div>
+                    <input-bloc label="edit.alert.dynamic.levels.points.before.triggered" [(ngModel)]="addedLevel.pointsBeforeTriggered" [validator]="validators.isNumber"></input-bloc>
+                    <input-bloc label="edit.alert.dynamic.levels.add.level" [(ngModel)]="addedLevel.name" [validator]="validators.notEmptyString"></input-bloc>
                     <button pButton type="button"  class="active-action" icon="fas fa-plus" (click)="addDynamicLevelsLevel()" ></button>
                 </p-tabPanel>
                 <p-tabPanel header="Scripts">

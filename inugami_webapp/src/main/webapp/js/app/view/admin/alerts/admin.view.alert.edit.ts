@@ -37,7 +37,8 @@ export class AdminViewAlertEdit implements AfterViewInit{
     private activationDaysData          : any;
     private dynamicLevelsLevels         : any;
     private channels                    : any;
-    private channelsData                : string[];    
+    private channelsData                : string[];
+    private addedLevel                  : any = {};    
 
     @Output() onClose                   : EventEmitter<any> = new EventEmitter();
     @Output() onError                   : EventEmitter<any> = new EventEmitter();
@@ -168,7 +169,29 @@ export class AdminViewAlertEdit implements AfterViewInit{
         this.activationDaysData.push({});
     }
     addDynamicLevelsLevel(){
-        this.dynamicLevelsLevels.push({});
+        if( isNull(org.inugami.validators.notNull(this.addedLevel.pointsBeforeTriggered)) &&
+            isNull(org.inugami.validators.notNegativeNumber(this.addedLevel.pointsBeforeTriggered)) &&
+            isNull(org.inugami.validators.notEmptyString(this.addedLevel.name))){
+               if(contains(this.addedLevel,this.dynamicLevelsLevels,function(a,b){
+                   return a.name === b.name;
+               })){
+                   alert(org.inugami.formatters.message("edit.alert.level.already.added"));
+               }else{
+                    this.dynamicLevelsLevels.push({pointsBeforeTriggered:this.addedLevel.pointsBeforeTriggered,
+                                                    name:this.addedLevel.name});
+                    //ajouter au graph
+                }
+        }
+    }
+
+    removeDynamicLevelsLevel(name){
+        let index = indexOf(name,this.dynamicLevelsLevels,function(list,value){
+            return list.name === value;
+        })
+        if(index > -1){
+            this.dynamicLevelsLevels.splice(index,1);
+            //remove from graph
+        }
     }
 
  /*****************************************************************************
@@ -184,4 +207,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
   registerOnTouched(fn: any) {
     this.onTouchedCallback = fn;
   }
+
+   
+
 }
