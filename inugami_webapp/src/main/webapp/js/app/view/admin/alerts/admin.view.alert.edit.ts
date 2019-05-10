@@ -1,6 +1,7 @@
 import {Component,Inject,OnInit,Input,
         Output,forwardRef,EventEmitter}                     from '@angular/core';
-import {NG_VALUE_ACCESSOR,ControlValueAccessor}             from '@angular/forms';
+import {NG_VALUE_ACCESSOR,ControlValueAccessor,
+        FormGroup,FormControl,FormArray,FormBuilder}        from '@angular/forms';
 
 import {AlertsCrudServices}                                 from './../../../services/http/alerts.crud.services';
 import {AlertEntity}                                        from './../../../models/alert.entity';
@@ -37,8 +38,9 @@ export class AdminViewAlertEdit implements AfterViewInit{
     private activationDaysData          : any;
     private dynamicLevelsLevels         : any;
     private channels                    : any;
-    private channelsData                : string[];
-    private addedLevel                  : any = {};    
+    private addedLevel                  : any = {};
+    
+    private alertForm                   :any;
 
     @Output() onClose                   : EventEmitter<any> = new EventEmitter();
     @Output() onError                   : EventEmitter<any> = new EventEmitter();
@@ -49,7 +51,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
     /**************************************************************************
     * CONSTRUCTOR
     **************************************************************************/
-    constructor(private alertsCrudServices : AlertsCrudServices) {
+    constructor(private alertsCrudServices : AlertsCrudServices,private fb: FormBuilder) {
         this.initValue();
     }
     ngAfterContentInit(){
@@ -102,8 +104,29 @@ export class AdminViewAlertEdit implements AfterViewInit{
         }
         if(isNull(this.channels)){
             this.channels = ["OpsGenie","Teams","SSE","Mail"];
-            this.channelsData = [];
         }
+        // faire gavffa a bien init channeles avant de faire ca 
+        const channelsFormControls = this.channels.map(control => new FormControl(false));
+        
+        this.alertForm = this.fb.group({
+                                        name: [''],
+                                        duration:  [''],
+                                        visibility: [''],
+                                        mainMessage: [''],
+                                        detailedMessage: [''],
+                                        tag:[''],
+                                        channelsData: this.fb.array(channelsFormControls),
+                                        sources: this.fb.group({
+                                            dataProvider: [''],
+                                            interval: [''],
+                                            from:[''],
+                                            to:[''],
+                                            query:['']
+                                        }),                         
+                                        activation: this.fb.array([this.createActivationLine()]),
+                                        dynamicLevels:[''],
+                                        scripts:['']
+            })                   
     }
     
 
@@ -197,17 +220,32 @@ export class AdminViewAlertEdit implements AfterViewInit{
  /*****************************************************************************
   * IMPLEMENTS ControlValueAccessor
   *****************************************************************************/
-  writeValue(value: any) {
-    this.innerValue = value;
-    this.initValue();
-  }
-  registerOnChange(fn: any) {
-    this.onChangeCallback = fn;
-  }
-  registerOnTouched(fn: any) {
-    this.onTouchedCallback = fn;
-  }
+    writeValue(value: any) {
+        this.innerValue = value;
+        this.initValue();
+    }
+    registerOnChange(fn: any) {
+        this.onChangeCallback = fn;
+    }
+    registerOnTouched(fn: any) {
+        this.onTouchedCallback = fn;
+    }
 
-   
+  /*****************************************************************************
+  * FORMS TOOLS METHOD
+  *****************************************************************************/
+    get channelsData(){
+        return this.alertForm.get('channelsData') as FormArray;
+    }
+
+    createActivationLine() : FormGroup{
+        return this.fb.group({
+            days: '',
+            timeSlots: '',
+        })
+    }
+    addActivationLine(){
+        this.alertForm.get('activation').push(this.createActivationLine());
+    }
 
 }

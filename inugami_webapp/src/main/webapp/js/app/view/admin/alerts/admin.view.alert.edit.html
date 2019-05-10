@@ -1,103 +1,108 @@
-<div [ngClass]="' alert-edit '" [class]="styleClass">
-    <div class="left-panel">
-        <div class="form-group row" *ngIf="innerValue">
-            <div class="col-3">
-                <input-bloc [(ngModel)]="innerValue.alerteName" [validator]="validators.notEmptyString"
-                    [disabled]="edit" label="alert.edit.alert.name"></input-bloc>
+<form [formGroup]="alertForm">
+    <div [ngClass]="' alert-edit '" [class]="styleClass">
+        <div class="left-panel">
+            <div class="form-group row" *ngIf="innerValue">
+                <div class="col-3">
+                    <input-bloc [(ngModel)]="innerValue.alerteName" [validator]="validators.notEmptyString"
+                        [disabled]="edit" label="alert.edit.alert.name" formControlName="name"></input-bloc>
+                </div>
+                <div class="col-2">
+                    <input-bloc [(ngModel)]="innerValue.duration" [validator]="validators.notNegativeNumber"
+                        label="alert.edit.alert.duration" type="number" formControlName="duration"></input-bloc>
+                </div>
+                <div class="col-2">
+                    <input-bloc [(ngModel)]="innerValue.channel" label="alert.edit.alert.channel"
+                        [validator]="validators.notEmptyString" formControlName=visibility></input-bloc>
+                </div>
             </div>
-            <div class="col-2">
-                <input-bloc [(ngModel)]="innerValue.duration" [validator]="validators.notNegativeNumber"
-                    label="alert.edit.alert.duration" type="number"></input-bloc>
-            </div>
-            <div class="col-2">
-                <input-bloc [(ngModel)]="innerValue.channel" label="alert.edit.alert.channel"
-                    [validator]="validators.notEmptyString"></input-bloc>
-            </div>
-            <div class="col-5">
-                <input-bloc [(ngModel)]="innerValue.level" label="alert.edit.alert.level"
-                    [validator]="validators.notEmptyString"></input-bloc>
-            </div>
-        </div>
-        <div class="form-group">
-            <input-bloc [(ngModel)]="innerValue.label" label="alert.edit.alert.label"
-                [validator]="validators.notEmptyString"></input-bloc>
+            <div class="form-group">
+                <input-bloc [(ngModel)]="innerValue.label" label="alert.edit.alert.label"
+                    [validator]="validators.notEmptyString" formGroupName="mainMessage"></input-bloc>
 
-            <input-bloc [(ngModel)]="innerValue.subLabel" label="alert.edit.alert.sub.label"></input-bloc>
-        </div>
-
-        <div class="form-group data-display">
-            <label>Data</label>
-            <textarea disabled="disabled">{{detailData}}</textarea>
-        </div>
-        <div class="channel-selector">
-            <msg key="edit.alert.channel"></msg>:
-            <span *ngFor="let channel of channels" class="channel">
-                <p-checkbox [(ngModel)]=channelsData value={{channel}}></p-checkbox>{{channel}}
-            </span>
-        </div>
-        <p-panel header="Sources">
-            <div>
-                <input-bloc  label="edit.alert.sources.data.provider"></input-bloc>
-                <input-bloc  label="edit.alert.sources.data.interval"></input-bloc>
+                <input-bloc [(ngModel)]="innerValue.subLabel" label="alert.edit.alert.sub.label" formGroupName="detailedMessage"></input-bloc>
             </div>
-            <div>
-                <input-bloc  label="edit.alert.sources.from"></input-bloc>
-                <input-bloc  label="edit.alert.sources.to"></input-bloc>
-            </div>
-            <div class="query-text-area">
-                <textarea pInputTextarea></textarea>
-                <msg key="edit.alert.query"></msg>
-            </div>             
-        </p-panel>
-    </div>
 
-
-    <div class="right-panel">
-        <p-panel header="Activation">
-            <msg key="edit.alert.activation.days"></msg>
-            <div *ngFor="let lineData of activationDaysData; index as i" class="day-and-time-line">
-                <input-days-selector [(ngModel)]="lineData.days"></input-days-selector>
-                <input-time-slots [(ngModel)]="lineData.timeSlots"></input-time-slots>
-                <button pButton type="button"  class="active-action" icon="fa fa-trash-alt" (click)="removeDaysLine(i)" ></button>
+            <div class="form-group data-display">
+                <label>Data</label>
+                <textarea disabled="disabled">{{detailData}}</textarea>
             </div>
-            <button pButton type="button"  class="active-action" (click)="addDaysLine()" msg>
-                <msg key="edit.alert.activation.add"></msg>
-            </button>
-            <p-tabView>
-                <p-tabPanel header="Seuil">
-                    <p-checkbox></p-checkbox> <msg key="edit.alert.dynamic.levels.dynamic"></msg>
-                    <input-bloc label="edit.alert.dynamic.levels.minValue" type="number"></input-bloc>
-                    <input-bloc label="edit.alert.dynamic.levels.maxValue" type="number"></input-bloc>
-                    <div class="dynamic-levels-levels" *ngFor="let level of dynamicLevelsLevels; index as i">
-                        <span class="points">{{level.pointsBeforeTriggered}}</span>
-                        <span class="name">{{level.name}}</span>
-                        <span class="delete"><button pButton type="button"  class="active-action" icon="fas fa-minus" (click)="removeDynamicLevelsLevel(level.name)" ></button></span>
-                    </div>
-                    <input-bloc label="edit.alert.dynamic.levels.points.before.triggered" [(ngModel)]="addedLevel.pointsBeforeTriggered" [validator]="validators.isNumber"></input-bloc>
-                    <input-bloc label="edit.alert.dynamic.levels.add.level" [(ngModel)]="addedLevel.name" [validator]="validators.notEmptyString"></input-bloc>
-                    <button pButton type="button"  class="active-action" icon="fas fa-plus" (click)="addDynamicLevelsLevel()" ></button>
-                </p-tabPanel>
-                <p-tabPanel header="Scripts">
+            <div class="channel-selector">
+                <msg key="edit.alert.channel"></msg>:
+                <span *ngFor="let channel of channels; index as i" class="channel" formArrayName="channelsData">
+                    <p-checkbox [(ngModel)]=channelsData value={{channel}} [formControlName]="i"></p-checkbox>{{channel}}
+                </span>
+            </div>
+            <p-panel header="Sources">
+                <div>
+                    <input-bloc label="edit.alert.sources.data.provider"></input-bloc>
+                    <input-bloc label="edit.alert.sources.data.interval"></input-bloc>
+                </div>
+                <div>
+                    <input-bloc label="edit.alert.sources.from"></input-bloc>
+                    <input-bloc label="edit.alert.sources.to"></input-bloc>
+                </div>
+                <div class="query-text-area">
                     <textarea pInputTextarea></textarea>
-                </p-tabPanel>
-            </p-tabView>
-        </p-panel>
-        <div class="btn-group" role="group">
-            <button pButton type="button" (click)="close()" class="default-action" msg>
-                <msg key="action.cancel"></msg>
-            </button>
-
-            <button pButton type="button" msg (click)="saveAlertAndClose()" class="active-action">
-                <msg key="action.save"></msg>
-            </button>
-
-            <button pButton type="button" msg (click)="saveAlert()" class="full-active-action" *ngIf="isNotEdit">
-                <msg key="action.save.and.continue"></msg>
-            </button>
+                    <msg key="edit.alert.query"></msg>
+                </div>
+            </p-panel>
         </div>
+
+
+        <div class="right-panel">
+            <p-panel header="Activation">
+                <msg key="edit.alert.activation.days"></msg>
+                <div *ngFor="let lineData of activationDaysData; index as i" class="day-and-time-line">
+                    <input-days-selector [(ngModel)]="lineData.days"></input-days-selector>
+                    <input-time-slots [(ngModel)]="lineData.timeSlots"></input-time-slots>
+                    <button pButton type="button" class="active-action" icon="fa fa-trash-alt"
+                        (click)="removeDaysLine(i)"></button>
+                </div>
+                <button pButton type="button" class="active-action" (click)="addDaysLine()" msg>
+                    <msg key="edit.alert.activation.add"></msg>
+                </button>
+                <p-tabView>
+                    <p-tabPanel header="Seuil">
+                        <p-checkbox></p-checkbox>
+                        <msg key="edit.alert.dynamic.levels.dynamic"></msg>
+                        <input-bloc label="edit.alert.dynamic.levels.minValue" type="number"></input-bloc>
+                        <input-bloc label="edit.alert.dynamic.levels.maxValue" type="number"></input-bloc>
+                        <div class="dynamic-levels-levels" *ngFor="let level of dynamicLevelsLevels; index as i">
+                            <span class="points">{{level.pointsBeforeTriggered}}</span>
+                            <span class="name">{{level.name}}</span>
+                            <span class="delete"><button pButton type="button" class="active-action" icon="fas fa-minus"
+                                    (click)="removeDynamicLevelsLevel(level.name)"></button></span>
+                        </div>
+                        <input-bloc label="edit.alert.dynamic.levels.points.before.triggered"
+                            [(ngModel)]="addedLevel.pointsBeforeTriggered" [validator]="validators.isNumber">
+                        </input-bloc>
+                        <input-bloc label="edit.alert.dynamic.levels.add.level" [(ngModel)]="addedLevel.name"
+                            [validator]="validators.notEmptyString"></input-bloc>
+                        <button pButton type="button" class="active-action" icon="fas fa-plus"
+                            (click)="addDynamicLevelsLevel()"></button>
+                    </p-tabPanel>
+                    <p-tabPanel header="Scripts">
+                        <textarea pInputTextarea></textarea>
+                    </p-tabPanel>
+                </p-tabView>
+            </p-panel>
+            <div class="btn-group" role="group">
+                <button pButton type="button" (click)="close()" class="default-action" msg>
+                    <msg key="action.cancel"></msg>
+                </button>
+
+                <button pButton type="button" msg (click)="saveAlertAndClose()" class="active-action">
+                    <msg key="action.save"></msg>
+                </button>
+
+                <button pButton type="button" msg (click)="saveAlert()" class="full-active-action" *ngIf="isNotEdit">
+                    <msg key="action.save.and.continue"></msg>
+                </button>
+            </div>
+        </div>
+
+
+
+        <div class="admin-view-alert-edit-end"></div>
     </div>
-
-
-
-    <div class="admin-view-alert-edit-end"></div>
-</div>
+</form>
