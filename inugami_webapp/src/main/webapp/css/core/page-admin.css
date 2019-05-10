@@ -159,8 +159,11 @@
 .page-admin .alert-edit .left-panel .query-text-area{
   position: relative;
 }
-.page-admin .alert-edit .left-panel .query-text-area textarea{
+.page-admin .alert-edit textarea{
   width: -webkit-fill-available;
+  height: 20em;
+}
+.page-admin .alert-edit .left-panel .query-text-area textarea{
   margin-top: 1em;
 }
 .page-admin .alert-edit .left-panel .query-text-area msg{
