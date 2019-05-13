@@ -88,10 +88,13 @@ export class InputTimeSlots implements OnInit, ControlValueAccessor {
      * IMPLEMENTS ControlValueAccessor
      *****************************************************************************/
     writeValue(timeSlots: any): void {
-      if(isNull(timeSlots)){
+      if(isNull(timeSlots) || !isArray(timeSlots)){
         timeSlots = [];
       }
         this.timeSlotsModel = timeSlots;
+        if(isNotNull(this.onModelChange)){
+          this.onModelChange(this.timeSlotsModel);
+        }
     }
 
     registerOnChange(fn: Function): void {
@@ -115,7 +118,9 @@ export class InputTimeSlots implements OnInit, ControlValueAccessor {
         this.timeSlotsModel.push(newSlot);
         let addEventResponse = new TimeSlotAdd(newSlot,this.timeSlotsModel); 
         this.onAdd.emit(addEventResponse);
+        this.onModelChange(this.timeSlotsModel);
       }
+      this.onModelTouched();
     }
     removeSlot(index : number){
       if(!this.readonly && !this.disabled){
@@ -124,7 +129,9 @@ export class InputTimeSlots implements OnInit, ControlValueAccessor {
 
         let removeEventResponse = new TimeSlotRemove(removedSlot,this.timeSlotsModel);
         this.onDelete.emit(removeEventResponse);
+        this.onModelChange(this.timeSlotsModel);
       }
+      this.onModelTouched();
     }
     
 
@@ -157,7 +164,8 @@ export class InputTimeSlots implements OnInit, ControlValueAccessor {
       this.processValidator();
       let changedElement = new TimeSlotChanged(i,this.timeSlotsModel);
       this.onChange.emit(changedElement);
-      
+      this.onModelTouched();
+      this.onModelChange(this.timeSlotsModel);
     }
 
     displayLabel() {
