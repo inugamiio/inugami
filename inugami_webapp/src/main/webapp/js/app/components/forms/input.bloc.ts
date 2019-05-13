@@ -134,17 +134,24 @@ export class InputBloc implements ControlValueAccessor,AfterViewInit {
   }
   private onChange(event){
     this.processValidator();
-    this.onChangeCallback(event);
+    if(isNotNull(this.onChangeCallback)){
+      this.onChangeCallback(event);
+    }
     this.ngModelChange.emit(event);
   }
   private onKeyPress(event){
     this.keypress.emit(event);
-    this.onTouchedCallback();
+    if(isNotNull(this.onTouchedCallback)){
+      this.onTouchedCallback();
+    }
+    
   }
   private onEnterPress(event){
     this.processValidator();
     this.enter.emit(event);
-    this.onTouchedCallback();
+    if(isNotNull(this.onTouchedCallback)){
+      this.onTouchedCallback();
+    }
   }
   /*****************************************************************************
   * IMPLEMENTS ControlValueAccessor

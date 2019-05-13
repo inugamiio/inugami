@@ -125,6 +125,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
                     query:['']
                 }),                         
                 activation: this.fb.array([this.createFormActivationLine()]),
+                levelPointsBeforeTriggered: this.fb.array([]),
                 dynamicLevels:[''],
                 scripts:['']
 })                
@@ -199,26 +200,28 @@ export class AdminViewAlertEdit implements AfterViewInit{
     }
     addDynamicLevelsLevel(){
         if( isNull(org.inugami.validators.notNull(this.addedLevel.pointsBeforeTriggered)) &&
-            isNull(org.inugami.validators.notNegativeNumber(this.addedLevel.pointsBeforeTriggered)) &&
-            isNull(org.inugami.validators.notEmptyString(this.addedLevel.name))){
+            isNull(org.inugami.validators.notNegativeNumber(this.addedLevel.pointsBeforeTriggered))){
                if(contains(this.addedLevel,this.dynamicLevelsLevels,function(a,b){
                    return a.name === b.name;
                })){
-                   alert(org.inugami.formatters.message("edit.alert.level.already.added"));
+                   alert(org.inugami.formatters.message("alert.edit.level.already.added"));
                }else{
                     this.dynamicLevelsLevels.push({pointsBeforeTriggered:this.addedLevel.pointsBeforeTriggered,
                                                     name:this.addedLevel.name});
+                    this.addFormLevelLine();
+                    
                     //ajouter au graph
                 }
         }
     }
 
-    removeDynamicLevelsLevel(name){
+    removeDynamicLevelsLevel(name,i){
         let index = indexOf(name,this.dynamicLevelsLevels,function(list,value){
             return list.name === value;
         })
         if(index > -1){
             this.dynamicLevelsLevels.splice(index,1);
+            this.removeFormLevelLine(i);
             //remove from graph
         }
     }
@@ -256,5 +259,30 @@ export class AdminViewAlertEdit implements AfterViewInit{
 
     removeFormActivationLine(index){
         this.alertForm.get('activation').removeAt(index);
+    }
+    createFormLevelLine(){
+        return this.fb.group({
+            points: '',
+            name: ''
+        })
+    }
+
+    addFormLevelLine(){
+        let array = this.alertForm.get('levelPointsBeforeTriggered');
+        let group = this.createFormLevelLine()
+        array.push(group);
+        group.patchValue({name:this.addedLevel.name,points:this.addedLevel.pointsBeforeTriggered});
+    }
+
+    removeFormLevelLine(index){
+        this.alertForm.get('levelPointsBeforeTriggered').removeAt(index);
+    }
+
+    setLevelName(event){
+        this.addedLevel.name = event;
+    }
+
+    setPointsBeforeTriggered(event){
+        this.addedLevel.pointsBeforeTriggered = event;
     }
 }
