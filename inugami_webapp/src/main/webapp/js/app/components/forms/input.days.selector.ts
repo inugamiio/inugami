@@ -91,10 +91,13 @@ export class InputDaysSelector implements OnInit, ControlValueAccessor {
      * IMPLEMENTS ControlValueAccessor
      *****************************************************************************/
     writeValue(daysModel: any): void {
-      if(isNull(daysModel)){
+      if(isNull(daysModel) || !isArray(daysModel)){
         daysModel = [];
       }
-        this.daysModel = daysModel;
+      this.daysModel = daysModel;
+      if(isNotNull(this.onModelChange)){
+        this.onModelChange(this.daysModel);
+      }
     }
 
     registerOnChange(fn: Function): void {
@@ -132,7 +135,9 @@ export class InputDaysSelector implements OnInit, ControlValueAccessor {
             }else{
               this.daysModel.push(day);
             }
-            this.onChange.emit(new DaysSelectorChange(this.daysModel) )
+            this.onChange.emit(new DaysSelectorChange(this.daysModel));
+            this.onModelChange(this.daysModel);
+            this.onModelTouched();
         }
     }
 
