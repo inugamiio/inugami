@@ -32,17 +32,17 @@
                     <p-checkbox [(ngModel)]=channelsData value={{channel}} [formControlName]="i"></p-checkbox>{{channel}}
                 </span>
             </div>
-            <p-panel header="Sources">
+            <p-panel header="Sources" formGroupName="sources">
                 <div>
-                    <input-bloc label="edit.alert.sources.data.provider"></input-bloc>
-                    <input-bloc label="edit.alert.sources.data.interval"></input-bloc>
+                    <input-bloc label="edit.alert.sources.data.provider" formControlName="dataProvider"></input-bloc>
+                    <input-bloc label="edit.alert.sources.data.interval" formControlName="interval"></input-bloc>
                 </div>
                 <div>
-                    <input-bloc label="edit.alert.sources.from"></input-bloc>
-                    <input-bloc label="edit.alert.sources.to"></input-bloc>
+                    <input-bloc label="edit.alert.sources.from" formControlName="from"></input-bloc>
+                    <input-bloc label="edit.alert.sources.to" formControlName="to"></input-bloc>
                 </div>
                 <div class="query-text-area">
-                    <textarea pInputTextarea></textarea>
+                    <textarea pInputTextarea formControlName="query"></textarea>
                     <msg key="edit.alert.query"></msg>
                 </div>
             </p-panel>
