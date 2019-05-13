@@ -4,7 +4,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { SvgComponent } from 'js/app/components/charts/svg_component/svg.component.ts';
 
 @Component({
-    templateUrl: 'js/app/components/forms/dynamic-levels.html',
+    templateUrl: 'js/app/components/forms/dynamic.levels.html',
     selector: 'dynamic-levels',
     providers: [
         {
@@ -34,7 +34,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     @Output() onClick                   = new EventEmitter<any>();
 
     @HostBinding('class') cssClass      = "inugami-input-dynamic-levels";
-    //@HostBinding('name') rootName       = name;
+    
     @HostBinding('id') rootId           = this.inputId;
     @HostBinding('tabindex') rootindex  = this.tabindex;
     
@@ -159,9 +159,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
 
     private _renderXAxis(svg) {
         let axisXGroup = svg.append("g").attr("class", "axis-x");
-        let axisX = axisXGroup.append("line")
-            .attr("stroke-width", 1)
-            .attr("stroke", "black");
+        let axisX = axisXGroup.append("line");
         let axisXPoints = axisXGroup.append("g").attr("class", "axisXPoints");
         for (let i = 0; i < this.position.axisXPoints.length; i++) {
             let axisXPoint = axisXPoints.append("circle").attr("cx", this.position.axisXPoints[i].x)
@@ -180,9 +178,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
 
     private _renderYAxis(svg) {
         let axisYGroup = svg.append("g").attr("class", "axis-y");
-        let axisY = axisYGroup.append("line")
-            .attr("stroke-width", 1)
-            .attr("stroke", "black");
+        let axisY = axisYGroup.append("line");
         let axisYPoints = axisYGroup.append("g").attr("class", "axisYPoints");
         for (let i = 0; i < this.position.axisYPoints.length; i++) {
             let axisYPoint = axisYPoints.append("circle")
@@ -426,7 +422,6 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         pathValues = this._formatPathValues(pathValues);
         let path = dataPointGroup.append("path")
             .attr("d", pathValues)
-            .attr("stroke", "black")
             .attr("fill", "none")
             .attr("class", "curve");
         path.lower();

@@ -14,3 +14,12 @@
     fill: #3b3d42;
     fill-opacity: 1;
 }
+
+.inugami-input-dynamic-levels .data .level .curve,
+.inugami-input-dynamic-levels  .layout .axis-y,
+.inugami-input-dynamic-levels  .layout .axis-x{
+    stroke-width: 0.1em;
+    stroke: black;
+}
+
+
