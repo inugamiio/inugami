@@ -1,6 +1,6 @@
 import {Component,Inject,OnInit,Input,
         Output,forwardRef,EventEmitter}                     from '@angular/core';
-import {NG_VALUE_ACCESSOR,ControlValueAccessor,
+import {NG_VALUE_ACCESSOR,ControlValueAccessor,Validators,
         FormGroup,FormControl,FormArray,FormBuilder}        from '@angular/forms';
 
 import {AlertsCrudServices}                                 from './../../../services/http/alerts.crud.services';
@@ -110,7 +110,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
         
         if(isNull(this.alertForm)){
             this.alertForm = this.fb.group({
-                name: [''],
+                name: ['',Validators.required],
                 duration:  [''],
                 visibility: [''],
                 mainMessage: [''],
@@ -128,6 +128,8 @@ export class AdminViewAlertEdit implements AfterViewInit{
                 dynamicLevels:[''],
                 scripts:['']
 })                
+        }else{
+            this.alertForm.reset();
         }   
     }
     
@@ -178,7 +180,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
 
     saveAlertAndClose(){
         this.saveAlert();
-        this. initValue();
+        this.initValue();
     }
 
     close(){
