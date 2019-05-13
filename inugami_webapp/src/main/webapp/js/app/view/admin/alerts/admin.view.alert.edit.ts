@@ -108,25 +108,27 @@ export class AdminViewAlertEdit implements AfterViewInit{
         // faire gavffa a bien init channeles avant de faire ca 
         const channelsFormControls = this.channels.map(control => new FormControl(false));
         
-        this.alertForm = this.fb.group({
-                                        name: [''],
-                                        duration:  [''],
-                                        visibility: [''],
-                                        mainMessage: [''],
-                                        detailedMessage: [''],
-                                        tag:[''],
-                                        channelsData: this.fb.array(channelsFormControls),
-                                        sources: this.fb.group({
-                                            dataProvider: [''],
-                                            interval: [''],
-                                            from:[''],
-                                            to:[''],
-                                            query:['']
-                                        }),                         
-                                        activation: this.fb.array([this.createFormActivationLine()]),
-                                        dynamicLevels:[''],
-                                        scripts:['']
-            })                   
+        if(isNull(this.alertForm)){
+            this.alertForm = this.fb.group({
+                name: [''],
+                duration:  [''],
+                visibility: [''],
+                mainMessage: [''],
+                detailedMessage: [''],
+                tag:[''],
+                channelsData: this.fb.array(channelsFormControls),
+                sources: this.fb.group({
+                    dataProvider: [''],
+                    interval: [''],
+                    from:[''],
+                    to:[''],
+                    query:['']
+                }),                         
+                activation: this.fb.array([this.createFormActivationLine()]),
+                dynamicLevels:[''],
+                scripts:['']
+})                
+        }   
     }
     
 
