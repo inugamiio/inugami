@@ -65,7 +65,9 @@ export class InputBloc implements ControlValueAccessor,AfterViewInit {
   @Output() keypress                  : EventEmitter<any> = new EventEmitter();
   @Output() enter                     : EventEmitter<any> = new EventEmitter();
 
-  
+
+  private onChangeCallback            : any;
+  private onTouchedCallback           : any;       
   private innerValue                  : any       = null;
   private labelTxt                    : string    = "";
   private errorTxt                    : string    = null;
@@ -132,20 +134,25 @@ export class InputBloc implements ControlValueAccessor,AfterViewInit {
   }
   private onChange(event){
     this.processValidator();
+    this.onChangeCallback(event);
     this.ngModelChange.emit(event);
   }
   private onKeyPress(event){
     this.keypress.emit(event);
+    this.onTouchedCallback();
   }
   private onEnterPress(event){
     this.processValidator();
     this.enter.emit(event);
+    this.onTouchedCallback();
   }
   /*****************************************************************************
   * IMPLEMENTS ControlValueAccessor
   *****************************************************************************/
   writeValue(value: any) {
       this.innerValue = value;
+      this.onChangeCallback(value);
+      this.onTouchedCallback();
   }
 
   registerOnChange(fn: any) {
