@@ -26,24 +26,28 @@
                 <label>Data</label>
                 <textarea disabled="disabled">{{detailData}}</textarea>
             </div>
+            <div class="tag">
+                    <msg key="alert.edit.tag"></msg>:
+                <p-chips formControlName="tag"></p-chips>
+            </div>
             <div class="channel-selector">
-                <msg key="edit.alert.channel"></msg>:
+                <msg key="alert.edit.channel"></msg>:
                 <span *ngFor="let channel of channels; index as i" class="channel" formArrayName="channelsData">
                     <p-checkbox  value={{channel}} [formControlName]="i"></p-checkbox>{{channel}} <!--  [(ngModel)]=channelsData -->
                 </span>
             </div>
             <p-panel header="Sources" formGroupName="sources">
                 <div>
-                    <input-bloc label="edit.alert.sources.data.provider" formControlName="dataProvider"></input-bloc>
-                    <input-bloc label="edit.alert.sources.data.interval" formControlName="interval"></input-bloc>
+                    <input-bloc label="alert.edit.sources.data.provider" formControlName="dataProvider"></input-bloc>
+                    <input-bloc label="alert.edit.sources.data.interval" formControlName="interval"></input-bloc>
                 </div>
                 <div>
-                    <input-bloc label="edit.alert.sources.from" formControlName="from"></input-bloc>
-                    <input-bloc label="edit.alert.sources.to" formControlName="to"></input-bloc>
+                    <input-bloc label="alert.edit.sources.from" formControlName="from"></input-bloc>
+                    <input-bloc label="alert.edit.sources.to" formControlName="to"></input-bloc>
                 </div>
                 <div class="query-text-area">
                     <textarea pInputTextarea formControlName="query"></textarea>
-                    <msg key="edit.alert.query"></msg>
+                    <msg key="alert.edit.query"></msg>
                 </div>
             </p-panel>
         </div>
@@ -51,7 +55,7 @@
 
         <div class="right-panel">
             <p-panel header="Activation">
-                <msg key="edit.alert.activation.days"></msg>
+                <msg key="alert.edit.activation.days"></msg>
                 <div formArrayName="activation">
                     <div *ngFor="let lineData of activationDaysData; index as i" class="day-and-time-line" [formGroupName]="i">
                         <input-days-selector formControlName="days" ></input-days-selector> <!-- [(ngModel)]="lineData.days" -->
@@ -61,24 +65,24 @@
                     </div>
                 </div>
                 <button pButton type="button" class="active-action" (click)="addActivationLine()" msg>
-                    <msg key="edit.alert.activation.add"></msg>
+                    <msg key="alert.edit.activation.add"></msg>
                 </button>
                 <p-tabView>
                     <p-tabPanel header="Seuil">
                         <p-checkbox></p-checkbox>
-                        <msg key="edit.alert.dynamic.levels.dynamic"></msg>
-                        <input-bloc label="edit.alert.dynamic.levels.minValue" type="number"></input-bloc>
-                        <input-bloc label="edit.alert.dynamic.levels.maxValue" type="number"></input-bloc>
+                        <msg key="alert.edit.dynamic.levels.dynamic"></msg>
+                        <input-bloc label="alert.edit.dynamic.levels.minValue" type="number"></input-bloc>
+                        <input-bloc label="alert.edit.dynamic.levels.maxValue" type="number"></input-bloc>
                         <div class="dynamic-levels-levels" *ngFor="let level of dynamicLevelsLevels; index as i">
                             <span class="points">{{level.pointsBeforeTriggered}}</span>
                             <span class="name">{{level.name}}</span>
                             <span class="delete"><button pButton type="button" class="active-action" icon="fas fa-minus"
                                     (click)="removeDynamicLevelsLevel(level.name)"></button></span>
                         </div>
-                        <input-bloc label="edit.alert.dynamic.levels.points.before.triggered"
+                        <input-bloc label="alert.edit.dynamic.levels.points.before.triggered"
                              [validator]="validators.isNumber"><!-- [(ngModel)]="addedLevel.pointsBeforeTriggered" -->
                         </input-bloc>
-                        <input-bloc label="edit.alert.dynamic.levels.add.level" 
+                        <input-bloc label="alert.edit.dynamic.levels.add.level" 
                             [validator]="validators.notEmptyString"></input-bloc><!-- [(ngModel)]="addedLevel.name" -->
                         <button pButton type="button" class="active-action" icon="fas fa-plus"
                             (click)="addDynamicLevelsLevel()"></button>
