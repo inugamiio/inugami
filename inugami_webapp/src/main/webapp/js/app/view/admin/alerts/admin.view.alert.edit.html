@@ -3,23 +3,23 @@
         <div class="left-panel">
             <div class="form-group row" *ngIf="innerValue">
                 <div class="col-3">
-                    <input-bloc [(ngModel)]="innerValue.alerteName" [validator]="validators.notEmptyString"
+                    <input-bloc  [validator]="validators.notEmptyString"
                         [disabled]="edit" label="alert.edit.alert.name" formControlName="name"></input-bloc>
                 </div>
                 <div class="col-2">
-                    <input-bloc [(ngModel)]="innerValue.duration" [validator]="validators.notNegativeNumber"
-                        label="alert.edit.alert.duration" type="number" formControlName="duration"></input-bloc>
+                    <input-bloc  [validator]="validators.notNegativeNumber" 
+                        label="alert.edit.alert.duration" type="number" formControlName="duration"></input-bloc><!-- [(ngModel)]="innerValue.duration" -->
                 </div>
                 <div class="col-2">
-                    <input-bloc [(ngModel)]="innerValue.channel" label="alert.edit.alert.channel"
-                        [validator]="validators.notEmptyString" formControlName=visibility></input-bloc>
+                    <input-bloc  label="alert.edit.alert.channel"
+                        [validator]="validators.notEmptyString" formControlName=visibility></input-bloc><!-- [(ngModel)]="innerValue.channel" -->
                 </div>
             </div>
             <div class="form-group">
-                <input-bloc [(ngModel)]="innerValue.label" label="alert.edit.alert.label"
-                    [validator]="validators.notEmptyString" formGroupName="mainMessage"></input-bloc>
+                <input-bloc  label="alert.edit.alert.label"
+                    [validator]="validators.notEmptyString" formControlName="mainMessage"></input-bloc> <!-- [(ngModel)]="innerValue.label" -->
 
-                <input-bloc [(ngModel)]="innerValue.subLabel" label="alert.edit.alert.sub.label" formGroupName="detailedMessage"></input-bloc>
+                <input-bloc  label="alert.edit.alert.sub.label" formControlName="detailedMessage"></input-bloc> <!-- [(ngModel)]="innerValue.subLabel" -->
             </div>
 
             <div class="form-group data-display">
@@ -29,7 +29,7 @@
             <div class="channel-selector">
                 <msg key="edit.alert.channel"></msg>:
                 <span *ngFor="let channel of channels; index as i" class="channel" formArrayName="channelsData">
-                    <p-checkbox [(ngModel)]=channelsData value={{channel}} [formControlName]="i"></p-checkbox>{{channel}}
+                    <p-checkbox  value={{channel}} [formControlName]="i"></p-checkbox>{{channel}} <!--  [(ngModel)]=channelsData -->
                 </span>
             </div>
             <p-panel header="Sources" formGroupName="sources">
@@ -52,13 +52,15 @@
         <div class="right-panel">
             <p-panel header="Activation">
                 <msg key="edit.alert.activation.days"></msg>
-                <div *ngFor="let lineData of activationDaysData; index as i" class="day-and-time-line">
-                    <input-days-selector [(ngModel)]="lineData.days"></input-days-selector>
-                    <input-time-slots [(ngModel)]="lineData.timeSlots"></input-time-slots>
-                    <button pButton type="button" class="active-action" icon="fa fa-trash-alt"
-                        (click)="removeDaysLine(i)"></button>
+                <div formArrayName="activation">
+                    <div *ngFor="let lineData of activationDaysData; index as i" class="day-and-time-line" [formGroupName]="i">
+                        <input-days-selector formControlName="days" ></input-days-selector> <!-- [(ngModel)]="lineData.days" -->
+                        <input-time-slots formControlName="timeSlots"></input-time-slots><!-- [(ngModel)]="lineData.timeSlots" -->
+                        <button pButton type="button" class="active-action" icon="fa fa-trash-alt"
+                            (click)="removeActivationLine(i)"></button>
+                    </div>
                 </div>
-                <button pButton type="button" class="active-action" (click)="addDaysLine()" msg>
+                <button pButton type="button" class="active-action" (click)="addActivationLine()" msg>
                     <msg key="edit.alert.activation.add"></msg>
                 </button>
                 <p-tabView>
@@ -74,15 +76,15 @@
                                     (click)="removeDynamicLevelsLevel(level.name)"></button></span>
                         </div>
                         <input-bloc label="edit.alert.dynamic.levels.points.before.triggered"
-                            [(ngModel)]="addedLevel.pointsBeforeTriggered" [validator]="validators.isNumber">
+                             [validator]="validators.isNumber"><!-- [(ngModel)]="addedLevel.pointsBeforeTriggered" -->
                         </input-bloc>
-                        <input-bloc label="edit.alert.dynamic.levels.add.level" [(ngModel)]="addedLevel.name"
-                            [validator]="validators.notEmptyString"></input-bloc>
+                        <input-bloc label="edit.alert.dynamic.levels.add.level" 
+                            [validator]="validators.notEmptyString"></input-bloc><!-- [(ngModel)]="addedLevel.name" -->
                         <button pButton type="button" class="active-action" icon="fas fa-plus"
                             (click)="addDynamicLevelsLevel()"></button>
                     </p-tabPanel>
                     <p-tabPanel header="Scripts">
-                        <textarea pInputTextarea></textarea>
+                        <textarea pInputTextarea formControlName="scripts"></textarea>
                     </p-tabPanel>
                 </p-tabView>
             </p-panel>

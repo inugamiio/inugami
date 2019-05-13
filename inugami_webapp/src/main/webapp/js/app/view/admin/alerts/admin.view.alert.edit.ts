@@ -123,7 +123,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
                                             to:[''],
                                             query:['']
                                         }),                         
-                                        activation: this.fb.array([this.createActivationLine()]),
+                                        activation: this.fb.array([this.createFormActivationLine()]),
                                         dynamicLevels:[''],
                                         scripts:['']
             })                   
@@ -184,12 +184,14 @@ export class AdminViewAlertEdit implements AfterViewInit{
         this.onClose.emit();
     }
 
-    removeDaysLine(index){
+    removeActivationLine(index){
         this.activationDaysData.splice(index,1);
+        this.removeFormActivationLine(index);
     }
 
-    addDaysLine(){
+    addActivationLine(){
         this.activationDaysData.push({});
+        this.addFormActivationLine();
     }
     addDynamicLevelsLevel(){
         if( isNull(org.inugami.validators.notNull(this.addedLevel.pointsBeforeTriggered)) &&
@@ -238,14 +240,17 @@ export class AdminViewAlertEdit implements AfterViewInit{
         return this.alertForm.get('channelsData') as FormArray;
     }
 
-    createActivationLine() : FormGroup{
+    createFormActivationLine() : FormGroup{
         return this.fb.group({
             days: '',
             timeSlots: '',
         })
     }
-    addActivationLine(){
-        this.alertForm.get('activation').push(this.createActivationLine());
+    addFormActivationLine(){
+        this.alertForm.get('activation').push(this.createFormActivationLine());
     }
 
+    removeFormActivationLine(index){
+        this.alertForm.get('activation').removeAt(index);
+    }
 }

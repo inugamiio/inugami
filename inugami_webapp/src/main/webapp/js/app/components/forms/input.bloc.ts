@@ -150,9 +150,7 @@ export class InputBloc implements ControlValueAccessor,AfterViewInit {
   * IMPLEMENTS ControlValueAccessor
   *****************************************************************************/
   writeValue(value: any) {
-      this.innerValue = value;
-      this.onChangeCallback(value);
-      this.onTouchedCallback();
+    this.innerValue = value;
   }
 
   registerOnChange(fn: any) {
