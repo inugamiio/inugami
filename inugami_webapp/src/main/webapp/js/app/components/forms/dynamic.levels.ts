@@ -630,12 +630,12 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     }
 
     private transformMouseCoordToSVG(y) {
-        var CTM = this.compos.svg.node().getScreenCTM();
-        return y = (y - CTM.f) / CTM.d;
+        var ctm = this.compos.svg.node().getScreenCTM();
+        return y = (y - ctm.f) / ctm.d;
     }
     private transformMouseCoordToscreen(y) {
-        var CTM = this.compos.svg.node().getScreenCTM();
-        return y = (y * CTM.d) - CTM.f;
+        var ctm = this.compos.svg.node().getScreenCTM();
+        return y = (y * ctm.d) - ctm.f;
     }
 
     private _readjustPosition() {
