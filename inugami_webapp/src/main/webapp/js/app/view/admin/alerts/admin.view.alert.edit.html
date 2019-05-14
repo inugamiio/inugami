@@ -14,6 +14,10 @@
                     <input-bloc  label="alert.edit.alert.channel"
                         [validator]="validators.notEmptyString" formControlName=visibility></input-bloc><!-- [(ngModel)]="innerValue.channel" -->
                 </div>
+                <div class="file-input">
+                    <button pButton type=button class="active-action" icon="fas fa-folder-open" (click)="fileinput.click()"></button>
+                    <input type=file (change)="fileChanged($event)" #fileinput>
+                </div>
             </div>
             <div class="form-group">
                 <input-bloc  label="alert.edit.alert.label"

@@ -226,6 +226,18 @@ export class AdminViewAlertEdit implements AfterViewInit{
         }
     }
 
+
+    fileChanged(event){
+        let file = event.target.files[0];
+        let reader = new FileReader();
+        let text;
+        reader.onload = (e) => {
+            text = reader.result;
+        }
+        reader.readAsText(file);
+       
+        //apply data on form
+    }
  /*****************************************************************************
   * IMPLEMENTS ControlValueAccessor
   *****************************************************************************/

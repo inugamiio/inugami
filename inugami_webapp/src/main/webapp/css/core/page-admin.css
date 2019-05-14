@@ -137,6 +137,10 @@
   width: 40%
 }
 
+.page-admin .alert-edit .left-panel .file-input input{
+  display: none;
+}
+
 .page-admin .alert-edit .left-panel .tag{
   margin-bottom: 2em;
   display: inline-block;
