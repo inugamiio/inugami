@@ -37,7 +37,10 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     
     @HostBinding('id') rootId           = this.inputId;
     @HostBinding('tabindex') rootindex  = this.tabindex;
-    
+
+    private axisXPointsNumber           : any;
+    private axisYPointsNumber           : any;
+
     private onTouched                   : any;
     private onChangeAccessor            : any;
 
@@ -106,7 +109,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
             axisYDownMargin     : 0.1
         }
 
-        this._initElementRatio();
+       
 
         this.elementSize = {
             axisX                       : 0,
@@ -132,7 +135,9 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         this.minValue           = 0;
         this.maxValue           = 100;
 
-        
+
+        this.axisXPointsNumber = parseInt(org.inugami.formatters.messageValue("alert.edit.dynamic.levels.axis.x.points.number"));
+        this.axisYPointsNumber = parseInt(org.inugami.formatters.messageValue("alert.edit.dynamic.levels.axis.y.points.number"));
     }
 
     /***************************************************************************
@@ -195,7 +200,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     private _renderYAxisLabel() {
         this.groups.axisYLabel = {};
         for (let i = 0; i < this.groups.axisYPoints.length; i++) {
-            if (i == 0 || i == 5 || i == 10) {
+            if (i == 0  || i== Math.floor(this.axisYPointsNumber/2) || i == this.axisYPointsNumber - 1) {
                 let label = this.groups.axisYGroup.append("text")
                     .attr("class", "tick-label")
                     .text((this.maxValue - this.minValue) * i / (this.groups.axisYPoints.length - 1) + this.minValue); 
@@ -210,7 +215,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     private _renderXAxisLabel() {
         this.groups.axisXLabel = {};
         for (let i = 0; i < this.groups.axisXPoints.length; i++) {
-            if (i == 6 || i == 0 || i == 12 || i == 23) {
+            if (  i == 0 || i== Math.floor(this.axisXPointsNumber/4) || i== Math.floor(this.axisXPointsNumber/2) || i == this.axisXPointsNumber - 1) {
                 let label = this.groups.axisXGroup.append("text")
                     .attr("class", "tick-label")
                     .text(i + "h");
@@ -226,10 +231,6 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     /***************************************************************************
      * INITIALIZATION
      ***************************************************************************/
-
-    private _initElementRatio() {
-
-    }
 
     private _initPositionTable() {
         this.position.axisX.x1 = this.elementSize.axisLeftMargin;
@@ -250,7 +251,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
 
     private _initAxisXPointsPosition() {
         this.position.axisXPoints = [];
-        for (let i = 1; i <= 24; i++) {
+        for (let i = 1; i <= this.axisXPointsNumber; i++) {
             this.position.axisXPoints.push({
                 x: this.elementSize.axisLeftMargin + i * this.elementSize.axisXPointsMargin,
                 y: this.position.axisX.y1,
@@ -259,7 +260,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     }
     private _initAxisYPointsPosition() {
         this.position.axisYPoints = [];
-        for (let i = 10; i >= 0; i--) {
+        for (let i = this.axisYPointsNumber - 1; i >= 0; i--) {
             this.position.axisYPoints.push({
                 x: this.position.axisY.x1,
                 y: this.elementSize.axisUpMargin + i * this.elementSize.axisYPointsMargin,
@@ -272,8 +273,8 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
 
         this.elementSize.axisX = this.elementRatio.axisX * this.widthPx;
         this.elementSize.axisY = this.elementRatio.axisY * this.heightPx;
-        this.elementSize.axisXPointsMargin = this.elementSize.axisX / 24;
-        this.elementSize.axisYPointsMargin = this.elementSize.axisY / 11;
+        this.elementSize.axisXPointsMargin = this.elementSize.axisX / this.axisXPointsNumber;
+        this.elementSize.axisYPointsMargin = this.elementSize.axisY / this.axisYPointsNumber;
         this.elementSize.axisUpMargin = this.elementRatio.axisYUpMargin * this.heightPx;
         this.elementSize.axisDownMargin = this.elementRatio.axisYDownMargin * this.heightPx;
         this.elementSize.axisLeftMargin = this.elementRatio.axisXLeftMargin * this.widthPx;
@@ -400,7 +401,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     private _canAdd(indexY) {
         let canAdd = true;
         let isFree = [];
-        for(let i = 0; i < 24; i++){
+        for(let i = 0; i < this.axisXPointsNumber; i++){
             isFree[i] = true;
             for(let dataLine of this.data){
                 for(let datapoint of dataLine.data){
@@ -408,11 +409,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
                 }
             }
         }
-        if(isFree.indexOf(true) == -1){
-            return false;
-        }else{
-            return true;
-        }
+        return isFree.indexOf(true) != -1;
     }
 
     private checkIfFree(datapoint,indexY,isFree,i){
@@ -846,7 +843,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
             if (isNotNull(this.elementSize)) {
                 for (let dataLine of data) {
                     org.inugami.asserts.notNull(dataLine.name, "data lines must have names");
-                    org.inugami.asserts.isTrue(dataLine.data.length == 24, "there must be 24 points, one for each hour");
+                    org.inugami.asserts.isTrue(dataLine.data.length == this.axisXPointsNumber, "there must be the same number of points as there is of x axis points");
                 }
 
                 for (let keys of Object.keys(this.groups.dataPoints)) {
@@ -896,9 +893,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     }
 
     private _emptyOrNull(value) {
-        if (isNull(value)) {
-            return true;
-        } else if (value.length == 0) {
+        if (isNull(value) || value.length == 0) {
             return true;
         } else {
             return false;
@@ -909,7 +904,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         for (let i = pathValues.length - 1; i > 1; i--) {
             pathValues[i] = pathValues[i] - pathValues[i - 2];
         }
-        let pathval = svg.builder.path(pathValues, false);
-        return pathval;
+        return  svg.builder.path(pathValues, false);
+        
     }
 }
