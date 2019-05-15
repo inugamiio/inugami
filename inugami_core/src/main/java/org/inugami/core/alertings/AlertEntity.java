@@ -16,7 +16,10 @@
  */
 package org.inugami.core.alertings;
 
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -80,6 +83,9 @@ public class AlertEntity implements Identifiable<String>, BeforeSave {
     private boolean           enable           = true;
     
     private long              ttl;
+    
+    @ElementCollection
+    private List<String>      providers;
     
     // =========================================================================
     // CONSTRUCTOR
@@ -277,6 +283,14 @@ public class AlertEntity implements Identifiable<String>, BeforeSave {
     
     public void setUrl(final String url) {
         this.url = url;
+    }
+    
+    public List<String> getProviders() {
+        return providers;
+    }
+    
+    public void setProviders(final List<String> providers) {
+        this.providers = providers;
     }
     
 }

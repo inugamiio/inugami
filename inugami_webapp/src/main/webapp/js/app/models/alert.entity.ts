@@ -11,7 +11,8 @@ export class AlertEntity {
         public created          : number,
         public data             : string,
         public enable           : boolean,
-        public ttl              : number
+        public ttl              : number,
+        public providers        : string[]
     ){ }
 }
 

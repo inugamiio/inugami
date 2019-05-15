@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 import java.util.Comparator;
 
 import org.inugami.api.spi.SpiPriority;
-import org.inugami.commons.tools.AnnotationTools;
+import org.inugami.api.tools.AnnotationTools;
 
 /**
  * PriorityComparator

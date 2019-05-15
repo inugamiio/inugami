@@ -18,8 +18,11 @@ package org.inugami.core.alertings.senders.slack.sender;
 
 import static org.inugami.api.tools.ConfigHandlerTools.ENABLE;
 import static org.inugami.api.tools.ConfigHandlerTools.grabConfig;
+import static org.inugami.api.tools.ConfigHandlerTools.grabConfigInt;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -64,6 +67,8 @@ public class SlackSenderService implements Sender<AbstractSlackModel>, Serializa
     
     private String                       url;
     
+    private final Map<String, String>    configurations   = new LinkedHashMap<>();
+    
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -81,6 +86,10 @@ public class SlackSenderService implements Sender<AbstractSlackModel>, Serializa
         final String baseUrl = grabConfig(SlackSender.class, "url", config);
         final String token = grabConfig(SlackSender.class, "token", config);
         final String proxyConfig = grabConfig(SlackSender.class, "proxy.host", config);
+        
+        configurations.put("url_base", baseUrl);
+        configurations.put("url_token", token);
+        
         HttpProxy proxy = null;
         
         if (baseUrl == null) {
@@ -93,15 +102,14 @@ public class SlackSenderService implements Sender<AbstractSlackModel>, Serializa
         }
         
         if (proxyConfig != null) {
-            //@formatter:off
-            proxy=new HttpProxy(proxyConfig,
-                                buildProxyPort(config),
-                                grabConfig(SlackSender.class, "proxy.user", config),
-                                grabConfig(SlackSender.class, "proxy.password", config)
-                                );
-            //@formatter:off
+            final String proxyUser = grabConfig(SlackSender.class, "proxy.user", config);
+            final String proxyPassword = grabConfig(SlackSender.class, "proxy.password", config);
+            proxy = new HttpProxy(proxyConfig, buildProxyPort(config), proxyUser, proxyPassword);
+            configurations.put("proxy_host", proxyConfig);
+            configurations.put("proxy_user", proxyUser);
+            configurations.put("proxy_password", proxyPassword);
         }
-        if(baseUrl !=null) {
+        if (baseUrl != null) {
             final StringBuilder urlBuilder = new StringBuilder();
             urlBuilder.append(baseUrl);
             if (!baseUrl.endsWith("/")) {
@@ -110,19 +118,39 @@ public class SlackSenderService implements Sender<AbstractSlackModel>, Serializa
             urlBuilder.append(token);
             url = urlBuilder.toString();
             
-            httpConnector = context.getHttpConnector(SlackSender.class.getSimpleName(), 20, 3000, 500, 50, 60000);
-            if(proxy!=null) {
+            final int maxConnection = grabConfigInt(SlackSender.class, "maxConnection", config, 20);
+            final int timeout = grabConfigInt(SlackSender.class, "timeout", config, 5000);
+            final int ttl = grabConfigInt(SlackSender.class, "ttl", config, 500);
+            final int maxPerRoute = grabConfigInt(SlackSender.class, "maxPerRoute", config, 50);
+            final int socketTimeout = grabConfigInt(SlackSender.class, "socketTimeout", config, 5000);
+            
+            httpConnector = context.getHttpConnector(SlackSender.class.getSimpleName(), maxConnection, timeout, ttl,
+                                                     maxPerRoute, socketTimeout);
+            configurations.put("max_connection", String.valueOf(maxConnection));
+            configurations.put("timeout", String.valueOf(timeout));
+            configurations.put("ttl", String.valueOf(ttl));
+            configurations.put("max_per_route", String.valueOf(maxPerRoute));
+            configurations.put("socket_timeout", String.valueOf(socketTimeout));
+            
+            if (proxy != null) {
                 httpConnector.setProxy(proxy);
-            } 
+            }
         }
         
     }
     
     private int buildProxyPort(final ConfigHandler<String, String> config) {
         final String port = grabConfig(SlackSender.class, "proxy.port", config);
-        return port==null?80 : Integer.parseInt(port);
+        final int result = port == null ? 80 : Integer.parseInt(port);
+        configurations.put("proxy_port", String.valueOf(result));
+        return result;
     }
-
+    
+    @Override
+    public Map<String, String> getConfiguration() {
+        return configurations;
+    }
+    
     // =========================================================================
     // METHODS
     // =========================================================================

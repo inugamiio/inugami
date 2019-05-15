@@ -21,6 +21,7 @@ import static org.inugami.api.tools.ConfigHandlerTools.grabConfig;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -137,6 +138,11 @@ public class TeamsAlertSender implements AlertsSender, Serializable {
     @Override
     public boolean enable() {
         return enable;
+    }
+    
+    @Override
+    public Map<String, String> getConfiguration() {
+        return sender.getConfiguration();
     }
     
     // =========================================================================
