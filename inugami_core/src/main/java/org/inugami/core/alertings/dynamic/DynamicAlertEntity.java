@@ -37,7 +37,7 @@ public class DynamicAlertEntity extends AlertEntity {
     @OneToMany(cascade = CascadeType.ALL, targetEntity = ActivationTime.class, fetch = FetchType.EAGER)
     private List<ActivationTime> activations;
     
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL)
     private AlertDataTransfomer  transformer;
     
     // =========================================================================
