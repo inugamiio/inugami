@@ -16,6 +16,9 @@
  */
 package org.inugami.core.services.senders;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * Sender
  * 
@@ -24,4 +27,8 @@ package org.inugami.core.services.senders;
  */
 public interface Sender<T> {
     void send(T data) throws SenderException;
+    
+    default Map<String, String> getConfiguration() {
+        return new LinkedHashMap<>();
+    }
 }
