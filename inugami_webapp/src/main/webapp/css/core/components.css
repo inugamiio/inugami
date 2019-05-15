@@ -486,10 +486,7 @@ p-panel .input-bloc.error .content-rectangle{
   border-style: solid; 
 }
 
-.input-bloc .input-bloc-label,
-.input-bloc .input-bloc-data{
-  float: mo;
-}
+
 .input-bloc .input-bloc-data{
   padding-left: 1em;  
   padding-right: 1em; 
@@ -542,6 +539,10 @@ body .input-bloc input{
 }
 .input-bloc.error {
   border-color:  #990000;
+  color:#990000;
+}
+.input-bloc.error input{
+  
   color:#990000;
 }
 
