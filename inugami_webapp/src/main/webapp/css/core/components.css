@@ -462,10 +462,7 @@ body .ui-panel .ui-panel-titlebar{
 body .ui-panel .input-bloc{
   border-style: none;
 }
-body .ui-panel .input-bloc.error{
-  /*border-style: solid;*/
 
-}
 .input-bloc{
   box-sizing: unset;
 }
