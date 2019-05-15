@@ -16,6 +16,8 @@
  */
 package org.inugami.core.alertings;
 
+import java.util.ArrayList;
+
 import org.inugami.api.alertings.AlertingResult;
 import org.inugami.api.mapping.Mapper;
 import org.inugami.api.models.data.JsonObject;
@@ -47,6 +49,10 @@ public class AlertResultToEntityMapper implements Mapper<AlertEntity, AlertingRe
         entity.setCreated(data.getCreated());
         entity.setUrl(data.getUrl());
         entity.setTtl(data.getCreated() + (data.getDuration() * 1000));
+        
+        if (data.getProviders() != null) {
+            entity.setProviders(new ArrayList<>(data.getProviders()));
+        }
         
         return entity;
     }
