@@ -19,11 +19,15 @@ public class TeamVisibleTo implements VisibleTo, Serializable {
 
     @Override
     public String toString() {
-        return "TeamVisibleTo{" +
-                "type='" + type + '\'' +
-                ", name='" + name + '\'' +
-                ", id='" + id + '\'' +
-                '}';
+        StringBuilder builder = new StringBuilder();
+        builder.append("TeamVisibleTo [type=");
+        builder.append(type);
+        builder.append(", name=");
+        builder.append(name);
+        builder.append(",id=");
+        builder.append(id);
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override

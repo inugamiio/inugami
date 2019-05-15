@@ -44,11 +44,15 @@ public class UserResponder implements Responder, Serializable {
 
     @Override
     public String toString() {
-        return "UserResponder{" +
-                "type=" + type +
-                ", username='" + username + '\'' +
-                ", id='" + id + '\'' +
-                '}';
+        final StringBuilder builder = new StringBuilder();
+        builder.append("UserResponder [type=");
+        builder.append(type);
+        builder.append(", username=");
+        builder.append(username);
+        builder.append(",id=");
+        builder.append(id);
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override

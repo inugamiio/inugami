@@ -71,30 +71,38 @@ public class OpsgenieModel implements JsonObject {
 
     @Override
     public String toString() {
-        return "OpsgenieModel [message{" +
-                "message='" + message + '\'' +
-                ", alias='" + alias + '\'' +
-                ", description='" + description + '\'' +
-                ", priority='" + priority + '\'' +
-                ", entity='" + entity + '\'' +
-                ", actions=" + actions +
-                ", tags=" + tags +
-                ", responders=" + responders +
-                ", visibleTo=" + visibleTo +
-                ", details=" + details +
-                ", source='" + source + '\'' +
-                ", user='" + user + '\'' +
-                ", note='" + note + '\'' +
-                '}';
+        final StringBuilder builder = new StringBuilder();
+        builder.append("OpsgenieModel [message=");
+        builder.append(message);
+        builder.append(",alias=");
+        builder.append(alias);
+        builder.append(",description=");
+        builder.append(description);
+        builder.append(",priority=");
+        builder.append(priority);
+        builder.append(",entity=");
+        builder.append(entity);
+        builder.append(",action=");
+        builder.append(actions);
+        builder.append(",tags=");
+        builder.append(tags);
+        builder.append(",responders=");
+        builder.append(responders);
+        builder.append(",visibleTo=");
+        builder.append(visibleTo);
+        builder.append(",details=");
+        builder.append(details);
+        builder.append(",source");
+        builder.append(source);
+        builder.append(",user=");
+        builder.append(user);
+        builder.append(",note=");
+        builder.append(note);
+        builder.append("]");
+
+        return builder.toString();
     }
 
-    final StringBuilder builder = new StringBuilder();
-        builder.append("Facts [name=");
-        builder.append(name);
-        builder.append(", value=");
-        builder.append(value);
-        builder.append("]");
-        return builder.toString();
 
     @Override
     public String convertToJson() {

@@ -56,10 +56,16 @@ public class OtherResponder implements Responder, Serializable {
 
     @Override
     public String toString() {
-        return "OtherResponder{" +
-                "type=" + type +
-                ", name='" + name + '\'' +
-                ", id='" + id + '\'' +
-                '}';
+        final StringBuilder builder = new StringBuilder();
+        builder.append("OtherResponder [type=");
+        builder.append(type);
+        builder.append(", name=");
+        builder.append(name);
+        builder.append(",id=");
+        builder.append(id);
+        builder.append("]");
+        return builder.toString();
     }
+
+
 }

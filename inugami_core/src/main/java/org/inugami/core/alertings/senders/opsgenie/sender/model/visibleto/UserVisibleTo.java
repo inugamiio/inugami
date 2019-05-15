@@ -39,11 +39,15 @@ public class UserVisibleTo implements VisibleTo, Serializable {
 
     @Override
     public String toString() {
-        return "UserVisibleTo{" +
-                "type='" + type + '\'' +
-                ", username='" + username + '\'' +
-                ", id='" + id + '\'' +
-                '}';
+        StringBuilder builder = new StringBuilder();
+        builder.append("UserVisibleTo [type=");
+        builder.append(type);
+        builder.append(", username=");
+        builder.append(username);
+        builder.append(",id=");
+        builder.append(id);
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
