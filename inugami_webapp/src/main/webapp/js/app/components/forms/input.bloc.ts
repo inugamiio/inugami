@@ -19,22 +19,24 @@ multi: true
 selector      : 'input-bloc',
 template      : `
 <div [ngClass]="getBaseStyleClass()" [class]="styleClass" [ngStyle]="style">
-  <div [ngClass]="' input-bloc-label '" [class.show]="displayLabel()">
-    &nbsp;
-    <span class="input-bloc-label-txt">{{labelTxt}}</span>
-    <span class="input-bloc-label-end"></span>
-  </div>
+  <div class="content-rectangle">
+    <div [ngClass]="' input-bloc-label '" [class.show]="displayLabel()">
+      &nbsp;
+      <span class="input-bloc-label-txt">{{labelTxt}}</span>
+      <span class="input-bloc-label-end"></span>
+    </div>
 
-  <div class="input-bloc-data">
-    <input  [type]="type" 
-            [placeholder]="labelTxt"
-            [attr.disabled]="isDisabled?'':null"
-            [(ngModel)]="innerValue"
-            (focus)="onFocus($event)"
-            (focusout)="onFocusOut($event)"
-            (ngModelChange)="onChange($event)"
-            (keypress)="onKeyPress($event)"
-            (enter)="onEnterPress($event)"/>
+    <div class="input-bloc-data">
+      <input  [type]="type" 
+              [placeholder]="labelTxt"
+              [attr.disabled]="isDisabled?'':null"
+              [(ngModel)]="innerValue"
+              (focus)="onFocus($event)"
+              (focusout)="onFocusOut($event)"
+              (ngModelChange)="onChange($event)"
+              (keypress)="onKeyPress($event)"
+              (enter)="onEnterPress($event)"/>
+    </div>
   </div>
   <div class="error-message" [class.show]="errorTxt">
     &nbsp;  
