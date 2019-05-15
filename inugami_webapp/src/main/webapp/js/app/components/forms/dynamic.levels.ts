@@ -203,7 +203,6 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
                 let textWidth = label.node().getBoundingClientRect().width;
                 let textHeight = label.node().getBoundingClientRect().height;
                 this.groups.axisYLabel[i] = label;
-
             }
         }
     }
@@ -328,7 +327,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
                     .attr("class", "level " + name);
                 this.groups.dataPoints[name] = [];
                 let targetValue = targetPoint * ((this.maxValue - this.minValue)/(this.groups.axisYPoints.length - 1))  + this.minValue;
-                let initialYposition = this.computeDataPointsPosition(this.position.axisY.y1, this.position.axisY.y2 - this.elementSize.axisYPointsMargin
+                let initialYposition = this.computeDataPointsPositionFromLevel(this.position.axisY.y1, this.position.axisY.y2 - this.elementSize.axisYPointsMargin
                     , targetValue, this.minValue, this.maxValue);
                 if (this.groups.tooltipText === undefined) {
                     this.groups.tooltipText = {};
@@ -405,9 +404,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
             isFree[i] = true;
             for(let dataLine of this.data){
                 for(let datapoint of dataLine.data){
-                    if(datapoint.level == ((indexY) * ((this.maxValue - this.minValue)/(this.groups.axisYPoints.length - 1)) ) + this.minValue){
-                        isFree[i] = false;        
-                    }  
+                    this.checkIfFree(datapoint,indexY,isFree,i);
                 }
             }
         }
@@ -416,6 +413,12 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         }else{
             return true;
         }
+    }
+
+    private checkIfFree(datapoint,indexY,isFree,i){
+        if(datapoint.level == ((indexY) * ((this.maxValue - this.minValue)/(this.groups.axisYPoints.length - 1)) ) + this.minValue){
+            isFree[i] = false;        
+        }  
     }
 
     private _newPath(dataPointGroup, name, pathValues) {
@@ -641,14 +644,18 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     private _readjustPosition() {
         for (let dataPointsLine of this.data) {
             for (let datapoint of dataPointsLine.data) {
-                if (datapoint.level > this.maxValue) {
-                    datapoint.level = this.maxValue;
-                } else if (datapoint.level < this.minValue) {
-                    datapoint.level = this.minValue;
-                }
+                this._putPointInBound(datapoint);
             }
         }
         this.processRefresh();
+    }
+
+    private _putPointInBound(datapoint){
+        if (datapoint.level > this.maxValue) {
+            datapoint.level = this.maxValue;
+        } else if (datapoint.level < this.minValue) {
+            datapoint.level = this.minValue;
+        }
     }
 
     /***************************************************************************
@@ -708,12 +715,17 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     private _refreshDataPointsPosition() {
         for (let i = 0; i < this.data.length; i++) {
             for (let j = 0; j < this.data[i].data.length; j++) {
-                let yPos = this.computeDataPointsPosition(this.position.axisY.y1, this.position.axisY.y2 - this.elementSize.axisYPointsMargin, this.data[i].data[j].level, this.minValue, this.maxValue);
-                this.groups.dataPoints[this.data[i].name][j].attr("cy", yPos)
-                    .attr("cx", this.position.axisXPoints[j].x);
+                this._computeDataPointsPosition(i,j);
             }
         }
     }
+
+    private _computeDataPointsPosition(lineIndex,pointIndex){
+        let yPos = this.computeDataPointsPositionFromLevel(this.position.axisY.y1, this.position.axisY.y2 - this.elementSize.axisYPointsMargin, this.data[lineIndex].data[pointIndex].level, this.minValue, this.maxValue);
+                this.groups.dataPoints[this.data[lineIndex].name][pointIndex].attr("cy", yPos)
+                    .attr("cx", this.position.axisXPoints[pointIndex].x);
+    }
+
     private _refreshTooltipsValue() {
         for (let dataLine of this.data) {
             for (let dataPoint of dataLine.data) {
@@ -725,39 +737,46 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     private _refreshTooltipsPosition() {
         for (let dataLine of this.data) {
             for (let dataPoint of dataLine.data) {
-                let tooltipText = this.groups.tooltipText[dataLine.name][dataPoint.hour];
-                let x = this.position.axisXPoints[dataPoint.hour].x + this.elementSize.tooltipLeftMargin;
-                let y = parseFloat(this.groups.dataPoints[dataLine.name][dataPoint.hour].attr("cy")) + tooltipText.name.node().getBoundingClientRect().height + this.elementSize.tooltipUpMargin;
-                tooltipText.name.attr("x", x)
-                    .attr("y", y);
-                tooltipText.hour.attr("x", parseFloat(tooltipText.name.attr("x")) + this.elementSize.tooltipHourLeftMargin)
-                    .attr("y", parseFloat(tooltipText.name.attr("y")) + this.elementSize.tooltipHourUpMargin + tooltipText.name.node().getBoundingClientRect().height);
-                tooltipText.level.attr("x", parseFloat(tooltipText.name.attr("x")) + this.elementSize.tooltipLevelLeftMargin + tooltipText.name.node().getBoundingClientRect().width)
-                    .attr("y", parseFloat(tooltipText.name.attr("y")) + this.elementSize.tooltipLevelUpMargin);
-
-                let tooltipBackground = this.groups.tooltipBackground[dataLine.name][dataPoint.hour];
-                let width = tooltipText.name.node().getBoundingClientRect().width + this.elementSize.tooltipLevelLeftMargin + tooltipText.level.node().getBoundingClientRect().width;
-                let height = tooltipText.name.node().getBoundingClientRect().height + this.elementSize.tooltipHourUpMargin + tooltipText.hour.node().getBoundingClientRect().height
-                tooltipBackground.attr("x", x - this.elementSize.tooltipBackgroundMargin)
-                    .attr("y", y - tooltipText.name.node().getBoundingClientRect().height - this.elementSize.tooltipBackgroundMargin)
-                    .attr("width", width + 2 * this.elementSize.tooltipBackgroundMargin)
-                    .attr("height", height + 2 * this.elementSize.tooltipBackgroundMargin);
+                this._computeTooltipsPosition(dataLine,dataPoint);
             }
         }
+    }
+
+    private _computeTooltipsPosition(dataLine,dataPoint){
+        let tooltipText = this.groups.tooltipText[dataLine.name][dataPoint.hour];
+        let x = this.position.axisXPoints[dataPoint.hour].x + this.elementSize.tooltipLeftMargin;
+        let y = parseFloat(this.groups.dataPoints[dataLine.name][dataPoint.hour].attr("cy")) + tooltipText.name.node().getBoundingClientRect().height + this.elementSize.tooltipUpMargin;
+        tooltipText.name.attr("x", x)
+            .attr("y", y);
+        tooltipText.hour.attr("x", parseFloat(tooltipText.name.attr("x")) + this.elementSize.tooltipHourLeftMargin)
+            .attr("y", parseFloat(tooltipText.name.attr("y")) + this.elementSize.tooltipHourUpMargin + tooltipText.name.node().getBoundingClientRect().height);
+        tooltipText.level.attr("x", parseFloat(tooltipText.name.attr("x")) + this.elementSize.tooltipLevelLeftMargin + tooltipText.name.node().getBoundingClientRect().width)
+            .attr("y", parseFloat(tooltipText.name.attr("y")) + this.elementSize.tooltipLevelUpMargin);
+
+        let tooltipBackground = this.groups.tooltipBackground[dataLine.name][dataPoint.hour];
+        let width = tooltipText.name.node().getBoundingClientRect().width + this.elementSize.tooltipLevelLeftMargin + tooltipText.level.node().getBoundingClientRect().width;
+        let height = tooltipText.name.node().getBoundingClientRect().height + this.elementSize.tooltipHourUpMargin + tooltipText.hour.node().getBoundingClientRect().height
+        tooltipBackground.attr("x", x - this.elementSize.tooltipBackgroundMargin)
+            .attr("y", y - tooltipText.name.node().getBoundingClientRect().height - this.elementSize.tooltipBackgroundMargin)
+            .attr("width", width + 2 * this.elementSize.tooltipBackgroundMargin)
+            .attr("height", height + 2 * this.elementSize.tooltipBackgroundMargin);
     }
 
     private _refreshPathPosition() {
         for (let dataLine of this.data) {
             let pathValues = [];
             for (let dataPoint of dataLine.data) {
-                pathValues.push(this.position.axisXPoints[dataPoint.hour].x)
-                pathValues.push(this.computeDataPointsPosition(this.position.axisY.y1, this.position.axisY.y2 - this.elementSize.axisYPointsMargin, dataPoint.level
-                    , this.minValue, this.maxValue));
-
+                this._computePathPosition(dataPoint,pathValues);
             }
             let path = this.groups.path[dataLine.name];
             path.attr("d", this._formatPathValues(pathValues));
         }
+    }
+
+    private _computePathPosition(dataPoint,pathValues){
+        pathValues.push(this.position.axisXPoints[dataPoint.hour].x)
+        pathValues.push(this.computeDataPointsPositionFromLevel(this.position.axisY.y1, this.position.axisY.y2 - this.elementSize.axisYPointsMargin, dataPoint.level
+            , this.minValue, this.maxValue));
     }
 
     private _showTooltips(datapoint) {
@@ -855,7 +874,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
      * TOOLS
      ***************************************************************************/
 
-    public computeDataPointsPosition(y1, y2, dataValue, dataMin, dataMax) {
+    public computeDataPointsPositionFromLevel(y1, y2, dataValue, dataMin, dataMax) {
         return (((y2 - y1) * (dataMax - dataValue)) / (dataMax - dataMin)) + y1;
     }
 
