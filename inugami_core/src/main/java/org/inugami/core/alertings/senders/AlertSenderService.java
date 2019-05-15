@@ -29,6 +29,7 @@ import org.inugami.api.alertings.AlertingResult;
 import org.inugami.api.alertings.AlertsSender;
 import org.inugami.api.functionnals.ConsumerWithException;
 import org.inugami.api.loggers.Loggers;
+import org.inugami.api.tools.AnnotationTools;
 import org.inugami.commons.threads.RunAndCloseService;
 import org.inugami.core.context.system.SystemInfosManager;
 
@@ -50,27 +51,37 @@ public class AlertSenderService implements Serializable {
     private List<AlertsSender> senders;
     
     // =========================================================================
+    // CONSTRUCTOR
+    // =========================================================================
+    public AlertSenderService() {
+    }
+    
+    protected AlertSenderService(final List<AlertsSender> senders) {
+        this.senders = senders;
+    }
+    
+    // =========================================================================
     // METHODS SEND
     // =========================================================================
     public synchronized void sendNewAlert(final AlertingResult alert, final List<String> channels) {
-        processOnSender("sendNewAlert", (sender) -> sender.sendNewAlert(alert, channels));
+        processOnSender("sendNewAlert", alert, (sender) -> sender.sendNewAlert(alert, channels));
     }
     
     public synchronized void send(final AlertingResult alert, final List<String> channels) {
-        processOnSender("send", (sender) -> sender.send(alert, channels));
+        processOnSender("send", alert, (sender) -> sender.send(alert, channels));
     }
     
     public synchronized void sendDisable(final List<String> uids, final List<String> channels) {
-        processOnSender("sendDisable", (sender) -> sender.delete(uids, channels));
+        processOnSender("sendDisable", null, (sender) -> sender.delete(uids, channels));
     }
     
     // =========================================================================
     // PROCESS ON SENDERS
     // =========================================================================
-    private synchronized void processOnSender(final String serviceName,
+    private synchronized void processOnSender(final String serviceName, final AlertingResult alert,
                                               final ConsumerWithException<AlertsSender> handler) {
         
-        final List<Callable<Void>> senderTasks = buildTasks(handler);
+        final List<Callable<Void>> senderTasks = buildTasks(handler, alert);
         //@formatter:off
         new RunAndCloseService<>(AlertSenderService.class.getName(),
                                  SystemInfosManager.TIMEOUT,
@@ -82,14 +93,31 @@ public class AlertSenderService implements Serializable {
         
     }
     
-    private List<Callable<Void>> buildTasks(final ConsumerWithException<AlertsSender> handler) {
+    private List<Callable<Void>> buildTasks(final ConsumerWithException<AlertsSender> handler,
+                                            final AlertingResult alert) {
         final List<Callable<Void>> result = new ArrayList<>();
-        
-        for (final AlertsSender sender : senders) {
+        final List<AlertsSender> selectedSenders = resolveSenders(alert);
+        for (final AlertsSender sender : selectedSenders) {
             result.add(() -> {
                 handler.process(sender);
                 return null;
             });
+        }
+        return result;
+    }
+    
+    protected List<AlertsSender> resolveSenders(final AlertingResult alert) {
+        final List<AlertsSender> result = new ArrayList<>();
+        if ((alert == null) || (alert.getProviders() == null) || alert.getProviders().isEmpty()) {
+            result.addAll(senders);
+        }
+        else {
+            for (final AlertsSender sender : senders) {
+                final String senderName = AnnotationTools.resolveNamed(sender);
+                if (alert.getProviders().contains(senderName)) {
+                    result.add(sender);
+                }
+            }
         }
         return result;
     }
