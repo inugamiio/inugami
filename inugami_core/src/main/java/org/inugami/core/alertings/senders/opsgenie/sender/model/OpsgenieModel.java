@@ -23,8 +23,8 @@ import java.util.Map;
 import org.inugami.api.models.data.JsonObject;
 
 import flexjson.JSONSerializer;
-import org.inugami.core.alertings.senders.opsgenie.sender.model.responder.Responder;
-import org.inugami.core.alertings.senders.opsgenie.sender.model.visibleto.VisibleTo;
+import org.inugami.core.alertings.senders.opsgenie.sender.model.responder.*;
+import org.inugami.core.alertings.senders.opsgenie.sender.model.visibleto.*;
 
 
 public class OpsgenieModel implements JsonObject {
@@ -67,30 +67,43 @@ public class OpsgenieModel implements JsonObject {
     // =========================================================================
     // OVERRIDES
     // =========================================================================
+
+
     @Override
     public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("TeamsModel [text=");
-        builder.append(text);
-        builder.append(", title=");
-        builder.append(title);
-        builder.append(", summary=");
-        builder.append(summary);
-        builder.append(", themeColor=");
-        builder.append(themeColor);
-        builder.append(", sections=");
-        builder.append(sections);
-        builder.append(", potentialAction=");
-        builder.append(potentialAction);
+        return "OpsgenieModel [message{" +
+                "message='" + message + '\'' +
+                ", alias='" + alias + '\'' +
+                ", description='" + description + '\'' +
+                ", priority='" + priority + '\'' +
+                ", entity='" + entity + '\'' +
+                ", actions=" + actions +
+                ", tags=" + tags +
+                ", responders=" + responders +
+                ", visibleTo=" + visibleTo +
+                ", details=" + details +
+                ", source='" + source + '\'' +
+                ", user='" + user + '\'' +
+                ", note='" + note + '\'' +
+                '}';
+    }
+
+    final StringBuilder builder = new StringBuilder();
+        builder.append("Facts [name=");
+        builder.append(name);
+        builder.append(", value=");
+        builder.append(value);
         builder.append("]");
         return builder.toString();
-    }
-    
+
     @Override
     public String convertToJson() {
         //@formatter:off
         return new JSONSerializer().exclude("*.class")
-                                   .transform(new PotentialActionTransformer(), PotentialAction.class)
+                                   .transform(new TeamVisibleToTransformer(), TeamVisibleTo.class)
+                                   .transform(new UserVisibleToTransformer(), UserVisibleTo.class)
+                                   .transform(new OtherResponderTransformer(), OtherResponder.class)
+                                   .transform(new UserResponderTransformer(), UserResponder.class)
                                    .deepSerialize(this);
         //@formatter:on
     }
@@ -98,70 +111,109 @@ public class OpsgenieModel implements JsonObject {
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================
-    public String getText() {
-        return text;
+
+
+    public String getMessage() {
+        return message;
     }
-    
-    public void setText(final String text) {
-        this.text = text;
+
+    public void setMessage(String message) {
+        this.message = message;
     }
-    
-    public String getTitle() {
-        return title;
+
+    public String getAlias() {
+        return alias;
     }
-    
-    public void setTitle(final String title) {
-        this.title = title;
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
-    
-    public String getSummary() {
-        return summary;
+
+    public String getDescription() {
+        return description;
     }
-    
-    public void setSummary(final String summary) {
-        this.summary = summary;
+
+    public void setDescription(String description) {
+        this.description = description;
     }
-    
-    public String getThemeColor() {
-        return themeColor;
+
+    public String getPriority() {
+        return priority;
     }
-    
-    public void setThemeColor(final String themeColor) {
-        this.themeColor = themeColor;
+
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
-    
-    public List<Section> getSections() {
-        return sections;
+
+    public String getEntity() {
+        return entity;
     }
-    
-    public void setSections(final List<Section> sections) {
-        this.sections = sections;
+
+    public void setEntity(String entity) {
+        this.entity = entity;
     }
-    
-    public void addSection(final Section section) {
-        if (sections == null) {
-            sections = new ArrayList<>();
-        }
-        if (section != null) {
-            sections.add(section);
-        }
+
+    public List<String> getActions() {
+        return actions;
     }
-    
-    public List<PotentialAction> getPotentialAction() {
-        return potentialAction;
+
+    public void setActions(List<String> actions) {
+        this.actions = actions;
     }
-    
-    public void setPotentialAction(final List<PotentialAction> potentialAction) {
-        this.potentialAction = potentialAction;
+
+    public List<String> getTags() {
+        return tags;
     }
-    
-    public void addPotentialAction(final PotentialAction action) {
-        if (potentialAction == null) {
-            potentialAction = new ArrayList<>();
-        }
-        if (action != null) {
-            potentialAction.add(action);
-        }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
-    
+
+    public List<Responder> getResponders() {
+        return responders;
+    }
+
+    public void setResponders(List<Responder> responders) {
+        this.responders = responders;
+    }
+
+    public List<VisibleTo> getVisibleTo() {
+        return visibleTo;
+    }
+
+    public void setVisibleTo(List<VisibleTo> visibleTo) {
+        this.visibleTo = visibleTo;
+    }
+
+    public Map<String, String> getDetails() {
+        return details;
+    }
+
+    public void setDetails(Map<String, String> details) {
+        this.details = details;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 }

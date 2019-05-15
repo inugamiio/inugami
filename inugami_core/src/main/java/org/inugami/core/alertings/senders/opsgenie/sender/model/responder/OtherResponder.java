@@ -4,7 +4,7 @@ import com.google.common.base.Objects;
 
 import java.io.Serializable;
 
-public class TeamResponder implements Responder, Serializable {
+public class OtherResponder implements Responder, Serializable {
     private static final long serialVersionUID = -1474824053820961800L;
 
     private ResponderType               type;
@@ -43,7 +43,7 @@ public class TeamResponder implements Responder, Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TeamResponder that = (TeamResponder) o;
+        OtherResponder that = (OtherResponder) o;
         return type == that.type &&
                 Objects.equal(name, that.name) &&
                 Objects.equal(id, that.id);
@@ -56,7 +56,7 @@ public class TeamResponder implements Responder, Serializable {
 
     @Override
     public String toString() {
-        return "TeamResponder{" +
+        return "OtherResponder{" +
                 "type=" + type +
                 ", name='" + name + '\'' +
                 ", id='" + id + '\'' +
