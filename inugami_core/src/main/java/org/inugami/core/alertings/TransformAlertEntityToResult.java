@@ -16,6 +16,8 @@
  */
 package org.inugami.core.alertings;
 
+import java.util.ArrayList;
+
 import org.inugami.api.alertings.AlertingResult;
 import org.inugami.api.functionnals.ApplyIfNotNull;
 import org.inugami.api.mapping.Mapper;
@@ -49,6 +51,7 @@ public class TransformAlertEntityToResult implements Mapper<AlertingResult, Aler
         applyIfNotNull(data.getSubLabel(),   result::setSubLabel);
         applyIfNotNull(data.getUrl(),        result::setUrl);
         applyIfNotNull(data.getData(),       (value)-> result.setData(buildData(value)));
+        applyIfNotNull(data.getProviders(),  (value)-> result.setProviders(new ArrayList<>(value)));
         //@formatter:on
         
         result.setCreated(data.getCreated());

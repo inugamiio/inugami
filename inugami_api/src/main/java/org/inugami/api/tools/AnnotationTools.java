@@ -14,15 +14,20 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.inugami.commons.tools;
+package org.inugami.api.tools;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.inugami.api.loggers.Loggers;
+import org.jboss.weld.proxy.WeldClientProxy;
 
 public final class AnnotationTools {
+    // =========================================================================
+    // ATTRIBUTES
+    // =========================================================================
+    private static final String JAVAX_NAMED = "javax.inject.Named";
     
     // =========================================================================
     // CONSTRUCTORS
@@ -72,6 +77,34 @@ public final class AnnotationTools {
             }
             catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 Loggers.DEBUG.error(e.getMessage(), e);
+            }
+        }
+        
+        return result;
+    }
+    
+    public static String resolveNamed(final Object object) {
+        String result = null;
+        if (object != null) {
+            
+            Class<?> clazz = object.getClass();
+            if (object instanceof WeldClientProxy) {
+                clazz = ((WeldClientProxy) object).getMetadata().getBean().getBeanClass();
+            }
+            
+            final Annotation annotation = searchAnnotation(clazz.getAnnotations(), JAVAX_NAMED);
+            
+            if (annotation != null) {
+                final Method getValue = searchMethod(annotation, "value");
+                if (getValue != null) {
+                    result = invoke(getValue, annotation);
+                }
+            }
+            
+            if ((result == null) || result.trim().isEmpty()) {
+                //@formatter:off
+                result = clazz.getSimpleName().substring(0, 1).toLowerCase() + clazz.getSimpleName().substring(1);
+                //@formatter:on
             }
         }
         
