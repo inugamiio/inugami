@@ -35,7 +35,7 @@ template      : `
               (focusout)="onFocusOut($event)"
               (ngModelChange)="onChange($event)"
               (keypress)="onKeyPress($event)"
-              (enter)="onEnterPress($event)"/>
+              (keyup.enter)="onEnterPress($event)"/>
     </div>
   </div>
   <div class="error-message" [class.show]="errorTxt">

@@ -198,8 +198,11 @@ export class AdminViewAlertEdit implements AfterViewInit{
         this.activationDaysData.push({});
         this.addFormActivationLine();
     }
-    addDynamicLevelsLevel(){
-        if( isNull(org.inugami.validators.notNull(this.addedLevel.pointsBeforeTriggered)) &&
+    addDynamicLevelsLevel(graph){
+        if( isNotNull(this.addedLevel.pointsBeforeTriggered)    &&
+            isNotNull(this.addedLevel.name)                     &&
+            this.addedLevel.name != ""                          &&
+            this.addedLevel.pointsBeforeTriggered != ""         &&
             isNull(org.inugami.validators.notNegativeNumber(this.addedLevel.pointsBeforeTriggered))){
                if(contains(this.addedLevel,this.dynamicLevelsLevels,function(a,b){
                    return a.name === b.name;
@@ -210,19 +213,20 @@ export class AdminViewAlertEdit implements AfterViewInit{
                                                     name:this.addedLevel.name});
                     this.addFormLevelLine();
                     
-                    //ajouter au graph
+                    graph.addNewData(this.addedLevel.name);
+                    
                 }
         }
     }
 
-    removeDynamicLevelsLevel(name,i){
+    removeDynamicLevelsLevel(name,i,graph){
         let index = indexOf(name,this.dynamicLevelsLevels,function(list,value){
             return list.name === value;
         })
         if(index > -1){
             this.dynamicLevelsLevels.splice(index,1);
             this.removeFormLevelLine(i);
-            //remove from graph
+            graph.deleteLine(name);
         }
     }
 
@@ -296,5 +300,17 @@ export class AdminViewAlertEdit implements AfterViewInit{
 
     setPointsBeforeTriggered(event){
         this.addedLevel.pointsBeforeTriggered = event;
+    }
+
+    setGraphMode(event,graph){
+        graph.dynamicMode = event;
+    }
+
+    setGraphMinValue(event,graph){
+      graph.setMinValue(parseFloat(event.target.value));
+    }
+    
+    setGraphMaxValue(event,graph){
+        graph.setMaxValue( parseFloat(event.target.value)); 
     }
 }

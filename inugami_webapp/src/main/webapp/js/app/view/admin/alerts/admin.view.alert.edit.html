@@ -76,11 +76,11 @@
                     <p-tabPanel header="Seuil" class="levels-setting">
                         <div>
                             <span class="dynamic">
-                                <p-checkbox></p-checkbox>
+                                <p-checkbox (onChange)="setGraphMode($event,graph)"></p-checkbox>
                                 <msg key="alert.edit.dynamic.levels.dynamic"></msg>
                             </span>
-                                <input-bloc label="alert.edit.dynamic.levels.minValue" type="number" styleClass="min-value"></input-bloc>
-                                <input-bloc label="alert.edit.dynamic.levels.maxValue" type="number" styleClass="min-value"></input-bloc>
+                                <input-bloc label="alert.edit.dynamic.levels.minValue" type="number" styleClass="min-value" (enter)="setGraphMinValue($event,graph)"></input-bloc>
+                                <input-bloc label="alert.edit.dynamic.levels.maxValue" type="number" styleClass="min-value" (enter)="setGraphMaxValue($event,graph)"></input-bloc>
                         </div>
 
                         <div formArrayName="levelPointsBeforeTriggered" class="levels">
@@ -88,19 +88,21 @@
                                 <input-bloc disabled=true formControlName="points" label="alert.edit.dynamic.levels.points.before.triggered" styeClass="points"></input-bloc>
                                 <input-bloc disabled=true formControlName="name" label="alert.edit.dynamic.levels.add.level" styeClass="name"></input-bloc>
                                 <span class="delete"><button pButton type="button" class="active-action" icon="fas fa-minus"
-                                        (click)="removeDynamicLevelsLevel(level.name,i)"></button></span>
+                                        (click)="removeDynamicLevelsLevel(level.name,i,graph)"></button></span>
                             </div>
                         </div>
                         <div class="add-level">
                                 <input-bloc label="alert.edit.dynamic.levels.points.before.triggered" (ngModelChange)="setPointsBeforeTriggered($event)" styeClass="points"
-                                [validator]="validators.isNumber" type="number"><!-- [(ngModel)]="addedLevel.pointsBeforeTriggered" -->
+                                [validator]="validators.notNegativeNumber" type="number"><!-- [(ngModel)]="addedLevel.pointsBeforeTriggered" -->
                            </input-bloc>
                            <input-bloc label="alert.edit.dynamic.levels.add.level" (ngModelChange)="setLevelName($event)" styeClass="name"
                                [validator]="validators.notEmptyString" ></input-bloc><!-- [(ngModel)]="addedLevel.name" -->
                            <button pButton type="button" class="active-action" icon="fas fa-plus"
-                               (click)="addDynamicLevelsLevel()"></button>
+                               (click)="addDynamicLevelsLevel(graph)"></button>
                         </div>
-                        
+                        <div class="graph">
+                            <dynamic-levels width=0.5 height=0.4 #graph></dynamic-levels>
+                        </div>
                     </p-tabPanel>
                     <p-tabPanel header="Scripts">
                         <textarea pInputTextarea formControlName="scripts"></textarea>

@@ -53,9 +53,9 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     private elementRatio                : any;
 
     private data                        : any;
-    private maxValue                    : any;
-    private minValue                    : any;
-    private staticMode                  : boolean;
+    private maxValue                    : number;
+    private minValue                    : number;
+    private dynamicMode                 : boolean;
 
     private selectedDataPoint           : any;
     private selectedDataPointsLine      : any;
@@ -99,9 +99,9 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         }
 
         this.elementRatio = {
-            axisX               : 0.8,
-            axisXLeftMargin     : 0.1,
-            axisXRightMargin    : 0.1,
+            axisX               : 0.90,
+            axisXLeftMargin     : 0.05,
+            axisXRightMargin    : 0.05,
 
 
             axisY               : 0.8,
@@ -544,7 +544,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         org.inugami.asserts.isTrue(this.minValue < this.maxValue, "min value should be lower than max value");
         if (isNotNull(this.selectedDataPoint)) {
 
-            if (this.staticMode) {
+            if (!this.dynamicMode) {
                 this._moveDataPointsLine(yPos);
             } else {
                 this._moveSingleDataPoint(yPos);
@@ -906,5 +906,16 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         }
         return  svg.builder.path(pathValues, false);
         
+    }
+
+    setMinValue(minValue){
+        this.minValue =minValue;
+        this.processRefresh();
+    }
+
+
+    setMaxValue(maxValue){
+        this.maxValue = maxValue;
+        this.processRefresh();
     }
 }
