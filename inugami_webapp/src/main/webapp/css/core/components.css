@@ -471,6 +471,7 @@ body .ui-panel .input-bloc{
 
 .input-bloc{
   box-sizing: unset;
+  display: inline-block;
 }
 
 .input-bloc .content-rectangle{
@@ -525,16 +526,11 @@ p-panel .input-bloc.error .content-rectangle{
 body .input-bloc input{
   border: 0;
   font-size: 1.5em;
+  /* width: 20em; */
   border-color:  #b5b5b5;
   outline:0;
 }
-.input-bloc input[type^=number]{
-  width: 3em;
-}
 
-.input-bloc input:focus{
-  border-color:  #1d487a;
-}
 
 .input-bloc.error input:focus{
   border-color:  #d30202;

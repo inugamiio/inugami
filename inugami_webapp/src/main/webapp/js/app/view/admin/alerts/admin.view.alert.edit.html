@@ -2,27 +2,28 @@
     <div [ngClass]="' alert-edit '" [class]="styleClass">
         <div class="left-panel">
             <div class="form-group row" *ngIf="innerValue">
-                <div class="col-3">
+                <div class="alert-name">
                     <input-bloc  [validator]="validators.notEmptyString"
-                        [disabled]="edit" label="alert.edit.alert.name" formControlName="name"></input-bloc>
+                    [disabled]="edit" label="alert.edit.alert.name" formControlName="name"></input-bloc>
+                    <span class="file-input">
+                        <button pButton type=button class="active-action" icon="fas fa-folder-open" (click)="fileinput.click()"></button>
+                        <input type=file (change)="fileChanged($event)" #fileinput>
+                    </span>
                 </div>
-                <div class="col-2">
-                    <input-bloc  [validator]="validators.notNegativeNumber" 
+                  
+                <div class="alert-duration-visibility">
+                    <input-bloc  [validator]="validators.notNegativeNumber" styleClass = "duration"
                         label="alert.edit.alert.duration" type="number" formControlName="duration"></input-bloc><!-- [(ngModel)]="innerValue.duration" -->
-                </div>
-                <div class="col-2">
-                    <input-bloc  label="alert.edit.alert.channel"
+                
+                    <input-bloc  label="alert.edit.alert.channel" styleClass = "visibility"
                         [validator]="validators.notEmptyString" formControlName=visibility></input-bloc><!-- [(ngModel)]="innerValue.channel" -->
+                    <input-bloc  label="alert.edit.alert.label" styleClass = "main-message"
+                        [validator]="validators.notEmptyString" formControlName="mainMessage"></input-bloc>
                 </div>
-                <div class="file-input">
-                    <button pButton type=button class="active-action" icon="fas fa-folder-open" (click)="fileinput.click()"></button>
-                    <input type=file (change)="fileChanged($event)" #fileinput>
-                </div>
+                    
             </div>
-            <div class="form-group">
-                <input-bloc  label="alert.edit.alert.label"
-                    [validator]="validators.notEmptyString" formControlName="mainMessage"></input-bloc> <!-- [(ngModel)]="innerValue.label" -->
-
+            <div class="detailed-message">
+                 <!-- [(ngModel)]="innerValue.label" -->
                 <input-bloc  label="alert.edit.alert.sub.label" formControlName="detailedMessage"></input-bloc> <!-- [(ngModel)]="innerValue.subLabel" -->
             </div>
 
@@ -60,7 +61,7 @@
         <div class="right-panel">
             <p-panel header="Activation">
                 <msg key="alert.edit.activation.days"></msg>
-                <div formArrayName="activation">
+                <div formArrayName="activation" class="activation">
                     <div *ngFor="let lineData of activationDaysData; index as i" class="day-and-time-line" [formGroupName]="i">
                         <input-days-selector formControlName="days" ></input-days-selector> <!-- [(ngModel)]="lineData.days" -->
                         <input-time-slots formControlName="timeSlots"></input-time-slots><!-- [(ngModel)]="lineData.timeSlots" -->
@@ -72,29 +73,34 @@
                     <msg key="alert.edit.activation.add"></msg>
                 </button>
                 <p-tabView>
-                    <p-tabPanel header="Seuil">
-                        <p-checkbox></p-checkbox>
-                        <msg key="alert.edit.dynamic.levels.dynamic"></msg>
-                        <input-bloc label="alert.edit.dynamic.levels.minValue" type="number"></input-bloc>
-                        <input-bloc label="alert.edit.dynamic.levels.maxValue" type="number"></input-bloc>
+                    <p-tabPanel header="Seuil" class="levels-setting">
+                        <div>
+                            <span class="dynamic">
+                                <p-checkbox></p-checkbox>
+                                <msg key="alert.edit.dynamic.levels.dynamic"></msg>
+                            </span>
+                                <input-bloc label="alert.edit.dynamic.levels.minValue" type="number" styleClass="min-value"></input-bloc>
+                                <input-bloc label="alert.edit.dynamic.levels.maxValue" type="number" styleClass="min-value"></input-bloc>
+                        </div>
 
-                        <div formArrayName="levelPointsBeforeTriggered">
+                        <div formArrayName="levelPointsBeforeTriggered" class="levels">
                             <div class="dynamic-levels-levels" *ngFor="let level of dynamicLevelsLevels; index as i" [formGroupName]="i">
-                                <input-bloc disabled=true formControlName="points" label="alert.edit.dynamic.levels.points.before.triggered"></input-bloc>
-                                <input-bloc disabled=true formControlName="name" label="alert.edit.dynamic.levels.add.level"></input-bloc>
+                                <input-bloc disabled=true formControlName="points" label="alert.edit.dynamic.levels.points.before.triggered" styeClass="points"></input-bloc>
+                                <input-bloc disabled=true formControlName="name" label="alert.edit.dynamic.levels.add.level" styeClass="name"></input-bloc>
                                 <span class="delete"><button pButton type="button" class="active-action" icon="fas fa-minus"
                                         (click)="removeDynamicLevelsLevel(level.name,i)"></button></span>
                             </div>
                         </div>
+                        <div class="add-level">
+                                <input-bloc label="alert.edit.dynamic.levels.points.before.triggered" (ngModelChange)="setPointsBeforeTriggered($event)" styeClass="points"
+                                [validator]="validators.isNumber" type="number"><!-- [(ngModel)]="addedLevel.pointsBeforeTriggered" -->
+                           </input-bloc>
+                           <input-bloc label="alert.edit.dynamic.levels.add.level" (ngModelChange)="setLevelName($event)" styeClass="name"
+                               [validator]="validators.notEmptyString" ></input-bloc><!-- [(ngModel)]="addedLevel.name" -->
+                           <button pButton type="button" class="active-action" icon="fas fa-plus"
+                               (click)="addDynamicLevelsLevel()"></button>
+                        </div>
                         
-
-                        <input-bloc label="alert.edit.dynamic.levels.points.before.triggered" (ngModelChange)="setPointsBeforeTriggered($event)"
-                             [validator]="validators.isNumber" type="number"><!-- [(ngModel)]="addedLevel.pointsBeforeTriggered" -->
-                        </input-bloc>
-                        <input-bloc label="alert.edit.dynamic.levels.add.level" (ngModelChange)="setLevelName($event)"
-                            [validator]="validators.notEmptyString" ></input-bloc><!-- [(ngModel)]="addedLevel.name" -->
-                        <button pButton type="button" class="active-action" icon="fas fa-plus"
-                            (click)="addDynamicLevelsLevel()"></button>
                     </p-tabPanel>
                     <p-tabPanel header="Scripts">
                         <textarea pInputTextarea formControlName="scripts"></textarea>

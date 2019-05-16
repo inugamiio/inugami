@@ -137,8 +137,44 @@
   width: 40%
 }
 
+
+.page-admin .alert-edit .left-panel .alert-name,
+.page-admin .alert-edit .left-panel .alert-duration-visibility{
+  position: relative;
+  left: 1.5em;
+}
+
+.page-admin .alert-edit .left-panel .alert-name .input-bloc input{
+  width: 30em;
+}
+.page-admin .alert-edit .left-panel .file-input {
+  position: relative;
+  bottom : 2.5em;
+  left: 1em;
+}
 .page-admin .alert-edit .left-panel .file-input input{
   display: none;
+}
+
+.page-admin .alert-edit .left-panel .alert-duration-visibility .visibility,
+.page-admin .alert-edit .left-panel .alert-duration-visibility .duration{
+  margin-right: 1em;
+}
+
+.page-admin .alert-edit .left-panel .alert-duration-visibility .duration input{
+  width: 5em;
+}
+
+.page-admin .alert-edit .left-panel .alert-duration-visibility .visibility input{
+  width: 7em;
+}
+
+.page-admin .alert-edit .left-panel .alert-duration-visibility .main-message input{
+  width: 15em;
+}
+
+.page-admin .alert-edit .left-panel .detailed-message input{
+  width: 33em;
 }
 
 .page-admin .alert-edit .left-panel .tag{
@@ -167,8 +203,18 @@
   top:-0.5em;
 }
 
+
+
 .page-admin .alert-edit .right-panel .ui-panel .ui-panel-content .day-and-time-line{
+  background-color: white;
+  padding-bottom: 0.8em;
+  padding-top: 0.8em;
+  border-radius: 1em;
+  margin-bottom: 2em;
   display: flex;
+}
+.page-admin .alert-edit .right-panel .ui-panel .ui-panel-content .day-and-time-line button{
+  font-size: 0.7em
 }
 
 .page-admin .alert-edit .right-panel .ui-panel .ui-panel-content .day-and-time-line input-time-slots{
@@ -178,6 +224,31 @@
 .page-admin .alert-edit .right-panel .ui-panel .ui-panel-content .day-and-time-line input-days-selector{
   flex-shrink: 0;
   margin-right: 1em;
+}
+
+.page-admin .alert-edit .right-panel .levels-setting .ui-tabview-panel.ui-widget-content{
+  background-color: #f5f5f5;
+}
+
+.page-admin .alert-edit .right-panel .levels-setting .dynamic{
+  position: relative;
+  bottom: 2.5em;
+  
+}
+
+.page-admin .alert-edit .right-panel .levels-setting .min-value,
+.page-admin .alert-edit .right-panel .levels-setting .dynamic{
+  margin-right: 1em;
+}
+
+.page-admin .alert-edit .right-panel .levels-setting .add-level button,
+.page-admin .alert-edit .right-panel .levels .delete{
+  position: relative;
+  bottom: 2.6em;
+}
+
+.page-admin .alert-edit .right-panel .levels-setting .add-level input  {
+  width: 15em;
 }
 
 
