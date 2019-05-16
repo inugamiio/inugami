@@ -30,6 +30,7 @@ import {InputBloc}                      from './components/forms/input.bloc';
 import {InputDaysSelector}              from './components/forms/input.days.selector';
 import {InputSwitch}                    from './components/forms/input.switch';
 import {InputTimeSlots}                 from './components/forms/input.time.slots';
+import {DynamicLevels}                  from './components/forms/dynamic.levels';
 
 import {Carousel}                       from './components/carousel/carousel';
 import {PropertiesEditor}               from './components/properties_editor/properties.editor';
@@ -100,6 +101,7 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     InputSwitch,
     InputTimeSlots,
     InputDaysSelector,
+    DynamicLevels,
     Carousel,
     PropertiesEditor,
 
@@ -135,6 +137,7 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     InputSwitch,
     InputDaysSelector,
     InputTimeSlots,
+    DynamicLevels,
     Carousel, 
 
     BarChart,
@@ -222,3 +225,4 @@ const  AppRootModuleRoutesConfig: Routes = [
     { path: ''     , component: HomeView , pathMatch:'full' }
 ];
 export const AppRootModuleRoutes = RouterModule.forRoot(AppRootModuleRoutesConfig);
+
