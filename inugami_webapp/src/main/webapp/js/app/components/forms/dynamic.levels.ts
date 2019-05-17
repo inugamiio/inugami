@@ -473,7 +473,6 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         if (event.shiftKey) {
             this._moveAllPointsBefore(dataPoint);
             this._readjustPosition();
-            this.processRefresh();
         }
     }
 
@@ -549,9 +548,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
             } else {
                 this._moveSingleDataPoint(yPos);
             }
-
-            this._readjustPosition();
-            this.processRefresh();
+            this._readjustLinePosition(this.selectedDataPoint);
         }
     }
 
@@ -572,7 +569,6 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
                     pos, this.minValue, this.maxValue);
             }
         }
-        this.processRefresh();
     }
 
     private _moveSingleDataPoint(yPos) {
@@ -595,6 +591,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     }
 
     private _moveAllPointsAfter(dataPoint) {
+        
         let name = dataPoint.attr("lineName");
         let lineData = this.data.find(function (element) {
             return element.name == name;
@@ -647,6 +644,16 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         this.processRefresh();
     }
 
+    private _readjustLinePosition(dataPoint) {
+        let dataline = this.data.find(function (element) {
+            return element.name == dataPoint.attr("lineName");
+        });
+            for (let datapoint of dataline.data) {
+                this._putPointInBound(datapoint);
+            }
+        this.processLineRefresh(dataline);
+    }
+
     private _putPointInBound(datapoint){
         if (datapoint.level > this.maxValue) {
             datapoint.level = this.maxValue;
@@ -672,6 +679,18 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         this.onChange.emit(this.data)
     }
 
+    public processLineRefresh(dataLine) {
+        this._refreshLineValues(dataLine);
+        if (isNotNull(this.validator)) {
+            let error = this.validator(this.data);
+            this._setErrorState(error);
+        }
+        if (isNotNull(this.onChangeAccessor)) {
+            this.onChangeAccessor(this.data);
+        }
+        this.onChange.emit(this.data)
+    }
+
     private _refreshValues() {
         this._refreshAxisValues();
         this._refreshAxisXPointsValues();
@@ -682,6 +701,13 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         this._refreshPathPosition();
         this._refreshXAxisLabel();
         this._refreshYAxisLabel();
+    }
+
+    private _refreshLineValues(dataLine){
+        this._refreshLineDataPointsPosition(dataLine);
+        this._refreshLineTooltipsValue(dataLine);
+        this._refreshLineTooltipsPosition(dataLine);
+        this._refreshLinePathPosition(dataLine);
     }
 
     private _refreshAxisValues() {
@@ -710,32 +736,44 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     }
 
     private _refreshDataPointsPosition() {
-        for (let i = 0; i < this.data.length; i++) {
-            for (let j = 0; j < this.data[i].data.length; j++) {
-                this._computeDataPointsPosition(i,j);
-            }
+        for (let dataLine of this.data) {
+            this._refreshLineDataPointsPosition(dataLine);
         }
     }
 
-    private _computeDataPointsPosition(lineIndex,pointIndex){
-        let yPos = this.computeDataPointsPositionFromLevel(this.position.axisY.y1, this.position.axisY.y2 - this.elementSize.axisYPointsMargin, this.data[lineIndex].data[pointIndex].level, this.minValue, this.maxValue);
-                this.groups.dataPoints[this.data[lineIndex].name][pointIndex].attr("cy", yPos)
+    private _refreshLineDataPointsPosition(dataLine) {
+        for (let j = 0; j < dataLine.data.length; j++) {
+            this._computeDataPointsPosition(dataLine,j);
+        }
+    }
+
+    private _computeDataPointsPosition(dataLine,pointIndex){
+        let yPos = this.computeDataPointsPositionFromLevel(this.position.axisY.y1, this.position.axisY.y2 - this.elementSize.axisYPointsMargin, dataLine.data[pointIndex].level, this.minValue, this.maxValue);
+                this.groups.dataPoints[dataLine.name][pointIndex].attr("cy", yPos)
                     .attr("cx", this.position.axisXPoints[pointIndex].x);
     }
 
     private _refreshTooltipsValue() {
         for (let dataLine of this.data) {
-            for (let dataPoint of dataLine.data) {
-                this.groups.tooltipText[dataLine.name][dataPoint.hour].level.text(dataPoint.level);
-            }
+            this._refreshLineTooltipsValue(dataLine);
+        }
+    }
+
+    private _refreshLineTooltipsValue(dataLine) {
+        for (let dataPoint of dataLine.data) {
+            this.groups.tooltipText[dataLine.name][dataPoint.hour].level.text(dataPoint.level);
         }
     }
 
     private _refreshTooltipsPosition() {
         for (let dataLine of this.data) {
-            for (let dataPoint of dataLine.data) {
-                this._computeTooltipsPosition(dataLine,dataPoint);
-            }
+            this._refreshLineTooltipsPosition(dataLine);
+        }
+    }
+
+    private _refreshLineTooltipsPosition(dataLine){
+        for (let dataPoint of dataLine.data) {
+            this._computeTooltipsPosition(dataLine,dataPoint);
         }
     }
 
@@ -761,14 +799,21 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
 
     private _refreshPathPosition() {
         for (let dataLine of this.data) {
-            let pathValues = [];
-            for (let dataPoint of dataLine.data) {
-                this._computePathPosition(dataPoint,pathValues);
-            }
-            let path = this.groups.path[dataLine.name];
-            path.attr("d", this._formatPathValues(pathValues));
+            this._refreshLinePathPosition(dataLine);
         }
     }
+
+    private _refreshLinePathPosition(dataLine) {
+        let pathValues = [];
+        for (let dataPoint of dataLine.data) {
+            this._computePathPosition(dataPoint, pathValues);
+        }
+        let path = this.groups.path[dataLine.name];
+        path.attr("d", this._formatPathValues(pathValues));
+
+    }
+
+
 
     private _computePathPosition(dataPoint,pathValues){
         pathValues.push(this.position.axisXPoints[dataPoint.hour].x)
@@ -836,7 +881,6 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     }
 
     public writeValue(data) {
-        if (!this.readonly && !this.disabled) {
             if (isNull(data)) {
                 data = [];
             }
@@ -854,9 +898,8 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
                 }
                 this.data = data;
                 this._readjustPosition();
-                this.processRefresh();
+                //this.processRefresh();
             }
-        }
     }
 
     registerOnTouched(fn: () => void) {
@@ -910,12 +953,12 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
 
     setMinValue(minValue){
         this.minValue =minValue;
-        this.processRefresh();
+       this._readjustPosition();
     }
 
 
     setMaxValue(maxValue){
         this.maxValue = maxValue;
-        this.processRefresh();
+        this._readjustPosition();
     }
 }
