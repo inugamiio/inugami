@@ -8,13 +8,13 @@ import javax.ws.rs.Path;
 import org.inugami.api.dao.DaoException;
 import org.inugami.commons.security.ItemProcessor;
 import org.inugami.commons.security.SecurityTools;
-import org.inugami.core.alertings.dynamic.ActivationTime;
-import org.inugami.core.alertings.dynamic.AlertDataTransfomer;
-import org.inugami.core.alertings.dynamic.DynamicAlertEntity;
-import org.inugami.core.alertings.dynamic.DynamicLevel;
-import org.inugami.core.alertings.dynamic.ProviderSource;
-import org.inugami.core.alertings.dynamic.Tag;
-import org.inugami.core.alertings.dynamic.TimeSlot;
+import org.inugami.core.alertings.dynamic.entities.ActivationTime;
+import org.inugami.core.alertings.dynamic.entities.AlertDataTransfomer;
+import org.inugami.core.alertings.dynamic.entities.DynamicAlertEntity;
+import org.inugami.core.alertings.dynamic.entities.DynamicLevel;
+import org.inugami.core.alertings.dynamic.entities.ProviderSource;
+import org.inugami.core.alertings.dynamic.entities.Tag;
+import org.inugami.core.alertings.dynamic.entities.TimeSlot;
 import org.inugami.core.cdi.services.dao.AbstractCrudRest;
 
 @Path("alert/dynamic")

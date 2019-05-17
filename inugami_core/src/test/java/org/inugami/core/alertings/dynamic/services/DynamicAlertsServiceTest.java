@@ -1,23 +1,28 @@
-package org.inugami.core.alertings;
+package org.inugami.core.alertings.dynamic.services;
+
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.inugami.commons.files.FilesUtils;
 import org.inugami.commons.tools.TestUnitResources;
-import org.inugami.core.alertings.dynamic.DynamicAlertEntity;
+import org.inugami.core.alertings.dynamic.entities.DynamicAlertEntity;
+import org.inugami.core.context.Context;
 import org.junit.Test;
 
-import flexjson.JSONDeserializer;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DynamicAlertsServiceTest implements TestUnitResources {
     
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final DynamicAlertsService SERVICE = new DynamicAlertsService();
+    private static final DynamicAlertsService SERVICE = initService();
     
     // =========================================================================
     // ITEGRATION
@@ -26,27 +31,33 @@ public class DynamicAlertsServiceTest implements TestUnitResources {
         
     }
     
+    private static DynamicAlertsService initService() {
+        return new DynamicAlertsService(Context.initializeStandalone());
+    }
+    
     // =========================================================================
     // UNIT TEST
     // =========================================================================
     @Test
-    public void testResolveAlertToProcess() throws Exception {
+    public void testResolveAlertsToProcess() throws Exception {
         final List<DynamicAlertEntity> entities = loadEntities("alerting/dynamicAlerts.01.json");
-        SERVICE.resolveAlertToProcess(entities, buildDate("2019/05/16 14:00"));
+        final List<DynamicAlertEntity> cas1 = SERVICE.resolveAlertsToProcess(entities, buildDate("2019/05/16 14:00"));
+        assertEquals(2, cas1.size());
         
+        final List<DynamicAlertEntity> cas2 = SERVICE.resolveAlertsToProcess(entities, buildDate("2019/05/16 14:03"));
+        assertEquals(1, cas2.size());
     }
     
     // =========================================================================
     // TOOLS
     // =========================================================================
-    private List<DynamicAlertEntity> loadEntities(final String path) {
+    private List<DynamicAlertEntity> loadEntities(final String path) throws IOException {
         final File file = FilesUtils.buildFile(initResourcesPath(), path);
+        final String json = FilesUtils.readContent(file);
         
         //@formatter:off
-        final List<DynamicAlertEntity> result = new JSONDeserializer<List<DynamicAlertEntity>>().use(null,
-                                                                                                     this.getClass()).deserialize(path);
+        return new ObjectMapper().readValue(json, new TypeReference<List<DynamicAlertEntity>>() {});
         //@formatter:on
-        return null;
     }
     
     private long buildDate(final String time) throws ParseException {

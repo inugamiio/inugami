@@ -1,4 +1,4 @@
-package org.inugami.core.alertings.dynamic;
+package org.inugami.core.alertings.dynamic.entities;
 
 import java.util.List;
 

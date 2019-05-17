@@ -1,35 +1,35 @@
-package org.inugami.core.alertings.dynamic;
+package org.inugami.core.alertings.dynamic.entities;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.inugami.api.dao.Identifiable;
 
 @Entity
-@Table(name = "CORE_ACTIVATION_TIME_SLOT")
-public class TimeSlot implements Identifiable<Long> {
+@Table(name = "CORE_ALERT_DATA_TRANSFORMER")
+public class AlertDataTransfomer implements Identifiable<Long> {
     
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final long serialVersionUID = -426400984660202399L;
+    private static final long serialVersionUID = 8658816619910512607L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long              uid;
     
-    @Column(name = "time_from")
-    private String            from;
+    private String            name;
     
-    private String            to;
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
+    @Lob
+    private String            script;
     
+    // =========================================================================
+    // OVERRIDES
+    // =========================================================================
     @Override
     public Long getUid() {
         return uid;
@@ -45,15 +45,12 @@ public class TimeSlot implements Identifiable<Long> {
         return uid != null;
     }
     
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = (prime * result) + ((from == null) ? 0 : from.hashCode());
-        result = (prime * result) + ((to == null) ? 0 : to.hashCode());
+        result = (prime * result) + ((name == null) ? 0 : name.hashCode());
+        result = (prime * result) + ((script == null) ? 0 : script.hashCode());
         return result;
     }
     
@@ -61,11 +58,11 @@ public class TimeSlot implements Identifiable<Long> {
     public boolean equals(final Object obj) {
         boolean result = this == obj;
         
-        if (!result && (obj != null) && (obj instanceof TimeSlot)) {
-            final TimeSlot other = (TimeSlot) obj;
+        if (!result && (obj != null) && (obj instanceof AlertDataTransfomer)) {
+            final AlertDataTransfomer other = (AlertDataTransfomer) obj;
             //@formatter:off
-            result = (from==null)?other.getFrom() == null : from.equals(other.getFrom())
-                  && (to == null)?other.getTo()   == null : to.equals(other.getTo());
+            result = (name == null)  ? other.getName()== null  : name.equals(other.getName())
+                  && (script ==null) ? other.getScript()==null : script.equals(other.getScript());
             //@formatter:on
         }
         
@@ -75,12 +72,12 @@ public class TimeSlot implements Identifiable<Long> {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("TimeSlot [uid=");
+        builder.append("AlertDataTransfomer [uid=");
         builder.append(uid);
-        builder.append(", from=");
-        builder.append(from);
-        builder.append(", to=");
-        builder.append(to);
+        builder.append(", name=");
+        builder.append(name);
+        builder.append(", script=");
+        builder.append(script);
         builder.append("]");
         return builder.toString();
     }
@@ -88,20 +85,20 @@ public class TimeSlot implements Identifiable<Long> {
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================
-    public String getFrom() {
-        return from;
+    public String getName() {
+        return name;
     }
     
-    public void setFrom(final String from) {
-        this.from = from;
+    public void setName(final String name) {
+        this.name = name;
     }
     
-    public String getTo() {
-        return to;
+    public String getScript() {
+        return script;
     }
     
-    public void setTo(final String to) {
-        this.to = to;
+    public void setScript(final String script) {
+        this.script = script;
     }
     
 }
