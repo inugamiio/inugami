@@ -40,7 +40,9 @@ export class AdminViewAlertEdit implements AfterViewInit{
     private channels                    : any;
     private addedLevel                  : any = {};
     
-    private alertForm                   :any;
+    private alertForm                   : any;
+
+    private formatter                   : any;
 
     @Output() onClose                   : EventEmitter<any> = new EventEmitter();
     @Output() onError                   : EventEmitter<any> = new EventEmitter();
@@ -128,10 +130,11 @@ export class AdminViewAlertEdit implements AfterViewInit{
                 levelPointsBeforeTriggered: this.fb.array([]),
                 dynamicLevels:[''],
                 scripts:['']
-})                
+            })                
         }else{
             this.alertForm.reset();
-        }   
+        }
+        this.formatter = null;
     }
     
 
@@ -312,5 +315,13 @@ export class AdminViewAlertEdit implements AfterViewInit{
     
     setGraphMaxValue(event,graph){
         graph.setMaxValue( parseFloat(event.target.value)); 
+    }
+
+    setFormatter(event){
+        let precision  = parseFloat(event.target.value);
+        if(precision > 0){
+            precision = Math.pow(10,precision);
+            this.formatter = (value) => Math.round(value * precision + Number.EPSILON) / precision;
+        }
     }
 }

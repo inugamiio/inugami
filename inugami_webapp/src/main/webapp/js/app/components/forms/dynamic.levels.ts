@@ -154,6 +154,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         this._renderYAxisLabel();
 
         this._initEvent();
+        this.processRefresh();
     }
 
     private _renderAxis(svgComponentChild) {
@@ -204,9 +205,6 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
                 let label = this.groups.axisYGroup.append("text")
                     .attr("class", "tick-label")
                     .text((this.maxValue - this.minValue) * i / (this.groups.axisYPoints.length - 1) + this.minValue); 
-
-                let textWidth = label.node().getBoundingClientRect().width;
-                let textHeight = label.node().getBoundingClientRect().height;
                 this.groups.axisYLabel[i] = label;
             }
         }
@@ -850,11 +848,15 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     private _refreshYAxisLabel() {
         for (let key of Object.keys(this.groups.axisYLabel)) {
             let label = this.groups.axisYLabel[key];
+            let text = (this.maxValue - this.minValue) * parseInt(key) / (this.groups.axisYPoints.length - 1) + this.minValue;
+            text =  isNull(this.formatter) ?   Math.round(text * 100 + Number.EPSILON) / 100 : this.formatter(text);
+            
+            label.text(text);
             let textWidth = label.node().getBoundingClientRect().width;
             let textHeight = label.node().getBoundingClientRect().height;
             label.attr("x", this.position.axisYPoints[key].x - textWidth - this.elementSize.axisYLabelRightMargin)
-                .attr("y", this.position.axisYPoints[key].y + textHeight / 2)
-                .text((this.maxValue - this.minValue) * parseInt(key) / (this.groups.axisYPoints.length - 1) + this.minValue);
+                .attr("y", this.position.axisYPoints[key].y + textHeight / 2);
+                
         }
     }
 
@@ -898,7 +900,6 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
                 }
                 this.data = data;
                 this._readjustPosition();
-                //this.processRefresh();
             }
     }
 
@@ -920,11 +921,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
 
     public computeDataPointsLevel(y1, y2, dataY, dataMin, dataMax) {
         let level = (((dataMax - dataMin) * (y2 - dataY)) / (y2 - y1)) + dataMin;
-        if (isNull(this.formatter)) {
-            return Math.round(level * 100 + Number.EPSILON) / 100;
-        } else {
-            return this.formatter(level);
-        }
+        return isNull(this.formatter) ?   Math.round(level * 100 + Number.EPSILON) / 100 :  this.formatter(level);
     }
 
     private _convertToHour(i) {
@@ -936,11 +933,8 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     }
 
     private _emptyOrNull(value) {
-        if (isNull(value) || value.length == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return isNull(value) || value.length == 0 ;
+
     }
 
     private _formatPathValues(pathValues) {
@@ -952,12 +946,18 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     }
 
     setMinValue(minValue){
+        if(isNaN(minValue)){
+            minValue = this.maxValue -100;
+        }
         this.minValue =minValue;
-       this._readjustPosition();
+        this._readjustPosition();
     }
 
 
     setMaxValue(maxValue){
+        if(isNaN(maxValue)){
+            maxValue = this.minValue + 100;
+        }
         this.maxValue = maxValue;
         this._readjustPosition();
     }

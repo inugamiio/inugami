@@ -81,6 +81,7 @@
                             </span>
                                 <input-bloc label="alert.edit.dynamic.levels.minValue" type="number" styleClass="min-value" (enter)="setGraphMinValue($event,graph)"></input-bloc>
                                 <input-bloc label="alert.edit.dynamic.levels.maxValue" type="number" styleClass="min-value" (enter)="setGraphMaxValue($event,graph)"></input-bloc>
+                                <input-bloc label="alert.edit.dynamic.levels.precision" type="number" styleClass="precision-value" (enter)="setFormatter($event)"></input-bloc>
                         </div>
 
                         <div formArrayName="levelPointsBeforeTriggered" class="levels">
@@ -93,7 +94,7 @@
                         </div>
                         <div class="add-level">
                                 <input-bloc label="alert.edit.dynamic.levels.points.before.triggered" (ngModelChange)="setPointsBeforeTriggered($event)" styeClass="points"
-                                [validator]="validators.notNegativeNumber" type="number"><!-- [(ngModel)]="addedLevel.pointsBeforeTriggered" -->
+                                [validator]="validators.notEmptyString" type="number"><!-- [(ngModel)]="addedLevel.pointsBeforeTriggered" -->
                            </input-bloc>
                            <input-bloc label="alert.edit.dynamic.levels.add.level" (ngModelChange)="setLevelName($event)" styeClass="name"
                                [validator]="validators.notEmptyString" ></input-bloc><!-- [(ngModel)]="addedLevel.name" -->
@@ -101,7 +102,7 @@
                                (click)="addDynamicLevelsLevel(graph)"></button>
                         </div>
                         <div class="graph">
-                            <dynamic-levels width=0.5 height=0.4 #graph></dynamic-levels>
+                            <dynamic-levels width=0.5 height=0.4 [formatter]="formatter" formControlName="dynamicLevels" #graph></dynamic-levels>
                         </div>
                     </p-tabPanel>
                     <p-tabPanel header="Scripts">
