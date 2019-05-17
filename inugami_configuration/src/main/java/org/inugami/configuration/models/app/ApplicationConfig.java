@@ -45,7 +45,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final long           serialVersionUID = -3387499578573275619L;
+    private static final long           serialVersionUID          = -3387499578573275619L;
     
     @XStreamAsAttribute
     private String                      applicationName;
@@ -69,7 +69,10 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
     private int                         maxRunningEvents;
     
     @XStreamAsAttribute
-    private int                         maxThreads       = 1500;
+    private int                         maxThreads                = 1500;
+    
+    @XStreamAsAttribute
+    private int                         alertingDynamicMaxThreads = 10;
     
     private DataProviderModel           dataStorage;
     
@@ -87,7 +90,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
     // =========================================================================
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append("ApplicationConfig [properties=");
         builder.append(properties);
         builder.append(", security=");
@@ -106,6 +109,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         maxPluginRunningStandalone  = Integer.parseInt(ctx.applyProperties(JvmKeyValues.APPLICATION_PLUGIN_RUNNING_STANDALONE.or(maxPluginRunningStandalone)));
         alertingEnable              = Boolean.parseBoolean(ctx.applyProperties(JvmKeyValues.ALERTING_ENABLE.or(String.valueOf(alertingEnable))));
         maxThreads                  = Integer.parseInt(ctx.applyProperties(JvmKeyValues.APPLICATION_MAX_THREADS.or("1500")));
+        alertingDynamicMaxThreads   = Integer.parseInt(ctx.applyProperties(JvmKeyValues.ALERTING_DYNAMIC_MAX_THREADS.or(alertingDynamicMaxThreads)));
         
         if(maxThreads<=0) {
             maxThreads = 1500;
@@ -123,7 +127,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
 
         httpDefaultConfig.postProcessing(ctx);
         
-        for(SecurityConfiguration secu : security) {
+        for(final SecurityConfiguration secu : security) {
            secu.postProcessing(ctx);
         }
     }
@@ -135,7 +139,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         return applicationName;
     }
     
-    public void setApplicationName(String applicationName) {
+    public void setApplicationName(final String applicationName) {
         this.applicationName = applicationName;
     }
     
@@ -143,7 +147,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         return timeout;
     }
     
-    public void setTimeout(long timeout) {
+    public void setTimeout(final long timeout) {
         this.timeout = timeout;
     }
     
@@ -151,7 +155,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         return maxPluginRunning;
     }
     
-    public void setMaxPluginRunning(int maxPluginRunning) {
+    public void setMaxPluginRunning(final int maxPluginRunning) {
         this.maxPluginRunning = maxPluginRunning;
     }
     
@@ -159,7 +163,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         return maxPluginRunningStandalone;
     }
     
-    public void setMaxPluginRunningStandalone(int maxPluginRunningStandalone) {
+    public void setMaxPluginRunningStandalone(final int maxPluginRunningStandalone) {
         this.maxPluginRunningStandalone = maxPluginRunningStandalone;
     }
     
@@ -167,7 +171,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         return maxRunningEvents;
     }
     
-    public void setMaxRunningEvents(int maxRunningEvents) {
+    public void setMaxRunningEvents(final int maxRunningEvents) {
         this.maxRunningEvents = maxRunningEvents;
     }
     
@@ -175,7 +179,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         return properties;
     }
     
-    public void setProperties(List<PropertyModel> properties) {
+    public void setProperties(final List<PropertyModel> properties) {
         this.properties = properties;
     }
     
@@ -196,7 +200,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         return result;
     }
     
-    public ApplicationConfig addSecurityConfiguration(SecurityConfiguration config) {
+    public ApplicationConfig addSecurityConfiguration(final SecurityConfiguration config) {
         if (security == null) {
             security = new ArrayList<>();
         }
@@ -206,7 +210,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         return this;
     }
     
-    public ApplicationConfig addSecurityConfigurations(List<SecurityConfiguration> config) {
+    public ApplicationConfig addSecurityConfigurations(final List<SecurityConfiguration> config) {
         if (security == null) {
             security = new ArrayList<>();
         }
@@ -216,7 +220,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         return this;
     }
     
-    public void setSecurity(List<SecurityConfiguration> security) {
+    public void setSecurity(final List<SecurityConfiguration> security) {
         this.security = security;
     }
     
@@ -224,7 +228,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         return httpDefaultConfig;
     }
     
-    public void setHttpDefaultConfig(HttpDefaultConfig httpDefaultConfig) {
+    public void setHttpDefaultConfig(final HttpDefaultConfig httpDefaultConfig) {
         this.httpDefaultConfig = httpDefaultConfig;
     }
     
@@ -232,7 +236,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         return enableTechnicalsUsers;
     }
     
-    public void setEnableTechnicalsUsers(boolean enableTechnicalsUsers) {
+    public void setEnableTechnicalsUsers(final boolean enableTechnicalsUsers) {
         this.enableTechnicalsUsers = enableTechnicalsUsers;
     }
     
@@ -240,7 +244,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         return scriptTimeout;
     }
     
-    public void setScriptTimeout(long scriptTimeout) {
+    public void setScriptTimeout(final long scriptTimeout) {
         this.scriptTimeout = scriptTimeout;
     }
     
@@ -257,7 +261,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         return dataStorage;
     }
 
-    public void setDataStorage(DataProviderModel dataStorage) {
+    public void setDataStorage(final DataProviderModel dataStorage) {
         this.dataStorage = dataStorage;
     }
 
@@ -265,14 +269,20 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         return alertingEnable;
     }
 
-    public void setAlertingEnable(boolean alertingEnable) {
+    public void setAlertingEnable(final boolean alertingEnable) {
         this.alertingEnable = alertingEnable;
     }
 
     public int getMaxThreads() {
         return maxThreads;
     }
-    public void setMaxThreads(int maxThreads) {
+    public void setMaxThreads(final int maxThreads) {
         this.maxThreads = maxThreads;
     }
+
+    public int getAlertingDynamicMaxThreads() {
+        return alertingDynamicMaxThreads;
+    }
+    
+    
 }

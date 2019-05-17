@@ -38,6 +38,9 @@ public class DynamicAlertsService {
         
         final List<DynamicAlertEntity> alertsToProcess = resolveAlertsToProcess(entities, System.currentTimeMillis());
         
+        if (!alertsToProcess.isEmpty()) {
+            final int maxThreads = context.getApplicationConfiguration().getAlertingDynamicMaxThreads();
+        }
     }
     
     // =========================================================================
