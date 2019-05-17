@@ -14,26 +14,34 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.inugami.monitoring.api.senders;
+package org.inugami.api.monitoring.interceptors;
 
 import java.util.List;
 
+import org.inugami.api.monitoring.MonitoringInitializer;
+import org.inugami.api.monitoring.data.ResponseData;
+import org.inugami.api.monitoring.data.ResquestData;
+import org.inugami.api.monitoring.exceptions.ErrorResult;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.api.spi.NamedSpi;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
 
 /**
- * MonitoringProvider
+ * MonitoringFilterInterceptor
  * 
  * @author patrick_guillerm
- * @since 27 déc. 2018
+ * @since 28 déc. 2018
  */
-public interface MonitoringSender extends NamedSpi {
+public interface MonitoringFilterInterceptor extends NamedSpi, MonitoringInitializer {
+    MonitoringFilterInterceptor buildInstance(ConfigHandler<String, String> configuration);
     
-    MonitoringSender buildInstance(ConfigHandler<String, String> configuration);
-    
-    void process(List<GenericMonitoringModel> data) throws MonitoringSenderException;
-    
-    default void shutdown() {
+    default List<GenericMonitoringModel> onBegin(final ResquestData request) {
+        return null;
     }
+    
+    default List<GenericMonitoringModel> onDone(final ResquestData request, final ResponseData response,
+                                                final ErrorResult error) {
+        return null;
+    }
+    
 }

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.inugami.monitoring.api.senders;
+package org.inugami.api.monitoring.senders;
 
 import org.inugami.api.exceptions.TechnicalException;
 

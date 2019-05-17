@@ -179,4 +179,11 @@ public interface ApplicationContext {
     // =========================================================================
     JavaScriptEngine getScriptEngine();
     
+    // =========================================================================
+    // LIFECYCLE
+    // =========================================================================
+    void registerForShutodown(BootstrapContext subContext);
+    
+    default void forceShutdownSubContext() {
+    };
 }

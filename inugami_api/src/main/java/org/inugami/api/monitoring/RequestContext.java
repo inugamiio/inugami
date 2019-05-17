@@ -14,13 +14,14 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.inugami.monitoring.api.interceptors;
+package org.inugami.api.monitoring;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ServiceLoader;
 import java.util.UUID;
 
-import org.inugami.monitoring.api.data.RequestInformation;
-import org.inugami.monitoring.api.data.RequestInformationBuilder;
-import org.inugami.monitoring.api.data.config.Monitoring;
+import org.inugami.api.monitoring.models.Monitoring;
 
 /**
  * RequestContext
@@ -33,15 +34,25 @@ public final class RequestContext {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static Monitoring                      config;
+    private static Monitoring                      config   = loadConfig();
     
     private static ThreadLocal<RequestInformation> INSTANCE = new ThreadLocal<>();
     
     // =========================================================================
     // METHODS
     // =========================================================================
-    public static void initializeConfig(Monitoring inputConfig) {
-        config = inputConfig;
+    public synchronized static Monitoring loadConfig() {
+        if (config == null) {
+            final List<MonitoringLoaderSpi> services = new ArrayList<>();
+            final ServiceLoader<MonitoringLoaderSpi> servicesLoader = ServiceLoader.load(MonitoringLoaderSpi.class);
+            servicesLoader.forEach(services::add);
+            
+            if (!services.isEmpty()) {
+                config = services.get(0).load();
+            }
+            
+        }
+        return config;
     }
     
     public static RequestInformation getInstance() {
@@ -52,7 +63,7 @@ public final class RequestContext {
         return result;
     }
     
-    /* package */ static synchronized void setInstance(RequestInformation instance) {
+    public static synchronized void setInstance(final RequestInformation instance) {
         INSTANCE.set(instance);
     }
     
@@ -60,7 +71,7 @@ public final class RequestContext {
     // INIT
     // =========================================================================
     private static RequestInformation initializeTechnicalRequest() {
-        RequestInformationBuilder builder = new RequestInformationBuilder();
+        final RequestInformationBuilder builder = new RequestInformationBuilder();
         
         if (config != null) {
             builder.setEnv(config.getEnv());

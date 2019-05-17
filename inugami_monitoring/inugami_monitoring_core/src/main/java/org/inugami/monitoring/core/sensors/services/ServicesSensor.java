@@ -24,10 +24,10 @@ import java.util.Map;
 import org.inugami.api.models.Tuple;
 import org.inugami.api.models.data.graphite.number.GraphiteNumber;
 import org.inugami.api.models.tools.BlockingQueue;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.sensors.MonitoringSensor;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.commons.spi.SpiLoader;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.sensors.MonitoringSensor;
 
 /**
  * ServicesSensor
@@ -52,7 +52,8 @@ public class ServicesSensor implements MonitoringSensor {
     // CONSTRUCTORS
     // =========================================================================
     @Override
-    public MonitoringSensor buildInstance(long interval, String query, ConfigHandler<String, String> configuration) {
+    public MonitoringSensor buildInstance(final long interval, final String query,
+                                          final ConfigHandler<String, String> configuration) {
         ServicesSensor.interval = interval;
         this.configuration = configuration;
         return this;
@@ -78,20 +79,20 @@ public class ServicesSensor implements MonitoringSensor {
         final List<GenericMonitoringModel> data = BUFFER.pollAll();
         final Map<GenericMonitoringModel, List<GraphiteNumber>> reducedValues = reduceData(data);
         
-        for (Map.Entry<GenericMonitoringModel, List<GraphiteNumber>> entry : reducedValues.entrySet()) {
+        for (final Map.Entry<GenericMonitoringModel, List<GraphiteNumber>> entry : reducedValues.entrySet()) {
             result.addAll(computeValue(entry.getKey(), entry.getValue()));
         }
         
         return result;
     }
     
-    private Map<GenericMonitoringModel, List<GraphiteNumber>> reduceData(List<GenericMonitoringModel> data) {
-        Map<String, Tuple<GenericMonitoringModel, List<GraphiteNumber>>> localBuffer = new HashMap<>();
+    private Map<GenericMonitoringModel, List<GraphiteNumber>> reduceData(final List<GenericMonitoringModel> data) {
+        final Map<String, Tuple<GenericMonitoringModel, List<GraphiteNumber>>> localBuffer = new HashMap<>();
         
-        for (GenericMonitoringModel item : data) {
+        for (final GenericMonitoringModel item : data) {
             Tuple<GenericMonitoringModel, List<GraphiteNumber>> saved = localBuffer.get(item.getNonTemporalHash());
             if (saved == null) {
-                List<GraphiteNumber> values = new ArrayList<>();
+                final List<GraphiteNumber> values = new ArrayList<>();
                 values.add(item.getValue());
                 saved = new Tuple<>(item, values);
                 localBuffer.put(item.getNonTemporalHash(), saved);
@@ -101,16 +102,17 @@ public class ServicesSensor implements MonitoringSensor {
             }
         }
         
-        Map<GenericMonitoringModel, List<GraphiteNumber>> result = new HashMap<>();
-        for (Map.Entry<String, Tuple<GenericMonitoringModel, List<GraphiteNumber>>> entry : localBuffer.entrySet()) {
+        final Map<GenericMonitoringModel, List<GraphiteNumber>> result = new HashMap<>();
+        for (final Map.Entry<String, Tuple<GenericMonitoringModel, List<GraphiteNumber>>> entry : localBuffer.entrySet()) {
             result.put(entry.getValue().getKey(), entry.getValue().getValue());
         }
         return result;
     }
     
-    private List<GenericMonitoringModel> computeValue(GenericMonitoringModel data, List<GraphiteNumber> values) {
+    private List<GenericMonitoringModel> computeValue(final GenericMonitoringModel data,
+                                                      final List<GraphiteNumber> values) {
         final List<GenericMonitoringModel> result = new ArrayList<>();
-        for (ServicesSensorAggregator aggregator : AGGREGATORS) {
+        for (final ServicesSensorAggregator aggregator : AGGREGATORS) {
             if (aggregator.accept(data, configuration)) {
                 final List<GenericMonitoringModel> aggregated = aggregator.compute(data, values, configuration);
                 if (aggregated != null) {
@@ -124,7 +126,7 @@ public class ServicesSensor implements MonitoringSensor {
     // =========================================================================
     // ADD DATA
     // =========================================================================
-    public static synchronized void addData(List<GenericMonitoringModel> data) {
+    public static synchronized void addData(final List<GenericMonitoringModel> data) {
         if (data != null) {
             BUFFER.addAll(data);
         }

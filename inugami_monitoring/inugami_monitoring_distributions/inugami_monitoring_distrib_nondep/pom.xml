@@ -72,14 +72,14 @@
                                     <resource>META-INF/services/org.inugami.monitoring.api.resolvers.Interceptable</resource>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.inugami.monitoring.api.sensors.MonitoringSensor</resource>
+                                    <resource>META-INF/services/org.inugami.api.monitoring.sensors.MonitoringSensor</resource>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/org.inugami.monitoring.core.sensors.services.ServicesSensorAggregator</resource>
                                 </transformer>
 
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.inugami.monitoring.api.senders.MonitoringSender</resource>
+                                    <resource>META-INF/services/org.inugami.api.monitoring.senders.MonitoringSender</resource>
                                 </transformer>
 
                             </transformers>

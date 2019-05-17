@@ -18,10 +18,10 @@ package org.inugami.monitoring.core.interceptors.spi;
 
 import java.util.Map;
 
+import org.inugami.api.monitoring.RequestContext;
+import org.inugami.api.monitoring.RequestInformation;
+import org.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.monitoring.api.data.RequestInformation;
-import org.inugami.monitoring.api.interceptors.MonitoringFilterInterceptor;
-import org.inugami.monitoring.api.interceptors.RequestContext;
 import org.slf4j.MDC;
 
 public class MdcInterceptor implements MonitoringFilterInterceptor {
@@ -62,6 +62,12 @@ public class MdcInterceptor implements MonitoringFilterInterceptor {
     // =========================================================================
     @Override
     public MonitoringFilterInterceptor buildInstance(final ConfigHandler<String, String> configuration) {
+        initialize();
+        return this;
+    }
+    
+    @Override
+    public void initialize() {
         final RequestInformation requestContext = RequestContext.getInstance();
         
         setMdc(MDCKeys.env, requestContext.getEnv());
@@ -98,8 +104,6 @@ public class MdcInterceptor implements MonitoringFilterInterceptor {
                 
             }
         }
-        
-        return null;
     }
     
     private void setMdc(final MDCKeys key, final String value) {

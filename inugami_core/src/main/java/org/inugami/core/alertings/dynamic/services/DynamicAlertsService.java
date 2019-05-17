@@ -1,24 +1,36 @@
 package org.inugami.core.alertings.dynamic.services;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.exceptions.FatalException;
 import org.inugami.api.loggers.Loggers;
+import org.inugami.commons.threads.ExecutorFactory;
 import org.inugami.core.alertings.dynamic.entities.DynamicAlertEntity;
 import org.inugami.core.context.ApplicationContext;
 
+@ApplicationScoped
 @Named
-public class DynamicAlertsService {
+public class DynamicAlertsService implements Serializable {
+    
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
+    private static final long            serialVersionUID = -8151022786358668308L;
+    
     @Inject
-    private ApplicationContext context;
+    private transient ApplicationContext context;
+    
+    private transient ExecutorService    executor;
     
     // =========================================================================
     // CONSTRUCTORS
@@ -28,6 +40,25 @@ public class DynamicAlertsService {
     
     protected DynamicAlertsService(final ApplicationContext context) {
         this.context = context;
+        postConstruct();
+    }
+    
+    @PostConstruct
+    public void postConstruct() {
+        final int maxThreads = context.getApplicationConfiguration().getAlertingDynamicMaxThreads();
+        
+        //@formatter:off
+        executor = new ExecutorFactory(maxThreads,
+                                       DynamicAlertsService.class.getSimpleName(),
+                                       false,
+                                       context.getGlobalConfiguration())
+                           .getExecutorSerice();
+        //@formatter:on
+    }
+    
+    @PreDestroy
+    public void shutdown() {
+        executor.shutdown();
     }
     
     // =========================================================================
@@ -39,7 +70,10 @@ public class DynamicAlertsService {
         final List<DynamicAlertEntity> alertsToProcess = resolveAlertsToProcess(entities, System.currentTimeMillis());
         
         if (!alertsToProcess.isEmpty()) {
-            final int maxThreads = context.getApplicationConfiguration().getAlertingDynamicMaxThreads();
+            
+            final List<DyncamicAlertsTask> tasks = buildTasks(alertsToProcess);
+            
+            processAlerting(tasks);
         }
     }
     
@@ -59,6 +93,13 @@ public class DynamicAlertsService {
             }
         }
         return result;
+    }
+    
+    // =========================================================================
+    // PROCESS ALERTING
+    // =========================================================================
+    private void processAlerting(final List<DyncamicAlertsTask> tasks) {
+        // TODO Auto-generated method stub
     }
     
     // =========================================================================
@@ -89,5 +130,10 @@ public class DynamicAlertsService {
         }
         
         return result;
+    }
+    
+    private List<DyncamicAlertsTask> buildTasks(final List<DynamicAlertEntity> alertsToProcess) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

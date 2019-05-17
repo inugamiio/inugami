@@ -14,9 +14,7 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.inugami.monitoring.api.exceptions;
-
-import java.io.Serializable;
+package org.inugami.api.monitoring.exceptions;
 
 /**
  * ErrorResult
@@ -24,42 +22,30 @@ import java.io.Serializable;
  * @author patrick_guillerm
  * @since 28 déc. 2018
  */
-public class ErrorResult implements Serializable {
+public class ErrorResultBuilder {
     
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final long         serialVersionUID   = 6750655178043958203L;
+    private int    httpCode  = 500;
     
-    /* package */ static final String DEFAULT_ERROR_TYPE = "technical";
+    private String errorCode;
     
-    private final int                 httpCode;
+    private String errorType = ErrorResult.DEFAULT_ERROR_TYPE;
     
-    private final String              errorCode;
+    private String message;
     
-    private final String              errorType;
+    private String stack;
     
-    private final String              message;
+    private String fallBack;
     
-    private final String              stack;
-    
-    private final String              cause;
-    
-    private final String              fallBack;
+    private String cause;
     
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    public ErrorResult(int httpCode, String errorCode, String errorType, String message, String stack, String fallBack,
-                       String cause) {
-        super();
-        this.httpCode = httpCode;
-        this.errorCode = errorCode;
-        this.errorType = errorType;
-        this.message = message;
-        this.stack = stack;
-        this.fallBack = fallBack;
-        this.cause = cause;
+    public ErrorResult build() {
+        return new ErrorResult(httpCode, errorCode, errorType, message, stack, fallBack, cause);
     }
     
     // =========================================================================
@@ -68,7 +54,7 @@ public class ErrorResult implements Serializable {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("ErrorResult [httpCode=");
+        builder.append("ErrorResultBuilder [httpCode=");
         builder.append(httpCode);
         builder.append(", errorCode=");
         builder.append(errorCode);
@@ -82,55 +68,70 @@ public class ErrorResult implements Serializable {
         return builder.toString();
     }
     
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((errorCode == null) ? 0 : errorCode.hashCode());
-        return result;
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        boolean result = this == obj;
-        
-        if (!result && obj != null && obj instanceof ErrorResult) {
-            final ErrorResult other = (ErrorResult) obj;
-            result = errorCode == null ? other.getErrorCode() == null : errorCode.equals(other.getErrorCode());
-        }
-        
-        return result;
-    }
-    
     // =========================================================================
-    // GETTERS & SETTERS
+    // GETTER & SETTERS
     // =========================================================================
     public int getHttpCode() {
         return httpCode;
+    }
+    
+    public ErrorResultBuilder setHttpCode(int httpCode) {
+        this.httpCode = httpCode;
+        return this;
     }
     
     public String getErrorCode() {
         return errorCode;
     }
     
+    public ErrorResultBuilder setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+        return this;
+    }
+    
     public String getMessage() {
         return message;
+    }
+    
+    public ErrorResultBuilder setMessage(String message) {
+        this.message = message;
+        return this;
     }
     
     public String getStack() {
         return stack;
     }
     
+    public ErrorResultBuilder setStack(String stack) {
+        this.stack = stack;
+        return this;
+    }
+    
     public String getFallBack() {
         return fallBack;
     }
     
+    public ErrorResultBuilder setFallBack(String fallBack) {
+        this.fallBack = fallBack;
+        return this;
+    }
+    
     public String getErrorType() {
-        return errorType == null ? DEFAULT_ERROR_TYPE : errorType;
+        return errorType;
+    }
+    
+    public ErrorResultBuilder setErrorType(String errorType) {
+        this.errorType = errorType;
+        return this;
     }
     
     public String getCause() {
         return cause;
+    }
+    
+    public ErrorResultBuilder setCause(String cause) {
+        this.cause = cause;
+        return this;
     }
     
 }

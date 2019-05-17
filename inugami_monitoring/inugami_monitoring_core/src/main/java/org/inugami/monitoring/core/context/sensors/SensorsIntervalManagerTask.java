@@ -27,11 +27,11 @@ import java.util.concurrent.TimeUnit;
 import org.inugami.api.ctx.BootstrapContext;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.tools.Chrono;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.senders.MonitoringSender;
+import org.inugami.api.monitoring.sensors.MonitoringSensor;
 import org.inugami.api.tools.CalendarTools;
 import org.inugami.commons.threads.RunAndCloseService;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.senders.MonitoringSender;
-import org.inugami.monitoring.api.sensors.MonitoringSensor;
 import org.inugami.monitoring.core.context.MonitoringContext;
 
 /**

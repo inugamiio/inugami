@@ -45,7 +45,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final long           serialVersionUID          = -3387499578573275619L;
+    private static final long           serialVersionUID = -3387499578573275619L;
     
     @XStreamAsAttribute
     private String                      applicationName;
@@ -69,10 +69,10 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
     private int                         maxRunningEvents;
     
     @XStreamAsAttribute
-    private int                         maxThreads                = 1500;
+    private int                         maxThreads       = 1500;
     
     @XStreamAsAttribute
-    private int                         alertingDynamicMaxThreads = 10;
+    private Integer                     alertingDynamicMaxThreads;
     
     private DataProviderModel           dataStorage;
     
@@ -109,7 +109,7 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
         maxPluginRunningStandalone  = Integer.parseInt(ctx.applyProperties(JvmKeyValues.APPLICATION_PLUGIN_RUNNING_STANDALONE.or(maxPluginRunningStandalone)));
         alertingEnable              = Boolean.parseBoolean(ctx.applyProperties(JvmKeyValues.ALERTING_ENABLE.or(String.valueOf(alertingEnable))));
         maxThreads                  = Integer.parseInt(ctx.applyProperties(JvmKeyValues.APPLICATION_MAX_THREADS.or("1500")));
-        alertingDynamicMaxThreads   = Integer.parseInt(ctx.applyProperties(JvmKeyValues.ALERTING_DYNAMIC_MAX_THREADS.or(alertingDynamicMaxThreads)));
+        alertingDynamicMaxThreads   = Integer.parseInt(ctx.applyProperties(JvmKeyValues.ALERTING_DYNAMIC_MAX_THREADS.or(alertingDynamicMaxThreads==null?10:alertingDynamicMaxThreads)));
         
         if(maxThreads<=0) {
             maxThreads = 1500;

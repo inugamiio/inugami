@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.inugami.monitoring.api.sensors;
+package org.inugami.api.monitoring.sensors;
 
 import java.util.List;
 
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.api.spi.NamedSpi;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
 
 /**
  * Sensor
@@ -40,5 +40,4 @@ public interface MonitoringSensor extends NamedSpi {
     default void shutdown() {
     }
     
-
 }

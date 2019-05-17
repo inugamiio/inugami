@@ -11,7 +11,9 @@ import java.util.List;
 import org.inugami.commons.files.FilesUtils;
 import org.inugami.commons.tools.TestUnitResources;
 import org.inugami.core.alertings.dynamic.entities.DynamicAlertEntity;
+import org.inugami.core.context.ApplicationContext;
 import org.inugami.core.context.Context;
+import org.junit.After;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -22,7 +24,9 @@ public class DynamicAlertsServiceTest implements TestUnitResources {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final DynamicAlertsService SERVICE = initService();
+    private static final ApplicationContext   CONTEXT = Context.initializeStandalone();
+    
+    private static final DynamicAlertsService SERVICE = new DynamicAlertsService(CONTEXT);
     
     // =========================================================================
     // ITEGRATION
@@ -31,8 +35,9 @@ public class DynamicAlertsServiceTest implements TestUnitResources {
         
     }
     
-    private static DynamicAlertsService initService() {
-        return new DynamicAlertsService(Context.initializeStandalone());
+    @After
+    public void shutdown() {
+        CONTEXT.forceShutdownSubContext();
     }
     
     // =========================================================================

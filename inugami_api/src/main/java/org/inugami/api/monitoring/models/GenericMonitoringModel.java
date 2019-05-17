@@ -14,16 +14,20 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.inugami.monitoring.api.data;
+package org.inugami.api.monitoring.models;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
+import org.apache.commons.codec.binary.Hex;
 import org.inugami.api.dao.Identifiable;
+import org.inugami.api.loggers.Loggers;
 import org.inugami.api.mapping.DateTransformer;
 import org.inugami.api.models.data.JsonObject;
 import org.inugami.api.models.data.graphite.number.GraphiteNumber;
 import org.inugami.api.models.data.graphite.number.GraphiteNumberTransformer;
-import org.inugami.commons.security.EncryptionUtils;
 
 import flexjson.JSON;
 
@@ -83,11 +87,12 @@ public class GenericMonitoringModel implements JsonObject, Identifiable<String> 
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    /* package */ GenericMonitoringModel(String asset, String environment, String instanceName, String instanceNumber,
-                                         String counterType, String device, String callType, String service,
-                                         String subService, String valueType, String timeUnit, Date date,
-                                         long timestamp, String errorCode, String errorType, GraphiteNumber value,
-                                         String data) {
+    /* package */ GenericMonitoringModel(final String asset, final String environment, final String instanceName,
+                                         final String instanceNumber, final String counterType, final String device,
+                                         final String callType, final String service, final String subService,
+                                         final String valueType, final String timeUnit, final Date date,
+                                         final long timestamp, final String errorCode, final String errorType,
+                                         final GraphiteNumber value, final String data) {
         super();
         this.asset = asset;
         this.environment = environment;
@@ -123,7 +128,20 @@ public class GenericMonitoringModel implements JsonObject, Identifiable<String> 
                                      String.valueOf(timestamp)
                                 );
         //@formatter:on
-        uid = new EncryptionUtils().encodeSha1(path);
+        uid = hashPath(path);
+    }
+    
+    private static String hashPath(final String value) {
+        String result = null;
+        try {
+            final MessageDigest md = MessageDigest.getInstance("SHA-512");
+            final byte[] bytes = md.digest(value.getBytes(StandardCharsets.UTF_8));
+            result = Hex.encodeHexString(bytes);
+        }
+        catch (final NoSuchAlgorithmException e) {
+            Loggers.DEBUG.error(e.getMessage(), e);
+        }
+        return result;
     }
     
     // =========================================================================
@@ -133,15 +151,15 @@ public class GenericMonitoringModel implements JsonObject, Identifiable<String> 
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((path == null) ? 0 : path.hashCode());
+        result = (prime * result) + ((path == null) ? 0 : path.hashCode());
         return result;
     }
     
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         boolean result = this == obj;
         
-        if (!result && obj != null && obj instanceof GenericMonitoringModel) {
+        if (!result && (obj != null) && (obj instanceof GenericMonitoringModel)) {
             final GenericMonitoringModel other = (GenericMonitoringModel) obj;
             result = path.equals(other.getPath());
         }
@@ -177,7 +195,7 @@ public class GenericMonitoringModel implements JsonObject, Identifiable<String> 
     }
     
     @Override
-    public void setUid(String uid) {
+    public void setUid(final String uid) {
         // nothing to do
     }
     

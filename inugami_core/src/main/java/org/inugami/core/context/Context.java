@@ -130,6 +130,8 @@ public final class Context implements ApplicationContext,
     
     private final JavaScriptEngine              javaScriptEngine       = JavaScriptEngine.getInstance();
     
+    private final List<BootstrapContext>        subContexts            = new ArrayList<>();
+    
     private volatile static Context             instance;
     
     // =========================================================================
@@ -199,6 +201,12 @@ public final class Context implements ApplicationContext,
             result.setSystemInfo(systemInfosManager.getSystemInfos());
         }
         return result;
+    }
+    
+    @Override
+    public void registerForShutodown(final BootstrapContext subContext) {
+        Asserts.notNull("sub context is mandatory", subContext);
+        subContexts.add(subContext);
     }
     
     // =========================================================================
@@ -511,6 +519,7 @@ public final class Context implements ApplicationContext,
     // =========================================================================
     @Override
     public void startup() {
+        subContexts.stream().forEach(BootstrapContext::startup);
         //@formatter:off
         schedulers.entrySet()
                   .stream()
@@ -526,6 +535,7 @@ public final class Context implements ApplicationContext,
         metricsEventsSenderSse.interrupt();
         SseService.shutdown();
         runnableContext.stream().forEach(RunnableContext::shutdown);
+        forceShutdownSubContext();
         genericContext.shutdown(this);
         
         //@formatter:off
@@ -538,6 +548,11 @@ public final class Context implements ApplicationContext,
         processShutdown(threadsStandaloneExecutor, ()->threadsStandaloneExecutor.shutdown());
         processShutdown(systemInfosManager,        ()->systemInfosManager.shutdown());
         //@formatter:on
+    }
+    
+    @Override
+    public void forceShutdownSubContext() {
+        subContexts.stream().forEach(BootstrapContext::shutdown);
     }
     
     // =========================================================================
@@ -723,6 +738,8 @@ public final class Context implements ApplicationContext,
     public JavaScriptEngine getScriptEngine() {
         return javaScriptEngine;
     }
+
+
 
 
 }

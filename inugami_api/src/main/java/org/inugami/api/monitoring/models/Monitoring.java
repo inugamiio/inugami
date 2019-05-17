@@ -14,15 +14,22 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.inugami.monitoring.api.data.config;
+package org.inugami.api.monitoring.models;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
+import org.inugami.api.monitoring.senders.MonitoringSender;
+import org.inugami.api.monitoring.sensors.MonitoringSensor;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.monitoring.api.interceptors.MonitoringFilterInterceptor;
-import org.inugami.monitoring.api.senders.MonitoringSender;
-import org.inugami.monitoring.api.sensors.MonitoringSensor;
+
+/**
+ * Monitoring
+ * 
+ * @author patrickguillerm
+ * @since Jan 16, 2019
+ */
 
 /**
  * Monitoring
@@ -64,9 +71,10 @@ public class Monitoring {
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    public Monitoring(boolean enable, String env, String asset, String hostname, String instanceName,
-                      String instanceNumber, ConfigHandler<String, String> properties, List<MonitoringSender> senders,
-                      List<MonitoringSensor> sensors, Headers headers, int maxSensorsTasksThreads,
+    public Monitoring(final boolean enable, final String env, final String asset, final String hostname,
+                      final String instanceName, final String instanceNumber,
+                      final ConfigHandler<String, String> properties, final List<MonitoringSender> senders,
+                      final List<MonitoringSensor> sensors, final Headers headers, final int maxSensorsTasksThreads,
                       final String applicationVersion, final List<MonitoringFilterInterceptor> interceptors) {
         super();
         this.enable = enable;
@@ -89,7 +97,7 @@ public class Monitoring {
     // =========================================================================
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append("Monitoring [enable=");
         builder.append(enable);
         builder.append(", env=");
