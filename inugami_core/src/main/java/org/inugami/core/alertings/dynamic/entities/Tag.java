@@ -6,11 +6,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.inugami.api.dao.ClonableObject;
 import org.inugami.api.dao.Identifiable;
 
 @Entity
 @Table(name = "CORE_TAGS")
-public class Tag implements Identifiable<String> {
+public class Tag implements Identifiable<String>, ClonableObject<Tag> {
     
     // =========================================================================
     // ATTRIBUTES
@@ -32,6 +33,11 @@ public class Tag implements Identifiable<String> {
     public Tag(@NotNull @NotEmpty final String name) {
         this.name = name;
         //@formatter:on
+    }
+    
+    @Override
+    public Tag cloneObject() {
+        return new Tag(name);
     }
     
     // =========================================================================

@@ -99,7 +99,7 @@ public class DynamicAlertsService implements Serializable {
     // PROCESS ALERTING
     // =========================================================================
     private void processAlerting(final List<DyncamicAlertsTask> tasks) {
-        // TODO Auto-generated method stub
+        tasks.forEach(executor::submit);
     }
     
     // =========================================================================
@@ -133,7 +133,11 @@ public class DynamicAlertsService implements Serializable {
     }
     
     private List<DyncamicAlertsTask> buildTasks(final List<DynamicAlertEntity> alertsToProcess) {
-        // TODO Auto-generated method stub
-        return null;
+        final List<DyncamicAlertsTask> result = new ArrayList<>();
+        
+        for (final DynamicAlertEntity entity : alertsToProcess) {
+            result.add(new DyncamicAlertsTask(entity.cloneObject(), context));
+        }
+        return result;
     }
 }

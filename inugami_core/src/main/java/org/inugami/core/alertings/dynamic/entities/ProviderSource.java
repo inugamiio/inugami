@@ -10,11 +10,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.inugami.api.dao.ClonableObject;
 import org.inugami.api.dao.Identifiable;
 
 @Entity
 @Table(name = "CORE_PROVIDER_SOURCE")
-public class ProviderSource implements Identifiable<Long> {
+public class ProviderSource implements Identifiable<Long>, ClonableObject<ProviderSource> {
     
     // =========================================================================
     // ATTRIBUTES
@@ -30,6 +31,8 @@ public class ProviderSource implements Identifiable<Long> {
     private String            provider;
     
     private String            cronExpression;
+    
+    private String            eventName;
     
     @Column(name = "dataset_from")
     private String            from;
@@ -47,6 +50,23 @@ public class ProviderSource implements Identifiable<Long> {
     
     public ProviderSource(final long uid) {
         this.uid = uid;
+    }
+    
+    public ProviderSource(final Long uid, final String provider, final String cronExpression, final String from,
+                          final String to, final String query, final String eventName) {
+        super();
+        this.uid = uid;
+        this.provider = provider;
+        this.cronExpression = cronExpression;
+        this.from = from;
+        this.to = to;
+        this.query = query;
+        this.eventName = eventName;
+    }
+    
+    @Override
+    public ProviderSource cloneObject() {
+        return new ProviderSource(uid, provider, cronExpression, from, to, query, eventName);
     }
     
     // =========================================================================
@@ -94,6 +114,8 @@ public class ProviderSource implements Identifiable<Long> {
         builder.append(provider);
         builder.append(", cronExpression=");
         builder.append(cronExpression);
+        builder.append(", eventName=");
+        builder.append(eventName);
         builder.append(", from=");
         builder.append(from);
         builder.append(", to=");
@@ -160,6 +182,14 @@ public class ProviderSource implements Identifiable<Long> {
     
     public void setQuery(final String query) {
         this.query = query;
+    }
+    
+    public String getEventName() {
+        return eventName;
+    }
+    
+    public void setEventName(final String eventName) {
+        this.eventName = eventName;
     }
     
 }

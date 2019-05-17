@@ -9,11 +9,12 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.inugami.api.dao.ClonableObject;
 import org.inugami.api.dao.Identifiable;
 
 @Entity
 @Table(name = "CORE_DYNAMIC_LEVELS_VALUES")
-public class DynamicLevelValues implements Identifiable<Long> {
+public class DynamicLevelValues implements Identifiable<Long>, ClonableObject<DynamicLevelValues> {
     
     // =========================================================================
     // ATTRIBUTES
@@ -42,6 +43,18 @@ public class DynamicLevelValues implements Identifiable<Long> {
         super();
         this.hour = hour;
         this.level = level;
+    }
+    
+    public DynamicLevelValues(final Long uid, final Integer hour, final Double level) {
+        super();
+        this.uid = uid;
+        this.hour = hour;
+        this.level = level;
+    }
+    
+    @Override
+    public DynamicLevelValues cloneObject() {
+        return new DynamicLevelValues(uid, hour, level);
     }
     
     // =========================================================================

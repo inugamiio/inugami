@@ -7,11 +7,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.inugami.api.dao.ClonableObject;
 import org.inugami.api.dao.Identifiable;
 
 @Entity
 @Table(name = "CORE_ACTIVATION_TIME_SLOT")
-public class TimeSlot implements Identifiable<Long> {
+public class TimeSlot implements Identifiable<Long>, ClonableObject<TimeSlot> {
     
     // =========================================================================
     // ATTRIBUTES
@@ -30,6 +31,24 @@ public class TimeSlot implements Identifiable<Long> {
     // CONSTRUCTORS
     // =========================================================================
     
+    public TimeSlot() {
+    }
+    
+    public TimeSlot(final Long uid, final String from, final String to) {
+        super();
+        this.uid = uid;
+        this.from = from;
+        this.to = to;
+    }
+    
+    @Override
+    public TimeSlot cloneObject() {
+        return new TimeSlot(uid, from, to);
+    }
+    
+    // =========================================================================
+    // OVERRIDES
+    // =========================================================================
     @Override
     public Long getUid() {
         return uid;
@@ -45,9 +64,6 @@ public class TimeSlot implements Identifiable<Long> {
         return uid != null;
     }
     
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
     @Override
     public int hashCode() {
         final int prime = 31;

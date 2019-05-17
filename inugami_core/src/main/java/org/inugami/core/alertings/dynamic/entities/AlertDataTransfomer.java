@@ -7,11 +7,12 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
+import org.inugami.api.dao.ClonableObject;
 import org.inugami.api.dao.Identifiable;
 
 @Entity
 @Table(name = "CORE_ALERT_DATA_TRANSFORMER")
-public class AlertDataTransfomer implements Identifiable<Long> {
+public class AlertDataTransfomer implements Identifiable<Long>, ClonableObject<AlertDataTransfomer> {
     
     // =========================================================================
     // ATTRIBUTES
@@ -26,6 +27,20 @@ public class AlertDataTransfomer implements Identifiable<Long> {
     
     @Lob
     private String            script;
+    
+    public AlertDataTransfomer() {
+    }
+    
+    public AlertDataTransfomer(final Long uid, final String name, final String script) {
+        this.uid = uid;
+        this.name = name;
+        this.script = script;
+    }
+    
+    @Override
+    public AlertDataTransfomer cloneObject() {
+        return new AlertDataTransfomer(uid, name, script);
+    }
     
     // =========================================================================
     // OVERRIDES

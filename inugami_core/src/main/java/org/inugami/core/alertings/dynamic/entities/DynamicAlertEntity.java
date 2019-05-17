@@ -1,7 +1,11 @@
 package org.inugami.core.alertings.dynamic.entities;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,10 +16,12 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.inugami.api.alertings.AlerteLevels;
+import org.inugami.api.dao.ClonableObject;
 import org.inugami.core.alertings.AlertEntity;
 
 @Entity
-public class DynamicAlertEntity extends AlertEntity {
+public class DynamicAlertEntity extends AlertEntity implements ClonableObject<DynamicAlertEntity> {
     
     // =========================================================================
     // ATTRIBUTES
@@ -52,6 +58,71 @@ public class DynamicAlertEntity extends AlertEntity {
                               @NotNull @NotEmpty final String level) {
         super(alerteName, level);
       //@formatter:on
+    }
+    
+    protected DynamicAlertEntity(final String alerteName, final String level, final AlerteLevels levelType,
+                                 final int levelNumber, final String label, final String subLabel, final String url,
+                                 final long created, final long duration, final String channel, final String data,
+                                 final boolean enable, final long ttl, final List<String> providers,
+                                 final Set<Tag> tags, final ProviderSource source, final List<DynamicLevel> levels,
+                                 final String script, final List<ActivationTime> activations,
+                                 final AlertDataTransfomer transformer) {
+        super(alerteName, level, levelType, levelNumber, label, subLabel, url, created, duration, channel, data, enable,
+              ttl, providers);
+        this.tags = tags;
+        this.source = source;
+        this.levels = levels;
+        this.script = script;
+        this.activations = activations;
+        this.transformer = transformer;
+    }
+    
+    @Override
+    public DynamicAlertEntity cloneObject() {
+        final List<String> newProviders = new ArrayList<>(getProviders());
+        
+        //@formatter:off
+        final Set<Tag> newTags = Optional.ofNullable(tags)
+                                         .orElse(Collections.emptySet())
+                                         .stream()
+                                         .map(Tag::cloneObject)
+                                         .collect(Collectors.toSet());
+        
+        final List<DynamicLevel> newLevels  = Optional.ofNullable(levels)
+                                                      .orElse(Collections.emptyList())
+                                                      .stream()
+                                                      .map(DynamicLevel::cloneObject)
+                                                      .collect(Collectors.toList());
+        
+        
+        final List<ActivationTime> newActivations = Optional.ofNullable(activations)
+                                                            .orElse(Collections.emptyList())
+                                                            .stream()
+                                                            .map(ActivationTime::cloneObject)
+                                                            .collect(Collectors.toList());
+        
+        
+        return new  DynamicAlertEntity(getAlerteName(),
+                                       getLevel(),  
+                                       getLevelType(),
+                                       getLevelNumber(),
+                                       getLabel(),
+                                       getSubLabel(),
+                                       getUrl(),
+                                       getCreated(),
+                                       getDuration(), 
+                                       getChannel(),
+                                       getData(),
+                                       isEnable(), 
+                                       getTtl(),
+                                       newProviders,
+                                       newTags,
+                                       source==null?null:source.cloneObject(),
+                                       newLevels,
+                                       script,
+                                       newActivations,
+                                       transformer==null?null:transformer.cloneObject());
+        //@formatter:on
     }
     
     // =========================================================================

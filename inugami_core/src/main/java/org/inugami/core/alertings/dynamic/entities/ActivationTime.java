@@ -1,6 +1,10 @@
 package org.inugami.core.alertings.dynamic.entities;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
@@ -12,11 +16,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.inugami.api.dao.ClonableObject;
 import org.inugami.api.dao.Identifiable;
 
 @Entity
 @Table(name = "CORE_ACTIVATION_TIME")
-public class ActivationTime implements Identifiable<Long> {
+public class ActivationTime implements Identifiable<Long>, ClonableObject<ActivationTime> {
     
     // =========================================================================
     // ATTRIBUTES
@@ -32,6 +37,33 @@ public class ActivationTime implements Identifiable<Long> {
     
     @OneToMany(cascade = CascadeType.ALL, targetEntity = TimeSlot.class, fetch = FetchType.EAGER)
     private List<TimeSlot>    hours;
+    
+    // =========================================================================
+    // CONSTRUCTORS
+    // =========================================================================
+    public ActivationTime() {
+    }
+    
+    public ActivationTime(final Long uid, final List<String> days, final List<TimeSlot> hours) {
+        super();
+        this.uid = uid;
+        this.days = days;
+        this.hours = hours;
+    }
+    
+    @Override
+    public ActivationTime cloneObject() {
+        
+        final List<String> newDays = days == null ? null : new ArrayList<>(days);
+        //@formatter:off
+        final List<TimeSlot> newHours = Optional.ofNullable(hours)
+                                                .orElse(Collections.emptyList())
+                                                .stream()
+                                                .map(TimeSlot::cloneObject)
+                                                .collect(Collectors.toList());
+        //@formatter:on
+        return new ActivationTime(uid, newDays, newHours);
+    }
     
     // =========================================================================
     // OVERRIDES

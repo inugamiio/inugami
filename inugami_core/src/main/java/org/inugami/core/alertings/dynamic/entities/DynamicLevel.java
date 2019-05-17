@@ -1,5 +1,6 @@
 package org.inugami.core.alertings.dynamic.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,11 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.inugami.api.dao.ClonableObject;
 import org.inugami.api.dao.Identifiable;
 
 @Entity
 @Table(name = "CORE_DYNAMIC_LEVELS")
-public class DynamicLevel implements Identifiable<Long> {
+public class DynamicLevel implements Identifiable<Long>, ClonableObject<DynamicLevel> {
     
     // =========================================================================
     // ATTRIBUTES
@@ -32,6 +34,20 @@ public class DynamicLevel implements Identifiable<Long> {
     private List<DynamicLevelValues> data;
     
     private transient boolean        dynamic;
+    
+    // =========================================================================
+    // CONSTRUCTORS
+    // =========================================================================
+    public DynamicLevel() {
+    }
+    
+    public DynamicLevel(final Long uid, final String name, final List<DynamicLevelValues> data, final boolean dynamic) {
+        super();
+        this.uid = uid;
+        this.name = name;
+        this.data = data;
+        this.dynamic = dynamic;
+    }
     
     // =========================================================================
     // OVERRIDES
@@ -51,6 +67,14 @@ public class DynamicLevel implements Identifiable<Long> {
         return uid != null;
     }
     
+    @Override
+    public DynamicLevel cloneObject() {
+        final List<DynamicLevelValues> newData = new ArrayList<>();
+        if (data != null) {
+            data.stream().map(DynamicLevelValues::cloneObject).forEach(newData::add);
+        }
+        return new DynamicLevel(uid, name, data, dynamic);
+    }
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================
