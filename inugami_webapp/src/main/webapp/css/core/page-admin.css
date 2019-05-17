@@ -182,6 +182,19 @@
   display: inline-block;
 }
 
+.page-admin .alert-edit .left-panel .channel-selector{
+  font-size: 1.2em;
+}
+.page-admin .alert-edit .left-panel .channel-selector .channel{
+  color: gray;
+  font-size: 1.2em;
+  display: inline-block;
+  margin-right: 1em;
+}
+.page-admin .alert-edit .left-panel .channel-selector .channel.enable{
+  color: black;
+}
+
 
 .page-admin .alert-edit .right-panel{
   float: right;
@@ -250,7 +263,6 @@
 .page-admin .alert-edit .right-panel .levels-setting .add-level input  {
   width: 15em;
 }
-
 
 
 .page-admin .konami{

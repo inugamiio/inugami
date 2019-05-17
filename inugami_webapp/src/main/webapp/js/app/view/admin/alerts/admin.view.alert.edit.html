@@ -37,9 +37,9 @@
             </div>
             <div class="channel-selector">
                 <msg key="alert.edit.channel"></msg>:
-                <span *ngFor="let channel of channels; index as i" class="channel" formArrayName="channelsData">
-                    <p-checkbox  value={{channel}} [formControlName]="i"></p-checkbox>{{channel}} <!--  [(ngModel)]=channelsData -->
-                </span>
+                <div *ngFor="let channel of channels; index as i" class="channel" [ngClass]="{'enable':channel.enable}" formArrayName="channelsData">
+                    <p-checkbox  value={{channel.name}} [formControlName]="i"></p-checkbox>{{channel.name}} <!--  [(ngModel)]=channelsData -->
+                </div>
             </div>
             <p-panel header="Sources" formGroupName="sources">
                 <div>

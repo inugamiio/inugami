@@ -99,14 +99,14 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         }
 
         this.elementRatio = {
-            axisX               : 0.90,
+            axisX               : 0.85,
             axisXLeftMargin     : 0.05,
-            axisXRightMargin    : 0.05,
+            axisXRightMargin    : 0.1,
 
 
-            axisY               : 0.8,
+            axisY               : 0.7,
             axisYUpMargin       : 0.1,
-            axisYDownMargin     : 0.1
+            axisYDownMargin     : 0.2
         }
 
        

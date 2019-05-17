@@ -7,6 +7,7 @@ import {AlertsCrudServices}                                 from './../../../ser
 import {AlertEntity}                                        from './../../../models/alert.entity';
 import {InputBloc}                                          from './../../../components/forms/input.bloc';
 import {Msg}                                                from './../../../components/msg/msg';
+import { HttpServices } from '../../../services/http/http.services';
 
 export const ADMIN_VIEW_ALERT_EDIT_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -35,11 +36,11 @@ export class AdminViewAlertEdit implements AfterViewInit{
     private innerValue                  : AlertEntity; 
     private isNotEdit                   : boolean;
 
-    private channels                    : any;
+    private channels                    : any[] = [];
     private addedLevel                  : any = {};
     
     private alertForm                   : any;
-
+    private resp                        : any;
     private formatter                   : any;
 
     @Output() onClose                   : EventEmitter<any> = new EventEmitter();
@@ -51,7 +52,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
     /**************************************************************************
     * CONSTRUCTOR
     **************************************************************************/
-    constructor(private alertsCrudServices : AlertsCrudServices,private fb: FormBuilder) {
+    constructor(private alertsCrudServices : AlertsCrudServices,private fb: FormBuilder, private httpService : HttpServices) {
         this.initValue();
     }
     ngAfterContentInit(){
@@ -87,12 +88,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
             }
             this.detailData =  strJson.split("\\u0022").join("\""); 
         }
-
-        if(isNull(this.channels)){
-            this.channels = ["OpsGenie","Teams","SSE","Mail"];
-        }
-        // faire gavffa a bien init channeles avant de faire ca 
-        const channelsFormControls = this.channels.map(control => new FormControl(false));
+        
         
         if(isNull(this.alertForm)){
             this.alertForm = this.fb.group({
@@ -102,7 +98,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
                 mainMessage: [''],
                 detailedMessage: [''],
                 tag:[''],
-                channelsData: this.fb.array(channelsFormControls),
+                channelsData: this.fb.array([]),
                 sources: this.fb.group({
                     dataProvider: [''],
                     interval: [''],
@@ -114,13 +110,29 @@ export class AdminViewAlertEdit implements AfterViewInit{
                 levelPointsBeforeTriggered: this.fb.array([]),
                 dynamicLevels:[''],
                 scripts:['']
-            })                
+            })
+        
+            this.initChannels();                
         }else{
             this.alertForm.controls['levelPointsBeforeTriggered'].controls =[];
             this.alertForm.reset();
         }
     }
+
+    initChannels(){
+        let self = this;
+        this.resp = this.httpService.get("http://localhost:8080/inugami_webapp/rest/alert/providers");
+        this.resp.then(data => self.addChannels(data));
+    }
     
+    addChannels(data){
+        let channelsData = this.alertForm.get('channelsData');
+        let channelArray = [];
+        for(let provider of data){
+            this.channels.push({name:provider.name,enable:provider.enable});
+            this.alertForm.get('channelsData').push(this.fb.control(channelArray));
+        }
+    }
 
     /**************************************************************************
     * ACTIONS
