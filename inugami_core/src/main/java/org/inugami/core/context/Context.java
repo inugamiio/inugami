@@ -63,6 +63,7 @@ import org.inugami.configuration.models.app.SecurityConfiguration;
 import org.inugami.configuration.models.app.UserConfig;
 import org.inugami.configuration.models.plugins.Plugin;
 import org.inugami.configuration.services.resolver.ConfigurationResolver;
+import org.inugami.core.alertings.DefaultAlertingProvider;
 import org.inugami.core.context.runner.CallableEvent;
 import org.inugami.core.context.runner.EventRunnerFuture;
 import org.inugami.core.context.runner.PluginEventsRunner;
@@ -432,6 +433,22 @@ public final class Context implements ApplicationContext,
     @Override
     public AlertingProvider getAlertingProvider(final String name) {
         return getNamedComponent(name, (plugin) -> plugin.getAlertingProviders().orElse(null));
+    }
+    
+    @Override
+    public AlertingProvider getAlertingProvider() {
+        AlertingProvider result = null;
+        final List<AlertingProvider> providers = getAlertingProviders();
+        if (providers != null) {
+            for (final AlertingProvider provider : providers) {
+                if (provider instanceof DefaultAlertingProvider) {
+                    result = provider;
+                    break;
+                }
+            }
+        }
+        
+        return result;
     }
     
     @Override

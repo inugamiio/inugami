@@ -1,10 +1,19 @@
 package org.inugami.core.alertings.dynamic.services;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
+import org.inugami.api.alertings.AlertingProvider;
+import org.inugami.api.alertings.DynamicAlertingLevel;
 import org.inugami.api.exceptions.NotYetImplementedException;
 import org.inugami.api.exceptions.services.ProcessorException;
 import org.inugami.api.loggers.Loggers;
@@ -16,7 +25,10 @@ import org.inugami.api.providers.Provider;
 import org.inugami.api.providers.concurrent.FutureData;
 import org.inugami.api.providers.task.ProviderFutureResult;
 import org.inugami.core.alertings.dynamic.entities.DynamicAlertEntity;
+import org.inugami.core.alertings.dynamic.entities.DynamicLevel;
+import org.inugami.core.alertings.dynamic.entities.DynamicLevelValues;
 import org.inugami.core.alertings.dynamic.entities.ProviderSource;
+import org.inugami.core.alertings.dynamic.entities.Tag;
 import org.inugami.core.context.ApplicationContext;
 
 public class DyncamicAlertsTask implements Callable<Void> {
@@ -49,6 +61,22 @@ public class DyncamicAlertsTask implements Callable<Void> {
     
     @Override
     public Void call() throws Exception {
+        try {
+            process();
+        }
+        catch (final Exception e) {
+            Loggers.ALERTING.error(e.getMessage());
+            Loggers.DEBUG.error(e.getMessage(), e);
+            throw e;
+        }
+        
+        return null;
+    }
+    // =========================================================================
+    // LOAD DATA
+    // =========================================================================
+    
+    private void process() throws InterruptedException, ExecutionException, ProcessorException {
         ProviderFutureResult data = null;
         SimpleEvent event = null;
         if (entity.getSource() != null) {
@@ -67,11 +95,10 @@ public class DyncamicAlertsTask implements Callable<Void> {
             data = applyProcessor(data, event);
         }
         
-        return null;
+        if (data != null) {
+            processAlerting(data, event);
+        }
     }
-    // =========================================================================
-    // LOAD DATA
-    // =========================================================================
     
     private ProviderFutureResult loadDataFromProvider(final SimpleEvent event) throws InterruptedException,
                                                                                ExecutionException, TimeoutException {
@@ -83,7 +110,6 @@ public class DyncamicAlertsTask implements Callable<Void> {
         }
         else {
             final FutureData<ProviderFutureResult> futur = provider.callEvent(event, GAV);
-            
             result = futur.getFuture().get(context.getApplicationConfiguration().getTimeout(), TimeUnit.MILLISECONDS);
         }
         
@@ -103,7 +129,7 @@ public class DyncamicAlertsTask implements Callable<Void> {
     }
     
     // =========================================================================
-    // POST
+    // APPLY PROCESSOR
     // =========================================================================
     private ProviderFutureResult applyProcessor(final ProviderFutureResult data,
                                                 final SimpleEvent event) throws ProcessorException {
@@ -121,16 +147,8 @@ public class DyncamicAlertsTask implements Callable<Void> {
     
     private ProviderFutureResult invokeProcessor(final ProviderFutureResult data,
                                                  final SimpleEvent event) throws ProcessorException {
-        ProviderFutureResult result = data;
         final Processor processor = context.getProcessor(entity.getTransformer().getName());
-        if (processor == null) {
-            Loggers.ALERTING.error("can't transform data from dynamic alert {} with unkown processor : {}",
-                                   entity.getAlerteName(), entity.getTransformer().getName());
-        }
-        else {
-            result = processor.process(event, data);
-        }
-        return result;
+        return processor.process(event, data);
     }
     
     private ProviderFutureResult invokeJavaScriptTransformer(final ProviderFutureResult data, final SimpleEvent event) {
@@ -138,10 +156,67 @@ public class DyncamicAlertsTask implements Callable<Void> {
     }
     
     // =========================================================================
+    // PROCESS ALERTING
+    // =========================================================================
+    private void processAlerting(final ProviderFutureResult data, final SimpleEvent event) {
+        final AlertingProvider provider = context.getAlertingProvider();
+        if (provider == null) {
+            Loggers.ALERTING.error("no default alerting provider found!");
+        }
+        else {
+            final List<DynamicAlertingLevel> levels = buildLevels(entity.getLevels());
+            if (!levels.isEmpty()) {
+                provider.processDynamicAlert(GAV, event, data, levels, entity.getLabel(), entity.getSubLabel(),
+                                             buildTag(entity.getTags()));
+            }
+        }
+    }
+    
+    private List<DynamicAlertingLevel> buildLevels(final List<DynamicLevel> dynamicLevels) {
+        final List<DynamicAlertingLevel> result = new ArrayList<>();
+        if (dynamicLevels != null) {
+            final int currentHour = resolveCurrentHour();
+            
+            for (final DynamicLevel level : dynamicLevels) {
+                if ((level.getData() != null) && !level.getData().isEmpty()) {
+                    if (level.getData().size() == 1) {
+                        result.add(new DynamicAlertingLevel(level.getName(), level.getData().get(0).getLevel()));
+                    }
+                    else {
+                        for (final DynamicLevelValues hourData : level.getData()) {
+                            if (hourData.getHour() == currentHour) {
+                                result.add(new DynamicAlertingLevel(level.getName(), hourData.getLevel()));
+                                break;
+                            }
+                        }
+                    }
+                }
+                
+            }
+        }
+        
+        return result;
+    }
+    
+    private int resolveCurrentHour() {
+        return Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+    }
+    
+    // =========================================================================
     // TOOLS
     // =========================================================================
     private boolean isEmpty(final String eventName) {
         return (eventName == null) || eventName.trim().isEmpty();
+    }
+    
+    private List<String> buildTag(final Set<Tag> tags) {
+        //@formatter:off
+        return Optional.ofNullable(tags)
+                       .orElse(Collections.emptySet())
+                       .stream()
+                       .map(Tag::getName)
+                       .collect(Collectors.toList());
+        //@formatter:on
     }
     
 }

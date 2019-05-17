@@ -15,6 +15,7 @@ import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.exceptions.FatalException;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.commons.threads.ExecutorFactory;
+import org.inugami.core.alertings.dynamic.entities.ActivationTime;
 import org.inugami.core.alertings.dynamic.entities.DynamicAlertEntity;
 import org.inugami.core.context.ApplicationContext;
 
@@ -88,11 +89,17 @@ public class DynamicAlertsService implements Serializable {
             final String cronExpression = resolveCronExpression(entity);
             final CronResolver cronResolver = buildCronREsolver(cronExpression, entity.getUid());
             
-            if ((cronExpression != null) && cronResolver.willFire(timestamp)) {
+            if ((cronExpression != null) && cronResolver.willFire(timestamp)
+                && alertIsInTimeSlot(entity.getActivations())) {
                 result.add(entity);
             }
         }
         return result;
+    }
+    
+    private boolean alertIsInTimeSlot(final List<ActivationTime> activations) {
+        Loggers.ALERTING.warn("alertIsInTimeSlot isn't implemented yet!");
+        return true;
     }
     
     // =========================================================================

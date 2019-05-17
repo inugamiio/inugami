@@ -109,6 +109,8 @@ public interface ApplicationContext {
     
     AlertingProvider getAlertingProvider(final String name);
     
+    AlertingProvider getAlertingProvider();
+    
     List<AlertingProvider> getAlertingProviders();
     
     void disablePlugin(final Gav gav);
