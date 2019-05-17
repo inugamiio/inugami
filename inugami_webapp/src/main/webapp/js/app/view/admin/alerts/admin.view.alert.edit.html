@@ -62,7 +62,7 @@
             <p-panel header="Activation">
                 <msg key="alert.edit.activation.days"></msg>
                 <div formArrayName="activation" class="activation">
-                    <div *ngFor="let lineData of activationDaysData; index as i" class="day-and-time-line" [formGroupName]="i">
+                    <div *ngFor="let activationLine of alertForm.get('activation').controls; index as i" class="day-and-time-line" [formGroupName]="i">
                         <input-days-selector formControlName="days" ></input-days-selector> <!-- [(ngModel)]="lineData.days" -->
                         <input-time-slots formControlName="timeSlots"></input-time-slots><!-- [(ngModel)]="lineData.timeSlots" -->
                         <button pButton type="button" class="active-action" icon="fa fa-trash-alt"
@@ -85,11 +85,11 @@
                         </div>
 
                         <div formArrayName="levelPointsBeforeTriggered" class="levels">
-                            <div class="dynamic-levels-levels" *ngFor="let level of dynamicLevelsLevels; index as i" [formGroupName]="i">
+                            <div class="dynamic-levels-levels" *ngFor="let level of alertForm.get('levelPointsBeforeTriggered').controls; index as i" [formGroupName]="i">
                                 <input-bloc disabled=true formControlName="points" label="alert.edit.dynamic.levels.points.before.triggered" styeClass="points"></input-bloc>
                                 <input-bloc disabled=true formControlName="name" label="alert.edit.dynamic.levels.add.level" styeClass="name"></input-bloc>
                                 <span class="delete"><button pButton type="button" class="active-action" icon="fas fa-minus"
-                                        (click)="removeDynamicLevelsLevel(level.name,i,graph)"></button></span>
+                                        (click)="removeDynamicLevelsLevel(i,graph)"></button></span>
                             </div>
                         </div>
                         <div class="add-level">

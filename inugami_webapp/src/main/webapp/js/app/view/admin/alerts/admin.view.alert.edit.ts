@@ -35,8 +35,6 @@ export class AdminViewAlertEdit implements AfterViewInit{
     private innerValue                  : AlertEntity; 
     private isNotEdit                   : boolean;
 
-    private activationDaysData          : any;
-    private dynamicLevelsLevels         : any;
     private channels                    : any;
     private addedLevel                  : any = {};
     
@@ -88,22 +86,8 @@ export class AdminViewAlertEdit implements AfterViewInit{
                 strJson = strJson.substring(0,strJson.length-1);
             }
             this.detailData =  strJson.split("\\u0022").join("\""); 
-            
-            
         }
-        if(isNull(this.activationDaysData)){
-            let timeSlots = []
-            let days = [];
-            let lineData = {
-                days:days,
-                timeSlots:timeSlots
-            }
 
-            this.activationDaysData = [lineData];
-        }
-        if(isNull(this.dynamicLevelsLevels)){
-            this.dynamicLevelsLevels = [];
-        }
         if(isNull(this.channels)){
             this.channels = ["OpsGenie","Teams","SSE","Mail"];
         }
@@ -132,9 +116,9 @@ export class AdminViewAlertEdit implements AfterViewInit{
                 scripts:['']
             })                
         }else{
+            this.alertForm.controls['levelPointsBeforeTriggered'].controls =[];
             this.alertForm.reset();
         }
-        this.formatter = null;
     }
     
 
@@ -193,44 +177,37 @@ export class AdminViewAlertEdit implements AfterViewInit{
     }
 
     removeActivationLine(index){
-        this.activationDaysData.splice(index,1);
         this.removeFormActivationLine(index);
     }
 
     addActivationLine(){
-        this.activationDaysData.push({});
         this.addFormActivationLine();
     }
+
     addDynamicLevelsLevel(graph){
         if( isNotNull(this.addedLevel.pointsBeforeTriggered)    &&
             isNotNull(this.addedLevel.name)                     &&
             this.addedLevel.name != ""                          &&
             this.addedLevel.pointsBeforeTriggered != ""         &&
             isNull(org.inugami.validators.notNegativeNumber(this.addedLevel.pointsBeforeTriggered))){
-               if(contains(this.addedLevel,this.dynamicLevelsLevels,function(a,b){
-                   return a.name === b.name;
+               if(contains(this.addedLevel,this.alertForm.get('levelPointsBeforeTriggered').controls,function(a,b){
+                   return a.value.name === b.name;
                })){
                    alert(org.inugami.formatters.message("alert.edit.level.already.added"));
                }else{
-                    this.dynamicLevelsLevels.push({pointsBeforeTriggered:this.addedLevel.pointsBeforeTriggered,
-                                                    name:this.addedLevel.name});
                     this.addFormLevelLine();
-                    
                     graph.addNewData(this.addedLevel.name);
                     
                 }
         }
     }
 
-    removeDynamicLevelsLevel(name,i,graph){
-        let index = indexOf(name,this.dynamicLevelsLevels,function(list,value){
-            return list.name === value;
-        })
-        if(index > -1){
-            this.dynamicLevelsLevels.splice(index,1);
-            this.removeFormLevelLine(i);
-            graph.deleteLine(name);
-        }
+    removeDynamicLevelsLevel(i,graph){
+        let array = this.alertForm.get('levelPointsBeforeTriggered');
+        let name = array.at(i).value.name; 
+        array.removeAt(i);
+
+        graph.deleteLine(name)
     }
 
 
