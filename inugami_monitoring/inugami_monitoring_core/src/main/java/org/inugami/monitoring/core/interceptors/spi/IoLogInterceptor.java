@@ -59,14 +59,14 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     // =========================================================================
     public IoLogInterceptor() {
         enableDecorator = true;
-        inputDecorator = ">> ";
-        outputDecorator = "<< ";
+        inputDecorator = "[IN] ";
+        outputDecorator = "[OUT] ";
     }
     
     public IoLogInterceptor(final ConfigHandler<String, String> configuration) {
         enableDecorator = configuration.grabBoolean("enableDecorator", true);
-        inputDecorator = configuration.grabOrDefault("inputDecorator", ">> ");
-        outputDecorator = configuration.grabOrDefault("outputDecorator", "<< ");
+        inputDecorator = configuration.grabOrDefault("inputDecorator", "[IN] ");
+        outputDecorator = configuration.grabOrDefault("outputDecorator", "[OUT] ");
     }
     
     @Override

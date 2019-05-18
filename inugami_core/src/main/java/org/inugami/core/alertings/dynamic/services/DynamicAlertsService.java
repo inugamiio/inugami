@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -14,7 +15,7 @@ import javax.inject.Named;
 import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.exceptions.FatalException;
 import org.inugami.api.loggers.Loggers;
-import org.inugami.commons.threads.ExecutorFactory;
+import org.inugami.commons.threads.MonitoredThreadFactory;
 import org.inugami.core.alertings.dynamic.entities.ActivationTime;
 import org.inugami.core.alertings.dynamic.entities.DynamicAlertEntity;
 import org.inugami.core.context.ApplicationContext;
@@ -49,11 +50,9 @@ public class DynamicAlertsService implements Serializable {
         final int maxThreads = context.getApplicationConfiguration().getAlertingDynamicMaxThreads();
         
         //@formatter:off
-        executor = new ExecutorFactory(maxThreads,
-                                       DynamicAlertsService.class.getSimpleName(),
-                                       false,
-                                       context.getGlobalConfiguration())
-                           .getExecutorSerice();
+        executor = Executors.newFixedThreadPool(maxThreads,
+                                                new MonitoredThreadFactory(DynamicAlertsService.class.getSimpleName(), false)); 
+                
         //@formatter:on
     }
     
@@ -71,7 +70,7 @@ public class DynamicAlertsService implements Serializable {
         final List<DynamicAlertEntity> alertsToProcess = resolveAlertsToProcess(entities, System.currentTimeMillis());
         
         if (!alertsToProcess.isEmpty()) {
-            
+            Loggers.ALERTING.info("{} dynamic alerts to process", alertsToProcess.size());
             final List<DyncamicAlertsTask> tasks = buildTasks(alertsToProcess);
             
             processAlerting(tasks);

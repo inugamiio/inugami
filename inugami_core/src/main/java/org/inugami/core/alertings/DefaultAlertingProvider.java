@@ -44,6 +44,7 @@ import org.inugami.api.models.data.basic.Json;
 import org.inugami.api.models.events.AlertingModel;
 import org.inugami.api.models.events.GenericEvent;
 import org.inugami.api.models.events.SimpleEvent;
+import org.inugami.api.monitoring.MdcService;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.api.providers.task.ProviderFutureResult;
 import org.inugami.commons.engine.JavaScriptEngine;
@@ -343,6 +344,7 @@ public class DefaultAlertingProvider implements AlertingProvider {
         }
         
         final Callable<String> task = () -> {
+            MdcService.initialize();
             String result = null;
             try {
                 JsonObject jsonObj = null;

@@ -45,6 +45,7 @@ import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.Gav;
 import org.inugami.api.models.events.GenericEvent;
 import org.inugami.api.models.tools.RunnableContext;
+import org.inugami.api.monitoring.MdcService;
 import org.inugami.api.processors.ClassBehavior;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.api.processors.Processor;
@@ -139,6 +140,7 @@ public final class Context implements ApplicationContext,
     // CONSTRUCTORS
     // =========================================================================
     protected Context(final EngineListener listener, final boolean disableCron) {
+        MdcService.initialize();
         cache = new CacheService();
         this.disableCron = disableCron;
         spiLoader = new SpiLoader();

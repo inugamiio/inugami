@@ -18,6 +18,7 @@ package org.inugami.commons.threads;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,10 @@ import java.util.function.BiFunction;
 import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.tools.Chrono;
+import org.inugami.api.monitoring.MonitoringInitializer;
+import org.inugami.api.monitoring.RequestContext;
+import org.inugami.api.monitoring.RequestInformation;
+import org.inugami.commons.spi.SpiLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +55,9 @@ public class RunAndCloseService<T> implements ThreadFactory {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final Logger                         LOGGER      = LoggerFactory.getLogger(RunAndCloseService.class);
+    private static final Logger                         LOGGER                = LoggerFactory.getLogger(RunAndCloseService.class);
+    
+    private static final List<MonitoringInitializer>    monitoringInitializer = initMonitoringInitializers();
     
     private final String                                threadsName;
     
@@ -68,13 +75,20 @@ public class RunAndCloseService<T> implements ThreadFactory {
     
     private final ThreadGroup                           threadGroup;
     
-    private final AtomicInteger                         threadIndex = new AtomicInteger();
+    private final AtomicInteger                         threadIndex           = new AtomicInteger();
     
-    private final List<T>                               data        = new ArrayList<>();
+    private final List<T>                               data                  = new ArrayList<>();
+    
+    private final RequestInformation                    requestContext;
     
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
+    private static List<MonitoringInitializer> initMonitoringInitializers() {
+        final List<MonitoringInitializer> spiServices = new SpiLoader().loadSpiService(MonitoringInitializer.class);
+        return spiServices == null ? Collections.emptyList() : spiServices;
+    }
+    
     @SafeVarargs
     public RunAndCloseService(final String threadsName, final long timeout, final int nbThreads,
                               final BiFunction<Exception, Callable<T>, T> onError, final Callable<T>... tasks) {
@@ -109,6 +123,9 @@ public class RunAndCloseService<T> implements ThreadFactory {
         threadGroup = Thread.currentThread().getThreadGroup();
         executor = Executors.newFixedThreadPool(howManyThreads, this);
         completion = new ExecutorCompletionService<>(executor);
+        
+        this.requestContext = RequestContext.getInstance();
+        
     }
     
     // =========================================================================
@@ -195,7 +212,8 @@ public class RunAndCloseService<T> implements ThreadFactory {
     @Override
     public Thread newThread(final Runnable runnable) {
         final String name = String.join(".", threadsName, String.valueOf(threadIndex.getAndIncrement()));
-        final Thread result = new Thread(threadGroup, runnable, name, 10);
+        final Thread result = new MonitoredThread(threadGroup, runnable, name, 10, requestContext,
+                                                  monitoringInitializer);
         result.setDaemon(false);
         return result;
     }

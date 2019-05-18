@@ -37,6 +37,7 @@ import org.inugami.api.dao.DaoException;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.mapping.Mapper;
 import org.inugami.api.models.data.basic.Json;
+import org.inugami.api.monitoring.MdcService;
 import org.inugami.core.alertings.dynamic.entities.DynamicAlertEntity;
 import org.inugami.core.alertings.dynamic.services.DynamicAlertsService;
 import org.inugami.core.cdi.scheduler.SystemEvent;
@@ -86,6 +87,7 @@ public class AlertServices implements Serializable {
     //@formatter:off
     public void manageAlertsSaved(@Observes  final SystemEvent event) {
         //@formatter:on
+        MdcService.initialize();
         try {
             processManageAlertsSaved();
         }

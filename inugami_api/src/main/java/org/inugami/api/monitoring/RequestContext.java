@@ -81,7 +81,7 @@ public final class RequestContext {
             builder.setInstanceNumber(config.getInstanceNumber());
             builder.setApplicationVersion(config.getApplicationVersion());
         }
-        
+        builder.setDeviceIdentifier("system");
         builder.setCorrelationId(UUID.randomUUID().toString());
         builder.setRequestId(UUID.randomUUID().toString());
         builder.setService(String.join("_", "technical", Thread.currentThread().getName()));

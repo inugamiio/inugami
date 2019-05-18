@@ -19,9 +19,9 @@
     == INTERCEPTORS
     ========================================================================= -->
     <interceptors>
-<!--         <interceptor name="iolog" /> -->
-<!--         <interceptor name="servicesCounter" /> -->
-
+        <interceptor name="mdcInterceptor" />
+        <interceptor name="iolog" />
+        <interceptor name="servicesCounter" />
     </interceptors>
     <!-- =========================================================================
     == SENDERS
@@ -41,14 +41,14 @@
     == SENSORS
     ========================================================================= -->
     <sensors>
-        <sensor name="cpu" >
+        <sensor name="cpu">
             <properties>
                 <property key="timeUnit" value="1min" />
             </properties>
         </sensor>
-        <sensor name="threads" interval="10000" />
-        <sensor name="memory"  />
-<!--         <sensor name="servicesSensor" /> -->
+        <sensor name="threads" interval="30000" />
+        <sensor name="memory" />
+        <sensor name="servicesSensor" />
     </sensors>
 
 </monitoring>
