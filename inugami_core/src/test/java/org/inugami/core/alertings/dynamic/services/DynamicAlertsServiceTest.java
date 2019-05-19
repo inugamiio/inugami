@@ -61,9 +61,10 @@ public class DynamicAlertsServiceTest implements TestUnitResources {
     @Test
     public void testAlertIsInTimeSlot() throws Exception {
         final long time = buildDate("2019/05/19 15:10");
+        
         //@formatter:off
         assertTrue( SERVICE.alertIsInTimeSlot(buildActivation(asList("sunday","monday"),asList(new TimeSlot("06:00", "16:00"))), time));
-        assertFalse(SERVICE.alertIsInTimeSlot(buildActivation(asList("sunday","monday"),asList(new TimeSlot("06:00", "16:00"))), time));
+        assertFalse(SERVICE.alertIsInTimeSlot(buildActivation(asList("sunday","monday"),asList(new TimeSlot("16:00", "20:00"))), time));
         assertFalse(SERVICE.alertIsInTimeSlot(buildActivation(asList(),asList(new TimeSlot("06:00", "16:00"))), time));
         assertFalse(SERVICE.alertIsInTimeSlot(buildActivation(asList("monday","tuesday"),asList(new TimeSlot("06:00", "16:00"))), time));
         //@formatter:on

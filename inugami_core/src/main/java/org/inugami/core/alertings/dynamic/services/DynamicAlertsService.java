@@ -2,7 +2,10 @@ package org.inugami.core.alertings.dynamic.services;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,16 +21,29 @@ import org.inugami.api.loggers.Loggers;
 import org.inugami.commons.threads.MonitoredThreadFactory;
 import org.inugami.core.alertings.dynamic.entities.ActivationTime;
 import org.inugami.core.alertings.dynamic.entities.DynamicAlertEntity;
+import org.inugami.core.alertings.dynamic.entities.TimeSlot;
 import org.inugami.core.context.ApplicationContext;
 
 @ApplicationScoped
 @Named
 public class DynamicAlertsService implements Serializable {
     
+    private static final String UNDEFINE = "undefine";
+    
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final long            serialVersionUID = -8151022786358668308L;
+    private static final long serialVersionUID = -8151022786358668308L;
+    
+    //@formatter:off
+    private static final String[] DAYS = {"SUNDAY",
+                                          "MONDAY",
+                                          "TUESDAY",
+                                          "WEDNESDAY",
+                                          "THURSDAY",
+                                          "FRIDAY",
+                                          "SATURDAY"};
+    //@formatter:on
     
     @Inject
     private transient ApplicationContext context;
@@ -97,8 +113,110 @@ public class DynamicAlertsService implements Serializable {
     }
     
     protected boolean alertIsInTimeSlot(final List<ActivationTime> activations, final long timestamp) {
-        Loggers.ALERTING.warn("alertIsInTimeSlot isn't implemented yet!");
-        return true;
+        boolean result = false;
+        
+        final List<ActivationTime> currentDayActivation = searchCurrentDayActivation(activations, timestamp);
+        if (!currentDayActivation.isEmpty()) {
+            final int hour = buildHour(timestamp);
+            for (final ActivationTime activationTime : currentDayActivation) {
+                result = isActivationInTimeSlot(activationTime, hour);
+                if (result) {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+    
+    private List<ActivationTime> searchCurrentDayActivation(final List<ActivationTime> activations,
+                                                            final long timestamp) {
+        final List<ActivationTime> result = new ArrayList<>();
+        final int currentDay = buildCurrentDay(timestamp);
+        
+        if (activations != null) {
+            for (final ActivationTime activation : activations) {
+                final Set<Integer> days = convertToDayIndex(activation.getDays());
+                if (days.contains(currentDay)) {
+                    result.add(activation);
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    private Set<Integer> convertToDayIndex(final List<String> activationDays) {
+        final Set<Integer> days = new HashSet<>();
+        if (activationDays != null) {
+            //@formatter:off
+            activationDays.stream()
+                       .map(this::convertToDayIndex)
+                       .forEach(days::add);
+            //@formatter:on
+        }
+        return days;
+    }
+    
+    private boolean isActivationInTimeSlot(final ActivationTime activationTime, final int hour) {
+        boolean result = false;
+        
+        if (activationTime.getHours() != null) {
+            for (final TimeSlot timeSlot : activationTime.getHours()) {
+                final int from = convertToFromHour(timeSlot.getFrom());
+                final int to = convertToUntilHour(timeSlot.getTo());
+                result = (hour >= from) && (hour < to);
+            }
+        }
+        return result;
+    }
+    
+    private int convertToDayIndex(final String day) {
+        int result = -1;
+        if (day != null) {
+            final String currentDay = day.trim();
+            for (int i = 0; i < DAYS.length; i++) {
+                if (DAYS[i].equalsIgnoreCase(currentDay)) {
+                    result = i + 1;
+                    break;
+                }
+            }
+        }
+        return result;
+        
+    }
+    
+    private int buildCurrentDay(final long timestamp) {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp);
+        return calendar.get(Calendar.DAY_OF_WEEK);
+    }
+    
+    private int buildHour(final long timestamp) {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp);
+        return calendar.get(Calendar.HOUR_OF_DAY);
+    }
+    
+    private int convertToFromHour(final String from) {
+        int result = -1;
+        if ((from != null) && (from.length() == 5) && from.contains(":")) {
+            final String[] parts = from.split(":");
+            if (parts.length == 2) {
+                try {
+                    result = Integer.parseInt(parts[0]);
+                }
+                catch (final NumberFormatException e) {
+                    Loggers.DEBUG.error(e.getMessage(), e);
+                }
+                
+            }
+        }
+        return result;
+    }
+    
+    private int convertToUntilHour(final String to) {
+        final int hour = convertToFromHour(to);
+        return hour == 0 ? 24 : hour;
     }
     
     // =========================================================================
