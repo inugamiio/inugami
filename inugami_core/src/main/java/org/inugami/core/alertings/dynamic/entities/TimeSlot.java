@@ -34,6 +34,10 @@ public class TimeSlot implements Identifiable<Long>, ClonableObject<TimeSlot> {
     public TimeSlot() {
     }
     
+    public TimeSlot(final String from, final String to) {
+        this(-1L, from, to);
+    }
+    
     public TimeSlot(final Long uid, final String from, final String to) {
         super();
         this.uid = uid;

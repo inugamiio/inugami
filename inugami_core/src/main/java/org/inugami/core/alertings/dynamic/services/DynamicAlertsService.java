@@ -89,14 +89,14 @@ public class DynamicAlertsService implements Serializable {
             final CronResolver cronResolver = buildCronREsolver(cronExpression, entity.getUid());
             
             if ((cronExpression != null) && cronResolver.willFire(timestamp)
-                && alertIsInTimeSlot(entity.getActivations())) {
+                && alertIsInTimeSlot(entity.getActivations(), timestamp)) {
                 result.add(entity);
             }
         }
         return result;
     }
     
-    private boolean alertIsInTimeSlot(final List<ActivationTime> activations) {
+    protected boolean alertIsInTimeSlot(final List<ActivationTime> activations, final long timestamp) {
         Loggers.ALERTING.warn("alertIsInTimeSlot isn't implemented yet!");
         return true;
     }
