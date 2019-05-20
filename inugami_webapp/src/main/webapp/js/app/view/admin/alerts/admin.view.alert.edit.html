@@ -115,11 +115,11 @@
                     <msg key="action.cancel"></msg>
                 </button>
 
-                <button pButton type="button" msg (click)="saveAlertAndClose()" class="active-action">
+                <button pButton type="submit" [disabled]="!alertForm.valid" msg (click)="saveAlertAndClose()" class="active-action">
                     <msg key="action.save"></msg>
                 </button>
 
-                <button pButton type="button" msg (click)="saveAlert()" class="full-active-action" *ngIf="isNotEdit">
+                <button pButton type="submit" [disabled]="!alertForm.valid" msg (click)="saveAlert()" class="full-active-action" *ngIf="isNotEdit">
                     <msg key="action.save.and.continue"></msg>
                 </button>
             </div>
