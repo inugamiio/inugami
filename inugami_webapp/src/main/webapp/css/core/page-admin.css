@@ -196,11 +196,6 @@
 }
 
 
-.page-admin .alert-edit .right-panel{
-  float: right;
-  width: 60%
-}
-
 .page-admin .alert-edit .left-panel .query-text-area{
   position: relative;
 }
@@ -216,6 +211,11 @@
   top:-0.5em;
 }
 
+
+.page-admin .alert-edit .right-panel{
+  float: right;
+  width: 60%
+}
 
 
 .page-admin .alert-edit .right-panel .ui-panel .ui-panel-content .day-and-time-line{
@@ -264,6 +264,32 @@
   width: 15em;
 }
 
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.WARN .curve
+{
+  stroke: #ca740a;
+  stroke-width: 0.2em;
+}
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.WARN .dots{
+  fill: #ca740a;
+}
+
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.ERROR .curve
+{
+  stroke: #e74a1a;
+  stroke-width: 0.2em;
+}
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.ERROR .dots{
+  fill: #e74a1a;
+}
+
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.INFO .curve
+{
+  stroke: #15088d;
+  stroke-width: 0.2em;
+}
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.INFO .dots{
+  fill: #15088d;
+}
 
 .page-admin .konami{
   background: #0c0c0c;

@@ -7,7 +7,9 @@ import {AlertsCrudServices}                                 from './../../../ser
 import {AlertEntity}                                        from './../../../models/alert.entity';
 import {InputBloc}                                          from './../../../components/forms/input.bloc';
 import {Msg}                                                from './../../../components/msg/msg';
-import { HttpServices } from '../../../services/http/http.services';
+import {inputTimeSlotsValidator}                            from './validators/input-time-slots.validator';
+import {dynamicLevelsValidator}                             from './validators/dynamic-levels.validator';
+import { HttpServices }                                     from '../../../services/http/http.services';
 
 export const ADMIN_VIEW_ALERT_EDIT_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -93,8 +95,8 @@ export class AdminViewAlertEdit implements AfterViewInit{
         if(isNull(this.alertForm)){
             this.alertForm = this.fb.group({
                 name: ['',Validators.required],
-                duration:  [''],
-                visibility: [''],
+                duration:  ['60'],
+                visibility: ['@all'],
                 mainMessage: [''],
                 detailedMessage: [''],
                 tag:[''],
@@ -108,7 +110,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
                 }),                         
                 activation: this.fb.array([this.createFormActivationLine()]),
                 levelPointsBeforeTriggered: this.fb.array([]),
-                dynamicLevels:[''],
+                dynamicLevels:['',[dynamicLevelsValidator]],
                 scripts:['']
             })
         
@@ -159,6 +161,10 @@ export class AdminViewAlertEdit implements AfterViewInit{
     /*************************************************************************
     * ACTIONS
     **************************************************************************/
+    onSubmit(){
+        let i =2;
+    }
+
     saveAlert(){
         this.cleanMessage();
         let alerts = [this.innerValue];
@@ -290,8 +296,8 @@ export class AdminViewAlertEdit implements AfterViewInit{
 
     createFormActivationLine() : FormGroup{
         return this.fb.group({
-            days: '',
-            timeSlots: '',
+            days: [''],
+            timeSlots: ['',[Validators.required,inputTimeSlotsValidator()]],
         })
     }
     addFormActivationLine(){
