@@ -1,5 +1,6 @@
 package org.inugami.core.alertings.dynamic.services;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -38,6 +39,8 @@ public class ComputeDynamicAlertTest {
         
         final AlertingResult cas1 = service.process(event, buildTimeValueData(), levels, message, subMessage, tags);
         assertNotNull(cas1);
+        assertEquals(AlerteLevels.WARN, cas1.getLevelType());
+        assertEquals("warn PRD SEARCH MICRO_SERVICE", cas1.getLevel());
         
         final List<DynamicAlertingLevel> levels2 = Arrays.asList(new DynamicAlertingLevel(AlerteLevels.WARN, 5.5, 2),
                                                                  new DynamicAlertingLevel(AlerteLevels.ERROR, 10.5, 2));
