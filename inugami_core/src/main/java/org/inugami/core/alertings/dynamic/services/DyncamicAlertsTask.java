@@ -183,7 +183,7 @@ public class DyncamicAlertsTask implements Callable<Void> {
                         result.add(new DynamicAlertingLevel(level.getName(), level.getData().get(0).getLevel(),
                                                             level.getActivationDelais(), entity.getDuration(),
                                                             entity.getNominal(), entity.getUnit(), entity.getService(),
-                                                            entity.getComponent()));
+                                                            entity.getComponent(), entity.isInverse()));
                     }
                     else {
                         for (final DynamicLevelValues hourData : level.getData()) {
@@ -191,7 +191,8 @@ public class DyncamicAlertsTask implements Callable<Void> {
                                 result.add(new DynamicAlertingLevel(level.getName(), hourData.getLevel(),
                                                                     level.getActivationDelais(), entity.getDuration(),
                                                                     entity.getNominal(), entity.getUnit(),
-                                                                    entity.getService(), entity.getComponent()));
+                                                                    entity.getService(), entity.getComponent(),
+                                                                    entity.isInverse()));
                                 break;
                             }
                         }

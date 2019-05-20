@@ -108,8 +108,17 @@ public class ComputeDynamicAlert {
                     targetName = timeValues.get(i).getPath();
                 }
                 final GraphiteNumber value = timeValues.get(i).getValue();
-                if ((value != null) && (value.toDouble() >= level.getThreshold())) {
-                    found.add(value);
+                if ((value != null)) {
+                    if (level.isInverse()) {
+                        if ((value.toDouble() <= level.getThreshold())) {
+                            found.add(value);
+                        }
+                    }
+                    else {
+                        if ((value.toDouble() >= level.getThreshold())) {
+                            found.add(value);
+                        }
+                    }
                 }
             }
             if (found.size() == delais) {

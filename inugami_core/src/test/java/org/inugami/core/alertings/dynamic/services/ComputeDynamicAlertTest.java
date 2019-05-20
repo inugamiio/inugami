@@ -38,10 +38,11 @@ public class ComputeDynamicAlertTest {
         final SimpleEvent event = new SimpleEventBuilder().addName("event-test").build();
         final List<DynamicAlertingLevel> levels = Arrays.asList(new DynamicAlertingLevel(AlerteLevels.WARN, 5.5, 1,
                                                                                          duration, nominal, unit,
-                                                                                         serviceName, component),
+                                                                                         serviceName, component, false),
                                                                 new DynamicAlertingLevel(AlerteLevels.ERROR, 10.5, 1,
                                                                                          duration, nominal, unit,
-                                                                                         serviceName, component));
+                                                                                         serviceName, component,
+                                                                                         false));
         final String message = "error occurs";
         final String subMessage = "some error is present";
         final List<String> tags = Arrays.asList("PRD", "SEARCH", "MICRO_SERVICE");
@@ -54,10 +55,12 @@ public class ComputeDynamicAlertTest {
         
         final List<DynamicAlertingLevel> levels2 = Arrays.asList(new DynamicAlertingLevel(AlerteLevels.WARN, 5.5, 2,
                                                                                           duration, nominal, unit,
-                                                                                          serviceName, component),
+                                                                                          serviceName, component,
+                                                                                          false),
                                                                  new DynamicAlertingLevel(AlerteLevels.ERROR, 10.5, 2,
                                                                                           duration, nominal, unit,
-                                                                                          serviceName, component));
+                                                                                          serviceName, component,
+                                                                                          false));
         
         final List<AlertingResult> cas2 = service.process(event, buildTimeValueData(), levels2, message, subMessage,
                                                           tags);

@@ -20,19 +20,21 @@ public class DynamicAlertingLevel {
     
     private final String       component;
     
+    private final boolean      inverse;
+    
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
     public DynamicAlertingLevel(final String level, final double threshold, final int activationDelais,
                                 final long duration, final String nominal, final String unit, final String service,
-                                final String component) {
+                                final String component, final boolean inverse) {
         this(AlerteLevels.getAlerteLevel(level), threshold, activationDelais, duration, nominal, unit, service,
-             component);
+             component, inverse);
     }
     
     public DynamicAlertingLevel(final AlerteLevels level, final double threshold, final int activationDelais,
                                 final long duration, final String nominal, final String unit, final String service,
-                                final String component) {
+                                final String component, final boolean inverse) {
         super();
         this.level = level;
         this.threshold = threshold;
@@ -42,6 +44,7 @@ public class DynamicAlertingLevel {
         this.unit = unit;
         this.service = service;
         this.component = component;
+        this.inverse = inverse;
     }
     
     // =========================================================================
@@ -119,6 +122,10 @@ public class DynamicAlertingLevel {
     
     public String getComponent() {
         return component;
+    }
+    
+    public boolean isInverse() {
+        return inverse;
     }
     
 }
