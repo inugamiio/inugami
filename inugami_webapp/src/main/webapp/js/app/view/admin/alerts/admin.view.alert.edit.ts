@@ -229,10 +229,43 @@ export class AdminViewAlertEdit implements AfterViewInit{
         let text;
         reader.onload = (e) => {
             text = reader.result;
+            let jsonData = JSON.parse(text);
+            jsonData = this.patchChannelsData(jsonData);
+            this.setFormGroupForFile(jsonData);
+            this.alertForm.patchValue(jsonData);
+            event.target.value = null;
         }
         reader.readAsText(file);
-       
-        //apply data on form
+    }
+
+    setFormGroupForFile(jsonData){
+        this.removeAllFormLevelLine();
+        this.removeAllFormActivationLine();
+        if(isNotNull(jsonData.levelPointsBeforeTriggered)){
+            for(let i = 0; i < jsonData.levelPointsBeforeTriggered.length; i++){
+                this.addFormLevelLine();
+            }
+        }
+        if(isNotNull(jsonData.activation)){
+            for(let i = 0; i < jsonData.activation.length; i++){
+                this.addFormActivationLine();
+            }
+        }
+    }
+
+    patchChannelsData(jsonData){
+    let channelsData = jsonData.channelsData;
+    let self = this;
+    for(let channelTab of channelsData){
+        let index = this.channels.findIndex(function(element){
+            return element.name == channelTab[0];
+        })
+        if(index != -1){
+            self.alertForm.get("channelsData").at(index).patchValue(self.channels[index].name);
+        }
+    }
+    delete jsonData.channelsData;
+    return jsonData; 
     }
  /*****************************************************************************
   * IMPLEMENTS ControlValueAccessor
@@ -311,6 +344,20 @@ export class AdminViewAlertEdit implements AfterViewInit{
         if(precision > 0){
             precision = Math.pow(10,precision);
             this.formatter = (value) => Math.round(value * precision + Number.EPSILON) / precision;
+        }
+    }
+
+    removeAllFormLevelLine(){
+        let length = this.alertForm.get('levelPointsBeforeTriggered').length
+        for(let i = length - 1; i >= 0 ;i--){
+            this.removeFormLevelLine(i);
+        }
+    }
+
+    removeAllFormActivationLine(){
+        let length = this.alertForm.get('activation').length;
+        for(let i = length - 1; i >= 0 ;i--){
+            this.removeFormActivationLine(i);
         }
     }
 }

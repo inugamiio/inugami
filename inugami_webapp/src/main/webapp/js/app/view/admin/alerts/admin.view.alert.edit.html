@@ -7,7 +7,7 @@
                     [disabled]="edit" label="alert.edit.alert.name" formControlName="name"></input-bloc>
                     <span class="file-input">
                         <button pButton type=button class="active-action" icon="fas fa-folder-open" (click)="fileinput.click()"></button>
-                        <input type=file (change)="fileChanged($event)" #fileinput>
+                        <input type=file (input)="fileChanged($event)" #fileinput>
                     </span>
                 </div>
                   
