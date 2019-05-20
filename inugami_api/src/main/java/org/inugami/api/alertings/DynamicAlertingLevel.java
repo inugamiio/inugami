@@ -8,17 +8,20 @@ public class DynamicAlertingLevel {
     
     private final double       threshold;
     
+    private final int          activationDelais;
+    
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    public DynamicAlertingLevel(final String level, final double threshold) {
-        this(AlerteLevels.getAlerteLevel(level), threshold);
+    public DynamicAlertingLevel(final String level, final double threshold, final int activationDelais) {
+        this(AlerteLevels.getAlerteLevel(level), threshold, activationDelais);
     }
     
-    public DynamicAlertingLevel(final AlerteLevels level, final double threshold) {
+    public DynamicAlertingLevel(final AlerteLevels level, final double threshold, final int activationDelais) {
         super();
         this.level = level;
         this.threshold = threshold;
+        this.activationDelais = activationDelais == 0 ? 1 : activationDelais;
     }
     
     // =========================================================================
@@ -57,6 +60,8 @@ public class DynamicAlertingLevel {
         builder.append(level);
         builder.append(", threshold=");
         builder.append(threshold);
+        builder.append(", activationDelais=");
+        builder.append(activationDelais);
         builder.append("]");
         return builder.toString();
     }
@@ -71,4 +76,9 @@ public class DynamicAlertingLevel {
     public double getThreshold() {
         return threshold;
     }
+    
+    public int getActivationDelais() {
+        return activationDelais;
+    }
+    
 }

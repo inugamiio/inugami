@@ -30,6 +30,8 @@ public class DynamicLevel implements Identifiable<Long>, ClonableObject<DynamicL
     
     private String                   name;
     
+    private int                      activationDelais;
+    
     @OneToMany(cascade = CascadeType.ALL, targetEntity = DynamicLevelValues.class, fetch = FetchType.EAGER)
     private List<DynamicLevelValues> data;
     
@@ -120,6 +122,14 @@ public class DynamicLevel implements Identifiable<Long>, ClonableObject<DynamicL
     
     public boolean isDynamic() {
         return dynamic;
+    }
+    
+    public int getActivationDelais() {
+        return activationDelais;
+    }
+    
+    public void setActivationDelais(final int activationDelais) {
+        this.activationDelais = activationDelais;
     }
     
 }
