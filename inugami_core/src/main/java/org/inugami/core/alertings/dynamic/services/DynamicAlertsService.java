@@ -165,6 +165,9 @@ public class DynamicAlertsService implements Serializable {
                 final int from = convertToFromHour(timeSlot.getFrom());
                 final int to = convertToUntilHour(timeSlot.getTo());
                 result = (hour >= from) && (hour < to);
+                if (result) {
+                    break;
+                }
             }
         }
         return result;

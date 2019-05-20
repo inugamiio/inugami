@@ -181,13 +181,17 @@ public class DyncamicAlertsTask implements Callable<Void> {
                 if ((level.getData() != null) && !level.getData().isEmpty()) {
                     if (level.getData().size() == 1) {
                         result.add(new DynamicAlertingLevel(level.getName(), level.getData().get(0).getLevel(),
-                                                            level.getActivationDelais()));
+                                                            level.getActivationDelais(), entity.getDuration(),
+                                                            entity.getNominal(), entity.getUnit(), entity.getService(),
+                                                            entity.getComponent()));
                     }
                     else {
                         for (final DynamicLevelValues hourData : level.getData()) {
                             if (hourData.getHour() == currentHour) {
                                 result.add(new DynamicAlertingLevel(level.getName(), hourData.getLevel(),
-                                                                    level.getActivationDelais()));
+                                                                    level.getActivationDelais(), entity.getDuration(),
+                                                                    entity.getNominal(), entity.getUnit(),
+                                                                    entity.getService(), entity.getComponent()));
                                 break;
                             }
                         }

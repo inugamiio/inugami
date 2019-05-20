@@ -46,6 +46,14 @@ public class DynamicAlertEntity extends AlertEntity implements ClonableObject<Dy
     @OneToOne(cascade = CascadeType.ALL)
     private AlertDataTransfomer  transformer;
     
+    private String               nominal;
+    
+    private String               unit;
+    
+    private String               service;
+    
+    private String               component;
+    
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -66,7 +74,8 @@ public class DynamicAlertEntity extends AlertEntity implements ClonableObject<Dy
                                  final boolean enable, final long ttl, final List<String> providers,
                                  final Set<Tag> tags, final ProviderSource source, final List<DynamicLevel> levels,
                                  final String script, final List<ActivationTime> activations,
-                                 final AlertDataTransfomer transformer) {
+                                 final AlertDataTransfomer transformer, final String nominal, final String unit,
+                                 final String service, final String component) {
         super(alerteName, level, levelType, levelNumber, label, subLabel, url, created, duration, channel, data, enable,
               ttl, providers);
         this.tags = tags;
@@ -75,6 +84,10 @@ public class DynamicAlertEntity extends AlertEntity implements ClonableObject<Dy
         this.script = script;
         this.activations = activations;
         this.transformer = transformer;
+        this.nominal = nominal;
+        this.unit = unit;
+        this.service = service;
+        this.component = component;
     }
     
     @Override
@@ -121,7 +134,12 @@ public class DynamicAlertEntity extends AlertEntity implements ClonableObject<Dy
                                        newLevels,
                                        script,
                                        newActivations,
-                                       transformer==null?null:transformer.cloneObject());
+                                       transformer==null?null:transformer.cloneObject(),
+                                       nominal,
+                                       unit,
+                                       service,
+                                       component         
+                );
         //@formatter:on
     }
     
@@ -174,6 +192,22 @@ public class DynamicAlertEntity extends AlertEntity implements ClonableObject<Dy
     
     public void setTransformer(final AlertDataTransfomer transformer) {
         this.transformer = transformer;
+    }
+    
+    public String getNominal() {
+        return nominal;
+    }
+    
+    public String getUnit() {
+        return unit;
+    }
+    
+    public String getService() {
+        return service;
+    }
+    
+    public String getComponent() {
+        return component;
     }
     
 }

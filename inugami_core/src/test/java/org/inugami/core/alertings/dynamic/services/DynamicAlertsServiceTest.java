@@ -51,10 +51,10 @@ public class DynamicAlertsServiceTest implements TestUnitResources {
     @Test
     public void testResolveAlertsToProcess() throws Exception {
         final List<DynamicAlertEntity> entities = loadEntities("alerting/dynamicAlerts.01.json");
-        final List<DynamicAlertEntity> cas1 = SERVICE.resolveAlertsToProcess(entities, buildDate("2019/05/16 14:00"));
+        final List<DynamicAlertEntity> cas1 = SERVICE.resolveAlertsToProcess(entities, buildDate("2019/05/19 14:00"));
         assertEquals(2, cas1.size());
         
-        final List<DynamicAlertEntity> cas2 = SERVICE.resolveAlertsToProcess(entities, buildDate("2019/05/16 14:03"));
+        final List<DynamicAlertEntity> cas2 = SERVICE.resolveAlertsToProcess(entities, buildDate("2019/05/19 14:03"));
         assertEquals(1, cas2.size());
     }
     
