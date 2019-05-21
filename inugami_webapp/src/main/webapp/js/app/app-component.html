@@ -12,30 +12,7 @@
 <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 + Main menu
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-<header class="main-header gray-dark-bg" [class.hidden-menu]="!sessionScope.showMainMenu"  *ngIf="sessionScope.isConnected()">
-  <menu>
-    <ul  *ngIf="sessionScope.isConnected()">
-        <li>
-          <a (click)="logout()" title="Déconnection" [class.admin]="sessionScope.isAdmin()">
-              <span class="firstName">{{sessionScope.user.firstName}}</span>
-              <span class="lastName">{{sessionScope.user.lastName}}</span>
-          </a>
-        </li>
-
-        <li *ngIf="sessionScope.hasRole('admin')">
-          <a routerLink="/admin"  routerLinkActive="active">Administration</a>
-        </li>
-        
-        
-
-        <li><a routerLink="/"                   routerLinkActive="active">Home</a></li>
-        <li><a routerLink="/help"               routerLinkActive="active">Help</a></li>
-        <div class="clear"></div>
-    </ul>
-  </menu>
-</header>
-
-
+<main-menu></main-menu>
 <system-notification></system-notification>
 
 </div>

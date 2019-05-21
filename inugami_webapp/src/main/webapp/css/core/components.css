@@ -5,6 +5,7 @@
 **
 ********************************************************************************
 *******************************************************************************/
+@import "component-main-menu.css";
 @import "components_properties_editor.css";
 @import "components_carousel.css";
 @import "component-curve-chart.css";
@@ -67,6 +68,10 @@
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 + plugin-infos
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+.plugin-infos{
+  background: #ffffff;
+}
+
 .plugin-infos .plugin-infos-content .plugin-infos-title{
   font-weight: bold;
 }
@@ -536,10 +541,6 @@ nav.dynamic-sections {
 
 :root{
   --nav-dynamic-section-color : #dfcada;
-}
-
-.page-admin-bloc-content{ 
-  background-color: white;
 }
 
 nav.dynamic-sections ul{

@@ -7,6 +7,9 @@ import {PluginsService}                 from './../services/plugins.service';
 import {PluginInfos}                    from './../components/plugin_infos/plugin.info';
 import {SessionScope}                   from './../scopes/session.scope';
 import {ValueBloc}                      from './../components/charts/value_bloc/value.bloc';
+import {MainMenuService,
+        MAIN_MENU_ON_CLICK}             from './../components/main_menu/main.menu.service';
+import {MainMenuLink}                   from './../components/main_menu/main.menu.link';
 
 @Component({
     templateUrl: 'js/app/view/admin.view.html',
@@ -59,7 +62,8 @@ export class AdminView implements OnInit, OnDestroy{
     constructor(private route: ActivatedRoute,
                 private pluginsService:PluginsService,
                 private adminService:AdminService,
-                private sessionScope : SessionScope){
+                private sessionScope : SessionScope,
+                private mainMenuService  : MainMenuService){
         org.inugami.sse.register("administration");
 
         let self = this;
@@ -67,10 +71,15 @@ export class AdminView implements OnInit, OnDestroy{
           self.msgKonami="";
           self.konamiMode= true;
         });
+
+        org.inugami.events.addEventListener(MAIN_MENU_ON_CLICK, function(data){
+          self.updateSectionToDisplay(data);
+        });
     }
 
 
     ngOnInit() {
+      this.initMainMenu();
       let self = this;
       this.sub = this.route.params.subscribe(params => {
          this.sessionScope.openMainMenu();
@@ -103,6 +112,17 @@ export class AdminView implements OnInit, OnDestroy{
     /**************************************************************************
     * INITIALIZE
     **************************************************************************/
+    initMainMenu(){
+      this.mainMenuService.cleanLinks();
+      this.mainMenuService.setCurrentTitle("Administration");
+      this.mainMenuService.addSubLink(new MainMenuLink("Health", "health","health", false , 'admin'));
+      this.mainMenuService.addSubLink(new MainMenuLink("Caches", "caches","caches", false, 'admin'));
+      this.mainMenuService.addSubLink(new MainMenuLink("Alerts", "alerts","alerts", false, 'admin'));
+      this.mainMenuService.addSubLink(new MainMenuLink("Plugins", "plugins","plugins", false, 'admin'));
+      this.mainMenuService.addSubLink(new MainMenuLink("Events", "events","events", false, 'admin'));
+      this.mainMenuService.addSubLink(new MainMenuLink("Actions", "actions","actions", false, 'admin'));
+      this.mainMenuService.updateMenu();
+    }
     initData() {
       this.grabAllPlugins();
       this.grabUpTime();
@@ -287,7 +307,9 @@ export class AdminView implements OnInit, OnDestroy{
     }
 
 
-
+    updateSectionToDisplay(event:any){
+      this.sectionToDisplay = event.detail.path;
+    }
     /**************************************************************************
     * GETTERS
     **************************************************************************/

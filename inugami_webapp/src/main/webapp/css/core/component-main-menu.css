@@ -1,0 +1,80 @@
+header.main-menu {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    font-size: 220%;
+    -webkit-transition: top 0.25s linear;
+    -moz-transition: top 0.25s linear;
+    -ms-transition: top 0.25s linear;
+    -o-transition: top 0.25s linear;
+    transition:  top 0.25s linear;
+    background: #ffffff;
+}
+header.main-menu.hidden-menu{
+    top: -3em;
+}
+.main-menu  menu{
+    
+}
+
+.main-menu  menu>ul,
+.main-menu  .sub-link ul{
+    margin: 0;
+    padding: 0;
+}
+.main-menu  menu>ul>li,
+.main-menu  .sub-link li{
+    list-style: none;
+}
+
+.main-menu  menu>ul>li{
+    float: left;
+}
+
+.main-menu  menu>ul>li.user{
+    float: right;
+    font-size: 80%;
+    padding-top: 0.3em;
+}
+.main-menu  menu>ul>li.home-link{
+    
+    
+}
+.main-menu  .sub-link{
+    padding-left: 1em;
+}
+
+.main-menu  .sub-link ul{
+    
+    
+}
+
+.main-menu  .sub-link li{
+    float: left;
+    margin-right: 0.5em;
+}
+
+/*
+
+.inugami.demo.dashboard header{
+    position: absolute;
+    top:0;
+    background-color:#303030;
+    width: 100%;
+    padding: 0.5em;
+    color: #ffffff;
+    box-shadow: 0 0 1em 0 #676767;
+}
+
+.inugami.demo.dashboard header nav ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.inugami.demo.dashboard header nav ul li{
+    float: left;
+    padding: 0.5em;
+    font-size: 140%;
+}
+*/
