@@ -48,7 +48,7 @@ public class ComputeDynamicAlertTest {
         final List<String> tags = Arrays.asList("PRD", "SEARCH", "MICRO_SERVICE");
         
         final List<AlertingResult> cas1 = service.process(event, buildTimeValueData(), levels, message, subMessage,
-                                                          tags);
+                                                          tags, null);
         assertNotNull(cas1);
         assertEquals(AlerteLevels.WARN, cas1.get(0).getLevelType());
         assertEquals("warn PRD SEARCH MICRO_SERVICE", cas1.get(0).getLevel());
@@ -63,7 +63,7 @@ public class ComputeDynamicAlertTest {
                                                                                           false));
         
         final List<AlertingResult> cas2 = service.process(event, buildTimeValueData(), levels2, message, subMessage,
-                                                          tags);
+                                                          tags, null);
         assertTrue(cas2.isEmpty());
         
     }

@@ -20,22 +20,15 @@ import org.inugami.api.providers.task.ProviderFutureResult;
 public class ComputeDynamicAlert {
     
     // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
-    
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    
-    // =========================================================================
     // METHODS
     // =========================================================================
     public List<AlertingResult> compute(final SimpleEvent event, final ProviderFutureResult data,
                                         final List<DynamicAlertingLevel> levels, final String message,
-                                        final String subMessage, final List<String> tags) {
+                                        final String subMessage, final List<String> tags,
+                                        final List<String> alertSenders) {
         List<AlertingResult> result = null;
         if ((data != null) && (data.getData().isPresent()) && (levels != null) && (!levels.isEmpty())) {
-            result = process(event, data.getData().get(), levels, message, subMessage, tags);
+            result = process(event, data.getData().get(), levels, message, subMessage, tags, alertSenders);
         }
         return result;
     }
@@ -45,11 +38,13 @@ public class ComputeDynamicAlert {
     // =========================================================================
     protected List<AlertingResult> process(final SimpleEvent event, final JsonObject data,
                                            final List<DynamicAlertingLevel> levels, final String message,
-                                           final String subMessage, final List<String> tags) {
+                                           final String subMessage, final List<String> tags,
+                                           final List<String> alertSenders) {
         List<AlertingResult> result = null;
         levels.sort((ref, value) -> ref.getLevel().compareTo(value.getLevel()));
         
         final List<TimeValue> timeValues = TimeValuesConvertor.convert(data);
+        timeValues.sort((ref, value) -> new Long(value.getTime()).compareTo(ref.getTime()));
         List<AlertThreshold> alertThreshold = null;
         if (timeValues != null) {
             alertThreshold = checkAlertsLevel(timeValues, levels);
@@ -58,7 +53,7 @@ public class ComputeDynamicAlert {
         if (alertThreshold != null) {
             result = new ArrayList<>();
             for (final AlertThreshold threshold : alertThreshold) {
-                result.add(buildAlert(threshold, event, message, subMessage, tags));
+                result.add(buildAlert(threshold, event, message, subMessage, tags, alertSenders));
             }
         }
         
@@ -99,7 +94,7 @@ public class ComputeDynamicAlert {
     
     private AlertThreshold resolveThresholdAlert(final List<TimeValue> timeValues, final DynamicAlertingLevel level) {
         AlertThreshold result = null;
-        final int delais = level.getActivationDelais();
+        final int delais = level.getActivationDelais() == 0 ? 1 : level.getActivationDelais();
         String targetName = null;
         if (timeValues.size() >= delais) {
             final LinkedList<GraphiteNumber> found = new LinkedList<>();
@@ -132,7 +127,8 @@ public class ComputeDynamicAlert {
     // TOOLS & BUILDER
     // =========================================================================
     private AlertingResult buildAlert(final AlertThreshold alertThreshold, final SimpleEvent event,
-                                      final String message, final String subMessage, final List<String> tags) {
+                                      final String message, final String subMessage, final List<String> tags,
+                                      final List<String> alertSenders) {
         
         final AlertingResult result = new AlertingResult();
         final DynamicAlertingLevel dynamicLevel = alertThreshold.getDynamicLevel();
@@ -158,9 +154,8 @@ public class ComputeDynamicAlert {
         
         result.setCreated(System.currentTimeMillis());
         result.setDuration(dynamicLevel.getDuration());
-        if (event.getProvider().isPresent()) {
-            result.addProvider(event.getProvider().get());
-        }
+        
+        result.setProviders(alertSenders);
         
         return result;
     }

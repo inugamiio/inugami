@@ -193,9 +193,9 @@ public class DefaultAlertingProvider implements AlertingProvider {
     @Override
     public void processDynamicAlert(final Gav gav, final SimpleEvent event, final ProviderFutureResult data,
                                     final List<DynamicAlertingLevel> levels, final String message,
-                                    final String subMessage, final List<String> tags) {
+                                    final String subMessage, final List<String> tags, final List<String> alertSenders) {
         final List<AlertingResult> dynamicAlerts = computeDynamicAlert.compute(event, data, levels, message, subMessage,
-                                                                               tags);
+                                                                               tags, alertSenders);
         if (dynamicAlerts != null) {
             for (final AlertingResult alert : dynamicAlerts) {
                 appendAlert(alert);

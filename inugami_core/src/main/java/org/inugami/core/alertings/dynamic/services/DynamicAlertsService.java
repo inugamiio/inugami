@@ -83,7 +83,7 @@ public class DynamicAlertsService implements Serializable {
     public void process(final List<DynamicAlertEntity> entities) {
         Asserts.notNull(entities);
         
-        final List<DynamicAlertEntity> alertsToProcess = resolveAlertsToProcess(entities, System.currentTimeMillis());
+        final List<DynamicAlertEntity> alertsToProcess = resolveAlertsToProcess(entities, buildCurrentTime());
         
         if (!alertsToProcess.isEmpty()) {
             Loggers.ALERTING.info("{} dynamic alerts to process", alertsToProcess.size());
@@ -266,5 +266,12 @@ public class DynamicAlertsService implements Serializable {
             result.add(new DyncamicAlertsTask(entity.cloneObject(), context));
         }
         return result;
+    }
+    
+    private long buildCurrentTime() {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTimeInMillis();
     }
 }

@@ -167,7 +167,7 @@ public class DyncamicAlertsTask implements Callable<Void> {
             final List<DynamicAlertingLevel> levels = buildLevels(entity.getLevels());
             if (!levels.isEmpty()) {
                 provider.processDynamicAlert(GAV, event, data, levels, entity.getLabel(), entity.getSubLabel(),
-                                             buildTag(entity.getTags()));
+                                             buildTag(entity.getTags()), entity.getProviders());
             }
         }
     }

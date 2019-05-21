@@ -32,6 +32,7 @@ import org.inugami.api.models.data.basic.StringJson;
 import org.inugami.api.models.events.SimpleEventBuilder;
 import org.inugami.api.providers.task.ProviderFutureResult;
 import org.inugami.api.providers.task.ProviderFutureResultBuilder;
+import org.inugami.api.tools.NamedComponent;
 import org.inugami.core.services.sse.SseService;
 
 /**
@@ -42,7 +43,7 @@ import org.inugami.core.services.sse.SseService;
  */
 @Named
 @Default
-public class SseAlertSender implements AlertsSender {
+public class SseAlertSender implements AlertsSender, NamedComponent {
     
     // =========================================================================
     // ATTRIBUTES
@@ -102,6 +103,11 @@ public class SseAlertSender implements AlertsSender {
     @Override
     public boolean enable() {
         return true;
+    }
+    
+    @Override
+    public String getName() {
+        return "sse";
     }
     
 }
