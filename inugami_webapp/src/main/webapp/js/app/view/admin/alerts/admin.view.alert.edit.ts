@@ -154,9 +154,9 @@ export class AdminViewAlertEdit implements AfterViewInit{
 
     saveAlert(){
         let alertEntity = this.convertFormToAlert();
-        alertEntity = new AlertEntity();
+       /* alertEntity = new AlertEntity();
         alertEntity.name="test";
-        alertEntity.level="info";
+        alertEntity.level="info";*/
         this.cleanMessage();
         let alerts = [alertEntity];
         if(this.edit){
@@ -470,6 +470,8 @@ export class AdminViewAlertEdit implements AfterViewInit{
 
         this.alertForm.get('dynamicLevels').patchValue(value.levels);
 
+        this.innerValueChannels = value.providers;
+        this.initChannels();
 
         //faut penser aux channels 
         //et les points avant trigger
