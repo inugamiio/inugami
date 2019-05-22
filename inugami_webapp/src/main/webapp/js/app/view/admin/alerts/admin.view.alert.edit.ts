@@ -10,6 +10,12 @@ import {Msg}                                                from './../../../com
 import {inputTimeSlotsValidator}                            from './validators/input-time-slots.validator';
 import {dynamicLevelsValidator}                             from './validators/dynamic-levels.validator';
 import { HttpServices }                                     from '../../../services/http/http.services';
+import { Tag } from '../../../models/tag';
+import { DynamicLevel } from '../../../models/dynamic.level';
+import { DynamicLevelValues } from '../../../models/dynamic.level.values';
+import { TimeSlot } from '../../../models/time.slot';
+import { ProviderSource } from '../../../models/provider.source';
+import { AlertsDynamicCrudServices } from '../../../services/http/alerts.dynamic.crud.services';
 
 
 export const ADMIN_VIEW_ALERT_EDIT_VALUE_ACCESSOR: any = {
@@ -36,7 +42,8 @@ export class AdminViewAlertEdit implements AfterViewInit{
 
     private detailData                  : string;
     private validators                  : any = org.inugami.validators;
-    private innerValue                  : AlertEntity; 
+    private innerValue                  : AlertEntity;
+    private innerValueChannels          : string[]; 
     private isNotEdit                   : boolean;
 
     private channels                    : any[] = [];
@@ -59,7 +66,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
     /**************************************************************************
     * CONSTRUCTOR
     **************************************************************************/
-    constructor(private alertsCrudServices : AlertsCrudServices,private fb: FormBuilder, private httpService : HttpServices) {
+    constructor(private alertsCrudServices : AlertsDynamicCrudServices,private fb: FormBuilder, private httpService : HttpServices) {
         this.initValue();
     }
     ngAfterContentInit(){
@@ -70,27 +77,6 @@ export class AdminViewAlertEdit implements AfterViewInit{
     * INIT
     **************************************************************************/
     private initValue(){
-        //faudrait supprimer linit de innervalue normement
-        if(isNull(this.innerValue)){
-            this.innerValue = new AlertEntity();
-        }
-        if(isNull(this.innerValue.duration)){
-            this.innerValue.duration = 60;
-        }
-        if(isNull(this.innerValue.data)){
-            this.detailData = null;
-        }else{
-            let strJson = this.innerValue.data.trim();
-            if(strJson.startsWith('"{')){
-                strJson = strJson.substring(1,strJson.length);
-            }
-            if(strJson.endsWith('}"')){
-                strJson = strJson.substring(0,strJson.length-1);
-            }
-            this.detailData =  strJson.split("\\u0022").join("\""); 
-        }
-        
-        
         if(isNull(this.alertForm)){
             this.alertForm = this.fb.group({
                 name: ['',Validators.required],
@@ -167,21 +153,12 @@ export class AdminViewAlertEdit implements AfterViewInit{
  
 
     saveAlert(){
-        this.innerValue = new AlertEntity();
-        let form = this.alertForm.value;
-        this.innerValue.alerteName = form.name;
-        this.innerValue.level = form.level;
-        this.innerValue.label = form.mainMessage;
-        this.innerValue.subLabel = form.detailedMessage;
-        this.innerValue.level = "info";
-        this.innerValue.providers = [];
-        for(let provider of form.channelsData){
-            if(isNotNull(provider)){
-                this.innerValue.providers.push(provider[0]);
-            }
-        }
+        let alertEntity = this.convertFormToAlert();
+        alertEntity = new AlertEntity();
+        alertEntity.name="test";
+        alertEntity.level="info";
         this.cleanMessage();
-        let alerts = [this.innerValue];
+        let alerts = [alertEntity];
         if(this.edit){
             this.alertsCrudServices.merge(alerts)
                                    .then((data)=>{
@@ -296,12 +273,11 @@ export class AdminViewAlertEdit implements AfterViewInit{
             if(isNotNull(value.uid)){
                 this.edit = true;
                 this.isNotEdit = !this.edit;
-               // this.alertForm.get("name").disable();
             }else{
                 this.edit = false;
                 this.isNotEdit = !this.edit;
             }
-            this.applyAlertOnForm(value)
+            this.convertAlertToForm(value)
         }else{
             this.edit = false;
             this.isNotEdit = !this.edit;
@@ -316,22 +292,9 @@ export class AdminViewAlertEdit implements AfterViewInit{
         this.onTouchedCallback = fn;
     }
 
-    applyAlertOnForm(value){
-        this.innerValue = value;
-        this.initChannels();
-        this.alertForm.get('name').patchValue(value.alerteName);
-        if(isNotNull(value.label)){
-            this.alertForm.get('mainMessage').patchValue(value.label);
-        }
-        if(isNotNull(value.subLabel)){
-            this.alertForm.get('detailedMessage').patchValue(value.subLabel);
-        }
-
-    }
-
     applyAllertProviderOnForm(){
-        if(isNotNull(this.innerValue.providers) && isNotNull(this.channels)){
-            for(let provider of this.innerValue.providers){
+        if(isNotNull(this.innerValueChannels) && isNotNull(this.channels)){
+            for(let provider of this.innerValueChannels){
                 for(let i  = 0; i < this.channels.length; i++){
                     if(provider == this.channels[i].name){
                         this.alertForm.get('channelsData').at(i).patchValue([provider]);
@@ -351,7 +314,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
     createFormActivationLine() : FormGroup{
         return this.fb.group({
             days: [''],
-            timeSlots: ['',[Validators.required,inputTimeSlotsValidator()]],
+            hours: ['',[Validators.required,inputTimeSlotsValidator()]],
         })
     }
     addFormActivationLine(){
@@ -428,4 +391,88 @@ export class AdminViewAlertEdit implements AfterViewInit{
     hideCronTooltip(tooltip){
         this.cronTooltipHidden = true;
     }
+
+    convertFormToAlert(){
+       let alert = new AlertEntity();
+        let form                        = this.alertForm.value;
+        alert.alerteName        = form.name;
+        alert.label             = form.mainMessage;
+        alert.subLabel          = form.detailedMessage;
+        alert.duration          = form.duration;
+        alert.script            = form.scripts;
+        alert.levels            = form.dynamicLevels;
+        alert.level             = "info";
+
+        if(isNotNull(form.sources)){
+            alert.source = new ProviderSource(
+                form.sources.dataProvider,
+                form.sources.interval,
+                form.sources.from,
+                form.sources.to,
+                form.sources.query
+            )
+        }
+        
+        alert.tags     = [];
+        for(let tagname of form.tag){
+            let tag = new Tag(tagname)
+            alert.tags.push(tag);
+        }
+        
+        alert.providers = [];
+        for(let provider of form.channelsData){
+            if(isNotNull(provider)){
+                alert.providers.push(provider[0]);
+            }
+        }
+        
+        alert.activations = form.activation;
+    
+        return alert;
+    }
+
+    convertAlertToForm(value){
+        this.innerValueChannels  = value.providers;
+        this.initChannels();
+        this.alertForm.get('name').patchValue(value.alerteName);
+        this.alertForm.get('duration').patchValue(value.duration);
+        this.alertForm.get('mainMessage').patchValue(value.label);
+        this.alertForm.get('detailedMessage').patchValue(value.subLabel);
+        this.alertForm.get('scripts').patchValue(value.script);
+    
+
+        if(isNotNull(value.source)){
+            this.alertForm.get('sources').get('interval').patchValue(value.source.cronExpression);
+            this.alertForm.get('sources').get('dataProvider').patchValue(value.source.provider);
+            this.alertForm.get('sources').get('from').patchValue(value.source.from);
+            this.alertForm.get('sources').get('to').patchValue(value.source.to);
+            this.alertForm.get('sources').get('query').patchValue(value.source.query);
+        }
+        if(isNotNull(value.tags)){
+            let tags = [];
+            for(let tag of value.tags){
+                tags.push(tag.name);
+            }
+            this.alertForm.get('tag').patchValue(tags);
+        }
+
+        if(isNotNull(value.activations)){
+            let activations = [];
+            for(let activationTime of value.activations){
+                this.addActivationLine();
+                let activation = {days:'',hours:''};
+                activation.days = activationTime.days;
+                activation.hours = activationTime.hours;
+                activations.push(activation);
+            }
+            this.alertForm.get('activation').patchValue(activations);
+        }
+
+        this.alertForm.get('dynamicLevels').patchValue(value.levels);
+
+
+        //faut penser aux channels 
+        //et les points avant trigger
+    }
+    
 }

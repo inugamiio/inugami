@@ -72,6 +72,7 @@ import {SoundServices}                  from './services/sound.services';
 import {HttpServices}                   from './services/http/http.services';
 import {GenericCrudServices}            from './services/http/generic.crud.services';
 import {AlertsCrudServices}             from './services/http/alerts.crud.services';
+import {AlertsDynamicCrudServices}      from './services/http/alerts.dynamic.crud.services';
 
 
 // MODULE ----------------------------------------------------------------------
@@ -168,7 +169,8 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     HeaderServices,
     SoundServices,
     HttpServices,
-    AlertsCrudServices
+    AlertsCrudServices,
+    AlertsDynamicCrudServices,
   ],
   entryComponents: [
     Image,
