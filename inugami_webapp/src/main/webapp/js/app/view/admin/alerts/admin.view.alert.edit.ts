@@ -11,6 +11,7 @@ import {inputTimeSlotsValidator}                            from './validators/i
 import {dynamicLevelsValidator}                             from './validators/dynamic-levels.validator';
 import { HttpServices }                                     from '../../../services/http/http.services';
 
+
 export const ADMIN_VIEW_ALERT_EDIT_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => AdminViewAlertEdit),
@@ -45,6 +46,10 @@ export class AdminViewAlertEdit implements AfterViewInit{
     private resp                        : any;
     private formatter                   : any;
 
+    private cronTooltip                 : any;
+    private cronTooltipHidden           : boolean = true;
+
+
     @Output() onClose                   : EventEmitter<any> = new EventEmitter();
     @Output() onError                   : EventEmitter<any> = new EventEmitter();
     @Output() onSuccess                 : EventEmitter<any> = new EventEmitter();
@@ -65,19 +70,13 @@ export class AdminViewAlertEdit implements AfterViewInit{
     * INIT
     **************************************************************************/
     private initValue(){
+        //faudrait supprimer linit de innervalue normement
         if(isNull(this.innerValue)){
             this.innerValue = new AlertEntity();
         }
         if(isNull(this.innerValue.duration)){
             this.innerValue.duration = 60;
         }
-        if(isNull(this.innerValue.level)){
-            this.innerValue.level= "info";
-        }
-        if(isNull(this.innerValue.channel)){
-            this.innerValue.channel = "@all";
-        }
-        
         if(isNull(this.innerValue.data)){
             this.detailData = null;
         }else{
@@ -96,7 +95,6 @@ export class AdminViewAlertEdit implements AfterViewInit{
             this.alertForm = this.fb.group({
                 name: ['',Validators.required],
                 duration:  ['60'],
-                visibility: ['@all'],
                 mainMessage: [''],
                 detailedMessage: [''],
                 tag:[''],
@@ -131,9 +129,14 @@ export class AdminViewAlertEdit implements AfterViewInit{
         let channelsData = this.alertForm.get('channelsData');
         let channelArray = [];
         for(let provider of data){
-            this.channels.push({name:provider.name,enable:provider.enable});
-            this.alertForm.get('channelsData').push(this.fb.control(channelArray));
+            if(isNull(this.channels.find(function(element){
+                return element.name == provider.name;
+            }))){
+                this.channels.push({name:provider.name,enable:provider.enable});
+                this.alertForm.get('channelsData').push(this.fb.control(channelArray));
+            }
         }
+        this.applyAllertProviderOnForm()
     }
 
     /**************************************************************************
@@ -161,11 +164,22 @@ export class AdminViewAlertEdit implements AfterViewInit{
     /*************************************************************************
     * ACTIONS
     **************************************************************************/
-    onSubmit(){
-        let i =2;
-    }
+ 
 
     saveAlert(){
+        this.innerValue = new AlertEntity();
+        let form = this.alertForm.value;
+        this.innerValue.alerteName = form.name;
+        this.innerValue.level = form.level;
+        this.innerValue.label = form.mainMessage;
+        this.innerValue.subLabel = form.detailedMessage;
+        this.innerValue.level = "info";
+        this.innerValue.providers = [];
+        for(let provider of form.channelsData){
+            if(isNotNull(provider)){
+                this.innerValue.providers.push(provider[0]);
+            }
+        }
         this.cleanMessage();
         let alerts = [this.innerValue];
         if(this.edit){
@@ -267,7 +281,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
             return element.name == channelTab[0];
         })
         if(index != -1){
-            self.alertForm.get("channelsData").at(index).patchValue(self.channels[index].name);
+            self.alertForm.get("channelsData").at(index).patchValue([self.channels[index].name]);
         }
     }
     delete jsonData.channelsData;
@@ -277,14 +291,54 @@ export class AdminViewAlertEdit implements AfterViewInit{
   * IMPLEMENTS ControlValueAccessor
   *****************************************************************************/
     writeValue(value: any) {
-        this.innerValue = value;
-        this.initValue();
+        this.alertForm.reset();
+        if(isNotNull(value)){
+            if(isNotNull(value.uid)){
+                this.edit = true;
+                this.isNotEdit = !this.edit;
+               // this.alertForm.get("name").disable();
+            }else{
+                this.edit = false;
+                this.isNotEdit = !this.edit;
+            }
+            this.applyAlertOnForm(value)
+        }else{
+            this.edit = false;
+            this.isNotEdit = !this.edit;
+        }
     }
+
     registerOnChange(fn: any) {
         this.onChangeCallback = fn;
     }
+
     registerOnTouched(fn: any) {
         this.onTouchedCallback = fn;
+    }
+
+    applyAlertOnForm(value){
+        this.innerValue = value;
+        this.initChannels();
+        this.alertForm.get('name').patchValue(value.alerteName);
+        if(isNotNull(value.label)){
+            this.alertForm.get('mainMessage').patchValue(value.label);
+        }
+        if(isNotNull(value.subLabel)){
+            this.alertForm.get('detailedMessage').patchValue(value.subLabel);
+        }
+
+    }
+
+    applyAllertProviderOnForm(){
+        if(isNotNull(this.innerValue.providers) && isNotNull(this.channels)){
+            for(let provider of this.innerValue.providers){
+                for(let i  = 0; i < this.channels.length; i++){
+                    if(provider == this.channels[i].name){
+                        this.alertForm.get('channelsData').at(i).patchValue([provider]);
+                    }
+                }
+            }
+        }
     }
 
   /*****************************************************************************
@@ -365,5 +419,13 @@ export class AdminViewAlertEdit implements AfterViewInit{
         for(let i = length - 1; i >= 0 ;i--){
             this.removeFormActivationLine(i);
         }
+    }
+
+    showCronTooltip(tooltip){
+        this.cronTooltipHidden = false;
+    }
+
+    hideCronTooltip(tooltip){
+        this.cronTooltipHidden = true;
     }
 }

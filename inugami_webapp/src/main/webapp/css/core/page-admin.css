@@ -139,7 +139,7 @@
 
 
 .page-admin .alert-edit .left-panel .alert-name,
-.page-admin .alert-edit .left-panel .alert-duration-visibility{
+.page-admin .alert-edit .left-panel .alert-duration-message{
   position: relative;
   left: 1.5em;
 }
@@ -156,21 +156,17 @@
   display: none;
 }
 
-.page-admin .alert-edit .left-panel .alert-duration-visibility .visibility,
-.page-admin .alert-edit .left-panel .alert-duration-visibility .duration{
+.page-admin .alert-edit .left-panel .alert-duration-message .duration{
   margin-right: 1em;
 }
 
-.page-admin .alert-edit .left-panel .alert-duration-visibility .duration input{
-  width: 5em;
-}
-
-.page-admin .alert-edit .left-panel .alert-duration-visibility .visibility input{
+.page-admin .alert-edit .left-panel .alert-duration-message .duration input{
   width: 7em;
 }
 
-.page-admin .alert-edit .left-panel .alert-duration-visibility .main-message input{
-  width: 15em;
+
+.page-admin .alert-edit .left-panel .alert-duration-message .main-message input{
+  width: 23.4em;
 }
 
 .page-admin .alert-edit .left-panel .detailed-message input{
@@ -182,10 +178,32 @@
   display: inline-block;
 }
 
+.page-admin .alert-edit .left-panel .tag .message,
+.page-admin .alert-edit .left-panel .tag .tags{
+  display: inline;
+}
+
+.page-admin .alert-edit .left-panel .tag .message{
+  position: relative;
+  top: 0.7em;
+  font-size: 1.5em;
+}
+
 .page-admin .alert-edit .left-panel .channel-selector{
   font-size: 1.2em;
+  display: flex;
 }
-.page-admin .alert-edit .left-panel .channel-selector .channel{
+
+.page-admin .alert-edit .left-panel .channel-selector .message,
+.page-admin .alert-edit .left-panel .channel-selector .channels{
+  display: inline-block;
+}
+
+.page-admin .alert-edit .left-panel .channel-selector .message{
+  margin-right: 1em;
+  font-size: 1.5em;
+}
+.page-admin .alert-edit .left-panel .channel-selector .channels .channel{
   color: gray;
   font-size: 1.2em;
   display: inline-block;
@@ -195,6 +213,44 @@
   color: black;
 }
 
+.page-admin .alert-edit .left-panel .sources .to input,
+.page-admin .alert-edit .left-panel .sources .from input,
+.page-admin .alert-edit .left-panel .sources .interval input,
+.page-admin .alert-edit .left-panel .sources .provider input{
+  width: 16em;
+}
+
+.page-admin .alert-edit .left-panel .sources .cron-tooltip{
+  background: #504c4c;
+  color: white;
+  position: absolute;
+  width: 20em;
+  left: 31em;
+  bottom: 11em;
+  padding: 0.5em;
+  height: 20em;
+  border-radius: 1em;
+
+  white-space: pre-line;
+}
+
+.page-admin .alert-edit .left-panel .sources .cron-tooltip.hidden{
+  visibility:hidden;
+ 
+}
+
+.page-admin .alert-edit .left-panel .sources .first-line{
+  position: relative;
+  top:0em;
+  
+}
+
+.page-admin .alert-edit .left-panel .sources  button{
+  position: absolute;
+  left: 100em;
+  bottom: 12em;
+  font-size: 0.5em;
+}
 
 .page-admin .alert-edit .left-panel .query-text-area{
   position: relative;
@@ -247,6 +303,20 @@
   position: relative;
   bottom: 2.5em;
   
+}
+
+.page-admin .alert-edit .right-panel .levels-setting .p-accordion{
+  margin-bottom: 1em;
+}
+
+.page-admin .alert-edit .right-panel .levels-setting .p-accordion .ui-accordion-header a,
+.page-admin .alert-edit .right-panel .levels-setting .p-accordion .ui-accordion-header{
+  color: black;
+
+}
+
+.page-admin .alert-edit .right-panel .levels-setting .p-accordion .ui-accordion-header.ui-state-active{
+  background-color: white; 
 }
 
 .page-admin .alert-edit .right-panel .levels-setting .min-value,

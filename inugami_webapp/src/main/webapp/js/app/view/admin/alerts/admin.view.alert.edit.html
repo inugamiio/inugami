@@ -1,5 +1,18 @@
-<form [formGroup]="alertForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="alertForm">
     <div [ngClass]="' alert-edit '" [class]="styleClass">
+            <div class="btn-group" role="group">
+                    <button pButton type="button" (click)="close()" class="default-action" msg>
+                        <msg key="action.cancel"></msg>
+                    </button>
+    
+                    <button pButton type="button" [disabled]="!alertForm.valid" msg name="save" (click)="saveAlertAndClose()" class="active-action">
+                        <msg key="action.save"></msg>
+                    </button>
+    
+                    <button pButton type="button" [disabled]="!alertForm.valid" msg name="saveandcontinue" (click)="saveAlert()" class="full-active-action" *ngIf="isNotEdit">
+                        <msg key="action.save.and.continue"></msg>
+                    </button>
+                </div>
         <div class="left-panel">
             <div class="form-group row" *ngIf="innerValue">
                 <div class="alert-name">
@@ -11,12 +24,9 @@
                     </span>
                 </div>
                   
-                <div class="alert-duration-visibility">
+                <div class="alert-duration-message">
                     <input-bloc  [validator]="validators.notNegativeNumber" styleClass = "duration"
                         label="alert.edit.alert.duration" type="number" formControlName="duration"></input-bloc><!-- [(ngModel)]="innerValue.duration" -->
-                
-                    <input-bloc  label="alert.edit.alert.channel" styleClass = "visibility"
-                        [validator]="validators.notEmptyString" formControlName=visibility></input-bloc><!-- [(ngModel)]="innerValue.channel" -->
                     <input-bloc  label="alert.edit.alert.label" styleClass = "main-message"
                         [validator]="validators.notEmptyString" formControlName="mainMessage"></input-bloc>
                 </div>
@@ -26,29 +36,34 @@
                  <!-- [(ngModel)]="innerValue.label" -->
                 <input-bloc  label="alert.edit.alert.sub.label" formControlName="detailedMessage"></input-bloc> <!-- [(ngModel)]="innerValue.subLabel" -->
             </div>
-
-            <div class="form-group data-display">
-                <label>Data</label>
-                <textarea disabled="disabled">{{detailData}}</textarea>
-            </div>
             <div class="tag">
-                    <msg key="alert.edit.tag"></msg>:
-                <p-chips formControlName="tag"></p-chips>
+                    <div class="message">
+                        <msg key="alert.edit.tag"></msg>:
+                    </div>
+                <div class="tags">
+                    <p-chips formControlName="tag"></p-chips>
+                </div>
             </div>
             <div class="channel-selector">
-                <msg key="alert.edit.channel"></msg>:
-                <div *ngFor="let channel of channels; index as i" class="channel" [ngClass]="{'enable':channel.enable}" formArrayName="channelsData">
-                    <p-checkbox  value={{channel.name}} [formControlName]="i"></p-checkbox>{{channel.name}} <!--  [(ngModel)]=channelsData -->
+                <div class="message">
+                        <msg key="alert.edit.channel"></msg>:
+                </div>
+                <div class="channels">
+                        <div *ngFor="let channel of channels; index as i" class="channel" [ngClass]="{'enable':channel.enable}" formArrayName="channelsData">
+                                <p-checkbox  value={{channel.name}} [formControlName]="i"></p-checkbox>{{channel.name}}
+                        </div>
                 </div>
             </div>
-            <p-panel header="Sources" formGroupName="sources">
-                <div>
-                    <input-bloc label="alert.edit.sources.data.provider" formControlName="dataProvider"></input-bloc>
-                    <input-bloc label="alert.edit.sources.data.interval" formControlName="interval"></input-bloc>
+            <p-panel header="Sources" formGroupName="sources" class="sources">
+                <div class="first-line">
+                    <button type="button" pButton icon="far fa-question-circle" class="active-action" (mouseover)="showCronTooltip()" (mouseout)="hideCronTooltip()"></button>
+                    <input-bloc label="alert.edit.sources.data.provider" class="provider" formControlName="dataProvider"></input-bloc>
+                    <input-bloc label="alert.edit.sources.data.interval" class="interval" formControlName="interval"></input-bloc>
+                    <div class="cron-tooltip" [ngClass]="{'hidden':cronTooltipHidden}" ><msg key="alert.edit.cron.tooltip"></msg></div>
                 </div>
                 <div>
-                    <input-bloc label="alert.edit.sources.from" formControlName="from"></input-bloc>
-                    <input-bloc label="alert.edit.sources.to" formControlName="to"></input-bloc>
+                    <input-bloc label="alert.edit.sources.from" class="from" formControlName="from"></input-bloc>
+                    <input-bloc label="alert.edit.sources.to" class="to" formControlName="to"></input-bloc>
                 </div>
                 <div class="query-text-area">
                     <textarea pInputTextarea formControlName="query"></textarea>
@@ -85,12 +100,16 @@
                         </div>
 
                         <div formArrayName="levelPointsBeforeTriggered" class="levels">
-                            <div class="dynamic-levels-levels" *ngFor="let level of alertForm.get('levelPointsBeforeTriggered').controls; index as i" [formGroupName]="i">
-                                <input-bloc disabled=true formControlName="points" label="alert.edit.dynamic.levels.points.before.triggered" styeClass="points"></input-bloc>
-                                <input-bloc disabled=true formControlName="name" label="alert.edit.dynamic.levels.add.level" styeClass="name"></input-bloc>
-                                <span class="delete"><button pButton type="button" class="active-action" icon="fas fa-minus"
-                                        (click)="removeDynamicLevelsLevel(i,graph)"></button></span>
-                            </div>
+                                <p-accordion styleClass="p-accordion">
+                                        <p-accordionTab header="Added Levels">
+                                                <div class="dynamic-levels-levels" *ngFor="let level of alertForm.get('levelPointsBeforeTriggered').controls; index as i" [formGroupName]="i">
+                                                        <input-bloc disabled=true formControlName="points" label="alert.edit.dynamic.levels.points.before.triggered" styeClass="points"></input-bloc>
+                                                        <input-bloc disabled=true formControlName="name" label="alert.edit.dynamic.levels.add.level" styeClass="name"></input-bloc>
+                                                        <span class="delete"><button pButton type="button" class="active-action" icon="fas fa-minus"
+                                                                (click)="removeDynamicLevelsLevel(i,graph)"></button></span>
+                                                    </div>
+                                        </p-accordionTab>
+                                </p-accordion>
                         </div>
                         <div class="add-level">
                                 <input-bloc label="alert.edit.dynamic.levels.points.before.triggered" (ngModelChange)="setPointsBeforeTriggered($event)" styeClass="points"
@@ -110,23 +129,24 @@
                     </p-tabPanel>
                 </p-tabView>
             </p-panel>
-            <div class="btn-group" role="group">
+            
+        </div>
+
+
+        
+        <div class="admin-view-alert-edit-end"></div>
+        <div class="btn-group" role="group">
                 <button pButton type="button" (click)="close()" class="default-action" msg>
                     <msg key="action.cancel"></msg>
                 </button>
 
-                <button pButton type="submit" [disabled]="!alertForm.valid" msg (click)="saveAlertAndClose()" class="active-action">
+                <button pButton type="button" [disabled]="!alertForm.valid" msg name="save" (click)="saveAlertAndClose()" class="active-action">
                     <msg key="action.save"></msg>
                 </button>
 
-                <button pButton type="submit" [disabled]="!alertForm.valid" msg (click)="saveAlert()" class="full-active-action" *ngIf="isNotEdit">
+                <button pButton type="button" [disabled]="!alertForm.valid" msg name="saveandcontinue" (click)="saveAlert()" class="full-active-action" *ngIf="isNotEdit">
                     <msg key="action.save.and.continue"></msg>
                 </button>
             </div>
-        </div>
-
-
-
-        <div class="admin-view-alert-edit-end"></div>
     </div>
 </form>

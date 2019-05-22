@@ -71,10 +71,13 @@ export class AdminViewAlerts{
     }
 
     onAlertSelect(event){
-        if(isNotNull(this.selectedAlert) && this.selectedAlert.alerteName==event.data.alerteName){
-            this.unSelectedAlert();
-        }
         this.selectedAlert=event.data;
+        this.setActiveSection('createView');
+    }
+
+    showNewAlert(){
+        this.selectedAlert = null;
+        this.setActiveSection('createView');
     }
     
     cleanMessage(){

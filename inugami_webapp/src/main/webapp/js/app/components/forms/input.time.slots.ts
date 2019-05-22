@@ -77,7 +77,7 @@ export class InputTimeSlots implements OnInit, ControlValueAccessor {
       this.separator= org.inugami.formatters.message("time.slots.to");
       org.inugami.asserts.isFalse("??time.slots.to??"===this.separator, "property time.slots.to not found");
        if(this.timeSlotsModel.length == 0){
-         let initialTimeSlot = new TimeSlot("00:00","23:59"); 
+         let initialTimeSlot = new TimeSlot("00:00","00:00"); 
          this.timeSlotsModel.push(initialTimeSlot);
          
        }
@@ -112,7 +112,7 @@ export class InputTimeSlots implements OnInit, ControlValueAccessor {
     * METHODS
     *****************************************************************************/
 
-    addSlot(from = "00:00", to = "23:59"){
+    addSlot(from = "00:00", to = "00:00"){
       if(!this.readonly && !this.disabled){
         let newSlot = new TimeSlot(from,to); 
         this.timeSlotsModel.push(newSlot);

@@ -29,7 +29,7 @@ template      : `
     <div class="input-bloc-data">
       <input  [type]="type" 
               [placeholder]="labelTxt"
-              [attr.disabled]="isDisabled?'':null"
+              [attr.disabled]="disabled?'':null"
               [(ngModel)]="innerValue"
               (focus)="onFocus($event)"
               (focusout)="onFocusOut($event)"
