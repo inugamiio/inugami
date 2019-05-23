@@ -1,0 +1,11 @@
+<div [class]="styleClass" [ngStyle]="style">
+    <div class="svg-component">
+        <div [ngClass]="componentBaseStyleClass" [class]="styleClass">
+            <div class="svg-container" [style.height.px]="size.svg.height" [style.width.px]="size.svg.width" #container>
+            </div>
+
+            <div class="svg-container-end"></div>
+        </div>
+        <div class="svg-component-end"></div>
+    </div>
+</div>
