@@ -6,6 +6,7 @@ import org.inugami.api.alertings.AlertsSenderException;
 import org.inugami.api.exceptions.RenderingException;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.processors.ConfigHandler;
+import org.inugami.core.alertings.senders.opsgenie.sender.OpsgenieSender;
 import org.inugami.core.alertings.senders.opsgenie.sender.model.OpsgenieModel;
 import org.inugami.core.alertings.senders.teams.TeamsAlertRenderer;
 import org.inugami.core.alertings.senders.teams.TeamsAlertSender;
