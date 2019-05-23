@@ -143,6 +143,9 @@
   position: relative;
   left: 1.5em;
 }
+.page-admin .alert-edit .left-panel .alert-name input[disabled]{
+  font-style: italic;
+}
 
 .page-admin .alert-edit .left-panel .alert-name .input-bloc input{
   width: 30em;
@@ -228,9 +231,8 @@
   left: 31em;
   bottom: 11em;
   padding: 0.5em;
-  height: 20em;
+  height: 30em;
   border-radius: 1em;
-
   white-space: pre-line;
 }
 
@@ -336,29 +338,29 @@
 
 .page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.WARN .curve
 {
-  stroke: #ca740a;
+  stroke: #c9952b;
   stroke-width: 0.2em;
 }
 .page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.WARN .dots{
-  fill: #ca740a;
+  fill: #c9952b;
 }
 
 .page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.ERROR .curve
 {
-  stroke: #e74a1a;
+  stroke: #c12534;
   stroke-width: 0.2em;
 }
 .page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.ERROR .dots{
-  fill: #e74a1a;
+  fill: #c12534;
 }
 
 .page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.INFO .curve
 {
-  stroke: #15088d;
+  stroke: #25599d;
   stroke-width: 0.2em;
 }
 .page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.INFO .dots{
-  fill: #15088d;
+  fill: #25599d;
 }
 
 .page-admin .konami{

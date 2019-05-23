@@ -4,7 +4,7 @@ import { DynamicLevel } from "./dynamic.level";
 import { ActivationTime } from "./activation.time"; 
 
 export class AlertEntity {
-    /*constructor(
+    constructor(
         public alerteName       : string,
         public level            : string,
         public levelType        : string,
@@ -23,8 +23,8 @@ export class AlertEntity {
         public tags             : Tag[],
         public levels           : DynamicLevel[],
         public activations      : ActivationTime[]
-    ){ }*/
-    constructor(public alerteName       : string,
+    ){ }
+    /*constructor(public alerteName       : string,
         public level            : string,
         public levelType        : string,
         public levelNumber      : number,
@@ -36,8 +36,7 @@ export class AlertEntity {
         public data             : string,
         public enable           : boolean,
         public ttl              : number,
-        public providers        : string[]){       
-    }
+        public providers        : string[]){ }*/
 }
 
 

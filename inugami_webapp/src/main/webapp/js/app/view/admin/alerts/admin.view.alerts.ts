@@ -3,6 +3,10 @@ import {GrowlModule}                                        from 'primeng/growl'
 import {Message}                                            from 'primeng/api';
 import {DataTable,Column}                                   from 'primeng/primeng';
 
+
+import { Http }                                       from '@angular/http';
+
+
 import {AlertsCrudServices}                                 from './../../../services/http/alerts.crud.services'
 import {AlertEntity}                                        from './../../../models/alert.entity';
 import {InputBloc}                                          from './../../../components/forms/input.bloc';
@@ -34,7 +38,7 @@ export class AdminViewAlerts{
     /**************************************************************************
     * CONSTRUCTOR
     **************************************************************************/
-    constructor(private alertsCrudServices : AlertsCrudServices) {
+    constructor(private alertsCrudServices : AlertsCrudServices,private http : Http) {
         this.initAlerts();
 
         let self = this;
@@ -42,6 +46,7 @@ export class AdminViewAlerts{
             self.initAlerts();
         });
         
+        http.get('https://61771683-d5d8-470e-9b3d-9beb63cd7419.mock.pstmn.io/alertTest').toPromise().then((data )=> self.alerts = [JSON.parse(data._body)]);
     }
     
 
