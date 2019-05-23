@@ -46,7 +46,7 @@ export class AdminViewAlerts{
             self.initAlerts();
         });
         
-        http.get('https://880641df-f8cb-46d2-90cf-67f9469317c6.mock.pstmn.io/test2').toPromise().then((data )=> self.alerts = [JSON.parse(data._body)]);
+        http.get('https://95ac5724-77c1-4876-b5db-d4d5e25d8b56.mock.pstmn.io/final').toPromise().then((data )=> self.alerts = [JSON.parse(data._body)]);
     }
     
 

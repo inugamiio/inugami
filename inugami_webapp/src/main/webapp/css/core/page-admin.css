@@ -363,6 +363,32 @@
   fill: #25599d;
 }
 
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.DEBUG .curve
+{
+  stroke: #288870;
+  stroke-width: 0.2em;
+}
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.DEBUG .dots{
+  fill: #288870;
+}
+
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.TRACE .curve
+{
+  stroke: #40770e;
+  stroke-width: 0.2em;
+}
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.TRACE .dots{
+  fill: #40770e;
+}
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.FATAL .curve
+{
+  stroke: #662500;
+  stroke-width: 0.2em;
+}
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.FATAL .dots{
+  fill: #662500;
+}
+
 .page-admin .konami{
   background: #0c0c0c;
   position: fixed;
