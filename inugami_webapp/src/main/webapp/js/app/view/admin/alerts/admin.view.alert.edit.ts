@@ -189,9 +189,6 @@ export class AdminViewAlertEdit implements AfterViewInit{
         this.removeFormActivationLine(index);
     }
 
-    addActivationLine(){
-        this.addFormActivationLine();
-    }
 
     addDynamicLevelsLevel(graph){
         if( isNotNull(this.addedLevel.pointsBeforeTriggered)    &&
@@ -400,8 +397,16 @@ export class AdminViewAlertEdit implements AfterViewInit{
         alert.subLabel          = form.detailedMessage;
         alert.duration          = form.duration;
         alert.script            = form.scripts;
-        alert.levels            = form.dynamicLevels;
         alert.level             = "info";
+
+        alert.levels            = form.dynamicLevels;
+
+        if(isNotNull(form.dynamicLevels) && isNotNull(form.levelPointsBeforeTriggered)){
+            for(let level of form.levelPointsBeforeTriggered){
+                let levelValue = alert.levels.find(element => {return element.name == level.name});
+                levelValue.activationDelais  = level.points;
+            }
+        }
 
         if(isNotNull(form.sources)){
             alert.source = new ProviderSource(
@@ -459,13 +464,27 @@ export class AdminViewAlertEdit implements AfterViewInit{
         if(isNotNull(value.activations)){
             let activations = [];
             for(let activationTime of value.activations){
-                this.addActivationLine();
+                this.addFormActivationLine();
                 let activation = {days:'',hours:''};
                 activation.days = activationTime.days;
                 activation.hours = activationTime.hours;
                 activations.push(activation);
             }
             this.alertForm.get('activation').patchValue(activations);
+        }
+
+        if(isNotNull(value.levels)){
+            let levels = [];
+            let array = this.alertForm.get('levelPointsBeforeTriggered');
+            for(let levelValue of value.levels){
+                let group = this.createFormLevelLine()
+                array.push(group);
+                let level = {points:'',name:''};
+                level.points = levelValue.activationDelais;
+                level.name = levelValue.name;
+                levels.push(level);
+            }
+            array.patchValue(levels);
         }
 
         this.alertForm.get('dynamicLevels').patchValue(value.levels);
