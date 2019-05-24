@@ -21,7 +21,9 @@
                     [disabled]="edit" label="alert.edit.alert.name" formControlName="name"></input-bloc>
                     <span class="file-input">
                         <button pButton type=button class="active-action" icon="fas fa-folder-open" (click)="fileinput.click()"></button>
+                        <button pButton type=button class="active-action" icon="fas fa-arrow-down" (click)="download.click()"></button>
                         <input type=file (input)="fileChanged($event)" #fileinput>
+                        <a class="download" title="Download JSON" [href]="fileUri" download="download.json" #download></a>
                     </span>
                 </div>
                   
@@ -57,10 +59,10 @@
             </div>
             <p-panel header="Sources" formGroupName="sources" class="sources">
                 <div class="first-line">
-                    <button type="button" pButton icon="far fa-question-circle" class="active-action" (mouseover)="showCronTooltip()" (mouseout)="hideCronTooltip()"></button>
+                    <button type="button" pButton icon="far fa-question-circle" class="active-action tooltip-button cron" (mouseover)="toggleFormTooltip(crontooltip)" (mouseout)="toggleFormTooltip(crontooltip)"></button>
                     <input-bloc label="alert.edit.sources.data.provider" class="provider" formControlName="dataProvider"></input-bloc>
                     <input-bloc label="alert.edit.sources.data.interval" class="interval" formControlName="interval"></input-bloc>
-                    <div class="cron-tooltip" [ngClass]="{'hidden':cronTooltipHidden}" ><msg key="alert.edit.cron.tooltip"></msg></div>
+                    <div class="form-tooltip cron hidden"  #crontooltip><msg key="alert.edit.tooltip.cron"></msg></div>
                 </div>
                 <div>
                     <input-bloc label="alert.edit.sources.from" class="from" formControlName="from"></input-bloc>
@@ -98,6 +100,8 @@
                                 <input-bloc label="alert.edit.dynamic.levels.minValue" type="number" styleClass="min-value" (enter)="setGraphMinValue($event,graph)"></input-bloc>
                                 <input-bloc label="alert.edit.dynamic.levels.maxValue" type="number" styleClass="min-value" (enter)="setGraphMaxValue($event,graph)"></input-bloc>
                                 <input-bloc label="alert.edit.dynamic.levels.precision" type="number" styleClass="precision-value" (enter)="setFormatter($event)"></input-bloc>
+                                <button type="button" pButton icon="far fa-question-circle" class="active-action tooltip-button precision" (mouseover)="toggleFormTooltip(precision)" (mouseout)="toggleFormTooltip(precision)"></button>
+                                <div class="form-tooltip hidden precision" #precision><msg key="alert.edit.tooltip.precision"></msg></div>
                         </div>
 
                         <div formArrayName="levelPointsBeforeTriggered" class="levels">

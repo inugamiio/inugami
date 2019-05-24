@@ -3,6 +3,8 @@ import {Component,Inject,OnInit,Input,
 import {NG_VALUE_ACCESSOR,ControlValueAccessor,Validators,
         FormGroup,FormControl,FormArray,FormBuilder}        from '@angular/forms';
 
+import {DomSanitizer}                                       from '@angular/platform-browser';
+
 import {AlertsCrudServices}                                 from './../../../services/http/alerts.crud.services';
 import {AlertEntity}                                        from './../../../models/alert.entity';
 import {InputBloc}                                          from './../../../components/forms/input.bloc';
@@ -46,6 +48,8 @@ export class AdminViewAlertEdit implements AfterViewInit{
     private innerValueChannels          : string[]; 
     private isNotEdit                   : boolean;
 
+    private fileUri                     : any;
+
     private channels                    : any[] = [];
     private addedLevel                  : any = {};
     
@@ -66,7 +70,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
     /**************************************************************************
     * CONSTRUCTOR
     **************************************************************************/
-    constructor(private alertsCrudServices : AlertsDynamicCrudServices,private fb: FormBuilder, private httpService : HttpServices) {
+    constructor(private alertsCrudServices : AlertsDynamicCrudServices,private fb: FormBuilder, private httpService : HttpServices,private sanitizer : DomSanitizer) {
         this.initValue();
     }
     ngAfterContentInit(){
@@ -103,7 +107,15 @@ export class AdminViewAlertEdit implements AfterViewInit{
             this.alertForm.controls['levelPointsBeforeTriggered'].controls =[];
             this.alertForm.reset();
         }
+
+        this.alertForm.valueChanges.subscribe(val => {
+            let jsonData = JSON.stringify(val);
+            this.fileUri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8,"+encodeURIComponent(jsonData));
+            
+        })
     }
+
+    
 
     initChannels(){
         let self = this;
@@ -381,8 +393,12 @@ export class AdminViewAlertEdit implements AfterViewInit{
         }
     }
 
-    showCronTooltip(tooltip){
-        this.cronTooltipHidden = false;
+    toggleFormTooltip(tooltip){
+       if(tooltip.classList.contains('hidden')){
+           tooltip.classList.remove('hidden');
+       }else{
+           tooltip.classList.add('hidden');
+       }
     }
 
     hideCronTooltip(tooltip){
@@ -495,5 +511,5 @@ export class AdminViewAlertEdit implements AfterViewInit{
         //faut penser aux channels 
         //et les points avant trigger
     }
-    
+
 }

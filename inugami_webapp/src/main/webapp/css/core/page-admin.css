@@ -148,7 +148,7 @@
 }
 
 .page-admin .alert-edit .left-panel .alert-name .input-bloc input{
-  width: 30em;
+  width: 27.8em;
 }
 .page-admin .alert-edit .left-panel .file-input {
   position: relative;
@@ -223,7 +223,7 @@
   width: 16em;
 }
 
-.page-admin .alert-edit .left-panel .sources .cron-tooltip{
+.page-admin .alert-edit .left-panel .sources .form-tooltip{
   background: #504c4c;
   color: white;
   position: absolute;
@@ -236,22 +236,24 @@
   white-space: pre-line;
 }
 
-.page-admin .alert-edit .left-panel .sources .cron-tooltip.hidden{
+.page-admin .alert-edit .left-panel .sources .form-tooltip.hidden{
   visibility:hidden;
- 
 }
+
+
 
 .page-admin .alert-edit .left-panel .sources .first-line{
   position: relative;
   top:0em;
-  
+}
+.page-admin .alert-edit .left-panel .sources  .tooltip-button{
+  font-size: 0.5em;
 }
 
-.page-admin .alert-edit .left-panel .sources  button{
+.page-admin .alert-edit .left-panel .sources  .tooltip-button.cron{
   position: absolute;
   left: 100em;
   bottom: 12em;
-  font-size: 0.5em;
 }
 
 .page-admin .alert-edit .left-panel .query-text-area{
