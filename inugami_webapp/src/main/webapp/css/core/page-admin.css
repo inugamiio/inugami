@@ -222,31 +222,27 @@
 .page-admin .alert-edit .left-panel .sources .provider input{
   width: 16em;
 }
-
-.page-admin .alert-edit .left-panel .sources .form-tooltip{
-  background: #504c4c;
-  color: white;
-  position: absolute;
-  width: 20em;
-  left: 31em;
-  bottom: 11em;
-  padding: 0.5em;
-  height: 30em;
-  border-radius: 1em;
-  white-space: pre-line;
-}
-
-.page-admin .alert-edit .left-panel .sources .form-tooltip.hidden{
-  visibility:hidden;
-}
-
-
-
 .page-admin .alert-edit .left-panel .sources .first-line{
   position: relative;
   top:0em;
 }
-.page-admin .alert-edit .left-panel .sources  .tooltip-button{
+.page-admin .alert-edit  .form-tooltip{
+  background: #504c4c;
+  color: white;
+  position: absolute;
+  left: 31em;
+  max-width: 20em;
+  bottom: 11em;
+  padding: 0.5em;
+  border-radius: 1em;
+  white-space: pre-line;
+}
+
+.page-admin .alert-edit .form-tooltip.hidden{
+  visibility:hidden;
+}
+
+.page-admin .alert-edit .tooltip-button{
   font-size: 0.5em;
 }
 
@@ -255,6 +251,17 @@
   left: 100em;
   bottom: 12em;
 }
+
+.page-admin .alert-edit .right-panel .tooltip-button.precision{
+  position: relative;
+  bottom: 7em;
+}
+
+.page-admin .alert-edit .right-panel .form-tooltip.precision{
+  position: relative;
+  left: 50em;
+}
+
 
 .page-admin .alert-edit .left-panel .query-text-area{
   position: relative;
