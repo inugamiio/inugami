@@ -20,13 +20,13 @@
                     <div *ngIf="hasRole(subLink)" [class]="subLink.styleClass" [class.selected]="subLink.selected">
                         <div *ngIf="subLink.rooterLink">
                             <a [routerLink]="subLink.path"  routerLinkActive="active">
-                                <span class="icon"></span>
+                                <span class="icon"><span class="before"></span></span>
                                 <span class="link">{{subLink.title}}</span>
                             </a>
                         </div>
                         <div *ngIf="!subLink.rooterLink">
                             <a (click)="routeToVirtualLink(subLink)">
-                                <span class="icon"></span>
+                                <span class="icon"><span class="before"></span></span>
                                 <span class="link">{{subLink.title}}</span>
                             </a>
                         </div>

@@ -117,9 +117,9 @@ export class AdminView implements OnInit, OnDestroy{
       this.mainMenuService.setCurrentTitle("Administration");
       this.mainMenuService.addSubLink(new MainMenuLink("Health", "health","icon-enable health", false , 'admin',true));
       this.mainMenuService.addSubLink(new MainMenuLink("Caches", "caches","icon-enable caches", false, 'admin'));
-      this.mainMenuService.addSubLink(new MainMenuLink("Alerts", "alerts","icon-enable alerts", false, 'admin'));
+      this.mainMenuService.addSubLink(new MainMenuLink("Alerts", "alerts","icon-enable alerts fas", false, 'admin'));
       this.mainMenuService.addSubLink(new MainMenuLink("Plugins", "plugins","icon-enable plugins", false, 'admin'));
-      this.mainMenuService.addSubLink(new MainMenuLink("Events", "events","icon-enable Events", false, 'admin'));
+      this.mainMenuService.addSubLink(new MainMenuLink("Events", "events","icon-enable events far", false, 'admin'));
       this.mainMenuService.addSubLink(new MainMenuLink("Actions", "actions","icon-enable actions", false, 'admin'));
       this.mainMenuService.updateMenu();
     }

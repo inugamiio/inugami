@@ -97,7 +97,7 @@ header.main-menu.hidden-menu{
     cursor: pointer;
 }
 .main-menu .sub-link ul li>div a .link{
-
+    color : black;
 }
 
 
@@ -111,7 +111,7 @@ header.main-menu.hidden-menu{
     top: 0.2em;
 }
 
-.main-menu .sub-link ul li>div a .icon{
+.main-menu .sub-link ul li>div a .icon .before{
     -webkit-font-smoothing: antialiased;
     display: inline-block;
     font-style: normal;
@@ -121,33 +121,46 @@ header.main-menu.hidden-menu{
     font-family: Font Awesome\ 5 Free;
     font-weight: 900;
 }
-.main-menu .sub-link ul li>div.icon-enable.health a .icon::before{
+.main-menu .sub-link ul li>div.icon-enable.health a .icon .before::before{
     content: "\f21e";
 }
 
-.main-menu .sub-link ul li>div.icon-enable.caches a .icon::before{
+.main-menu .sub-link ul li>div.icon-enable.caches a .icon .before::before{
     content: "\f1c0";
 }
 
 
-.main-menu .sub-link ul li>div.icon-enable.plugins a .icon::before{
+.main-menu .sub-link ul li>div.icon-enable.plugins a .icon .before::before{
     content: "\f12e";
 }
 
-.main-menu .sub-link ul li>div.icon-enable.events a .icon{
+.main-menu .sub-link ul li>div.icon-enable.events a .icon .before{
     -webkit-font-smoothing: antialiased;
     display: inline-block;
     font-style: normal;
     font-variant: normal;
     text-rendering: auto;
     line-height: 1;
-    font-family: Font Awesome\ 5 Free;
     font-weight: 400;
 }
-.main-menu .sub-link ul li>div.icon-enable.events a .icon::before{
+.main-menu .sub-link ul li>div.icon-enable.alerts a .icon .before::before{
+    content: "\f0f3";
+}
+.main-menu .sub-link ul li>div.icon-enable.events a .icon .before::before{
     content: "\f073";
 }
 
-.main-menu .sub-link ul li>div.icon-enable.actions a .icon::before{
+.main-menu .sub-link ul li>div.icon-enable.actions a .icon .before::before{
     content: "\f013";
+}
+
+.main-menu .sub-link ul li>div.icon-enable a .icon .before{
+    font-size: 60%;
+    height: 1.6em;
+    width: 1.6em;
+    text-align: center;
+    margin-top: 0em;
+    display: block;
+    float: left;
+    padding-top: 16%;
 }

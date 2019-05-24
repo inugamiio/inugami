@@ -540,7 +540,7 @@ nav.dynamic-sections {
 }
 
 :root{
-  --nav-dynamic-section-color : #dfcada;
+  --nav-dynamic-section-color : #ffffff;
 }
 
 nav.dynamic-sections ul{
@@ -574,6 +574,7 @@ nav.dynamic-sections li{
 nav.dynamic-sections li.active{
   border-bottom: 2px solid #ffffff;
   background: #ffffff;
+  border-left: 1px solid #b9b7b7;
 }
 
 nav.dynamic-sections .dynamic-sections-end{
