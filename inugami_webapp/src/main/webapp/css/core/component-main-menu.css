@@ -14,7 +14,9 @@ header.main-menu.hidden-menu{
     top: -3em;
 }
 .main-menu  menu{
-    
+    height: 1.5em;
+    overflow: hidden;
+
 }
 
 .main-menu  menu>ul,
@@ -35,18 +37,15 @@ header.main-menu.hidden-menu{
     float: right;
     font-size: 80%;
     padding-top: 0.3em;
+    padding-right: 0.5em;
 }
-.main-menu  menu>ul>li.home-link{
-    
-    
-}
+
 .main-menu  .sub-link{
     padding-left: 1em;
 }
 
 .main-menu  .sub-link ul{
-    
-    
+    padding-top:0.1em;
 }
 
 .main-menu  .sub-link li{
@@ -54,27 +53,101 @@ header.main-menu.hidden-menu{
     margin-right: 0.5em;
 }
 
-/*
-
-.inugami.demo.dashboard header{
-    position: absolute;
-    top:0;
-    background-color:#303030;
-    width: 100%;
-    padding: 0.5em;
+.main-menu .home-link{
+    padding-left: 0.5em;
+}
+.main-menu .home-link,
+.main-menu .home-link a,
+.main-menu .home-link .home-link-end{
     color: #ffffff;
-    box-shadow: 0 0 1em 0 #676767;
+    background-color: #c4003e;
 }
 
-.inugami.demo.dashboard header nav ul{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.inugami.demo.dashboard header nav ul li{
+.main-menu .home-link a,
+.main-menu .home-link .current-title{
     float: left;
-    padding: 0.5em;
-    font-size: 140%;
+    display: block;
 }
-*/
+.main-menu .home-link .current-title{
+    min-width: 7em;
+    padding-left: 0.5em;
+}
+
+.main-menu .home-link .home-link-end{
+    display: block;
+    width: 0.7em;
+    height: 1.5em;
+    float: right;
+    border-radius: 100%;
+    position: relative;
+    right: -4%;
+}
+
+.main-menu .sub-link ul li>div{
+    -webkit-transition: color 0.5s linear;
+    -moz-transition: color 0.5s linear;
+    -ms-transition: color 0.5s linear;
+    -o-transition: color 0.5s linear;
+    transition:  tocolorp 0.5s linear;
+}
+.main-menu .sub-link ul li>div.selected{
+    color:#aa1044;
+}
+.main-menu .sub-link ul li>div a{
+    cursor: pointer;
+}
+.main-menu .sub-link ul li>div a .link{
+
+}
+
+
+.main-menu .sub-link ul li>div.icon-enable a .icon{
+    height: 1em;
+    width: 1em;
+    border: 1px solid;
+    display: inline-block;
+    border-radius: 100%;
+    position: relative;
+    top: 0.2em;
+}
+
+.main-menu .sub-link ul li>div a .icon{
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+    font-family: Font Awesome\ 5 Free;
+    font-weight: 900;
+}
+.main-menu .sub-link ul li>div.icon-enable.health a .icon::before{
+    content: "\f21e";
+}
+
+.main-menu .sub-link ul li>div.icon-enable.caches a .icon::before{
+    content: "\f1c0";
+}
+
+
+.main-menu .sub-link ul li>div.icon-enable.plugins a .icon::before{
+    content: "\f12e";
+}
+
+.main-menu .sub-link ul li>div.icon-enable.events a .icon{
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+    font-family: Font Awesome\ 5 Free;
+    font-weight: 400;
+}
+.main-menu .sub-link ul li>div.icon-enable.events a .icon::before{
+    content: "\f073";
+}
+
+.main-menu .sub-link ul li>div.icon-enable.actions a .icon::before{
+    content: "\f013";
+}

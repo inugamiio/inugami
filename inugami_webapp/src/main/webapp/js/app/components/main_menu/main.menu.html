@@ -10,18 +10,25 @@
   
           <li class="home-link">
               <a routerLink="/"   routerLinkActive="active" class="home"><i class="fas fa-home"></i></a>
-              <span>{{currentTitle}}</span>
+              <span class="current-title">{{currentTitle}}</span>
+              <span class="home-link-end"></span>
           </li>
 
           <li class="sub-link">
             <ul>
                 <li  *ngFor="let subLink of links" >
-                    <div *ngIf="hasRole(subLink)">
+                    <div *ngIf="hasRole(subLink)" [class]="subLink.styleClass" [class.selected]="subLink.selected">
                         <div *ngIf="subLink.rooterLink">
-                            <a [routerLink]="subLink.path"  routerLinkActive="active">{{subLink.title}}</a>
+                            <a [routerLink]="subLink.path"  routerLinkActive="active">
+                                <span class="icon"></span>
+                                <span class="link">{{subLink.title}}</span>
+                            </a>
                         </div>
                         <div *ngIf="!subLink.rooterLink">
-                            <a (click)="routeToVirtualLink(subLink)">{{subLink.title}}</a>
+                            <a (click)="routeToVirtualLink(subLink)">
+                                <span class="icon"></span>
+                                <span class="link">{{subLink.title}}</span>
+                            </a>
                         </div>
                     </div>
                 </li>

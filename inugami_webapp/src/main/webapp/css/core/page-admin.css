@@ -10,8 +10,7 @@
     min-width: 30px;
   }
   .page-admin .page-admin-content{
-    float: right;
-    width: 89%;
+    padding: 2em;
   }
   .page-admin menu.page-admin-menu ul {
       list-style: none;
@@ -205,4 +204,21 @@
 .page-admin .connected-users .users  td{
   padding-left: 0.5em;
   padding-right: 0.5em;
+}
+
+.page-admin .page-admin-content>article{
+  background-color: #ffffff;
+  min-height: calc(85vh);
+  padding: 1.5em;
+  box-shadow: 0 0 2em 0px #8e8d8d;
+  margin-top: 2em;
+}
+
+.page-admin .page-admin-content nav.dynamic-sections ul{
+  background:none;
+}
+
+.page-admin .page-admin-content nav.dynamic-sections{
+  margin-top: -5.8em;
+  margin-bottom: 2em;
 }

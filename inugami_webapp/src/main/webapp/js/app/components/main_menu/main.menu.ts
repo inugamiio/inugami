@@ -56,6 +56,10 @@ export class MainMenu{
     }
 
     public routeToVirtualLink(subLink:MainMenuLink){
+        for(let link of this.links){
+            link.selected = false;
+        }
+        subLink.selected = true;
         org.inugami.events.fireEvent(MAIN_MENU_ON_CLICK,subLink);
     }
 
