@@ -90,7 +90,8 @@ header.main-menu.hidden-menu{
     -o-transition: color 0.5s linear;
     transition:  tocolorp 0.5s linear;
 }
-.main-menu .sub-link ul li>div.selected{
+.main-menu .sub-link ul li>div.selected,
+.main-menu .sub-link ul li>div.selected a .link {
     color:#aa1044;
 }
 .main-menu .sub-link ul li>div a{
