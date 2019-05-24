@@ -99,7 +99,8 @@ export class AdminViewAlertEdit implements AfterViewInit{
                 activation: this.fb.array([this.createFormActivationLine()]),
                 levelPointsBeforeTriggered: this.fb.array([]),
                 dynamicLevels:['',[dynamicLevelsValidator]],
-                scripts:['']
+                scripts:[''],
+                inverse:['"false"']
             })
         
             this.initChannels();                
@@ -263,11 +264,13 @@ export class AdminViewAlertEdit implements AfterViewInit{
     let channelsData = jsonData.channelsData;
     let self = this;
     for(let channelTab of channelsData){
-        let index = this.channels.findIndex(function(element){
-            return element.name == channelTab[0];
-        })
-        if(index != -1){
-            self.alertForm.get("channelsData").at(index).patchValue([self.channels[index].name]);
+        if(isNotNull(channelTab)){
+            let index = this.channels.findIndex(function(element){
+                return element.name == channelTab[0];
+            })
+            if(index != -1){
+                self.alertForm.get("channelsData").at(index).patchValue([self.channels[index].name]);
+            }
         }
     }
     delete jsonData.channelsData;
@@ -416,6 +419,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
         alert.level             = "info";
 
         alert.levels            = form.dynamicLevels;
+        alert.inverse == "true" ? true : false;
 
         if(isNotNull(form.dynamicLevels) && isNotNull(form.levelPointsBeforeTriggered)){
             for(let level of form.levelPointsBeforeTriggered){
@@ -433,13 +437,14 @@ export class AdminViewAlertEdit implements AfterViewInit{
                 form.sources.query
             )
         }
-        
-        alert.tags     = [];
-        for(let tagname of form.tag){
-            let tag = new Tag(tagname)
-            alert.tags.push(tag);
+        if(isNotNull(form.tag)){
+            alert.tags     = [];
+            for(let tagname of form.tag){
+                let tag = new Tag(tagname)
+                alert.tags.push(tag);
+            }
         }
-        
+       
         alert.providers = [];
         for(let provider of form.channelsData){
             if(isNotNull(provider)){
@@ -460,6 +465,8 @@ export class AdminViewAlertEdit implements AfterViewInit{
         this.alertForm.get('mainMessage').patchValue(value.label);
         this.alertForm.get('detailedMessage').patchValue(value.subLabel);
         this.alertForm.get('scripts').patchValue(value.script);
+        let inverse = value.inverse ? "true": "false";
+        this.alertForm.get('inverse').patchValue(inverse);
     
 
         if(isNotNull(value.source)){

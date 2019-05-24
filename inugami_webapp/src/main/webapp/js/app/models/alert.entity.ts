@@ -22,7 +22,8 @@ export class AlertEntity {
         public source           : ProviderSource,
         public tags             : Tag[],
         public levels           : DynamicLevel[],
-        public activations      : ActivationTime[]
+        public activations      : ActivationTime[],
+        public inverse          : boolean,
     ){ }
     /*constructor(public alerteName       : string,
         public level            : string,

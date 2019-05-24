@@ -125,6 +125,11 @@
                            <button pButton type="button" class="active-action" icon="fas fa-plus"
                                (click)="addDynamicLevelsLevel(graph)"></button>
                         </div>
+                        <div class="inverse"><p-radioButton name="inverse" value=true formControlName="inverse"></p-radioButton>
+                            <msg key="alert.edit.alert.inverse.min"></msg>
+                            <p-radioButton name="inverse" value=false formControlName="inverse"></p-radioButton>
+                             <msg key="alert.edit.alert.inverse.max"></msg>
+                            </div>
                         <div class="graph">
                             <dynamic-levels width=0.5 height=0.4 [formatter]="formatter" formControlName="dynamicLevels" #graph></dynamic-levels>
                         </div>
