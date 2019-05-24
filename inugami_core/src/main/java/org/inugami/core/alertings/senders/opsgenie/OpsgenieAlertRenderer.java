@@ -11,6 +11,7 @@ import org.inugami.core.alertings.senders.SenderRenderer;
 import org.inugami.core.alertings.senders.opsgenie.sender.model.OpsgenieModel;
 import org.inugami.api.exceptions.Asserts;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -56,10 +57,13 @@ public class OpsgenieAlertRenderer implements SenderRenderer<OpsgenieModel>{
         }
         result.setPriority(resultPriority);
 
+        ArrayList<String> tags = new ArrayList<String>();
+        for(Tag tag : alert.getTags()){
+            tags.add(tag.getName());
+        }
+        result.setTags(tags);
 
         //tags a aller chercjer avec extract ??
-
-        //priority a mapper avec les erreur quexistent deja
 
         //details a mettre le reste
 
