@@ -16,6 +16,7 @@
  */
 package org.inugami.commons.security;
 
+import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -97,6 +98,23 @@ public final class SecurityTools {
     
     public static void secureJavaScriptAndHtml(final Supplier<String> getter, final Consumer<String> setter) {
         secureEntity(getter, setter, StringEscapeUtils::escapeJavaScript, StringEscapeUtils::escapeHtml);
+    }
+    
+    public static <T> void secureJavaScriptAndHtml(final Collection<T> values,
+                                                   final ItemProcessor<T>... itemProcessors) {
+        if ((values != null) && (itemProcessors != null)) {
+            for (final T value : values) {
+                for (final ItemProcessor<T> processor : itemProcessors) {
+                    final String content = processor.getExtractor().apply(value);
+                    if (value != null) {
+                        final String securedContent = escapeJavaScriptAndHtml(content);
+                        processor.getSetter().accept(value, securedContent);
+                    }
+                }
+                
+            }
+        }
+        
     }
     
     public static void secureEntity(final Supplier<String> getter, final Consumer<String> setter,
