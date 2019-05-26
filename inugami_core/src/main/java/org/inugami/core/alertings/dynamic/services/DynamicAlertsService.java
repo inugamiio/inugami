@@ -71,7 +71,7 @@ public class DynamicAlertsService implements Serializable {
         
         if (!alertsToProcess.isEmpty()) {
             Loggers.ALERTING.info("{} dynamic alerts to process", alertsToProcess.size());
-            final List<DyncamicAlertsTask> tasks = buildTasks(alertsToProcess);
+            final List<DynamicAlertsTask> tasks = buildTasks(alertsToProcess);
             
             processAlerting(tasks);
         }
@@ -104,7 +104,7 @@ public class DynamicAlertsService implements Serializable {
     // =========================================================================
     // PROCESS ALERTING
     // =========================================================================
-    private void processAlerting(final List<DyncamicAlertsTask> tasks) {
+    private void processAlerting(final List<DynamicAlertsTask> tasks) {
         tasks.forEach(executor::submit);
     }
     
@@ -138,11 +138,11 @@ public class DynamicAlertsService implements Serializable {
         return result;
     }
     
-    private List<DyncamicAlertsTask> buildTasks(final List<DynamicAlertEntity> alertsToProcess) {
-        final List<DyncamicAlertsTask> result = new ArrayList<>();
+    private List<DynamicAlertsTask> buildTasks(final List<DynamicAlertEntity> alertsToProcess) {
+        final List<DynamicAlertsTask> result = new ArrayList<>();
         
         for (final DynamicAlertEntity entity : alertsToProcess) {
-            result.add(new DyncamicAlertsTask(entity.cloneObject(), context));
+            result.add(new DynamicAlertsTask(entity.cloneObject(), context));
         }
         return result;
     }
