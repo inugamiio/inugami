@@ -44,6 +44,10 @@ public class ActivationTime implements Identifiable<Long>, ClonableObject<Activa
     public ActivationTime() {
     }
     
+    public ActivationTime(final List<String> days, final List<TimeSlot> hours) {
+        this(-1L, days, hours);
+    }
+    
     public ActivationTime(final Long uid, final List<String> days, final List<TimeSlot> hours) {
         super();
         this.uid = uid;
