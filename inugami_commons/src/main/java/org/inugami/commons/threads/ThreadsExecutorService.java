@@ -25,20 +25,17 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.BiConsumer;
 
 import org.inugami.api.exceptions.Asserts;
-import org.inugami.api.exceptions.FatalException;
 import org.inugami.api.exceptions.TechnicalException;
 import org.inugami.api.listeners.TaskFinishListener;
 import org.inugami.api.listeners.TaskStartListener;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.tools.Chrono;
 import org.inugami.api.providers.concurrent.LifecycleBootstrap;
-import org.inugami.api.providers.concurrent.ThreadSleep;
 
 /**
  * ThreadsExecutorService
@@ -46,7 +43,7 @@ import org.inugami.api.providers.concurrent.ThreadSleep;
  * @author patrick_guillerm
  * @since 13 janv. 2017
  */
-public class ThreadsExecutorService implements ThreadFactory, LifecycleBootstrap {
+public class ThreadsExecutorService implements LifecycleBootstrap {
     
     // =========================================================================
     // ATTRIBUTES
@@ -56,19 +53,9 @@ public class ThreadsExecutorService implements ThreadFactory, LifecycleBootstrap
     
     private final String          name;
     
-    private final String          prefix;
-    
     private final ExecutorService executor;
     
     private final ExecutorService executorCompletable;
-    
-    private final boolean         deamon;
-    
-    private final ThreadGroup     threadGroup;
-    
-    private int                   threadNumber;
-    
-    private final ThreadSleep     threadSleep;
     
     // =========================================================================
     // CONSTRUCTORS
@@ -82,15 +69,12 @@ public class ThreadsExecutorService implements ThreadFactory, LifecycleBootstrap
     }
     
     public ThreadsExecutorService(final String name, final int maxThreads, final boolean deamon, final Long timeout) {
-        threadGroup = Thread.currentThread().getThreadGroup();
-        executor = Executors.newFixedThreadPool(maxThreads, this);
-        executorCompletable = Executors.newFixedThreadPool(maxThreads, this);
-        this.deamon = deamon;
         this.name = name == null ? "ThreadsExecutor" : name;
+        final MonitoredThreadFactory threadFactory = new MonitoredThreadFactory(this.name, deamon);
+        executor = Executors.newFixedThreadPool(maxThreads, threadFactory);
+        executorCompletable = Executors.newFixedThreadPool(maxThreads, threadFactory);
         
-        prefix = this.name + "-";
         this.timeout = timeout == null ? 30000L : timeout.longValue();
-        threadSleep = ThreadSleep.build50ms();
         
     }
     
@@ -180,8 +164,6 @@ public class ThreadsExecutorService implements ThreadFactory, LifecycleBootstrap
                 }
             }
             
-            // CompletableFuture<?>[] type = {};
-            // CompletableFuture.allOf(futures.toArray(type));
         }
     }
     
@@ -235,24 +217,6 @@ public class ThreadsExecutorService implements ThreadFactory, LifecycleBootstrap
     
     private <T> Future<T> run(final Callable<T> taskToProcess) {
         return executor.submit(taskToProcess);
-    }
-    
-    // =========================================================================
-    // METHODS
-    // =========================================================================
-    private synchronized int incrementThreadNumber() {
-        threadNumber++;
-        return threadNumber;
-    }
-    
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    @Override
-    public Thread newThread(final Runnable runnable) {
-        final Thread result = new ThreadsExecutorThread(threadGroup, runnable, prefix + incrementThreadNumber(), 0);
-        result.setDaemon(deamon);
-        return result;
     }
     
     public <T> Future<T> submit(final String name, final Callable<T> task) {
@@ -345,32 +309,6 @@ public class ThreadsExecutorService implements ThreadFactory, LifecycleBootstrap
             }
             
             return result;
-        }
-        
-    }
-    
-    private class ThreadsExecutorThread extends Thread {
-        
-        public ThreadsExecutorThread(final ThreadGroup threadGroup, final Runnable runnable, final String name,
-                                     final long stackSize) {
-            super(threadGroup, runnable, name, stackSize);
-        }
-        
-        @Override
-        public void run() {
-            super.run();
-        }
-        
-    }
-    
-    // =========================================================================
-    // EXCEPTION
-    // =========================================================================
-    private class ThreadShutdownTimeout extends FatalException {
-        private static final long serialVersionUID = 853307421505237502L;
-        
-        public ThreadShutdownTimeout(final String message, final Object... values) {
-            super(message, values);
         }
         
     }

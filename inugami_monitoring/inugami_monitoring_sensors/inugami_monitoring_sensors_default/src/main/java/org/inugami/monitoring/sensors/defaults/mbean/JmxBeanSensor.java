@@ -31,10 +31,10 @@ import javax.management.ReflectionException;
 
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.models.GenericMonitoringModelBuilder;
+import org.inugami.api.monitoring.sensors.MonitoringSensor;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.data.GenericMonitoringModelBuilder;
-import org.inugami.monitoring.api.sensors.MonitoringSensor;
 import org.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 
 public class JmxBeanSensor implements MonitoringSensor {

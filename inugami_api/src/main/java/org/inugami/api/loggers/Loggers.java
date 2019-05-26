@@ -85,6 +85,8 @@ public final class Loggers {
     
     public static final Logger TASK          = LoggerFactory.getLogger("TASK");
     
+    public static final Logger REST          = LoggerFactory.getLogger("REST");
+    
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
