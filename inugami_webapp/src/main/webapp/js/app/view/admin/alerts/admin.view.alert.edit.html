@@ -60,7 +60,7 @@
             <p-panel header="Sources" formGroupName="sources" class="sources">
                 <div class="first-line">
                     <button type="button" pButton icon="far fa-question-circle" class="active-action tooltip-button cron" (mouseover)="toggleFormTooltip(crontooltip)" (mouseout)="toggleFormTooltip(crontooltip)"></button>
-                    <input-bloc label="alert.edit.sources.data.provider" class="provider" formControlName="dataProvider"></input-bloc>
+                    <input-bloc label="alert.edit.sources.data.provider" [validator]="validators.notEmptyString" class="provider" formControlName="dataProvider"></input-bloc>
                     <input-bloc label="alert.edit.sources.data.interval" class="interval" formControlName="interval"></input-bloc>
                     <div class="form-tooltip cron hidden"  #crontooltip><msg key="alert.edit.tooltip.cron"></msg></div>
                 </div>
