@@ -55,7 +55,6 @@ public class AlertEntity implements Identifiable<String>, BeforeSave {
     @Pattern(regexp = "^[a-zA-Z_\\-.0-9]+$")
     private String            alerteName;
     
-    @NotNull
     @NotEmpty
     private String            level;
     
