@@ -137,10 +137,6 @@ export class AdminViewAlertEdit implements AfterViewInit{
             }
         }
         this.applyAllertProviderOnForm();
-
-        if(isNull(this.alertForm.get('inverse').value)){
-            this.alertForm.get('inverse').patchValue("false");
-        }
     }
 
     /**************************************************************************
@@ -197,6 +193,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
 
     close(){
         this.initValue();
+        this.edit = false;
         this.onClose.emit();
     }
 
@@ -422,7 +419,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
         alert.level             = "info";
 
         alert.levels            = form.dynamicLevels;
-        alert.inverse == "true" ? true : false;
+        alert.inverse = form.inverse == "true" ? true : false;
 
         if(isNotNull(form.dynamicLevels) && isNotNull(form.levelPointsBeforeTriggered)){
             for(let level of form.levelPointsBeforeTriggered){
