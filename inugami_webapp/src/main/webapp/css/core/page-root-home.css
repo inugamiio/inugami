@@ -2,22 +2,22 @@
 /*******************************************************************************
 * page-root-home
 *******************************************************************************/
-.page-root-home .plugin-menu ul{
+.plugin-menu ul{
     list-style: none;
  }
  
- .page-root-home .plugin-menu a{
+.plugin-menu a{
     height: 12em;
     width: 12em;
     display: block;
     background-color:#f5f7fa;
  }
- .page-root-home .plugin-menu  a,
- .page-root-home .plugin-menu  a .label{
+.plugin-menu  a,
+.plugin-menu  a .label{
    color: #22313F;
  }
  
- .page-root-home .plugin-menu  a .label{
+ .plugin-menu  a .label{
    margin-top: 4em;
    float: left;
    width: 100%;
@@ -26,12 +26,12 @@
    font-size: 130%;
  }
  
- .page-root-home .plugin-menu ul li{
+ .plugin-menu ul li{
    float:  left;
    margin-left: 2em;
    margin-bottom: 2em;
  }
- .page-root-home .plugin-menu ul li:first{
+.plugin-menu ul li:first{
    margin-left: 0em;
  }
  

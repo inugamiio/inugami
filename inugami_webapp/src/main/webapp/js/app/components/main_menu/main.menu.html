@@ -17,14 +17,14 @@
           <li class="sub-link">
             <ul>
                 <li  *ngFor="let subLink of links" >
-                    <div *ngIf="hasRole(subLink)" [class]="subLink.styleClass" [class.selected]="subLink.selected">
-                        <div *ngIf="subLink.rooterLink">
+                    <div *ngIf="hasRole(subLink)" [class]="buildSubLinkClass(subLink)" >
+                        <div *ngIf="isRooterLink(subLink)">
                             <a [routerLink]="subLink.path"  routerLinkActive="active">
                                 <span class="icon"><span class="before"></span></span>
                                 <span class="link">{{subLink.title}}</span>
                             </a>
                         </div>
-                        <div *ngIf="!subLink.rooterLink">
+                        <div *ngIf="isNotRooterLink(subLink)">
                             <a (click)="routeToVirtualLink(subLink)">
                                 <span class="icon"><span class="before"></span></span>
                                 <span class="link">{{subLink.title}}</span>

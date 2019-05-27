@@ -46,14 +46,8 @@ export class MainMenu{
         this.links = this.mainMenuService.getLink();
     }
     
-    private hasRole(link : MainMenuLink){
-        let result = true;
 
-        if(isNotNull(link.role)){
-            result = this.sessionScope.hasRole(link.role);
-        }
-        return result;
-    }
+
 
     public routeToVirtualLink(subLink:MainMenuLink){
         for(let link of this.links){
@@ -65,5 +59,41 @@ export class MainMenu{
 
     public logout(){
         this.securityServices.logout();
-      }
+    }
+
+    /**************************************************************************
+    * BUILDER AND TOOLS
+    **************************************************************************/
+   public hasRole(link : MainMenuLink){
+    let result = true;
+
+    if(isNotNull(link.role) && link.role.trim()!=""){
+        result = this.sessionScope.hasRole(link.role);
+    }
+    return result;
+    }
+    public isRooterLink(link : MainMenuLink){
+        let result = false;
+        if(isNotNull(link.rooterLink)){
+            result = link.rooterLink;
+        }
+        return result;
+    }
+    public isNotRooterLink(link : MainMenuLink){
+        return !this.isRooterLink(link);
+    }
+
+    public buildSubLinkClass(link : MainMenuLink):string{
+        let result = ['sublink'];
+        if(isNotNull(link)){
+            if(isNotNull(link.styleClass)){
+                result.push(link.styleClass);
+            }
+            if(link.selected){
+                result.push('selected');
+            }
+        }
+
+        return result.join(' ');
+    }
 }
