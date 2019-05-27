@@ -100,7 +100,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
                 levelPointsBeforeTriggered: this.fb.array([]),
                 dynamicLevels:['',[dynamicLevelsValidator]],
                 scripts:[''],
-                inverse:['"false"']
+                inverse:['',Validators.required]
             })
         
             this.initChannels();                

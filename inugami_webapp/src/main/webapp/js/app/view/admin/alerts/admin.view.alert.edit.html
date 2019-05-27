@@ -129,6 +129,8 @@
                             <msg key="alert.edit.alert.inverse.min"></msg>
                             <p-radioButton name="inverse" value=false formControlName="inverse"></p-radioButton>
                              <msg key="alert.edit.alert.inverse.max"></msg>
+                             <button type="button" pButton icon="far fa-question-circle" class="active-action tooltip-button inverse" (mouseover)="toggleFormTooltip(inverse)" (mouseout)="toggleFormTooltip(inverse)"></button>
+                             <div class="form-tooltip inverse hidden"  #inverse><msg key="alert.edit.tooltip.inverse"></msg></div>
                             </div>
                         <div class="graph">
                             <dynamic-levels width=0.5 height=0.4 [formatter]="formatter" formControlName="dynamicLevels" #graph></dynamic-levels>

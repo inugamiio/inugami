@@ -347,11 +347,22 @@
 
 .page-admin .alert-edit .right-panel .inverse .ui-radiobutton-box{
   background: white;
+  
 }
 
 .page-admin .alert-edit .right-panel .inverse .ui-radiobutton-box.ui-state-active{
   background: #c12534;
   border: #c12534;
+}
+
+.page-admin .alert-edit .right-panel .inverse msg{
+  margin-right: 1em;
+}
+
+.page-admin .alert-edit .right-panel .inverse .form-tooltip.inverse{
+  left: 95em;
+  bottom: 23em;
+  position: absolute;
 }
 
 .page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.WARN .curve
