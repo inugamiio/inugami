@@ -354,6 +354,16 @@
   background: #c12534;
   border: #c12534;
 }
+.page-admin .alert-edit .right-panel .level-tooltip .tooltip-button{
+  position: absolute;
+  left: 98em;
+}
+.page-admin .alert-edit .right-panel .level-tooltip  .form-tooltip.level{
+  position: absolute;
+  left: 110em;
+  bottom: 30em;
+}
+
 
 .page-admin .alert-edit .right-panel .inverse msg{
   margin-right: 1em;

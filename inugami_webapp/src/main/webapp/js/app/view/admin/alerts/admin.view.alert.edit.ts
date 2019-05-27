@@ -84,7 +84,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
         if(isNull(this.alertForm)){
             this.alertForm = this.fb.group({
                 name: ['',Validators.required],
-                duration:  ['60'],
+                duration:  [''],
                 mainMessage: [''],
                 detailedMessage: [''],
                 tag:[''],
@@ -100,9 +100,8 @@ export class AdminViewAlertEdit implements AfterViewInit{
                 levelPointsBeforeTriggered: this.fb.array([]),
                 dynamicLevels:['',[dynamicLevelsValidator]],
                 scripts:[''],
-                inverse:['',Validators.required]
+                inverse:['']
             })
-        
             this.initChannels();                
         }else{
             this.alertForm.controls['levelPointsBeforeTriggered'].controls =[];
@@ -114,6 +113,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
             this.fileUri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8,"+encodeURIComponent(jsonData));
             
         })
+        
     }
 
     
@@ -125,6 +125,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
     }
     
     addChannels(data){
+        
         let channelsData = this.alertForm.get('channelsData');
         let channelArray = [];
         for(let provider of data){
@@ -135,7 +136,11 @@ export class AdminViewAlertEdit implements AfterViewInit{
                 this.alertForm.get('channelsData').push(this.fb.control(channelArray));
             }
         }
-        this.applyAllertProviderOnForm()
+        this.applyAllertProviderOnForm();
+
+        if(isNull(this.alertForm.get('inverse').value)){
+            this.alertForm.get('inverse').patchValue("false");
+        }
     }
 
     /**************************************************************************
@@ -167,9 +172,6 @@ export class AdminViewAlertEdit implements AfterViewInit{
 
     saveAlert(){
         let alertEntity = this.convertFormToAlert();
-       /* alertEntity = new AlertEntity();
-        alertEntity.name="test";
-        alertEntity.level="info";*/
         this.cleanMessage();
         let alerts = [alertEntity];
         if(this.edit){
@@ -331,6 +333,7 @@ export class AdminViewAlertEdit implements AfterViewInit{
     }
     addFormActivationLine(){
         this.alertForm.get('activation').push(this.createFormActivationLine());
+        
     }
 
     removeFormActivationLine(index){
@@ -509,14 +512,8 @@ export class AdminViewAlertEdit implements AfterViewInit{
             }
             array.patchValue(levels);
         }
-
         this.alertForm.get('dynamicLevels').patchValue(value.levels);
-
         this.innerValueChannels = value.providers;
         this.initChannels();
-
-        //faut penser aux channels 
-        //et les points avant trigger
     }
-
 }

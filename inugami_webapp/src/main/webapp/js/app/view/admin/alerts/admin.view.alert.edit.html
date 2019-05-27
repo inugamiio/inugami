@@ -124,6 +124,10 @@
                                [validator]="validators.notEmptyString" ></input-bloc>
                            <button pButton type="button" class="active-action" icon="fas fa-plus"
                                (click)="addDynamicLevelsLevel(graph)"></button>
+                            <div class="level-tooltip">
+                                <button type="button" pButton icon="far fa-question-circle" class="active-action tooltip-button level" (mouseover)="toggleFormTooltip(level)" (mouseout)="toggleFormTooltip(level)"></button>
+                                <div class="form-tooltip level hidden"  #level><msg key="alert.edit.tooltip.level"></msg></div>
+                            </div>
                         </div>
                         <div class="inverse"><p-radioButton name="inverse" value=true formControlName="inverse"></p-radioButton>
                             <msg key="alert.edit.alert.inverse.min"></msg>
