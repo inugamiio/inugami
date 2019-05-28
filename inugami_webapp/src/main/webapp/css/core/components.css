@@ -22,6 +22,8 @@
 @import "component-forms-input.switch.css";
 @import "component-forms-input.time.slots.css";
 @import "component-p-button.css";
+@import "component-forms-dynamic-levels.css";
+@import "p-panel.css";
 @import "component-p-chips.css";
 
 @import "p-table.css";
@@ -456,10 +458,42 @@
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 + input-bloc
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-.input-bloc .input-bloc-label,
+
+body .ui-panel .ui-panel-content {
+  background-color: #f5f5f5
+}
+
+body .ui-panel .ui-panel-titlebar{
+  border : none;
+}
+body .ui-panel .input-bloc{
+  border-style: none;
+}
+
+.input-bloc{
+  box-sizing: unset;
+}
+
+.input-bloc .content-rectangle{
+  border-style: solid;
+  border-radius: 1em;
+  border-width: 0.1em;
+  display: inline-block;
+  background-color: white;
+}
+
+p-panel .input-bloc .content-rectangle{
+  border-style: none; 
+}
+
+p-panel .input-bloc.error .content-rectangle{
+  border-style: solid; 
+}
+
+
 .input-bloc .input-bloc-data{
-  width: 100%;
-  float: left;
+  padding-left: 1em;  
+  padding-right: 1em; 
 }
 .input-bloc .input-bloc-end{
   clear: both;
@@ -468,13 +502,12 @@
 .input-bloc .input-bloc-label{
   color: transparent;
   position: relative;
-  left: -0.7em;
+  left: 0.7em;
   -webkit-transition: color 0.25s;
   transition: color 0.25s;
 }
 .input-bloc .input-bloc-label.show{
   color: #4d4d4d;
-  
 }
 .input-bloc .input-bloc-label .input-bloc-label-txt{
   display: none;
@@ -490,12 +523,14 @@
   display: inline;
 }
 
-.input-bloc input{
+body .input-bloc input{
   border: 0;
-  width: 100%;
-  border-bottom: 1px solid;
+  font-size: 1.5em;
   border-color:  #b5b5b5;
   outline:0;
+}
+.input-bloc input[type^=number]{
+  width: 3em;
 }
 
 .input-bloc input:focus{
@@ -506,8 +541,12 @@
   border-color:  #d30202;
   color:#d30202;
 }
-.input-bloc.error input{
+.input-bloc.error {
   border-color:  #990000;
+  color:#990000;
+}
+.input-bloc.error input{
+  
   color:#990000;
 }
 
