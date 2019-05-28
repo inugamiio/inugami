@@ -43,6 +43,8 @@ public class OpsgenieSenderService implements Sender<OpsgenieModel>, Serializabl
 
     private String                       url;
 
+    private String                       token;
+
     private final Map<String, String> configurations   = new LinkedHashMap<>();
 
     // =========================================================================
@@ -65,11 +67,11 @@ public class OpsgenieSenderService implements Sender<OpsgenieModel>, Serializabl
         enable = grabConfigBoolean(OpsgenieSender.class, ENABLE, config, false);
 
         //@formatter:off
-        final String urlBase          = grabConfig(OpsgenieSender.class, "url.base", config);
-        final String urlToken         = grabConfig(OpsgenieSender.class, "url.token", config);
+        final String urlBase          = grabConfig(OpsgenieSender.class, "url", config);
+        final String urlToken         = grabConfig(OpsgenieSender.class, "token", config);
         //@formatter:on
         configurations.put("url_base", urlBase);
-        configurations.put("url_token", urlToken);
+        configurations.put("url_token", token);
 
         if (enable) {
             Asserts.notNull("base url is mandatory!", urlBase);
@@ -79,7 +81,12 @@ public class OpsgenieSenderService implements Sender<OpsgenieModel>, Serializabl
             url = urlBase;
         }
 
+        if(urlToken != null){
+            token = urlToken;
+        }
+
         configurations.put("url", url);
+        configurations.put("token", token);
 
         final String proxyConfig = grabConfig(OpsgenieSender.class, "proxy.host", config);
         HttpProxy proxy = null;
@@ -138,6 +145,7 @@ public class OpsgenieSenderService implements Sender<OpsgenieModel>, Serializabl
     public void send(final OpsgenieModel data) throws SenderException {
         final Map<String, String> header = new HashMap<String, String>();
         header.put("Content-Type", MediaType.APPLICATION_JSON);
+        header.put("Authorization",token);
 
         if (!enable) {
             return;

@@ -8,10 +8,6 @@ import org.inugami.api.loggers.Loggers;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.core.alertings.senders.opsgenie.sender.OpsgenieSender;
 import org.inugami.core.alertings.senders.opsgenie.sender.model.OpsgenieModel;
-import org.inugami.core.alertings.senders.teams.TeamsAlertRenderer;
-import org.inugami.core.alertings.senders.teams.TeamsAlertSender;
-import org.inugami.core.alertings.senders.teams.sender.TeamsSender;
-import org.inugami.core.alertings.senders.teams.sender.models.TeamsModel;
 import org.inugami.core.context.ApplicationContext;
 import org.inugami.core.services.senders.Sender;
 import org.inugami.core.services.senders.SenderException;
@@ -21,6 +17,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import static org.inugami.api.tools.ConfigHandlerTools.ENABLE;
 import static org.inugami.api.tools.ConfigHandlerTools.grabConfig;
@@ -41,8 +38,6 @@ public class OpsgenieAlertSender implements AlertsSender, Serializable {
     @Inject
     private OpsgenieAlertRenderer defaultRenderer;
 
-    @Inject
-    private List<OpsgenieAlertRenderer> renderers;
 
     private String                   defaultChannel;
 
@@ -56,11 +51,9 @@ public class OpsgenieAlertSender implements AlertsSender, Serializable {
     public OpsgenieAlertSender() {
     }
 
-    protected OpsgenieAlertSender(final ApplicationContext context, final Sender<OpsgenieModel> sender,
-                               final List<OpsgenieAlertRenderer> renderers, final OpsgenieAlertRenderer defaultRenderer) {
+    protected OpsgenieAlertSender(final ApplicationContext context, final Sender<OpsgenieModel> sender, final OpsgenieAlertRenderer defaultRenderer) {
         this.context = context;
         this.sender = sender;
-        this.renderers = renderers;
         this.defaultRenderer = defaultRenderer;
     }
 
@@ -118,6 +111,11 @@ public class OpsgenieAlertSender implements AlertsSender, Serializable {
     }
 
     @Override
+    public Map<String, String> getConfiguration() {
+        return sender.getConfiguration();
+    }
+    
+    @Override
     public boolean enable() {
         return enable;
     }
@@ -126,25 +124,8 @@ public class OpsgenieAlertSender implements AlertsSender, Serializable {
     // BUILD
     // =========================================================================
     protected OpsgenieModel buildNewAlert(final AlertingResult alert) throws RenderingException {
-        final OpsgenieAlertRenderer renderer = resolveRenderer(alert);
-        return renderer.rendering(alert);
+        return this.defaultRenderer.rendering(alert);
 
     }
-    // =========================================================================
-    // RESOLVER
-    // =========================================================================
-    private OpsgenieAlertRenderer resolveRenderer(final AlertingResult alert) {
-        OpsgenieAlertRenderer result = null;
-        for (final OpsgenieAlertRenderer renderer : renderers) {
-            if ((renderer != defaultRenderer) && renderer.accept(alert)) {
-                result = renderer;
-                break;
-            }
-        }
-        if (result == null) {
-            result = defaultRenderer;
-        }
 
-        return result;
-    }
 }
