@@ -20,13 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.inugami.api.models.data.graphite.number.LongNumber;
+import org.inugami.api.monitoring.data.ResponseData;
+import org.inugami.api.monitoring.data.ResquestData;
+import org.inugami.api.monitoring.exceptions.ErrorResult;
+import org.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.models.GenericMonitoringModelBuilder;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.data.GenericMonitoringModelBuilder;
-import org.inugami.monitoring.api.data.ResponseData;
-import org.inugami.monitoring.api.data.ResquestData;
-import org.inugami.monitoring.api.exceptions.ErrorResult;
-import org.inugami.monitoring.api.interceptors.MonitoringFilterInterceptor;
 import org.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 import org.inugami.monitoring.core.sensors.services.ServiceValueTypes;
 import org.inugami.monitoring.core.sensors.services.ServicesSensor;
@@ -46,7 +46,7 @@ public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
     }
     
     @Override
-    public MonitoringFilterInterceptor buildInstance(ConfigHandler<String, String> configuration) {
+    public MonitoringFilterInterceptor buildInstance(final ConfigHandler<String, String> configuration) {
         return new ServiceCounterInterceptor();
     }
     
@@ -59,7 +59,7 @@ public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
     // =========================================================================
     
     @Override
-    public List<GenericMonitoringModel> onBegin(ResquestData request) {
+    public List<GenericMonitoringModel> onBegin(final ResquestData request) {
         final GenericMonitoringModelBuilder builder = GenericMonitoringModelTools.initResultBuilder();
         
         builder.setValue(new LongNumber(1));
@@ -71,11 +71,12 @@ public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
     }
     
     @Override
-    public List<GenericMonitoringModel> onDone(ResquestData request, ResponseData response, ErrorResult error) {
+    public List<GenericMonitoringModel> onDone(final ResquestData request, final ResponseData response,
+                                               final ErrorResult error) {
         final List<GenericMonitoringModel> result = new ArrayList<>();
         
         final GenericMonitoringModelBuilder builder = GenericMonitoringModelTools.initResultBuilder();
-        ServiceValueTypes doneType = error == null ? ServiceValueTypes.DONE : ServiceValueTypes.ERROR;
+        final ServiceValueTypes doneType = error == null ? ServiceValueTypes.DONE : ServiceValueTypes.ERROR;
         
         if (doneType == ServiceValueTypes.ERROR) {
             builder.setErrorCode(error.getErrorCode());

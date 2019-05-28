@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.inugami.api.models.JsonBuilder;
+import org.inugami.api.monitoring.data.ResponseData;
+import org.inugami.api.monitoring.data.ResquestData;
+import org.inugami.api.monitoring.exceptions.ErrorResult;
+import org.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.data.ResponseData;
-import org.inugami.monitoring.api.data.ResquestData;
-import org.inugami.monitoring.api.exceptions.ErrorResult;
-import org.inugami.monitoring.api.interceptors.MonitoringFilterInterceptor;
 import org.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,18 +59,18 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     // =========================================================================
     public IoLogInterceptor() {
         enableDecorator = true;
-        inputDecorator = ">> ";
-        outputDecorator = "<< ";
+        inputDecorator = "[IN] ";
+        outputDecorator = "[OUT] ";
     }
     
-    public IoLogInterceptor(ConfigHandler<String, String> configuration) {
+    public IoLogInterceptor(final ConfigHandler<String, String> configuration) {
         enableDecorator = configuration.grabBoolean("enableDecorator", true);
-        inputDecorator = configuration.grabOrDefault("inputDecorator", ">> ");
-        outputDecorator = configuration.grabOrDefault("outputDecorator", "<< ");
+        inputDecorator = configuration.grabOrDefault("inputDecorator", "[IN] ");
+        outputDecorator = configuration.grabOrDefault("outputDecorator", "[OUT] ");
     }
     
     @Override
-    public MonitoringFilterInterceptor buildInstance(ConfigHandler<String, String> configuration) {
+    public MonitoringFilterInterceptor buildInstance(final ConfigHandler<String, String> configuration) {
         return new IoLogInterceptor(configuration);
     }
     
@@ -83,7 +83,7 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     // METHODS
     // =========================================================================
     @Override
-    public List<GenericMonitoringModel> onBegin(ResquestData request) {
+    public List<GenericMonitoringModel> onBegin(final ResquestData request) {
         final String playload = buildPlayload(request, null);
         //@formatter:off
         final String msg = String.join("|", 
@@ -99,7 +99,8 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     }
     
     @Override
-    public List<GenericMonitoringModel> onDone(ResquestData request, ResponseData httpResponse, ErrorResult error) {
+    public List<GenericMonitoringModel> onDone(final ResquestData request, final ResponseData httpResponse,
+                                               final ErrorResult error) {
         final String playload = buildPlayload(request, httpResponse);
         //@formatter:off
         final String msg = String.join("|", 
@@ -124,7 +125,7 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     // RENDERING
     // =========================================================================
     
-    private String buildPlayload(ResquestData request, ResponseData httpResponse) {
+    private String buildPlayload(final ResquestData request, final ResponseData httpResponse) {
         final StringBuilder result = new StringBuilder();
         result.append(buildHeader(request));
         result.append('|');
@@ -138,7 +139,7 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         return result.toString();
     }
     
-    private String buildHeader(ResquestData request) {
+    private String buildHeader(final ResquestData request) {
         final JsonBuilder json = new JsonBuilder();
         json.openObject();
         if (request.getHearder() != null) {
@@ -158,7 +159,7 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         return ObfuscatorTools.applyObfuscators(json.toString());
     }
     
-    private String renderContent(String contentType, String content) {
+    private String renderContent(final String contentType, final String content) {
         String result = null;
         if (content == null) {
             result = JsonBuilder.VALUE_NULL;
@@ -172,11 +173,11 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         return result;
     }
     
-    private String renderMethod(String method) {
+    private String renderMethod(final String method) {
         return "[" + method + "]";
     }
     
-    private String renderContentType(String contentType) {
+    private String renderContentType(final String contentType) {
         return contentType == null ? EMPTY : "|" + contentType;
     }
     

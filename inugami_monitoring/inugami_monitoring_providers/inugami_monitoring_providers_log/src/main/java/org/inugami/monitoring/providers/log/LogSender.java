@@ -18,10 +18,10 @@ package org.inugami.monitoring.providers.log;
 
 import java.util.List;
 
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.senders.MonitoringSender;
+import org.inugami.api.monitoring.senders.MonitoringSenderException;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.senders.MonitoringSender;
-import org.inugami.monitoring.api.senders.MonitoringSenderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

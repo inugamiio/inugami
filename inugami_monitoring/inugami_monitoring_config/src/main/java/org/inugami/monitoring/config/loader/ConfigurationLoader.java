@@ -26,10 +26,11 @@ import org.inugami.api.constants.JvmKeyValues;
 import org.inugami.api.exceptions.FatalException;
 import org.inugami.api.exceptions.TechnicalException;
 import org.inugami.api.loggers.Loggers;
+import org.inugami.api.monitoring.MonitoringLoaderSpi;
+import org.inugami.api.monitoring.models.Monitoring;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.commons.files.FilesUtils;
 import org.inugami.configuration.services.ConfigHandlerHashMap;
-import org.inugami.monitoring.api.data.config.Monitoring;
 import org.inugami.monitoring.config.models.DefaultHeaderInformation;
 import org.inugami.monitoring.config.models.HeaderInformationsConfig;
 import org.inugami.monitoring.config.models.InterceptorConfig;
@@ -50,19 +51,20 @@ import com.thoughtworks.xstream.XStream;
  * @author patrickguillerm
  * @since Jan 15, 2019
  */
-public final class ConfigurationLoader {
+public final class ConfigurationLoader implements MonitoringLoaderSpi {
     
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final static XStream   XSTREAM_MAIN  = initXStream();
+    private final static XStream XSTREAM_MAIN = initXStream();
     
-    public final static Monitoring CONFIGURATION = initializeConfiguration();
+    public final Monitoring      configuration;
     
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    private ConfigurationLoader() {
+    public ConfigurationLoader() {
+        configuration = initializeConfiguration();
     }
     
     private static XStream initXStream() {
@@ -95,7 +97,12 @@ public final class ConfigurationLoader {
     // =========================================================================
     // METHODS
     // =========================================================================
-    private static Monitoring initializeConfiguration() {
+    @Override
+    public Monitoring load() {
+        return configuration;
+    }
+    
+    private Monitoring initializeConfiguration() {
         final File configFile = resolveConfigFilePath();
         MonitoringConfig result = null;
         
