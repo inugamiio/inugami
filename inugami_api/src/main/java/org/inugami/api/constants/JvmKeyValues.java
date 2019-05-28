@@ -107,6 +107,7 @@ public enum JvmKeyValues {
     DATA_STORAGE_HBM2DDL("data.hbm2ddl"),
     
     ALERTING_ENABLE("alerting.enable"),
+    ALERTING_DYNAMIC_MAX_THREADS("alerting.dynamic.max.threads"),
     
     SCRIPT_FULL_SCRIPT_PATH("script.full.script.path"),
     

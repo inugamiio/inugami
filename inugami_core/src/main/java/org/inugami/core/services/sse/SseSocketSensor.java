@@ -19,10 +19,10 @@ package org.inugami.core.services.sse;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.models.GenericMonitoringModelBuilder;
+import org.inugami.api.monitoring.sensors.MonitoringSensor;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.data.GenericMonitoringModelBuilder;
-import org.inugami.monitoring.api.sensors.MonitoringSensor;
 import org.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 
 /**

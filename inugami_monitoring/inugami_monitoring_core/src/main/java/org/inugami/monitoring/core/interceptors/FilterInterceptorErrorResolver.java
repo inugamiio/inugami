@@ -25,9 +25,9 @@ import java.util.regex.Pattern;
 
 import org.inugami.api.exceptions.ErrorType;
 import org.inugami.api.loggers.Loggers;
+import org.inugami.api.monitoring.exceptions.ErrorResult;
+import org.inugami.api.monitoring.exceptions.ErrorResultBuilder;
 import org.inugami.commons.spi.SpiLoader;
-import org.inugami.monitoring.api.exceptions.ErrorResult;
-import org.inugami.monitoring.api.exceptions.ErrorResultBuilder;
 import org.inugami.monitoring.api.exceptions.ExceptionHandlerMapper;
 import org.inugami.monitoring.api.exceptions.ExceptionResolver;
 
