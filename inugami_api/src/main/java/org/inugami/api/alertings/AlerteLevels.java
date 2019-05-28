@@ -35,12 +35,13 @@ public enum AlerteLevels {
     OFF     (      0 , "^OFF$"     ,"#cccccf"),
     UNDEFINE(      1,"#333333");
     //@formatter:on
+    private static final AlerteLevels[] values = values();
     
-    private int     level;
+    private int                         level;
     
-    private Pattern regex;
+    private Pattern                     regex;
     
-    private String  color;
+    private String                      color;
     
     private AlerteLevels(final int level, final String color) {
         this.level = level;
@@ -59,7 +60,7 @@ public enum AlerteLevels {
         if (level != null) {
             final String localLevel = level.toLowerCase().trim();
             
-            for (final AlerteLevels item : AlerteLevels.values()) {
+            for (final AlerteLevels item : values) {
                 if (UNDEFINE == item) {
                     break;
                 }

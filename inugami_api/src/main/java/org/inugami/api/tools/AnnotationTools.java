@@ -87,25 +87,31 @@ public final class AnnotationTools {
         String result = null;
         if (object != null) {
             
-            Class<?> clazz = object.getClass();
-            if (object instanceof WeldClientProxy) {
-                clazz = ((WeldClientProxy) object).getMetadata().getBean().getBeanClass();
+            if (object instanceof NamedComponent) {
+                result = ((NamedComponent) object).getName();
             }
-            
-            final Annotation annotation = searchAnnotation(clazz.getAnnotations(), JAVAX_NAMED);
-            
-            if (annotation != null) {
-                final Method getValue = searchMethod(annotation, "value");
-                if (getValue != null) {
-                    result = invoke(getValue, annotation);
+            else {
+                Class<?> clazz = object.getClass();
+                if (object instanceof WeldClientProxy) {
+                    clazz = ((WeldClientProxy) object).getMetadata().getBean().getBeanClass();
+                }
+                
+                final Annotation annotation = searchAnnotation(clazz.getAnnotations(), JAVAX_NAMED);
+                
+                if (annotation != null) {
+                    final Method getValue = searchMethod(annotation, "value");
+                    if (getValue != null) {
+                        result = invoke(getValue, annotation);
+                    }
+                }
+                
+                if ((result == null) || result.trim().isEmpty()) {
+                    //@formatter:off
+                    result = clazz.getSimpleName().substring(0, 1).toLowerCase() + clazz.getSimpleName().substring(1);
+                    //@formatter:on
                 }
             }
             
-            if ((result == null) || result.trim().isEmpty()) {
-                //@formatter:off
-                result = clazz.getSimpleName().substring(0, 1).toLowerCase() + clazz.getSimpleName().substring(1);
-                //@formatter:on
-            }
         }
         
         return result;

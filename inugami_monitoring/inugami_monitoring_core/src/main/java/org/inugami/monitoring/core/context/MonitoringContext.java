@@ -22,12 +22,12 @@ import java.util.Map;
 
 import org.inugami.api.ctx.BootstrapContext;
 import org.inugami.api.loggers.Loggers;
-import org.inugami.monitoring.api.data.config.Monitoring;
-import org.inugami.monitoring.api.interceptors.MonitoringFilterInterceptor;
-import org.inugami.monitoring.api.interceptors.RequestContext;
-import org.inugami.monitoring.api.senders.MonitoringSender;
-import org.inugami.monitoring.api.sensors.MonitoringSensor;
-import org.inugami.monitoring.config.loader.ConfigurationLoader;
+import org.inugami.api.monitoring.MonitoringLoaderSpi;
+import org.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
+import org.inugami.api.monitoring.models.Monitoring;
+import org.inugami.api.monitoring.senders.MonitoringSender;
+import org.inugami.api.monitoring.sensors.MonitoringSensor;
+import org.inugami.commons.spi.SpiLoader;
 import org.inugami.monitoring.core.context.sensors.SensorsIntervalManagerTask;
 
 /**
@@ -41,7 +41,7 @@ public class MonitoringContext implements BootstrapContext<Void> {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final static Monitoring                     CONFIG        = ConfigurationLoader.CONFIGURATION;
+    private final static Monitoring                     CONFIG        = loadConfiguration();
     
     private final Map<Long, SensorsIntervalManagerTask> managersTasks = new HashMap<>();
     
@@ -51,7 +51,6 @@ public class MonitoringContext implements BootstrapContext<Void> {
     @Override
     public void bootrap(final Void ctx) {
         if (CONFIG != null) {
-            RequestContext.initializeConfig(CONFIG);
             if (CONFIG.isEnable()) {
                 managersTasks.putAll(buildSensorsTasks(CONFIG.getSensors()));
             }
@@ -64,6 +63,11 @@ public class MonitoringContext implements BootstrapContext<Void> {
             //@formatter:on
         }
     };
+    
+    private static Monitoring loadConfiguration() {
+        final MonitoringLoaderSpi loader = new SpiLoader().loadSpiSingleService(MonitoringLoaderSpi.class);
+        return loader == null ? null : loader.load();
+    }
     
     // =========================================================================
     // SHUTDOWN

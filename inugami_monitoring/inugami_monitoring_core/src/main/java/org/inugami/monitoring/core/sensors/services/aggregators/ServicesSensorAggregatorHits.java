@@ -22,10 +22,10 @@ import java.util.Optional;
 
 import org.inugami.api.models.data.graphite.number.GraphiteNumber;
 import org.inugami.api.models.data.graphite.number.LongNumber;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.models.GenericMonitoringModelBuilder;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.api.spi.SpiPriority;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.data.GenericMonitoringModelBuilder;
 import org.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 import org.inugami.monitoring.core.sensors.services.ServiceValueTypes;
 import org.inugami.monitoring.core.sensors.services.ServicesSensorAggregator;

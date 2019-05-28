@@ -27,11 +27,13 @@ import java.util.concurrent.TimeUnit;
 import org.inugami.api.ctx.BootstrapContext;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.tools.Chrono;
+import org.inugami.api.monitoring.MdcService;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.senders.MonitoringSender;
+import org.inugami.api.monitoring.sensors.MonitoringSensor;
 import org.inugami.api.tools.CalendarTools;
+import org.inugami.commons.threads.MonitoredThreadFactory;
 import org.inugami.commons.threads.RunAndCloseService;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.senders.MonitoringSender;
-import org.inugami.monitoring.api.sensors.MonitoringSensor;
 import org.inugami.monitoring.core.context.MonitoringContext;
 
 /**
@@ -69,7 +71,8 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
         this.maxTheads = maxTheads;
         this.interval = interval;
         timeout = (long) (interval * 0.9);
-        executor = Executors.newSingleThreadScheduledExecutor();
+        executor = Executors.newSingleThreadScheduledExecutor(new MonitoredThreadFactory(getClass().getSimpleName(),
+                                                                                         false));
         final String name = String.join("_", SensorsIntervalManagerTask.class.getSimpleName(),
                                         String.valueOf(interval) + "ms");
         this.nameSensor = name + "_sensor";
@@ -117,6 +120,7 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
         
         @Override
         public void run() {
+            MdcService.initialize();
             final int nbThreads = tasks.size() < maxTheads ? tasks.size() : maxTheads;
             final RunAndCloseService<List<GenericMonitoringModel>> sensorThreads = new RunAndCloseService<>(nameSensor,
                                                                                                             timeout,

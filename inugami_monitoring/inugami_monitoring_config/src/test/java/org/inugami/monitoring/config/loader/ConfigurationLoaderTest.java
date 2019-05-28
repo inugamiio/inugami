@@ -22,10 +22,10 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 
 import org.inugami.api.constants.JvmKeyValues;
+import org.inugami.api.monitoring.models.Monitoring;
+import org.inugami.api.monitoring.sensors.MonitoringSensor;
 import org.inugami.commons.files.FilesUtils;
 import org.inugami.commons.tools.TestUnitResources;
-import org.inugami.monitoring.api.data.config.Monitoring;
-import org.inugami.monitoring.api.sensors.MonitoringSensor;
 import org.inugami.monitoring.config.spi.MBeanSensorForTest;
 import org.junit.Test;
 
@@ -47,7 +47,7 @@ public class ConfigurationLoaderTest implements TestUnitResources {
         System.getProperties().put("inugami-home", "foobar");
         System.getProperties().put(JvmKeyValues.MONITORING_FILE.getKey(), configFile.getAbsolutePath());
         
-        final Monitoring config = ConfigurationLoader.CONFIGURATION;
+        final Monitoring config = new ConfigurationLoader().load();
         assertNotNull(config);
         assertEquals("PRD1", config.getEnv());
         assertEquals("DTV", config.getAsset());

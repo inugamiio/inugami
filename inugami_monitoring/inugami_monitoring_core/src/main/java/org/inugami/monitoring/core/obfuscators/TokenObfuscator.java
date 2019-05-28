@@ -33,20 +33,33 @@ public class TokenObfuscator implements Obfuscator {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final static Pattern EMPTY = ObfuscatorTools.buildJsonFieldPattern("(token|TOKEN)", "\"\\s*\""); 
-    private final static Pattern DEFAULT = ObfuscatorTools.buildJsonFieldPattern("(token|TOKEN)");
+    private static final Pattern  EMPTY              = ObfuscatorTools.buildJsonFieldPattern("(token|TOKEN)",
+                                                                                             "\"\\s*\"");
+    
+    private static final Pattern  DEFAULT            = ObfuscatorTools.buildJsonFieldPattern("(token|TOKEN)");
+    
+    private static final String[] ACTIVATED_ELEMENTS = { "token", "TOKEN" };
     
     // =========================================================================
     // METHODS
     // =========================================================================
     @Override
-    public boolean accept(String data) {
-        return data.contains("token") || data.contains("TOKEN");
+    public boolean accept(final String data) {
+        boolean found = false;
+        
+        for (final String element : ACTIVATED_ELEMENTS) {
+            found = data.contains(element);
+            if (found) {
+                break;
+            }
+        }
+        
+        return found;
     }
     
     @Override
-    public String clean(String data) {
-        String result =  replaceAll(DEFAULT, data, "\"token\":\"xxxxx\"");
+    public String clean(final String data) {
+        final String result = replaceAll(DEFAULT, data, "\"token\":\"xxxxx\"");
         
         return replaceAll(EMPTY, result, "\"token\":\"empty\"");
     }

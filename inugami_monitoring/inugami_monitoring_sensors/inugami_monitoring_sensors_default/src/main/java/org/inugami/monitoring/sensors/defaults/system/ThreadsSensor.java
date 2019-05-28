@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.inugami.api.models.data.graphite.number.LongNumber;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.models.GenericMonitoringModelBuilder;
+import org.inugami.api.monitoring.sensors.MonitoringSensor;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.data.GenericMonitoringModelBuilder;
-import org.inugami.monitoring.api.sensors.MonitoringSensor;
 import org.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 
 /**

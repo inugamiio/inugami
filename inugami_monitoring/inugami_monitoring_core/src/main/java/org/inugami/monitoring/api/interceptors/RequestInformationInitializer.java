@@ -26,14 +26,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.inugami.api.loggers.Loggers;
+import org.inugami.api.monitoring.RequestContext;
+import org.inugami.api.monitoring.RequestInformation;
+import org.inugami.api.monitoring.RequestInformationBuilder;
+import org.inugami.api.monitoring.models.Monitoring;
 import org.inugami.commons.spi.SpiLoader;
-import org.inugami.monitoring.api.data.RequestInformation;
-import org.inugami.monitoring.api.data.RequestInformationBuilder;
-import org.inugami.monitoring.api.data.config.Monitoring;
-import org.inugami.monitoring.api.interceptors.RequestContext;
 import org.inugami.monitoring.api.resolvers.DefaultServiceNameResolver;
 import org.inugami.monitoring.api.resolvers.ServiceNameResolver;
-import org.inugami.monitoring.config.loader.ConfigurationLoader;
 
 /**
  * RequestInformationInitializer
@@ -45,27 +44,26 @@ public final class RequestInformationInitializer {
     // =========================================================================
     // BUILDER
     // =========================================================================
-    private final static Monitoring          CONFIG                = ConfigurationLoader.CONFIGURATION;
+    private final static Monitoring          CONFIG                = RequestContext.loadConfig();
     
     private static final SpiLoader           SPI_LOADER            = new SpiLoader();
     
     private static final ServiceNameResolver SERVICE_NAME_RESOLVER = SPI_LOADER.loadSpiServiceByPriority(ServiceNameResolver.class,
                                                                                                          new DefaultServiceNameResolver());
     
-    
-
-    
     // =========================================================================
     // BUILDER
     // =========================================================================
-    public static synchronized void buildRequestInformation(HttpServletRequest request, Map<String, String> headers) {
+    public static synchronized void buildRequestInformation(final HttpServletRequest request,
+                                                            final Map<String, String> headers) {
         final RequestInformation information = buildInformation(request, headers);
         RequestContext.setInstance(information);
     }
     
-    private static RequestInformation buildInformation(HttpServletRequest request, final Map<String, String> headers) {
+    private static RequestInformation buildInformation(final HttpServletRequest request,
+                                                       final Map<String, String> headers) {
         
-        RequestInformationBuilder builder = new RequestInformationBuilder();
+        final RequestInformationBuilder builder = new RequestInformationBuilder();
         builder.setEnv(CONFIG.getEnv());
         builder.setAsset(CONFIG.getAsset());
         builder.setHostname(CONFIG.getHostname());
@@ -84,7 +82,7 @@ public final class RequestInformationInitializer {
         builder.setDeviceType(headers.get(CONFIG.getHeaders().getDeviceType()));
         builder.setDeviceClass(headers.get(CONFIG.getHeaders().getDeviceClass()));
         
-        String clientVersion = headers.get(CONFIG.getHeaders().getDeviceVersion());
+        final String clientVersion = headers.get(CONFIG.getHeaders().getDeviceVersion());
         builder.setVersion(clientVersion);
         builder.setMajorVersion(clientVersion == null ? null : clientVersion.split("[.]")[0]);
         builder.setOsVersion(headers.get(CONFIG.getHeaders().getDeviceOsVersion()));
@@ -100,9 +98,9 @@ public final class RequestInformationInitializer {
         builder.setLanguage(headers.get(CONFIG.getHeaders().getLanguage()));
         builder.setCountry(headers.get(CONFIG.getHeaders().getCountry()));
         
-        Map<String, String> specific = new HashMap<>();
-        if (CONFIG.getHeaders().getSpecificHeaders() != null && !CONFIG.getHeaders().getSpecificHeaders().isEmpty()) {
-            for (String key : CONFIG.getHeaders().getSpecificHeaders()) {
+        final Map<String, String> specific = new HashMap<>();
+        if ((CONFIG.getHeaders().getSpecificHeaders() != null) && !CONFIG.getHeaders().getSpecificHeaders().isEmpty()) {
+            for (final String key : CONFIG.getHeaders().getSpecificHeaders()) {
                 specific.put(key, headers.get(key));
             }
         }
@@ -110,36 +108,31 @@ public final class RequestInformationInitializer {
         return builder.build();
     }
     
-    private static String buildUriPath(HttpServletRequest request) {
+    private static String buildUriPath(final HttpServletRequest request) {
         final String contextPath = request.getContextPath();
         final String path = request.getRequestURI().toString();
         return path.length() >= contextPath.length() ? path.substring(contextPath.length()) : path;
     }
     
-    private static String buildUriPath(String string) {
-        // TODO Auto-generated method stub
-        return null;
+    private static String buildUid(final String uid) {
+        return (uid == null) || uid.trim().isEmpty() ? UUID.randomUUID().toString() : uid;
     }
     
-    private static String buildUid(String uid) {
-        return uid == null || uid.trim().isEmpty() ? UUID.randomUUID().toString() : uid;
-    }
-    
-    public static Map<String, String> buildHeadersMap(HttpServletRequest request) {
+    public static Map<String, String> buildHeadersMap(final HttpServletRequest request) {
         final Map<String, String> header = new HashMap<>();
         final Enumeration<String> names = request.getHeaderNames();
         while (names.hasMoreElements()) {
-            String key = names.nextElement();
+            final String key = names.nextElement();
             header.put(key.toLowerCase(), request.getHeader(key));
         }
         return header;
     }
     
-    public static Map<String, String> buildHeadersMap(HttpServletResponse response) {
+    public static Map<String, String> buildHeadersMap(final HttpServletResponse response) {
         final Map<String, String> header = new HashMap<>();
         final Iterator<String> names = response.getHeaderNames().iterator();
         while (names.hasNext()) {
-            String key = names.next();
+            final String key = names.next();
             header.put(key.toLowerCase(), response.getHeader(key));
         }
         header.put(CONFIG.getHeaders().getCorrelationId(), RequestContext.getInstance().getCorrelationId());
@@ -150,19 +143,19 @@ public final class RequestInformationInitializer {
     // TOOLS
     // =========================================================================
     
-    public static void appendResponseHeaderInformation(HttpServletResponse httpResponse) {
+    public static void appendResponseHeaderInformation(final HttpServletResponse httpResponse) {
         final RequestInformation requestContext = RequestContext.getInstance();
         httpResponse.setHeader(CONFIG.getHeaders().getCorrelationId(), requestContext.getCorrelationId());
         httpResponse.setHeader(CONFIG.getHeaders().getRequestId(), requestContext.getRequestId());
     }
     
-    private static Double parseDouble(String value) {
+    private static Double parseDouble(final String value) {
         Double result = null;
         if (value != null) {
             try {
                 result = Double.parseDouble(value);
             }
-            catch (Exception e) {
+            catch (final Exception e) {
                 Loggers.DEBUG.error(e.getMessage(), e);
             }
         }

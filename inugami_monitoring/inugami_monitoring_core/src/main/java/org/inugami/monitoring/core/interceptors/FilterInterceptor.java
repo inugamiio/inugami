@@ -19,7 +19,6 @@ package org.inugami.monitoring.core.interceptors;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Proxy;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,15 +35,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.tools.Chrono;
+import org.inugami.api.monitoring.RequestContext;
+import org.inugami.api.monitoring.data.ResponseData;
+import org.inugami.api.monitoring.data.ResquestData;
+import org.inugami.api.monitoring.data.ResquestDataBuilder;
+import org.inugami.api.monitoring.exceptions.ErrorResult;
+import org.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import org.inugami.api.tools.CalendarTools;
 import org.inugami.commons.spi.SpiLoader;
-import org.inugami.monitoring.api.data.ResponseData;
-import org.inugami.monitoring.api.data.ResquestData;
-import org.inugami.monitoring.api.data.ResquestDataBuilder;
-import org.inugami.monitoring.api.exceptions.ErrorResult;
 import org.inugami.monitoring.api.exceptions.ExceptionResolver;
-import org.inugami.monitoring.api.interceptors.MonitoringFilterInterceptor;
-import org.inugami.monitoring.api.interceptors.RequestContext;
 import org.inugami.monitoring.api.interceptors.RequestInformationInitializer;
 import org.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 import org.inugami.monitoring.api.resolvers.Interceptable;
@@ -207,13 +206,13 @@ public class FilterInterceptor implements Filter {
         return builder.build();
     }
     
-    private byte[] readInput(ServletInputStream inputStream) {
+    private byte[] readInput(final ServletInputStream inputStream) {
         
         final StringBuilder result = new StringBuilder();
         final ByteArrayOutputStream out = new ByteArrayOutputStream(64 * KILO);
         
         final int bufferSize = 16 * KILO;
-        byte[] buffer = new byte[bufferSize];
+        final byte[] buffer = new byte[bufferSize];
         
         int bytesLeft;
         try {
@@ -221,7 +220,7 @@ public class FilterInterceptor implements Filter {
                 out.write(buffer, 0, bytesLeft);
             }
         }
-        catch (IOException e) {
+        catch (final IOException e) {
             Loggers.DEBUG.error(e.getMessage(), e);
         }
         
