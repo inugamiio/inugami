@@ -226,6 +226,7 @@
   position: relative;
   top:0em;
 }
+
 .page-admin .alert-edit  .form-tooltip{
   background: #504c4c;
   color: white;
@@ -248,8 +249,6 @@
 
 .page-admin .alert-edit .left-panel .sources  .tooltip-button.cron{
   position: absolute;
-  left: 100em;
-  bottom: 12em;
 }
 
 .page-admin .alert-edit .right-panel .tooltip-button.precision{
