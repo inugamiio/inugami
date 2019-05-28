@@ -167,7 +167,7 @@ public class DyncamicAlertsTask implements Callable<Void> {
             final List<DynamicAlertingLevel> levels = buildLevels(entity.getLevels());
             if (!levels.isEmpty()) {
                 provider.processDynamicAlert(GAV, event, data, levels, entity.getLabel(), entity.getSubLabel(),
-                                             buildTag(entity.getTags()));
+                                             buildTag(entity.getTags()), entity.getProviders());
             }
         }
     }
@@ -180,12 +180,19 @@ public class DyncamicAlertsTask implements Callable<Void> {
             for (final DynamicLevel level : dynamicLevels) {
                 if ((level.getData() != null) && !level.getData().isEmpty()) {
                     if (level.getData().size() == 1) {
-                        result.add(new DynamicAlertingLevel(level.getName(), level.getData().get(0).getLevel()));
+                        result.add(new DynamicAlertingLevel(level.getName(), level.getData().get(0).getLevel(),
+                                                            level.getActivationDelais(), entity.getDuration(),
+                                                            entity.getNominal(), entity.getUnit(), entity.getService(),
+                                                            entity.getComponent(), entity.isInverse()));
                     }
                     else {
                         for (final DynamicLevelValues hourData : level.getData()) {
                             if (hourData.getHour() == currentHour) {
-                                result.add(new DynamicAlertingLevel(level.getName(), hourData.getLevel()));
+                                result.add(new DynamicAlertingLevel(level.getName(), hourData.getLevel(),
+                                                                    level.getActivationDelais(), entity.getDuration(),
+                                                                    entity.getNominal(), entity.getUnit(),
+                                                                    entity.getService(), entity.getComponent(),
+                                                                    entity.isInverse()));
                                 break;
                             }
                         }

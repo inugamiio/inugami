@@ -46,9 +46,9 @@
                 <property key="timeUnit" value="1min" />
             </properties>
         </sensor>
-        <sensor name="threads" interval="30000" />
-        <sensor name="memory" />
-        <sensor name="servicesSensor" />
+<!--         <sensor name="threads" interval="30000" /> -->
+<!--         <sensor name="memory" /> -->
+<!--         <sensor name="servicesSensor" /> -->
     </sensors>
 
 </monitoring>
