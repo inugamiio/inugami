@@ -7,6 +7,7 @@ import org.inugami.api.loggers.Loggers;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.commons.connectors.HttpProxy;
 import org.inugami.core.alertings.senders.opsgenie.sender.model.OpsgenieModel;
+import org.inugami.core.alertings.senders.teams.sender.models.TeamsModel;
 import org.inugami.core.context.ApplicationContext;
 import org.inugami.core.services.connectors.HttpConnector;
 import org.inugami.core.services.senders.Sender;
@@ -17,7 +18,9 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.core.MediaType;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -133,17 +136,23 @@ public class OpsgenieSenderService implements Sender<OpsgenieModel>, Serializabl
 
     @Override
     public void send(final OpsgenieModel data) throws SenderException {
+        final Map<String, String> header = new HashMap<String, String>();
+        header.put("Content-Type", MediaType.APPLICATION_JSON);
+
         if (!enable) {
             return;
         }
-        final String json = new JSONSerializer().exclude("*.class").deepSerialize(data);
+        final String json = data.convertToJson();
+
         try {
-            httpConnector.post(url, json);
+            httpConnector.post(url, json, null, header);
+
         }
         catch (final ConnectorException e) {
             Loggers.ALERTS_SENDER.error("can't send to opsgenie :{} \n{}", url, json);
             throw new SenderException(e.getMessage(), e);
         }
+
     }
 
 }
