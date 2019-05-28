@@ -15,13 +15,13 @@
 <nav class="dynamic-sections">
     <ul>
         <li [class.active]="isActiveSection('table')" (click)="setActiveSection('table')">
-            <i class="far fa-bell"></i>
-            <msg key="alert.table.action.title"></msg>
+            <i class="icon far fa-bell"></i>
+            <span class="title"><msg key="alert.table.action.title"></msg></span>
         </li>
 
         <li [class.active]="isActiveSection('createView')" (click)="setActiveSection('createView')">
-            <i class="fas fa-plus"></i>
-            <msg key="alert.create.action.title"></msg>
+            <i class="icon fas fa-plus"></i>
+            <span><msg key="alert.create.action.title"></msg></span>
         </li>
         <div class="dynamic-sections-end"></div>
     </ul>
