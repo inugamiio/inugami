@@ -64,15 +64,21 @@ public class AlertSenderService implements Serializable {
     // METHODS SEND
     // =========================================================================
     public synchronized void sendNewAlert(final AlertingResult alert, final List<String> channels) {
-        processOnSender("sendNewAlert", alert, (sender) -> sender.sendNewAlert(alert, channels));
+        processOnSender("sendNewAlert", alert, (sender) -> {
+            sender.sendNewAlert(alert, channels);
+        });
     }
     
     public synchronized void send(final AlertingResult alert, final List<String> channels) {
-        processOnSender("send", alert, (sender) -> sender.send(alert, channels));
+        processOnSender("send", alert, (sender) -> {
+            sender.send(alert, channels);
+        });
     }
     
     public synchronized void sendDisable(final List<String> uids, final List<String> channels) {
-        processOnSender("sendDisable", null, (sender) -> sender.delete(uids, channels));
+        processOnSender("sendDisable", null, (sender) -> {
+            sender.delete(uids, channels);
+        });
     }
     
     // =========================================================================

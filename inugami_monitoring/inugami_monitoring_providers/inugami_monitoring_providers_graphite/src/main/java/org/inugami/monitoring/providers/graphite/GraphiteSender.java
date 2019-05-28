@@ -24,10 +24,10 @@ import java.util.List;
 import org.inugami.api.exceptions.FatalException;
 import org.inugami.api.functionnals.ApplyIfNotNull;
 import org.inugami.api.loggers.Loggers;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.senders.MonitoringSender;
+import org.inugami.api.monitoring.senders.MonitoringSenderException;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.senders.MonitoringSender;
-import org.inugami.monitoring.api.senders.MonitoringSenderException;
 
 import com.codahale.metrics.graphite.PickledGraphite;
 

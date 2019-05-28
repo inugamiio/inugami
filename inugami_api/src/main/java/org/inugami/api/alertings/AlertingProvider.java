@@ -21,6 +21,7 @@ import java.util.List;
 import org.inugami.api.models.Gav;
 import org.inugami.api.models.events.AlertingModel;
 import org.inugami.api.models.events.GenericEvent;
+import org.inugami.api.models.events.SimpleEvent;
 import org.inugami.api.providers.task.ProviderFutureResult;
 import org.inugami.api.tools.NamedComponent;
 
@@ -42,4 +43,10 @@ public interface AlertingProvider extends NamedComponent {
     void processSavedAlerts(final List<AlertingResult> entities);
     
     void processDisableAlerts(final List<String> alertsUids, final String channel);
+    
+    default void processDynamicAlert(final Gav gav, final SimpleEvent event, final ProviderFutureResult data,
+                                     final List<DynamicAlertingLevel> levels, final String message,
+                                     final String subMessage, final List<String> tags,
+                                     final List<String> alertSenders) {
+    }
 }

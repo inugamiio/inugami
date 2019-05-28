@@ -19,7 +19,6 @@
     <maxRunningEvents>5</maxRunningEvents>
     <alertingEnable>true</alertingEnable>
     <maxThreads>1500</maxThreads>
-	
 	<!--========================================================================
     =   HTTP DEFAULT CONFIG
     =========================================================================-->

@@ -102,6 +102,27 @@ public class AlertEntity implements Identifiable<String>, BeforeSave {
         this.level = level;
     }
     
+    protected AlertEntity(final String alerteName, final String level, final AlerteLevels levelType,
+                          final int levelNumber, final String label, final String subLabel, final String url,
+                          final long created, final long duration, final String channel, final String data,
+                          final boolean enable, final long ttl, final List<String> providers) {
+        super();
+        this.alerteName = alerteName;
+        this.level = level;
+        this.levelType = levelType;
+        this.levelNumber = levelNumber;
+        this.label = label;
+        this.subLabel = subLabel;
+        this.url = url;
+        this.created = created;
+        this.duration = duration;
+        this.channel = channel;
+        this.data = data;
+        this.enable = enable;
+        this.ttl = ttl;
+        this.providers = providers;
+    }
+    
     // =========================================================================
     // HANDLER
     // =========================================================================

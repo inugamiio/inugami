@@ -18,9 +18,9 @@ package org.inugami.monitoring.config.spi;
 
 import java.util.List;
 
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.sensors.MonitoringSensor;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.sensors.MonitoringSensor;
 
 /**
  * CpuSensorforTest
@@ -34,7 +34,8 @@ public class ThreadsSensorForTest implements MonitoringSensor {
     // SPI
     // =========================================================================
     @Override
-    public MonitoringSensor buildInstance(long interval, String query, ConfigHandler<String, String> configuration) {
+    public MonitoringSensor buildInstance(final long interval, final String query,
+                                          final ConfigHandler<String, String> configuration) {
         return this;
     }
     
