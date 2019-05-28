@@ -6,12 +6,12 @@ import {SecurityServices}                       from './services/security.servic
 import {SystemNotification}                     from './components/system_notification/system.notification';
 import {HttpServices}                           from './services/http/http.services'
 import {PluginsService}                         from './services/plugins.service'
-
+import {MainMenu}                       from './components/main_menu/main.menu';
 
 @Component({
     selector: 'app-component',
     templateUrl: 'js/app/app-component.html'
-    directives : [SystemNotification]
+    directives : [SystemNotification,MainMenu]
 })
 export class AppComponent {
     /**************************************************************************
@@ -125,17 +125,5 @@ export class AppComponent {
              }
          }
       });
-    }
-
-    /**************************************************************************
-    * METHODES
-    **************************************************************************/
-
-    public logout(){
-      this.securityServices.logout();
-    }
-    
-    private handlerKeys(event) {
-      console.log(event);
     }
 }

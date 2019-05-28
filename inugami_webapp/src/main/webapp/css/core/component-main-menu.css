@@ -1,0 +1,167 @@
+header.main-menu {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    font-size: 220%;
+    -webkit-transition: top 0.25s linear;
+    -moz-transition: top 0.25s linear;
+    -ms-transition: top 0.25s linear;
+    -o-transition: top 0.25s linear;
+    transition:  top 0.25s linear;
+    background: #ffffff;
+}
+header.main-menu.hidden-menu{
+    top: -3em;
+}
+.main-menu  menu{
+    height: 1.5em;
+    overflow: hidden;
+
+}
+
+.main-menu  menu>ul,
+.main-menu  .sub-link ul{
+    margin: 0;
+    padding: 0;
+}
+.main-menu  menu>ul>li,
+.main-menu  .sub-link li{
+    list-style: none;
+}
+
+.main-menu  menu>ul>li{
+    float: left;
+}
+
+.main-menu  menu>ul>li.user{
+    float: right;
+    font-size: 80%;
+    padding-top: 0.3em;
+    padding-right: 0.5em;
+}
+
+.main-menu  .sub-link{
+    padding-left: 1em;
+}
+
+.main-menu  .sub-link ul{
+    padding-top:0.1em;
+}
+
+.main-menu  .sub-link li{
+    float: left;
+    margin-right: 0.5em;
+}
+
+.main-menu .home-link{
+    padding-left: 0.5em;
+}
+.main-menu .home-link,
+.main-menu .home-link a,
+.main-menu .home-link .home-link-end{
+    color: #ffffff;
+    background-color: #c4003e;
+}
+
+.main-menu .home-link a,
+.main-menu .home-link .current-title{
+    float: left;
+    display: block;
+}
+.main-menu .home-link .current-title{
+    min-width: 7em;
+    padding-left: 0.5em;
+}
+
+.main-menu .home-link .home-link-end{
+    display: block;
+    width: 0.7em;
+    height: 1.5em;
+    float: right;
+    border-radius: 100%;
+    position: relative;
+    right: -4%;
+}
+
+.main-menu .sub-link ul li>div{
+    -webkit-transition: color 0.5s linear;
+    -moz-transition: color 0.5s linear;
+    -ms-transition: color 0.5s linear;
+    -o-transition: color 0.5s linear;
+    transition:  tocolorp 0.5s linear;
+}
+.main-menu .sub-link ul li>div.selected,
+.main-menu .sub-link ul li>div.selected a .link {
+    color:#aa1044;
+}
+.main-menu .sub-link ul li>div a{
+    cursor: pointer;
+}
+.main-menu .sub-link ul li>div a .link{
+    color : black;
+}
+
+
+.main-menu .sub-link ul li>div.icon-enable a .icon{
+    height: 1em;
+    width: 1em;
+    border: 1px solid;
+    display: inline-block;
+    border-radius: 100%;
+    position: relative;
+    top: 0.2em;
+}
+
+.main-menu .sub-link ul li>div a .icon .before{
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+    font-family: Font Awesome\ 5 Free;
+    font-weight: 900;
+}
+.main-menu .sub-link ul li>div.icon-enable.health a .icon .before::before{
+    content: "\f21e";
+}
+
+.main-menu .sub-link ul li>div.icon-enable.caches a .icon .before::before{
+    content: "\f1c0";
+}
+
+
+.main-menu .sub-link ul li>div.icon-enable.plugins a .icon .before::before{
+    content: "\f12e";
+}
+
+.main-menu .sub-link ul li>div.icon-enable.events a .icon .before{
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+    font-weight: 400;
+}
+.main-menu .sub-link ul li>div.icon-enable.alerts a .icon .before::before{
+    content: "\f0f3";
+}
+.main-menu .sub-link ul li>div.icon-enable.events a .icon .before::before{
+    content: "\f073";
+}
+
+.main-menu .sub-link ul li>div.icon-enable.actions a .icon .before::before{
+    content: "\f013";
+}
+
+.main-menu .sub-link ul li>div.icon-enable a .icon .before{
+    font-size: 60%;
+    height: 1.6em;
+    width: 1.6em;
+    text-align: center;
+    margin-top: 0em;
+    display: block;
+    float: left;
+    padding-top: 16%;
+}
