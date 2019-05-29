@@ -12,6 +12,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
+import org.inugami.api.providers.Provider;
 import org.inugami.configuration.models.plugins.Plugin;
 import org.inugami.configuration.services.mapping.PluginMapping;
 import org.inugami.core.context.ApplicationContext;
@@ -25,11 +26,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
 @Path("provider")
-public class ProviderRest {
+public class DataProviderRest {
     @Inject
     private ApplicationContext context;
 
@@ -38,10 +41,17 @@ public class ProviderRest {
     @Produces(MediaType.APPLICATION_JSON)
     public String getProviders(){
 
-        final List<Plugin> result = new ArrayList<>();
+        final List<Plugin> pluginList = new ArrayList<>();
         org.inugami.core.context.Context.getInstance().getPlugins().ifPresent(plugins -> {
-            result.addAll(Context.getInstance().getPlugins().get());
+            pluginList.addAll(Context.getInstance().getPlugins().get());
         });
-        return "{}";
+
+
+        List<Provider> providerList  = new ArrayList<>();
+        for (Plugin plugin: pluginList) {
+            for(Provider provider: plugin.getProviders().orElse(Collections.emptyList()))
+             providerList.add(provider);
+        }
+        return "j";//result.toString();
     }
 }
