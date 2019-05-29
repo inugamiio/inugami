@@ -1,13 +1,17 @@
 package org.inugami.core.alertings.senders.opsgenie.sender;
 
-import flexjson.JSONSerializer;
+import static org.inugami.api.tools.ConfigHandlerTools.ENABLE;
+import static org.inugami.api.tools.ConfigHandlerTools.grabConfig;
+import static org.inugami.api.tools.ConfigHandlerTools.grabConfigBoolean;
+import static org.inugami.api.tools.ConfigHandlerTools.grabConfigInt;
+
+
 import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.exceptions.services.ConnectorException;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.commons.connectors.HttpProxy;
 import org.inugami.core.alertings.senders.opsgenie.sender.model.OpsgenieModel;
-import org.inugami.core.alertings.senders.teams.sender.models.TeamsModel;
 import org.inugami.core.context.ApplicationContext;
 import org.inugami.core.services.connectors.HttpConnector;
 import org.inugami.core.services.senders.Sender;
