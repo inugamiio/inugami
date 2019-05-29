@@ -53,6 +53,7 @@ import {SvgGenericMap}                  from './components/charts/svg_generic_ma
 import {JenkinsJobsComponent}           from './components/providers/jenkins_jobs/jenkins.jobs.component';
 import {GitlabMergeRequestsComponent}   from './components/providers/gitlab_merge_requests/gitlab.merge.requests.component';
 import {JiraIssuesComponent}            from './components/providers/jira_issues/jira.issues.components';
+import {MainMenu}                       from './components/main_menu/main.menu';
 
 // VIEWS -----------------------------------------------------------------------
 import {HomeView}                       from './view/home.view';
@@ -74,6 +75,7 @@ import {GenericCrudServices}            from './services/http/generic.crud.servi
 import {AlertsCrudServices}             from './services/http/alerts.crud.services';
 import {AlertsDynamicCrudServices}      from './services/http/alerts.dynamic.crud.services';
 
+import {MainMenuService}                from './components/main_menu/main.menu.service';
 
 // MODULE ----------------------------------------------------------------------
 @NgModule({
@@ -123,7 +125,8 @@ import {AlertsDynamicCrudServices}      from './services/http/alerts.dynamic.cru
 
     JenkinsJobsComponent,
     GitlabMergeRequestsComponent,
-    JiraIssuesComponent
+    JiraIssuesComponent,
+    MainMenu
   ],
   entryComponents: [],
   exports: [
@@ -159,7 +162,8 @@ import {AlertsDynamicCrudServices}      from './services/http/alerts.dynamic.cru
 
     JenkinsJobsComponent,
     GitlabMergeRequestsComponent,
-    JiraIssuesComponent
+    JiraIssuesComponent,
+    MainMenu
   ],
   providers: [
     PluginsService,
@@ -171,6 +175,7 @@ import {AlertsDynamicCrudServices}      from './services/http/alerts.dynamic.cru
     HttpServices,
     AlertsCrudServices,
     AlertsDynamicCrudServices,
+    MainMenuService
   ],
   entryComponents: [
     Image,

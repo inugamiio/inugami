@@ -5,6 +5,7 @@
 **
 ********************************************************************************
 *******************************************************************************/
+@import "component-main-menu.css";
 @import "components_properties_editor.css";
 @import "components_carousel.css";
 @import "component-curve-chart.css";
@@ -69,6 +70,9 @@
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 + plugin-infos
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+.plugin-infos{
+  background: #ffffff;
+}
 .plugin-infos .plugin-infos-content .plugin-infos-title{
   font-weight: bold;
 }
@@ -570,11 +574,7 @@ nav.dynamic-sections {
 }
 
 :root{
-  --nav-dynamic-section-color : #dfcada;
-}
-
-.page-admin-bloc-content{ 
-  background-color: white;
+  --nav-dynamic-section-color : #ffffff;
 }
 
 nav.dynamic-sections ul{
@@ -603,17 +603,19 @@ nav.dynamic-sections li{
   margin-bottom: -2px;
   cursor: pointer;
   background: linear-gradient(#ffffff 75%,#cecdcdbd);
-  -webkit-border-top-left-radius: 0.5em;
-  -webkit-border-top-right-radius: 0.5em;
-  -moz-border-radius-topleft: 0.5em;
-  -moz-border-radius-topright: 0.5em;
-  border-top-left-radius: 0.5em;
-  border-top-right-radius: 0.5em;
+  -webkit-border-top-left-radius: 0.3em;
+  -webkit-border-top-right-radius: 0.3em;
+  -moz-border-radius-topleft: 0.3em;
+  -moz-border-radius-topright: 0.3em;
+  border-top-left-radius: 0.3em;
+  border-top-right-radius: 0.3em;
+  width: 10em;
+  text-align: center;
 }
 nav.dynamic-sections li.active{
-  background: initial;
   border-bottom: 2px solid #ffffff;
-  background-color: #ffffff;
+  background: #ffffff;
+  border-left: 1px solid #b9b7b7;
  
 }
 
@@ -621,6 +623,11 @@ nav.dynamic-sections .dynamic-sections-end{
   clear: both;
 }
 
+nav.dynamic-sections li .icon{
+  border: 1px solid;
+  border-radius: 100%;
+  padding: 0.3em;
+}
 
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
