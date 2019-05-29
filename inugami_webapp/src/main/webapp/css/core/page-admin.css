@@ -383,56 +383,67 @@
   position: absolute;
 }
 
-.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.WARN .curve
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.WARN .curve,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.warn .curve
 {
   stroke: #c9952b;
   stroke-width: 0.2em;
 }
-.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.WARN .dots{
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.WARN .dots,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.warn .dots{
   fill: #c9952b;
 }
 
-.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.ERROR .curve
-{
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.ERROR .curve,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.error .curve{
   stroke: #c12534;
   stroke-width: 0.2em;
 }
-.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.ERROR .dots{
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.ERROR .dots,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.error .dots{
   fill: #c12534;
 }
 
-.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.INFO .curve
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.INFO .curve,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.info .curve
 {
   stroke: #25599d;
   stroke-width: 0.2em;
 }
-.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.INFO .dots{
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.INFO .dots,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.info .dots{
   fill: #25599d;
 }
 
-.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.DEBUG .curve
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.DEBUG .curve,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.debug .curve
 {
   stroke: #288870;
   stroke-width: 0.2em;
 }
-.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.DEBUG .dots{
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.DEBUG .dots,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.debug .dots{
   fill: #288870;
 }
 
-.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.TRACE .curve
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.TRACE .curve,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.trace .curve
 {
   stroke: #40770e;
   stroke-width: 0.2em;
 }
-.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.TRACE .dots{
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.TRACE .dots,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.trace .dots{
   fill: #40770e;
 }
-.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.FATAL .curve
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.FATAL .curve,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.fatal .curve
 {
   stroke: #662500;
   stroke-width: 0.2em;
 }
-.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.FATAL .dots{
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.FATAL .dots,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.fatal .dots{
   fill: #662500;
 }
 
