@@ -1,32 +1,18 @@
 package org.inugami.webapp.rest;
 
-import javax.validation.constraints.Past;
-import javax.inject.Inject;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
-import org.apache.commons.lang3.StringUtils;
 import org.inugami.api.providers.Provider;
 import org.inugami.configuration.models.plugins.Plugin;
-import org.inugami.configuration.services.mapping.PluginMapping;
 import org.inugami.core.context.ApplicationContext;
 import org.inugami.core.context.Context;
 import org.inugami.core.security.commons.roles.UserConnected;
-import org.inugami.core.security.commons.services.SecurityTokenService;
-import org.inugami.core.services.sse.SseService;
-import org.picketlink.idm.model.Account;
-import org.picketlink.idm.model.basic.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.inugami.webapp.rest.models.DataProviderRestModel;
 
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,11 +33,13 @@ public class DataProviderRest {
         });
 
 
-        List<Provider> providerList  = new ArrayList<>();
+        List<DataProviderRestModel> modelList   = new ArrayList<>();
         for (Plugin plugin: pluginList) {
             for(Provider provider: plugin.getProviders().orElse(Collections.emptyList()))
-             providerList.add(provider);
+             modelList.add(new DataProviderRestModel(provider.getType(),provider.getTimeout()));
         }
-        return "j";//result.toString();
+
+
+        return modelList.toString() ;//result.toString();
     }
 }
