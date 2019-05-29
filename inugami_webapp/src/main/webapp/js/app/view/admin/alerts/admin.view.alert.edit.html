@@ -121,9 +121,11 @@
                                 <msg key="alert.edit.dynamic.levels.dynamic"></msg>
                             </span>
                             <input-bloc label="alert.edit.dynamic.levels.minValue" type="number" styleClass="min-value"
-                                (enter)="setGraphMinValue($event,graph)"></input-bloc>
+                                (enter)="setGraphMinValue($event,graph)"
+                                (change)="setGraphMinValue($event,graph)"></input-bloc>
                             <input-bloc label="alert.edit.dynamic.levels.maxValue" type="number" styleClass="min-value"
-                                (enter)="setGraphMaxValue($event,graph)"></input-bloc>
+                                (enter)="setGraphMaxValue($event,graph)"
+                                (change)="setGraphMaxValue($event,graph)"></input-bloc>
                             <input-bloc label="alert.edit.dynamic.levels.precision" type="number"
                                 styleClass="precision-value" (enter)="setFormatter($event)"></input-bloc>
                             <button type="button" pButton icon="far fa-question-circle"
@@ -162,7 +164,8 @@
                                 (ngModelChange)="setLevelName($event)" styeClass="name"
                                 [validator]="validators.notEmptyString"></input-bloc>
                             <button pButton type="button" class="active-action" icon="fas fa-plus"
-                                (click)="addDynamicLevelsLevel(graph)"></button>
+                                (click)="addDynamicLevelsLevel(graph)"
+                                (enter)="addDynamicLevelsLevel(graph)"></button>
                             <div class="level-tooltip">
                                 <button type="button" pButton icon="far fa-question-circle"
                                     class="active-action tooltip-button level" (mouseover)="toggleFormTooltip(level)"
