@@ -156,7 +156,7 @@
                         <div class="add-level">
                             <input-bloc label="alert.edit.dynamic.levels.points.before.triggered"
                                 (ngModelChange)="setPointsBeforeTriggered($event)" styeClass="points"
-                                [validator]="validators.notEmptyString" type="number">
+                                [validator]="validators.notNegativeNumber" type="number">
                             </input-bloc>
                             <input-bloc label="alert.edit.dynamic.levels.add.level"
                                 (ngModelChange)="setLevelName($event)" styeClass="name"

@@ -201,20 +201,19 @@ export class AdminViewAlertEdit implements AfterViewInit {
 
 
     addDynamicLevelsLevel(graph) {
-        if (isNotNull(this.addedLevel.pointsBeforeTriggered) &&
-            isNotNull(this.addedLevel.name) &&
+        if (isNotNull(this.addedLevel.name) &&
             this.addedLevel.name != "" &&
-            this.addedLevel.pointsBeforeTriggered != "" &&
             isNull(org.inugami.validators.notNegativeNumber(this.addedLevel.pointsBeforeTriggered))) {
-            if (contains(this.addedLevel, this.alertForm.get('levelPointsBeforeTriggered').controls, function (a, b) {
-                return a.value.name === b.name;
-            })) {
-                alert(org.inugami.formatters.message("alert.edit.level.already.added"));
-            } else {
-                this.addFormLevelLine();
-                graph.addNewData(this.addedLevel.name);
 
-            }
+                    if (contains(this.addedLevel, this.alertForm.get('levelPointsBeforeTriggered').controls, function (a, b) {
+                        return a.value.name === b.name;
+                    })) {
+                        alert(org.inugami.formatters.message("alert.edit.level.already.added"));
+                    } else {
+                        this.addFormLevelLine();
+                        graph.addNewData(this.addedLevel.name);
+
+                    }
         }
     }
 
