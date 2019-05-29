@@ -138,7 +138,9 @@ export class AdminViewAlertEdit implements AfterViewInit {
             }
         }
         this.applyAllertProviderOnForm();
-        this.alertForm.get('inverse').patchValue("false");
+        if(isNull(this.alertForm.get('inverse').value)){
+            this.alertForm.get('inverse').patchValue("false");
+        }
     }
 
     applyDefaultValues(){
