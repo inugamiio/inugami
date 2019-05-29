@@ -31,7 +31,7 @@ import org.inugami.core.alertings.dynamic.entities.ProviderSource;
 import org.inugami.core.alertings.dynamic.entities.Tag;
 import org.inugami.core.context.ApplicationContext;
 
-public class DyncamicAlertsTask implements Callable<Void> {
+public class DynamicAlertsTask implements Callable<Void> {
     
     // =========================================================================
     // ATTRIBUTES
@@ -45,7 +45,7 @@ public class DyncamicAlertsTask implements Callable<Void> {
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    public DyncamicAlertsTask(final DynamicAlertEntity entity, final ApplicationContext context) {
+    public DynamicAlertsTask(final DynamicAlertEntity entity, final ApplicationContext context) {
         super();
         this.entity = entity;
         this.context = context;

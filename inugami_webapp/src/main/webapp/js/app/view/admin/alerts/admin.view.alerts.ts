@@ -3,6 +3,10 @@ import {GrowlModule}                                        from 'primeng/growl'
 import {Message}                                            from 'primeng/api';
 import {DataTable,Column}                                   from 'primeng/primeng';
 
+
+import { Http }                                       from '@angular/http';
+
+
 import {AlertsCrudServices}                                 from './../../../services/http/alerts.crud.services'
 import {AlertEntity}                                        from './../../../models/alert.entity';
 import {InputBloc}                                          from './../../../components/forms/input.bloc';
@@ -34,7 +38,7 @@ export class AdminViewAlerts{
     /**************************************************************************
     * CONSTRUCTOR
     **************************************************************************/
-    constructor(private alertsCrudServices : AlertsCrudServices) {
+    constructor(private alertsCrudServices : AlertsCrudServices,private http : Http) {
         this.initAlerts();
 
         let self = this;
@@ -42,6 +46,7 @@ export class AdminViewAlerts{
             self.initAlerts();
         });
         
+       
     }
     
 
@@ -71,10 +76,13 @@ export class AdminViewAlerts{
     }
 
     onAlertSelect(event){
-        if(isNotNull(this.selectedAlert) && this.selectedAlert.alerteName==event.data.alerteName){
-            this.unSelectedAlert();
-        }
         this.selectedAlert=event.data;
+        this.setActiveSection('createView');
+    }
+
+    showNewAlert(){
+        this.selectedAlert = null;
+        this.setActiveSection('createView');
     }
     
     cleanMessage(){

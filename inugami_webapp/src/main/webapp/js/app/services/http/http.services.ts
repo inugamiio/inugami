@@ -93,7 +93,10 @@ export class HttpServices {
             try{
                 json=JSON.parse(error._body);
                 errorData.data=json;
-            }catch(err){}
+            }catch(err){
+                errorData.data = error._body + " \n"+error.statusText;
+                errorData.data = errorData.data.replace(/&quot;/g,'"')
+             }
              
         }
         return Promise.reject(errorData);

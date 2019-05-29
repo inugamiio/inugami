@@ -10,8 +10,7 @@
     min-width: 30px;
   }
   .page-admin .page-admin-content{
-    float: right;
-    width: 89%;
+    padding: 2em;
   }
   .page-admin menu.page-admin-menu ul {
       list-style: none;
@@ -116,7 +115,12 @@
     float: right;
     margin-right: 1em;
   }
-  
+  .page-admin .admin-view-alerts .btn-group.top{
+    margin-top: -4em;
+  }
+  .page-admin .admin-view-alerts .btn-group.bottom{
+    margin-top: 1em;
+  }
   .admin-view-alert-edit-end{
     clear: both;
   }
@@ -132,6 +136,332 @@
   padding-left: 1em;
 }
 
+.page-admin .alert-edit .left-panel{
+  float: left;
+  width: 40%
+}
+
+
+.page-admin .alert-edit .left-panel .alert-name,
+.page-admin .alert-edit .left-panel .alert-duration-message{
+  position: relative;
+  left: 1.5em;
+}
+.page-admin .alert-edit .left-panel .alert-name input[disabled]{
+  font-style: italic;
+}
+
+.page-admin .alert-edit .left-panel .alert-name .input-bloc input{
+  width: 27.8em;
+}
+.page-admin .alert-edit .left-panel .file-input {
+  position: relative;
+  bottom : 2.5em;
+  left: 1em;
+}
+.page-admin .alert-edit .left-panel .file-input input{
+  display: none;
+}
+
+.page-admin .alert-edit .left-panel .alert-duration-message .duration{
+  margin-right: 1em;
+}
+
+.page-admin .alert-edit .left-panel .alert-duration-message .duration input{
+  width: 7em;
+}
+
+
+.page-admin .alert-edit .left-panel .alert-duration-message .main-message input{
+  width: 23.4em;
+}
+
+.page-admin .alert-edit .left-panel .detailed-message input{
+  width: 33em;
+}
+
+.page-admin .alert-edit .left-panel .tag{
+  margin-bottom: 2em;
+  display: inline-block;
+}
+
+.page-admin .alert-edit .left-panel .tag .message,
+.page-admin .alert-edit .left-panel .tag .tags{
+  display: inline;
+}
+.page-admin .alert-edit .left-panel .tag .tags .ui-chips-input-token input{
+  border-bottom: 1px dotted #c6c6c6;
+  position: relative;
+  top: 0.3em;
+}
+
+
+
+.page-admin .alert-edit .left-panel .tag .message{
+  position: relative;
+  top: 0.7em;
+  font-size: 1.5em;
+}
+
+.page-admin .alert-edit .left-panel .channel-selector{
+  font-size: 1.2em;
+  display: flex;
+}
+
+.page-admin .alert-edit .left-panel .channel-selector .message,
+.page-admin .alert-edit .left-panel .channel-selector .channels{
+  display: inline-block;
+}
+
+.page-admin .alert-edit .left-panel .channel-selector .message{
+  margin-right: 1em;
+  font-size: 1.5em;
+}
+.page-admin .alert-edit .left-panel .channel-selector .channels .channel{
+  color: gray;
+  font-size: 1.2em;
+  display: inline-block;
+  margin-right: 1em;
+}
+.page-admin .alert-edit .left-panel .channel-selector .channel.enable{
+  color: black;
+}
+
+.page-admin .alert-edit .left-panel .sources .to input,
+.page-admin .alert-edit .left-panel .sources .from input,
+.page-admin .alert-edit .left-panel .sources .interval input,
+.page-admin .alert-edit .left-panel .sources .provider input{
+  width: 16em;
+}
+.page-admin .alert-edit .left-panel .sources .first-line{
+  position: relative;
+  top:0em;
+}
+
+.page-admin .alert-edit  .form-tooltip{
+  background: #504c4c;
+  color: white;
+  position: absolute;
+  left: 31em;
+  max-width: 20em;
+  bottom: 11em;
+  padding: 0.5em;
+  border-radius: 1em;
+  white-space: pre-line;
+}
+
+.page-admin .alert-edit .form-tooltip.hidden{
+  visibility:hidden;
+}
+
+.page-admin .alert-edit .tooltip-button{
+  font-size: 0.5em;
+}
+
+.page-admin .alert-edit .left-panel .sources  .tooltip-button.cron{
+  position: absolute;
+}
+
+.page-admin .alert-edit .right-panel .tooltip-button.precision{
+  position: relative;
+  bottom: 7em;
+}
+
+.page-admin .alert-edit .right-panel .form-tooltip.precision{
+  position: relative;
+  left: 50em;
+}
+
+
+.page-admin .alert-edit .left-panel .query-text-area{
+  position: relative;
+}
+.page-admin .alert-edit textarea{
+  width: -webkit-fill-available;
+  height: 20em;
+}
+.page-admin .alert-edit .left-panel .query-text-area textarea{
+  margin-top: 1em;
+}
+.page-admin .alert-edit .left-panel .query-text-area msg{
+  position: absolute;
+  top:-0.5em;
+}
+
+
+.page-admin .alert-edit .right-panel{
+  float: right;
+  width: 60%;
+  padding-left:2em;
+}
+
+
+.page-admin .alert-edit .right-panel .ui-panel .ui-panel-content .day-and-time-line{
+  background-color: white;
+  padding-bottom: 0.8em;
+  padding-top: 0.8em;
+  border-radius: 1em;
+  margin-bottom: 2em;
+  display: flex;
+}
+.page-admin .alert-edit .right-panel .ui-panel .ui-panel-content .day-and-time-line button{
+  font-size: 0.7em
+}
+
+.page-admin .alert-edit .right-panel .ui-panel .ui-panel-content .day-and-time-line input-time-slots{
+  margin-right: 1em; 
+}
+
+.page-admin .alert-edit .right-panel .ui-panel .ui-panel-content .day-and-time-line input-days-selector{
+  flex-shrink: 0;
+  margin-right: 1em;
+}
+
+
+.page-admin .alert-edit .right-panel .levels-setting .dynamic{
+  position: relative;
+  bottom: 2.5em;
+  
+}
+
+.page-admin .alert-edit .right-panel .levels-setting .p-accordion{
+  margin-bottom: 1em;
+}
+
+.page-admin .alert-edit .right-panel .levels-setting .p-accordion .ui-accordion-header a,
+.page-admin .alert-edit .right-panel .levels-setting .p-accordion .ui-accordion-header{
+  color: black;
+
+}
+
+.page-admin .alert-edit .right-panel .levels-setting .p-accordion .ui-accordion-header.ui-state-active{
+  background-color: white; 
+}
+
+.page-admin .alert-edit .right-panel .levels-setting .min-value,
+.page-admin .alert-edit .right-panel .levels-setting .dynamic{
+  margin-right: 1em;
+}
+
+.page-admin .alert-edit .right-panel .levels-setting .add-level button,
+.page-admin .alert-edit .right-panel .levels .delete{
+  position: relative;
+  bottom: 2.6em;
+}
+
+.page-admin .alert-edit .right-panel .levels-setting .add-level input  {
+  width: 15em;
+}
+
+.page-admin .alert-edit .right-panel .inverse .ui-radiobutton-box{
+  background: white;
+  
+}
+
+.page-admin .alert-edit .right-panel .inverse .ui-radiobutton-box.ui-state-active{
+  background: #c12534;
+  border: #c12534;
+}
+.page-admin .alert-edit .right-panel .level-tooltip .tooltip-button{
+  position: absolute;
+  left: 98em;
+}
+.page-admin .alert-edit .right-panel .level-tooltip  .form-tooltip.level{
+  position: absolute;
+  left: 110em;
+  bottom: 30em;
+}
+
+
+.page-admin .alert-edit .right-panel .inverse msg{
+  margin-right: 1em;
+}
+
+.page-admin .alert-edit .right-panel .inverse .form-tooltip.inverse{
+  left: 95em;
+  bottom: 23em;
+  position: absolute;
+}
+
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.WARN .curve,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.warn .curve
+{
+  stroke: #c9952b;
+  stroke-width: 0.2em;
+}
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.WARN .dots,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.warn .dots{
+  fill: #c9952b;
+}
+
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.ERROR .curve,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.error .curve{
+  stroke: #c12534;
+  stroke-width: 0.2em;
+}
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.ERROR .dots,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.error .dots{
+  fill: #c12534;
+}
+
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.INFO .curve,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.info .curve
+{
+  stroke: #25599d;
+  stroke-width: 0.2em;
+}
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.INFO .dots,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.info .dots{
+  fill: #25599d;
+}
+
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.DEBUG .curve,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.debug .curve
+{
+  stroke: #288870;
+  stroke-width: 0.2em;
+}
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.DEBUG .dots,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.debug .dots{
+  fill: #288870;
+}
+
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.TRACE .curve,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.trace .curve
+{
+  stroke: #40770e;
+  stroke-width: 0.2em;
+}
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.TRACE .dots,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.trace .dots{
+  fill: #40770e;
+}
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.FATAL .curve,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.fatal .curve
+{
+  stroke: #662500;
+  stroke-width: 0.2em;
+}
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.FATAL .dots,
+.page-admin .alert-edit .right-panel .graph .inugami-input-dynamic-levels .data .level.fatal .dots{
+  fill: #662500;
+}
+
+
+
+.page-admin .activation-threshold{
+  margin-top:2em;
+}
+
+.page-admin .activation-threshold.ui-tabview,
+.page-admin .activation-threshold.ui-tabview.ui-tabview-top .ui-tabview-nav{
+  background-color: transparent;
+}
+
+
+.page-admin .activation-threshold .ui-tabview-panels .ui-tabview-panel.ui-widget-content{
+  background-color: #ffffff;
+}
 
 .page-admin .konami{
   background: #0c0c0c;
@@ -205,4 +535,22 @@
 .page-admin .connected-users .users  td{
   padding-left: 0.5em;
   padding-right: 0.5em;
+}
+
+.page-admin .page-admin-content>article{
+  background-color: #ffffff;
+  min-height: calc(85vh);
+  padding: 1.5em;
+  box-shadow: 0 0 2em 0px #8e8d8d;
+  margin-top: 2em;
+}
+
+.page-admin .page-admin-content nav.dynamic-sections ul{
+  background:none;
+}
+
+.page-admin .page-admin-content nav.dynamic-sections{
+  margin-top: -5.8em;
+  margin-bottom: 2em;
+  margin-left: -1.6em;
 }
