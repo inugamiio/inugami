@@ -17,6 +17,7 @@ body{
     font-family: 'Avenir', Sans-serif;
     font-style : normal;
     font-size: 12px;
+    background: linear-gradient(90deg, #d5c4ce 0%, #eae0d6 100%);
 }
 
 body, menu{
@@ -128,7 +129,7 @@ LOADING
 }
 
 .inugami .dashboard{
-   margin-top: 3em;
+   margin-top: 5em;
 }
 /*******************************************************************************
 LAYOUT
