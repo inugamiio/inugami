@@ -1,6 +1,6 @@
 <form [formGroup]="alertForm">
     <div [ngClass]="' alert-edit '" [class]="styleClass">
-        <div class="btn-group" role="group">
+        <div class="btn-group top" role="group">
             <button pButton type="button" (click)="close()" class="default-action" msg>
                 <msg key="action.cancel"></msg>
             </button>
@@ -51,6 +51,8 @@
                     <p-chips formControlName="tag"></p-chips>
                 </div>
             </div>
+
+
             <div class="channel-selector">
                 <div class="message">
                     <msg key="alert.edit.channel"></msg>:
@@ -62,6 +64,8 @@
                     </div>
                 </div>
             </div>
+
+
             <p-panel header="Sources" formGroupName="sources" class="sources">
                 <div class="first-line">
                         <input-bloc label="alert.edit.sources.data.provider" [validator]="validators.notEmptyString"
@@ -107,7 +111,9 @@
                 <button pButton type="button" class="active-action" (click)="addFormActivationLine()" msg>
                     <msg key="alert.edit.activation.add"></msg>
                 </button>
-                <p-tabView>
+
+
+                <p-tabView styleClass="activation-threshold">
                     <p-tabPanel header="Seuil" class="levels-setting">
                         <div>
                             <span class="dynamic">
@@ -194,7 +200,7 @@
 
 
         <div class="admin-view-alert-edit-end"></div>
-        <div class="btn-group" role="group">
+        <div class="btn-group bottom" role="group">
             <button pButton type="button" (click)="close()" class="default-action" msg>
                 <msg key="action.cancel"></msg>
             </button>
