@@ -101,7 +101,8 @@ export class AdminViewAlertEdit implements AfterViewInit {
                 levelPointsBeforeTriggered: this.fb.array([]),
                 dynamicLevels: ['', [dynamicLevelsValidator]],
                 scripts: [''],
-                inverse: ['']
+                inverse: [''],
+                addedLevelPoints: [''],
             })
             this.initChannels();
         } else {
@@ -114,6 +115,8 @@ export class AdminViewAlertEdit implements AfterViewInit {
             this.fileUri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(jsonData));
 
         })
+
+        this.applyDefaultValues();
 
     }
 
@@ -135,8 +138,15 @@ export class AdminViewAlertEdit implements AfterViewInit {
             }
         }
         this.applyAllertProviderOnForm();
+        if(isNull(this.alertForm.get('inverse').value)){
+            this.alertForm.get('inverse').patchValue("false");
+        }
     }
 
+    applyDefaultValues(){
+        this.alertForm.get('duration').patchValue(60);
+        this.alertForm.get('addedLevelPoints').patchValue(1);
+    }
     /**************************************************************************
     * ACTIONS
     **************************************************************************/
@@ -289,6 +299,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
         } else {
             this.edit = false;
             this.isNotEdit = !this.edit;
+            this.applyDefaultValues();
         }
     }
 

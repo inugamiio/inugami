@@ -19,7 +19,7 @@
             <span class="title"><msg key="alert.table.action.title"></msg></span>
         </li>
 
-        <li [class.active]="isActiveSection('createView')" (click)="setActiveSection('createView')">
+        <li [class.active]="isActiveSection('createView')" (click)="showNewAlert()">
             <i class="icon fas fa-plus"></i>
             <span><msg key="alert.create.action.title"></msg></span>
         </li>
@@ -37,9 +37,10 @@
 <article *ngIf="isActiveSection('createView')" class="createView">
     <fieldset>
         <legend><msg key="alert.create.title"></msg></legend>
-        <admin-view-alert-edit (onSuccess)="onMessage($event)"
-                               (onError)="onMessage($event)"
-                               (onCleanMessage)="cleanMessage()">
+        <admin-view-alert-edit  [(ngModel)]="selectedAlert" 
+                                (onSuccess)="onMessage($event)"
+                                (onError)="onMessage($event)"
+                                (onCleanMessage)="cleanMessage()">
         </admin-view-alert-edit>
     </fieldset>
 </article>
@@ -77,16 +78,6 @@
             </p-column>
 
         </p-dataTable>
-
-        <aside *ngIf="selectedAlert">
-            <h2><msg key="title.generic.informations"></msg></h2>
-            <admin-view-alert-edit edit="true"
-                                   [(ngModel)]="selectedAlert" 
-                                   (onSuccess)="onMessage($event)"
-                                   (onError)="onMessage($event)"
-                                   (onCleanMessage)="cleanMessage()"
-                                   (onClose)="unSelectedAlert()"></admin-view-alert-edit>
-        </aside>
     </fieldset>
     
 </article>

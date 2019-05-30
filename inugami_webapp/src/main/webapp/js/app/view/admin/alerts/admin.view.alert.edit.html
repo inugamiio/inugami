@@ -156,8 +156,8 @@
                             </p-accordion>
                         </div>
                         <div class="add-level">
-                            <input-bloc label="alert.edit.dynamic.levels.points.before.triggered"
-                                (ngModelChange)="setPointsBeforeTriggered($event)" styeClass="points"
+                            <input-bloc label="alert.edit.dynamic.levels.points.before.triggered" formControlName="addedLevelPoints"
+                                (ngModelChange)="setPointsBeforeTriggered($event)"  styeClass="points"
                                 [validator]="validators.notNegativeNumber" type="number">
                             </input-bloc>
                             <input-bloc label="alert.edit.dynamic.levels.add.level"
@@ -176,9 +176,9 @@
                             </div>
                         </div>
                         <div class="inverse">
-                            <p-radioButton name="inverse" value=true formControlName="inverse"></p-radioButton>
+                            <p-radioButton name="inverse" value="true" formControlName="inverse"></p-radioButton>
                             <msg key="alert.edit.alert.inverse.min"></msg>
-                            <p-radioButton name="inverse" value=false formControlName="inverse"></p-radioButton>
+                            <p-radioButton name="inverse" value="false" formControlName="inverse"></p-radioButton>
                             <msg key="alert.edit.alert.inverse.max"></msg>
                             <button type="button" pButton icon="far fa-question-circle"
                                 class="active-action tooltip-button inverse" (mouseover)="toggleFormTooltip(inverse)"
