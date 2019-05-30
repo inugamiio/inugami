@@ -101,10 +101,13 @@ export class InputBloc implements ControlValueAccessor,AfterViewInit {
     return isNotNull(this.innerValue) && (""+this.innerValue).length>0;
   }
  
-  private getBaseStyleClass(){
+  public getBaseStyleClass(){
     let result = ["input-bloc"];
     result.push(this.isDisabled);
 
+    if(isNotNull(this.styleClass)){
+      result.push(this.styleClass);
+    }
     if(isNotNull(this.errorTxt)){
       result.push("error");
     }

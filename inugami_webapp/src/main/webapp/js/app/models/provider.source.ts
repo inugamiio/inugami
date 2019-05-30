@@ -4,6 +4,7 @@ export class ProviderSource{
         public cronExpression       : string,
         public from                 : string,
         public to                   : string,
+        public eventName            : string,
         public query                : string
     ){}
 }

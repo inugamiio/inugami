@@ -41,6 +41,7 @@
             </div>
             <div class="detailed-message">
                 <input-bloc label="alert.edit.alert.sub.label" formControlName="detailedMessage"></input-bloc>
+                <input-bloc label="alert.edit.alert.url" formControlName="url"></input-bloc>
             </div>
 
             <div class="tag">
@@ -87,6 +88,9 @@
                 <div>
                     <input-bloc label="alert.edit.sources.from" class="from" formControlName="from"></input-bloc>
                     <input-bloc label="alert.edit.sources.to" class="to" formControlName="to"></input-bloc>
+                </div>
+                <div>
+                    <input-bloc label="alert.edit.sources.event.name" styleClass="eventName" formControlName="eventName"></input-bloc>
                 </div>
                 <div class="query-text-area">
                     <textarea pInputTextarea formControlName="query"></textarea>
@@ -176,10 +180,8 @@
                             </div>
                         </div>
                         <div class="inverse">
-                            <p-radioButton name="inverse" value="true" formControlName="inverse"></p-radioButton>
-                            <msg key="alert.edit.alert.inverse.min"></msg>
-                            <p-radioButton name="inverse" value="false" formControlName="inverse"></p-radioButton>
-                            <msg key="alert.edit.alert.inverse.max"></msg>
+                            <p-radioButton name="inverse" value="true" formControlName="inverse" [label]="labelInverseMin"></p-radioButton>
+                            <p-radioButton name="inverse" value="false" formControlName="inverse" [label]="labelInverseMax"></p-radioButton>
                             <button type="button" pButton icon="far fa-question-circle"
                                 class="active-action tooltip-button inverse" (mouseover)="toggleFormTooltip(inverse)"
                                 (mouseout)="toggleFormTooltip(inverse)"></button>

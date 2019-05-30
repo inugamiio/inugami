@@ -61,6 +61,8 @@ export class AdminViewAlertEdit implements AfterViewInit {
     private resp: any;
     private formatter: any;
 
+    private labelInverseMin  :string = org.inugami.formatters.message("alert.edit.alert.inverse.min");
+    private labelInverseMax  :string = org.inugami.formatters.message("alert.edit.alert.inverse.max");
 
     @Output() onClose: EventEmitter<any> = new EventEmitter();
     @Output() onError: EventEmitter<any> = new EventEmitter();
@@ -88,6 +90,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
                 duration: [''],
                 mainMessage: [''],
                 detailedMessage: [''],
+                url: [''],
                 tag: [''],
                 channelsData: this.fb.array([]),
                 sources: this.fb.group({
@@ -95,6 +98,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
                     interval: [''],
                     from: [''],
                     to: [''],
+                    eventName: [''],
                     query: ['']
                 }),
                 activation: this.fb.array([this.createFormActivationLine()]),
@@ -422,6 +426,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
         alert.alerteName = form.name;
         alert.label = form.mainMessage;
         alert.subLabel = form.detailedMessage;
+        alert.url = form.url;
         alert.duration = form.duration;
         alert.script = form.scripts;
         alert.level = "info";
@@ -442,6 +447,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
                 form.sources.interval,
                 form.sources.from,
                 form.sources.to,
+                form.sources.eventName,
                 form.sources.query
             )
         }
