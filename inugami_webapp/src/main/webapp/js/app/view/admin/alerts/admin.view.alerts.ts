@@ -76,8 +76,10 @@ export class AdminViewAlerts{
     }
 
     onAlertSelect(event){
-        this.selectedAlert=event.data;
-        this.setActiveSection('createView');
+        if(isNotNull(event.data) && isNotNull(event.data.dynamicAlerting) && event.data.dynamicAlerting){
+            this.selectedAlert=event.data;
+            this.setActiveSection('createView');
+        }
     }
 
     showNewAlert(){

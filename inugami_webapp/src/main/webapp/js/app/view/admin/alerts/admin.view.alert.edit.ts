@@ -478,6 +478,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
         this.alertForm.get('duration').patchValue(value.duration);
         this.alertForm.get('mainMessage').patchValue(value.label);
         this.alertForm.get('detailedMessage').patchValue(value.subLabel);
+        this.alertForm.get('url').patchValue(value.url);
         this.alertForm.get('scripts').patchValue(value.script);
         let inverse = value.inverse ? "true" : "false";
         this.alertForm.get('inverse').patchValue(inverse);
@@ -488,6 +489,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
             this.alertForm.get('sources').get('dataProvider').patchValue(value.source.provider);
             this.alertForm.get('sources').get('from').patchValue(value.source.from);
             this.alertForm.get('sources').get('to').patchValue(value.source.to);
+            this.alertForm.get('eventName').patchValue(value.eventName);
             this.alertForm.get('sources').get('query').patchValue(value.source.query);
         }
         if (isNotNull(value.tags)) {

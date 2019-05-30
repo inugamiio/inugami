@@ -56,6 +56,8 @@ public class DynamicAlertEntity extends AlertEntity implements ClonableObject<Dy
     
     private boolean              inverse;
     
+    private final boolean        dynamicAlerting  = true;
+    
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -236,6 +238,10 @@ public class DynamicAlertEntity extends AlertEntity implements ClonableObject<Dy
     
     public void setInverse(final boolean inverse) {
         this.inverse = inverse;
+    }
+    
+    public boolean isDynamicAlerting() {
+        return dynamicAlerting;
     }
     
 }
