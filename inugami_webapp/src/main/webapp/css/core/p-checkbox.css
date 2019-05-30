@@ -16,3 +16,7 @@ body .ui-chkbox .ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hov
 .ui-chkbox .ui-chkbox-icon{
     visibility: hidden;
 }
+
+body.inugami  .ui-chkbox-label{
+    vertical-align: inherit;
+}

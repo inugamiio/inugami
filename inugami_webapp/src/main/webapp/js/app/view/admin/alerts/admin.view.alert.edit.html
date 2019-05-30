@@ -60,7 +60,7 @@
                 <div class="channels">
                     <div *ngFor="let channel of channels; index as i" class="channel"
                         [ngClass]="{'enable':channel.enable}" formArrayName="channelsData">
-                        <p-checkbox value={{channel.name}} [formControlName]="i"></p-checkbox>{{channel.name}}
+                        <p-checkbox value={{channel.name}} [formControlName]="i" [label]="channel.name"></p-checkbox>
                     </div>
                 </div>
             </div>
