@@ -55,7 +55,7 @@
     <fieldset>
         <h2><msg key="alert.table.title"></msg></h2>
         
-        <p-dataTable [value]="alerts"
+        <p-dataTable #dt [value]="alerts"
                         [rows]="10"
                         [paginator]="true"
                         [pageLinks]="3"
@@ -67,7 +67,9 @@
             <p-column field="created"    [header]="msgLabels.created"   [sortable]="true" >
                 <ng-template let-alert="rowData" pTemplate="body">{{formateDate(alert.created)}}</ng-template>
             </p-column>
-            <p-column field="uid"        [header]="msgLabels.uid"       [sortable]="true" [filter]="true" filterMatchMode="contains"></p-column>
+            <p-column field="uid"              [header]="msgLabels.uid"       [sortable]="true" [filter]="true" filterMatchMode="contains"></p-column>
+            <p-column field="dynamicAlerting"  header="dynamic"               [sortable]="true" [filter]="true" filterMatchMode="contains"></p-column>
+            
             <p-column field="level"      [header]="msgLabels.level"     [sortable]="true" [filter]="true" filterMatchMode="contains"></p-column>
             <p-column field="label"      [header]="msgLabels.label"     [sortable]="true" [filter]="true" filterMatchMode="contains"></p-column>
             <p-column field="label"      [header]="msgLabels.actions">
