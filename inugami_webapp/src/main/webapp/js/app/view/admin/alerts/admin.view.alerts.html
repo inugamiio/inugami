@@ -68,7 +68,11 @@
                 <ng-template let-alert="rowData" pTemplate="body">{{formateDate(alert.created)}}</ng-template>
             </p-column>
             <p-column field="uid"              [header]="msgLabels.uid"       [sortable]="true" [filter]="true" filterMatchMode="contains"></p-column>
-            <p-column field="dynamicAlerting"  header="dynamic"               [sortable]="true" [filter]="true" filterMatchMode="contains"></p-column>
+            <p-column field="dynamicAlerting"  header="dynamic"               [sortable]="true" [filter]="true" filterMatchMode="contains" styleClass="align-center">
+                    <ng-template let-alert="rowData" pTemplate="body">
+                        <span [class]="isDynamicAlert(alert.dynamicAlerting)"><span class="label">{{alert.dynamicAlerting}}</span></span>
+                    </ng-template>
+            </p-column>
             
             <p-column field="level"      [header]="msgLabels.level"     [sortable]="true" [filter]="true" filterMatchMode="contains"></p-column>
             <p-column field="label"      [header]="msgLabels.label"     [sortable]="true" [filter]="true" filterMatchMode="contains"></p-column>

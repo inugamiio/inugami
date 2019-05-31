@@ -157,4 +157,7 @@ export class AdminViewAlerts{
         return org.inugami.formatters.timestampToDate(timestamp);
     }
     
+    isDynamicAlert(value:boolean){
+        return value?"alert-element dynamic-alert fas fa-cog":"alert-element  default-alert";
+    }
 }

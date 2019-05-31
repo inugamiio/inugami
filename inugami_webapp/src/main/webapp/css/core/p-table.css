@@ -59,3 +59,15 @@ body .ui-datatable .ui-cell-data input-switch{
     margin-left: 7em;
     top: 0.5em;
 }
+
+.ui-cell-data .alert-element {
+    font-size:200%;
+}
+
+.ui-cell-data  .alert-element  .label{ 
+    display: none;
+}
+
+.align-center{
+    text-align: center;
+}
