@@ -76,8 +76,10 @@ export class AdminViewAlerts{
     }
 
     onAlertSelect(event){
-        this.selectedAlert=event.data;
-        this.setActiveSection('createView');
+        if(isNotNull(event.data) && isNotNull(event.data.dynamicAlerting) && event.data.dynamicAlerting){
+            this.selectedAlert=event.data;
+            this.setActiveSection('createView');
+        }
     }
 
     showNewAlert(){
@@ -155,4 +157,7 @@ export class AdminViewAlerts{
         return org.inugami.formatters.timestampToDate(timestamp);
     }
     
+    isDynamicAlert(value:boolean){
+        return value?"alert-element dynamic-alert fas fa-cog":"alert-element  default-alert";
+    }
 }

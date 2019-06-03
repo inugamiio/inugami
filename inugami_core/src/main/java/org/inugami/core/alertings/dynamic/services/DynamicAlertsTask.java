@@ -120,12 +120,16 @@ public class DynamicAlertsTask implements Callable<Void> {
         final SimpleEventBuilder builder = new SimpleEventBuilder();
         final ProviderSource source = entity.getSource();
         builder.addName(isEmpty(source.getEventName()) ? entity.getAlerteName() : source.getEventName());
-        builder.addFrom(source.getFrom());
-        builder.addUntil(source.getTo());
-        builder.addProvider(source.getProvider());
-        builder.addScheduler(source.getCronExpression());
+        builder.addFrom(applyProperties(source.getFrom()));
+        builder.addUntil(applyProperties(source.getTo()));
+        builder.addProvider(applyProperties(source.getProvider()));
+        builder.addScheduler(applyProperties(source.getCronExpression()));
         builder.addQuery(source.getQuery());
         return builder.build();
+    }
+    
+    private String applyProperties(final String value) {
+        return context.getGlobalConfiguration().applyProperties(value);
     }
     
     // =========================================================================

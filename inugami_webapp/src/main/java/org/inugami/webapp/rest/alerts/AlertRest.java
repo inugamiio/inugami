@@ -130,9 +130,7 @@ public class AlertRest extends AbstractCrudRest<AlertEntity, String> {
         SecurityTools.secureJavaScriptAndHtml(entity::getLevel,      entity::setLevel);
         SecurityTools.secureJavaScriptAndHtml(entity::getLabel,      entity::setLabel);
         SecurityTools.secureJavaScriptAndHtml(entity::getSubLabel,   entity::setSubLabel);
-        SecurityTools.secureJavaScriptAndHtml(entity::getUrl,        entity::setUrl);
         SecurityTools.secureJavaScriptAndHtml(entity::getChannel,    entity::setChannel);
-        SecurityTools.secureJavaScriptAndHtml(entity::getData,       entity::setData);
         //@formatter:off
         
         return entity;

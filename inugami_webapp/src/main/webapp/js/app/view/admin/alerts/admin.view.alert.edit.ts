@@ -61,6 +61,8 @@ export class AdminViewAlertEdit implements AfterViewInit {
     private resp: any;
     private formatter: any;
 
+    private labelInverseMin  :string = org.inugami.formatters.message("alert.edit.alert.inverse.min");
+    private labelInverseMax  :string = org.inugami.formatters.message("alert.edit.alert.inverse.max");
 
     @Output() onClose: EventEmitter<any> = new EventEmitter();
     @Output() onError: EventEmitter<any> = new EventEmitter();
@@ -88,6 +90,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
                 duration: [''],
                 mainMessage: [''],
                 detailedMessage: [''],
+                url: [''],
                 tag: [''],
                 channelsData: this.fb.array([]),
                 sources: this.fb.group({
@@ -95,13 +98,15 @@ export class AdminViewAlertEdit implements AfterViewInit {
                     interval: [''],
                     from: [''],
                     to: [''],
+                    eventName: [''],
                     query: ['']
                 }),
                 activation: this.fb.array([this.createFormActivationLine()]),
                 levelPointsBeforeTriggered: this.fb.array([]),
                 dynamicLevels: ['', [dynamicLevelsValidator]],
                 scripts: [''],
-                inverse: ['']
+                inverse: [''],
+                addedLevelPoints: [''],
             })
             this.initChannels();
         } else {
@@ -114,6 +119,8 @@ export class AdminViewAlertEdit implements AfterViewInit {
             this.fileUri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(jsonData));
 
         })
+
+        this.applyDefaultValues();
 
     }
 
@@ -135,8 +142,15 @@ export class AdminViewAlertEdit implements AfterViewInit {
             }
         }
         this.applyAllertProviderOnForm();
+        if(isNull(this.alertForm.get('inverse').value)){
+            this.alertForm.get('inverse').patchValue("false");
+        }
     }
 
+    applyDefaultValues(){
+        this.alertForm.get('duration').patchValue(60);
+        this.alertForm.get('addedLevelPoints').patchValue(1);
+    }
     /**************************************************************************
     * ACTIONS
     **************************************************************************/
@@ -289,6 +303,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
         } else {
             this.edit = false;
             this.isNotEdit = !this.edit;
+            this.applyDefaultValues();
         }
     }
 
@@ -411,6 +426,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
         alert.alerteName = form.name;
         alert.label = form.mainMessage;
         alert.subLabel = form.detailedMessage;
+        alert.url = form.url;
         alert.duration = form.duration;
         alert.script = form.scripts;
         alert.level = "info";
@@ -431,6 +447,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
                 form.sources.interval,
                 form.sources.from,
                 form.sources.to,
+                form.sources.eventName,
                 form.sources.query
             )
         }
@@ -461,6 +478,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
         this.alertForm.get('duration').patchValue(value.duration);
         this.alertForm.get('mainMessage').patchValue(value.label);
         this.alertForm.get('detailedMessage').patchValue(value.subLabel);
+        this.alertForm.get('url').patchValue(value.url);
         this.alertForm.get('scripts').patchValue(value.script);
         let inverse = value.inverse ? "true" : "false";
         this.alertForm.get('inverse').patchValue(inverse);
@@ -471,6 +489,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
             this.alertForm.get('sources').get('dataProvider').patchValue(value.source.provider);
             this.alertForm.get('sources').get('from').patchValue(value.source.from);
             this.alertForm.get('sources').get('to').patchValue(value.source.to);
+            this.alertForm.get('eventName').patchValue(value.eventName);
             this.alertForm.get('sources').get('query').patchValue(value.source.query);
         }
         if (isNotNull(value.tags)) {

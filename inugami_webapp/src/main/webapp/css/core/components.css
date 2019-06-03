@@ -616,7 +616,7 @@ nav.dynamic-sections li.active{
   border-bottom: 2px solid #ffffff;
   background: #ffffff;
   border-left: 1px solid #b9b7b7;
- 
+  margin-right: 0.2em;
 }
 
 nav.dynamic-sections .dynamic-sections-end{

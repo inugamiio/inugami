@@ -41,6 +41,7 @@
             </div>
             <div class="detailed-message">
                 <input-bloc label="alert.edit.alert.sub.label" formControlName="detailedMessage"></input-bloc>
+                <input-bloc label="alert.edit.alert.url" formControlName="url"></input-bloc>
             </div>
 
             <div class="tag">
@@ -60,7 +61,7 @@
                 <div class="channels">
                     <div *ngFor="let channel of channels; index as i" class="channel"
                         [ngClass]="{'enable':channel.enable}" formArrayName="channelsData">
-                        <p-checkbox value={{channel.name}} [formControlName]="i"></p-checkbox>{{channel.name}}
+                        <p-checkbox value={{channel.name}} [formControlName]="i" [label]="channel.name"></p-checkbox>
                     </div>
                 </div>
             </div>
@@ -87,6 +88,9 @@
                 <div>
                     <input-bloc label="alert.edit.sources.from" class="from" formControlName="from"></input-bloc>
                     <input-bloc label="alert.edit.sources.to" class="to" formControlName="to"></input-bloc>
+                </div>
+                <div>
+                    <input-bloc label="alert.edit.sources.event.name" styleClass="eventName" formControlName="eventName"></input-bloc>
                 </div>
                 <div class="query-text-area">
                     <textarea pInputTextarea formControlName="query"></textarea>
@@ -156,8 +160,8 @@
                             </p-accordion>
                         </div>
                         <div class="add-level">
-                            <input-bloc label="alert.edit.dynamic.levels.points.before.triggered"
-                                (ngModelChange)="setPointsBeforeTriggered($event)" styeClass="points"
+                            <input-bloc label="alert.edit.dynamic.levels.points.before.triggered" formControlName="addedLevelPoints"
+                                (ngModelChange)="setPointsBeforeTriggered($event)"  styeClass="points"
                                 [validator]="validators.notNegativeNumber" type="number">
                             </input-bloc>
                             <input-bloc label="alert.edit.dynamic.levels.add.level"
@@ -176,10 +180,8 @@
                             </div>
                         </div>
                         <div class="inverse">
-                            <p-radioButton name="inverse" value=true formControlName="inverse"></p-radioButton>
-                            <msg key="alert.edit.alert.inverse.min"></msg>
-                            <p-radioButton name="inverse" value=false formControlName="inverse"></p-radioButton>
-                            <msg key="alert.edit.alert.inverse.max"></msg>
+                            <p-radioButton name="inverse" value="true" formControlName="inverse" [label]="labelInverseMin"></p-radioButton>
+                            <p-radioButton name="inverse" value="false" formControlName="inverse" [label]="labelInverseMax"></p-radioButton>
                             <button type="button" pButton icon="far fa-question-circle"
                                 class="active-action tooltip-button inverse" (mouseover)="toggleFormTooltip(inverse)"
                                 (mouseout)="toggleFormTooltip(inverse)"></button>
