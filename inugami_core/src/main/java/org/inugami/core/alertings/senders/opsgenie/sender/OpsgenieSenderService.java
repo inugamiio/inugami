@@ -74,8 +74,8 @@ public class OpsgenieSenderService implements Sender<OpsgenieModel>, Serializabl
         final String urlBase          = grabConfig(OpsgenieSender.class, "url", config);
         final String urlToken         = grabConfig(OpsgenieSender.class, "token", config);
         //@formatter:on
-        configurations.put("url_base", urlBase);
-        configurations.put("url_token", token);
+        configurations.put("url", urlBase);
+        configurations.put("token", token);
 
         if (enable) {
             Asserts.notNull("base url is mandatory!", urlBase);
@@ -89,8 +89,6 @@ public class OpsgenieSenderService implements Sender<OpsgenieModel>, Serializabl
             token = urlToken;
         }
 
-        configurations.put("url", url);
-        configurations.put("token", token);
 
         final String proxyConfig = grabConfig(OpsgenieSender.class, "proxy.host", config);
         HttpProxy proxy = null;
