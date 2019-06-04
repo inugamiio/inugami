@@ -69,8 +69,9 @@
 
             <p-panel header="Sources" formGroupName="sources" class="sources">
                 <div class="first-line">
-                        <input-bloc label="alert.edit.sources.data.provider" [validator]="validators.notEmptyString"
-                        class="provider" formControlName="dataProvider"></input-bloc>
+                       <!-- <input-bloc label="alert.edit.sources.data.provider" [validator]="validators.notEmptyString"
+                        class="provider" formControlName="dataProvider"></input-bloc>-->
+                        <p-dropdown [options]="providers" [placeholder]="dataProviderPlaceHolder"  styleClass="provider" formControlName="dataProvider"></p-dropdown>
                         
                     <span class="interval-block">
                             <input-bloc label="alert.edit.sources.data.interval" class="interval" formControlName="interval">
