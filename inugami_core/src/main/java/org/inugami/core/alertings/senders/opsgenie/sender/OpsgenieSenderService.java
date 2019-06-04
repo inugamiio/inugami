@@ -22,6 +22,7 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.MediaType;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -72,21 +73,20 @@ public class OpsgenieSenderService implements Sender<OpsgenieModel>, Serializabl
 
         //@formatter:off
         final String urlBase          = grabConfig(OpsgenieSender.class, "url", config);
-        final String urlToken         = grabConfig(OpsgenieSender.class, "token", config);
+        final String genieToken          = grabConfig(OpsgenieSender.class, "token", config);
+
         //@formatter:on
         configurations.put("url", urlBase);
-        configurations.put("token", token);
+        configurations.put("token", genieToken);
+
 
         if (enable) {
-            Asserts.notNull("base url is mandatory!", urlBase);
-            Asserts.notNull("token is mandatory!", urlToken);
-        }
-        if (urlBase != null ) {
-            url = urlBase;
+            Asserts.notNull("url is mandatory!", urlBase);
+            Asserts.notNull("token is mandatory!", genieToken);
         }
 
-        if(urlToken != null){
-            token = urlToken;
+        if(genieToken != null){
+            token = genieToken;
         }
 
 
