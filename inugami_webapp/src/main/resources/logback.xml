@@ -5,7 +5,7 @@
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{dd/MM HH:mm:ss} %5p [%c:%L] - %m%n</pattern>
+            <pattern>%d{dd/MM HH:mm:ss} %5p [%c:%L] [%X{deviceIdentifier}|%X{correlation_id}|%X{request_id}|%X{conversation_id}|%X{service}]- %m%n</pattern>
         </encoder>
 
     </appender>

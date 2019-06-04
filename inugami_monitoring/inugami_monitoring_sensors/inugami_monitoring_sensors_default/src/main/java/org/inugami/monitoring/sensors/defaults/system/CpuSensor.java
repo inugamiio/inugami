@@ -23,11 +23,11 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.inugami.api.loggers.Loggers;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.models.GenericMonitoringModelBuilder;
+import org.inugami.api.monitoring.sensors.MonitoringSensor;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.api.tools.Comparators;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.data.GenericMonitoringModelBuilder;
-import org.inugami.monitoring.api.sensors.MonitoringSensor;
 import org.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 import org.inugami.monitoring.api.tools.IntervalValues;
 

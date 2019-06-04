@@ -1,8 +1,6 @@
 .ui-chips {
-
 height: 3em;
 display: inline-block;
-
 }
 .ui-chips .ui-inputtext,
 .ui-chips .ui-inputtext.ui-state-focus {
@@ -10,6 +8,7 @@ display: inline-block;
     position: relative;
     height: 3em;
     top: 1em;
+    display: inline;
 }
 
 .ui-chips .ui-chips-token {
@@ -21,7 +20,6 @@ display: inline-block;
     border-radius: 2em;
     color: black;
     font-size: 1.25em;
-    
 }
 
 .ui-chips .ui-chips-token-label{

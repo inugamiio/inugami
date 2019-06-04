@@ -23,6 +23,7 @@ import org.inugami.api.metrics.events.MetricsEvents;
 import org.inugami.api.models.JsonBuilder;
 import org.inugami.api.models.data.JsonObject;
 import org.inugami.api.models.data.basic.Json;
+import org.inugami.api.monitoring.RequestContext;
 import org.inugami.api.providers.concurrent.ThreadSleep;
 import org.inugami.core.services.sse.SseService;
 import org.slf4j.Logger;
@@ -81,6 +82,7 @@ public class MetricsEventsSenderSse extends Thread {
     // =========================================================================
     @Override
     public void run() {
+        RequestContext.getInstance();
         final ThreadSleep threadSleep = new ThreadSleep(5000);
         while (!stop) {
             if (!running) {

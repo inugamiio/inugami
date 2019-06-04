@@ -45,6 +45,7 @@ import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.Gav;
 import org.inugami.api.models.events.GenericEvent;
 import org.inugami.api.models.tools.RunnableContext;
+import org.inugami.api.monitoring.MdcService;
 import org.inugami.api.processors.ClassBehavior;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.api.processors.Processor;
@@ -63,6 +64,7 @@ import org.inugami.configuration.models.app.SecurityConfiguration;
 import org.inugami.configuration.models.app.UserConfig;
 import org.inugami.configuration.models.plugins.Plugin;
 import org.inugami.configuration.services.resolver.ConfigurationResolver;
+import org.inugami.core.alertings.DefaultAlertingProvider;
 import org.inugami.core.context.runner.CallableEvent;
 import org.inugami.core.context.runner.EventRunnerFuture;
 import org.inugami.core.context.runner.PluginEventsRunner;
@@ -130,12 +132,15 @@ public final class Context implements ApplicationContext,
     
     private final JavaScriptEngine              javaScriptEngine       = JavaScriptEngine.getInstance();
     
+    private final List<BootstrapContext>        subContexts            = new ArrayList<>();
+    
     private volatile static Context             instance;
     
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
     protected Context(final EngineListener listener, final boolean disableCron) {
+        MdcService.initialize();
         cache = new CacheService();
         this.disableCron = disableCron;
         spiLoader = new SpiLoader();
@@ -199,6 +204,12 @@ public final class Context implements ApplicationContext,
             result.setSystemInfo(systemInfosManager.getSystemInfos());
         }
         return result;
+    }
+    
+    @Override
+    public void registerForShutodown(final BootstrapContext subContext) {
+        Asserts.notNull("sub context is mandatory", subContext);
+        subContexts.add(subContext);
     }
     
     // =========================================================================
@@ -427,6 +438,22 @@ public final class Context implements ApplicationContext,
     }
     
     @Override
+    public AlertingProvider getAlertingProvider() {
+        AlertingProvider result = null;
+        final List<AlertingProvider> providers = getAlertingProviders();
+        if (providers != null) {
+            for (final AlertingProvider provider : providers) {
+                if (provider instanceof DefaultAlertingProvider) {
+                    result = provider;
+                    break;
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    @Override
     public List<AlertingProvider> getAlertingProviders() {
         final List<AlertingProvider> result = new ArrayList<>();
         for (final Plugin plugin : getPlugins().orElse(new ArrayList<>())) {
@@ -511,6 +538,7 @@ public final class Context implements ApplicationContext,
     // =========================================================================
     @Override
     public void startup() {
+        subContexts.stream().forEach(BootstrapContext::startup);
         //@formatter:off
         schedulers.entrySet()
                   .stream()
@@ -526,6 +554,7 @@ public final class Context implements ApplicationContext,
         metricsEventsSenderSse.interrupt();
         SseService.shutdown();
         runnableContext.stream().forEach(RunnableContext::shutdown);
+        forceShutdownSubContext();
         genericContext.shutdown(this);
         
         //@formatter:off
@@ -538,6 +567,11 @@ public final class Context implements ApplicationContext,
         processShutdown(threadsStandaloneExecutor, ()->threadsStandaloneExecutor.shutdown());
         processShutdown(systemInfosManager,        ()->systemInfosManager.shutdown());
         //@formatter:on
+    }
+    
+    @Override
+    public void forceShutdownSubContext() {
+        subContexts.stream().forEach(BootstrapContext::shutdown);
     }
     
     // =========================================================================
@@ -723,6 +757,8 @@ public final class Context implements ApplicationContext,
     public JavaScriptEngine getScriptEngine() {
         return javaScriptEngine;
     }
+
+
 
 
 }

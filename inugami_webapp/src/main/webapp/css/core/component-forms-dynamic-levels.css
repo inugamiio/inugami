@@ -23,3 +23,8 @@
 }
 
 
+.inugami-input-dynamic-levels:focus,
+.inugami-input-dynamic-levels div:focus,
+.inugami-input-dynamic-levels svg:focus{
+    outline: none;
+}

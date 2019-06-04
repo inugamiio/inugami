@@ -18,10 +18,10 @@ package org.inugami.monitoring.config.spi;
 
 import java.util.List;
 
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.senders.MonitoringSender;
+import org.inugami.api.monitoring.senders.MonitoringSenderException;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.senders.MonitoringSender;
-import org.inugami.monitoring.api.senders.MonitoringSenderException;
 
 /**
  * SenderElsForTest
@@ -39,7 +39,7 @@ public class SenderElsForTest implements MonitoringSender {
     // SPI
     // =========================================================================
     @Override
-    public MonitoringSender buildInstance(ConfigHandler<String, String> configuration) {
+    public MonitoringSender buildInstance(final ConfigHandler<String, String> configuration) {
         return this;
     }
     
@@ -52,7 +52,7 @@ public class SenderElsForTest implements MonitoringSender {
     // METHODS
     // =========================================================================
     @Override
-    public void process(List<GenericMonitoringModel> data) throws MonitoringSenderException {
+    public void process(final List<GenericMonitoringModel> data) throws MonitoringSenderException {
         // TODO Auto-generated method stub
         
     }

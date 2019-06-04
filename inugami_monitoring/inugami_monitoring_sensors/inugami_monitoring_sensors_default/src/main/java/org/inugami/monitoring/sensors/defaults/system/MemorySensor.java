@@ -19,12 +19,11 @@ package org.inugami.monitoring.sensors.defaults.system;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.inugami.api.models.data.graphite.number.FloatNumber;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.models.GenericMonitoringModelBuilder;
+import org.inugami.api.monitoring.sensors.MonitoringSensor;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.api.tools.Comparators;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.data.GenericMonitoringModelBuilder;
-import org.inugami.monitoring.api.sensors.MonitoringSensor;
 import org.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 import org.inugami.monitoring.api.tools.IntervalValues;
 
@@ -40,6 +39,7 @@ public class MemorySensor implements MonitoringSensor {
     // ATTRIBUTES
     // =========================================================================
     private final static long          MEGA = 1024 * 1024;
+    
     private final long                 interval;
     
     private final double               percentil;
@@ -58,7 +58,7 @@ public class MemorySensor implements MonitoringSensor {
         timeUnit = null;
     }
     
-    public MemorySensor(long interval, String query, ConfigHandler<String, String> configuration) {
+    public MemorySensor(final long interval, final String query, final ConfigHandler<String, String> configuration) {
         super();
         this.interval = interval;
         this.percentil = configuration.grab("percentil", 0.95);
@@ -67,7 +67,8 @@ public class MemorySensor implements MonitoringSensor {
     }
     
     @Override
-    public MonitoringSensor buildInstance(long interval, String query, ConfigHandler<String, String> configuration) {
+    public MonitoringSensor buildInstance(final long interval, final String query,
+                                          final ConfigHandler<String, String> configuration) {
         return new MemorySensor(interval, query, configuration);
     }
     
@@ -75,7 +76,7 @@ public class MemorySensor implements MonitoringSensor {
     // METHODS
     // =========================================================================
     private Long extractMemoryUsage() {
-        long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        final long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         return used / MEGA;
     }
     
@@ -86,8 +87,8 @@ public class MemorySensor implements MonitoringSensor {
         return buildGenericMonitoringModel(data);
     }
     
-    private List<GenericMonitoringModel> buildGenericMonitoringModel(List<Long> data) {
-        List<GenericMonitoringModel> result = new ArrayList<>();
+    private List<GenericMonitoringModel> buildGenericMonitoringModel(final List<Long> data) {
+        final List<GenericMonitoringModel> result = new ArrayList<>();
         final GenericMonitoringModelBuilder builder = GenericMonitoringModelTools.initResultBuilder();
         final Long resultValue = GenericMonitoringModelTools.getPercentilValues(data, percentil);
         

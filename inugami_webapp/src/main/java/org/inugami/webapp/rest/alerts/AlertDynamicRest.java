@@ -6,23 +6,27 @@ import java.util.stream.Collectors;
 import javax.ws.rs.Path;
 
 import org.inugami.api.dao.DaoException;
+import org.inugami.api.loggers.Loggers;
 import org.inugami.commons.security.ItemProcessor;
 import org.inugami.commons.security.SecurityTools;
-import org.inugami.core.alertings.dynamic.ActivationTime;
-import org.inugami.core.alertings.dynamic.AlertDataTransfomer;
-import org.inugami.core.alertings.dynamic.DynamicAlertEntity;
-import org.inugami.core.alertings.dynamic.DynamicLevel;
-import org.inugami.core.alertings.dynamic.ProviderSource;
-import org.inugami.core.alertings.dynamic.Tag;
-import org.inugami.core.alertings.dynamic.TimeSlot;
+import org.inugami.core.alertings.dynamic.entities.ActivationTime;
+import org.inugami.core.alertings.dynamic.entities.AlertDataTransfomer;
+import org.inugami.core.alertings.dynamic.entities.DynamicAlertEntity;
+import org.inugami.core.alertings.dynamic.entities.DynamicLevel;
+import org.inugami.core.alertings.dynamic.entities.ProviderSource;
+import org.inugami.core.alertings.dynamic.entities.Tag;
+import org.inugami.core.alertings.dynamic.entities.TimeSlot;
 import org.inugami.core.cdi.services.dao.AbstractCrudRest;
+import org.inugami.core.cdi.services.dao.PostCrudHandler;
 
 @Path("alert/dynamic")
-public class AlertDynamicRest extends AbstractCrudRest<DynamicAlertEntity, String> {
+public class AlertDynamicRest extends AbstractCrudRest<DynamicAlertEntity, String>
+        implements PostCrudHandler<DynamicAlertEntity> {
     
     // =========================================================================
     // OVERRIDES
     // =========================================================================
+    
     @Override
     protected Class<? extends DynamicAlertEntity> initType() {
         return DynamicAlertEntity.class;
@@ -40,10 +44,8 @@ public class AlertDynamicRest extends AbstractCrudRest<DynamicAlertEntity, Strin
         SecurityTools.secureJavaScriptAndHtml(entity::getLevel,      entity::setLevel);
         SecurityTools.secureJavaScriptAndHtml(entity::getLabel,      entity::setLabel);
         SecurityTools.secureJavaScriptAndHtml(entity::getSubLabel,   entity::setSubLabel);
-        SecurityTools.secureJavaScriptAndHtml(entity::getUrl,        entity::setUrl);
         SecurityTools.secureJavaScriptAndHtml(entity::getChannel,    entity::setChannel);
         SecurityTools.secureJavaScriptAndHtml(entity::getData,       entity::setData);
-        SecurityTools.secureJavaScriptAndHtml(entity::getScript,     entity::setScript);
 
         SecurityTools.secureJavaScriptAndHtml(entity.getTags()  , new ItemProcessor<>(Tag::getName, (item, content) -> item.setName(content)));
         SecurityTools.secureJavaScriptAndHtml(entity.getLevels(), new ItemProcessor<>(DynamicLevel::getName, (item, content) -> item.setName(content)));
@@ -54,13 +56,11 @@ public class AlertDynamicRest extends AbstractCrudRest<DynamicAlertEntity, Strin
             SecurityTools.secureJavaScriptAndHtml(source::getCronExpression,  source::setCronExpression);
             SecurityTools.secureJavaScriptAndHtml(source::getFrom,            source::setFrom);
             SecurityTools.secureJavaScriptAndHtml(source::getTo,              source::setTo);
-            SecurityTools.secureJavaScriptAndHtml(source::getQuery,           source::setQuery); 
         }
   
         if(entity.getTransformer()!=null) {
             final AlertDataTransfomer transfo = entity.getTransformer();
             SecurityTools.secureJavaScriptAndHtml(transfo::getName,        transfo::setName);
-            SecurityTools.secureJavaScriptAndHtml(transfo::getScript,  transfo::setScript);
         }
         
         if(entity.getActivations() !=null) {
@@ -81,6 +81,29 @@ public class AlertDynamicRest extends AbstractCrudRest<DynamicAlertEntity, Strin
         }
         //@formatter:on
         return entity;
+    }
+    
+    // =========================================================================
+    // HANDLER
+    // =========================================================================
+    @Override
+    protected PostCrudHandler<DynamicAlertEntity> initHandler() {
+        return this;
+    }
+    
+    @Override
+    public void onFindAll(final List<DynamicAlertEntity> result) {
+        Loggers.REST.info("find {} entities", result == null ? 0 : result.size());
+    }
+    
+    @Override
+    public void onFind(final List<DynamicAlertEntity> result) {
+        Loggers.REST.info("find {} entities", result == null ? 0 : result.size());
+    }
+    
+    @Override
+    public void onSave(final List<DynamicAlertEntity> listEntity) {
+        Loggers.REST.info("save {} entities", listEntity == null ? 0 : listEntity.size());
     }
     
 }

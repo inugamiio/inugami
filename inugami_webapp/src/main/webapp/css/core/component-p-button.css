@@ -45,7 +45,7 @@
     color : black;
 }
 
-.default-action:not([label]) [class*=ui-button-icon],.active-action:not([label]) [class*=ui-button-icon],.full-active-action:not([label]) [class*=ui-button-icon] {
+.default-action:not([label]):not([msg]) [class*=ui-button-icon] ,.active-action:not([label]):not([msg]) [class*=ui-button-icon] ,.full-active-action:not([label]):not([msg]) [class*=ui-button-icon] {
     font-size: 2em;
 }
 
@@ -77,7 +77,7 @@
     color: white;
 }
 
-.full-active-action.ui-button:not([label]),.default-action:not([label]), .active-action:not([label]) {
+.full-active-action.ui-button:not([label]):not([msg]),.default-action:not([label]):not([msg]), .active-action:not([label]):not([msg]){
     width: 3em;
     height: 3em;;
 }
@@ -98,4 +98,25 @@
 
 .small-button.ui-button .ui-button-icon-left{
     font-size: 1em;
+}
+
+.full-active-action[msg] .ui-button-text,.default-action[msg] .ui-button-text,.active-action[msg] .ui-button-text{
+    display: none;
+}
+
+.full-active-action[msg] msg,.default-action[msg] msg,.active-action[msg] msg{
+    margin-left: 0.75em;
+    margin-right: 0.75em; 
+}
+
+.full-active-action[msg] msg{
+    color : white;
+}
+
+.default-action[msg] msg{
+    color: black;
+}
+
+.active-action[msg] msg{
+    color:#c12534;
 }

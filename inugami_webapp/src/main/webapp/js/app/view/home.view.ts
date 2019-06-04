@@ -4,6 +4,9 @@ import {PluginsService}                                       from './../service
 import {MenuLink}                                             from './../models/menu.link';
 import {SimpleValue}                                          from './../components/charts/simple_value/simple.value';
 import {SessionScope}                                         from './../scopes/session.scope';
+import {MainMenuService}                                      from './../components/main_menu/main.menu.service';
+import {MainMenuLink}                                         from './../components/main_menu/main.menu.link';
+
 
 @Component({
     templateUrl: 'js/app/view/home.view.html',
@@ -23,13 +26,15 @@ export class HomeView implements OnInit, OnDestroy{
   constructor(private route: ActivatedRoute,
               private pluginsService:PluginsService,
               private router: Router,
-              private sessionScope : SessionScope){
+              private sessionScope : SessionScope,
+              private mainMenuService  : MainMenuService){
       this.showLinks = true;
   }
 
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
+      this.initMainMenu();
       if(!this.sessionScope.isConnected()){
         this.router.navigate(['/login']);
       }else{
@@ -42,7 +47,12 @@ export class HomeView implements OnInit, OnDestroy{
   /**************************************************************************
   * INITIALIZE
   **************************************************************************/
-
+  initMainMenu(){ 
+     this.mainMenuService.cleanLinks();
+     this.mainMenuService.setCurrentTitle("Home");
+     this.mainMenuService.addSubLink(new MainMenuLink("Administration", "/admin","admin",true,'admin'));
+     this.mainMenuService.updateMenu();
+  }
   grabAllMenuLinks(){
       this.pluginsService.getAllMenuLinks().then(data =>{
         this.initPluginsLinks(data);

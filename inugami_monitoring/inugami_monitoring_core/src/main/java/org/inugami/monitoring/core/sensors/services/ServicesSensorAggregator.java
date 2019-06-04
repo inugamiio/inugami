@@ -19,8 +19,8 @@ package org.inugami.monitoring.core.sensors.services;
 import java.util.List;
 
 import org.inugami.api.models.data.graphite.number.GraphiteNumber;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
 
 /**
  * ServicesSensorAggregator
