@@ -1,6 +1,7 @@
 package org.inugami.webapp.rest.models;
 
 import com.google.common.base.Objects;
+import org.inugami.api.processors.ConfigHandler;
 
 import java.io.Serializable;
 
@@ -9,13 +10,16 @@ public class DataProviderRestModel implements Serializable {
 
     private static final long serialVersionUID = 5867341458582220123L;
 
-    private final String name;
+    private final String                            name;
 
-    private final float         timeout;
+    private final float                             timeout;
 
-    public DataProviderRestModel(String name, float timeout) {
+    private final ConfigHandler<String,String>      config;
+
+    public DataProviderRestModel(String name, float timeout,ConfigHandler<String,String> config ) {
         this.name = name;
         this.timeout = timeout;
+        this.config = config;
     }
 
     @Override
@@ -39,6 +43,8 @@ public class DataProviderRestModel implements Serializable {
     public float getTimeout() {
         return timeout;
     }
+
+    public ConfigHandler<String,String> getConfig(){ return config;}
 
     @Override
     public String toString() {

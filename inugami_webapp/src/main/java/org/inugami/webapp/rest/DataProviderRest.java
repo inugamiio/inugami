@@ -25,7 +25,7 @@ public class DataProviderRest {
     @GET
     @UserConnected
     @Produces(MediaType.APPLICATION_JSON)
-    public String getProviders(){
+    public List<DataProviderRestModel> getProviders(){
 
         final List<Plugin> pluginList = new ArrayList<>();
         org.inugami.core.context.Context.getInstance().getPlugins().ifPresent(plugins -> {
@@ -35,11 +35,11 @@ public class DataProviderRest {
 
         List<DataProviderRestModel> modelList   = new ArrayList<>();
         for (Plugin plugin: pluginList) {
-            for(Provider provider: plugin.getProviders().orElse(Collections.emptyList()))
-             modelList.add(new DataProviderRestModel(provider.getType(),provider.getTimeout()));
+            for(Provider provider: plugin.getProviders().orElse(Collections.emptyList())){
+                modelList.add(new DataProviderRestModel(provider.getType(),provider.getTimeout(),provider.getConfig()));
+            }
         }
 
-
-        return modelList.toString() ;//result.toString();
+        return modelList ;//result.toString();
     }
 }
