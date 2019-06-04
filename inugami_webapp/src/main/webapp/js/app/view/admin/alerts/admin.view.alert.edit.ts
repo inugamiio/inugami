@@ -230,7 +230,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
     }
 
 
-    addDynamicLevelsLevel(graph) {
+    addDynamicLevelsLevel(graph,levelName) {
         if (isNotNull(this.addedLevel.name) &&
             this.addedLevel.name != "" &&
             isNull(org.inugami.validators.notNegativeNumber(this.addedLevel.pointsBeforeTriggered))) {
@@ -242,7 +242,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
                     } else {
                         this.addFormLevelLine();
                         graph.addNewData(this.addedLevel.name);
-
+                        levelName.innerValue = null;
                     }
         }
     }

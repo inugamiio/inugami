@@ -167,10 +167,10 @@
                             </input-bloc>
                             <input-bloc label="alert.edit.dynamic.levels.add.level"
                                 (ngModelChange)="setLevelName($event)" styeClass="name"
-                                [validator]="validators.notEmptyString"></input-bloc>
+                                [validator]="validators.notEmptyString" #levelName></input-bloc>
                             <button pButton type="button" class="active-action" icon="fas fa-plus"
-                                (click)="addDynamicLevelsLevel(graph)"
-                                (enter)="addDynamicLevelsLevel(graph)"></button>
+                                (click)="addDynamicLevelsLevel(graph,levelName)"
+                                (enter)="addDynamicLevelsLevel(graph,levelName)"></button>
                             <div class="level-tooltip">
                                 <button type="button" pButton icon="far fa-question-circle"
                                     class="active-action tooltip-button level" (mouseover)="toggleFormTooltip(level)"
