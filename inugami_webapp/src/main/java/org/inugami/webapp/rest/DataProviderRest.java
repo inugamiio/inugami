@@ -40,6 +40,6 @@ public class DataProviderRest {
             }
         }
 
-        return modelList ;//result.toString();
+        return modelList ;
     }
 }
