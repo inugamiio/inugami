@@ -156,4 +156,10 @@ public class CsvProvider extends AbstractProvider implements Provider, NamedComp
     public String getName() {
         return name;
     }
+    
+    @Override
+    public ConfigHandler<String,String> getConfig(){
+        return config;
+    }
+
 }

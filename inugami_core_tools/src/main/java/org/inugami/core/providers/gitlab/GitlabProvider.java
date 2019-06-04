@@ -99,6 +99,16 @@ public class GitlabProvider extends AbstractProvider implements Provider, Provid
         return TYPE;
     }
 
+    @Override
+    public long getTimeout(){
+        return timeout;
+    }
+
+    @Override
+    public ConfigHandler<String,String> getConfig(){
+        return config;
+    }
+
     // =========================================================================
     // CALL EVENT
     // =========================================================================
