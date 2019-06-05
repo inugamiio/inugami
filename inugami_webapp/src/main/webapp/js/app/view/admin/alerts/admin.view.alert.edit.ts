@@ -129,13 +129,13 @@ export class AdminViewAlertEdit implements AfterViewInit {
 
     initChannels() {
         let self = this;
-        this.resp = this.httpService.get("http://localhost:8080/inugami_webapp/rest/alert/providers");
+        this.resp = this.httpService.get(window.location.origin+CONTEXT_PATH+"rest/alert/providers");
         this.resp.then(data => self.addChannels(data));
     }
 
     initProviders(){
         let self = this;
-        let resp = this.httpService.get("http://localhost:8080/inugami_webapp/rest/provider");
+        let resp = this.httpService.get(window.location.origin+CONTEXT_PATH+"rest/provider");
         resp.then(data => self.addProviders(data));
     }
 
