@@ -1,0 +1,42 @@
+<header class="main-menu" [class.hidden-menu]="!sessionScope.showMainMenu"  *ngIf="sessionScope.isConnected()">
+    <menu>
+      <ul  *ngIf="sessionScope.isConnected()">
+          <li class="user">
+            <a (click)="logout()" title="Déconnection" [class.admin]="sessionScope.isAdmin()">
+                <span class="firstName">{{sessionScope.user.firstName}}</span>
+                <span class="lastName">{{sessionScope.user.lastName}}</span>
+            </a>
+          </li>
+  
+          <li class="home-link">
+              <a routerLink="/"   routerLinkActive="active" class="home"><i class="fas fa-home"></i></a>
+              <span class="current-title">{{currentTitle}}</span>
+              <span class="home-link-end"></span>
+          </li>
+
+          <li class="sub-link">
+            <ul>
+                <li  *ngFor="let subLink of links" >
+                    <div *ngIf="hasRole(subLink)" [class]="buildSubLinkClass(subLink)" >
+                        <div *ngIf="isRooterLink(subLink)">
+                            <a [routerLink]="subLink.path"  routerLinkActive="active">
+                                <span class="icon"><span class="before"></span></span>
+                                <span class="link">{{subLink.title}}</span>
+                            </a>
+                        </div>
+                        <div *ngIf="isNotRooterLink(subLink)">
+                            <a (click)="routeToVirtualLink(subLink)">
+                                <span class="icon"><span class="before"></span></span>
+                                <span class="link">{{subLink.title}}</span>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <div class="clear"></div>
+            </ul>
+        </li>
+          
+          <div class="clear"></div>
+      </ul>
+    </menu>
+</header>

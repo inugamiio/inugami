@@ -37,6 +37,9 @@ import org.inugami.api.dao.DaoException;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.mapping.Mapper;
 import org.inugami.api.models.data.basic.Json;
+import org.inugami.api.monitoring.MdcService;
+import org.inugami.core.alertings.dynamic.entities.DynamicAlertEntity;
+import org.inugami.core.alertings.dynamic.services.DynamicAlertsService;
 import org.inugami.core.cdi.scheduler.SystemEvent;
 import org.inugami.core.context.ApplicationContext;
 import org.inugami.core.services.sse.SseService;
@@ -62,6 +65,9 @@ public class AlertServices implements Serializable {
     @Inject
     private ApplicationContext                            context;
     
+    @Inject
+    private DynamicAlertsService                          dynamicAlertsService;
+    
     private List<AlertingProvider>                        alertsProviders;
     
     private transient Mapper<AlertingResult, AlertEntity> transformEntityToResult;
@@ -78,8 +84,10 @@ public class AlertServices implements Serializable {
     // =========================================================================
     // METHODS
     // =========================================================================
-    public void manageAlertsSaved(@Observes
-    final SystemEvent event) {
+    //@formatter:off
+    public void manageAlertsSaved(@Observes  final SystemEvent event) {
+        //@formatter:on
+        MdcService.initialize();
         try {
             processManageAlertsSaved();
         }
@@ -104,8 +112,12 @@ public class AlertServices implements Serializable {
     
     private void processAlerts(final List<AlertEntity> entities) {
         try {
-            deleteExpireEntities(entities);
-            sendAlerts(entities);
+            final List<AlertEntity> alertEntities = new ArrayList<>(entities);
+            final List<AlertEntity> dynamicAlerts = extractAlertEntities(alertEntities);
+            
+            deleteExpireEntities(alertEntities);
+            sendAlerts(alertEntities);
+            processDynamicAlerts(dynamicAlerts);
         }
         catch (final DaoException e) {
             Loggers.ALERTING.error(e.getMessage());
@@ -194,11 +206,41 @@ public class AlertServices implements Serializable {
         }
     }
 
+    
+    // =========================================================================
+    // DYNAMIC ALERTS
+    // =========================================================================
+    private List<AlertEntity> extractAlertEntities(final List<AlertEntity> entities) {
+        final List<AlertEntity>  result = new ArrayList<>();
+        if(entities != null) {
+            for(final AlertEntity entity : entities) {
+                if(entity instanceof DynamicAlertEntity) {
+                    result.add(entity);
+                }
+            }
+            entities.removeAll(result);
+        }
+        return result;
+    }
+    
+    
+    private void processDynamicAlerts(final List<AlertEntity> dynamicAlerts) {
+        if(!dynamicAlerts.isEmpty()) {
+            //@formatter:off
+            final List<DynamicAlertEntity> entities = dynamicAlerts.stream()
+                                                                   .map((item)->(DynamicAlertEntity)item)
+                                                                   .collect(Collectors.toList());
+            //@formatter:on
+            
+            dynamicAlertsService.process(entities);
+        }
+    }
+    
     // =========================================================================
     // TOOLS
     // =========================================================================
     private boolean isNotScheduledAlert(final AlertEntity entity) {
         return true;
     }
-
+    
 }

@@ -31,6 +31,7 @@ import javax.script.ScriptException;
 
 import org.inugami.api.alertings.AlertingProvider;
 import org.inugami.api.alertings.AlertingResult;
+import org.inugami.api.alertings.DynamicAlertingLevel;
 import org.inugami.api.dao.Dao;
 import org.inugami.api.dao.SaveEntitiesResult;
 import org.inugami.api.loggers.Loggers;
@@ -42,6 +43,8 @@ import org.inugami.api.models.data.JsonObjectStrFactory;
 import org.inugami.api.models.data.basic.Json;
 import org.inugami.api.models.events.AlertingModel;
 import org.inugami.api.models.events.GenericEvent;
+import org.inugami.api.models.events.SimpleEvent;
+import org.inugami.api.monitoring.MdcService;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.api.providers.task.ProviderFutureResult;
 import org.inugami.commons.engine.JavaScriptEngine;
@@ -49,6 +52,7 @@ import org.inugami.commons.files.FilesUtils;
 import org.inugami.commons.threads.RunAndCloseService;
 import org.inugami.commons.tools.ProxyBuilder;
 import org.inugami.configuration.models.plugins.Plugin;
+import org.inugami.core.alertings.dynamic.services.ComputeDynamicAlert;
 import org.inugami.core.alertings.senders.AlertSenderService;
 import org.inugami.core.context.Context;
 import org.inugami.core.services.sse.SseService;
@@ -76,6 +80,8 @@ public class DefaultAlertingProvider implements AlertingProvider {
     private final Mapper<AlertEntity, AlertingResult> alertResultToEntity     = new AlertResultToEntityMapper();
     
     private final Mapper<AlertingResult, AlertEntity> transformEntityToResult = new TransformAlertEntityToResult();
+    
+    private final ComputeDynamicAlert                 computeDynamicAlert     = new ComputeDynamicAlert();
     
     private AlertSenderService                        alertSenderService;
     
@@ -182,6 +188,19 @@ public class DefaultAlertingProvider implements AlertingProvider {
             postProcessAlerting(registerResult);
         }
         return result;
+    }
+    
+    @Override
+    public void processDynamicAlert(final Gav gav, final SimpleEvent event, final ProviderFutureResult data,
+                                    final List<DynamicAlertingLevel> levels, final String message,
+                                    final String subMessage, final List<String> tags, final List<String> alertSenders) {
+        final List<AlertingResult> dynamicAlerts = computeDynamicAlert.compute(event, data, levels, message, subMessage,
+                                                                               tags, alertSenders);
+        if (dynamicAlerts != null) {
+            for (final AlertingResult alert : dynamicAlerts) {
+                appendAlert(alert);
+            }
+        }
     }
     
     // =========================================================================
@@ -328,6 +347,7 @@ public class DefaultAlertingProvider implements AlertingProvider {
         }
         
         final Callable<String> task = () -> {
+            MdcService.initialize();
             String result = null;
             try {
                 JsonObject jsonObj = null;
@@ -337,8 +357,9 @@ public class DefaultAlertingProvider implements AlertingProvider {
                 result = engine.execute(preload, alert.grabFunction().get(), gav, event, jsonObj);
             }
             catch (final Exception e) {
-                Loggers.ALERTING.error("unable to process alerting check on {} - {} : ",gav.getHash(),event.getName(), e.getMessage());
-                Loggers.DEBUG.error(e.getMessage(),e);
+                Loggers.ALERTING.error("unable to process alerting check on {} - {} : ", gav.getHash(), event.getName(),
+                                       e.getMessage());
+                Loggers.DEBUG.error(e.getMessage(), e);
             }
             return result;
         };

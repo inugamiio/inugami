@@ -105,6 +105,16 @@ public class JenkinsProvider extends AbstractProvider implements Provider, Provi
     public String getType() {
         return TYPE;
     }
+
+    @Override
+    public long getTimeout(){
+        return timeout;
+    }
+
+    @Override
+    public ConfigHandler<String,String> getConfig(){
+        return config;
+    }
     
     // =========================================================================
     // CALL EVENT

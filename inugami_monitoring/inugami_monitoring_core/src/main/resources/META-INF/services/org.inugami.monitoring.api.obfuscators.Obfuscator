@@ -1,0 +1,3 @@
+org.inugami.monitoring.core.obfuscators.AuthorizationObfuscator
+org.inugami.monitoring.core.obfuscators.TokenObfuscator
+org.inugami.monitoring.core.obfuscators.PasswordObfuscator

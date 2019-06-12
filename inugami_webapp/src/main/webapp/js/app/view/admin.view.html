@@ -1,19 +1,5 @@
 <section [ngClass]="' page-admin '" [class]="adminCustomStyle">
   <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  + MENU
-  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-  <menu class="page-admin-menu">
-    <ul>
-        <li *ngFor="let item of menuItems" [class]="isActiveSection(item.name)">
-            <a (click)="changeSection(item.name)" >
-                <span [ngClass]="'fa icon '" [class]="item.name"></span>
-                <span class="label">{{item.label}}</span>
-            </a>
-        </li>
-    </ul>
-  </menu>
-
-  <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   + CONTENT
   +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
   <div class="page-admin-content">
@@ -141,9 +127,6 @@
     :: Plugins
     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
     <article  *ngIf="sectionToDisplay =='plugins'">
-        <header>
-            <h2>Plugins</h2>
-        </header>
         <div class="page-admin-bloc-content">
           <ul class="list-without-deco">
             <li *ngFor="let value of plugins; let i = index">
@@ -158,9 +141,6 @@
     :: Caches
     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
     <article  *ngIf="sectionToDisplay =='caches'">
-        <header>
-            <h2>Caches</h2>
-        </header>
         <div class="page-admin-bloc-content">
             
             <ul class="list-without-deco caches-list">
@@ -178,14 +158,11 @@
     <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     :: Alerts
     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-    <article  *ngIf="sectionToDisplay =='alerts'">
-            <header>
-                <h2>Alerts</h2>
-            </header>
+    <article  *ngIf="sectionToDisplay =='alerts'" class="alerts-block">
             <div class="page-admin-bloc-content">
                <admin-view-alerts ></admin-view-alerts>
             </div>
-        </article>
+    </article>
 
     <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     :: Running Events
@@ -223,10 +200,6 @@
     :: Actions
     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
     <article *ngIf="sectionToDisplay =='actions'">
-        <header>
-            <h2>Actions</h2>
-        </header>
-
         <div class="list-defs">
           <dl class="show-state">
                 <dt>Actions</dt>
@@ -244,7 +217,6 @@
                 </dd>
                 <div class="dd-end"></div>
           </dl>
-
         </div>
 
 

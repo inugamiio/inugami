@@ -779,7 +779,7 @@ public class HttpBasicConnector {
             
             assertDataLength(url, response.getEntity().getContentLength());
             
-            if (response.getStatusLine().getStatusCode() == 200) {
+            if (response.getStatusLine().getStatusCode() >= 200 && response.getStatusLine().getStatusCode() < 400) {
                 final HttpEntity httpEntity = response.getEntity();
                 resultBuilder.addContenType(httpEntity.getContentType().getValue());
                 
@@ -912,7 +912,8 @@ public class HttpBasicConnector {
      */
     private void assertResponseOk(final HttpResponse response) throws ConnectorException {
         Asserts.notNull(response);
-        if (200 != response.getStatusLine().getStatusCode()) {
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (200  > statusCode || 400 <= statusCode) {
             throw new HttpConnectorException(response.getStatusLine().getStatusCode(),
                                              response.getStatusLine().getReasonPhrase());
         }

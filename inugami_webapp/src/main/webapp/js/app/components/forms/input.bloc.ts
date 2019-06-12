@@ -19,22 +19,24 @@ multi: true
 selector      : 'input-bloc',
 template      : `
 <div [ngClass]="getBaseStyleClass()" [class]="styleClass" [ngStyle]="style">
-  <div [ngClass]="' input-bloc-label '" [class.show]="displayLabel()">
-    &nbsp;
-    <span class="input-bloc-label-txt">{{labelTxt}}</span>
-    <span class="input-bloc-label-end"></span>
-  </div>
+  <div class="content-rectangle">
+    <div [ngClass]="' input-bloc-label '" [class.show]="displayLabel()">
+      &nbsp;
+      <span class="input-bloc-label-txt">{{labelTxt}}</span>
+      <span class="input-bloc-label-end"></span>
+    </div>
 
-  <div class="input-bloc-data">
-    <input  [type]="type" 
-            [placeholder]="labelTxt"
-            [attr.disabled]="isDisabled?'':null"
-            [(ngModel)]="innerValue"
-            (focus)="onFocus($event)"
-            (focusout)="onFocusOut($event)"
-            (ngModelChange)="onChange($event)"
-            (keypress)="onKeyPress($event)"
-            (enter)="onEnterPress($event)"/>
+    <div class="input-bloc-data">
+      <input  [type]="type" 
+              [placeholder]="labelTxt"
+              [attr.disabled]="disabled?'':null"
+              [(ngModel)]="innerValue"
+              (focus)="onFocus($event)"
+              (focusout)="onFocusOut($event)"
+              (ngModelChange)="onChange($event)"
+              (keypress)="onKeyPress($event)"
+              (keyup.enter)="onEnterPress($event)"/>
+    </div>
   </div>
   <div class="error-message" [class.show]="errorTxt">
     &nbsp;  
@@ -65,7 +67,9 @@ export class InputBloc implements ControlValueAccessor,AfterViewInit {
   @Output() keypress                  : EventEmitter<any> = new EventEmitter();
   @Output() enter                     : EventEmitter<any> = new EventEmitter();
 
-  
+
+  private onChangeCallback            : any;
+  private onTouchedCallback           : any;       
   private innerValue                  : any       = null;
   private labelTxt                    : string    = "";
   private errorTxt                    : string    = null;
@@ -97,10 +101,13 @@ export class InputBloc implements ControlValueAccessor,AfterViewInit {
     return isNotNull(this.innerValue) && (""+this.innerValue).length>0;
   }
  
-  private getBaseStyleClass(){
+  public getBaseStyleClass(){
     let result = ["input-bloc"];
     result.push(this.isDisabled);
 
+    if(isNotNull(this.styleClass)){
+      result.push(this.styleClass);
+    }
     if(isNotNull(this.errorTxt)){
       result.push("error");
     }
@@ -132,20 +139,30 @@ export class InputBloc implements ControlValueAccessor,AfterViewInit {
   }
   private onChange(event){
     this.processValidator();
+    if(isNotNull(this.onChangeCallback)){
+      this.onChangeCallback(event);
+    }
     this.ngModelChange.emit(event);
   }
   private onKeyPress(event){
     this.keypress.emit(event);
+    if(isNotNull(this.onTouchedCallback)){
+      this.onTouchedCallback();
+    }
+    
   }
   private onEnterPress(event){
     this.processValidator();
     this.enter.emit(event);
+    if(isNotNull(this.onTouchedCallback)){
+      this.onTouchedCallback();
+    }
   }
   /*****************************************************************************
   * IMPLEMENTS ControlValueAccessor
   *****************************************************************************/
   writeValue(value: any) {
-      this.innerValue = value;
+    this.innerValue = value;
   }
 
   registerOnChange(fn: any) {

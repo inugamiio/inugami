@@ -26,5 +26,4 @@ import org.inugami.api.tools.StringDataCleaner;
  */
 public interface Obfuscator extends StringDataCleaner {
     
-
 }

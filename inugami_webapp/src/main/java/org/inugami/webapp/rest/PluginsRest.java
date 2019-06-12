@@ -16,17 +16,6 @@
  */
 package org.inugami.webapp.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
 import org.inugami.api.exceptions.ProcessingRunningException;
 import org.inugami.api.exceptions.services.MappingException;
 import org.inugami.api.models.Gav;
@@ -39,9 +28,17 @@ import org.inugami.configuration.services.mapping.PluginMapping;
 import org.inugami.core.context.ApplicationContext;
 import org.inugami.core.context.Context;
 import org.inugami.core.security.commons.roles.UserConnected;
-import org.inugami.core.services.cache.CacheService;
-import org.inugami.core.services.cache.CacheTypes;
 import org.inugami.core.services.sse.SseService;
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * PluginRest
@@ -146,4 +143,5 @@ public class PluginsRest {
         }
         return result;
     }
+
 }

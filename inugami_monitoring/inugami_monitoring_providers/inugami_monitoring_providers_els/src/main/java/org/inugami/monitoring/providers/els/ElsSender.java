@@ -24,14 +24,14 @@ import java.util.concurrent.Callable;
 
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.senders.MonitoringSender;
+import org.inugami.api.monitoring.senders.MonitoringSenderException;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.api.providers.ProviderWithHttpConnector;
 import org.inugami.api.tools.CalendarTools;
 import org.inugami.commons.connectors.HttpBasicConnector;
 import org.inugami.commons.threads.RunAndCloseService;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.senders.MonitoringSender;
-import org.inugami.monitoring.api.senders.MonitoringSenderException;
 import org.inugami.monitoring.api.tools.IntervalValues;
 
 /**

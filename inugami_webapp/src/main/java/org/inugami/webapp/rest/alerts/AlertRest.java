@@ -17,9 +17,13 @@
 package org.inugami.webapp.rest.alerts;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -27,9 +31,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.inugami.api.alertings.AlertsSender;
 import org.inugami.api.dao.Dao;
 import org.inugami.api.dao.DaoEntityNotFoundException;
 import org.inugami.api.dao.DaoException;
+import org.inugami.api.tools.AnnotationTools;
 import org.inugami.commons.security.SecurityTools;
 import org.inugami.core.alertings.AlertEntity;
 import org.inugami.core.alertings.AlertServices;
@@ -40,6 +46,7 @@ import org.inugami.core.cdi.services.dao.PostCrudHandlerBuilder;
 import org.inugami.core.security.commons.roles.Admin;
 import org.inugami.core.security.commons.roles.crud.CrudSecurityHandlerAdminOnly;
 import org.inugami.core.services.sse.SseService;
+import org.inugami.webapp.rest.alerts.models.ProviderRestModel;
 import org.picketlink.Identity;
 
 /**
@@ -54,13 +61,16 @@ public class AlertRest extends AbstractCrudRest<AlertEntity, String> {
     // ATTRIBUTES
     // =========================================================================
     @Inject
-    private Dao           dao;
+    private Dao                dao;
     
     @Inject
-    private Identity      identity;
+    private Identity           identity;
     
     @Inject
-    private AlertServices alertServices;
+    private AlertServices      alertServices;
+    
+    @Inject
+    private List<AlertsSender> senders;
     
     // =========================================================================
     // AbstractCrudRest
@@ -114,15 +124,13 @@ public class AlertRest extends AbstractCrudRest<AlertEntity, String> {
     }
     
     @Override
-    protected AlertEntity secureXssEntity(AlertEntity entity) {
+    protected AlertEntity secureXssEntity(final AlertEntity entity) {
         //@formatter:off
         SecurityTools.secureJavaScriptAndHtml(entity::getAlerteName, entity::setAlerteName);
         SecurityTools.secureJavaScriptAndHtml(entity::getLevel,      entity::setLevel);
         SecurityTools.secureJavaScriptAndHtml(entity::getLabel,      entity::setLabel);
         SecurityTools.secureJavaScriptAndHtml(entity::getSubLabel,   entity::setSubLabel);
-        SecurityTools.secureJavaScriptAndHtml(entity::getUrl,        entity::setUrl);
         SecurityTools.secureJavaScriptAndHtml(entity::getChannel,    entity::setChannel);
-        SecurityTools.secureJavaScriptAndHtml(entity::getData,       entity::setData);
         //@formatter:off
         
         return entity;
@@ -159,4 +167,22 @@ public class AlertRest extends AbstractCrudRest<AlertEntity, String> {
         return Response.ok().build();
     }
     
+    
+    @Admin
+    @GET
+    @Path("providers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ProviderRestModel> getProviders() {
+        //@formatter:off
+        return Optional.ofNullable(senders)
+                       .orElse(Collections.emptyList())
+                       .stream()
+                       .map(this::mapSenderToProviderRestModel)
+                       .collect(Collectors.toList());
+        //@formatter:on        
+    }
+    
+    private ProviderRestModel mapSenderToProviderRestModel(final AlertsSender sender) {
+        return new ProviderRestModel(AnnotationTools.resolveNamed(sender), sender.enable(), sender.getConfiguration());
+    }
 }

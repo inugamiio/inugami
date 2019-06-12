@@ -1,0 +1,23 @@
+
+ body .ui-chkbox .ui-chkbox-box.ui-state-active {
+    background-color: #c2023e;
+}
+
+body .ui-chkbox .ui-chkbox-box,
+body .ui-chkbox .ui-chkbox-box.ui-state-active{
+  border-color:   #90193f;	
+}
+
+body .ui-chkbox .ui-chkbox-box.ui-state-focus,
+body .ui-chkbox .ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hover{
+    border-color:   #de5b5f;
+}
+
+.ui-chkbox .ui-chkbox-icon{
+    visibility: hidden;
+}
+
+body.inugami  .ui-chkbox-label,
+body.inugami  .ui-radiobutton-label{
+    vertical-align: inherit;
+}

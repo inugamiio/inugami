@@ -42,6 +42,10 @@
 }
 
 .inugami-input-switch-button .background{
+    background-color: #cccccc;
+}
+
+.inugami-input-switch-button.state-on .background{
     background-color: #c12534;
 }
 

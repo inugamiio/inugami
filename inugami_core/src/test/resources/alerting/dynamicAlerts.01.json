@@ -1,0 +1,192 @@
+[
+  {
+    "alerteName": "simple_alert_test_1",
+    "label": "Sorry for this error",
+    "level": "dynamic",
+    "subLabel": "Simple test",
+    "url": "https://github.com/inugamiio",
+    "duration": 60,
+    "channel": "@all",
+    "enable": true,
+    "providers": ["sse", "opsgenie"],
+    "tags": ["PRD", "SEARCH"],
+    "source": {
+      "provider": "graphite",
+      "cronExpression": "{{EVERY_MINUTE}}",
+      "from": "-30min",
+      "to": "-5min",
+      "query": "org.foo.bar.cup.p95"
+    },
+    "levels": [
+      {
+        "name": "ERROR",
+        "data": [
+          { "hour": 0, "level": 2.5 },
+          { "hour": 1, "level": 2.5 },
+          { "hour": 2, "level": 4.5 },
+          { "hour": 3, "level": 5.5 },
+          { "hour": 4, "level": 7.5 },
+          { "hour": 5, "level": 12.5 },
+          { "hour": 6, "level": 2.5 },
+          { "hour": 7, "level": 1.5 },
+          { "hour": 8, "level": 1.5 },
+          { "hour": 9, "level": 1.5 },
+          { "hour": 10, "level": 1.5 },
+          { "hour": 11, "level": 2.2 },
+          { "hour": 12, "level": 2.4 },
+          { "hour": 13, "level": 2.5 },
+          { "hour": 14, "level": 2.5 },
+          { "hour": 15, "level": 2.5 },
+          { "hour": 16, "level": 2.5 },
+          { "hour": 17, "level": 4.5 },
+          { "hour": 18, "level": 4.5 },
+          { "hour": 19, "level": 4.5 },
+          { "hour": 20, "level": 5.5 },
+          { "hour": 21, "level": 5.5 },
+          { "hour": 22, "level": 6.5 },
+          { "hour": 23, "level": 2.5 }
+        ]
+      },
+      {
+        "name": "WARN",
+        "data": [
+          { "hour": 0, "level": 1.5 },
+          { "hour": 1, "level": 1.5 },
+          { "hour": 2, "level": 2.5 },
+          { "hour": 3, "level": 4.5 },
+          { "hour": 4, "level": 6.5 },
+          { "hour": 5, "level": 10.5 },
+          { "hour": 6, "level": 1.5 },
+          { "hour": 7, "level": 0.5 },
+          { "hour": 8, "level": 0.5 },
+          { "hour": 9, "level": 0.5 },
+          { "hour": 10, "level": 0.5 },
+          { "hour": 11, "level": 1.2 },
+          { "hour": 12, "level": 1.4 },
+          { "hour": 13, "level": 1.5 },
+          { "hour": 14, "level": 1.5 },
+          { "hour": 15, "level": 1.5 },
+          { "hour": 16, "level": 1.5 },
+          { "hour": 17, "level": 3.5 },
+          { "hour": 18, "level": 3.5 },
+          { "hour": 19, "level": 3.5 },
+          { "hour": 20, "level": 4.5 },
+          { "hour": 21, "level": 4.5 },
+          { "hour": 22, "level": 5.5 },
+          { "hour": 23, "level": 1.5 }
+        ]
+      }
+    ],
+    "script": "console.log('check')",
+    "activations": [
+      {
+        "days": ["Monday", "Wednesday", "Sunday"],
+        "hours": [
+          { "from": "00:10", "to": "06:00" },
+          { "from": "06:00", "to": "18:00" },
+          { "from": "19:00", "to": "23:59" }
+        ]
+      }
+    ],
+    "transformer": {
+      "name": "basicTransformer",
+      "script": "return null"
+    }
+  },
+
+
+  {
+    "alerteName": "simple_alert_test_1",
+    "label": "Sorry for this error",
+    "level": "dynamic",
+    "subLabel": "Simple test",
+    "url": "https://github.com/inugamiio",
+    "duration": 60,
+    "channel": "@all",
+    "enable": true,
+    "providers": ["sse", "opsgenie"],
+    "tags": ["PRD", "SEARCH"],
+    "source": {
+      "provider": "graphite",
+      "cronExpression": "{{EVERY_FIVE_MIN}}",
+      "from": "-30min",
+      "to": "-5min",
+      "query": "org.foo.bar.cup.p95"
+    },
+    "levels": [
+      {
+        "name": "ERROR",
+        "data": [
+          { "hour": 0, "level": 2.5 },
+          { "hour": 1, "level": 2.5 },
+          { "hour": 2, "level": 4.5 },
+          { "hour": 3, "level": 5.5 },
+          { "hour": 4, "level": 7.5 },
+          { "hour": 5, "level": 12.5 },
+          { "hour": 6, "level": 2.5 },
+          { "hour": 7, "level": 1.5 },
+          { "hour": 8, "level": 1.5 },
+          { "hour": 9, "level": 1.5 },
+          { "hour": 10, "level": 1.5 },
+          { "hour": 11, "level": 2.2 },
+          { "hour": 12, "level": 2.4 },
+          { "hour": 13, "level": 2.5 },
+          { "hour": 14, "level": 2.5 },
+          { "hour": 15, "level": 2.5 },
+          { "hour": 16, "level": 2.5 },
+          { "hour": 17, "level": 4.5 },
+          { "hour": 18, "level": 4.5 },
+          { "hour": 19, "level": 4.5 },
+          { "hour": 20, "level": 5.5 },
+          { "hour": 21, "level": 5.5 },
+          { "hour": 22, "level": 6.5 },
+          { "hour": 23, "level": 2.5 }
+        ]
+      },
+      {
+        "name": "WARN",
+        "data": [
+          { "hour": 0, "level": 1.5 },
+          { "hour": 1, "level": 1.5 },
+          { "hour": 2, "level": 2.5 },
+          { "hour": 3, "level": 4.5 },
+          { "hour": 4, "level": 6.5 },
+          { "hour": 5, "level": 10.5 },
+          { "hour": 6, "level": 1.5 },
+          { "hour": 7, "level": 0.5 },
+          { "hour": 8, "level": 0.5 },
+          { "hour": 9, "level": 0.5 },
+          { "hour": 10, "level": 0.5 },
+          { "hour": 11, "level": 1.2 },
+          { "hour": 12, "level": 1.4 },
+          { "hour": 13, "level": 1.5 },
+          { "hour": 14, "level": 1.5 },
+          { "hour": 15, "level": 1.5 },
+          { "hour": 16, "level": 1.5 },
+          { "hour": 17, "level": 3.5 },
+          { "hour": 18, "level": 3.5 },
+          { "hour": 19, "level": 3.5 },
+          { "hour": 20, "level": 4.5 },
+          { "hour": 21, "level": 4.5 },
+          { "hour": 22, "level": 5.5 },
+          { "hour": 23, "level": 1.5 }
+        ]
+      }
+    ],
+    "script": "console.log('check')",
+    "activations": [
+      {
+        "days": ["Monday", "Wednesday", "Sunday"],
+        "hours": [
+          { "from": "00:10", "to": "06:00" },
+          { "from": "06:00", "to": "18:00" },
+          { "from": "19:00", "to": "23:59" }
+        ]
+      }
+    ],
+    "transformer": {
+      "name": "basicTransformer",
+      "script": "return null"
+    }
+  }
+]

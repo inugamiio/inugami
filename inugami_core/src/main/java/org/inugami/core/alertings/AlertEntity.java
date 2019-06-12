@@ -16,7 +16,10 @@
  */
 package org.inugami.core.alertings;
 
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -52,7 +55,6 @@ public class AlertEntity implements Identifiable<String>, BeforeSave {
     @Pattern(regexp = "^[a-zA-Z_\\-.0-9]+$")
     private String            alerteName;
     
-    @NotNull
     @NotEmpty
     private String            level;
     
@@ -81,6 +83,9 @@ public class AlertEntity implements Identifiable<String>, BeforeSave {
     
     private long              ttl;
     
+    @ElementCollection
+    private List<String>      providers;
+    
     // =========================================================================
     // CONSTRUCTOR
     // =========================================================================
@@ -95,6 +100,27 @@ public class AlertEntity implements Identifiable<String>, BeforeSave {
         super();
         this.alerteName = alerteName;
         this.level = level;
+    }
+    
+    protected AlertEntity(final String alerteName, final String level, final AlerteLevels levelType,
+                          final int levelNumber, final String label, final String subLabel, final String url,
+                          final long created, final long duration, final String channel, final String data,
+                          final boolean enable, final long ttl, final List<String> providers) {
+        super();
+        this.alerteName = alerteName;
+        this.level = level;
+        this.levelType = levelType;
+        this.levelNumber = levelNumber;
+        this.label = label;
+        this.subLabel = subLabel;
+        this.url = url;
+        this.created = created;
+        this.duration = duration;
+        this.channel = channel;
+        this.data = data;
+        this.enable = enable;
+        this.ttl = ttl;
+        this.providers = providers;
     }
     
     // =========================================================================
@@ -277,6 +303,14 @@ public class AlertEntity implements Identifiable<String>, BeforeSave {
     
     public void setUrl(final String url) {
         this.url = url;
+    }
+    
+    public List<String> getProviders() {
+        return providers;
+    }
+    
+    public void setProviders(final List<String> providers) {
+        this.providers = providers;
     }
     
 }

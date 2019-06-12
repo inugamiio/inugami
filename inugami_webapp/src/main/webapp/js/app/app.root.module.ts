@@ -30,6 +30,7 @@ import {InputBloc}                      from './components/forms/input.bloc';
 import {InputDaysSelector}              from './components/forms/input.days.selector';
 import {InputSwitch}                    from './components/forms/input.switch';
 import {InputTimeSlots}                 from './components/forms/input.time.slots';
+import {DynamicLevels}                  from './components/forms/dynamic.levels';
 
 import {Carousel}                       from './components/carousel/carousel';
 import {PropertiesEditor}               from './components/properties_editor/properties.editor';
@@ -52,6 +53,7 @@ import {SvgGenericMap}                  from './components/charts/svg_generic_ma
 import {JenkinsJobsComponent}           from './components/providers/jenkins_jobs/jenkins.jobs.component';
 import {GitlabMergeRequestsComponent}   from './components/providers/gitlab_merge_requests/gitlab.merge.requests.component';
 import {JiraIssuesComponent}            from './components/providers/jira_issues/jira.issues.components';
+import {MainMenu}                       from './components/main_menu/main.menu';
 
 // VIEWS -----------------------------------------------------------------------
 import {HomeView}                       from './view/home.view';
@@ -71,7 +73,9 @@ import {SoundServices}                  from './services/sound.services';
 import {HttpServices}                   from './services/http/http.services';
 import {GenericCrudServices}            from './services/http/generic.crud.services';
 import {AlertsCrudServices}             from './services/http/alerts.crud.services';
+import {AlertsDynamicCrudServices}      from './services/http/alerts.dynamic.crud.services';
 
+import {MainMenuService}                from './components/main_menu/main.menu.service';
 
 // MODULE ----------------------------------------------------------------------
 @NgModule({
@@ -100,6 +104,7 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     InputSwitch,
     InputTimeSlots,
     InputDaysSelector,
+    DynamicLevels,
     Carousel,
     PropertiesEditor,
 
@@ -120,7 +125,8 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
 
     JenkinsJobsComponent,
     GitlabMergeRequestsComponent,
-    JiraIssuesComponent
+    JiraIssuesComponent,
+    MainMenu
   ],
   entryComponents: [],
   exports: [
@@ -135,6 +141,7 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     InputSwitch,
     InputDaysSelector,
     InputTimeSlots,
+    DynamicLevels,
     Carousel, 
 
     BarChart,
@@ -155,7 +162,8 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
 
     JenkinsJobsComponent,
     GitlabMergeRequestsComponent,
-    JiraIssuesComponent
+    JiraIssuesComponent,
+    MainMenu
   ],
   providers: [
     PluginsService,
@@ -165,7 +173,9 @@ import {AlertsCrudServices}             from './services/http/alerts.crud.servic
     HeaderServices,
     SoundServices,
     HttpServices,
-    AlertsCrudServices
+    AlertsCrudServices,
+    AlertsDynamicCrudServices,
+    MainMenuService
   ],
   entryComponents: [
     Image,
@@ -222,3 +232,4 @@ const  AppRootModuleRoutesConfig: Routes = [
     { path: ''     , component: HomeView , pathMatch:'full' }
 ];
 export const AppRootModuleRoutes = RouterModule.forRoot(AppRootModuleRoutesConfig);
+

@@ -24,8 +24,7 @@ import java.util.ServiceLoader;
 import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.spi.NamedSpi;
-import org.inugami.api.spi.SpiPriority;
-import org.inugami.commons.tools.AnnotationTools;
+import org.inugami.api.tools.AnnotationTools;
 
 /**
  * SpiLoader

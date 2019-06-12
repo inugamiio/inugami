@@ -16,6 +16,8 @@
  */
 package org.inugami.monitoring.api.exceptions;
 
+import org.inugami.api.monitoring.exceptions.ErrorResult;
+
 /**
  * ExceptionResolver
  * 

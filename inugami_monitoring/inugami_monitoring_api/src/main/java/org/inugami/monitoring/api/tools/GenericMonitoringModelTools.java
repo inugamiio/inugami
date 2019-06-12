@@ -20,11 +20,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import org.inugami.api.monitoring.RequestContext;
+import org.inugami.api.monitoring.RequestInformation;
+import org.inugami.api.monitoring.models.GenericMonitoringModel;
+import org.inugami.api.monitoring.models.GenericMonitoringModelBuilder;
 import org.inugami.api.tools.CalendarTools;
-import org.inugami.monitoring.api.data.GenericMonitoringModel;
-import org.inugami.monitoring.api.data.GenericMonitoringModelBuilder;
-import org.inugami.monitoring.api.data.RequestInformation;
-import org.inugami.monitoring.api.interceptors.RequestContext;
 
 /**
  * GenericMonitoringModelTools

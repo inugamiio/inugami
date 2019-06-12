@@ -3,6 +3,10 @@ import {GrowlModule}                                        from 'primeng/growl'
 import {Message}                                            from 'primeng/api';
 import {DataTable,Column}                                   from 'primeng/primeng';
 
+
+import { Http }                                       from '@angular/http';
+
+
 import {AlertsCrudServices}                                 from './../../../services/http/alerts.crud.services'
 import {AlertEntity}                                        from './../../../models/alert.entity';
 import {InputBloc}                                          from './../../../components/forms/input.bloc';
@@ -34,7 +38,7 @@ export class AdminViewAlerts{
     /**************************************************************************
     * CONSTRUCTOR
     **************************************************************************/
-    constructor(private alertsCrudServices : AlertsCrudServices) {
+    constructor(private alertsCrudServices : AlertsCrudServices,private http : Http) {
         this.initAlerts();
 
         let self = this;
@@ -42,6 +46,7 @@ export class AdminViewAlerts{
             self.initAlerts();
         });
         
+       
     }
     
 
@@ -71,10 +76,15 @@ export class AdminViewAlerts{
     }
 
     onAlertSelect(event){
-        if(isNotNull(this.selectedAlert) && this.selectedAlert.alerteName==event.data.alerteName){
-            this.unSelectedAlert();
+        if(isNotNull(event.data) && isNotNull(event.data.dynamicAlerting) && event.data.dynamicAlerting){
+            this.selectedAlert=event.data;
+            this.setActiveSection('createView');
         }
-        this.selectedAlert=event.data;
+    }
+
+    showNewAlert(){
+        this.selectedAlert = null;
+        this.setActiveSection('createView');
     }
     
     cleanMessage(){
@@ -147,4 +157,7 @@ export class AdminViewAlerts{
         return org.inugami.formatters.timestampToDate(timestamp);
     }
     
+    isDynamicAlert(value:boolean){
+        return value?"alert-element dynamic-alert fas fa-cog":"alert-element  default-alert";
+    }
 }
