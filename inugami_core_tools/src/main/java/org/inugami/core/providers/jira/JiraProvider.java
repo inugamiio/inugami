@@ -92,6 +92,16 @@ public class JiraProvider extends AbstractProvider implements Provider, Provider
     public String getType() {
         return TYPE;
     }
+
+    @Override
+    public long getTimeout(){
+        return timeout;
+    }
+
+    @Override
+    public ConfigHandler<String,String> getConfig(){
+        return config;
+    }
     
     // =========================================================================
     // CALL EVENT

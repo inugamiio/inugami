@@ -69,28 +69,30 @@
 
             <p-panel header="Sources" formGroupName="sources" class="sources">
                 <div class="first-line">
-                        <input-bloc label="alert.edit.sources.data.provider" [validator]="validators.notEmptyString"
-                        class="provider" formControlName="dataProvider"></input-bloc>
-                        
+                    <p-dropdown [options]="providers" [placeholder]="dataProviderPlaceHolder" styleClass="provider"
+                        formControlName="dataProvider"></p-dropdown>
+
                     <span class="interval-block">
-                            <input-bloc label="alert.edit.sources.data.interval" class="interval" formControlName="interval">
+                        <input-bloc label="alert.edit.sources.data.interval" class="interval"
+                            formControlName="interval">
                         </input-bloc>
                         <div class="form-tooltip cron hidden" #crontooltip>
                             <msg key="alert.edit.tooltip.cron"></msg>
                         </div>
-                        
+
                         <button type="button" pButton icon="far fa-question-circle"
-                        class="active-action tooltip-button cron" (mouseover)="toggleFormTooltip(crontooltip)"
-                        (mouseout)="toggleFormTooltip(crontooltip)"></button>
+                            class="active-action tooltip-button cron" (mouseover)="toggleFormTooltip(crontooltip)"
+                            (mouseout)="toggleFormTooltip(crontooltip)"></button>
                     </span>
-                    
-                                    </div>
+
+                </div>
                 <div>
                     <input-bloc label="alert.edit.sources.from" class="from" formControlName="from"></input-bloc>
                     <input-bloc label="alert.edit.sources.to" class="to" formControlName="to"></input-bloc>
                 </div>
                 <div>
-                    <input-bloc label="alert.edit.sources.event.name" styleClass="eventName" formControlName="eventName"></input-bloc>
+                    <input-bloc label="alert.edit.sources.event.name" styleClass="eventName"
+                        formControlName="eventName"></input-bloc>
                 </div>
                 <div class="query-text-area">
                     <textarea pInputTextarea formControlName="query"></textarea>
@@ -125,11 +127,11 @@
                                 <msg key="alert.edit.dynamic.levels.dynamic"></msg>
                             </span>
                             <input-bloc label="alert.edit.dynamic.levels.minValue" type="number" styleClass="min-value"
-                                (enter)="setGraphMinValue($event,graph)"
-                                (change)="setGraphMinValue($event,graph)"></input-bloc>
+                                (enter)="setGraphMinValue($event,graph)" (change)="setGraphMinValue($event,graph)">
+                            </input-bloc>
                             <input-bloc label="alert.edit.dynamic.levels.maxValue" type="number" styleClass="min-value"
-                                (enter)="setGraphMaxValue($event,graph)"
-                                (change)="setGraphMaxValue($event,graph)"></input-bloc>
+                                (enter)="setGraphMaxValue($event,graph)" (change)="setGraphMaxValue($event,graph)">
+                            </input-bloc>
                             <input-bloc label="alert.edit.dynamic.levels.precision" type="number"
                                 styleClass="precision-value" (enter)="setFormatter($event)"></input-bloc>
                             <button type="button" pButton icon="far fa-question-circle"
@@ -160,16 +162,16 @@
                             </p-accordion>
                         </div>
                         <div class="add-level">
-                            <input-bloc label="alert.edit.dynamic.levels.points.before.triggered" formControlName="addedLevelPoints"
-                                (ngModelChange)="setPointsBeforeTriggered($event)"  styeClass="points"
-                                [validator]="validators.notNegativeNumber" type="number">
+                            <input-bloc label="alert.edit.dynamic.levels.points.before.triggered"
+                                formControlName="addedLevelPoints" (ngModelChange)="setPointsBeforeTriggered($event)"
+                                styeClass="points" [validator]="validators.notNegativeNumber" type="number">
                             </input-bloc>
                             <input-bloc label="alert.edit.dynamic.levels.add.level"
                                 (ngModelChange)="setLevelName($event)" styeClass="name"
-                                [validator]="validators.notEmptyString"></input-bloc>
+                                [validator]="validators.notEmptyString" #levelName></input-bloc>
                             <button pButton type="button" class="active-action" icon="fas fa-plus"
-                                (click)="addDynamicLevelsLevel(graph)"
-                                (enter)="addDynamicLevelsLevel(graph)"></button>
+                                (click)="addDynamicLevelsLevel(graph,levelName)"
+                                (enter)="addDynamicLevelsLevel(graph,levelName)"></button>
                             <div class="level-tooltip">
                                 <button type="button" pButton icon="far fa-question-circle"
                                     class="active-action tooltip-button level" (mouseover)="toggleFormTooltip(level)"
@@ -180,8 +182,10 @@
                             </div>
                         </div>
                         <div class="inverse">
-                            <p-radioButton name="inverse" value="true" formControlName="inverse" [label]="labelInverseMin"></p-radioButton>
-                            <p-radioButton name="inverse" value="false" formControlName="inverse" [label]="labelInverseMax"></p-radioButton>
+                            <p-radioButton name="inverse" value="true" formControlName="inverse"
+                                [label]="labelInverseMin"></p-radioButton>
+                            <p-radioButton name="inverse" value="false" formControlName="inverse"
+                                [label]="labelInverseMax"></p-radioButton>
                             <button type="button" pButton icon="far fa-question-circle"
                                 class="active-action tooltip-button inverse" (mouseover)="toggleFormTooltip(inverse)"
                                 (mouseout)="toggleFormTooltip(inverse)"></button>

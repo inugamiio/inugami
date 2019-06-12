@@ -230,9 +230,27 @@
 
 .page-admin .alert-edit .left-panel .sources .to input,
 .page-admin .alert-edit .left-panel .sources .from input,
-.page-admin .alert-edit .left-panel .sources .interval input,
-.page-admin .alert-edit .left-panel .sources .provider input{
+.page-admin .alert-edit .left-panel .sources .interval input{
   width: 16em;
+}
+
+.page-admin .alert-edit .left-panel .sources p-dropdown{
+  font-size: 1.5em;
+  width: 10em;
+  position: relative;
+  bottom:1.8em;
+  width: 16em;
+}
+
+.page-admin .alert-edit .left-panel .sources p-dropdown .provider{
+  border: none;
+  width: 17.5em;
+  border-radius: 5em; 
+}
+
+
+.page-admin .alert-edit .left-panel .sources p-dropdown .ui-state-highlight{
+  background:  #c12534;
 }
 .page-admin .alert-edit .left-panel .sources .first-line{
   position: relative;

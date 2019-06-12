@@ -51,7 +51,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
     private innerValue: AlertEntity;
     private innerValueChannels: string[];
     private isNotEdit: boolean;
-
+    private providers : any[];
     private fileUri: any;
 
     private channels: any[] = [];
@@ -63,6 +63,8 @@ export class AdminViewAlertEdit implements AfterViewInit {
 
     private labelInverseMin  :string = org.inugami.formatters.message("alert.edit.alert.inverse.min");
     private labelInverseMax  :string = org.inugami.formatters.message("alert.edit.alert.inverse.max");
+
+    private dataProviderPlaceHolder : string = org.inugami.formatters.message("alert.edit.sources.data.provider");
 
     @Output() onClose: EventEmitter<any> = new EventEmitter();
     @Output() onError: EventEmitter<any> = new EventEmitter();
@@ -109,6 +111,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
                 addedLevelPoints: [''],
             })
             this.initChannels();
+            this.initProviders();
         } else {
             this.alertForm.controls['levelPointsBeforeTriggered'].controls = [];
             this.alertForm.reset();
@@ -126,8 +129,14 @@ export class AdminViewAlertEdit implements AfterViewInit {
 
     initChannels() {
         let self = this;
-        this.resp = this.httpService.get("http://localhost:8080/inugami_webapp/rest/alert/providers");
+        this.resp = this.httpService.get(window.location.origin+CONTEXT_PATH+"rest/alert/providers");
         this.resp.then(data => self.addChannels(data));
+    }
+
+    initProviders(){
+        let self = this;
+        let resp = this.httpService.get(window.location.origin+CONTEXT_PATH+"rest/provider");
+        resp.then(data => self.addProviders(data));
     }
 
     addChannels(data) {
@@ -147,6 +156,13 @@ export class AdminViewAlertEdit implements AfterViewInit {
         }
     }
 
+    addProviders(data){
+        this.providers = [];
+        for(let provider of data){
+            let tempProvider = {label:provider.name,value:provider.name}
+            this.providers.push(tempProvider);
+        }
+    }
     applyDefaultValues(){
         this.alertForm.get('duration').patchValue(60);
         this.alertForm.get('addedLevelPoints').patchValue(1);
@@ -214,7 +230,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
     }
 
 
-    addDynamicLevelsLevel(graph) {
+    addDynamicLevelsLevel(graph,levelName) {
         if (isNotNull(this.addedLevel.name) &&
             this.addedLevel.name != "" &&
             isNull(org.inugami.validators.notNegativeNumber(this.addedLevel.pointsBeforeTriggered))) {
@@ -226,7 +242,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
                     } else {
                         this.addFormLevelLine();
                         graph.addNewData(this.addedLevel.name);
-
+                        levelName.innerValue = null;
                     }
         }
     }
@@ -482,6 +498,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
         this.alertForm.get('scripts').patchValue(value.script);
         let inverse = value.inverse ? "true" : "false";
         this.alertForm.get('inverse').patchValue(inverse);
+        
 
 
         if (isNotNull(value.source)) {
@@ -489,7 +506,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
             this.alertForm.get('sources').get('dataProvider').patchValue(value.source.provider);
             this.alertForm.get('sources').get('from').patchValue(value.source.from);
             this.alertForm.get('sources').get('to').patchValue(value.source.to);
-            this.alertForm.get('eventName').patchValue(value.eventName);
+            this.alertForm.get('sources').get('eventName').patchValue(value.eventName);
             this.alertForm.get('sources').get('query').patchValue(value.source.query);
         }
         if (isNotNull(value.tags)) {
