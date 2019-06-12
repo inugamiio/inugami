@@ -29,7 +29,8 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     @Input() style                      : string;
     @Input() styleClass                 : string;
     @Input() inputId                    : string;
-
+    @Input() dotSize                    : number = 7;
+    
     @Output() onChange                  = new EventEmitter<any>();
     @Output() onClick                   = new EventEmitter<any>();
 
@@ -350,7 +351,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
                     initialYposition, this.minValue, this.maxValue);
                 for (let i = 0; i < this.groups.axisXPoints.length; i++) {
                     let dataPoint = dotsGroup.append("circle")
-                        .attr("r", 4) 
+                        .attr("r", this.dotSize) 
                         .attr("lineName", name)
                         .attr("hour", i)
                         .attr("class", "dot hour-" + i + " " + name);
