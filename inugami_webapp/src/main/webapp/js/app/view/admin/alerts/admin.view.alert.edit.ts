@@ -170,7 +170,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
     addProviders(data){
         this.providers = [];
         for(let provider of data){
-            let tempProvider = {label:provider.name,value:provider.name}
+            let tempProvider = {label:provider,value:provider}
             this.providers.push(tempProvider);
         }
     }
