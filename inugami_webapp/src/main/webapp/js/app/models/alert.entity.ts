@@ -24,7 +24,12 @@ export class AlertEntity {
         public levels           : DynamicLevel[],
         public activations      : ActivationTime[],
         public inverse          : boolean,
-        public dynamicAlerting? : boolean
+        public maxValue         : number,
+        public minValue         : number,
+        public dynamic          : boolean,
+        public dynamicAlerting? : boolean,
+        
+
     ){ }
 }
 
