@@ -19,10 +19,11 @@ package org.inugami.api.models.data.graphite;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.exceptions.TechnicalException;
 
-import sun.misc.IOUtils;
+
 
 /**
  * FileUtils
@@ -37,20 +38,29 @@ public class TestFileUtils {
     // =========================================================================
     public byte[] readFromClassLoader(final String resourceName) throws TechnicalException {
         Asserts.notNull(resourceName);
-        byte[] result = null;
+
         final InputStream resource = this.getClass().getClassLoader().getResourceAsStream(resourceName);
         if (resource == null) {
             throw new FileUtilsException("can't found file {0} in classPath", resourceName);
         }
-        
+
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+
         try {
-            result = IOUtils.readFully(resource, -1, true);
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = resource.read(buffer)) != -1) {
+                result.write(buffer, 0, length);
+            }
         }
         catch (final IOException e) {
             throw new FileUtilsException(e.getMessage(), e);
         }
-        
-        return result;
+
+        return result.toByteArray();
+
+
     }
     
     // =========================================================================
