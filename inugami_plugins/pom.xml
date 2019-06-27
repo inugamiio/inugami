@@ -40,9 +40,29 @@
     <modules>
         <module>inugami_plugins_root</module>
     </modules>
-    
+
     <!-- ======================================================================= 
     = DEPENDENCIES
+    ======================================================================== -->
+    <dependencies>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.inugami</groupId>
+            <artifactId>inugami_core</artifactId>
+        </dependency>
+    </dependencies>    
+    
+    <!-- ======================================================================= 
+    = BUILD
     ======================================================================== -->
     <build>
         <pluginManagement>
@@ -59,21 +79,6 @@
                     <groupId>org.inugami.maven.plugin</groupId>
                     <artifactId>inugami-maven-plugin</artifactId>
                     <version>${_super.plugin.inugami-plugin-maven.version}</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.inugami</groupId>
-                            <artifactId>inugami_webapp</artifactId>
-                            <version>${project.version}</version>
-                            <type>war</type>
-                        </dependency>
-
-                        <dependency>
-                            <groupId>org.apache.tomcat</groupId>
-                            <artifactId>tomcat</artifactId>
-                            <version>${org.apache.tomcat.embed.version}</version>
-                            <type>zip</type>
-                        </dependency>
-                    </dependencies>
                     <executions>
                         <execution>
                             <id>buildArtifactType</id>
