@@ -134,7 +134,8 @@
         <!--[ others ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <plugins.external-atlassian-jgitflow.jgitflow-maven-plugin>1.0-m4.3</plugins.external-atlassian-jgitflow.jgitflow-maven-plugin>
         <plugins.pl-project13-maven.git-commit-id-plugin>2.1.15</plugins.pl-project13-maven.git-commit-id-plugin>
-        
+
+
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: REPORTING VERSIONS
@@ -192,8 +193,10 @@
 
         <!--[ Data base drivers ]++++++++++++++++++++++++++++++++++++++++++++-->
         <com.h2database.h2.version>1.4.196</com.h2database.h2.version>
-        
-        
+
+
+        <jaxb.version>2.3.0</jaxb.version>
+        <javax.activation.version>1.1.1</javax.activation.version>
         
         <!--[ Others ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <io.dropwizard.metrics.version>4.0.5</io.dropwizard.metrics.version>
@@ -586,8 +589,29 @@
                 <version>${org.hibernate.validator.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${jaxb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-core</artifactId>
+                <version>${jaxb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-impl</artifactId>
+                <version>${jaxb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.activation</groupId>
+                <artifactId>activation</artifactId>
+                <version>${javax.activation.version}</version>
+            </dependency>
 
-                    
+
+
             <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             :: LOGGER
             :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->

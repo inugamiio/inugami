@@ -53,6 +53,8 @@ export class AdminViewAlertEdit implements AfterViewInit {
     private isNotEdit: boolean;
     private providers : any[];
     private fileUri: any;
+    private dynamic: boolean;
+
 
     private channels: any[] = [];
     private addedLevel: any = {};
@@ -109,7 +111,14 @@ export class AdminViewAlertEdit implements AfterViewInit {
                 scripts: [''],
                 inverse: [''],
                 addedLevelPoints: [''],
+                showedMaxValue:[''],
+                showedMinValue:[''],
+                dynamic:[''],
             })
+
+            let self = this;
+            this.alertForm.controls['dynamic'].valueChanges.subscribe((value)=> {self.dynamic = value})
+
             this.initChannels();
             this.initProviders();
         } else {
@@ -122,6 +131,8 @@ export class AdminViewAlertEdit implements AfterViewInit {
             this.fileUri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(jsonData));
 
         })
+
+
 
         this.applyDefaultValues();
 
@@ -390,9 +401,6 @@ export class AdminViewAlertEdit implements AfterViewInit {
         this.addedLevel.pointsBeforeTriggered = event;
     }
 
-    setGraphMode(event, graph) {
-        graph.dynamicMode = event;
-    }
 
     setGraphMinValue(event, graph) {
         graph.setMinValue(parseFloat(event.target.value));
@@ -446,8 +454,13 @@ export class AdminViewAlertEdit implements AfterViewInit {
         alert.duration = form.duration;
         alert.script = form.scripts;
         alert.level = "info";
+        alert.dynamic = form.dynamic;
 
-        alert.levels = form.dynamicLevels;
+        if(isNotNull(form.dynamicLevels)){
+            alert.levels = form.dynamicLevels.data;
+            alert.maxValue = form.dynamicLevels.maxValue;
+            alert.minValue = form.dynamicLevels.minValue;
+        }
         alert.inverse = form.inverse == "true" ? true : false;
 
         if (isNotNull(form.dynamicLevels) && isNotNull(form.levelPointsBeforeTriggered)) {
@@ -498,6 +511,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
         this.alertForm.get('scripts').patchValue(value.script);
         let inverse = value.inverse ? "true" : "false";
         this.alertForm.get('inverse').patchValue(inverse);
+        this.alertForm.get('dynamic').patchValue(value.dynamic,{emitEvent:true});
         
 
 
@@ -506,7 +520,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
             this.alertForm.get('sources').get('dataProvider').patchValue(value.source.provider);
             this.alertForm.get('sources').get('from').patchValue(value.source.from);
             this.alertForm.get('sources').get('to').patchValue(value.source.to);
-            this.alertForm.get('sources').get('eventName').patchValue(value.eventName);
+            this.alertForm.get('sources').get('eventName').patchValue(value.source.eventName);
             this.alertForm.get('sources').get('query').patchValue(value.source.query);
         }
         if (isNotNull(value.tags)) {
@@ -541,8 +555,15 @@ export class AdminViewAlertEdit implements AfterViewInit {
                 levels.push(level);
             }
             array.patchValue(levels);
+
+            let dynamicLevels = {'minValue':value.minValue,'maxValue':value.maxValue,'data':value.levels};     
+
+            this.alertForm.get('dynamicLevels').patchValue(dynamicLevels);
+            this.alertForm.get('showedMinValue').patchValue(value.minValue);
+            this.alertForm.get('showedMaxValue').patchValue(value.maxValue);
         }
-        this.alertForm.get('dynamicLevels').patchValue(value.levels);
+
+
         this.innerValueChannels = value.providers;
         this.initChannels();
     }

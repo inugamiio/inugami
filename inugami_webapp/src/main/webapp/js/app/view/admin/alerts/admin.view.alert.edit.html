@@ -123,13 +123,13 @@
                     <p-tabPanel header="Seuil" class="levels-setting">
                         <div>
                             <span class="dynamic">
-                                <p-checkbox (onChange)="setGraphMode($event,graph)"></p-checkbox>
+                                <p-checkbox formControlName="dynamic" binary="true"></p-checkbox>
                                 <msg key="alert.edit.dynamic.levels.dynamic"></msg>
                             </span>
-                            <input-bloc label="alert.edit.dynamic.levels.minValue" type="number" styleClass="min-value"
+                            <input-bloc label="alert.edit.dynamic.levels.minValue" type="number" styleClass="min-value" formControlName="showedMinValue"
                                 (enter)="setGraphMinValue($event,graph)" (change)="setGraphMinValue($event,graph)">
                             </input-bloc>
-                            <input-bloc label="alert.edit.dynamic.levels.maxValue" type="number" styleClass="min-value"
+                            <input-bloc label="alert.edit.dynamic.levels.maxValue" type="number" styleClass="min-value" formControlName="showedMaxValue"
                                 (enter)="setGraphMaxValue($event,graph)" (change)="setGraphMaxValue($event,graph)">
                             </input-bloc>
                             <input-bloc label="alert.edit.dynamic.levels.precision" type="number"
@@ -194,7 +194,7 @@
                             </div>
                         </div>
                         <div class="graph">
-                            <dynamic-levels width=0.5 height=0.4 [formatter]="formatter" formControlName="dynamicLevels"
+                            <dynamic-levels width=0.5 height=0.4 [formatter]="formatter" formControlName="dynamicLevels" [dynamicMode]="dynamic"
                                 #graph></dynamic-levels>
                         </div>
                     </p-tabPanel>
