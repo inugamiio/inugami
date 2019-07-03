@@ -5,15 +5,16 @@ import {Component,
   forwardRef,
   AfterViewInit,
   ElementRef}                                         from '@angular/core';
+import {HttpClient}                                   from '@angular/common/http';
+import {NG_VALUE_ACCESSOR,ControlValueAccessor}       from '@angular/forms';
 
 import * as d3 from 'd3';
-import {NG_VALUE_ACCESSOR,ControlValueAccessor}       from '@angular/forms';
+
 import {SvgComponent}                                 from './../svg_component/svg.component';
 import {HttpServices}                                 from './../../../services/http/http.services';
-import {Http}                                         from '@angular/http';
+
 import {SvgGenericMapEventIncomming}                  from './svg.generic.map.event.incomming';
 import {SvgGenericMapMouseEvent}                      from './svg.generic.map.mouse.event';
-
 
 export const SvgGenericMap_ACCESSOR: any = {
 provide: NG_VALUE_ACCESSOR,
@@ -48,7 +49,7 @@ export class SvgGenericMap extends SvgComponent implements ControlValueAccessor,
   /*****************************************************************************
   * INIT
   *****************************************************************************/
-  constructor(private el: ElementRef,private http  : Http,private httpSerivce    : HttpServices){
+  constructor(private el: ElementRef,private http  : HttpClient,private httpSerivce : HttpServices){
     super(el);
   }
 

@@ -23,6 +23,7 @@ import {Msg}                            from './components/msg/msg';
 import {Bloc}                           from './components/display/bloc/bloc';
 import {Image}                          from './components/display/image/image';
 import {SvgComponent}                   from './components/charts/svg_component/svg.component';
+
 import {SystemNotification}             from './components/system_notification/system.notification';
 import {AlertingTab}                    from './components/alerting_tab/alerting.tab';
 
@@ -36,15 +37,16 @@ import {Carousel}                       from './components/carousel/carousel';
 import {PropertiesEditor}               from './components/properties_editor/properties.editor';
 import {ClockComponent}                 from './components/clock/clock.component';
 import {ServerStateComponent}           from './components/server_state/server.state.component';
-
 import {BarChart}                       from './components/charts/bar_chart/bar.chart';
 import {BubbleLegend}                   from './components/charts/bubble_legend/bubble_legend';
 import {CurveChart}                     from './components/charts/curve_chart/curve.chart';
 import {DoubleBubble}                   from './components/charts/double_bubble/double.bubble';
 import {EvolutionValue}                 from './components/charts/evolution_value/evolution.value';
+
 import {SimpleGraph}                    from './components/charts/simple_graph/simple_graph';
 import {SimpleValue}                    from './components/charts/simple_value/simple.value';
 import {TimeHandler}                    from './components/charts/time_handler/time.handler';
+
 import {Value}                          from './components/charts/value/value';
 import {ValueBloc}                      from './components/charts/value_bloc/value.bloc';
 import {ValueChart}                     from './components/charts/value_chart/value.chart';
@@ -55,6 +57,9 @@ import {GitlabMergeRequestsComponent}   from './components/providers/gitlab_merg
 import {JiraIssuesComponent}            from './components/providers/jira_issues/jira.issues.components';
 import {MainMenu}                       from './components/main_menu/main.menu';
 
+
+
+
 // VIEWS -----------------------------------------------------------------------
 import {HomeView}                       from './view/home.view';
 import {HelpView}                       from './view/help.view';
@@ -62,7 +67,6 @@ import {AdminView}                      from './view/admin.view';
 import {AdminViewAlerts}                from './view/admin/alerts/admin.view.alerts';
 import {AdminViewAlertEdit}             from './view/admin/alerts/admin.view.alert.edit';
 import {LoginView}                      from './view/login.view';
-
 
 // SERVICES --------------------------------------------------------------------
 import {PluginsService}                 from './services/plugins.service';
@@ -77,6 +81,7 @@ import {AlertsDynamicCrudServices}      from './services/http/alerts.dynamic.cru
 
 import {MainMenuService}                from './components/main_menu/main.menu.service';
 
+
 // MODULE ----------------------------------------------------------------------
 @NgModule({
   imports: [CommonModule, BrowserModule, ReactiveFormsModule,FormsModule, HttpClientModule,RouterModule,BrowserAnimationsModule,PrimeNgModule],
@@ -90,74 +95,89 @@ import {MainMenuService}                from './components/main_menu/main.menu.s
     PluginInfosBehaviors,
     EventInfos,
     SimpleEventInfos,
-    
+
+    // SubView
+    AdminViewAlerts,
+    AdminViewAlertEdit,
+
+    // components
     Bloc,
     Image,
     SvgComponent,
-    
+    Msg,
+
     SystemNotification,
     AlertingTab,
-    Msg,
-    AdminViewAlerts,
-    AdminViewAlertEdit,
+
     InputBloc,
     InputSwitch,
     InputTimeSlots,
     InputDaysSelector,
     DynamicLevels,
+
     Carousel,
     PropertiesEditor,
+    ClockComponent,
+    ServerStateComponent,
 
     BarChart,
     BubbleLegend,
     CurveChart,
     DoubleBubble,
     EvolutionValue,
+
     SimpleGraph,
     SimpleValue,
     TimeHandler,
     Value,
     ValueBloc,
     ValueChart,
-    ClockComponent,
-    ServerStateComponent,
     SvgGenericMap,
 
     JenkinsJobsComponent,
     GitlabMergeRequestsComponent,
     JiraIssuesComponent,
     MainMenu
+
   ],
   entryComponents: [],
   exports: [
+    // SubView
+    AdminViewAlerts,
+    AdminViewAlertEdit,
+
+    // components
     Bloc,
     Image,
     SvgComponent,
-    
+    Msg,
+
     SystemNotification,
     AlertingTab,
-    Msg,
+
     InputBloc,
     InputSwitch,
-    InputDaysSelector,
     InputTimeSlots,
+    InputDaysSelector,
     DynamicLevels,
-    Carousel, 
+
+    Carousel,
+    PropertiesEditor,
+    ClockComponent,
+    ServerStateComponent,
 
     BarChart,
     BubbleLegend,
     CurveChart,
     DoubleBubble,
     EvolutionValue,
+
     SimpleGraph,
     SimpleValue,
     TimeHandler,
     Value,
     ValueBloc,
     ValueChart,
-    PropertiesEditor,
-    ClockComponent,
-    ServerStateComponent,
     SvgGenericMap,
 
     JenkinsJobsComponent,
@@ -166,9 +186,9 @@ import {MainMenuService}                from './components/main_menu/main.menu.s
     MainMenu
   ],
   providers: [
+    SessionScope,
     PluginsService,
     AdminService,
-    SessionScope,
     SecurityServices,
     HeaderServices,
     SoundServices,
@@ -177,55 +197,17 @@ import {MainMenuService}                from './components/main_menu/main.menu.s
     AlertsDynamicCrudServices,
     MainMenuService
   ],
-  entryComponents: [
-    Image,
-    BarChart,
-    BubbleLegend,
-    CurveChart,
-    DoubleBubble,
-    EvolutionValue,
-    SimpleGraph,
-    SimpleValue,
-    TimeHandler,
-    Value,
-    ValueBloc,
-    ValueChart,
-    Carousel,
-    ClockComponent,
-    ServerStateComponent,
-    JenkinsJobsComponent,
-    GitlabMergeRequestsComponent,
-    JiraIssuesComponent
-  ],
   bootstrap: []
 })
 export class AppRootModule {
 }
 
 
-PLUGINS_COMPONENTS['image']                 = Image;
-PLUGINS_COMPONENTS['bar-chart']             = BarChart;
-PLUGINS_COMPONENTS['bubble-legend']         = BubbleLegend;
-PLUGINS_COMPONENTS['curve-chart']           = CurveChart;
-PLUGINS_COMPONENTS['double-bubble']         = DoubleBubble;
-PLUGINS_COMPONENTS['evolution-value']       = EvolutionValue;
-PLUGINS_COMPONENTS['simple-graph']          = SimpleGraph;
-PLUGINS_COMPONENTS['simple-value']          = SimpleValue;
-PLUGINS_COMPONENTS['time-handler']          = TimeHandler;
-PLUGINS_COMPONENTS['value']                 = Value;
-PLUGINS_COMPONENTS['value-bloc']            = ValueBloc;
-PLUGINS_COMPONENTS['value-chart']           = ValueChart;
-PLUGINS_COMPONENTS['carousel']              = Carousel;
-PLUGINS_COMPONENTS['clock']                 = ClockComponent;
-PLUGINS_COMPONENTS['server-state']          = ServerStateComponent;
-PLUGINS_COMPONENTS['jenkins-jobs']          = JenkinsJobsComponent;
-PLUGINS_COMPONENTS['gitlab-merge-requests'] = GitlabMergeRequestsComponent;
-PLUGINS_COMPONENTS['jira-issues']           = JiraIssuesComponent;
-PLUGINS_COMPONENTS['i-svg-generic-map']     = SvgGenericMap;
 
 
 
 const  AppRootModuleRoutesConfig: Routes = [
+    
     { path: 'help' , component: HelpView },
     { path: 'admin', component: AdminView },
     { path: 'login', component: LoginView },

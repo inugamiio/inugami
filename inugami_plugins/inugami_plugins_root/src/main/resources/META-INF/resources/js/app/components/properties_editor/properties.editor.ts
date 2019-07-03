@@ -1,6 +1,6 @@
 import {Component,Input,forwardRef}                         from '@angular/core';
 import {NG_VALUE_ACCESSOR,ControlValueAccessor}             from '@angular/forms';
-import {ConfirmationService}                                from 'primeng/primeng';
+import {ConfirmationService}                                from 'primeng/api';
 
 import {InputBloc}                                          from './../forms/input.bloc';
 import {Property}                                           from './../../models/property';
@@ -55,6 +55,7 @@ export class PropertiesEditor  implements ControlValueAccessor{
     public removeProperty(index:number){
         let property = this.innerValue[index];
         let confirmationLable   = org.inugami.formatters.message("properties.delete.confirmation",[property.key]);
+
         this.confirmationService.confirm({
 
             message: confirmationLable,
@@ -62,9 +63,6 @@ export class PropertiesEditor  implements ControlValueAccessor{
                 this.innerValue.splice(index,1);
             }
         });
-
-
-        
     }
 
     /***************************************************************************

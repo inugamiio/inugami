@@ -2,7 +2,6 @@ import {Component,OnInit,OnDestroy}                           from '@angular/cor
 import {ActivatedRoute,Router,NavigationStart,NavigationEnd}  from '@angular/router';
 import {PluginsService}                                       from './../services/plugins.service';
 import {MenuLink}                                             from './../models/menu.link';
-import {SimpleValue}                                          from './../components/charts/simple_value/simple.value';
 import {SessionScope}                                         from './../scopes/session.scope';
 import {MainMenuService}                                      from './../components/main_menu/main.menu.service';
 import {MainMenuLink}                                         from './../components/main_menu/main.menu.link';
@@ -10,7 +9,7 @@ import {MainMenuLink}                                         from './../compone
 
 @Component({
     templateUrl: 'js/app/view/home.view.html',
-    directives : [SimpleValue]
+    directives : []
 })
 export class HomeView implements OnInit, OnDestroy{
 
@@ -19,7 +18,7 @@ export class HomeView implements OnInit, OnDestroy{
   **************************************************************************/
   private showLink      : boolean = false;
   private pluginsLinks  : MenuLink[];
-  
+
   /**************************************************************************
   * CONSTRUCTOR
   **************************************************************************/

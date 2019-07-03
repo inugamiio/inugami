@@ -1,10 +1,10 @@
 import {Component,Inject,OnInit,Input,Output,forwardRef}    from '@angular/core';
 import {GrowlModule}                                        from 'primeng/growl';
 import {Message}                                            from 'primeng/api';
-import {DataTable,Column}                                   from 'primeng/primeng';
+import {TableModule}                                        from 'primeng/table';
 
 
-import { Http }                                       from '@angular/http';
+import { Http }                                             from '@angular/http';
 
 
 import {AlertsCrudServices}                                 from './../../../services/http/alerts.crud.services'
@@ -16,7 +16,7 @@ import {AdminViewAlertEdit}                                 from './../../../vie
 @Component({
   selector      : 'admin-view-alerts',
   templateUrl   : 'js/app/view/admin/alerts/admin.view.alerts.html',
-  directives    : [DataTable,Column,InputBloc,Msg,AdminViewAlertEdit]
+  directives    : [InputBloc,Msg,AdminViewAlertEdit]
 })
 export class AdminViewAlerts{
 
