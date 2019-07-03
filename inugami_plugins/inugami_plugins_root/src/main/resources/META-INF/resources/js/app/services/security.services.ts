@@ -1,6 +1,6 @@
 import {Injectable}                             from '@angular/core';
 import {Router}                                 from '@angular/router';
-import {Http}                                   from '@angular/http';
+import {HttpClient}                             from '@angular/common/http';
 
 import {HeaderServices}                         from './../services/header.services';
 import {SessionScope}                           from './../scopes/session.scope';
@@ -16,7 +16,7 @@ export class SecurityServices {
     /**************************************************************************
     * CONSTRUCTORS
     **************************************************************************/
-    constructor(private http           : Http,
+    constructor(private http           : HttpClient,
                 private router         : Router,
                 private sessionScope   : SessionScope,
                 private headerServices : HeaderServices) {

@@ -13,16 +13,10 @@
 	<base href="<%=request.getContextPath()%>/">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script src="<%=request.getContextPath()%>/js/vendors/platform-js/platform.js"></script>
-	<script src="<%=request.getContextPath()%>/js/vendors/jquery/dist/jquery.min.js"></script>
-	
-	<script src="<%=request.getContextPath()%>/js/vendors.js"></script>
-	<script src="<%=request.getContextPath()%>/js/vendors/chartjs/Chart.bundle.min.js"></script>
-	<script src="<%=request.getContextPath()%>/js/vendors/chartjs/Chart.min.js"></script>
-	<script src="<%=request.getContextPath()%>/js/vendors/d3/build/d3.min.js"></script>
+ 
+	<script src="<%=request.getContextPath()%>/js/vendors/vendors.js"></script>
 
-	<script src="<%=request.getContextPath()%>/js/vendors/bootstrap/bootstrap.bundle.min.js"></script>
-	
+
 
 	<!-- CORE JS -->
 	<script type="text/javascript">
@@ -45,20 +39,7 @@
 	<%=ResourceLoaderJSP.getPluginJavaScripts(request.getContextPath())%>
 
 	<!-- STYLES -->
-	<link   href="<%=request.getContextPath()%>/css/core/bootstrap.min.css" rel="stylesheet" />
-	<link   href="<%=request.getContextPath()%>/css/core/bootstrap-reboot.min.css" rel="stylesheet" />
-	<link   href="<%=request.getContextPath()%>/css/core/bootstrap-grid.min.css" rel="stylesheet" />
-	
-	<link   href="<%=request.getContextPath()%>/css/core/font.css" rel="stylesheet" />
-	<link   href="<%=request.getContextPath()%>/css/core/font-awesome.min.css" rel="stylesheet" />
-	<link   href="<%=request.getContextPath()%>/css/core/fontello.css" rel="stylesheet" />
-	<link   href="<%=request.getContextPath()%>/css/core/mfglabs.css" rel="stylesheet" />
-	<link   href="<%=request.getContextPath()%>/css/core/typicons.css" rel="stylesheet" />
-	
-	<link   href="<%=request.getContextPath()%>/js/vendors/primeng/resources/primeng.min.css" rel="stylesheet" />
-	<link   href="<%=request.getContextPath()%>/js/vendors/primeng/resources/themes/bootstrap/theme.css" rel="stylesheet" />
-
-
+	<link   href="<%=request.getContextPath()%>/css/core/vendors.css" rel="stylesheet" />
 	
 
 	<link   href="<%=request.getContextPath()%>/css/core/application.css" rel="stylesheet" />
@@ -93,47 +74,76 @@
     // SYSTEM JS CONFIG
     // =====================================================================
     (function(global) {
+		SystemJS.typescriptOptions = {
+			"target": "es5",
+			"module": "system",
+			"moduleResolution": "node",
+			"sourceMap": true,
+			"emitDecoratorMetadata": true,
+			"experimentalDecorators": true,
+			"noImplicitAny": true,
+			"suppressImplicitAnyIndexErrors": true
+		};
+	
         var config = {
-          transpiler: 'typescript',
-          typescriptOptions: {
-            emitDecoratorMetadata: true
-          },
-
-          packages: {
-            '<%=request.getContextPath()%>/js': {
-              defaultExtension: 'ts'
-            },
-            '<%=request.getContextPath()%>/js/vendors': {
-              defaultExtension: 'js'
+          transpiler: 'ts',
+		  meta: {
+            'typescript': {
+              "exports": "ts"
             }
-          },
+        },
+    
+        paths: {
+            'vendor:': VENDOR_PATH+"/"
+		},
+		
+        bundles: {
+            '<%=request.getContextPath()%>/js/vendors/rxjs-system-bundle/Rx.system.min.js': [
+              "rxjs",
+              "rxjs/*",
+              "rxjs/operator/*",
+              "rxjs/operators/*",
+              "rxjs/observable/*",
+              "rxjs/scheduler/*",
+              "rxjs/symbol/*",
+              "rxjs/add/operator/*",
+              "rxjs/add/observable/*",
+              "rxjs/util/*"
+			],
+			'<%=request.getContextPath()%>/js/vendors/primeng/primeng-components.js': [
+				"components/*",
+		    ]
+		}, 
+        paths: {
+            'vendor:': VENDOR_PATH+"/"
+        },
           map:{
-"js/app/controllers"                	: APP_PATH+"/controllers",
-"js/app/components"                 	: APP_PATH+"/components",
-"js/app/scopes"                     	: APP_PATH+"/scopes",
-"js/app/models"                     	: APP_PATH+"/models",
-"js/app/services"                   	: APP_PATH+"/services",
+"app" 									: 'js/app',
 
-"@angular/router"                   	: VENDOR_PATH+"/@angular/router/bundles/router.umd.min",
-"@angular/core"                     	: VENDOR_PATH+"/@angular/core/bundles/core.umd.min",
-"@angular/common"                   	: VENDOR_PATH+"/@angular/common/bundles/common.umd.min",
-"@angular/http"                     	: VENDOR_PATH+"/@angular/http/bundles/http.umd.min.js",
-"@angular/platform-browser-dynamic" 	: VENDOR_PATH+"/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.min",
-"@angular/compiler"                 	: VENDOR_PATH+"/@angular/compiler/bundles/compiler.umd.min",
-"@angular/platform-browser"         	: VENDOR_PATH+"/@angular/platform-browser/bundles/platform-browser.umd.min",
-"@angular/forms"                    	: VENDOR_PATH+"/@angular/forms/bundles/forms.umd.min",
-"@angular/platform-browser/animations"	: VENDOR_PATH+"/@angular/platform-browser/bundles/platform-browser-animations.umd.min",
-"@angular/animations/browser"			: VENDOR_PATH+"/@angular/animations/bundles/animations-browser.umd.min",
-"@angular/animations"				 	: VENDOR_PATH+"/@angular/animations/bundles/animations.umd.min",
+"@angular/core"                     	: "vendor:@angular/core/bundles/core.umd.min.js",
+"@angular/common"                   	: "vendor:@angular/common/bundles/common.umd.min.js",
+"@angular/compiler"                 	: "vendor:@angular/compiler/bundles/compiler.umd.min.js",
+'@angular/platform-browser'             : "vendor:@angular/platform-browser/bundles/platform-browser.umd.js",
+"@angular/platform-browser-dynamic" 	: "vendor:@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.min.js",
+"@angular/common/http"                  : "vendor:@angular/common/bundles/common-http.umd.js",
+"@angular/forms"                    	: "vendor:@angular/forms/bundles/forms.umd.min.js",
+"@angular/platform-browser/animations"	: "vendor:@angular/platform-browser/bundles/platform-browser-animations.umd.min.js",
+"@angular/animations/browser"		    : "vendor:@angular/animations/bundles/animations-browser.umd.min.js",
+"@angular/animations"				 	: "vendor:@angular/animations/bundles/animations.umd.min.js",
+"@angular/router"                   	: "vendor:@angular/router/bundles/router.umd.min.js",
 
+"ts"                                    : 'vendor:plugin-typescript/lib/plugin.js',
+"typescript"                            : 'vendor:typescript/lib/typescript.js',
+"core-js"                               : "vendor:core-js",
 
-"rxjs"                              	: VENDOR_PATH+"/rxjs",
-"primeng/primeng"				    	: VENDOR_PATH+"/primeng/primeng",
-"d3"									: VENDOR_PATH+"/d3/build/d3.min"
+"primeng/primeng"				    	: "vendor:primeng/primeng.js",
+"d3"									: "vendor:d3/d3.min.js"
 
 <%=ResourceLoaderJSP.getPluginSystemMap()%>
-          }
-
+          },
+		  packages: {
+			"app"     : { defaultExtension: 'ts' }
+		  }
         };
 
         if (global.filterSystemConfig) {

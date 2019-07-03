@@ -1,5 +1,6 @@
 import {Injectable}                              from '@angular/core';
-import {Http, Response,Headers, RequestOptions}  from '@angular/http';
+import {HttpClient, HttpResponse,
+       HttpHeaders, HttpRequest}                 from '@angular/common/http';
 import {SessionScope}                            from './../../scopes/session.scope';
 import {HeaderServices}                          from './../header.services'
 
@@ -10,7 +11,7 @@ export class HttpServices {
     /**************************************************************************
     * CONSTRUCTORS
     **************************************************************************/
-    constructor(private http: Http,
+    constructor(private http: HttpClient,
                 private headerServices:HeaderServices,
                 private sessionScope : SessionScope) {
 

@@ -179,7 +179,7 @@ public class ResourcesRenderer {
         // IMPORTS
         // ---------------------------------------------------
         //@formatter:off
-        result.append("import 'rxjs/add/operator/toPromise';");
+        result.append("import 'add/operator/toPromise';");
         result.append(importation("CommonModule"            , "@angular/common"));
         result.append(importation("BrowserModule"           , "@angular/platform-browser"));
         result.append(importation("ReactiveFormsModule"     , "@angular/forms"));

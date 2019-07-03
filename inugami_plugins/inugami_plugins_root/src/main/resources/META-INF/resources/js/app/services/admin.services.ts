@@ -1,5 +1,5 @@
 import {Injectable}                              from '@angular/core';
-import {Http}                                    from '@angular/http';
+import {HttpClient}                              from '@angular/common/http';
 import {SessionScope}                            from './../scopes/session.scope';
 import {HeaderServices}                          from './../services/header.services';
 import {HttpServices}                            from './../services/http/http.services';
@@ -15,7 +15,7 @@ export class AdminService {
     /**************************************************************************
     * CONSTRUCTORS
     **************************************************************************/
-    constructor(private http           : Http,
+    constructor(private http           : HttpClient,
                 private headerServices : HeaderServices,
                 private sessionScope   : SessionScope,
                 private httpService    : HttpServices) {

@@ -3,7 +3,7 @@ import {RouterModule,Routes}            from '@angular/router';
 import {NgModule}                       from '@angular/core'
 import {CommonModule}                   from '@angular/common'
 import {BrowserModule}                  from '@angular/platform-browser'
-import {HttpModule}                     from '@angular/http'
+import { HttpClientModule }             from '@angular/common/http';
 import {ReactiveFormsModule}            from '@angular/forms'
 import {FormsModule}                    from '@angular/forms'
 import {BrowserAnimationsModule}        from '@angular/platform-browser/animations';
@@ -79,7 +79,7 @@ import {MainMenuService}                from './components/main_menu/main.menu.s
 
 // MODULE ----------------------------------------------------------------------
 @NgModule({
-  imports: [CommonModule, BrowserModule, ReactiveFormsModule,FormsModule, HttpModule,RouterModule,BrowserAnimationsModule,PrimeNgModule],
+  imports: [CommonModule, BrowserModule, ReactiveFormsModule,FormsModule, HttpClientModule,RouterModule,BrowserAnimationsModule,PrimeNgModule],
   declarations: [
     HomeView,
     HelpView,

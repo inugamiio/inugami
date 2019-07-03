@@ -1,5 +1,5 @@
 import {Injectable}                                 from '@angular/core';
-import {Http,Headers, RequestOptions}               from '@angular/http';
+import {HttpRequest}                                from '@angular/common/http';
 import {SessionScope}                               from './../scopes/session.scope';
 
 
@@ -16,14 +16,13 @@ export class HeaderServices {
     /**************************************************************************
     * CONSTRUCTORS
     **************************************************************************/
-    constructor(private http         : Http,
-                private sessionScope : SessionScope) {
+    constructor(private sessionScope : SessionScope) {
     }
 
     /**************************************************************************
     * API
     **************************************************************************/
-    public buildHeader(headerInfos) : RequestOptions{
+    public buildHeader(headerInfos) : HttpRequest{
       
       let headerData = isNull(headerInfos)?{}:headerInfos;
       if(this.sessionScope.isConnected()){
@@ -40,6 +39,6 @@ export class HeaderServices {
       headerData[org.inugami.constants.headers.DEVICE_NETWORK_SPEED_DOWN]    = org.inugami.constants.deviceNetworkSpeedDown;
       headerData[org.inugami.constants.headers.DEVICE_NETWORK_SPEED_LATENCY] = org.inugami.constants.deviceNetworkSpeedLatency;
       
-      return new RequestOptions({ headers: new Headers(headerData) });
+      return new HttpRequest({ headers: new Headers(headerData) });
     }
 }
