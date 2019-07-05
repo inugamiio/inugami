@@ -40,7 +40,8 @@
 
 	<!-- STYLES -->
 	<link   href="<%=request.getContextPath()%>/css/core/vendors.css" rel="stylesheet" />
-	
+	<link   href="<%=request.getContextPath()%>/css/core/fontawesome.all.min.css" rel="stylesheet" />
+
 
 	<link   href="<%=request.getContextPath()%>/css/core/application.css" rel="stylesheet" />
 	<link   href="<%=request.getContextPath()%>/css/core/page-root-home.css" rel="stylesheet" />
