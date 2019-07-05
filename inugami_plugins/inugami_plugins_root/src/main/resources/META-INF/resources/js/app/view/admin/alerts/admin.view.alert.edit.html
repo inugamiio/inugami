@@ -4,16 +4,16 @@
     <div [ngClass]="' alert-edit '" [class]="styleClass">
         <div class="btn-group top" role="group">
             <!--pButton-->
-            <button  type="button" (click)="close()" class="default-action" msg>
+            <button  pButton type="button" (click)="close()" class="default-action" msg>
                 <msg key="action.cancel"></msg>
             </button>
 
-            <button  type="button" [disabled]="!alertForm.valid" msg name="save" (click)="saveAlertAndClose()"
+            <button  pButton type="button" [disabled]="!alertForm.valid" msg name="save" (click)="saveAlertAndClose()"
                 class="active-action">
                 <msg key="action.save"></msg>
             </button>
 
-            <button  type="button" [disabled]="!alertForm.valid" msg name="saveandcontinue" (click)="saveAlert()"
+            <button  pButton type="button" [disabled]="!alertForm.valid" msg name="saveandcontinue" (click)="saveAlert()"
                 class="full-active-action" *ngIf="isNotEdit">
                 <msg key="action.save.and.continue"></msg>
             </button>
@@ -24,9 +24,9 @@
                     <input-bloc [validator]="validators.notEmptyString" [disabled]="edit" label="alert.edit.alert.name"
                         formControlName="name"></input-bloc>
                     <span class="file-input">
-                        <button pButton type=button class="active-action" icon="fas fa-folder-open"
+                        <button  type=button class="active-action" icon="fas fa-folder-open"
                             (click)="fileinput.click()"></button>
-                        <button pButton type=button class="active-action" icon="fas fa-arrow-down"
+                        <button  type=button class="active-action" icon="fas fa-arrow-down"
                             (click)="download.click()"></button>
                         <input type=file (input)="fileChanged($event)" #fileinput>
                         <a class="download" title="Download JSON" [href]="fileUri" download="download.json"

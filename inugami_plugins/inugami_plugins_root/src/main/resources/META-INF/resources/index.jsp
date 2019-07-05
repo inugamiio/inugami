@@ -40,6 +40,7 @@
 
 	<!-- STYLES -->
 	<link   href="<%=request.getContextPath()%>/css/core/vendors.css" rel="stylesheet" />
+	<link   href="<%=request.getContextPath()%>/css/core/primeng-theme.css" rel="stylesheet" />
 	<link   href="<%=request.getContextPath()%>/css/core/fontawesome.all.min.css" rel="stylesheet" />
 
 
@@ -110,10 +111,7 @@
               "rxjs/add/operator/*",
               "rxjs/add/observable/*",
               "rxjs/util/*"
-			],
-			//'<%=request.getContextPath()%>/js/vendors/primeng/primeng-components.js': [
-			//	"components/*",
-		    //]
+			]
 		}, 
         paths: {
             'vendor:': VENDOR_PATH+"/"
@@ -137,7 +135,7 @@
 "typescript"                            : 'vendor:typescript/lib/typescript.js',
 "core-js"                               : "vendor:core-js",
 "tslib"                                 : "vendor:tslib/tslib.js",
-/*
+
 "primeng/accordion"				    	: "vendor:primeng/accordion.js",
 "primeng/api"				    	    : "vendor:primeng/api.js",
 "primeng/autocomplete"				    : "vendor:primeng/autocomplete.js",
@@ -194,7 +192,7 @@
 "primeng/panelmenu"				    	: "vendor:primeng/panelmenu.js",
 "primeng/password"				    	: "vendor:primeng/password.js",
 "primeng/picklist"				    	: "vendor:primeng/picklist.js",
-"primeng/primeng"				    	: "vendor:primeng/primeng.js",
+
 "primeng/progressbar"				    : "vendor:primeng/progressbar.js",
 "primeng/progressspinner"				: "vendor:primeng/progressspinner.js",
 "primeng/radiobutton"				    : "vendor:primeng/radiobutton.js",
@@ -222,7 +220,7 @@
 "primeng/treetable"				    	: "vendor:primeng/treetable.js",
 "primeng/tristatecheckbox"				: "vendor:primeng/tristatecheckbox.js",
 "primeng/virtualscroller"				: "vendor:primeng/virtualscroller.js",
-*/
+
 "d3"									: "vendor:d3/d3.min.js"
 
 <%=ResourceLoaderJSP.getPluginSystemMap()%>

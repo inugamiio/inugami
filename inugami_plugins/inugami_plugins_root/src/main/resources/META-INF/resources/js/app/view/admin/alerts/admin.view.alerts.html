@@ -37,6 +37,7 @@
 <article *ngIf="isActiveSection('createView')" class="createView">
     <fieldset>
         <legend><msg key="alert.create.title"></msg></legend>
+
         <admin-view-alert-edit  [(ngModel)]="selectedAlert" 
                                 (onSuccess)="onMessage($event)"
                                 (onError)="onMessage($event)"

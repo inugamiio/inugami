@@ -9,6 +9,9 @@ import {FormsModule}                    from '@angular/forms'
 import {BrowserAnimationsModule}        from '@angular/platform-browser/animations';
 import {PrimeNgModule}                  from './primeng.module';
 
+
+
+
 // SCOPES ----------------------------------------------------------------------
 import {SessionScope}                    from './scopes/session.scope';
 
@@ -79,7 +82,9 @@ import {MainMenuService}                from './components/main_menu/main.menu.s
 // MODULE ----------------------------------------------------------------------
 //PrimeNgModule
 @NgModule({
-  imports: [CommonModule, BrowserModule, ReactiveFormsModule,FormsModule, HttpClientModule,RouterModule,BrowserAnimationsModule],
+  imports: [CommonModule, BrowserModule, ReactiveFormsModule,
+            FormsModule, HttpClientModule,RouterModule,BrowserAnimationsModule,
+            PrimeNgModule],
   declarations: [
     HomeView,
     HelpView,
@@ -135,6 +140,7 @@ import {MainMenuService}                from './components/main_menu/main.menu.s
     // SubView
     AdminViewAlerts,
     AdminViewAlertEdit,
+
 
     // components
     Bloc,
