@@ -32,7 +32,6 @@ export class HomeView implements OnInit, OnDestroy{
 
 
   ngOnInit() {
-    /*
     this.sub = this.route.params.subscribe(params => {
       this.initMainMenu();
       if(!this.sessionScope.isConnected()){
@@ -42,7 +41,6 @@ export class HomeView implements OnInit, OnDestroy{
         this.grabAllMenuLinks();
       }
     });
-    */
   }
 
   /**************************************************************************
@@ -50,19 +48,19 @@ export class HomeView implements OnInit, OnDestroy{
   **************************************************************************/
   initMainMenu(){ 
 
-    //this.mainMenuService.cleanLinks();
-    //this.mainMenuService.setCurrentTitle("Home");
-    //this.mainMenuService.addSubLink(new MainMenuLink("Administration", "/admin","admin",true,'admin'));
-    //this.mainMenuService.updateMenu();
+    this.mainMenuService.cleanLinks();
+    this.mainMenuService.setCurrentTitle("Home");
+    this.mainMenuService.addSubLink(new MainMenuLink("Administration", "/admin","admin",true,'admin'));
+    this.mainMenuService.updateMenu();
   }
   grabAllMenuLinks(){
-      //this.pluginsService.getAllMenuLinks().then(data =>{
-      //  this.initPluginsLinks(data);
-      //});
+      this.pluginsService.getAllMenuLinks().then(data =>{
+        this.initPluginsLinks(data);
+      });
   }
   initPluginsLinks(data){
-      //this.pluginsLinks = data;
-      //this.showLink=true;
+      this.pluginsLinks = data;
+      this.showLink=true;
   }
 
 }
