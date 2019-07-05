@@ -18,21 +18,17 @@ import {PluginInfosBehaviors}           from './components/plugin_infos_behavior
 import {AdminBloc}                      from './components/admin_bloc/admin.bloc';
 import {EventInfos}                     from './components/event_infos/event.infos';
 import {SimpleEventInfos}               from './components/simple_event_infos/simple.event.infos';
-
 import {Msg}                            from './components/msg/msg';
 import {Bloc}                           from './components/display/bloc/bloc';
 import {Image}                          from './components/display/image/image';
 import {SvgComponent}                   from './components/charts/svg_component/svg.component';
-
 import {SystemNotification}             from './components/system_notification/system.notification';
 import {AlertingTab}                    from './components/alerting_tab/alerting.tab';
-
 import {InputBloc}                      from './components/forms/input.bloc';
 import {InputDaysSelector}              from './components/forms/input.days.selector';
 import {InputSwitch}                    from './components/forms/input.switch';
 import {InputTimeSlots}                 from './components/forms/input.time.slots';
 import {DynamicLevels}                  from './components/forms/dynamic.levels';
-
 import {Carousel}                       from './components/carousel/carousel';
 import {PropertiesEditor}               from './components/properties_editor/properties.editor';
 import {ClockComponent}                 from './components/clock/clock.component';
@@ -42,16 +38,13 @@ import {BubbleLegend}                   from './components/charts/bubble_legend/
 import {CurveChart}                     from './components/charts/curve_chart/curve.chart';
 import {DoubleBubble}                   from './components/charts/double_bubble/double.bubble';
 import {EvolutionValue}                 from './components/charts/evolution_value/evolution.value';
-
 import {SimpleGraph}                    from './components/charts/simple_graph/simple_graph';
 import {SimpleValue}                    from './components/charts/simple_value/simple.value';
 import {TimeHandler}                    from './components/charts/time_handler/time.handler';
-
 import {Value}                          from './components/charts/value/value';
 import {ValueBloc}                      from './components/charts/value_bloc/value.bloc';
 import {ValueChart}                     from './components/charts/value_chart/value.chart';
 import {SvgGenericMap}                  from './components/charts/svg_generic_map/svg.generic.map';
-
 import {JenkinsJobsComponent}           from './components/providers/jenkins_jobs/jenkins.jobs.component';
 import {GitlabMergeRequestsComponent}   from './components/providers/gitlab_merge_requests/gitlab.merge.requests.component';
 import {JiraIssuesComponent}            from './components/providers/jira_issues/jira.issues.components';
@@ -69,6 +62,7 @@ import {AdminViewAlertEdit}             from './view/admin/alerts/admin.view.ale
 import {LoginView}                      from './view/login.view';
 
 // SERVICES --------------------------------------------------------------------
+
 import {PluginsService}                 from './services/plugins.service';
 import {AdminService}                   from './services/admin.services';
 import {SecurityServices}               from './services/security.services';
@@ -83,8 +77,9 @@ import {MainMenuService}                from './components/main_menu/main.menu.s
 
 
 // MODULE ----------------------------------------------------------------------
+//PrimeNgModule
 @NgModule({
-  imports: [CommonModule, BrowserModule, ReactiveFormsModule,FormsModule, HttpClientModule,RouterModule,BrowserAnimationsModule,PrimeNgModule],
+  imports: [CommonModule, BrowserModule, ReactiveFormsModule,FormsModule, HttpClientModule,RouterModule,BrowserAnimationsModule],
   declarations: [
     HomeView,
     HelpView,
@@ -105,27 +100,22 @@ import {MainMenuService}                from './components/main_menu/main.menu.s
     Image,
     SvgComponent,
     Msg,
-
     SystemNotification,
     AlertingTab,
-
     InputBloc,
     InputSwitch,
     InputTimeSlots,
     InputDaysSelector,
     DynamicLevels,
-
     Carousel,
     PropertiesEditor,
     ClockComponent,
     ServerStateComponent,
-
     BarChart,
     BubbleLegend,
     CurveChart,
     DoubleBubble,
     EvolutionValue,
-
     SimpleGraph,
     SimpleValue,
     TimeHandler,
@@ -133,7 +123,6 @@ import {MainMenuService}                from './components/main_menu/main.menu.s
     ValueBloc,
     ValueChart,
     SvgGenericMap,
-
     JenkinsJobsComponent,
     GitlabMergeRequestsComponent,
     JiraIssuesComponent,
@@ -142,6 +131,7 @@ import {MainMenuService}                from './components/main_menu/main.menu.s
   ],
   entryComponents: [],
   exports: [
+    HomeView,
     // SubView
     AdminViewAlerts,
     AdminViewAlertEdit,
@@ -151,27 +141,22 @@ import {MainMenuService}                from './components/main_menu/main.menu.s
     Image,
     SvgComponent,
     Msg,
-
     SystemNotification,
     AlertingTab,
-
     InputBloc,
     InputSwitch,
     InputTimeSlots,
     InputDaysSelector,
     DynamicLevels,
-
     Carousel,
     PropertiesEditor,
     ClockComponent,
     ServerStateComponent,
-
     BarChart,
     BubbleLegend,
     CurveChart,
     DoubleBubble,
     EvolutionValue,
-
     SimpleGraph,
     SimpleValue,
     TimeHandler,
@@ -179,7 +164,6 @@ import {MainMenuService}                from './components/main_menu/main.menu.s
     ValueBloc,
     ValueChart,
     SvgGenericMap,
-
     JenkinsJobsComponent,
     GitlabMergeRequestsComponent,
     JiraIssuesComponent,

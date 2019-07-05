@@ -1,17 +1,17 @@
 import { Component, OnInit, OnDestroy }         from '@angular/core';
-import { ActivatedRoute,Router,NavigationEnd }  from '@angular/router';
+//import { ActivatedRoute,Router,NavigationEnd }  from '@angular/router';
 
-import {SessionScope}                           from './scopes/session.scope';
-import {SecurityServices}                       from './services/security.services'
-import {SystemNotification}                     from './components/system_notification/system.notification';
-import {HttpServices}                           from './services/http/http.services'
-import {PluginsService}                         from './services/plugins.service'
-import {MainMenu}                               from './components/main_menu/main.menu';
+//import {SessionScope}                           from './scopes/session.scope';
+//import {SecurityServices}                       from './services/security.services'
+//import {SystemNotification}                     from './components/system_notification/system.notification';
+//import {HttpServices}                           from './services/http/http.services'
+//import {PluginsService}                         from './services/plugins.service'
+//import {MainMenu}                               from './components/main_menu/main.menu';
 
 @Component({
     selector: 'app-component',
     templateUrl: 'js/app/app-component.html',
-    directives : [SystemNotification,MainMenu]
+    //directives : [SystemNotification,MainMenu]
 })
 export class AppComponent {
     /**************************************************************************
@@ -24,16 +24,17 @@ export class AppComponent {
     /**************************************************************************
     * CONSTRUCTOR
     **************************************************************************/
-    
+    /*
     constructor(private route            : ActivatedRoute,
                 private router           : Router,
                 private sessionScope     : SessionScope,
                 private securityServices : SecurityServices,
                 private httpServices     : HttpServices,
-                private pluginsService   : PluginsService) {
-
-      org.inugami.sse.httpConnector =httpServices;
-            
+                private pluginsService   : PluginsService
+                ) {
+*/
+      //org.inugami.sse.httpConnector =httpServices;
+            /*
       router.events.subscribe((val) => {
         if(val instanceof NavigationEnd){
           let realUrl =val.url;
@@ -94,13 +95,15 @@ export class AppComponent {
           }
           org.inugami.events.fireEvent(callBackEvent, data);
       });
-    }
+      */
+  //  }
 
     /**************************************************************************
     * ON INIT
     **************************************************************************/
 
     public ngOnInit() {
+      /*
       this.sub = this.route.queryParams.subscribe(params => {
          this.sessionScope.openMainMenu();
          let redirectPage = "/";
@@ -125,5 +128,6 @@ export class AppComponent {
              }
          }
       });
+      */
     }
 }

@@ -1,5 +1,5 @@
 import {Injectable}                                 from '@angular/core';
-import {HttpRequest}                                from '@angular/common/http';
+import {HttpRequest,HttpHeaders}                    from '@angular/common/http';
 import {SessionScope}                               from './../scopes/session.scope';
 
 
@@ -39,6 +39,6 @@ export class HeaderServices {
       headerData[org.inugami.constants.headers.DEVICE_NETWORK_SPEED_DOWN]    = org.inugami.constants.deviceNetworkSpeedDown;
       headerData[org.inugami.constants.headers.DEVICE_NETWORK_SPEED_LATENCY] = org.inugami.constants.deviceNetworkSpeedLatency;
       
-      return new HttpRequest({ headers: new Headers(headerData) });
+      return new HttpRequest({ headers: new HttpHeaders(headerData) });
     }
 }

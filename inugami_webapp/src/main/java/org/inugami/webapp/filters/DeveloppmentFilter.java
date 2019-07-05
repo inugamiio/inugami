@@ -63,16 +63,7 @@ public class DeveloppmentFilter implements Filter {
     private static final File              NOT_PLUGIN_RESOURCES = new File(".notPluginResource");
     
     //@formatter:off
-    private static final  String[] EXCLUDE_PATHS = {
-        "/rest/",               "/vendors/",                "/vendors.js",
-        "/js/app/core/",        "/css/core/",               "application.css",
-        "bootstrap.min.css",    "bootstrap-responsive.css", "bootstrap-theme.min.css",
-        "components.css",       "/core/font.css",           "font-awesome.min.css", 
-        "fontello.css",         "mfglabs.css",              "primeui-ng-all.min.css", 
-        "typicons.css",         "/js/app/core",             "app.boot.ts",
-        "app.component.ts",     "app.root.module.ts",       "app-component.html", 
-        "primeng.module.ts"
-    };
+    private static final  String[] EXCLUDE_PATHS = { "/rest/","/vendors/","/vendors.js"};
     //@formatter:on
     
     private final List<Plugin> plugins = new ArrayList<>();
@@ -103,7 +94,6 @@ public class DeveloppmentFilter implements Filter {
                .getPlugins()
                .orElse(new ArrayList<>())
                .stream()
-               .filter(plugin->plugin.getFrontConfig().isPresent())
                .filter(plugin->plugin.getManifest()!=null)
                .filter(plugin->plugin.getManifest().getWorkspace()!=null)
                .filter(plugin->workspaceExists(plugin.getManifest().getWorkspace()))

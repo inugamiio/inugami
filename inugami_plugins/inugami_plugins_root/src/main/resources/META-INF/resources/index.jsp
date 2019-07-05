@@ -110,9 +110,9 @@
               "rxjs/add/observable/*",
               "rxjs/util/*"
 			],
-			'<%=request.getContextPath()%>/js/vendors/primeng/primeng-components.js': [
-				"components/*",
-		    ]
+			//'<%=request.getContextPath()%>/js/vendors/primeng/primeng-components.js': [
+			//	"components/*",
+		    //]
 		}, 
         paths: {
             'vendor:': VENDOR_PATH+"/"
@@ -135,8 +135,8 @@
 "ts"                                    : 'vendor:plugin-typescript/lib/plugin.js',
 "typescript"                            : 'vendor:typescript/lib/typescript.js',
 "core-js"                               : "vendor:core-js",
-
-
+//"tslib"                                 : "vendor:tslib/tslib.js",
+/*
 "primeng/accordion"				    	: "vendor:primeng/accordion.js",
 "primeng/api"				    	    : "vendor:primeng/api.js",
 "primeng/autocomplete"				    : "vendor:primeng/autocomplete.js",
@@ -221,7 +221,7 @@
 "primeng/treetable"				    	: "vendor:primeng/treetable.js",
 "primeng/tristatecheckbox"				: "vendor:primeng/tristatecheckbox.js",
 "primeng/virtualscroller"				: "vendor:primeng/virtualscroller.js",
-
+*/
 "d3"									: "vendor:d3/d3.min.js"
 
 <%=ResourceLoaderJSP.getPluginSystemMap()%>

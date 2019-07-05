@@ -35,7 +35,7 @@ export class LoginView implements OnInit, OnDestroy{
 
   ngOnInit() {
     this.sessionScope.closeMainMenu();
-
+/*
     let storedToken = localStorage.getItem(this.localStorageTokenKey);
     if(isNotNull(storedToken)){
         this.securityServices.loginWithToken(storedToken)
@@ -44,23 +44,24 @@ export class LoginView implements OnInit, OnDestroy{
     }else{
       this.showForm();
     }
-    
+  */  
   }
 
   /**************************************************************************
   * ACTION
   **************************************************************************/
   private showForm(){
-    localStorage.removeItem(this.localStorageTokenKey);
-    this.enableLoginForm = "show";
+    //localStorage.removeItem(this.localStorageTokenKey);
+    //this.enableLoginForm = "show";
   }
   public handleKeyDown(event:any){
     if(event.keycode == 13){
-     this.processLogin();
+     //this.processLogin();
     }
   }
   public processLogin(){
      this.error=null;
+     /*
      if(isNull(this.disableAction)){
         this.disableAction = "disable";
       
@@ -68,6 +69,7 @@ export class LoginView implements OnInit, OnDestroy{
                             .then (data =>{this.onLoginSuccess(data)})
                             .catch(error=>{this.loginFail()});
      }
+     */
   }
 
 
@@ -75,11 +77,12 @@ export class LoginView implements OnInit, OnDestroy{
   * HANDLING
   **************************************************************************/
   private loginFail(){
-    this.error="Echec d'identification, veuillez vérifier votre login et mot de passe";
-    this.disableAction =null;
+    //this.error="Echec d'identification, veuillez vérifier votre login et mot de passe";
+    //this.disableAction =null;
   }
 
   private onLoginSuccess(data){
+    /*
     if(isNotNull(data.token)){
       this.sessionScope.user=data;
       org.inugami.sse.userToken=this.sessionScope.getToken();
@@ -90,17 +93,19 @@ export class LoginView implements OnInit, OnDestroy{
     else{
       this.loginFail();
     }
+    */
   }
 
 
   private processRedirect(){
+    /*
     let home = "/";
     if(isNotNull(this.sessionScope._postRedirect) && "/login"!=this.sessionScope._postRedirect){
       home = this.sessionScope._postRedirect;
     }
     this.disableAction =null;
     this.router.navigate([home]);
-
+  */
   }
-   
+ 
 }
