@@ -23,13 +23,13 @@ export class HttpServices {
     **************************************************************************/
     public get(url:string, header?:any){
         if(this.sessionScope.isConnected()){
-            let headerData = this.headerServices.buildHeader(header);
+            let options = this.headerServices.buildHeader(header);
             let session = this.sessionScope;
-            return this.http.get(url,headerData)
+            return this.http.get(url,{"headers":options,observe: "response" })
                 .toPromise()
                 .then(res  => {
                     session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
-                    return res.json()
+                    return res.body;
                 })
                 .catch(this.handleError);
         }else{
@@ -39,41 +39,41 @@ export class HttpServices {
 
 
     public post(url:string, data, header?:any){
-        let headerData = this.headerServices.buildHeader(header);
+        let options = this.headerServices.buildHeader(header);
         let session    = this.sessionScope;
         return this.http
-                   .post(url,JSON.stringify(data),headerData)
+                   .post(url,JSON.stringify(data),{"headers":options,observe: "response" })
                    .toPromise()
                    .then(res  => {
                         session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
-                        return res;
+                        return res.body;
                    })
                    .catch(this.handleError);
     }
 
     public put(url:string, data, header?:any){
-        let headerData = this.headerServices.buildHeader(header);
+        let options    = this.headerServices.buildHeader(header);
         let session    = this.sessionScope;
         return this.http
-                   .put(url,JSON.stringify(data),headerData)
+                   .put(url,JSON.stringify(data),{"headers":options,observe: "response" })
                    .toPromise()
                    .then(res  => {
                         session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
-                        return res;
+                        return res.body;
                    })
                    .catch(this.handleError);
     }
 
     public delete(url:string, data, header?:any){
         let session     = this.sessionScope;
-        let headerData  = this.headerServices.buildHeader(header);
+        let options     = this.headerServices.buildHeader(header);
         headerData.body = JSON.stringify(data);
         return this.http
-                   .delete(url,headerData)
+                   .delete(url,{"headers":options,observe: "response" })
                    .toPromise()
                    .then(res  => {
                         session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
-                        return res;
+                        return res.body;
                    })
                    .catch(this.handleError);
     }

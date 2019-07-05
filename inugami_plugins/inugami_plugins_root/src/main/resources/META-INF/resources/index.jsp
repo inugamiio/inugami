@@ -135,7 +135,7 @@
 "ts"                                    : 'vendor:plugin-typescript/lib/plugin.js',
 "typescript"                            : 'vendor:typescript/lib/typescript.js',
 "core-js"                               : "vendor:core-js",
-//"tslib"                                 : "vendor:tslib/tslib.js",
+"tslib"                                 : "vendor:tslib/tslib.js",
 /*
 "primeng/accordion"				    	: "vendor:primeng/accordion.js",
 "primeng/api"				    	    : "vendor:primeng/api.js",

@@ -39,11 +39,11 @@ export class SecurityServices {
             "password":password
         });
         let session = this.sessionScope;
-        return this.http.post(this.urls.login,json,options)
+        return this.http.post(this.urls.login,json,{"headers":options,observe: "response" })
                         .toPromise()
                         .then(res  => {
                             session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
-                            return res.json()
+                            return res.body;
                         })
                         .catch(this.handleError);
     }
@@ -54,11 +54,11 @@ export class SecurityServices {
             'token': token
         });
         let session = this.sessionScope;
-        return this.http.post(this.urls.login,null,options)
+        return this.http.post(this.urls.login,null,{"headers":options,observe: "response" })
                         .toPromise()
                         .then(res  => {
                             session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
-                            return res.json()
+                            return res.body;
                         })
                         .catch(this.handleError);
     }
@@ -72,7 +72,7 @@ export class SecurityServices {
         this.sessionScope.user = null;
         this.sessionScope.resetCorrelationId();
         localStorage.removeItem("inugami_token");
-        return this.http.post(this.urls.logout,null,options)
+        return this.http.post(this.urls.logout,null,{"headers":options,observe: "response"})
                         .toPromise()
                         .then(res  => {
                             window.location.href = CONTEXT_PATH;
@@ -88,6 +88,7 @@ export class SecurityServices {
     * HANDLING ERRORS
     **************************************************************************/
     private handleError(error: any): Promise<any> {
+        console.error(error);
         let errorData = error;
         try {
             errorData = error.json();
