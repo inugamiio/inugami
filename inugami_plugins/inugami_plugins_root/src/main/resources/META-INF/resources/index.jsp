@@ -221,7 +221,8 @@
 "primeng/tristatecheckbox"				: "vendor:primeng/tristatecheckbox.js",
 "primeng/virtualscroller"				: "vendor:primeng/virtualscroller.js",
 
-"d3"									: "vendor:d3/d3.min.js"
+"d3"									: "vendor:d3/d3.min.js",
+"chart.js"								: "vendor:chart.js/chart.min.js",
 
 <%=ResourceLoaderJSP.getPluginSystemMap()%>
           },

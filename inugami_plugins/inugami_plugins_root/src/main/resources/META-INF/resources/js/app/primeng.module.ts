@@ -85,7 +85,7 @@ import {PanelModule} from 'primeng/panel';
     CaptchaModule,
     CalendarModule,
     CarouselModule,
-    //ChartModule,
+    ChartModule,
     CheckboxModule,
     
     //ChipsModule,
@@ -153,7 +153,7 @@ import {PanelModule} from 'primeng/panel';
     CaptchaModule,
     CalendarModule,
     CarouselModule,
-    //ChartModule,
+    ChartModule,
     CheckboxModule,
     //ChipsModule,
     //CodeHighlighterModule,
