@@ -12,9 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var animations_1 = require("@angular/animations");
 var common_1 = require("@angular/common");
-var domhandler_1 = require("../dom/domhandler");
-var objectutils_1 = require("../utils/objectutils");
-var shared_1 = require("../common/shared");
+var domhandler_1 = require("primeng/dom/domhandler");
+var objectutils_1 = require("primeng/utils/objectutils");
+var shared_1 = require("primeng/common/shared");
 var forms_1 = require("@angular/forms");
 var scrolling_1 = require("@angular/cdk/scrolling");
 exports.MULTISELECT_VALUE_ACCESSOR = {

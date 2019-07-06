@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
 var animations_1 = require("@angular/animations");
-var messageservice_1 = require("../common/messageservice");
+var messageservice_1 = require("primeng/common/messageservice");
 var Messages = /** @class */ (function () {
     function Messages(messageService) {
         this.messageService = messageService;

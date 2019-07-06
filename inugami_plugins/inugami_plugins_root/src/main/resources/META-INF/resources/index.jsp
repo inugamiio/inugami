@@ -111,7 +111,11 @@
               "rxjs/add/operator/*",
               "rxjs/add/observable/*",
               "rxjs/util/*"
-			]
+			],
+
+			'<%=request.getContextPath()%>/js/vendors//@angular/cdk/cdk-bundle.min.js': [
+              "@angular/cdk/*"
+			],
 		}, 
         paths: {
             'vendor:': VENDOR_PATH+"/"
@@ -130,7 +134,6 @@
 "@angular/animations/browser"		    : "vendor:@angular/animations/bundles/animations-browser.umd.min.js",
 "@angular/animations"				 	: "vendor:@angular/animations/bundles/animations.umd.min.js",
 "@angular/router"                   	: "vendor:@angular/router/bundles/router.umd.min.js",
-
 "ts"                                    : 'vendor:plugin-typescript/lib/plugin.js',
 "typescript"                            : 'vendor:typescript/lib/typescript.js',
 "core-js"                               : "vendor:core-js",
@@ -220,9 +223,13 @@
 "primeng/treetable"				    	: "vendor:primeng/treetable.js",
 "primeng/tristatecheckbox"				: "vendor:primeng/tristatecheckbox.js",
 "primeng/virtualscroller"				: "vendor:primeng/virtualscroller.js",
-
+"primeng/dom/domhandler" 				: "vendor:primeng/components/dom/domhandler.js",
+"primeng/common/shared" 				: "vendor:primeng/components/common/shared.js",
+"primeng/common/messageservice" 		: "vendor:primeng/components/common/messageservice.js",
+"primeng/utils/objectutils" 		    : "vendor:primeng/components/utils/objectutils.js",
 "d3"									: "vendor:d3/d3.min.js",
 "chart.js"								: "vendor:chart.js/chart.min.js",
+"quill"									: "vendor:quill/quill.min.js"
 
 <%=ResourceLoaderJSP.getPluginSystemMap()%>
           },

@@ -14,7 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
-var domhandler_1 = require("../dom/domhandler");
+var domhandler_1 = require("primeng/dom/domhandler");
 var router_1 = require("@angular/router");
 var ContextMenuSub = /** @class */ (function () {
     function ContextMenuSub(contextMenu) {

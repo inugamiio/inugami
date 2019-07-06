@@ -11,8 +11,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
-var shared_1 = require("../common/shared");
-var paginator_1 = require("../paginator/paginator");
+var shared_1 = require("primeng/common/shared");
+var paginator_1 = require("primeng/paginator");
 var DataGrid = /** @class */ (function () {
     function DataGrid(el, differs) {
         this.el = el;

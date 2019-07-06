@@ -63,7 +63,7 @@ public class DeveloppmentFilter implements Filter {
     private static final File              NOT_PLUGIN_RESOURCES = new File(".notPluginResource");
     
     //@formatter:off
-    private static final  String[] EXCLUDE_PATHS = { "/rest/","/vendors/","/vendors.js"};
+    private static final  String[] EXCLUDE_PATHS = { "/rest/"};
     //@formatter:on
     
     private final List<Plugin> plugins = new ArrayList<>();
