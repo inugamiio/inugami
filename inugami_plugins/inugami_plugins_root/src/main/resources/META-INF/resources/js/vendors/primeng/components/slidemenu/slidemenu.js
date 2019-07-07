@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var animations_1 = require("@angular/animations");
 var common_1 = require("@angular/common");
-var domhandler_1 = require("../dom/domhandler");
+var domhandler_1 = require("primeng/dom/domhandler");
 var router_1 = require("@angular/router");
 var SlideMenuSub = /** @class */ (function () {
     function SlideMenuSub(slideMenu) {
