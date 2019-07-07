@@ -56,8 +56,8 @@ import {RadioButtonModule} from 'primeng/radiobutton';
 import {RatingModule} from 'primeng/rating';
 import {ScheduleModule} from 'primeng/schedule';
 import {SelectButtonModule} from 'primeng/selectbutton';
-import {SlideMenuModule} from 'primeng/sidemenu';
-import {SliderModule} from 'primeng/sider';
+import {SlideMenuModule} from 'primeng/slidemenu';
+import {SliderModule} from 'primeng/slider';
 import {SpinnerModule} from 'primeng/spinner';
 import {SplitButtonModule} from 'primeng/splitbutton';
 import {StepsModule} from 'primeng/steps';
@@ -97,7 +97,7 @@ import {PanelModule} from 'primeng/panel';
     ConfirmDialogModule,
     DialogModule,
     DragDropModule,
-    //DropdownModule,
+    DropdownModule,
     EditorModule,
     FieldsetModule,
     FileUploadModule,
@@ -130,20 +130,20 @@ import {PanelModule} from 'primeng/panel';
     
     ScheduleModule,
     SelectButtonModule,
-    //SlideMenuModule,
-    //SliderModule,
-    //SpinnerModule,
+    SlideMenuModule,
+    SliderModule,
+    SpinnerModule,
     SplitButtonModule,
-    //StepsModule,
-    //TabViewModule,
-    //TabMenuModule,
+    StepsModule,
+    TabViewModule,
+    TabMenuModule,
     TerminalModule,
     TieredMenuModule,
     ToggleButtonModule,
     ToolbarModule,
     TooltipModule,
-    //TreeModule,
-    //TreeTableModule,
+    TreeModule,
+    TreeTableModule,
     TriStateCheckboxModule
     ],
     exports : [

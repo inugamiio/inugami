@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
-var shared_1 = require("../common/shared");
+var shared_1 = require("primeng/common/shared");
 var animations_1 = require("@angular/animations");
 var idx = 0;
 var Panel = /** @class */ (function () {
