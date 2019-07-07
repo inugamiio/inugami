@@ -9,7 +9,8 @@ body .ui-chkbox .ui-chkbox-box.ui-state-active{
 }
 
 body .ui-chkbox .ui-chkbox-box.ui-state-focus,
-body .ui-chkbox .ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hover{
+body .ui-chkbox .ui-chkbox-box:not(.ui-state-disabled):hover,
+body .ui-chkbox .ui-chkbox-box.ui-state-active:hover{
     border-color:   #de5b5f;
 }
 

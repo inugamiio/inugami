@@ -1,13 +1,19 @@
-body .ui-datatable .ui-paginator,
+body .ui-table .ui-paginator,
 body .ui-widget-content,
-body  .ui-datatable .ui-datatable-thead>tr>th,
-body .ui-datatable .ui-datatable-tfoot>tr>td,
-body .ui-datatable .ui-datatable-data>tr>td{
+body  .ui-table .ui-table-thead>tr>th,
+body .ui-table .ui-table-tfoot>tr>td,
+body .ui-table .ui-table-data>tr>td,
+body .ui-table .ui-table-tbody > tr > td ,
+body .ui-table .ui-table-thead>tr>th{
     border-style: none; 
 }
-body .ui-datatable .ui-datatable-data tr.ui-state-highlight,
-body .ui-datatable .ui-datatable-data tr.ui-datatable-even.ui-state-highlight{
+body .ui-table .ui-table-data tr.ui-state-highlight,
+body .ui-table .ui-table-data tr.ui-table-even.ui-state-highlight{
     background-color: #c4c4c4;
+}
+body .ui-table .ui-table-thead>tr>th{
+    background-color: #ffffff;
+    font-size: 130%;
 }
 
 body .ui-paginator .ui-paginator-first,
@@ -49,12 +55,12 @@ body .ui-paginator .ui-paginator-rpp-options .ui-paginator-element.ui-state-defa
     color: black;
 }
 
-body .ui-datatable thead th.ui-state-active{
+body .ui-table thead th.ui-state-active{
     background: #c4c4c4;
     color: black;
 }
 
-body .ui-datatable .ui-cell-data input-switch{
+body .ui-table .ui-cell-data input-switch{
     position: relative;
     margin-left: 7em;
     top: 0.5em;

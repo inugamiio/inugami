@@ -56,29 +56,42 @@
 <article  *ngIf="isActiveSection('table')"  class="table">
     <fieldset>
         <h2><msg key="alert.table.title"></msg></h2>
-<!--
 
-        <p-table  [value]="alerts">
+
+        <p-table  [value]="alerts"
+                  selectionMode="single"
+                  [(selection)]="selectedAlert"
+                  (onRowSelect)="onAlertSelect($event)"
+                  (onRowUnselect)="unSelectedAlert()">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>UID
-                        
-
-                    </th>
-                   
-                </th>
+                    <th>created</th>
+                    <th>UID</th>
+                    <th>dynamic</th>
+                    <th>level</th>
+                    <th>label</th>
+                    <th>actions</th>
+                </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData>
-                <tr>
-                    <td >
-                        {{rowData.uid}}
+            <ng-template pTemplate="body" let-alert>
+                <tr [pSelectableRow]="alert">
+                    <td>{{formateDate(alert.created)}}</td>
+                    <td>{{alert.uid}}</td>
+                    <td><span [class]="isDynamicAlert(alert.dynamicAlerting)">
+                            <span class="label"></span>
+                        </span>
+                    </td>
+                    <td>{{alert.level}}</td>
+                    <td>{{alert.label}}</td>
+                    <td>
+                        <input-switch [(ngModel)]="alert.enable" (onChange)="onAlertActivationChange(alert)" labelOn="on" labelOff="off"></input-switch>
+                        <button pButton type="button" (click)="deleteAlert(alert)" icon="far fa-trash-alt" class="active-action" ></button>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
 
-    -->
-
+    
         <!--
         <p-table #dt [value]="alerts"
                         [rows]="10"
