@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
 var forms_1 = require("@angular/forms");
-var dropdown_1 = require("../dropdown/dropdown");
-var shared_1 = require("../common/shared");
+var dropdown_1 = require("primeng/dropdown/dropdown");
+var shared_1 = require("primeng/common/shared");
 var Paginator = /** @class */ (function () {
     function Paginator(cd) {
         this.cd = cd;

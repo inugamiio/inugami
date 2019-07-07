@@ -13,9 +13,9 @@ var scrolling_1 = require("@angular/cdk/scrolling");
 var core_1 = require("@angular/core");
 var animations_1 = require("@angular/animations");
 var common_1 = require("@angular/common");
-var shared_1 = require("../common/shared");
-var domhandler_1 = require("../dom/domhandler");
-var objectutils_1 = require("../utils/objectutils");
+var shared_1 = require("primeng/common/shared");
+var domhandler_1 = require("primeng/dom/domhandler");
+var objectutils_1 = require("primeng/utils/objectutils");
 var forms_1 = require("@angular/forms");
 exports.DROPDOWN_VALUE_ACCESSOR = {
     provide: forms_1.NG_VALUE_ACCESSOR,

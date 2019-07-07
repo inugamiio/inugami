@@ -164,6 +164,7 @@
 "primeng/dialog"				    	: "vendor:primeng/dialog.js",
 "primeng/dragdrop"				    	: "vendor:primeng/dragdrop.js",
 "primeng/dropdown"				    	: "vendor:primeng/dropdown.js",
+"primeng/dropdown/dropdown"				: "vendor:primeng/components/dropdown/dropdown.js",
 "primeng/dynamicdialog"				    : "vendor:primeng/dynamicdialog.js",
 "primeng/editor"				    	: "vendor:primeng/editor.js",
 "primeng/fieldset"				    	: "vendor:primeng/fieldset.js",
@@ -191,6 +192,8 @@
 "primeng/organizationchart"				: "vendor:primeng/organizationchart.js",
 "primeng/overlaypanel"				    : "vendor:primeng/overlaypanel.js",
 "primeng/paginator"				    	: "vendor:primeng/paginator.js",
+"primeng/paginator/paginator"			: "vendor:primeng/components/paginator/paginator.js",
+
 "primeng/panel"				    	    : "vendor:primeng/panel.js",
 "primeng/panelmenu"				    	: "vendor:primeng/panelmenu.js",
 "primeng/password"				    	: "vendor:primeng/password.js",
@@ -229,7 +232,9 @@
 "primeng/utils/objectutils" 		    : "vendor:primeng/components/utils/objectutils.js",
 "d3"									: "vendor:d3/d3.min.js",
 "chart.js"								: "vendor:chart.js/chart.min.js",
-"quill"									: "vendor:quill/quill.min.js"
+"quill"									: "vendor:quill/quill.min.js",
+"moment"								: "vendor:moment/moment-with-locales.js",
+"@fullcalendar/core"					: "vendor:@fullcalendar/core/main.min.js"
 
 <%=ResourceLoaderJSP.getPluginSystemMap()%>
           },

@@ -14,10 +14,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
-var shared_1 = require("../common/shared");
-var paginator_1 = require("../paginator/paginator");
-var domhandler_1 = require("../dom/domhandler");
-var objectutils_1 = require("../utils/objectutils");
+var shared_1 = require("primeng/common/shared");
+var paginator_1 = require("primeng/paginator/paginator");
+var domhandler_1 = require("primeng/dom/domhandler");
+var objectutils_1 = require("primeng/utils/objectutils");
 var core_2 = require("@angular/core");
 var rxjs_1 = require("rxjs");
 var TableService = /** @class */ (function () {
