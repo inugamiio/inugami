@@ -15,6 +15,7 @@
 
  
 	<script src="<%=request.getContextPath()%>/js/vendors/vendors.js"></script>
+	<script src="<%=request.getContextPath()%>/js/vendors/d3/d3.min.js"></script>
 	<script src="<%=request.getContextPath()%>/js/vendors/platform.js"></script>
 
 

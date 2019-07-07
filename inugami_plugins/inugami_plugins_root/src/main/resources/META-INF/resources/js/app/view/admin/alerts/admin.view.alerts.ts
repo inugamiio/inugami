@@ -1,10 +1,9 @@
 import {Component,Inject,OnInit,Input,Output,forwardRef}    from '@angular/core';
 import {HttpClient}                                         from '@angular/common/http';
-/*
+
 import {GrowlModule}                                        from 'primeng/growl';
 import {Message}                                            from 'primeng/api';
 import {TableModule}                                        from 'primeng/table';
-*/
 
 
 

@@ -71,7 +71,13 @@ export class AdminViewAlertEdit implements AfterViewInit {
     @Output() onSuccess: EventEmitter<any> = new EventEmitter();
     @Output() onCleanMessage: EventEmitter<any> = new EventEmitter();
 
-
+    private cols : any = [
+        { field: 'uid', header: 'uid' },
+        { field: 'created', header: 'created' },
+        { field: 'dynamicAlerting', header: 'dynamicAlerting' },
+        { field: 'level', header: 'level' },
+        { field: 'label', header: 'label' }
+    ];
     /**************************************************************************
     * CONSTRUCTOR
     **************************************************************************/

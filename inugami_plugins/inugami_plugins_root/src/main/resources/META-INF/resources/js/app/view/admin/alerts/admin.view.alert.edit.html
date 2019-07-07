@@ -1,19 +1,16 @@
 <form [formGroup]="alertForm">
-    <!--TODO:refactor primeNG-->
-
     <div [ngClass]="' alert-edit '" [class]="styleClass">
         <div class="btn-group top" role="group">
-            <!--pButton-->
-            <button  pButton type="button" (click)="close()" class="default-action" msg>
+            <button pButton type="button" (click)="close()" class="default-action" msg>
                 <msg key="action.cancel"></msg>
             </button>
 
-            <button  pButton type="button" [disabled]="!alertForm.valid" msg name="save" (click)="saveAlertAndClose()"
+            <button pButton type="button" [disabled]="!alertForm.valid" msg name="save" (click)="saveAlertAndClose()"
                 class="active-action">
                 <msg key="action.save"></msg>
             </button>
 
-            <button  pButton type="button" [disabled]="!alertForm.valid" msg name="saveandcontinue" (click)="saveAlert()"
+            <button pButton type="button" [disabled]="!alertForm.valid" msg name="saveandcontinue" (click)="saveAlert()"
                 class="full-active-action" *ngIf="isNotEdit">
                 <msg key="action.save.and.continue"></msg>
             </button>
@@ -24,9 +21,9 @@
                     <input-bloc [validator]="validators.notEmptyString" [disabled]="edit" label="alert.edit.alert.name"
                         formControlName="name"></input-bloc>
                     <span class="file-input">
-                        <button  type=button class="active-action" icon="fas fa-folder-open"
+                        <button pButton type=button class="active-action" icon="fas fa-folder-open"
                             (click)="fileinput.click()"></button>
-                        <button  type=button class="active-action" icon="fas fa-arrow-down"
+                        <button pButton type=button class="active-action" icon="fas fa-arrow-down"
                             (click)="download.click()"></button>
                         <input type=file (input)="fileChanged($event)" #fileinput>
                         <a class="download" title="Download JSON" [href]="fileUri" download="download.json"
@@ -52,7 +49,7 @@
                     <msg key="alert.edit.tag"></msg>:
                 </div>
                 <div class="tags">
-                    <!--<p-chips formControlName="tag"></p-chips>-->
+                    <p-chips formControlName="tag"></p-chips>
                 </div>
             </div>
 
@@ -64,17 +61,17 @@
                 <div class="channels">
                     <div *ngFor="let channel of channels; index as i" class="channel"
                         [ngClass]="{'enable':channel.enable}" formArrayName="channelsData">
-                        <!--<p-checkbox value={{channel.name}} [formControlName]="i" [label]="channel.name"></p-checkbox>-->
+                        <p-checkbox value={{channel.name}} [formControlName]="i" [label]="channel.name"></p-checkbox>
                     </div>
                 </div>
             </div>
 
 
-            <!--<p-panel header="Sources" formGroupName="sources" class="sources">-->
+            <p-panel header="Sources" formGroupName="sources" class="sources">
                 <div class="first-line">
-                    <!--<p-dropdown [options]="providers" [placeholder]="dataProviderPlaceHolder" styleClass="provider"
+                    <p-dropdown [options]="providers" [placeholder]="dataProviderPlaceHolder" styleClass="provider"
                         formControlName="dataProvider"></p-dropdown>
-                    -->
+
                     <span class="interval-block">
                         <input-bloc label="alert.edit.sources.data.interval" class="interval"
                             formControlName="interval">
@@ -83,7 +80,7 @@
                             <msg key="alert.edit.tooltip.cron"></msg>
                         </div>
 
-                        <button type="button"  icon="far fa-question-circle"
+                        <button type="button" pButton icon="far fa-question-circle"
                             class="active-action tooltip-button cron" (mouseover)="toggleFormTooltip(crontooltip)"
                             (mouseout)="toggleFormTooltip(crontooltip)"></button>
                     </span>
@@ -101,12 +98,11 @@
                     <textarea pInputTextarea formControlName="query"></textarea>
                     <msg key="alert.edit.query"></msg>
                 </div>
-            <!--</p-panel>-->
+            </p-panel>
         </div>
 
 
         <div class="right-panel">
-            <!--
             <p-panel header="Activation">
                 <msg key="alert.edit.activation.days"></msg>
                 <div formArrayName="activation" class="activation">
@@ -207,23 +203,23 @@
                     </p-tabPanel>
                 </p-tabView>
             </p-panel>
--->
+
         </div>
 
 
 
         <div class="admin-view-alert-edit-end"></div>
         <div class="btn-group bottom" role="group">
-            <button  type="button" (click)="close()" class="default-action" msg>
+            <button pButton type="button" (click)="close()" class="default-action" msg>
                 <msg key="action.cancel"></msg>
             </button>
 
-            <button  type="button" [disabled]="!alertForm.valid" msg name="save" (click)="saveAlertAndClose()"
+            <button pButton type="button" [disabled]="!alertForm.valid" msg name="save" (click)="saveAlertAndClose()"
                 class="active-action">
                 <msg key="action.save"></msg>
             </button>
 
-            <button  type="button" [disabled]="!alertForm.valid" msg name="saveandcontinue" (click)="saveAlert()"
+            <button pButton type="button" [disabled]="!alertForm.valid" msg name="saveandcontinue" (click)="saveAlert()"
                 class="full-active-action" *ngIf="isNotEdit">
                 <msg key="action.save.and.continue"></msg>
             </button>

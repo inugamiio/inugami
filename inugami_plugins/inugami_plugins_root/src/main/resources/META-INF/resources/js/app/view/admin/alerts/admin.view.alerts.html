@@ -56,7 +56,29 @@
 <article  *ngIf="isActiveSection('table')"  class="table">
     <fieldset>
         <h2><msg key="alert.table.title"></msg></h2>
-        
+<!--
+
+        <p-table  [value]="alerts">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>UID
+                        
+
+                    </th>
+                   
+                </th>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr>
+                    <td >
+                        {{rowData.uid}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    -->
+
         <!--
         <p-table #dt [value]="alerts"
                         [rows]="10"
