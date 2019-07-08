@@ -586,3 +586,16 @@
 .page-admin .interval.input-bloc{
   margin-left: 2em;
 }
+
+.page-admin .ui-table-thead .actions{
+  position: absolute;
+  top: 0.7em;
+}
+
+.page-admin .ui-table-tbody td .ui-button{
+  width: 2em;
+  height: 2em;
+  font-size: 62%;
+  padding: 1.5em;
+  margin-left: 1em;
+}

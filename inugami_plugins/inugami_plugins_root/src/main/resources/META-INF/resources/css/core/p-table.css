@@ -34,6 +34,7 @@ body .ui-paginator .ui-paginator-pages .ui-paginator-element.ui-state-default{
 body .ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-active{
     font-weight: bold;
     font-size: 1.1em;
+    margin-top: -0.2em;
 }
 
 
@@ -42,7 +43,7 @@ body .ui-paginator .ui-paginator-pages{
     border-color: #c12534;
     border-width: 0.1em;
     border-radius: 2em;
- 
+    height: 2em;
 }
 
 body .ui-paginator .ui-paginator-rpp-options{
@@ -76,4 +77,9 @@ body .ui-table .ui-cell-data input-switch{
 
 .align-center{
     text-align: center;
+}
+
+body .ui-table .ui-paginator{
+    background: #ffffff;
+    margin-top: 2em;
 }

@@ -58,19 +58,35 @@
         <h2><msg key="alert.table.title"></msg></h2>
 
 
-        <p-table  [value]="alerts"
+        <p-table  #dt [value]="alerts"
                   selectionMode="single"
                   [(selection)]="selectedAlert"
                   (onRowSelect)="onAlertSelect($event)"
-                  (onRowUnselect)="unSelectedAlert()">
+                  (onRowUnselect)="unSelectedAlert()"
+                  [paginator]="true" [rows]="10">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>created</th>
-                    <th>UID</th>
-                    <th>dynamic</th>
-                    <th>level</th>
-                    <th>label</th>
-                    <th>actions</th>
+                    <th>
+                        <div pSortableColumn="created">created<p-sortIcon [field]="created"></p-sortIcon></div>
+                        <input type="text" (input)="dt.filter($event.target.value, 'created', 'contains')">
+                    </th>
+                    <th>
+                        <div pSortableColumn="uid">UID<p-sortIcon [field]="uid"></p-sortIcon></div>
+                        <input type="text" (input)="dt.filter($event.target.value, 'uid', 'contains')">
+                    </th>
+                    <th>
+                        <div pSortableColumn="dynamicAlerting">Dynamic<p-sortIcon [field]="dynamicAlerting"></p-sortIcon></div>
+                        <input type="text" (input)="dt.filter($event.target.value, 'dynamicAlerting', 'contains')">
+                    </th>
+                    <th>
+                        <div pSortableColumn="level">Level<p-sortIcon [field]="level"></p-sortIcon></div>
+                        <input type="text" (input)="dt.filter($event.target.value, 'level', 'contains')">
+                    </th>
+                    <th>
+                        <div pSortableColumn="label">Label<p-sortIcon [field]="label"></p-sortIcon></div>
+                        <input type="text" (input)="dt.filter($event.target.value, 'label', 'contains')">
+                    </th>
+                    <th><div class="actions">actions</div></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-alert>
@@ -92,37 +108,6 @@
         </p-table>
 
     
-        <!--
-        <p-table #dt [value]="alerts"
-                        [rows]="10"
-                        [paginator]="true"
-                        [pageLinks]="3"
-                        [rowsPerPageOptions]="[5,10,20,50]"
-                        selectionMode="single"
-                        (onRowSelect)="onAlertSelect($event)"
-                        (onRowUnselect)="unSelectedAlert()" >
-
-            <p-column field="created"    [header]="msgLabels.created"   [sortable]="true" >
-                <ng-template let-alert="rowData" pTemplate="body">{{formateDate(alert.created)}}</ng-template>
-            </p-column>
-            <p-column field="uid"              [header]="msgLabels.uid"       [sortable]="true" [filter]="true" filterMatchMode="contains"></p-column>
-            <p-column field="dynamicAlerting"  header="dynamic"               [sortable]="true" [filter]="true" filterMatchMode="contains" styleClass="align-center">
-                    <ng-template let-alert="rowData" pTemplate="body">
-                        <span [class]="isDynamicAlert(alert.dynamicAlerting)"><span class="label">{{alert.dynamicAlerting}}</span></span>
-                    </ng-template>
-            </p-column>
-            
-            <p-column field="level"      [header]="msgLabels.level"     [sortable]="true" [filter]="true" filterMatchMode="contains"></p-column>
-            <p-column field="label"      [header]="msgLabels.label"     [sortable]="true" [filter]="true" filterMatchMode="contains"></p-column>
-            <p-column field="label"      [header]="msgLabels.actions">
-                <ng-template let-alert="rowData" pTemplate="body">
-                    <input-switch [(ngModel)]="alert.enable" (onChange)="onAlertActivationChange(alert)" labelOn="on" labelOff="off"></input-switch>
-                    <button pButton type="button" (click)="deleteAlert(alert)" icon="far fa-trash-alt" class="active-action" ></button>
-                </ng-template>
-            </p-column>
-
-        </p-table>
-        -->
     </fieldset>
     
 </article>
