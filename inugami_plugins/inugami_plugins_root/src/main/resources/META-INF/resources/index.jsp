@@ -239,7 +239,7 @@
 <%=ResourceLoaderJSP.getPluginSystemMap()%>
           },
           packages: {
-            "app"         : { defaultExtension: 'ts' },
+            "app"                    : { defaultExtension: 'ts' },
             "js/vendors/primeng"     : { defaultExtension: 'js' }
           }
         };
