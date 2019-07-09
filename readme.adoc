@@ -8,14 +8,14 @@ toc::[4]
 ==  Globals Informations :
 
 ==  Screenshots 
-image:https://raw.githubusercontent.com/inugamiio/inugami/development/inugami_doc/screenshot_0.png
+image:https://raw.githubusercontent.com/inugamiio/inugami/development/inugami_doc/screenshot_0.png[]
 
-image:https://raw.githubusercontent.com/inugamiio/inugami/development/inugami_doc/screenshot_1.png
+image:https://raw.githubusercontent.com/inugamiio/inugami/development/inugami_doc/screenshot_1.png[]
 
-image:https://raw.githubusercontent.com/inugamiio/inugami/development/inugami_doc/screenshot_2.png
+image:https://raw.githubusercontent.com/inugamiio/inugami/development/inugami_doc/screenshot_2.png[]
 
-image:https://raw.githubusercontent.com/inugamiio/inugami/development/inugami_doc/screenshot_3.png
+image:https://raw.githubusercontent.com/inugamiio/inugami/development/inugami_doc/screenshot_3.png[]
 
 
 video::
-https://raw.githubusercontent.com/inugamiio/inugami/development/inugami_doc/screenshot.mov?raw=true
+https://github.com/inugamiio/inugami/blob/development/inugami_doc/screenshot.mov?raw=true[]
