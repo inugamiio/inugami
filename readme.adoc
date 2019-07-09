@@ -7,4 +7,12 @@ toc::[4]
 
 ==  Globals Informations :
 
+==  Screenshots :
+![screenshot](https://github.com/inugamiio/inugami/blob/development/inugami_doc/screenshot_0.png)
+![screenshot](https://github.com/inugamiio/inugami/blob/development/inugami_doc/screenshot_1.png)
+![screenshot](https://github.com/inugamiio/inugami/blob/development/inugami_doc/screenshot_3.png)
+![screenshot](https://github.com/inugamiio/inugami/blob/development/inugami_doc/screenshot_4.png)
 
+
+[Movie screenshot](
+https://github.com/inugamiio/inugami/blob/development/inugami_doc/screenshot.mov?raw=true)
