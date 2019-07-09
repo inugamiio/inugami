@@ -57,7 +57,12 @@ public class DynamicAlertEntity extends AlertEntity implements ClonableObject<Dy
     private boolean              inverse;
     
     private final boolean        dynamicAlerting  = true;
-    
+
+    private float                maxValue;
+
+    private float                minValue;
+
+    private boolean              dynamic;
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -79,7 +84,7 @@ public class DynamicAlertEntity extends AlertEntity implements ClonableObject<Dy
                                  final Set<Tag> tags, final ProviderSource source, final List<DynamicLevel> levels,
                                  final String script, final List<ActivationTime> activations,
                                  final AlertDataTransfomer transformer, final String nominal, final String unit,
-                                 final String service, final String component, final boolean inverse) {
+                                 final String service, final String component, final boolean inverse, final float maxValue, final float minValue, final boolean dynamic) {
         super(alerteName, level, levelType, levelNumber, label, subLabel, url, created, duration, channel, data, enable,
               ttl, providers);
         this.tags = tags;
@@ -93,6 +98,9 @@ public class DynamicAlertEntity extends AlertEntity implements ClonableObject<Dy
         this.service = service;
         this.component = component;
         this.inverse = inverse;
+        this.maxValue = maxValue;
+        this.minValue = minValue;
+        this.dynamic = dynamic;
     }
     
     @Override
@@ -144,7 +152,10 @@ public class DynamicAlertEntity extends AlertEntity implements ClonableObject<Dy
                                        unit,
                                        service,
                                        component,
-                                       inverse
+                                       inverse,
+                                       maxValue,
+                                       minValue,
+                                       dynamic
                 );
         //@formatter:on
     }
@@ -243,5 +254,28 @@ public class DynamicAlertEntity extends AlertEntity implements ClonableObject<Dy
     public boolean isDynamicAlerting() {
         return dynamicAlerting;
     }
-    
+
+    public float getMaxValue() {
+        return maxValue;
+    }
+
+    public float getMinValue() {
+        return minValue;
+    }
+
+    public void setMaxValue(final float maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public void setMinValue(final float minValue) {
+        this.minValue = minValue;
+    }
+
+    public boolean isDynamic() {
+        return dynamic;
+    }
+
+    public void setDynamic(final boolean dynamic) {
+        this.dynamic = dynamic;
+    }
 }
