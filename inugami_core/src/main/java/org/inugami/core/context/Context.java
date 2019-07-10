@@ -548,7 +548,7 @@ public final class Context implements ApplicationContext,
         
         final List<Provider> providers = getBottstrapProviders();
         for (final Provider provider : providers) {
-            ((BootstrapContext) provider).startup();
+            ((org.inugami.api.ctx.BootstrapContext) provider).bootrap(this);
         }
         processEventsForce();
     }
@@ -558,7 +558,7 @@ public final class Context implements ApplicationContext,
         
         final List<Provider> providers = getBottstrapProviders();
         for (final Provider provider : providers) {
-            ((BootstrapContext) provider).shutdown();
+            ((org.inugami.api.ctx.BootstrapContext) provider).shutdown(this);
         }
         
         metricsEventsSenderSse.interrupt();
@@ -587,7 +587,7 @@ public final class Context implements ApplicationContext,
                             .filter(Optional::isPresent)
                             .map(Optional::get)
                             .flatMap(List::stream)
-                            .filter(provider-> provider instanceof BootstrapContext)
+                            .filter(provider-> provider instanceof org.inugami.api.ctx.BootstrapContext)
                             .collect(Collectors.toList());
        //@formatter:on
     }
