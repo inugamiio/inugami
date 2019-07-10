@@ -2713,6 +2713,7 @@ var SelectableRowDblClick = /** @class */ (function () {
         core_1.Directive({
             selector: '[pSelectableRowDblClick]',
             host: {
+                '[class.ui-selectable-row]': 'isEnabled()',
                 '[class.ui-state-highlight]': 'selected'
             }
         }),

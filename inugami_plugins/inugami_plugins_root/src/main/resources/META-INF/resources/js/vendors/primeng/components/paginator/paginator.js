@@ -38,6 +38,7 @@ var Paginator = /** @class */ (function () {
             this.updatePageLinks();
             this.updatePaginatorState();
             this.updateFirst();
+            this.updateRowsPerPageOptions();
         },
         enumerable: true,
         configurable: true
@@ -72,17 +73,25 @@ var Paginator = /** @class */ (function () {
         },
         set: function (val) {
             this._rowsPerPageOptions = val;
-            if (this._rowsPerPageOptions) {
-                this.rowsPerPageItems = [];
-                for (var _i = 0, _a = this._rowsPerPageOptions; _i < _a.length; _i++) {
-                    var opt = _a[_i];
-                    this.rowsPerPageItems.push({ label: String(opt), value: opt });
-                }
-            }
+            this.updateRowsPerPageOptions();
         },
         enumerable: true,
         configurable: true
     });
+    Paginator.prototype.updateRowsPerPageOptions = function () {
+        if (this.rowsPerPageOptions) {
+            this.rowsPerPageItems = [];
+            for (var _i = 0, _a = this.rowsPerPageOptions; _i < _a.length; _i++) {
+                var opt = _a[_i];
+                if (typeof opt == 'object' && opt['showAll']) {
+                    this.rowsPerPageItems.push({ label: opt['showAll'], value: this.totalRecords });
+                }
+                else {
+                    this.rowsPerPageItems.push({ label: String(opt), value: opt });
+                }
+            }
+        }
+    };
     Paginator.prototype.isFirstPage = function () {
         return this.getPage() === 0;
     };

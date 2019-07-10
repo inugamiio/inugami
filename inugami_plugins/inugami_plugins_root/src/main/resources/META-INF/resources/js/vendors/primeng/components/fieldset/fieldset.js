@@ -90,17 +90,22 @@ var Fieldset = /** @class */ (function () {
     Fieldset = __decorate([
         core_1.Component({
             selector: 'p-fieldset',
-            template: "\n        <fieldset [attr.id]=\"id\" [ngClass]=\"{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true, 'ui-fieldset-toggleable': toggleable}\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <legend class=\"ui-fieldset-legend ui-corner-all ui-state-default ui-unselectable-text\">\n                <ng-container *ngIf=\"toggleable; else legendContent\">\n                    <a tabindex=\"0\" (click)=\"toggle($event)\" (keydown.enter)=\"toggle($event)\" [attr.aria-controls]=\"id + '-content'\" [attr.aria-expanded]=\"!collapsed\">\n                        <ng-container *ngTemplateOutlet=\"legendContent\"></ng-container>\n                    </a>\n                </ng-container>\n                <ng-template #legendContent>\n                    <span class=\"ui-fieldset-toggler pi\" *ngIf=\"toggleable\" [ngClass]=\"{'pi-minus': !collapsed,'pi-plus':collapsed}\"></span>\n                    <span class=\"ui-fieldset-legend-text\">{{legend}}</span>\n                    <ng-content select=\"p-header\"></ng-content>\n                </ng-template>\n            </legend>\n            <div [attr.id]=\"id + '-content'\" class=\"ui-fieldset-content-wrapper\" [@fieldsetContent]=\"collapsed ? {value: 'hidden', params: {transitionParams: transitionOptions}} : {value: 'visible', params: {transitionParams: transitionOptions}}\" \n                        [ngClass]=\"{'ui-fieldset-content-wrapper-overflown': collapsed||animating}\" [attr.aria-hidden]=\"collapsed\"\n                         (@fieldsetContent.done)=\"onToggleDone($event)\" role=\"region\">\n                <div class=\"ui-fieldset-content\">\n                    <ng-content></ng-content>\n                </div>\n            </div>\n        </fieldset>\n    ",
+            template: "\n        <fieldset [attr.id]=\"id\" [ngClass]=\"{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true, 'ui-fieldset-toggleable': toggleable}\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <legend class=\"ui-fieldset-legend ui-corner-all ui-state-default ui-unselectable-text\">\n                <ng-container *ngIf=\"toggleable; else legendContent\">\n                    <a tabindex=\"0\" (click)=\"toggle($event)\" (keydown.enter)=\"toggle($event)\" [attr.aria-controls]=\"id + '-content'\" [attr.aria-expanded]=\"!collapsed\">\n                        <ng-container *ngTemplateOutlet=\"legendContent\"></ng-container>\n                    </a>\n                </ng-container>\n                <ng-template #legendContent>\n                    <span class=\"ui-fieldset-toggler pi\" *ngIf=\"toggleable\" [ngClass]=\"{'pi-minus': !collapsed,'pi-plus':collapsed}\"></span>\n                    <span class=\"ui-fieldset-legend-text\">{{legend}}</span>\n                    <ng-content select=\"p-header\"></ng-content>\n                </ng-template>\n            </legend>\n            <div [attr.id]=\"id + '-content'\" class=\"ui-fieldset-content-wrapper\" [@fieldsetContent]=\"collapsed ? {value: 'hidden', params: {transitionParams: transitionOptions, height: '0'}} : {value: 'visible', params: {transitionParams: animating ? transitionOptions : '0ms', height: '*'}}\" \n                        [ngClass]=\"{'ui-fieldset-content-wrapper-overflown': collapsed||animating}\" [attr.aria-hidden]=\"collapsed\"\n                         (@fieldsetContent.done)=\"onToggleDone($event)\" role=\"region\">\n                <div class=\"ui-fieldset-content\">\n                    <ng-content></ng-content>\n                </div>\n            </div>\n        </fieldset>\n    ",
             animations: [
                 animations_1.trigger('fieldsetContent', [
                     animations_1.state('hidden', animations_1.style({
-                        height: '0px'
+                        height: '0'
                     })),
+                    animations_1.state('void', animations_1.style({
+                        height: '{{height}}'
+                    }), { params: { height: '0' } }),
                     animations_1.state('visible', animations_1.style({
                         height: '*'
                     })),
                     animations_1.transition('visible => hidden', animations_1.animate('{{transitionParams}}')),
-                    animations_1.transition('hidden => visible', animations_1.animate('{{transitionParams}}'))
+                    animations_1.transition('hidden => visible', animations_1.animate('{{transitionParams}}')),
+                    animations_1.transition('void => hidden', animations_1.animate('{{transitionParams}}')),
+                    animations_1.transition('void => visible', animations_1.animate('{{transitionParams}}'))
                 ])
             ]
         }),

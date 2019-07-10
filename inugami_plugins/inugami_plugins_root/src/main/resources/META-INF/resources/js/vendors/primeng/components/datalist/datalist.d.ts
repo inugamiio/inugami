@@ -7,7 +7,7 @@ export declare class DataList implements AfterViewInit, AfterContentInit, DoChec
     rows: number;
     totalRecords: number;
     pageLinks: number;
-    rowsPerPageOptions: number[];
+    rowsPerPageOptions: any[];
     lazy: boolean;
     onLazyLoad: EventEmitter<any>;
     style: any;

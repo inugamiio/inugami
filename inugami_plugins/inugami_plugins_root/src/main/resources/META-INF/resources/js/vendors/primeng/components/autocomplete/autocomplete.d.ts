@@ -10,7 +10,9 @@ export declare class AutoComplete implements AfterViewChecked, AfterContentInit,
     minLength: number;
     delay: number;
     style: any;
+    panelStyle: any;
     styleClass: string;
+    panelStyleClass: string;
     inputStyle: any;
     inputId: string;
     inputStyleClass: string;

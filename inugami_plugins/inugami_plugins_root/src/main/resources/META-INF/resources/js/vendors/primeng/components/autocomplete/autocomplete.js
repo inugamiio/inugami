@@ -532,8 +532,16 @@ var AutoComplete = /** @class */ (function () {
     ], AutoComplete.prototype, "style", void 0);
     __decorate([
         core_1.Input(),
+        __metadata("design:type", Object)
+    ], AutoComplete.prototype, "panelStyle", void 0);
+    __decorate([
+        core_1.Input(),
         __metadata("design:type", String)
     ], AutoComplete.prototype, "styleClass", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], AutoComplete.prototype, "panelStyleClass", void 0);
     __decorate([
         core_1.Input(),
         __metadata("design:type", Object)

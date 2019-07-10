@@ -260,7 +260,8 @@ var Calendar = /** @class */ (function () {
         var dayNo = 1;
         var today = new Date();
         var weekNumbers = [];
-        for (var i = 0; i < 6; i++) {
+        var monthRows = Math.ceil((daysLength + firstDay) / 7);
+        for (var i = 0; i < monthRows; i++) {
             var week = [];
             if (i == 0) {
                 for (var j = (prevMonthDaysLength - firstDay + 1); j <= prevMonthDaysLength; j++) {
@@ -469,10 +470,15 @@ var Calendar = /** @class */ (function () {
     Calendar.prototype.selectDate = function (dateMeta) {
         var date = new Date(dateMeta.year, dateMeta.month, dateMeta.day);
         if (this.showTime) {
-            if (this.hourFormat === '12' && this.pm && this.currentHour != 12)
-                date.setHours(this.currentHour + 12);
-            else
+            if (this.hourFormat == '12') {
+                if (this.currentHour === 12)
+                    date.setHours(this.pm ? 12 : 0);
+                else
+                    date.setHours(this.pm ? this.currentHour + 12 : this.currentHour);
+            }
+            else {
                 date.setHours(this.currentHour);
+            }
             date.setMinutes(this.currentMinute);
             date.setSeconds(this.currentSecond);
         }
@@ -977,6 +983,7 @@ var Calendar = /** @class */ (function () {
         }
         catch (err) {
             //invalid date
+            this.updateModel(null);
         }
         this.filled = val != null && val.length;
         this.onInput.emit(event);
@@ -1536,6 +1543,7 @@ var Calendar = /** @class */ (function () {
         this.unbindMaskClickListener();
         this.unbindDocumentResizeListener();
         this.overlay = null;
+        this.disableModality();
     };
     Calendar.prototype.ngOnDestroy = function () {
         this.restoreOverlayAppend();

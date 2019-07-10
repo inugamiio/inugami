@@ -21,19 +21,19 @@ var Lightbox = /** @class */ (function () {
         this.effectDuration = '500ms';
         this.autoZIndex = true;
         this.baseZIndex = 0;
+        this.closeOnEscape = true;
     }
     Lightbox.prototype.onImageClick = function (event, image, i, content) {
         this.index = i;
         this.loading = true;
         content.style.width = 32 + 'px';
         content.style.height = 32 + 'px';
+        this.preventDocumentClickListener = true;
         this.show();
         this.displayImage(image);
-        this.preventDocumentClickListener = true;
         event.preventDefault();
     };
     Lightbox.prototype.ngAfterViewInit = function () {
-        var _this = this;
         this.panel = domhandler_1.DomHandler.findSingle(this.el.nativeElement, '.ui-lightbox ');
         if (this.appendTo) {
             if (this.appendTo === 'body')
@@ -41,17 +41,10 @@ var Lightbox = /** @class */ (function () {
             else
                 domhandler_1.DomHandler.appendChild(this.panel, this.appendTo);
         }
-        this.documentClickListener = this.renderer.listen('document', 'click', function (event) {
-            if (!_this.preventDocumentClickListener && _this.visible) {
-                _this.hide(event);
-            }
-            _this.preventDocumentClickListener = false;
-            _this.cd.markForCheck();
-        });
     };
     Lightbox.prototype.onLinkClick = function (event, content) {
-        this.show();
         this.preventDocumentClickListener = true;
+        this.show();
         event.preventDefault();
     };
     Lightbox.prototype.displayImage = function (image) {
@@ -73,18 +66,18 @@ var Lightbox = /** @class */ (function () {
         this.mask.style.zIndex = this.zindex - 1;
         this.center();
         this.visible = true;
+        this.bindGlobalListeners();
     };
     Lightbox.prototype.hide = function (event) {
         this.captionText = null;
         this.index = null;
         this.currentImage = null;
         this.visible = false;
-        this.panel.style.left = 'auto';
-        this.panel.style.top = 'auto';
         if (this.mask) {
             document.body.removeChild(this.mask);
             this.mask = null;
         }
+        this.unbindGlobalListeners();
         event.preventDefault();
     };
     Lightbox.prototype.center = function () {
@@ -98,11 +91,6 @@ var Lightbox = /** @class */ (function () {
             this.panel.style.display = 'none';
             this.panel.style.visibility = 'visible';
         }
-        var viewport = domhandler_1.DomHandler.getViewport();
-        var x = (viewport.width - elementWidth) / 2;
-        var y = (viewport.height - elementHeight) / 2;
-        this.panel.style.left = x + 'px';
-        this.panel.style.top = y + 'px';
     };
     Lightbox.prototype.onImageLoad = function (event, content) {
         var _this = this;
@@ -141,6 +129,35 @@ var Lightbox = /** @class */ (function () {
             this.displayImage(this.images[++this.index]);
         }
     };
+    Lightbox.prototype.bindGlobalListeners = function () {
+        var _this = this;
+        this.documentClickListener = this.renderer.listen('document', 'click', function (event) {
+            if (!_this.preventDocumentClickListener && _this.visible) {
+                _this.hide(event);
+            }
+            _this.preventDocumentClickListener = false;
+            _this.cd.markForCheck();
+        });
+        if (this.closeOnEscape && !this.documentEscapeListener) {
+            this.documentEscapeListener = this.renderer.listen('document', 'keydown', function (event) {
+                if (event.which == 27) {
+                    if (parseInt(_this.panel.style.zIndex) === (domhandler_1.DomHandler.zindex + _this.baseZIndex)) {
+                        _this.hide(event);
+                    }
+                }
+            });
+        }
+    };
+    Lightbox.prototype.unbindGlobalListeners = function () {
+        if (this.documentEscapeListener) {
+            this.documentEscapeListener();
+            this.documentEscapeListener = null;
+        }
+        if (this.documentClickListener) {
+            this.documentClickListener();
+            this.documentClickListener = null;
+        }
+    };
     Object.defineProperty(Lightbox.prototype, "leftVisible", {
         get: function () {
             return this.images && this.images.length && this.index != 0 && !this.loading;
@@ -156,9 +173,7 @@ var Lightbox = /** @class */ (function () {
         configurable: true
     });
     Lightbox.prototype.ngOnDestroy = function () {
-        if (this.documentClickListener) {
-            this.documentClickListener();
-        }
+        this.unbindGlobalListeners();
         if (this.appendTo) {
             this.el.nativeElement.appendChild(this.panel);
         }
@@ -199,6 +214,10 @@ var Lightbox = /** @class */ (function () {
         core_1.Input(),
         __metadata("design:type", Number)
     ], Lightbox.prototype, "baseZIndex", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], Lightbox.prototype, "closeOnEscape", void 0);
     Lightbox = __decorate([
         core_1.Component({
             selector: 'p-lightbox',

@@ -1202,7 +1202,7 @@ var TreeTable = /** @class */ (function () {
                     if (matches) {
                         this.filteredNodes.push(copyNode);
                     }
-                    isValueChanged = isValueChanged || !localMatch || globalMatch;
+                    isValueChanged = isValueChanged || !localMatch || globalMatch || (localMatch && this.filteredNodes.length > 0) || (!globalMatch && this.filteredNodes.length === 0);
                 }
                 if (!isValueChanged) {
                     this.filteredNodes = null;

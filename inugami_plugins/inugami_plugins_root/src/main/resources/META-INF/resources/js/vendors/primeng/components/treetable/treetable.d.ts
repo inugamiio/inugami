@@ -35,7 +35,7 @@ export declare class TreeTable implements AfterContentInit, OnInit, OnDestroy, B
     rows: number;
     first: number;
     pageLinks: number;
-    rowsPerPageOptions: number[];
+    rowsPerPageOptions: any[];
     alwaysShowPaginator: boolean;
     paginatorPosition: string;
     paginatorDropdownAppendTo: any;

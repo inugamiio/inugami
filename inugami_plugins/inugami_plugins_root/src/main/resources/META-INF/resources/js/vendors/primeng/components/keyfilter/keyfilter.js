@@ -129,7 +129,7 @@ var KeyFilter = /** @class */ (function () {
     KeyFilter.prototype.onPaste = function (e) {
         var clipboardData = e.clipboardData || window.clipboardData.getData('text');
         if (clipboardData) {
-            var pastedText = clipboardData;
+            var pastedText = clipboardData.getData('text');
             if (!this.regex.test(pastedText)) {
                 e.preventDefault();
             }

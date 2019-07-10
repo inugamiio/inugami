@@ -1,8 +1,9 @@
-import { ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
+import { ElementRef, AfterViewInit, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 export declare const SPINNER_VALUE_ACCESSOR: any;
 export declare class Spinner implements AfterViewInit, ControlValueAccessor {
     el: ElementRef;
+    cd: ChangeDetectorRef;
     onChange: EventEmitter<any>;
     onFocus: EventEmitter<any>;
     onBlur: EventEmitter<any>;
@@ -37,7 +38,7 @@ export declare class Spinner implements AfterViewInit, ControlValueAccessor {
     localeThousandSeparator: string;
     thousandRegExp: RegExp;
     inputfieldViewChild: ElementRef;
-    constructor(el: ElementRef);
+    constructor(el: ElementRef, cd: ChangeDetectorRef);
     type: string;
     ngAfterViewInit(): void;
     repeat(event: Event, interval: number, dir: number): void;

@@ -12,6 +12,7 @@ export declare class Lightbox implements AfterViewInit, OnDestroy {
     effectDuration: any;
     autoZIndex: boolean;
     baseZIndex: number;
+    closeOnEscape: boolean;
     visible: boolean;
     loading: boolean;
     currentImage: any;
@@ -22,6 +23,7 @@ export declare class Lightbox implements AfterViewInit, OnDestroy {
     mask: any;
     preventDocumentClickListener: boolean;
     documentClickListener: any;
+    documentEscapeListener: any;
     constructor(el: ElementRef, renderer: Renderer2, cd: ChangeDetectorRef);
     onImageClick(event: any, image: any, i: any, content: any): void;
     ngAfterViewInit(): void;
@@ -33,6 +35,8 @@ export declare class Lightbox implements AfterViewInit, OnDestroy {
     onImageLoad(event: any, content: any): void;
     prev(placeholder: any): void;
     next(placeholder: any): void;
+    bindGlobalListeners(): void;
+    unbindGlobalListeners(): void;
     readonly leftVisible: boolean;
     readonly rightVisible: boolean;
     ngOnDestroy(): void;

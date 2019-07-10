@@ -37,7 +37,7 @@ export declare class Table implements OnInit, AfterViewInit, AfterContentInit, B
     tableStyleClass: string;
     paginator: boolean;
     pageLinks: number;
-    rowsPerPageOptions: number[];
+    rowsPerPageOptions: any[];
     alwaysShowPaginator: boolean;
     paginatorPosition: string;
     paginatorDropdownAppendTo: any;

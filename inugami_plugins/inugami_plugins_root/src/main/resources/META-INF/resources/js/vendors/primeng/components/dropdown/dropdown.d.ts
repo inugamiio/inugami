@@ -1,3 +1,4 @@
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { ElementRef, OnInit, AfterViewInit, AfterContentInit, AfterViewChecked, OnDestroy, Renderer2, EventEmitter, QueryList, TemplateRef, ChangeDetectorRef, NgZone } from '@angular/core';
 import { AnimationEvent } from '@angular/animations';
 import { SelectItem } from '../common/selectitem';
@@ -60,9 +61,12 @@ export declare class Dropdown implements OnInit, AfterViewInit, AfterContentInit
     containerViewChild: ElementRef;
     filterViewChild: ElementRef;
     focusViewChild: ElementRef;
+    viewPort: CdkVirtualScrollViewport;
     editableInputViewChild: ElementRef;
     templates: QueryList<any>;
     private _autoWidth;
+    private virtualAutoScrolled;
+    private virtualScrollSelectedIndex;
     autoWidth: boolean;
     private _disabled;
     disabled: boolean;
@@ -104,7 +108,7 @@ export declare class Dropdown implements OnInit, AfterViewInit, AfterContentInit
     ngAfterViewInit(): void;
     readonly label: string;
     updateEditableLabel(): void;
-    onItemClick(event: any): void;
+    onItemClick(event: any, index: any): void;
     selectItem(event: any, option: any): void;
     ngAfterViewChecked(): void;
     writeValue(value: any): void;
@@ -119,6 +123,7 @@ export declare class Dropdown implements OnInit, AfterViewInit, AfterContentInit
     onEditableInputChange(event: any): void;
     show(): void;
     onOverlayAnimationStart(event: AnimationEvent): void;
+    scrollToSelectedVirtualScrollElement(event: any): void;
     appendOverlay(): void;
     restoreOverlayAppend(): void;
     hide(): void;

@@ -7,7 +7,7 @@ export declare class DataView implements OnInit, AfterContentInit, BlockableUI {
     rows: number;
     totalRecords: number;
     pageLinks: number;
-    rowsPerPageOptions: number[];
+    rowsPerPageOptions: any[];
     paginatorPosition: string;
     alwaysShowPaginator: boolean;
     paginatorDropdownAppendTo: any;

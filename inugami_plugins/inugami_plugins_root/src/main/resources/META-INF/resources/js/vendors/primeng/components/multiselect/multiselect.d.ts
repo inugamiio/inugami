@@ -78,6 +78,7 @@ export declare class MultiSelect implements OnInit, AfterViewInit, AfterContentI
     panelClick: boolean;
     filterValue: string;
     visibleOptions: SelectItem[];
+    disabledSelectedOptions: SelectItem[];
     filtered: boolean;
     itemTemplate: TemplateRef<any>;
     selectedItemsTemplate: TemplateRef<any>;
@@ -103,6 +104,7 @@ export declare class MultiSelect implements OnInit, AfterViewInit, AfterContentI
     isAllChecked(): boolean;
     isAllVisibleOptionsChecked(): boolean;
     getEnabledOptionCount(): number;
+    setDisabledSelectedOptions(): void;
     show(): void;
     onOverlayAnimationStart(event: AnimationEvent): void;
     appendOverlay(): void;

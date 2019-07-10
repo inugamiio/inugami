@@ -23,6 +23,8 @@ export declare class OrganizationChart implements AfterContentInit {
     selectionChange: EventEmitter<any>;
     onNodeSelect: EventEmitter<any>;
     onNodeUnselect: EventEmitter<any>;
+    onNodeExpand: EventEmitter<any>;
+    onNodeCollapse: EventEmitter<any>;
     templates: QueryList<any>;
     templateMap: any;
     constructor(el: ElementRef);

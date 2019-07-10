@@ -175,6 +175,7 @@ var MultiSelect = /** @class */ (function () {
         this.value = value;
         this.updateLabel();
         this.updateFilledState();
+        this.setDisabledSelectedOptions();
         this.cd.markForCheck();
     };
     MultiSelect.prototype.updateFilledState = function () {
@@ -232,18 +233,29 @@ var MultiSelect = /** @class */ (function () {
     };
     MultiSelect.prototype.toggleAll = function (event) {
         if (this.isAllChecked()) {
-            this.value = [];
+            if (this.disabledSelectedOptions && this.disabledSelectedOptions.length > 0) {
+                var value = [];
+                value = this.disabledSelectedOptions.slice();
+                this.value = value;
+            }
+            else {
+                this.value = [];
+            }
         }
         else {
             var opts = this.getVisibleOptions();
             if (opts) {
-                this.value = [];
+                var value = [];
+                if (this.disabledSelectedOptions && this.disabledSelectedOptions.length > 0) {
+                    value = this.disabledSelectedOptions.slice();
+                }
                 for (var i = 0; i < opts.length; i++) {
                     var option = opts[i];
                     if (!option.disabled) {
-                        this.value.push(opts[i].value);
+                        value.push(opts[i].value);
                     }
                 }
+                this.value = value;
             }
         }
         this.onModelChange(this.value);
@@ -256,7 +268,8 @@ var MultiSelect = /** @class */ (function () {
         }
         else {
             var optionCount = this.getEnabledOptionCount();
-            return this.value && this.options && (this.value.length > 0 && this.value.length == optionCount);
+            var disabledSelectedOptionCount = this.disabledSelectedOptions.length;
+            return this.value && this.options && (this.value.length > 0 && this.value.length == optionCount + disabledSelectedOptionCount);
         }
     };
     MultiSelect.prototype.isAllVisibleOptionsChecked = function () {
@@ -286,6 +299,19 @@ var MultiSelect = /** @class */ (function () {
         }
         else {
             return 0;
+        }
+    };
+    MultiSelect.prototype.setDisabledSelectedOptions = function () {
+        if (this.options) {
+            this.disabledSelectedOptions = [];
+            if (this.value) {
+                for (var _i = 0, _a = this.options; _i < _a.length; _i++) {
+                    var opt = _a[_i];
+                    if (opt.disabled && this.isSelected(opt.value)) {
+                        this.disabledSelectedOptions.push(opt.value);
+                    }
+                }
+            }
         }
     };
     MultiSelect.prototype.show = function () {

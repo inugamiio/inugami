@@ -19,8 +19,9 @@ exports.SPINNER_VALUE_ACCESSOR = {
     multi: true
 };
 var Spinner = /** @class */ (function () {
-    function Spinner(el) {
+    function Spinner(el, cd) {
         this.el = el;
+        this.cd = cd;
         this.onChange = new core_1.EventEmitter();
         this.onFocus = new core_1.EventEmitter();
         this.onBlur = new core_1.EventEmitter();
@@ -187,20 +188,22 @@ var Spinner = /** @class */ (function () {
     };
     Spinner.prototype.formatValue = function () {
         var value = this.value;
-        if (this.formatInput && value != null) {
-            value = value.toLocaleString(undefined, { maximumFractionDigits: 20 });
-            if (this.decimalSeparator && this.thousandSeparator) {
-                value = value.split(this.localeDecimalSeparator);
-                if (this.precision && value[1]) {
-                    value[1] = (this.decimalSeparator || this.localeDecimalSeparator) + value[1];
+        if (value != null) {
+            if (this.formatInput) {
+                value = value.toLocaleString(undefined, { maximumFractionDigits: 20 });
+                if (this.decimalSeparator && this.thousandSeparator) {
+                    value = value.split(this.localeDecimalSeparator);
+                    if (this.precision && value[1]) {
+                        value[1] = (this.decimalSeparator || this.localeDecimalSeparator) + value[1];
+                    }
+                    if (this.thousandSeparator && value[0].length > 3) {
+                        value[0] = value[0].replace(new RegExp("[" + this.localeThousandSeparator + "]", 'gim'), this.thousandSeparator);
+                    }
+                    value = value.join('');
                 }
-                if (this.thousandSeparator && value[0].length > 3) {
-                    value[0] = value[0].replace(new RegExp("[" + this.localeThousandSeparator + "]", 'gim'), this.thousandSeparator);
-                }
-                value = value.join('');
             }
+            this.formattedValue = value.toString();
         }
-        this.formattedValue = value;
     };
     Spinner.prototype.clearTimer = function () {
         if (this.timer) {
@@ -211,6 +214,7 @@ var Spinner = /** @class */ (function () {
         this.value = value;
         this.formatValue();
         this.updateFilledState();
+        this.cd.markForCheck();
     };
     Spinner.prototype.registerOnChange = function (fn) {
         this.onModelChange = fn;
@@ -323,7 +327,7 @@ var Spinner = /** @class */ (function () {
             },
             providers: [exports.SPINNER_VALUE_ACCESSOR]
         }),
-        __metadata("design:paramtypes", [core_1.ElementRef])
+        __metadata("design:paramtypes", [core_1.ElementRef, core_1.ChangeDetectorRef])
     ], Spinner);
     return Spinner;
 }());

@@ -7,7 +7,7 @@ export declare class DataGrid implements AfterViewInit, AfterContentInit, DoChec
     rows: number;
     totalRecords: number;
     pageLinks: number;
-    rowsPerPageOptions: number[];
+    rowsPerPageOptions: any[];
     lazy: boolean;
     emptyMessage: string;
     onLazyLoad: EventEmitter<any>;

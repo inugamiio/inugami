@@ -17,7 +17,7 @@ export declare class Paginator implements OnInit {
     _totalRecords: number;
     _first: number;
     _rows: number;
-    _rowsPerPageOptions: number[];
+    _rowsPerPageOptions: any[];
     rowsPerPageItems: SelectItem[];
     paginatorState: any;
     constructor(cd: ChangeDetectorRef);
@@ -25,7 +25,8 @@ export declare class Paginator implements OnInit {
     totalRecords: number;
     first: number;
     rows: number;
-    rowsPerPageOptions: number[];
+    rowsPerPageOptions: any[];
+    updateRowsPerPageOptions(): void;
     isFirstPage(): boolean;
     isLastPage(): boolean;
     getPageCount(): number;

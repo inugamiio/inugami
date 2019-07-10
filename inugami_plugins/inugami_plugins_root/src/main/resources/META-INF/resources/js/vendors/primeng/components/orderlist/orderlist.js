@@ -209,6 +209,7 @@ var OrderList = /** @class */ (function () {
         }
     };
     OrderList.prototype.onDragStart = function (event, index) {
+        event.dataTransfer.setData('text', 'b'); // For firefox
         event.target.blur();
         this.dragging = true;
         this.draggedItemIndex = index;

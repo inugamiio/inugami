@@ -40,6 +40,10 @@ var OrganizationChartNode = /** @class */ (function () {
     };
     OrganizationChartNode.prototype.toggleNode = function (event, node) {
         node.expanded = !node.expanded;
+        if (node.expanded)
+            this.chart.onNodeExpand.emit({ originalEvent: event, node: this.node });
+        else
+            this.chart.onNodeCollapse.emit({ originalEvent: event, node: this.node });
         event.preventDefault();
     };
     OrganizationChartNode.prototype.isSelected = function () {
@@ -90,6 +94,8 @@ var OrganizationChart = /** @class */ (function () {
         this.selectionChange = new core_1.EventEmitter();
         this.onNodeSelect = new core_1.EventEmitter();
         this.onNodeUnselect = new core_1.EventEmitter();
+        this.onNodeExpand = new core_1.EventEmitter();
+        this.onNodeCollapse = new core_1.EventEmitter();
     }
     Object.defineProperty(OrganizationChart.prototype, "root", {
         get: function () {
@@ -199,6 +205,14 @@ var OrganizationChart = /** @class */ (function () {
         core_1.Output(),
         __metadata("design:type", core_1.EventEmitter)
     ], OrganizationChart.prototype, "onNodeUnselect", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], OrganizationChart.prototype, "onNodeExpand", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], OrganizationChart.prototype, "onNodeCollapse", void 0);
     __decorate([
         core_1.ContentChildren(shared_2.PrimeTemplate),
         __metadata("design:type", core_1.QueryList)
