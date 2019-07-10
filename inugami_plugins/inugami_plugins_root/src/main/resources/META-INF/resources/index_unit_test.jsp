@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="org.inugami.webapp.jsp.ResourceLoaderJSP"%>
+<%@page import="org.inugami.plugins.root.jsp.ResourceLoaderJSP"%>
 <!DOCTYPE html>
 <html>
 

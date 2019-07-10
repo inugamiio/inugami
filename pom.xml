@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ======================================================================= 
@@ -46,6 +47,8 @@
 
         <environment.ci>false</environment.ci>
 
+        <_super.plugin.inugami_plugin_lifecycle.version>1.0.0</_super.plugin.inugami_plugin_lifecycle.version>
+        <_super.plugin.inugami-plugin-maven.version>1.0.0</_super.plugin.inugami-plugin-maven.version>
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: MAVEN SITE
@@ -241,6 +244,7 @@
         <module>inugami_core_security</module>
         <module>inugami_core_alerting_test</module>
         <module>inugami_data</module>
+        <module>inugami_plugins</module>
         <module>inugami_webapp</module>
         <module>inugami_server</module>
     </modules>
@@ -268,7 +272,26 @@
         </snapshotRepository>
     </distributionManagement>
 
+    <repositories>
+        <repository>
+            <id>inugami-release</id>
+            <name>inugami-release</name>
+            <url>http://inugami.io/artifactory/inugami-release</url>
+        </repository>
+        <repository>
+            <id>inugami-snapshot</id>
+            <name>inugami-snapshot</name>
+            <url>http://inugami.io/artifactory/inugami-snapshot</url>
+        </repository>
+    </repositories>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>inugami-release</id>
+            <name>inugami-release</name>
+            <url>http://inugami.io/artifactory/inugami-release</url>
+        </pluginRepository>
+    </pluginRepositories>
     <!-- ======================================================================= 
     = DEPENDENCIES
     ======================================================================== -->
@@ -341,6 +364,13 @@
                 <groupId>org.inugami</groupId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <artifactId>inugami_plugins_root</artifactId>
+                <groupId>org.inugami.plugins</groupId>
+                <version>${project.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.inugami</groupId>

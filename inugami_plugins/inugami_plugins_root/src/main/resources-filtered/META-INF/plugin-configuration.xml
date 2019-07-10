@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin enable="true">
+    <gav groupId="${project.groupId}" artifactId="${project.artifactId}" version="${project.version}" />
+</plugin>

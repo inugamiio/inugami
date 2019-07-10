@@ -14,43 +14,32 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.inugami.webapp.jsp;
+package org.inugami.plugins.root.jsp;
 
-/**
- * ResourceLoaderJSP
- * 
- * @author patrick_guillerm
- * @since 18 janv. 2017
- */
-public class ResourceLoaderJSP {
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.inugami.core.services.servlet.AbstractResourceServlet;
+
+@WebServlet("/js/app/app.routes.ts")
+public class RouterServlet extends AbstractResourceServlet {
+    
+    // =========================================================================
+    // ATTRIBUTES
+    // =========================================================================
+    /** The Constant serialVersionUID. */
+    private static final long serialVersionUID = 2021450967028795664L;
     
     // =========================================================================
     // METHODS
     // =========================================================================
-    public static final String PLUGINS_GAVS    = ResourcesRenderer.renderPluginsGavs();
-    
-    public static final String JAVASCRIPT_I18N = ResourcesRenderer.renderPluginsI18N();
-    
-    // =========================================================================
-    // METHODS
-    // =========================================================================
-    public static String getPluginCss(final String contextPath) {
-        return ResourcesRenderer.renderPluginsCss(contextPath);
-    }
-    
-    public static String getPluginJavaScripts(final String contextPath) {
-        return ResourcesRenderer.renderPluginsJavaScript(contextPath);
-    }
-    
-    public static String getPluginSystemMap() {
-        return ResourcesRenderer.renderPluginsSystemMap();
-    }
-    
-    public static String getApplicationVersion() {
-        return ResourcesRenderer.renderApplicationVersion();
-    }
-    
-    public static String getApplicationTitle() {
-        return ResourcesRenderer.getApplicationTitle();
+    @Override
+    protected void render(final HttpServletRequest request, final HttpServletResponse response,
+                          final PrintWriter writer) throws IOException {
+        writer.write(ResourcesRenderer.getRouter());
     }
 }
