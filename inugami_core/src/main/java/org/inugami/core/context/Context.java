@@ -546,11 +546,21 @@ public final class Context implements ApplicationContext,
                   .forEach(SchedulerService::start);
         //@formatter:on
         
+        final List<Provider> providers = getBottstrapProviders();
+        for (final Provider provider : providers) {
+            ((BootstrapContext) provider).startup();
+        }
         processEventsForce();
     }
     
     @Override
     public void shutdown() {
+        
+        final List<Provider> providers = getBottstrapProviders();
+        for (final Provider provider : providers) {
+            ((BootstrapContext) provider).shutdown();
+        }
+        
         metricsEventsSenderSse.interrupt();
         SseService.shutdown();
         runnableContext.stream().forEach(RunnableContext::shutdown);
@@ -567,6 +577,19 @@ public final class Context implements ApplicationContext,
         processShutdown(threadsStandaloneExecutor, ()->threadsStandaloneExecutor.shutdown());
         processShutdown(systemInfosManager,        ()->systemInfosManager.shutdown());
         //@formatter:on
+    }
+    
+    private List<Provider> getBottstrapProviders() {
+        //@formatter:off
+        return getPlugins().orElseGet(Collections::emptyList)
+                            .stream()
+                            .map(Plugin::getProviders)
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .flatMap(List::stream)
+                            .filter(provider-> provider instanceof BootstrapContext)
+                            .collect(Collectors.toList());
+       //@formatter:on
     }
     
     @Override
