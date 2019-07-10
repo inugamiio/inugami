@@ -8,114 +8,111 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var forms_1 = require("@angular/forms");
 var common_1 = require("@angular/common");
-var InputTextarea = (function () {
-    function InputTextarea(el) {
+var InputTextarea = /** @class */ (function () {
+    function InputTextarea(el, ngModel) {
         this.el = el;
+        this.ngModel = ngModel;
+        this.onResize = new core_1.EventEmitter();
     }
-    InputTextarea.prototype.ngOnInit = function () {
-        this.rowsDefault = this.rows;
-        this.colsDefault = this.cols;
-    };
     InputTextarea.prototype.ngDoCheck = function () {
         this.updateFilledState();
+        if (this.autoResize) {
+            this.resize();
+        }
     };
     //To trigger change detection to manage ui-state-filled for material labels when there is no value binding
     InputTextarea.prototype.onInput = function (e) {
         this.updateFilledState();
+        if (this.autoResize) {
+            this.resize(e);
+        }
     };
     InputTextarea.prototype.updateFilledState = function () {
-        this.filled = this.el.nativeElement.value && this.el.nativeElement.value.length;
+        this.filled = (this.el.nativeElement.value && this.el.nativeElement.value.length) || (this.ngModel && this.ngModel.model);
     };
     InputTextarea.prototype.onFocus = function (e) {
         if (this.autoResize) {
-            this.resize();
+            this.resize(e);
         }
     };
     InputTextarea.prototype.onBlur = function (e) {
         if (this.autoResize) {
-            this.resize();
+            this.resize(e);
         }
     };
-    InputTextarea.prototype.onKeyup = function (e) {
-        if (this.autoResize) {
-            this.resize();
+    InputTextarea.prototype.resize = function (event) {
+        this.el.nativeElement.style.height = this.el.nativeElement.scrollHeight + 'px';
+        if (parseFloat(this.el.nativeElement.style.height) >= parseFloat(this.el.nativeElement.style.maxHeight)) {
+            this.el.nativeElement.style.overflowY = "scroll";
+            this.el.nativeElement.style.height = this.el.nativeElement.style.maxHeight;
         }
-    };
-    InputTextarea.prototype.resize = function () {
-        var linesCount = 0, lines = this.el.nativeElement.value.split('\n');
-        for (var i = lines.length - 1; i >= 0; --i) {
-            linesCount += Math.floor((lines[i].length / this.colsDefault) + 1);
+        else {
+            this.el.nativeElement.style.overflow = "hidden";
         }
-        this.rows = (linesCount >= this.rowsDefault) ? (linesCount + 1) : this.rowsDefault;
+        this.onResize.emit(event || {});
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], InputTextarea.prototype, "autoResize", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], InputTextarea.prototype, "onResize", void 0);
+    __decorate([
+        core_1.HostListener('input', ['$event']),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], InputTextarea.prototype, "onInput", null);
+    __decorate([
+        core_1.HostListener('focus', ['$event']),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], InputTextarea.prototype, "onFocus", null);
+    __decorate([
+        core_1.HostListener('blur', ['$event']),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], InputTextarea.prototype, "onBlur", null);
+    InputTextarea = __decorate([
+        core_1.Directive({
+            selector: '[pInputTextarea]',
+            host: {
+                '[class.ui-inputtext]': 'true',
+                '[class.ui-corner-all]': 'true',
+                '[class.ui-inputtextarea-resizable]': 'autoResize',
+                '[class.ui-state-default]': 'true',
+                '[class.ui-widget]': 'true',
+                '[class.ui-state-filled]': 'filled'
+            }
+        }),
+        __param(1, core_1.Optional()),
+        __metadata("design:paramtypes", [core_1.ElementRef, forms_1.NgModel])
+    ], InputTextarea);
     return InputTextarea;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], InputTextarea.prototype, "autoResize", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Number)
-], InputTextarea.prototype, "rows", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Number)
-], InputTextarea.prototype, "cols", void 0);
-__decorate([
-    core_1.HostListener('input', ['$event']),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], InputTextarea.prototype, "onInput", null);
-__decorate([
-    core_1.HostListener('focus', ['$event']),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], InputTextarea.prototype, "onFocus", null);
-__decorate([
-    core_1.HostListener('blur', ['$event']),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], InputTextarea.prototype, "onBlur", null);
-__decorate([
-    core_1.HostListener('keyup', ['$event']),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], InputTextarea.prototype, "onKeyup", null);
-InputTextarea = __decorate([
-    core_1.Directive({
-        selector: '[pInputTextarea]',
-        host: {
-            '[class.ui-inputtext]': 'true',
-            '[class.ui-corner-all]': 'true',
-            '[class.ui-state-default]': 'true',
-            '[class.ui-widget]': 'true',
-            '[class.ui-state-filled]': 'filled',
-            '[attr.rows]': 'rows',
-            '[attr.cols]': 'cols'
-        }
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef])
-], InputTextarea);
 exports.InputTextarea = InputTextarea;
-var InputTextareaModule = (function () {
+var InputTextareaModule = /** @class */ (function () {
     function InputTextareaModule() {
     }
+    InputTextareaModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [InputTextarea],
+            declarations: [InputTextarea]
+        })
+    ], InputTextareaModule);
     return InputTextareaModule;
 }());
-InputTextareaModule = __decorate([
-    core_1.NgModule({
-        imports: [common_1.CommonModule],
-        exports: [InputTextarea],
-        declarations: [InputTextarea]
-    })
-], InputTextareaModule);
 exports.InputTextareaModule = InputTextareaModule;
 //# sourceMappingURL=inputtextarea.js.map

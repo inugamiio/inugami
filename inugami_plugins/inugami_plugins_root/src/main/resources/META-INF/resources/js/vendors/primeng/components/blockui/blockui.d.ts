@@ -1,12 +1,12 @@
 import { AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
-import { DomHandler } from '../dom/domhandler';
 export declare class BlockUI implements AfterViewInit, OnDestroy {
     el: ElementRef;
-    domHandler: DomHandler;
     target: any;
+    autoZIndex: boolean;
+    baseZIndex: number;
     mask: ElementRef;
     _blocked: boolean;
-    constructor(el: ElementRef, domHandler: DomHandler);
+    constructor(el: ElementRef);
     blocked: boolean;
     ngAfterViewInit(): void;
     block(): void;

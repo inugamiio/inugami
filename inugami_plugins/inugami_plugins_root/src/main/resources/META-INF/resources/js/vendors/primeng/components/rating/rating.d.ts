@@ -1,13 +1,21 @@
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 export declare const RATING_VALUE_ACCESSOR: any;
 export declare class Rating implements ControlValueAccessor {
+    private cd;
     disabled: boolean;
     readonly: boolean;
     stars: number;
     cancel: boolean;
+    iconOnClass: string;
+    iconOnStyle: any;
+    iconOffClass: string;
+    iconOffStyle: any;
+    iconCancelClass: string;
+    iconCancelStyle: any;
     onRate: EventEmitter<any>;
     onCancel: EventEmitter<any>;
+    constructor(cd: ChangeDetectorRef);
     value: number;
     onModelChange: Function;
     onModelTouched: Function;

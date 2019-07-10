@@ -41,7 +41,7 @@ export declare class Schedule implements DoCheck, OnDestroy, OnInit, OnChanges, 
     timeFormat: string | null;
     eventRender: Function;
     dayRender: Function;
-    options: any;
+    navLinks: boolean;
     onDayClick: EventEmitter<any>;
     onDrop: EventEmitter<any>;
     onEventClick: EventEmitter<any>;
@@ -54,15 +54,20 @@ export declare class Schedule implements DoCheck, OnDestroy, OnInit, OnChanges, 
     onEventResizeStop: EventEmitter<any>;
     onEventResize: EventEmitter<any>;
     onViewRender: EventEmitter<any>;
+    onViewDestroy: EventEmitter<any>;
+    onNavLinkDayClick: EventEmitter<any>;
+    onNavLinkWeekClick: EventEmitter<any>;
     initialized: boolean;
     stopNgOnChangesPropagation: boolean;
     differ: any;
-    schedule: any;
+    calendar: any;
     config: any;
+    _options: any;
     constructor(el: ElementRef, differs: IterableDiffers);
     ngOnInit(): void;
     ngAfterViewChecked(): void;
     ngOnChanges(changes: SimpleChanges): void;
+    options: any;
     initialize(): void;
     ngDoCheck(): void;
     ngOnDestroy(): void;
@@ -73,10 +78,11 @@ export declare class Schedule implements DoCheck, OnDestroy, OnInit, OnChanges, 
     nextYear(): void;
     today(): void;
     incrementDate(duration: any): void;
-    changeView(viewName: string): void;
+    changeView(viewName: string, dateOrRange: any): void;
     getDate(): any;
-    findEvent(id: string): any;
     updateEvent(event: any): void;
+    _findEvent(id: string): any;
+    _updateEvent(event: any): void;
 }
 export declare class ScheduleModule {
 }

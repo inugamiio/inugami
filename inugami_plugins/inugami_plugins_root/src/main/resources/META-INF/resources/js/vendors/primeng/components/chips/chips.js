@@ -13,19 +13,21 @@ var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
 var shared_1 = require("../common/shared");
 var inputtext_1 = require("../inputtext/inputtext");
-var domhandler_1 = require("../dom/domhandler");
 var forms_1 = require("@angular/forms");
 exports.CHIPS_VALUE_ACCESSOR = {
     provide: forms_1.NG_VALUE_ACCESSOR,
     useExisting: core_1.forwardRef(function () { return Chips; }),
     multi: true
 };
-var Chips = (function () {
-    function Chips(el, domHandler) {
+var Chips = /** @class */ (function () {
+    function Chips(el) {
         this.el = el;
-        this.domHandler = domHandler;
+        this.allowDuplicate = true;
         this.onAdd = new core_1.EventEmitter();
         this.onRemove = new core_1.EventEmitter();
+        this.onFocus = new core_1.EventEmitter();
+        this.onBlur = new core_1.EventEmitter();
+        this.onChipClick = new core_1.EventEmitter();
         this.onModelChange = function () { };
         this.onModelTouched = function () { };
     }
@@ -42,8 +44,18 @@ var Chips = (function () {
             }
         });
     };
+    Chips.prototype.onClick = function (event) {
+        this.inputViewChild.nativeElement.focus();
+    };
+    Chips.prototype.onItemClick = function (event, item) {
+        this.onChipClick.emit({
+            originalEvent: event,
+            value: item
+        });
+    };
     Chips.prototype.writeValue = function (value) {
         this.value = value;
+        this.updateMaxedOut();
     };
     Chips.prototype.registerOnChange = function (fn) {
         this.onModelChange = fn;
@@ -72,12 +84,18 @@ var Chips = (function () {
             return null;
         }
     };
-    Chips.prototype.onFocus = function () {
+    Chips.prototype.onInputFocus = function (event) {
         this.focus = true;
+        this.onFocus.emit(event);
     };
-    Chips.prototype.onBlur = function () {
+    Chips.prototype.onInputBlur = function (event) {
         this.focus = false;
+        if (this.addOnBlur && this.inputViewChild.nativeElement.value) {
+            this.addItem(event, this.inputViewChild.nativeElement.value);
+            this.inputViewChild.nativeElement.value = '';
+        }
         this.onModelTouched();
+        this.onBlur.emit(event);
     };
     Chips.prototype.removeItem = function (event, index) {
         if (this.disabled) {
@@ -90,12 +108,27 @@ var Chips = (function () {
             originalEvent: event,
             value: removedItem
         });
+        this.updateMaxedOut();
     };
-    Chips.prototype.onKeydown = function (event, inputEL) {
+    Chips.prototype.addItem = function (event, item) {
+        this.value = this.value || [];
+        if (item && item.trim().length) {
+            if (this.allowDuplicate || this.value.indexOf(item) === -1) {
+                this.value = this.value.concat([item]);
+                this.onModelChange(this.value);
+                this.onAdd.emit({
+                    originalEvent: event,
+                    value: item
+                });
+            }
+        }
+        this.updateMaxedOut();
+    };
+    Chips.prototype.onKeydown = function (event) {
         switch (event.which) {
             //backspace
             case 8:
-                if (inputEL.value.length === 0 && this.value && this.value.length > 0) {
+                if (this.inputViewChild.nativeElement.value.length === 0 && this.value && this.value.length > 0) {
                     this.value = this.value.slice();
                     var removedItem = this.value.pop();
                     this.onModelChange(this.value);
@@ -107,17 +140,16 @@ var Chips = (function () {
                 break;
             //enter
             case 13:
-                this.value = this.value || [];
-                if (inputEL.value && inputEL.value.trim().length && (!this.max || this.max > this.value.length)) {
-                    this.value = this.value.concat([inputEL.value]);
-                    this.onModelChange(this.value);
-                    this.onAdd.emit({
-                        originalEvent: event,
-                        value: inputEL.value
-                    });
-                }
-                inputEL.value = '';
+                this.addItem(event, this.inputViewChild.nativeElement.value);
+                this.inputViewChild.nativeElement.value = '';
                 event.preventDefault();
+                break;
+            case 9:
+                if (this.addOnTab && this.inputViewChild.nativeElement.value !== '') {
+                    this.addItem(event, this.inputViewChild.nativeElement.value);
+                    this.inputViewChild.nativeElement.value = '';
+                    event.preventDefault();
+                }
                 break;
             default:
                 if (this.max && this.value && this.max === this.value.length) {
@@ -126,79 +158,116 @@ var Chips = (function () {
                 break;
         }
     };
-    Object.defineProperty(Chips.prototype, "maxedOut", {
-        get: function () {
-            return this.max && this.value && this.max === this.value.length;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    Chips.prototype.updateMaxedOut = function () {
+        if (this.inputViewChild && this.inputViewChild.nativeElement) {
+            if (this.max && this.value && this.max === this.value.length)
+                this.inputViewChild.nativeElement.disabled = true;
+            else
+                this.inputViewChild.nativeElement.disabled = this.disabled || false;
+        }
+    };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Object)
+    ], Chips.prototype, "style", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], Chips.prototype, "styleClass", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], Chips.prototype, "disabled", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], Chips.prototype, "field", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], Chips.prototype, "placeholder", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Number)
+    ], Chips.prototype, "max", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Number)
+    ], Chips.prototype, "tabindex", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], Chips.prototype, "inputId", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], Chips.prototype, "allowDuplicate", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Object)
+    ], Chips.prototype, "inputStyle", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Object)
+    ], Chips.prototype, "inputStyleClass", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], Chips.prototype, "addOnTab", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], Chips.prototype, "addOnBlur", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], Chips.prototype, "onAdd", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], Chips.prototype, "onRemove", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], Chips.prototype, "onFocus", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], Chips.prototype, "onBlur", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], Chips.prototype, "onChipClick", void 0);
+    __decorate([
+        core_1.ViewChild('inputtext', { static: false }),
+        __metadata("design:type", core_1.ElementRef)
+    ], Chips.prototype, "inputViewChild", void 0);
+    __decorate([
+        core_1.ContentChildren(shared_1.PrimeTemplate),
+        __metadata("design:type", core_1.QueryList)
+    ], Chips.prototype, "templates", void 0);
+    Chips = __decorate([
+        core_1.Component({
+            selector: 'p-chips',
+            template: "\n        <div [ngClass]=\"'ui-chips ui-widget'\" [ngStyle]=\"style\" [class]=\"styleClass\" (click)=\"onClick($event)\">\n            <ul [ngClass]=\"{'ui-inputtext ui-state-default ui-corner-all':true,'ui-state-focus':focus,'ui-state-disabled':disabled}\">\n                <li #token *ngFor=\"let item of value; let i = index;\" class=\"ui-chips-token ui-state-highlight ui-corner-all\" (click)=\"onItemClick($event, item)\">\n                    <span *ngIf=\"!disabled\" class=\"ui-chips-token-icon pi pi-fw pi-times\" (click)=\"removeItem($event,i)\"></span>\n                    <span *ngIf=\"!itemTemplate\" class=\"ui-chips-token-label\">{{field ? resolveFieldData(item,field) : item}}</span>\n                    <ng-container *ngTemplateOutlet=\"itemTemplate; context: {$implicit: item}\"></ng-container>\n                </li>\n                <li class=\"ui-chips-input-token\">\n                    <input #inputtext type=\"text\" [attr.id]=\"inputId\" [attr.placeholder]=\"(value && value.length ? null : placeholder)\" [attr.tabindex]=\"tabindex\" (keydown)=\"onKeydown($event)\" \n                        (focus)=\"onInputFocus($event)\" (blur)=\"onInputBlur($event)\" [disabled]=\"disabled\" [ngStyle]=\"inputStyle\" [class]=\"inputStyleClass\">\n                </li>\n            </ul>\n        </div>\n    ",
+            providers: [exports.CHIPS_VALUE_ACCESSOR]
+        }),
+        __metadata("design:paramtypes", [core_1.ElementRef])
+    ], Chips);
     return Chips;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object)
-], Chips.prototype, "style", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], Chips.prototype, "styleClass", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], Chips.prototype, "disabled", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], Chips.prototype, "onAdd", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], Chips.prototype, "onRemove", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], Chips.prototype, "field", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], Chips.prototype, "placeholder", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Number)
-], Chips.prototype, "max", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Number)
-], Chips.prototype, "tabindex", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], Chips.prototype, "inputId", void 0);
-__decorate([
-    core_1.ContentChildren(shared_1.PrimeTemplate),
-    __metadata("design:type", core_1.QueryList)
-], Chips.prototype, "templates", void 0);
-Chips = __decorate([
-    core_1.Component({
-        selector: 'p-chips',
-        template: "\n        <div [ngClass]=\"'ui-chips ui-widget'\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <ul [ngClass]=\"{'ui-inputtext ui-state-default ui-corner-all':true,'ui-state-focus':focus,'ui-state-disabled':disabled}\" (click)=\"inputtext.focus()\">\n                <li #token *ngFor=\"let item of value; let i = index;\" class=\"ui-chips-token ui-state-highlight ui-corner-all\">\n                    <span *ngIf=\"!disabled\" class=\"ui-chips-token-icon fa fa-fw fa-close\" (click)=\"removeItem($event,i)\"></span>\n                    <span *ngIf=\"!itemTemplate\" class=\"ui-chips-token-label\">{{field ? resolveFieldData(item,field) : item}}</span>\n                    <ng-template *ngIf=\"itemTemplate\" [pTemplateWrapper]=\"itemTemplate\" [item]=\"item\"></ng-template>\n                </li>\n                <li class=\"ui-chips-input-token\">\n                    <input #inputtext type=\"text\" [attr.id]=\"inputId\" [attr.placeholder]=\"placeholder\" [attr.tabindex]=\"tabindex\" (keydown)=\"onKeydown($event,inputtext)\" \n                        (focus)=\"onFocus()\" (blur)=\"onBlur()\" [disabled]=\"maxedOut||disabled\" [disabled]=\"disabled\">\n                </li>\n            </ul>\n        </div>\n    ",
-        providers: [domhandler_1.DomHandler, exports.CHIPS_VALUE_ACCESSOR]
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef, domhandler_1.DomHandler])
-], Chips);
 exports.Chips = Chips;
-var ChipsModule = (function () {
+var ChipsModule = /** @class */ (function () {
     function ChipsModule() {
     }
+    ChipsModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule, inputtext_1.InputTextModule, shared_1.SharedModule],
+            exports: [Chips, inputtext_1.InputTextModule, shared_1.SharedModule],
+            declarations: [Chips]
+        })
+    ], ChipsModule);
     return ChipsModule;
 }());
-ChipsModule = __decorate([
-    core_1.NgModule({
-        imports: [common_1.CommonModule, inputtext_1.InputTextModule, shared_1.SharedModule],
-        exports: [Chips, inputtext_1.InputTextModule, shared_1.SharedModule],
-        declarations: [Chips]
-    })
-], ChipsModule);
 exports.ChipsModule = ChipsModule;
 //# sourceMappingURL=chips.js.map

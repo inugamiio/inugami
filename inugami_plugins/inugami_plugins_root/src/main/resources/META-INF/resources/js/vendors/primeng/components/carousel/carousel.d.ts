@@ -1,9 +1,8 @@
-import { ElementRef, AfterViewInit, AfterViewChecked, EventEmitter, OnDestroy, TemplateRef, QueryList, Renderer2 } from '@angular/core';
-import { DomHandler } from '../dom/domhandler';
+import { ElementRef, AfterViewInit, AfterViewChecked, EventEmitter, OnDestroy, TemplateRef, QueryList, Renderer2, ChangeDetectorRef } from '@angular/core';
 export declare class Carousel implements AfterViewChecked, AfterViewInit, OnDestroy {
     el: ElementRef;
-    domHandler: DomHandler;
     renderer: Renderer2;
+    cd: ChangeDetectorRef;
     numVisible: number;
     firstVisible: number;
     headerText: string;
@@ -17,16 +16,12 @@ export declare class Carousel implements AfterViewChecked, AfterViewInit, OnDest
     style: any;
     styleClass: string;
     onPage: EventEmitter<any>;
-    containerViewChild: ElementRef;
     templates: QueryList<any>;
     _value: any[];
     itemTemplate: TemplateRef<any>;
-    container: any;
     left: any;
-    viewport: any;
-    itemsContainer: any;
     items: any;
-    columns: any;
+    columns: number;
     page: number;
     valuesChanged: any;
     interval: any;
@@ -34,9 +29,12 @@ export declare class Carousel implements AfterViewChecked, AfterViewInit, OnDest
     mobileDropdownOptions: any[];
     selectDropdownOptions: any[];
     shrinked: boolean;
+    containerViewChild: ElementRef;
+    viewportViewChild: ElementRef;
+    itemsViewChild: ElementRef;
     documentResponsiveListener: any;
     differ: any;
-    constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2);
+    constructor(el: ElementRef, renderer: Renderer2, cd: ChangeDetectorRef);
     ngAfterContentInit(): void;
     value: any[];
     handleDataChange(): void;

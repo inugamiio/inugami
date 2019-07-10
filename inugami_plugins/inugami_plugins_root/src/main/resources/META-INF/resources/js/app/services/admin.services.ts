@@ -1,7 +1,5 @@
 import {Injectable}                              from '@angular/core';
-import {Http}                                    from '@angular/http';
 import {SessionScope}                            from './../scopes/session.scope';
-import {HeaderServices}                          from './../services/header.services';
 import {HttpServices}                            from './../services/http/http.services';
 
 @Injectable()
@@ -15,8 +13,7 @@ export class AdminService {
     /**************************************************************************
     * CONSTRUCTORS
     **************************************************************************/
-    constructor(private http           : Http,
-                private headerServices : HeaderServices,
+    constructor(
                 private sessionScope   : SessionScope,
                 private httpService    : HttpServices) {
         this.urls = {
@@ -73,12 +70,10 @@ export class AdminService {
     **/
     private processGet(url) : Promise<any> {
         if(this.sessionScope.hasRole('admin')){
-        let header = this.headerServices.buildHeader();
-        return this.http
-                 .get(url,header)
-                 .toPromise()
+        return this.httpService
+                 .get(url)
                  .then(res  => {
-                    return res.json()
+                    return res;
                  })
                  .catch(this.handleError);
         }else{
@@ -91,12 +86,10 @@ export class AdminService {
 
     private processDelete(url): Promise<any> {
         if(this.sessionScope.hasRole('admin')){
-        let header = this.headerServices.buildHeader();
-        return this.http
-                   .delete(url,header)
-                   .toPromise()
+        return this.httpService
+                   .delete(url)
                    .then(res  => {
-                        return res.json()
+                        return res;
                    })
                    .catch(this.handleError);
         }else{

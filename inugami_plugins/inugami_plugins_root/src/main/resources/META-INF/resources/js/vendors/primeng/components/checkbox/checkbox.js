@@ -17,9 +17,10 @@ exports.CHECKBOX_VALUE_ACCESSOR = {
     useExisting: core_1.forwardRef(function () { return Checkbox; }),
     multi: true
 };
-var Checkbox = (function () {
+var Checkbox = /** @class */ (function () {
     function Checkbox(cd) {
         this.cd = cd;
+        this.checkboxIcon = 'pi pi-check';
         this.onChange = new core_1.EventEmitter();
         this.onModelChange = function () { };
         this.onModelTouched = function () { };
@@ -44,6 +45,9 @@ var Checkbox = (function () {
             else
                 this.removeValue();
             this.onModelChange(this.model);
+            if (this.formControl) {
+                this.formControl.setValue(this.model);
+            }
         }
         else {
             this.onModelChange(this.checked);
@@ -91,68 +95,80 @@ var Checkbox = (function () {
     Checkbox.prototype.setDisabledState = function (val) {
         this.disabled = val;
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Object)
+    ], Checkbox.prototype, "value", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], Checkbox.prototype, "name", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], Checkbox.prototype, "disabled", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], Checkbox.prototype, "binary", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], Checkbox.prototype, "label", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Number)
+    ], Checkbox.prototype, "tabindex", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], Checkbox.prototype, "inputId", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Object)
+    ], Checkbox.prototype, "style", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], Checkbox.prototype, "styleClass", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], Checkbox.prototype, "labelStyleClass", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", forms_1.FormControl)
+    ], Checkbox.prototype, "formControl", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], Checkbox.prototype, "checkboxIcon", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], Checkbox.prototype, "onChange", void 0);
+    Checkbox = __decorate([
+        core_1.Component({
+            selector: 'p-checkbox',
+            template: "\n        <div [ngStyle]=\"style\" [ngClass]=\"'ui-chkbox ui-widget'\" [class]=\"styleClass\">\n            <div class=\"ui-helper-hidden-accessible\">\n                <input #cb type=\"checkbox\" [attr.id]=\"inputId\" [name]=\"name\" [value]=\"value\" [checked]=\"checked\" (focus)=\"onFocus($event)\" (blur)=\"onBlur($event)\"\n                [ngClass]=\"{'ui-state-focus':focused}\" (change)=\"handleChange($event)\" [disabled]=\"disabled\" [attr.tabindex]=\"tabindex\">\n            </div>\n            <div class=\"ui-chkbox-box ui-widget ui-corner-all ui-state-default\" (click)=\"onClick($event,cb,true)\"\n                        [ngClass]=\"{'ui-state-active':checked,'ui-state-disabled':disabled,'ui-state-focus':focused}\">\n                <span class=\"ui-chkbox-icon ui-clickable\" [ngClass]=\"checked ? checkboxIcon : null\"></span>\n            </div>\n        </div>\n        <label (click)=\"onClick($event,cb,true)\" [class]=\"labelStyleClass\"\n                [ngClass]=\"{'ui-chkbox-label': true, 'ui-label-active':checked, 'ui-label-disabled':disabled, 'ui-label-focus':focused}\"\n                *ngIf=\"label\" [attr.for]=\"inputId\">{{label}}</label>\n    ",
+            providers: [exports.CHECKBOX_VALUE_ACCESSOR]
+        }),
+        __metadata("design:paramtypes", [core_1.ChangeDetectorRef])
+    ], Checkbox);
     return Checkbox;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object)
-], Checkbox.prototype, "value", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], Checkbox.prototype, "name", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], Checkbox.prototype, "disabled", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], Checkbox.prototype, "binary", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], Checkbox.prototype, "label", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Number)
-], Checkbox.prototype, "tabindex", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], Checkbox.prototype, "inputId", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object)
-], Checkbox.prototype, "style", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], Checkbox.prototype, "styleClass", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], Checkbox.prototype, "onChange", void 0);
-Checkbox = __decorate([
-    core_1.Component({
-        selector: 'p-checkbox',
-        template: "\n        <div [ngStyle]=\"style\" [ngClass]=\"'ui-chkbox ui-widget'\" [class]=\"styleClass\">\n            <div class=\"ui-helper-hidden-accessible\">\n                <input #cb type=\"checkbox\" [attr.id]=\"inputId\" [name]=\"name\" [value]=\"value\" [checked]=\"checked\" (focus)=\"onFocus($event)\" (blur)=\"onBlur($event)\"\n                [ngClass]=\"{'ui-state-focus':focused}\" (change)=\"handleChange($event)\" [disabled]=\"disabled\" [attr.tabindex]=\"tabindex\">\n            </div>\n            <div class=\"ui-chkbox-box ui-widget ui-corner-all ui-state-default\" (click)=\"onClick($event,cb,true)\"\n                        [ngClass]=\"{'ui-state-active':checked,'ui-state-disabled':disabled,'ui-state-focus':focused}\">\n                <span class=\"ui-chkbox-icon ui-c\" [ngClass]=\"{'fa fa-check':checked}\"></span>\n            </div>\n        </div>\n        <label class=\"ui-chkbox-label\" (click)=\"onClick($event,cb,true)\" *ngIf=\"label\">{{label}}</label>\n    ",
-        providers: [exports.CHECKBOX_VALUE_ACCESSOR]
-    }),
-    __metadata("design:paramtypes", [core_1.ChangeDetectorRef])
-], Checkbox);
 exports.Checkbox = Checkbox;
-var CheckboxModule = (function () {
+var CheckboxModule = /** @class */ (function () {
     function CheckboxModule() {
     }
+    CheckboxModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [Checkbox],
+            declarations: [Checkbox]
+        })
+    ], CheckboxModule);
     return CheckboxModule;
 }());
-CheckboxModule = __decorate([
-    core_1.NgModule({
-        imports: [common_1.CommonModule],
-        exports: [Checkbox],
-        declarations: [Checkbox]
-    })
-], CheckboxModule);
 exports.CheckboxModule = CheckboxModule;
 //# sourceMappingURL=checkbox.js.map

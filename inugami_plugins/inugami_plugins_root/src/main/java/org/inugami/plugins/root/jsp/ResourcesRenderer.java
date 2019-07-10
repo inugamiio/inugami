@@ -179,14 +179,11 @@ public class ResourcesRenderer {
         // IMPORTS
         // ---------------------------------------------------
         //@formatter:off
-        result.append("import 'rxjs/add/operator/toPromise';");
         result.append(importation("CommonModule"            , "@angular/common"));
         result.append(importation("BrowserModule"           , "@angular/platform-browser"));
         result.append(importation("ReactiveFormsModule"     , "@angular/forms"));
         result.append(importation("NgModule"                , "@angular/core"));
         result.append(importation("FormsModule"             , "@angular/forms"));
-        //result.append(importation("platformBrowserDynamic"  , "@angular/platform-browser-dynamic"));
-        result.append(importation("HttpModule"              , "@angular/http"));
         result.append(importation("APP_BASE_HREF"           , "@angular/common"));
         result.append(importation("AppRootModule"           , "./app.root.module.ts"));
         result.append(importation("AppRootModuleRoutes"     , "./app.root.module.ts"));
@@ -209,7 +206,7 @@ public class ResourcesRenderer {
         // MODULE
         // ---------------------------------------------------
         result.append("@NgModule({");
-        result.append("imports: [CommonModule, BrowserModule, ReactiveFormsModule,FormsModule, HttpModule");
+        result.append("imports: [CommonModule, BrowserModule, ReactiveFormsModule,FormsModule");
         processOnFrontPlugins(plugin -> {
             final PluginFrontConfig frontConfig = plugin.getFrontConfig().get();
             result.append(',');

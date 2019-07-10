@@ -1,5 +1,6 @@
 import {Injectable}                              from '@angular/core';
-import {Http, Response,Headers, RequestOptions}  from '@angular/http';
+import {HttpClient, HttpResponse,
+       HttpHeaders, HttpRequest}                 from '@angular/common/http';
 import {SessionScope}                            from './../../scopes/session.scope';
 import {HeaderServices}                          from './../header.services'
 
@@ -10,7 +11,7 @@ export class HttpServices {
     /**************************************************************************
     * CONSTRUCTORS
     **************************************************************************/
-    constructor(private http: Http,
+    constructor(private http: HttpClient,
                 private headerServices:HeaderServices,
                 private sessionScope : SessionScope) {
 
@@ -20,15 +21,15 @@ export class HttpServices {
     /**************************************************************************
     * API
     **************************************************************************/
-    public get(url:string, header?:any){
+    public get(url:string, header?:any):Promise<any>{
         if(this.sessionScope.isConnected()){
-            let headerData = this.headerServices.buildHeader(header);
+            let options = this.headerServices.buildHeader(header);
             let session = this.sessionScope;
-            return this.http.get(url,headerData)
+            return this.http.get(url,{"headers":options,observe: "response" })
                 .toPromise()
                 .then(res  => {
                     session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
-                    return res.json()
+                    return res.body;
                 })
                 .catch(this.handleError);
         }else{
@@ -37,42 +38,42 @@ export class HttpServices {
     }
 
 
-    public post(url:string, data, header?:any){
-        let headerData = this.headerServices.buildHeader(header);
+    public post(url:string, data?, header?:any):Promise<any>{
+        let options = this.headerServices.buildHeader(header);
         let session    = this.sessionScope;
         return this.http
-                   .post(url,JSON.stringify(data),headerData)
+                   .post(url,JSON.stringify(data),{"headers":options,observe: "response" })
                    .toPromise()
                    .then(res  => {
                         session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
-                        return res;
+                        return res.body;
                    })
                    .catch(this.handleError);
     }
 
-    public put(url:string, data, header?:any){
-        let headerData = this.headerServices.buildHeader(header);
+    public put(url:string, data, header?:any):Promise<any>{
+        let options    = this.headerServices.buildHeader(header);
         let session    = this.sessionScope;
         return this.http
-                   .put(url,JSON.stringify(data),headerData)
+                   .put(url,JSON.stringify(data),{"headers":options,observe: "response" })
                    .toPromise()
                    .then(res  => {
                         session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
-                        return res;
+                        return res.body;
                    })
                    .catch(this.handleError);
     }
 
-    public delete(url:string, data, header?:any){
+    public delete(url:string, data?, header?:any):Promise<any>{
         let session     = this.sessionScope;
-        let headerData  = this.headerServices.buildHeader(header);
-        headerData.body = JSON.stringify(data);
+        let options     = this.headerServices.buildHeader(header);
+        
         return this.http
-                   .delete(url,headerData)
+                   .delete(url,{"headers":options,observe: "response" })
                    .toPromise()
                    .then(res  => {
                         session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
-                        return res;
+                        return res.body;
                    })
                    .catch(this.handleError);
     }

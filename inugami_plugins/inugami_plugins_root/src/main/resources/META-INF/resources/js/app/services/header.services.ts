@@ -1,5 +1,5 @@
 import {Injectable}                                 from '@angular/core';
-import {Http,Headers, RequestOptions}               from '@angular/http';
+import {HttpHeaders}                                from '@angular/common/http';
 import {SessionScope}                               from './../scopes/session.scope';
 
 
@@ -16,30 +16,43 @@ export class HeaderServices {
     /**************************************************************************
     * CONSTRUCTORS
     **************************************************************************/
-    constructor(private http         : Http,
-                private sessionScope : SessionScope) {
+    constructor(private sessionScope : SessionScope) {
     }
 
     /**************************************************************************
     * API
     **************************************************************************/
-    public buildHeader(headerInfos) : RequestOptions{
-      
+    public buildHeader(headerInfos) : HttpHeaders{
+      let result = {};
       let headerData = isNull(headerInfos)?{}:headerInfos;
       if(this.sessionScope.isConnected()){
-        headerData["Authorization"]=this.sessionScope.getToken();
+        result["Authorization"]=this.sessionScope.getToken();
       }
 
-      headerData[org.inugami.constants.headers.DEVICE_IDENTIFIER]            = org.inugami.constants.deviceIdentifier;
-      headerData[org.inugami.constants.headers.CORRELATION_ID]               = this.sessionScope.getCorrelationId();
-      headerData[org.inugami.constants.headers.DEVICE_TYPE]                  = org.inugami.constants.deviceType;
-      headerData[org.inugami.constants.headers.DEVICE_CLASS]                 = org.inugami.constants.deviceClass;
-      headerData[org.inugami.constants.headers.DEVICE_OS_VERSION]            = org.inugami.constants.deviceOsVersion;
-      headerData[org.inugami.constants.headers.DEVICE_VERSION]               = org.inugami.constants.deviceVersion;
-      headerData[org.inugami.constants.headers.DEVICE_NETWORK_TYPE]          = org.inugami.constants.deviceNetworkType;
-      headerData[org.inugami.constants.headers.DEVICE_NETWORK_SPEED_DOWN]    = org.inugami.constants.deviceNetworkSpeedDown;
-      headerData[org.inugami.constants.headers.DEVICE_NETWORK_SPEED_LATENCY] = org.inugami.constants.deviceNetworkSpeedLatency;
+      result[org.inugami.constants.headers.DEVICE_IDENTIFIER]            = org.inugami.constants.deviceIdentifier;
+      result[org.inugami.constants.headers.CORRELATION_ID]               = this.sessionScope.getCorrelationId();
+      result[org.inugami.constants.headers.DEVICE_TYPE]                  = org.inugami.constants.deviceType;
+      result[org.inugami.constants.headers.DEVICE_CLASS]                 = org.inugami.constants.deviceClass;
+      result[org.inugami.constants.headers.DEVICE_OS_VERSION]            = org.inugami.constants.deviceOsVersion;
+      result[org.inugami.constants.headers.DEVICE_VERSION]               = org.inugami.constants.deviceVersion;
+      result[org.inugami.constants.headers.DEVICE_NETWORK_TYPE]          = org.inugami.constants.deviceNetworkType;
+      result[org.inugami.constants.headers.DEVICE_NETWORK_SPEED_DOWN]    = org.inugami.constants.deviceNetworkSpeedDown;
+      result[org.inugami.constants.headers.DEVICE_NETWORK_SPEED_LATENCY] = org.inugami.constants.deviceNetworkSpeedLatency;
       
-      return new RequestOptions({ headers: new Headers(headerData) });
+      
+      if(isNotNull(headerInfos)){
+         for(let key of Object.keys(headerInfos)){
+          result[key]=headerInfos[key];
+         }
+      }
+
+      let resultData = {};
+      for(let key of Object.keys(result)){
+        if(isNotNull(result[key])){
+          resultData[key]=result[key];
+        }
+      }
+      
+      return new  HttpHeaders(resultData);
     }
 }

@@ -298,13 +298,18 @@
 .page-admin .alert-edit textarea{
   width: -webkit-fill-available;
   height: 20em;
+  border: none;
 }
 .page-admin .alert-edit .left-panel .query-text-area textarea{
   margin-top: 1em;
 }
 .page-admin .alert-edit .left-panel .query-text-area msg{
   position: absolute;
-  top:-0.5em;
+  top: -0.7em;
+  left: 0;
+  font-size: 1.5em;
+  margin-bottom: 3em;
+  color: #626262;
 }
 
 
@@ -467,7 +472,7 @@
 }
 
 .page-admin .alert-edit .input-bloc.eventName input{
-  width: 33.5em;
+  width: 34.5em;
 }
 
 .page-admin .activation-threshold{
@@ -574,4 +579,23 @@
   margin-top: -5.8em;
   margin-bottom: 2em;
   margin-left: -1.6em;
+}
+
+
+.page-admin .to.input-bloc,
+.page-admin .interval.input-bloc{
+  margin-left: 2em;
+}
+
+.page-admin .ui-table-thead .actions{
+  position: absolute;
+  top: 0.7em;
+}
+
+.page-admin .ui-table-tbody td .ui-button{
+  width: 2em;
+  height: 2em;
+  font-size: 62%;
+  padding: 1.5em;
+  margin-left: 1em;
 }

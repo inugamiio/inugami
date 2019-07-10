@@ -90,16 +90,16 @@ export class AdminView implements OnInit, OnDestroy{
 
          org.inugami.events.addEventListener(org.inugami.sse.events.ERROR, function(event){
            self.onServerDown(event);
-         );
+         });
          org.inugami.events.addEventListener(org.inugami.sse.events.OPEN, function(event){
            self.onServerUp(event);
-         );
+         });
          org.inugami.events.addEventListener("administration_start_stop_events", function(event){
            self.onEventStartStop(event);
-         );
+         });
          org.inugami.events.addEventListener("administration_system", function(event){
           self.onSystemInfo(event);
-        );
+        });
          
       });
 

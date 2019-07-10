@@ -11,33 +11,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
-var CodeHighlighter = (function () {
+var CodeHighlighter = /** @class */ (function () {
     function CodeHighlighter(el) {
         this.el = el;
     }
-    CodeHighlighter.prototype.ngOnInit = function () {
-        Prism.highlightElement(this.el.nativeElement);
+    CodeHighlighter.prototype.ngAfterViewInit = function () {
+        if (window['Prism']) {
+            window['Prism'].highlightElement(this.el.nativeElement);
+        }
     };
+    CodeHighlighter = __decorate([
+        core_1.Directive({
+            selector: '[pCode]'
+        }),
+        __metadata("design:paramtypes", [core_1.ElementRef])
+    ], CodeHighlighter);
     return CodeHighlighter;
 }());
-CodeHighlighter = __decorate([
-    core_1.Directive({
-        selector: '[pCode]'
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef])
-], CodeHighlighter);
 exports.CodeHighlighter = CodeHighlighter;
-var CodeHighlighterModule = (function () {
+var CodeHighlighterModule = /** @class */ (function () {
     function CodeHighlighterModule() {
     }
+    CodeHighlighterModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [CodeHighlighter],
+            declarations: [CodeHighlighter]
+        })
+    ], CodeHighlighterModule);
     return CodeHighlighterModule;
 }());
-CodeHighlighterModule = __decorate([
-    core_1.NgModule({
-        imports: [common_1.CommonModule],
-        exports: [CodeHighlighter],
-        declarations: [CodeHighlighter]
-    })
-], CodeHighlighterModule);
 exports.CodeHighlighterModule = CodeHighlighterModule;
 //# sourceMappingURL=codehighlighter.js.map

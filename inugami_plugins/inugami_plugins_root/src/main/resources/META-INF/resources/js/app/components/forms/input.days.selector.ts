@@ -167,7 +167,7 @@ export class InputDaysSelector implements OnInit, ControlValueAccessor {
 
     getDayClass(day : string){
       let selected = this.daysModel.indexOf(day) > -1 ? "selected" : "";
-      return "day-"+day+" "+selected ;
+      return "day day-"+day+" "+selected ;
     }
 
 }

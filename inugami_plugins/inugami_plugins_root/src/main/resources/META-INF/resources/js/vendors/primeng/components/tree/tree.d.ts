@@ -1,18 +1,9 @@
-import { AfterContentInit, OnDestroy, EventEmitter, OnInit, EmbeddedViewRef, ViewContainerRef, QueryList, TemplateRef } from '@angular/core';
-import { TreeNode } from '../common/api';
-import { TreeDragDropService } from '../common/api';
-import { Subscription } from 'rxjs/Subscription';
-export declare class TreeNodeTemplateLoader implements OnInit, OnDestroy {
-    viewContainer: ViewContainerRef;
-    node: any;
-    template: TemplateRef<any>;
-    view: EmbeddedViewRef<any>;
-    constructor(viewContainer: ViewContainerRef);
-    ngOnInit(): void;
-    ngOnDestroy(): void;
-}
+import { AfterContentInit, OnDestroy, EventEmitter, OnInit, QueryList, TemplateRef, ElementRef } from '@angular/core';
+import { TreeNode } from '../common/treenode';
+import { TreeDragDropService } from '../common/treedragdropservice';
+import { Subscription } from 'rxjs';
+import { BlockableUI } from '../common/blockableui';
 export declare class UITreeNode implements OnInit {
-    tree: Tree;
     static ICON_CLASS: string;
     node: TreeNode;
     parentNode: TreeNode;
@@ -20,7 +11,8 @@ export declare class UITreeNode implements OnInit {
     index: number;
     firstChild: boolean;
     lastChild: boolean;
-    constructor(tree: Tree);
+    tree: Tree;
+    constructor(tree: any);
     draghoverPrev: boolean;
     draghoverNext: boolean;
     draghoverNode: boolean;
@@ -28,11 +20,14 @@ export declare class UITreeNode implements OnInit {
     getIcon(): string;
     isLeaf(): boolean;
     toggle(event: Event): void;
+    expand(event: Event): void;
+    collapse(event: Event): void;
     onNodeClick(event: MouseEvent): void;
     onNodeTouchEnd(): void;
     onNodeRightClick(event: MouseEvent): void;
     isSelected(): boolean;
     onDropPoint(event: Event, position: number): void;
+    processPointDrop(dragNode: any, dragNodeIndex: any, position: any): void;
     onDropPointDragOver(event: any): void;
     onDropPointDragEnter(event: Event, position: number): void;
     onDropPointDragLeave(event: Event): void;
@@ -40,10 +35,17 @@ export declare class UITreeNode implements OnInit {
     onDragStop(event: any): void;
     onDropNodeDragOver(event: any): void;
     onDropNode(event: any): void;
+    processNodeDrop(dragNode: any): void;
     onDropNodeDragEnter(event: any): void;
     onDropNodeDragLeave(event: any): void;
+    onKeyDown(event: KeyboardEvent): void;
+    findNextSiblingOfAncestor(nodeElement: any): any;
+    findLastVisibleDescendant(nodeElement: any): any;
+    getParentNodeElement(nodeElement: any): any;
+    focusNode(element: any): void;
 }
-export declare class Tree implements OnInit, AfterContentInit, OnDestroy {
+export declare class Tree implements OnInit, AfterContentInit, OnDestroy, BlockableUI {
+    el: ElementRef;
     dragDropService: TreeDragDropService;
     value: TreeNode[];
     selectionMode: string;
@@ -66,6 +68,17 @@ export declare class Tree implements OnInit, AfterContentInit, OnDestroy {
     metaKeySelection: boolean;
     propagateSelectionUp: boolean;
     propagateSelectionDown: boolean;
+    loading: boolean;
+    loadingIcon: string;
+    emptyMessage: string;
+    ariaLabel: string;
+    ariaLabelledBy: string;
+    validateDrop: boolean;
+    filter: boolean;
+    filterBy: string;
+    filterMode: string;
+    filterPlaceholder: string;
+    nodeTrackBy: Function;
     templates: QueryList<any>;
     templateMap: any;
     nodeTouched: boolean;
@@ -77,20 +90,26 @@ export declare class Tree implements OnInit, AfterContentInit, OnDestroy {
     dragHover: boolean;
     dragStartSubscription: Subscription;
     dragStopSubscription: Subscription;
-    constructor(dragDropService: TreeDragDropService);
+    filteredNodes: TreeNode[];
+    constructor(el: ElementRef, dragDropService: TreeDragDropService);
     ngOnInit(): void;
     readonly horizontal: boolean;
     ngAfterContentInit(): void;
-    onNodeClick(event: MouseEvent, node: TreeNode): void;
+    onNodeClick(event: any, node: TreeNode): void;
     onNodeTouchEnd(): void;
     onNodeRightClick(event: MouseEvent, node: TreeNode): void;
     findIndexInSelection(node: TreeNode): number;
+    syncNodeOption(node: any, parentNodes: any, option: any, value?: any): void;
+    hasFilteredNodes(): number;
+    getNodeWithKey(key: string, nodes: TreeNode[]): any;
     propagateUp(node: TreeNode, select: boolean): void;
     propagateDown(node: TreeNode, select: boolean): void;
     isSelected(node: TreeNode): boolean;
     isSingleSelectionMode(): boolean;
     isMultipleSelectionMode(): boolean;
     isCheckboxSelectionMode(): boolean;
+    isNodeLeaf(node: any): boolean;
+    getRootNode(): TreeNode[];
     getTemplateForNode(node: TreeNode): TemplateRef<any>;
     onDragOver(event: any): void;
     onDrop(event: any): void;
@@ -98,6 +117,14 @@ export declare class Tree implements OnInit, AfterContentInit, OnDestroy {
     onDragLeave(event: any): void;
     allowDrop(dragNode: TreeNode, dropNode: TreeNode, dragNodeScope: any): boolean;
     isValidDragScope(dragScope: any): boolean;
+    onFilter(event: any): void;
+    findFilteredNodes(node: any, paramsWithoutNode: any): boolean;
+    isFilterMatched(node: any, { searchFields, filterText, isStrictMode }: {
+        searchFields: any;
+        filterText: any;
+        isStrictMode: any;
+    }): boolean;
+    getBlockableElement(): HTMLElement;
     ngOnDestroy(): void;
 }
 export declare class TreeModule {

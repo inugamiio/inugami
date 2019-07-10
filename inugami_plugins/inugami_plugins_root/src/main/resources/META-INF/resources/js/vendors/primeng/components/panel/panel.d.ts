@@ -1,5 +1,5 @@
 import { EventEmitter, ElementRef } from '@angular/core';
-import { BlockableUI } from '../common/api';
+import { BlockableUI } from '../common/blockableui';
 export declare class Panel implements BlockableUI {
     private el;
     toggleable: boolean;
@@ -9,12 +9,19 @@ export declare class Panel implements BlockableUI {
     styleClass: string;
     expandIcon: string;
     collapseIcon: string;
+    showHeader: boolean;
+    toggler: string;
     collapsedChange: EventEmitter<any>;
     onBeforeToggle: EventEmitter<any>;
     onAfterToggle: EventEmitter<any>;
+    transitionOptions: string;
+    footerFacet: any;
     animating: boolean;
+    id: string;
     constructor(el: ElementRef);
-    toggle(event: any): boolean;
+    onHeaderClick(event: Event): void;
+    onIconClick(event: Event): void;
+    toggle(event: Event): boolean;
     expand(event: any): void;
     collapse(event: any): void;
     getBlockableElement(): HTMLElement;
