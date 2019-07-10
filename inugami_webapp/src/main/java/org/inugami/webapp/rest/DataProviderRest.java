@@ -1,9 +1,7 @@
 package org.inugami.webapp.rest;
 
 import org.inugami.api.providers.Provider;
-import org.inugami.configuration.models.ProviderConfig;
 import org.inugami.configuration.models.plugins.Plugin;
-import org.inugami.configuration.models.plugins.PluginConfiguration;
 import org.inugami.core.context.ApplicationContext;
 import org.inugami.core.context.Context;
 import org.inugami.core.security.commons.roles.UserConnected;
@@ -27,26 +25,21 @@ public class DataProviderRest {
     @GET
     @UserConnected
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getProviders(){
+    public List<DataProviderRestModel> getProviders(){
 
-        final List<PluginConfiguration> pluginConfList = new ArrayList<>();
+        final List<Plugin> pluginList = new ArrayList<>();
         org.inugami.core.context.Context.getInstance().getPlugins().ifPresent(plugins -> {
-            for(Plugin plugin : Context.getInstance().getPlugins().get()){
-                pluginConfList.add(plugin.getConfig());
-            }
+            pluginList.addAll(Context.getInstance().getPlugins().get());
         });
 
 
-        List<String> response   = new ArrayList<>();
-        for (PluginConfiguration pluginconf: pluginConfList) {
-            
-            if(pluginconf.getProviders() != null){
-                for(ProviderConfig providerConf: pluginconf.getProviders()){
-                    response.add(providerConf.getName());
-                }
+        List<DataProviderRestModel> modelList   = new ArrayList<>();
+        for (Plugin plugin: pluginList) {
+            for(Provider provider: plugin.getProviders().orElse(Collections.emptyList())){
+                modelList.add(new DataProviderRestModel(provider.getType(),provider.getTimeout(),provider.getConfig()));
             }
         }
 
-        return response ;
+        return modelList ;
     }
 }
