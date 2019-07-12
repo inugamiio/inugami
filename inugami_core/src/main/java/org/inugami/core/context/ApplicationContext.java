@@ -96,6 +96,8 @@ public interface ApplicationContext {
     
     FutureData<ProviderFutureResult> processPluginEvent(final String eventName, final Gav gav) throws Exception;
     
+    void notifyDynamicEventResult(final GenericEvent event, ProviderFutureResult providerResult);
+    
     // =========================================================================
     // PLUGINS
     // =========================================================================

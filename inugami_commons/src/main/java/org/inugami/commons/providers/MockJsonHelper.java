@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.inugami.core.providers.mock;
+package org.inugami.commons.providers;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +42,6 @@ import org.inugami.api.providers.concurrent.ThreadSleep;
 import org.inugami.api.providers.task.ProviderFutureResult;
 import org.inugami.api.providers.task.ProviderFutureResultBuilder;
 import org.inugami.commons.files.FilesUtils;
-import org.inugami.core.providers.mock.scan.MockJsonScanJar;
 
 /**
  * MockJsonProvider

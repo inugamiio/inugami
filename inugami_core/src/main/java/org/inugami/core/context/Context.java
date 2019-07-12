@@ -394,6 +394,11 @@ public final class Context implements ApplicationContext,
         }
     }
     
+    @Override
+    public void notifyDynamicEventResult(final GenericEvent event, final ProviderFutureResult providerResult) {
+        // TODO implements
+    }
+    
     // =========================================================================
     // PLUGINS
     // =========================================================================
@@ -780,6 +785,8 @@ public final class Context implements ApplicationContext,
     public JavaScriptEngine getScriptEngine() {
         return javaScriptEngine;
     }
+
+
 
 
 
