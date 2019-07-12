@@ -102,6 +102,8 @@ public final class Context implements ApplicationContext,
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
+    private final static Plugin                 ROOT_DYNAMIC_PLUGIN    = new Plugin("org.inugami", "inugami_core");
+    
     private final GenericContext<Context>       genericContext         = new GenericContext<Context>();
     
     private final ConfigurationHolder           configuration;
@@ -395,8 +397,10 @@ public final class Context implements ApplicationContext,
     }
     
     @Override
-    public void notifyDynamicEventResult(final GenericEvent event, final ProviderFutureResult providerResult) {
-        // TODO implements
+    public void notifyDynamicEventResult(final GenericEvent event, final ProviderFutureResult providerResult,
+                                         final String channelName) {
+        new CallableEvent(ROOT_DYNAMIC_PLUGIN, event, channelName, this, null,
+                          getApplicationConfiguration().getTimeout(), starting).onDone(providerResult, event, null);
     }
     
     // =========================================================================
