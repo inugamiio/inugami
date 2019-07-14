@@ -1,21 +1,19 @@
-import { ElementRef, OnInit, DoCheck } from '@angular/core';
-export declare class InputTextarea implements OnInit, DoCheck {
+import { ElementRef, DoCheck, EventEmitter } from '@angular/core';
+import { NgModel } from '@angular/forms';
+export declare class InputTextarea implements DoCheck {
     el: ElementRef;
+    ngModel: NgModel;
     autoResize: boolean;
-    rows: number;
-    cols: number;
-    rowsDefault: number;
-    colsDefault: number;
+    onResize: EventEmitter<any>;
     filled: boolean;
-    constructor(el: ElementRef);
-    ngOnInit(): void;
+    cachedScrollHeight: number;
+    constructor(el: ElementRef, ngModel: NgModel);
     ngDoCheck(): void;
     onInput(e: any): void;
     updateFilledState(): void;
     onFocus(e: any): void;
     onBlur(e: any): void;
-    onKeyup(e: any): void;
-    resize(): void;
+    resize(event?: Event): void;
 }
 export declare class InputTextareaModule {
 }

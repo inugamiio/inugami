@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-.inugami-input-days-selector .days [class^="day"]{
+.inugami-input-days-selector .days .day{
     position: relative;
     width: 2em;
     height: 2em;
@@ -17,16 +17,16 @@
 }
 
 
-.inugami-input-days-selector .days [class^="day"].selected{
+.inugami-input-days-selector .days .day.selected{
     background-color:  #ED5565;
 }
 
-.inugami-input-days-selector .days [class^="day"] .label{
+.inugami-input-days-selector .days .day .label{
     position: relative;
     top:0.3em;
     left:0.6em;
     color:#c12534;
 }
-.inugami-input-days-selector .days [class^="day"].selected .label{
+.inugami-input-days-selector .days .day.selected .label{
     color: whitesmoke;
 }

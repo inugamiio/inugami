@@ -11,11 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
-var domhandler_1 = require("../dom/domhandler");
-var DeferredLoader = (function () {
-    function DeferredLoader(el, domHandler, renderer, viewContainer) {
+var DeferredLoader = /** @class */ (function () {
+    function DeferredLoader(el, renderer, viewContainer) {
         this.el = el;
-        this.domHandler = domHandler;
         this.renderer = renderer;
         this.viewContainer = viewContainer;
         this.onLoad = new core_1.EventEmitter();
@@ -25,24 +23,33 @@ var DeferredLoader = (function () {
         if (this.shouldLoad()) {
             this.load();
         }
-        this.documentScrollListener = this.renderer.listen('window', 'scroll', function () {
-            if (_this.shouldLoad()) {
-                _this.load();
-                _this.documentScrollListener();
-                _this.documentScrollListener = null;
-            }
-        });
+        if (!this.isLoaded()) {
+            this.documentScrollListener = this.renderer.listen('window', 'scroll', function () {
+                if (_this.shouldLoad()) {
+                    _this.load();
+                    _this.documentScrollListener();
+                    _this.documentScrollListener = null;
+                }
+            });
+        }
     };
     DeferredLoader.prototype.shouldLoad = function () {
-        var rect = this.el.nativeElement.getBoundingClientRect();
-        var docElement = document.documentElement;
-        var scrollTop = (window.pageYOffset || document.documentElement.scrollTop);
-        var winHeight = docElement.clientHeight;
-        return (winHeight >= rect.top);
+        if (this.isLoaded()) {
+            return false;
+        }
+        else {
+            var rect = this.el.nativeElement.getBoundingClientRect();
+            var docElement = document.documentElement;
+            var winHeight = docElement.clientHeight;
+            return (winHeight >= rect.top);
+        }
     };
     DeferredLoader.prototype.load = function () {
         this.view = this.viewContainer.createEmbeddedView(this.template);
         this.onLoad.emit();
+    };
+    DeferredLoader.prototype.isLoaded = function () {
+        return this.view != null;
     };
     DeferredLoader.prototype.ngOnDestroy = function () {
         this.view = null;
@@ -50,36 +57,34 @@ var DeferredLoader = (function () {
             this.documentScrollListener();
         }
     };
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], DeferredLoader.prototype, "onLoad", void 0);
+    __decorate([
+        core_1.ContentChild(core_1.TemplateRef, { static: false }),
+        __metadata("design:type", core_1.TemplateRef)
+    ], DeferredLoader.prototype, "template", void 0);
+    DeferredLoader = __decorate([
+        core_1.Directive({
+            selector: '[pDefer]'
+        }),
+        __metadata("design:paramtypes", [core_1.ElementRef, core_1.Renderer2, core_1.ViewContainerRef])
+    ], DeferredLoader);
     return DeferredLoader;
 }());
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], DeferredLoader.prototype, "onLoad", void 0);
-__decorate([
-    core_1.ContentChild(core_1.TemplateRef),
-    __metadata("design:type", core_1.TemplateRef)
-], DeferredLoader.prototype, "template", void 0);
-DeferredLoader = __decorate([
-    core_1.Directive({
-        selector: '[pDefer]',
-        host: {},
-        providers: [domhandler_1.DomHandler]
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef, domhandler_1.DomHandler, core_1.Renderer2, core_1.ViewContainerRef])
-], DeferredLoader);
 exports.DeferredLoader = DeferredLoader;
-var DeferModule = (function () {
+var DeferModule = /** @class */ (function () {
     function DeferModule() {
     }
+    DeferModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [DeferredLoader],
+            declarations: [DeferredLoader]
+        })
+    ], DeferModule);
     return DeferModule;
 }());
-DeferModule = __decorate([
-    core_1.NgModule({
-        imports: [common_1.CommonModule],
-        exports: [DeferredLoader],
-        declarations: [DeferredLoader]
-    })
-], DeferModule);
 exports.DeferModule = DeferModule;
 //# sourceMappingURL=defer.js.map

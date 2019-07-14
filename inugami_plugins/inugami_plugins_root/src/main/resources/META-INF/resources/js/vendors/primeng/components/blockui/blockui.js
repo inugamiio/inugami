@@ -12,10 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
 var domhandler_1 = require("../dom/domhandler");
-var BlockUI = (function () {
-    function BlockUI(el, domHandler) {
+var BlockUI = /** @class */ (function () {
+    function BlockUI(el) {
         this.el = el;
-        this.domHandler = domHandler;
+        this.autoZIndex = true;
+        this.baseZIndex = 0;
     }
     Object.defineProperty(BlockUI.prototype, "blocked", {
         get: function () {
@@ -23,7 +24,7 @@ var BlockUI = (function () {
         },
         set: function (val) {
             this._blocked = val;
-            if (this.mask.nativeElement) {
+            if (this.mask && this.mask.nativeElement) {
                 if (this._blocked)
                     this.block();
                 else
@@ -48,48 +49,58 @@ var BlockUI = (function () {
         else {
             document.body.appendChild(this.mask.nativeElement);
         }
-        this.mask.nativeElement.style.zIndex = String(++domhandler_1.DomHandler.zindex);
+        if (this.autoZIndex) {
+            this.mask.nativeElement.style.zIndex = String(this.baseZIndex + (++domhandler_1.DomHandler.zindex));
+        }
     };
     BlockUI.prototype.unblock = function () {
         this.el.nativeElement.appendChild(this.mask.nativeElement);
     };
     BlockUI.prototype.ngOnDestroy = function () {
+        this.unblock();
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Object)
+    ], BlockUI.prototype, "target", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], BlockUI.prototype, "autoZIndex", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Number)
+    ], BlockUI.prototype, "baseZIndex", void 0);
+    __decorate([
+        core_1.ViewChild('mask', { static: false }),
+        __metadata("design:type", core_1.ElementRef)
+    ], BlockUI.prototype, "mask", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean),
+        __metadata("design:paramtypes", [Boolean])
+    ], BlockUI.prototype, "blocked", null);
+    BlockUI = __decorate([
+        core_1.Component({
+            selector: 'p-blockUI',
+            template: "\n        <div #mask class=\"ui-blockui ui-widget-overlay\" [ngClass]=\"{'ui-blockui-document':!target}\" [ngStyle]=\"{display: blocked ? 'block' : 'none'}\">\n            <ng-content></ng-content>\n        </div>\n    "
+        }),
+        __metadata("design:paramtypes", [core_1.ElementRef])
+    ], BlockUI);
     return BlockUI;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object)
-], BlockUI.prototype, "target", void 0);
-__decorate([
-    core_1.ViewChild('mask'),
-    __metadata("design:type", core_1.ElementRef)
-], BlockUI.prototype, "mask", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean),
-    __metadata("design:paramtypes", [Boolean])
-], BlockUI.prototype, "blocked", null);
-BlockUI = __decorate([
-    core_1.Component({
-        selector: 'p-blockUI',
-        template: "\n        <div #mask class=\"ui-blockui ui-widget-overlay\" [ngClass]=\"{'ui-blockui-document':!target}\" [ngStyle]=\"{display: blocked ? 'block' : 'none'}\">\n            <ng-content></ng-content>\n        </div>\n    ",
-        providers: [domhandler_1.DomHandler]
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef, domhandler_1.DomHandler])
-], BlockUI);
 exports.BlockUI = BlockUI;
-var BlockUIModule = (function () {
+var BlockUIModule = /** @class */ (function () {
     function BlockUIModule() {
     }
+    BlockUIModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [BlockUI],
+            declarations: [BlockUI]
+        })
+    ], BlockUIModule);
     return BlockUIModule;
 }());
-BlockUIModule = __decorate([
-    core_1.NgModule({
-        imports: [common_1.CommonModule],
-        exports: [BlockUI],
-        declarations: [BlockUI]
-    })
-], BlockUIModule);
 exports.BlockUIModule = BlockUIModule;
 //# sourceMappingURL=blockui.js.map

@@ -1,8 +1,5 @@
 import {Injectable}                                 from '@angular/core';
-import {Router}                                     from '@angular/router';
-import {Http}                                       from '@angular/http';
-import {HeaderServices}                             from './../services/header.services';
-import {SessionScope}                               from './../scopes/session.scope';
+import {HttpClient}                                 from '@angular/common/http';
 import {Plugin}                                     from './../models/plugin';
 import {HttpServices}                               from './http/http.services';
 
@@ -19,8 +16,7 @@ export class PluginsService {
     /**************************************************************************
     * CONSTRUCTORS
     **************************************************************************/
-    constructor(private http           : Http,
-                private httpSerivce    : HttpServices) {
+    constructor(private httpSerivce    : HttpServices) {
         this.urls = {
             allPlugins                  : CONTEXT_PATH+"rest/plugins",
             allMenuLinks                : CONTEXT_PATH+"rest/plugins/menu-links",

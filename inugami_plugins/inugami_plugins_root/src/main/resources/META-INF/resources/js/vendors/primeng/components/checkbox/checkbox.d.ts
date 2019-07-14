@@ -1,5 +1,5 @@
 import { EventEmitter, ChangeDetectorRef } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import { ControlValueAccessor, FormControl } from '@angular/forms';
 export declare const CHECKBOX_VALUE_ACCESSOR: any;
 export declare class Checkbox implements ControlValueAccessor {
     private cd;
@@ -12,6 +12,9 @@ export declare class Checkbox implements ControlValueAccessor {
     inputId: string;
     style: any;
     styleClass: string;
+    labelStyleClass: string;
+    formControl: FormControl;
+    checkboxIcon: string;
     onChange: EventEmitter<any>;
     model: any;
     onModelChange: Function;

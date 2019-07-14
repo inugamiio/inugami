@@ -1,4 +1,4 @@
-import {Component}                          from '@angular/core';
+import {Component,Injectable}               from '@angular/core';
 import {ActivatedRoute,Router}              from '@angular/router';
 import {SessionScope}                       from './../../scopes/session.scope';
 import {MainMenuService,
@@ -12,6 +12,7 @@ import {SecurityServices}                   from './../../services/security.serv
   templateUrl   : 'js/app/components/main_menu/main.menu.html',
   directives    : [ ],
 })
+@Injectable()
 export class MainMenu{
 
     /**************************************************************************

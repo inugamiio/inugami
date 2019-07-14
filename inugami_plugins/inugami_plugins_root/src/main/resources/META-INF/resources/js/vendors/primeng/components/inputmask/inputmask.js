@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /*
     Port of jQuery MaskedInput by DigitalBush as a Native Angular2 Component in Typescript without jQuery
     https://github.com/digitalBush/jquery.maskedinput/
-    
+
     Copyright (c) 2007-2014 Josh Bush (digitalbush.com)
 
     Permission is hereby granted, free of charge, to any person
@@ -46,30 +46,48 @@ exports.INPUTMASK_VALUE_ACCESSOR = {
     useExisting: core_1.forwardRef(function () { return InputMask; }),
     multi: true
 };
-var InputMask = (function () {
-    function InputMask(el, domHandler) {
+var InputMask = /** @class */ (function () {
+    function InputMask(el) {
         this.el = el;
-        this.domHandler = domHandler;
         this.type = 'text';
         this.slotChar = '_';
         this.autoClear = true;
+        this.characterPattern = '[A-Za-z]';
         this.onComplete = new core_1.EventEmitter();
+        this.onFocus = new core_1.EventEmitter();
         this.onBlur = new core_1.EventEmitter();
+        this.onInput = new core_1.EventEmitter();
         this.onModelChange = function () { };
         this.onModelTouched = function () { };
     }
     InputMask.prototype.ngOnInit = function () {
+        var ua = domhandler_1.DomHandler.getUserAgent();
+        this.androidChrome = /chrome/i.test(ua) && /android/i.test(ua);
+        this.initMask();
+    };
+    Object.defineProperty(InputMask.prototype, "mask", {
+        get: function () {
+            return this._mask;
+        },
+        set: function (val) {
+            this._mask = val;
+            this.initMask();
+            this.writeValue('');
+            this.onModelChange(this.value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    InputMask.prototype.initMask = function () {
         this.tests = [];
         this.partialPosition = this.mask.length;
         this.len = this.mask.length;
         this.firstNonMaskPos = null;
         this.defs = {
             '9': '[0-9]',
-            'a': '[A-Za-z]',
-            '*': '[A-Za-z0-9]'
+            'a': this.characterPattern,
+            '*': this.characterPattern + "|[0-9]"
         };
-        var ua = this.domHandler.getUserAgent();
-        this.androidChrome = /chrome/i.test(ua) && /android/i.test(ua);
         var maskTokens = this.mask.split('');
         for (var i = 0; i < maskTokens.length; i++) {
             var c = maskTokens[i];
@@ -104,7 +122,7 @@ var InputMask = (function () {
     };
     InputMask.prototype.writeValue = function (value) {
         this.value = value;
-        if (this.inputViewChild.nativeElement) {
+        if (this.inputViewChild && this.inputViewChild.nativeElement) {
             if (this.value == undefined || this.value == null)
                 this.inputViewChild.nativeElement.value = '';
             else
@@ -229,26 +247,35 @@ var InputMask = (function () {
                 while (pos.begin < this.firstNonMaskPos && !this.tests[pos.begin])
                     pos.begin++;
             }
-            this.caret(pos.begin, pos.begin);
+            setTimeout(function () {
+                _this.caret(pos.begin, pos.begin);
+                _this.updateModel(e);
+                if (_this.isCompleted()) {
+                    _this.onComplete.emit();
+                }
+            }, 0);
         }
         else {
             this.checkVal(true);
-            while (pos.begin < this.len && !this.tests[pos.begin - 1])
+            while (pos.begin < this.len && !this.tests[pos.begin])
                 pos.begin++;
-            setTimeout(function () { return _this.caret(pos.begin, pos.begin); });
-        }
-        if (this.isCompleted()) {
-            this.onComplete.emit();
+            setTimeout(function () {
+                _this.caret(pos.begin, pos.begin);
+                _this.updateModel(e);
+                if (_this.isCompleted()) {
+                    _this.onComplete.emit();
+                }
+            }, 0);
         }
     };
     InputMask.prototype.onInputBlur = function (e) {
-        this.focus = false;
+        this.focused = false;
         this.onModelTouched();
         this.checkVal();
-        this.updateModel(e);
         this.updateFilledState();
         this.onBlur.emit(e);
-        if (this.inputViewChild.nativeElement.value != this.focusText) {
+        if (this.inputViewChild.nativeElement.value != this.focusText || this.inputViewChild.nativeElement.value != this.value) {
+            this.updateModel(e);
             var event_1 = document.createEvent('HTMLEvents');
             event_1.initEvent('change', true, false);
             this.inputViewChild.nativeElement.dispatchEvent(event_1);
@@ -259,7 +286,7 @@ var InputMask = (function () {
             return;
         }
         var k = e.which || e.keyCode, pos, begin, end;
-        var iPhone = /iphone/i.test(this.domHandler.getUserAgent());
+        var iPhone = /iphone/i.test(domhandler_1.DomHandler.getUserAgent());
         this.oldVal = this.inputViewChild.nativeElement.value;
         //backspace, delete, and escape get special treatment
         if (k === 8 || k === 46 || (iPhone && k === 127)) {
@@ -275,11 +302,11 @@ var InputMask = (function () {
             this.updateModel(e);
             e.preventDefault();
         }
-        else if (k === 13) {
+        else if (k === 13) { // enter
             this.onInputBlur(e);
             this.updateModel(e);
         }
-        else if (k === 27) {
+        else if (k === 27) { // escape
             this.inputViewChild.nativeElement.value = this.focusText;
             this.caret(0, this.checkVal());
             this.updateModel(e);
@@ -292,7 +319,7 @@ var InputMask = (function () {
             return;
         }
         var k = e.which || e.keyCode, pos = this.caret(), p, c, next, completed;
-        if (e.ctrlKey || e.altKey || e.metaKey || k < 32) {
+        if (e.ctrlKey || e.altKey || e.metaKey || k < 32 || (k > 34 && k < 41)) { //Ignore
             return;
         }
         else if (k && k !== 13) {
@@ -308,7 +335,7 @@ var InputMask = (function () {
                     this.buffer[p] = c;
                     this.writeBuffer();
                     next = this.seekNext(p);
-                    if (/android/i.test(this.domHandler.getUserAgent())) {
+                    if (/android/i.test(domhandler_1.DomHandler.getUserAgent())) {
                         //Path for CSP Violation on FireFox OS 1.1
                         var proxy = function () {
                             _this.caret(next);
@@ -393,12 +420,12 @@ var InputMask = (function () {
         }
         return (this.partialPosition ? i : this.firstNonMaskPos);
     };
-    InputMask.prototype.onFocus = function (event) {
+    InputMask.prototype.onInputFocus = function (event) {
         var _this = this;
         if (this.readonly) {
             return;
         }
-        this.focus = true;
+        this.focused = true;
         clearTimeout(this.caretTimeoutId);
         var pos;
         this.focusText = this.inputViewChild.nativeElement.value;
@@ -415,12 +442,14 @@ var InputMask = (function () {
                 _this.caret(pos);
             }
         }, 10);
+        this.onFocus.emit(event);
     };
-    InputMask.prototype.onInput = function (event) {
+    InputMask.prototype.onInputChange = function (event) {
         if (this.androidChrome)
             this.handleAndroidInput(event);
         else
             this.handleInputChange(event);
+        this.onInput.emit(event);
     };
     InputMask.prototype.handleInputChange = function (event) {
         var _this = this;
@@ -447,111 +476,151 @@ var InputMask = (function () {
         return unmaskedBuffer.join('');
     };
     InputMask.prototype.updateModel = function (e) {
-        this.onModelChange(this.unmask ? this.getUnmaskedValue() : e.target.value);
+        var updatedValue = this.unmask ? this.getUnmaskedValue() : e.target.value;
+        if (updatedValue !== null || updatedValue !== undefined) {
+            this.value = updatedValue;
+            this.onModelChange(this.value);
+        }
     };
     InputMask.prototype.updateFilledState = function () {
         this.filled = this.inputViewChild.nativeElement && this.inputViewChild.nativeElement.value != '';
     };
+    InputMask.prototype.focus = function () {
+        this.inputViewChild.nativeElement.focus();
+    };
     InputMask.prototype.ngOnDestroy = function () {
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], InputMask.prototype, "type", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], InputMask.prototype, "slotChar", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], InputMask.prototype, "autoClear", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Object)
+    ], InputMask.prototype, "style", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], InputMask.prototype, "inputId", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], InputMask.prototype, "styleClass", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], InputMask.prototype, "placeholder", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Number)
+    ], InputMask.prototype, "size", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Number)
+    ], InputMask.prototype, "maxlength", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], InputMask.prototype, "tabindex", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], InputMask.prototype, "ariaLabel", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], InputMask.prototype, "ariaRequired", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], InputMask.prototype, "disabled", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], InputMask.prototype, "readonly", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], InputMask.prototype, "unmask", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], InputMask.prototype, "name", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], InputMask.prototype, "required", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], InputMask.prototype, "characterPattern", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], InputMask.prototype, "autoFocus", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], InputMask.prototype, "autocomplete", void 0);
+    __decorate([
+        core_1.ViewChild('input', { static: false }),
+        __metadata("design:type", core_1.ElementRef)
+    ], InputMask.prototype, "inputViewChild", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], InputMask.prototype, "onComplete", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], InputMask.prototype, "onFocus", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], InputMask.prototype, "onBlur", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], InputMask.prototype, "onInput", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], InputMask.prototype, "mask", null);
+    InputMask = __decorate([
+        core_1.Component({
+            selector: 'p-inputMask',
+            template: "<input #input pInputText [attr.id]=\"inputId\" [attr.type]=\"type\" [attr.name]=\"name\" [ngStyle]=\"style\" [ngClass]=\"styleClass\" [attr.placeholder]=\"placeholder\"\n        [attr.size]=\"size\" [attr.autocomplete]=\"autocomplete\" [attr.maxlength]=\"maxlength\" [attr.tabindex]=\"tabindex\" [attr.aria-label]=\"ariaLabel\" [attr.aria-required]=\"ariaRequired\" [disabled]=\"disabled\" [readonly]=\"readonly\" [attr.required]=\"required\"\n        (focus)=\"onInputFocus($event)\" (blur)=\"onInputBlur($event)\" (keydown)=\"onKeyDown($event)\" (keypress)=\"onKeyPress($event)\" [attr.autofocus]=\"autoFocus\"\n        (input)=\"onInputChange($event)\" (paste)=\"handleInputChange($event)\">",
+            host: {
+                '[class.ui-inputwrapper-filled]': 'filled',
+                '[class.ui-inputwrapper-focus]': 'focus'
+            },
+            providers: [exports.INPUTMASK_VALUE_ACCESSOR]
+        }),
+        __metadata("design:paramtypes", [core_1.ElementRef])
+    ], InputMask);
     return InputMask;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], InputMask.prototype, "mask", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], InputMask.prototype, "type", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], InputMask.prototype, "slotChar", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], InputMask.prototype, "autoClear", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], InputMask.prototype, "style", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], InputMask.prototype, "inputId", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], InputMask.prototype, "styleClass", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], InputMask.prototype, "placeholder", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Number)
-], InputMask.prototype, "size", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Number)
-], InputMask.prototype, "maxlength", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], InputMask.prototype, "tabindex", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], InputMask.prototype, "disabled", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], InputMask.prototype, "readonly", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], InputMask.prototype, "unmask", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], InputMask.prototype, "name", void 0);
-__decorate([
-    core_1.ViewChild('input'),
-    __metadata("design:type", core_1.ElementRef)
-], InputMask.prototype, "inputViewChild", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], InputMask.prototype, "onComplete", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], InputMask.prototype, "onBlur", void 0);
-InputMask = __decorate([
-    core_1.Component({
-        selector: 'p-inputMask',
-        template: "<input #input pInputText [attr.id]=\"inputId\" [attr.type]=\"type\" [attr.name]=\"name\" [ngStyle]=\"style\" [ngClass]=\"styleClass\" [attr.placeholder]=\"placeholder\"\n        [attr.size]=\"size\" [attr.maxlength]=\"maxlength\" [attr.tabindex]=\"tabindex\" [disabled]=\"disabled\" [readonly]=\"readonly\"\n        (focus)=\"onFocus($event)\" (blur)=\"onInputBlur($event)\" (keydown)=\"onKeyDown($event)\" (keypress)=\"onKeyPress($event)\"\n        (input)=\"onInput($event)\" (paste)=\"handleInputChange($event)\">",
-        host: {
-            '[class.ui-inputwrapper-filled]': 'filled',
-            '[class.ui-inputwrapper-focus]': 'focus'
-        },
-        providers: [exports.INPUTMASK_VALUE_ACCESSOR, domhandler_1.DomHandler]
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef, domhandler_1.DomHandler])
-], InputMask);
 exports.InputMask = InputMask;
-var InputMaskModule = (function () {
+var InputMaskModule = /** @class */ (function () {
     function InputMaskModule() {
     }
+    InputMaskModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule, inputtext_1.InputTextModule],
+            exports: [InputMask],
+            declarations: [InputMask]
+        })
+    ], InputMaskModule);
     return InputMaskModule;
 }());
-InputMaskModule = __decorate([
-    core_1.NgModule({
-        imports: [common_1.CommonModule, inputtext_1.InputTextModule],
-        exports: [InputMask],
-        declarations: [InputMask]
-    })
-], InputMaskModule);
 exports.InputMaskModule = InputMaskModule;
 //# sourceMappingURL=inputmask.js.map

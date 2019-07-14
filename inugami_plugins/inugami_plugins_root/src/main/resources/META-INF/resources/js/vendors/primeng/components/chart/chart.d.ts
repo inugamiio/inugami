@@ -3,8 +3,10 @@ export declare class UIChart implements AfterViewInit, OnDestroy {
     el: ElementRef;
     type: string;
     options: any;
+    plugins: any[];
     width: string;
     height: string;
+    responsive: boolean;
     onDataSelect: EventEmitter<any>;
     initialized: boolean;
     _data: any;
@@ -16,7 +18,7 @@ export declare class UIChart implements AfterViewInit, OnDestroy {
     initChart(): void;
     getCanvas(): any;
     getBase64Image(): any;
-    generateLegend(): void;
+    generateLegend(): any;
     refresh(): void;
     reinit(): void;
     ngOnDestroy(): void;

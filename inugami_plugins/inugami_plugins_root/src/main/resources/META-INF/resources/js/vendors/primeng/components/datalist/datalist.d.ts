@@ -1,12 +1,13 @@
-import { ElementRef, AfterViewInit, AfterContentInit, EventEmitter, TemplateRef, QueryList } from '@angular/core';
-import { BlockableUI } from '../common/api';
-export declare class DataList implements AfterViewInit, AfterContentInit, BlockableUI {
+import { ElementRef, AfterViewInit, AfterContentInit, DoCheck, EventEmitter, TemplateRef, QueryList, IterableDiffers } from '@angular/core';
+import { BlockableUI } from '../common/blockableui';
+export declare class DataList implements AfterViewInit, AfterContentInit, DoCheck, BlockableUI {
     el: ElementRef;
+    differs: IterableDiffers;
     paginator: boolean;
     rows: number;
     totalRecords: number;
     pageLinks: number;
-    rowsPerPageOptions: number[];
+    rowsPerPageOptions: any[];
     lazy: boolean;
     onLazyLoad: EventEmitter<any>;
     style: any;
@@ -15,6 +16,10 @@ export declare class DataList implements AfterViewInit, AfterContentInit, Blocka
     emptyMessage: string;
     alwaysShowPaginator: boolean;
     trackBy: Function;
+    immutable: boolean;
+    scrollable: boolean;
+    scrollHeight: string;
+    paginatorDropdownAppendTo: any;
     onPage: EventEmitter<any>;
     header: any;
     footer: any;
@@ -24,11 +29,13 @@ export declare class DataList implements AfterViewInit, AfterContentInit, Blocka
     dataToRender: any[];
     first: number;
     page: number;
-    constructor(el: ElementRef);
+    differ: any;
+    constructor(el: ElementRef, differs: IterableDiffers);
     ngAfterContentInit(): void;
     ngAfterViewInit(): void;
     value: any[];
     handleDataChange(): void;
+    ngDoCheck(): void;
     updatePaginator(): void;
     paginate(event: any): void;
     updateDataToRender(datasource: any): void;

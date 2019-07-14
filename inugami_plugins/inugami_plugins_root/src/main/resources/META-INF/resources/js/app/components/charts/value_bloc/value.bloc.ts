@@ -13,7 +13,7 @@ export const CHART_VALUE_BLOC_ACCESSOR: any = {
 @Component({
 selector      : 'value-bloc',
 directives    : [],
-providers     : [CHART_VALUE_BLOC_ACCESSOR]
+providers     : [CHART_VALUE_BLOC_ACCESSOR],
 template      : `
   <div [ngClass]="'value-bloc'"
        [class]="styleClass" >

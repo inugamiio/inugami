@@ -11,9 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
-var UIChart = (function () {
+var Chart = require("chart.js");
+var UIChart = /** @class */ (function () {
     function UIChart(el) {
         this.el = el;
+        this.options = {};
+        this.plugins = [];
+        this.responsive = true;
         this.onDataSelect = new core_1.EventEmitter();
     }
     Object.defineProperty(UIChart.prototype, "data", {
@@ -41,10 +45,17 @@ var UIChart = (function () {
         }
     };
     UIChart.prototype.initChart = function () {
+        var opts = this.options || {};
+        opts.responsive = this.responsive;
+        // allows chart to resize in responsive mode
+        if (opts.responsive && (this.height || this.width)) {
+            opts.maintainAspectRatio = false;
+        }
         this.chart = new Chart(this.el.nativeElement.children[0].children[0], {
             type: this.type,
             data: this.data,
-            options: this.options
+            options: this.options,
+            plugins: this.plugins
         });
     };
     UIChart.prototype.getCanvas = function () {
@@ -55,7 +66,7 @@ var UIChart = (function () {
     };
     UIChart.prototype.generateLegend = function () {
         if (this.chart) {
-            this.chart.generateLegend();
+            return this.chart.generateLegend();
         }
     };
     UIChart.prototype.refresh = function () {
@@ -76,52 +87,60 @@ var UIChart = (function () {
             this.chart = null;
         }
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], UIChart.prototype, "type", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Object)
+    ], UIChart.prototype, "options", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Array)
+    ], UIChart.prototype, "plugins", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], UIChart.prototype, "width", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], UIChart.prototype, "height", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], UIChart.prototype, "responsive", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], UIChart.prototype, "onDataSelect", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], UIChart.prototype, "data", null);
+    UIChart = __decorate([
+        core_1.Component({
+            selector: 'p-chart',
+            template: "\n        <div style=\"position:relative\" [style.width]=\"responsive && !width ? null : width\" [style.height]=\"responsive && !height ? null : height\">\n            <canvas [attr.width]=\"responsive && !width ? null : width\" [attr.height]=\"responsive && !height ? null : height\" (click)=\"onCanvasClick($event)\"></canvas>\n        </div>\n    "
+        }),
+        __metadata("design:paramtypes", [core_1.ElementRef])
+    ], UIChart);
     return UIChart;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], UIChart.prototype, "type", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object)
-], UIChart.prototype, "options", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], UIChart.prototype, "width", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], UIChart.prototype, "height", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], UIChart.prototype, "onDataSelect", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object),
-    __metadata("design:paramtypes", [Object])
-], UIChart.prototype, "data", null);
-UIChart = __decorate([
-    core_1.Component({
-        selector: 'p-chart',
-        template: "\n        <div>\n            <canvas [attr.width]=\"width\" [attr.height]=\"height\" (click)=\"onCanvasClick($event)\"></canvas>\n        </div>\n    "
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef])
-], UIChart);
 exports.UIChart = UIChart;
-var ChartModule = (function () {
+var ChartModule = /** @class */ (function () {
     function ChartModule() {
     }
+    ChartModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [UIChart],
+            declarations: [UIChart]
+        })
+    ], ChartModule);
     return ChartModule;
 }());
-ChartModule = __decorate([
-    core_1.NgModule({
-        imports: [common_1.CommonModule],
-        exports: [UIChart],
-        declarations: [UIChart]
-    })
-], ChartModule);
 exports.ChartModule = ChartModule;
 //# sourceMappingURL=chart.js.map

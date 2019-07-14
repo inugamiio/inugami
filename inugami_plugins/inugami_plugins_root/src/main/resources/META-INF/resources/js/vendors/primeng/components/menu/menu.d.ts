@@ -1,30 +1,49 @@
-import { ElementRef, AfterViewInit, OnDestroy, Renderer2 } from '@angular/core';
-import { DomHandler } from '../dom/domhandler';
-import { MenuItem } from '../common/api';
-export declare class Menu implements AfterViewInit, OnDestroy {
+import { ElementRef, OnDestroy, EventEmitter, Renderer2 } from '@angular/core';
+import { AnimationEvent } from '@angular/animations';
+import { MenuItem } from '../common/menuitem';
+export declare class MenuItemContent {
+    item: MenuItem;
+    menu: Menu;
+    constructor(menu: any);
+}
+export declare class Menu implements OnDestroy {
     el: ElementRef;
-    domHandler: DomHandler;
     renderer: Renderer2;
     model: MenuItem[];
     popup: boolean;
     style: any;
     styleClass: string;
     appendTo: any;
+    autoZIndex: boolean;
+    baseZIndex: number;
+    showTransitionOptions: string;
+    hideTransitionOptions: string;
     containerViewChild: ElementRef;
+    onShow: EventEmitter<any>;
+    onHide: EventEmitter<any>;
     container: HTMLDivElement;
     documentClickListener: any;
-    preventDocumentDefault: any;
-    onResizeTarget: any;
-    constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2);
-    ngAfterViewInit(): void;
+    documentResizeListener: any;
+    preventDocumentDefault: boolean;
+    target: any;
+    visible: boolean;
+    constructor(el: ElementRef, renderer: Renderer2);
     toggle(event: any): void;
-    onResize(event: any): void;
     show(event: any): void;
+    onOverlayAnimationStart(event: AnimationEvent): void;
+    appendOverlay(): void;
+    restoreOverlayAppend(): void;
+    moveOnTop(): void;
     hide(): void;
+    onWindowResize(): void;
     itemClick(event: any, item: MenuItem): void;
+    bindDocumentClickListener(): void;
+    unbindDocumentClickListener(): void;
+    bindDocumentResizeListener(): void;
+    unbindDocumentResizeListener(): void;
+    onOverlayHide(): void;
     ngOnDestroy(): void;
     hasSubMenu(): boolean;
-    unsubscribe(item: any): void;
 }
 export declare class MenuModule {
 }

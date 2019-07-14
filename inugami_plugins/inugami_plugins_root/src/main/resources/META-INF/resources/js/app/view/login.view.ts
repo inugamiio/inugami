@@ -44,7 +44,6 @@ export class LoginView implements OnInit, OnDestroy{
     }else{
       this.showForm();
     }
-    
   }
 
   /**************************************************************************
@@ -61,6 +60,7 @@ export class LoginView implements OnInit, OnDestroy{
   }
   public processLogin(){
      this.error=null;
+
      if(isNull(this.disableAction)){
         this.disableAction = "disable";
       
@@ -68,6 +68,7 @@ export class LoginView implements OnInit, OnDestroy{
                             .then (data =>{this.onLoginSuccess(data)})
                             .catch(error=>{this.loginFail()});
      }
+
   }
 
 
@@ -100,7 +101,6 @@ export class LoginView implements OnInit, OnDestroy{
     }
     this.disableAction =null;
     this.router.navigate([home]);
-
   }
-   
+ 
 }

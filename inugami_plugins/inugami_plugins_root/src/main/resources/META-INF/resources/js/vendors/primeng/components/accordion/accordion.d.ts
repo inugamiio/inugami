@@ -1,32 +1,51 @@
-import { ElementRef, EventEmitter, QueryList } from '@angular/core';
-import { BlockableUI } from '../common/api';
-export declare class Accordion implements BlockableUI {
+import { ElementRef, AfterContentInit, OnDestroy, EventEmitter, QueryList, ChangeDetectorRef, TemplateRef } from '@angular/core';
+import { Header } from '../common/shared';
+import { BlockableUI } from '../common/blockableui';
+import { Subscription } from 'rxjs';
+export declare class AccordionTab implements OnDestroy {
+    header: string;
+    selected: boolean;
+    disabled: boolean;
+    cache: boolean;
+    selectedChange: EventEmitter<any>;
+    transitionOptions: string;
+    headerFacet: QueryList<Header>;
+    templates: QueryList<any>;
+    animating: boolean;
+    contentTemplate: TemplateRef<any>;
+    id: string;
+    loaded: boolean;
+    accordion: Accordion;
+    constructor(accordion: any);
+    ngAfterContentInit(): void;
+    toggle(event: any): boolean;
+    findTabIndex(): number;
+    readonly hasHeaderFacet: boolean;
+    onToggleDone(event: Event): void;
+    onKeydown(event: KeyboardEvent): void;
+    ngOnDestroy(): void;
+}
+export declare class Accordion implements BlockableUI, AfterContentInit, OnDestroy {
     el: ElementRef;
+    changeDetector: ChangeDetectorRef;
     multiple: boolean;
     onClose: EventEmitter<any>;
     onOpen: EventEmitter<any>;
     style: any;
     styleClass: string;
-    lazy: boolean;
+    expandIcon: string;
+    collapseIcon: string;
+    tabList: QueryList<AccordionTab>;
+    tabListSubscription: Subscription;
+    private _activeIndex;
     tabs: AccordionTab[];
-    constructor(el: ElementRef);
-    addTab(tab: AccordionTab): void;
+    constructor(el: ElementRef, changeDetector: ChangeDetectorRef);
+    ngAfterContentInit(): void;
+    initTabs(): any;
     getBlockableElement(): HTMLElement;
-}
-export declare class AccordionTab {
-    accordion: Accordion;
-    header: string;
-    selected: boolean;
-    disabled: boolean;
-    selectedChange: EventEmitter<any>;
-    headerFacet: QueryList<AccordionTab>;
-    animating: boolean;
-    constructor(accordion: Accordion);
-    toggle(event: any): boolean;
-    findTabIndex(): number;
-    readonly lazy: boolean;
-    readonly hasHeaderFacet: boolean;
-    onToggleDone(event: Event): void;
+    activeIndex: any;
+    updateSelectionState(): void;
+    ngOnDestroy(): void;
 }
 export declare class AccordionModule {
 }
