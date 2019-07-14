@@ -17,7 +17,7 @@ exports.TRISTATECHECKBOX_VALUE_ACCESSOR = {
     useExisting: core_1.forwardRef(function () { return TriStateCheckbox; }),
     multi: true
 };
-var TriStateCheckbox = (function () {
+var TriStateCheckbox = /** @class */ (function () {
     function TriStateCheckbox(cd) {
         this.cd = cd;
         this.onChange = new core_1.EventEmitter();
@@ -75,56 +75,60 @@ var TriStateCheckbox = (function () {
     TriStateCheckbox.prototype.setDisabledState = function (disabled) {
         this.disabled = disabled;
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], TriStateCheckbox.prototype, "disabled", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], TriStateCheckbox.prototype, "name", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Number)
+    ], TriStateCheckbox.prototype, "tabindex", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], TriStateCheckbox.prototype, "inputId", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Object)
+    ], TriStateCheckbox.prototype, "style", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], TriStateCheckbox.prototype, "styleClass", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], TriStateCheckbox.prototype, "label", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], TriStateCheckbox.prototype, "onChange", void 0);
+    TriStateCheckbox = __decorate([
+        core_1.Component({
+            selector: 'p-triStateCheckbox',
+            template: "\n        <div [ngStyle]=\"style\" [ngClass]=\"'ui-chkbox ui-tristatechkbox ui-widget'\" [class]=\"styleClass\">\n            <div class=\"ui-helper-hidden-accessible\">\n                <input #input type=\"text\" [attr.id]=\"inputId\" [name]=\"name\" [attr.tabindex]=\"tabindex\" readonly [disabled]=\"disabled\" (keyup)=\"onKeyup($event)\" (keydown)=\"onKeydown($event)\" (focus)=\"onFocus()\" (blur)=\"onBlur()\">\n            </div>\n            <div class=\"ui-chkbox-box ui-widget ui-corner-all ui-state-default\" (click)=\"onClick($event,input)\"\n                [ngClass]=\"{'ui-state-active':value!=null,'ui-state-disabled':disabled,'ui-state-focus':focus}\">\n                <span class=\"ui-chkbox-icon pi ui-clickable\" [ngClass]=\"{'pi-check':value==true,'pi-times':value==false}\"></span>\n            </div>\n        </div>\n        <label class=\"ui-chkbox-label\" (click)=\"onClick($event,input)\"\n               [ngClass]=\"{'ui-label-active':value!=null, 'ui-label-disabled':disabled, 'ui-label-focus':focus}\"\n               *ngIf=\"label\" [attr.for]=\"inputId\">{{label}}</label>\n    ",
+            providers: [exports.TRISTATECHECKBOX_VALUE_ACCESSOR]
+        }),
+        __metadata("design:paramtypes", [core_1.ChangeDetectorRef])
+    ], TriStateCheckbox);
     return TriStateCheckbox;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], TriStateCheckbox.prototype, "disabled", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], TriStateCheckbox.prototype, "name", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Number)
-], TriStateCheckbox.prototype, "tabindex", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], TriStateCheckbox.prototype, "inputId", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object)
-], TriStateCheckbox.prototype, "style", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], TriStateCheckbox.prototype, "styleClass", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], TriStateCheckbox.prototype, "onChange", void 0);
-TriStateCheckbox = __decorate([
-    core_1.Component({
-        selector: 'p-triStateCheckbox',
-        template: "\n        <div [ngStyle]=\"style\" [ngClass]=\"'ui-chkbox ui-tristatechkbox ui-widget'\" [class]=\"styleClass\">\n            <div class=\"ui-helper-hidden-accessible\">\n                <input #input type=\"text\" [attr.id]=\"inputId\" [name]=\"name\" [attr.tabindex]=\"tabindex\" readonly [disabled]=\"disabled\" (keyup)=\"onKeyup($event)\" (keydown)=\"onKeydown($event)\" (focus)=\"onFocus()\" (blur)=\"onBlur()\">\n            </div>\n            <div class=\"ui-chkbox-box ui-widget ui-corner-all ui-state-default\" (click)=\"onClick($event,input)\"\n                [ngClass]=\"{'ui-state-active':value!=null,'ui-state-disabled':disabled,'ui-state-focus':focus}\">\n                <span class=\"ui-chkbox-icon fa ui-c\" [ngClass]=\"{'fa-check':value==true,'fa-close':value==false}\"></span>\n            </div>\n        </div>\n    ",
-        providers: [exports.TRISTATECHECKBOX_VALUE_ACCESSOR]
-    }),
-    __metadata("design:paramtypes", [core_1.ChangeDetectorRef])
-], TriStateCheckbox);
 exports.TriStateCheckbox = TriStateCheckbox;
-var TriStateCheckboxModule = (function () {
+var TriStateCheckboxModule = /** @class */ (function () {
     function TriStateCheckboxModule() {
     }
+    TriStateCheckboxModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            exports: [TriStateCheckbox],
+            declarations: [TriStateCheckbox]
+        })
+    ], TriStateCheckboxModule);
     return TriStateCheckboxModule;
 }());
-TriStateCheckboxModule = __decorate([
-    core_1.NgModule({
-        imports: [common_1.CommonModule],
-        exports: [TriStateCheckbox],
-        declarations: [TriStateCheckbox]
-    })
-], TriStateCheckboxModule);
 exports.TriStateCheckboxModule = TriStateCheckboxModule;
 //# sourceMappingURL=tristatecheckbox.js.map

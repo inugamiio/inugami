@@ -1,5 +1,4 @@
 import {Injectable}                              from '@angular/core';
-import {Http, Response,Headers, RequestOptions}  from '@angular/http';
 import {HttpServices}                            from './http.services'
 
 @Injectable()

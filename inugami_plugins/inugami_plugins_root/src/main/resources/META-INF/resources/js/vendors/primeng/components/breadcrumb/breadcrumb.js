@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
 var router_1 = require("@angular/router");
-var Breadcrumb = (function () {
+var Breadcrumb = /** @class */ (function () {
     function Breadcrumb() {
     }
     Breadcrumb.prototype.itemClick = function (event, item) {
@@ -24,11 +24,7 @@ var Breadcrumb = (function () {
             event.preventDefault();
         }
         if (item.command) {
-            if (!item.eventEmitter) {
-                item.eventEmitter = new core_1.EventEmitter();
-                item.eventEmitter.subscribe(item.command);
-            }
-            item.eventEmitter.emit({
+            item.command({
                 originalEvent: event,
                 item: item
             });
@@ -39,52 +35,42 @@ var Breadcrumb = (function () {
             this.itemClick(event, this.home);
         }
     };
-    Breadcrumb.prototype.ngOnDestroy = function () {
-        if (this.model) {
-            for (var _i = 0, _a = this.model; _i < _a.length; _i++) {
-                var item = _a[_i];
-                if (item.eventEmitter) {
-                    item.eventEmitter.unsubscribe();
-                }
-            }
-        }
-    };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Array)
+    ], Breadcrumb.prototype, "model", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Object)
+    ], Breadcrumb.prototype, "style", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], Breadcrumb.prototype, "styleClass", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Object)
+    ], Breadcrumb.prototype, "home", void 0);
+    Breadcrumb = __decorate([
+        core_1.Component({
+            selector: 'p-breadcrumb',
+            template: "\n        <div [class]=\"styleClass\" [ngStyle]=\"style\" [ngClass]=\"'ui-breadcrumb ui-widget ui-widget-header ui-helper-clearfix ui-corner-all'\">\n            <ul>\n                <li class=\"ui-breadcrumb-home\" *ngIf=\"home\">\n                    <a *ngIf=\"!home.routerLink\" [href]=\"home.url||'#'\" class=\"ui-menuitem-link\" (click)=\"itemClick($event, home)\" \n                        [ngClass]=\"{'ui-state-disabled':home.disabled}\" [attr.target]=\"home.target\" [attr.title]=\"home.title\" [attr.id]=\"home.id\">\n                        <span [ngClass]=\"home.icon||'pi pi-home'\"></span>\n                    </a>\n                    <a *ngIf=\"home.routerLink\" [routerLink]=\"home.routerLink\" [queryParams]=\"home.queryParams\" [routerLinkActive]=\"'ui-state-active'\" [routerLinkActiveOptions]=\"home.routerLinkActiveOptions||{exact:false}\" class=\"ui-menuitem-link\" (click)=\"itemClick($event, home)\" \n                        [ngClass]=\"{'ui-state-disabled':home.disabled}\" [attr.target]=\"home.target\" [attr.title]=\"home.title\" [attr.id]=\"home.id\">\n                        <span [ngClass]=\"home.icon||'pi pi-home'\"></span>\n                    </a>\n                </li>\n                <li class=\"ui-breadcrumb-chevron pi pi-chevron-right\" *ngIf=\"model&&home\"></li>\n                <ng-template ngFor let-item let-end=\"last\" [ngForOf]=\"model\">\n                    <li role=\"menuitem\">\n                        <a *ngIf=\"!item.routerLink\" [href]=\"item.url||'#'\" class=\"ui-menuitem-link\" (click)=\"itemClick($event, item)\" \n                            [ngClass]=\"{'ui-state-disabled':item.disabled}\" [attr.target]=\"item.target\" [attr.title]=\"item.title\" [attr.id]=\"item.id\">\n                            <span *ngIf=\"item.icon\" class=\"ui-menuitem-icon\" [ngClass]=\"item.icon\"></span>\n                            <span class=\"ui-menuitem-text\">{{item.label}}</span>\n                        </a>\n                        <a *ngIf=\"item.routerLink\" [routerLink]=\"item.routerLink\" [queryParams]=\"item.queryParams\" [routerLinkActive]=\"'ui-state-active'\" [routerLinkActiveOptions]=\"item.routerLinkActiveOptions||{exact:false}\" class=\"ui-menuitem-link\" (click)=\"itemClick($event, item)\" \n                            [ngClass]=\"{'ui-state-disabled':item.disabled}\" [attr.target]=\"item.target\" [attr.title]=\"item.title\" [attr.id]=\"item.id\">\n                            <span *ngIf=\"item.icon\" class=\"ui-menuitem-icon\" [ngClass]=\"item.icon\"></span>\n                            <span class=\"ui-menuitem-text\">{{item.label}}</span>\n                        </a>\n                    </li>\n                    <li class=\"ui-breadcrumb-chevron pi pi-chevron-right\" *ngIf=\"!end\"></li>\n                </ng-template>\n            </ul>\n        </div>\n    "
+        })
+    ], Breadcrumb);
     return Breadcrumb;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Array)
-], Breadcrumb.prototype, "model", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object)
-], Breadcrumb.prototype, "style", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], Breadcrumb.prototype, "styleClass", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object)
-], Breadcrumb.prototype, "home", void 0);
-Breadcrumb = __decorate([
-    core_1.Component({
-        selector: 'p-breadcrumb',
-        template: "\n        <div [class]=\"styleClass\" [ngStyle]=\"style\" [ngClass]=\"'ui-breadcrumb ui-widget ui-widget-header ui-helper-clearfix ui-corner-all'\">\n            <ul>\n                <li class=\"ui-breadcrumb-home fa fa-home\" *ngIf=\"!home\"></li>\n                <li class=\"ui-breadcrumb-home\" *ngIf=\"home\">\n                    <a *ngIf=\"!home.routerLink\" [href]=\"home.url||'#'\" class=\"ui-menuitem-link\" (click)=\"itemClick($event, home)\" \n                        [ngClass]=\"{'ui-state-disabled':home.disabled}\" [attr.target]=\"home.target\">\n                        <span class=\"fa fa-home\"></span>\n                    </a>\n                    <a *ngIf=\"home.routerLink\" [routerLink]=\"home.routerLink\" [routerLinkActive]=\"'ui-state-active'\" [routerLinkActiveOptions]=\"home.routerLinkActiveOptions||{exact:false}\" class=\"ui-menuitem-link\" (click)=\"itemClick($event, home)\" \n                        [ngClass]=\"{'ui-state-disabled':home.disabled}\" [attr.target]=\"home.target\">\n                        <span class=\"fa fa-home\"></span>\n                    </a>\n                </li>\n                <li class=\"ui-breadcrumb-chevron fa fa-chevron-right\" *ngIf=\"model\"></li>\n                <ng-template ngFor let-item let-end=\"last\" [ngForOf]=\"model\">\n                    <li role=\"menuitem\">\n                        <a *ngIf=\"!item.routerLink\" [href]=\"item.url||'#'\" class=\"ui-menuitem-link\" (click)=\"itemClick($event, item)\" \n                            [ngClass]=\"{'ui-state-disabled':item.disabled}\" [attr.target]=\"item.target\">\n                            <span class=\"ui-menuitem-text\">{{item.label}}</span>\n                        </a>\n                        <a *ngIf=\"item.routerLink\" [routerLink]=\"item.routerLink\" [routerLinkActive]=\"'ui-state-active'\" [routerLinkActiveOptions]=\"item.routerLinkActiveOptions||{exact:false}\" class=\"ui-menuitem-link\" (click)=\"itemClick($event, item)\" \n                            [ngClass]=\"{'ui-state-disabled':item.disabled}\" [attr.target]=\"item.target\">\n                            <span class=\"ui-menuitem-text\">{{item.label}}</span>\n                        </a>\n                    </li>\n                    <li class=\"ui-breadcrumb-chevron fa fa-chevron-right\" *ngIf=\"!end\"></li>\n                </ng-template>\n            </ul>\n        </div>\n    "
-    })
-], Breadcrumb);
 exports.Breadcrumb = Breadcrumb;
-var BreadcrumbModule = (function () {
+var BreadcrumbModule = /** @class */ (function () {
     function BreadcrumbModule() {
     }
+    BreadcrumbModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule, router_1.RouterModule],
+            exports: [Breadcrumb, router_1.RouterModule],
+            declarations: [Breadcrumb]
+        })
+    ], BreadcrumbModule);
     return BreadcrumbModule;
 }());
-BreadcrumbModule = __decorate([
-    core_1.NgModule({
-        imports: [common_1.CommonModule, router_1.RouterModule],
-        exports: [Breadcrumb, router_1.RouterModule],
-        declarations: [Breadcrumb]
-    })
-], BreadcrumbModule);
 exports.BreadcrumbModule = BreadcrumbModule;
 //# sourceMappingURL=breadcrumb.js.map

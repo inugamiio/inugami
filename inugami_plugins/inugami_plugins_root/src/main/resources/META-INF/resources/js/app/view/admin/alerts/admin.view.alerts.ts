@@ -1,10 +1,11 @@
 import {Component,Inject,OnInit,Input,Output,forwardRef}    from '@angular/core';
+import {HttpClient}                                         from '@angular/common/http';
+
 import {GrowlModule}                                        from 'primeng/growl';
 import {Message}                                            from 'primeng/api';
-import {DataTable,Column}                                   from 'primeng/primeng';
+import {TableModule}                                        from 'primeng/table';
 
 
-import { Http }                                       from '@angular/http';
 
 
 import {AlertsCrudServices}                                 from './../../../services/http/alerts.crud.services'
@@ -16,7 +17,7 @@ import {AdminViewAlertEdit}                                 from './../../../vie
 @Component({
   selector      : 'admin-view-alerts',
   templateUrl   : 'js/app/view/admin/alerts/admin.view.alerts.html',
-  directives    : [DataTable,Column,InputBloc,Msg,AdminViewAlertEdit]
+  directives    : [InputBloc,Msg,AdminViewAlertEdit]
 })
 export class AdminViewAlerts{
 
@@ -25,7 +26,7 @@ export class AdminViewAlerts{
     **************************************************************************/
     private alerts                : AlertEntity[]  = [];
     private selectedAlert         : AlertEntity;
-    private msgs                  : Message[] = [];
+    //private msgs                  : Message[] = [];
     private sectionSelected       : string = "table";
 
     private msgLabels         : any = {
@@ -38,7 +39,7 @@ export class AdminViewAlerts{
     /**************************************************************************
     * CONSTRUCTOR
     **************************************************************************/
-    constructor(private alertsCrudServices : AlertsCrudServices,private http : Http) {
+    constructor(private alertsCrudServices : AlertsCrudServices,private http : HttpClient) {
         this.initAlerts();
 
         let self = this;

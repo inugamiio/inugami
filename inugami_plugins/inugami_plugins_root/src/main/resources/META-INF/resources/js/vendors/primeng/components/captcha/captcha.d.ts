@@ -1,5 +1,6 @@
 import { AfterViewInit, EventEmitter, NgZone, ElementRef } from '@angular/core';
 export declare class Captcha implements AfterViewInit {
+    el: ElementRef;
     _zone: NgZone;
     siteKey: string;
     theme: string;
@@ -10,9 +11,8 @@ export declare class Captcha implements AfterViewInit {
     initCallback: string;
     onResponse: EventEmitter<any>;
     onExpire: EventEmitter<any>;
-    el: ElementRef;
     private _instance;
-    constructor(_zone: NgZone);
+    constructor(el: ElementRef, _zone: NgZone);
     ngAfterViewInit(): void;
     init(): void;
     reset(): void;

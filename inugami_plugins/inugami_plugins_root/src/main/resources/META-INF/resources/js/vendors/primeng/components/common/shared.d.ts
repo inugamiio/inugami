@@ -1,4 +1,4 @@
-import { EventEmitter, ViewContainerRef, TemplateRef, OnInit, OnChanges, OnDestroy, AfterContentInit, QueryList, SimpleChanges, EmbeddedViewRef } from '@angular/core';
+import { EventEmitter, TemplateRef, AfterContentInit, QueryList } from '@angular/core';
 export declare class Header {
 }
 export declare class Footer {
@@ -10,19 +10,11 @@ export declare class PrimeTemplate {
     constructor(template: TemplateRef<any>);
     getType(): string;
 }
-export declare class TemplateWrapper implements OnInit, OnDestroy {
-    viewContainer: ViewContainerRef;
-    item: any;
-    index: number;
-    templateRef: TemplateRef<any>;
-    view: EmbeddedViewRef<any>;
-    constructor(viewContainer: ViewContainerRef);
-    ngOnInit(): void;
-    ngOnDestroy(): void;
-}
 export declare class Column implements AfterContentInit {
     field: string;
+    colId: string;
     sortField: string;
+    filterField: string;
     header: string;
     footer: string;
     sortable: any;
@@ -30,15 +22,26 @@ export declare class Column implements AfterContentInit {
     filter: boolean;
     filterMatchMode: string;
     filterType: string;
+    excludeGlobalFilter: boolean;
     rowspan: number;
     colspan: number;
+    scope: string;
     style: any;
     styleClass: string;
+    exportable: boolean;
+    headerStyle: any;
+    headerStyleClass: string;
+    bodyStyle: any;
+    bodyStyleClass: string;
+    footerStyle: any;
+    footerStyleClass: string;
     hidden: boolean;
     expander: boolean;
     selectionMode: string;
     filterPlaceholder: string;
+    filterMaxlength: number;
     frozen: boolean;
+    resizable: boolean;
     sortFunction: EventEmitter<any>;
     templates: QueryList<any>;
     template: TemplateRef<any>;
@@ -53,64 +56,12 @@ export declare class Row {
     columns: QueryList<Column>;
 }
 export declare class HeaderColumnGroup {
+    frozen: boolean;
     rows: QueryList<any>;
 }
 export declare class FooterColumnGroup {
+    frozen: boolean;
     rows: QueryList<any>;
-}
-export declare class ColumnBodyTemplateLoader implements OnInit, OnChanges, OnDestroy {
-    viewContainer: ViewContainerRef;
-    column: any;
-    rowData: any;
-    rowIndex: number;
-    view: EmbeddedViewRef<any>;
-    constructor(viewContainer: ViewContainerRef);
-    ngOnInit(): void;
-    ngOnChanges(changes: SimpleChanges): void;
-    ngOnDestroy(): void;
-}
-export declare class ColumnHeaderTemplateLoader implements OnInit, OnDestroy {
-    viewContainer: ViewContainerRef;
-    column: any;
-    view: EmbeddedViewRef<any>;
-    constructor(viewContainer: ViewContainerRef);
-    ngOnInit(): void;
-    ngOnDestroy(): void;
-}
-export declare class ColumnFooterTemplateLoader implements OnInit, OnDestroy {
-    viewContainer: ViewContainerRef;
-    column: any;
-    view: EmbeddedViewRef<any>;
-    constructor(viewContainer: ViewContainerRef);
-    ngOnInit(): void;
-    ngOnDestroy(): void;
-}
-export declare class ColumnFilterTemplateLoader implements OnInit, OnDestroy {
-    viewContainer: ViewContainerRef;
-    column: any;
-    view: EmbeddedViewRef<any>;
-    constructor(viewContainer: ViewContainerRef);
-    ngOnInit(): void;
-    ngOnDestroy(): void;
-}
-export declare class ColumnEditorTemplateLoader implements OnInit, OnDestroy {
-    viewContainer: ViewContainerRef;
-    column: any;
-    rowData: any;
-    rowIndex: any;
-    view: EmbeddedViewRef<any>;
-    constructor(viewContainer: ViewContainerRef);
-    ngOnInit(): void;
-    ngOnDestroy(): void;
-}
-export declare class TemplateLoader implements OnInit, OnDestroy {
-    viewContainer: ViewContainerRef;
-    template: TemplateRef<any>;
-    data: any;
-    view: EmbeddedViewRef<any>;
-    constructor(viewContainer: ViewContainerRef);
-    ngOnInit(): void;
-    ngOnDestroy(): void;
 }
 export declare class SharedModule {
 }

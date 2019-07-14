@@ -12,31 +12,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
 var button_1 = require("../button/button");
-var InplaceDisplay = (function () {
+var InplaceDisplay = /** @class */ (function () {
     function InplaceDisplay() {
     }
+    InplaceDisplay = __decorate([
+        core_1.Component({
+            selector: 'p-inplaceDisplay',
+            template: '<ng-content></ng-content>'
+        })
+    ], InplaceDisplay);
     return InplaceDisplay;
 }());
-InplaceDisplay = __decorate([
-    core_1.Component({
-        selector: 'p-inplaceDisplay',
-        template: '<ng-content></ng-content>'
-    })
-], InplaceDisplay);
 exports.InplaceDisplay = InplaceDisplay;
-var InplaceContent = (function () {
+var InplaceContent = /** @class */ (function () {
     function InplaceContent() {
     }
+    InplaceContent = __decorate([
+        core_1.Component({
+            selector: 'p-inplaceContent',
+            template: '<ng-content></ng-content>'
+        })
+    ], InplaceContent);
     return InplaceContent;
 }());
-InplaceContent = __decorate([
-    core_1.Component({
-        selector: 'p-inplaceContent',
-        template: '<ng-content></ng-content>'
-    })
-], InplaceContent);
 exports.InplaceContent = InplaceContent;
-var Inplace = (function () {
+var Inplace = /** @class */ (function () {
     function Inplace() {
         this.onActivate = new core_1.EventEmitter();
         this.onDeactivate = new core_1.EventEmitter();
@@ -54,54 +54,54 @@ var Inplace = (function () {
             this.onDeactivate.emit(event);
         }
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], Inplace.prototype, "active", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], Inplace.prototype, "closable", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], Inplace.prototype, "disabled", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Object)
+    ], Inplace.prototype, "style", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], Inplace.prototype, "styleClass", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], Inplace.prototype, "onActivate", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], Inplace.prototype, "onDeactivate", void 0);
+    Inplace = __decorate([
+        core_1.Component({
+            selector: 'p-inplace',
+            template: "\n        <div [ngClass]=\"{'ui-inplace ui-widget': true, 'ui-inplace-closable': closable}\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <div class=\"ui-inplace-display\" (click)=\"activate($event)\"\n                [ngClass]=\"{'ui-state-disabled':disabled}\" *ngIf=\"!active\">\n                <ng-content select=\"[pInplaceDisplay]\"></ng-content>\n            </div>\n            <div class=\"ui-inplace-content\" *ngIf=\"active\">\n                <ng-content select=\"[pInplaceContent]\"></ng-content>\n                <button type=\"button\" icon=\"pi pi-times\" pButton (click)=\"deactivate($event)\" *ngIf=\"closable\"></button>\n            </div>\n        </div>\n    "
+        })
+    ], Inplace);
     return Inplace;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], Inplace.prototype, "active", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], Inplace.prototype, "closable", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], Inplace.prototype, "disabled", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object)
-], Inplace.prototype, "style", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], Inplace.prototype, "styleClass", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], Inplace.prototype, "onActivate", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], Inplace.prototype, "onDeactivate", void 0);
-Inplace = __decorate([
-    core_1.Component({
-        selector: 'p-inplace',
-        template: "\n        <div [ngClass]=\"'ui-inplace ui-widget'\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <div class=\"ui-inplace-display\" (click)=\"activate($event)\"\n                [ngClass]=\"{'ui-state-disabled':disabled}\" *ngIf=\"!active\">\n                <ng-content select=\"[pInplaceDisplay]\"></ng-content>\n            </div>\n            <div class=\"ui-inplace-content\" *ngIf=\"active\">\n                <ng-content select=\"[pInplaceContent]\"></ng-content>\n                <button type=\"button\" icon=\"fa-close\" pButton (click)=\"deactivate($event)\" *ngIf=\"closable\"></button>\n            </div>\n        </div>\n    "
-    })
-], Inplace);
 exports.Inplace = Inplace;
-var InplaceModule = (function () {
+var InplaceModule = /** @class */ (function () {
     function InplaceModule() {
     }
+    InplaceModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule, button_1.ButtonModule],
+            exports: [Inplace, InplaceDisplay, InplaceContent, button_1.ButtonModule],
+            declarations: [Inplace, InplaceDisplay, InplaceContent]
+        })
+    ], InplaceModule);
     return InplaceModule;
 }());
-InplaceModule = __decorate([
-    core_1.NgModule({
-        imports: [common_1.CommonModule, button_1.ButtonModule],
-        exports: [Inplace, InplaceDisplay, InplaceContent, button_1.ButtonModule],
-        declarations: [Inplace, InplaceDisplay, InplaceContent]
-    })
-], InplaceModule);
 exports.InplaceModule = InplaceModule;
 //# sourceMappingURL=inplace.js.map

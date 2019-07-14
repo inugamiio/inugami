@@ -5,15 +5,16 @@ import {Component,
   forwardRef,
   AfterViewInit,
   ElementRef}                                         from '@angular/core';
+import {HttpClient}                                   from '@angular/common/http';
+import {NG_VALUE_ACCESSOR,ControlValueAccessor}       from '@angular/forms';
 
 import * as d3 from 'd3';
-import {NG_VALUE_ACCESSOR,ControlValueAccessor}       from '@angular/forms';
+
 import {SvgComponent}                                 from './../svg_component/svg.component';
-import {HttpServices}                                 from './../../../services/http/http.services';
-import {Http}                                         from '@angular/http';
+
 import {SvgGenericMapEventIncomming}                  from './svg.generic.map.event.incomming';
 import {SvgGenericMapMouseEvent}                      from './svg.generic.map.mouse.event';
-
+import { map } from 'rxjs/operators';
 
 export const SvgGenericMap_ACCESSOR: any = {
 provide: NG_VALUE_ACCESSOR,
@@ -48,7 +49,7 @@ export class SvgGenericMap extends SvgComponent implements ControlValueAccessor,
   /*****************************************************************************
   * INIT
   *****************************************************************************/
-  constructor(private el: ElementRef,private http  : Http,private httpSerivce    : HttpServices){
+  constructor(private el: ElementRef,private http  : HttpClient){
     super(el);
   }
 
@@ -56,15 +57,14 @@ export class SvgGenericMap extends SvgComponent implements ControlValueAccessor,
     let self = this;
     let url = [CONTEXT_PATH, this.src].join('');
 
-    this.http.get(url).toPromise().then(data =>{
-      self.initSvgMap(data);
-    });
+    this.http.get<any>(url,{responseType:'text',observe: 'response'})
+        .subscribe(res => self.initSvgMap(res.body));
   }
 
   private initSvgMap(data){
-    if(isNotNull(data._body)){
-      let viewBox = this.extractViewBox(data._body); 
-      let content = this.cleanContent(data._body);
+    if(isNotNull(data)){
+      let viewBox = this.extractViewBox(data); 
+      let content = this.cleanContent(data);
  
       this.compos.svg.html(content);
       if(isNotNull(viewBox)){

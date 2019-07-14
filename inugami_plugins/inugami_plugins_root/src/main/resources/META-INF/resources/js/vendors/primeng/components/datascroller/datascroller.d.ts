@@ -1,38 +1,43 @@
-import { ElementRef, AfterViewInit, OnDestroy, Renderer2, EventEmitter, QueryList, TemplateRef } from '@angular/core';
-import { DomHandler } from '../dom/domhandler';
-export declare class DataScroller implements AfterViewInit, OnDestroy {
+import { ElementRef, OnInit, AfterViewInit, OnDestroy, Renderer2, NgZone, EventEmitter, QueryList, TemplateRef } from '@angular/core';
+export declare class DataScroller implements OnInit, AfterViewInit, OnDestroy {
     el: ElementRef;
     renderer: Renderer2;
-    domHandler: DomHandler;
+    zone: NgZone;
+    value: any[];
     rows: number;
     lazy: boolean;
-    onLazyLoad: EventEmitter<any>;
     style: any;
     styleClass: string;
     buffer: number;
     inline: boolean;
     scrollHeight: any;
     loader: any;
-    contentViewChild: ElementRef;
+    totalRecords: number;
+    trackBy: Function;
     header: any;
     footer: any;
     templates: QueryList<any>;
-    _value: any[];
+    contentViewChild: ElementRef;
+    onLazyLoad: EventEmitter<any>;
     itemTemplate: TemplateRef<any>;
     dataToRender: any[];
     first: number;
-    scrollFunction: any;
-    contentElement: HTMLDivElement;
-    constructor(el: ElementRef, renderer: Renderer2, domHandler: DomHandler);
+    inlineScrollListener: any;
+    windowScrollListener: any;
+    loaderClickListener: any;
+    page: number;
+    constructor(el: ElementRef, renderer: Renderer2, zone: NgZone);
+    ngOnInit(): void;
     ngAfterViewInit(): void;
     ngAfterContentInit(): void;
-    value: any[];
-    handleDataChange(): void;
     load(): void;
+    shouldLoad(): boolean;
     reset(): void;
     isEmpty(): boolean;
-    createLazyLoadMetadata(): any;
     bindScrollListener(): void;
+    unbindScrollListener(): void;
+    onInlineScroll(): void;
+    onWindowScroll(): void;
     ngOnDestroy(): void;
 }
 export declare class DataScrollerModule {

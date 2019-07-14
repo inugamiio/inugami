@@ -1,5 +1,5 @@
 import { EventEmitter } from '@angular/core';
-import { MenuItem } from '../common/api';
+import { MenuItem } from '../common/menuitem';
 export declare class Steps {
     activeIndex: number;
     model: MenuItem[];

@@ -1,8 +1,6 @@
 import { ElementRef, AfterViewChecked, AfterViewInit, OnDestroy, EventEmitter } from '@angular/core';
-import { DomHandler } from '../dom/domhandler';
 export declare class Galleria implements AfterViewChecked, AfterViewInit, OnDestroy {
     el: ElementRef;
-    domHandler: DomHandler;
     style: any;
     styleClass: string;
     panelWidth: number;
@@ -14,7 +12,9 @@ export declare class Galleria implements AfterViewChecked, AfterViewInit, OnDest
     autoPlay: boolean;
     transitionInterval: number;
     showCaption: boolean;
+    effectDuration: number;
     onImageClicked: EventEmitter<{}>;
+    onImageChange: EventEmitter<{}>;
     _images: any[];
     slideshowActive: boolean;
     container: any;
@@ -28,7 +28,7 @@ export declare class Galleria implements AfterViewChecked, AfterViewInit, OnDest
     stripLeft: number;
     imagesChanged: boolean;
     initialized: boolean;
-    constructor(el: ElementRef, domHandler: DomHandler);
+    constructor(el: ElementRef);
     ngAfterViewChecked(): void;
     images: any[];
     ngAfterViewInit(): void;

@@ -3,14 +3,21 @@
     background-color: #c2023e;
 }
 
-body .ui-chkbox .ui-chkbox-box,
 body .ui-chkbox .ui-chkbox-box.ui-state-active{
-  border-color:   #90193f;	
+    background-color:   #90193f;	
 }
 
-body .ui-chkbox .ui-chkbox-box.ui-state-focus,
-body .ui-chkbox .ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hover{
-    border-color:   #de5b5f;
+
+body .ui-chkbox .ui-chkbox-box:not(.ui-state-disabled):hover,
+body .ui-chkbox .ui-chkbox-box.ui-state-active:hover,
+body .ui-chkbox .ui-chkbox-box.ui-state-active.ui-state-focus:hover,
+body .ui-chkbox .ui-chkbox-box.ui-state-active:hover,
+.inugami .ui-chkbox .ui-chkbox-box.ui-state-active.ui-state-focus,
+.inugami .ui-chkbox .ui-chkbox-box.ui-state-active.ui-state-focus:hover,
+body .ui-chkbox .ui-chkbox-box.ui-state-active:hover{
+    background-color:   #de5b5f;
+    border:none;
+    outline: none;
 }
 
 .ui-chkbox .ui-chkbox-icon{
