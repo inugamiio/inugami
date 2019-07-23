@@ -33,7 +33,7 @@ import org.inugami.api.models.data.graphite.number.LongNumber;
 import org.inugami.api.models.events.SimpleEvent;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.commons.files.FilesUtils;
-import org.inugami.core.providers.mock.MockJsonHelper;
+import org.inugami.commons.providers.MockJsonHelper;
 
 /**
  * CsvTask

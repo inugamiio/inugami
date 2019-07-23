@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.inugami.core.providers.mock.scan;
+package org.inugami.commons.providers;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +25,6 @@ import java.util.List;
 import org.inugami.commons.files.FilesUtils;
 import org.inugami.commons.files.zip.ZipScanerBuilder;
 import org.inugami.commons.scan.ScanResources;
-import org.inugami.core.providers.mock.MockJsonHelper;
 
 /**
  * MockJsonScanJar

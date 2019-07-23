@@ -70,6 +70,8 @@ public class Plugin implements Serializable {
     
     private transient final List<AlertingProvider> alertingProviders;
     
+    private final Gav                              gav;
+    
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -85,9 +87,9 @@ public class Plugin implements Serializable {
                     final ManifestInfo manifest,
                     final  Map<String, Map<String, String>>  propertiesPaths) {
         //@formatter:on
-        super();
         Asserts.notNull(config);
         Asserts.notNull(config.getGav());
+        this.gav = config.getGav();
         this.enabled = config.isEnable();
         this.config = config;
         this.eventConfigPresent = (events != null) && !events.isEmpty();
@@ -102,6 +104,21 @@ public class Plugin implements Serializable {
         this.providers          = providers          == null ? null : Collections.unmodifiableList(providers);
         this.alertingProviders  = alertingProviders  == null ? null : Collections.unmodifiableList(alertingProviders);
         //@formatter:on
+        
+    }
+    
+    public Plugin(final String groupId, final String artifactId) {
+        gav = new Gav(groupId, artifactId);
+        config = null;
+        events = null;
+        eventConfigPresent = false;
+        manifest = null;
+        properties = null;
+        listeners = null;
+        processors = null;
+        providers = null;
+        handlers = null;
+        alertingProviders = null;
         
     }
     
@@ -136,7 +153,7 @@ public class Plugin implements Serializable {
     // DELEGATES
     // =========================================================================
     public Gav getGav() {
-        return config.getGav();
+        return gav;
     }
     
     public List<Resource> getResources() {
