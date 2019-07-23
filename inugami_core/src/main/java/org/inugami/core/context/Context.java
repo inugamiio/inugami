@@ -102,6 +102,8 @@ public final class Context implements ApplicationContext,
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
+    private final static Plugin                 ROOT_DYNAMIC_PLUGIN    = new Plugin("org.inugami", "inugami_core");
+    
     private final GenericContext<Context>       genericContext         = new GenericContext<Context>();
     
     private final ConfigurationHolder           configuration;
@@ -394,6 +396,13 @@ public final class Context implements ApplicationContext,
         }
     }
     
+    @Override
+    public void notifyDynamicEventResult(final GenericEvent event, final ProviderFutureResult providerResult,
+                                         final String channelName) {
+        new CallableEvent(ROOT_DYNAMIC_PLUGIN, event, channelName, this, null,
+                          getApplicationConfiguration().getTimeout(), starting).onDone(providerResult, event, null);
+    }
+    
     // =========================================================================
     // PLUGINS
     // =========================================================================
@@ -546,11 +555,21 @@ public final class Context implements ApplicationContext,
                   .forEach(SchedulerService::start);
         //@formatter:on
         
+        final List<Provider> providers = getBottstrapProviders();
+        for (final Provider provider : providers) {
+            ((org.inugami.api.ctx.BootstrapContext) provider).bootrap(this);
+        }
         processEventsForce();
     }
     
     @Override
     public void shutdown() {
+        
+        final List<Provider> providers = getBottstrapProviders();
+        for (final Provider provider : providers) {
+            ((org.inugami.api.ctx.BootstrapContext) provider).shutdown(this);
+        }
+        
         metricsEventsSenderSse.interrupt();
         SseService.shutdown();
         runnableContext.stream().forEach(RunnableContext::shutdown);
@@ -567,6 +586,19 @@ public final class Context implements ApplicationContext,
         processShutdown(threadsStandaloneExecutor, ()->threadsStandaloneExecutor.shutdown());
         processShutdown(systemInfosManager,        ()->systemInfosManager.shutdown());
         //@formatter:on
+    }
+    
+    private List<Provider> getBottstrapProviders() {
+        //@formatter:off
+        return getPlugins().orElseGet(Collections::emptyList)
+                            .stream()
+                            .map(Plugin::getProviders)
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .flatMap(List::stream)
+                            .filter(provider-> provider instanceof org.inugami.api.ctx.BootstrapContext)
+                            .collect(Collectors.toList());
+       //@formatter:on
     }
     
     @Override
@@ -757,6 +789,8 @@ public final class Context implements ApplicationContext,
     public JavaScriptEngine getScriptEngine() {
         return javaScriptEngine;
     }
+
+
 
 
 

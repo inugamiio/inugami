@@ -31,7 +31,7 @@ import org.inugami.api.providers.concurrent.FutureDataBuilder;
 import org.inugami.api.providers.task.ProviderFutureResult;
 import org.inugami.api.providers.task.ProviderTask;
 import org.inugami.commons.connectors.HttpBasicConnector;
-import org.inugami.core.providers.mock.MockJsonHelper;
+import org.inugami.commons.providers.MockJsonHelper;
 import org.inugami.core.services.connectors.HttpConnector;
 
 /**

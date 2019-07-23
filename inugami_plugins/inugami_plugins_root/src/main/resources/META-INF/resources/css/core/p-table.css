@@ -1,0 +1,85 @@
+body .ui-table .ui-paginator,
+body .ui-widget-content,
+body  .ui-table .ui-table-thead>tr>th,
+body .ui-table .ui-table-tfoot>tr>td,
+body .ui-table .ui-table-data>tr>td,
+body .ui-table .ui-table-tbody > tr > td ,
+body .ui-table .ui-table-thead>tr>th{
+    border-style: none; 
+}
+body .ui-table .ui-table-data tr.ui-state-highlight,
+body .ui-table .ui-table-data tr.ui-table-even.ui-state-highlight{
+    background-color: #c4c4c4;
+}
+body .ui-table .ui-table-thead>tr>th{
+    background-color: #ffffff;
+    font-size: 130%;
+}
+
+body .ui-paginator .ui-paginator-first,
+body .ui-paginator .ui-paginator-prev,
+body .ui-paginator .ui-paginator-next,
+body .ui-paginator .ui-paginator-last{
+
+    color: #c12534;
+}
+
+body .ui-paginator .ui-paginator-pages .ui-paginator-page:hover.ui-state-active,
+body .ui-paginator .ui-paginator-pages .ui-paginator-page:hover.ui-state-default,
+body .ui-paginator .ui-paginator-pages .ui-paginator-element.ui-state-active,
+body .ui-paginator .ui-paginator-pages .ui-paginator-element.ui-state-default{
+    background: initial;
+    color: #c12534;
+}
+body .ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-active{
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-top: -0.2em;
+}
+
+
+body .ui-paginator .ui-paginator-pages{
+    border-style: solid;
+    border-color: #c12534;
+    border-width: 0.1em;
+    border-radius: 2em;
+    height: 2em;
+}
+
+body .ui-paginator .ui-paginator-rpp-options{
+    background-color: initial;
+    color: #c12534 ;
+    border-color: #c12534;
+}
+
+body .ui-paginator .ui-paginator-rpp-options .ui-paginator-element.ui-state-default.ui-state-active{
+    color: black;
+}
+
+body .ui-table thead th.ui-state-active{
+    background: #c4c4c4;
+    color: black;
+}
+
+body .ui-table .ui-cell-data input-switch{
+    position: relative;
+    margin-left: 7em;
+    top: 0.5em;
+}
+
+.ui-cell-data .alert-element {
+    font-size:200%;
+}
+
+.ui-cell-data  .alert-element  .label{ 
+    display: none;
+}
+
+.align-center{
+    text-align: center;
+}
+
+body .ui-table .ui-paginator{
+    background: #ffffff;
+    margin-top: 2em;
+}

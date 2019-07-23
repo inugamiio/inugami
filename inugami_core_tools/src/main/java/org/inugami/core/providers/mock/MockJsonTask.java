@@ -23,6 +23,7 @@ import org.inugami.api.models.events.SimpleEvent;
 import org.inugami.api.providers.task.ProviderFutureResult;
 import org.inugami.api.providers.task.ProviderFutureResultBuilder;
 import org.inugami.api.providers.task.ProviderTask;
+import org.inugami.commons.providers.MockJsonHelper;
 
 /**
  * MockJsonTask

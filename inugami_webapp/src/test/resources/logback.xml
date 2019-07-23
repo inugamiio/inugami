@@ -28,6 +28,40 @@
     </logger>
 
 
+    <logger name="org.hibernate">
+        <level value="INFO" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="org.ehcache">
+        <level value="INFO" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="org.jboss">
+        <level value="INFO" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="org.jboss.resteasy.cdi">
+        <level value="INFO" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+
+    <logger name="org.picketlink">
+        <level value="INFO" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="SSE">
+        <level value="INFO" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="org.apache.kafka">
+        <level value="INFO" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+
+
     <root level="DEBUG">
         <appender-ref ref="STDOUT" />
 

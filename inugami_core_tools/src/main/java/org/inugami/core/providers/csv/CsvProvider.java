@@ -36,9 +36,9 @@ import org.inugami.api.providers.concurrent.FutureDataBuilder;
 import org.inugami.api.providers.task.ProviderFutureResult;
 import org.inugami.api.providers.task.ProviderFutureResultBuilder;
 import org.inugami.api.tools.NamedComponent;
+import org.inugami.commons.providers.MockJsonHelper;
+import org.inugami.commons.providers.MockJsonScanJar;
 import org.inugami.core.providers.graphite.GraphiteProvider;
-import org.inugami.core.providers.mock.MockJsonHelper;
-import org.inugami.core.providers.mock.scan.MockJsonScanJar;
 
 /**
  * CsvProvider
@@ -158,8 +158,8 @@ public class CsvProvider extends AbstractProvider implements Provider, NamedComp
     }
     
     @Override
-    public ConfigHandler<String,String> getConfig(){
+    public ConfigHandler<String, String> getConfig() {
         return config;
     }
-
+    
 }

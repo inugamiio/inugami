@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ======================================================================= 
+    = MAVEN
+    ======================================================================== -->
+    <prerequisites>
+        <maven>3.2.3</maven>
+    </prerequisites>
+
+    <!-- ======================================================================= 
+    = PARENT
+    ======================================================================== -->
+    <parent>
+        <groupId>org.inugami</groupId>
+        <artifactId>inugami</artifactId>
+        <version>1.1.1-SNAPSHOT</version>
+    </parent>
+
+    <!-- ======================================================================= 
+    = PROJECT
+    ======================================================================== -->
+    <groupId>org.inugami.plugins</groupId>
+    <artifactId>inugami_plugins</artifactId>
+    <packaging>pom</packaging>
+
+    <!-- ======================================================================= 
+    = PROPERTIES
+    ======================================================================== -->
+    <properties>
+        <super.inugami.plugin>false</super.inugami.plugin>
+        <super.inugami.plugins.set>false</super.inugami.plugins.set>
+    </properties>
+    
+    <!-- ======================================================================= 
+    = DEPENDENCIES
+    ======================================================================== -->
+    <modules>
+        <module>inugami_plugins_root</module>
+    </modules>
+
+    <!-- ======================================================================= 
+    = DEPENDENCIES
+    ======================================================================== -->
+    <dependencies>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.inugami</groupId>
+            <artifactId>inugami_core</artifactId>
+        </dependency>
+    </dependencies>    
+    
+    <!-- ======================================================================= 
+    = BUILD
+    ======================================================================== -->
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources-filtered</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.inugami.maven.plugin.lifecycle</groupId>
+                    <artifactId>inugami-maven-lifecycle</artifactId>
+                    <version>${_super.plugin.inugami_plugin_lifecycle.version}</version>
+                    <extensions>true</extensions>
+                </plugin>
+
+
+                <plugin>
+                    <groupId>org.inugami.maven.plugin</groupId>
+                    <artifactId>inugami-maven-plugin</artifactId>
+                    <version>${_super.plugin.inugami-plugin-maven.version}</version>
+                    <executions>
+                        <execution>
+                            <id>buildArtifactType</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>buildArtifactType</goal>
+                            </goals>
+                        </execution>
+
+                        <execution>
+                            <id>clean-server-plugin</id>
+                            <phase>${super.inugami.plugin}clean-server</phase>
+                            <goals>
+                                <goal>cleanServer</goal>
+                            </goals>
+                        </execution>
+
+                        <execution>
+                            <id>build-server-plugin</id>
+                            <phase>${super.inugami.plugin}build-server</phase>
+                            <goals>
+                                <goal>buildServer</goal>
+                            </goals>
+                        </execution>
+
+                        <execution>
+                            <id>deploy-plugin</id>
+                            <phase>${super.inugami.plugin}deploy-plugin</phase>
+                            <goals>
+                                <goal>deployPlugin</goal>
+                            </goals>
+                        </execution>
+
+                        <execution>
+                            <id>deploy-resources</id>
+                            <phase>${super.inugami.plugin}deployResources</phase>
+                            <goals>
+                                <goal>deployPlugin</goal>
+                            </goals>
+                        </execution>
+
+                        <execution>
+                            <id>attach-war</id>
+                            <phase>${super.inugami.plugin}${super.inugami.plugin.attach.war}package</phase>
+                            <goals>
+                                <goal>buildWar</goal>
+                            </goals>
+                        </execution>
+
+
+
+                    </executions>
+                    <configuration>
+                        <server>${super.inugami.server.home}</server>
+                        <forceClean>${super.inugami.server.force.clean}</forceClean>
+                        <artifactTypePlugin>${super.inugami.plugin}</artifactTypePlugin>
+                        <artifactTypePluginsSet>${super.inugami.plugins.set}</artifactTypePluginsSet>
+                        <envDev>${super.env.dev}</envDev>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.inugami.maven.plugin</groupId>
+                                        <artifactId>inugami-maven-plugin</artifactId>
+                                        <versionRange>[1.0.0,)</versionRange>
+                                        <goals>
+                                            <goal>buildArtifactType</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute />
+                                    </action>
+                                </pluginExecution>
+
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>buildnumber-maven-plugin</artifactId>
+                                        <versionRange>[1.3,)</versionRange>
+                                        <goals>
+                                            <goal>create-timestamp</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+
+
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.inugami.maven.plugin.lifecycle</groupId>
+                <artifactId>inugami-maven-lifecycle</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.inugami.maven.plugin</groupId>
+                <artifactId>inugami-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
