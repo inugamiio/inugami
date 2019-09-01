@@ -7,6 +7,8 @@ import {HttpServices}                           from './services/http/http.servi
 import {PluginsService}                         from './services/plugins.service'
 import {MainMenu}                               from './components/main_menu/main.menu';
 
+import {EVENTS} from './angular/events';
+
 @Component({
     selector: 'app-component',
     templateUrl: 'js/app/app-component.html',
@@ -31,9 +33,11 @@ export class AppComponent {
                 private httpServices     : HttpServices,
                 private pluginsService   : PluginsService
                 ) {
-
+                  
       org.inugami.sse.httpConnector =httpServices;
-           
+    
+    
+
       router.events.subscribe((val) => {
         if(val instanceof NavigationEnd){
           let realUrl =val.url;

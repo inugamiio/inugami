@@ -29,6 +29,7 @@ export class SecurityServices {
             logout : CONTEXT_PATH+"rest/security/authenticate/logout"
         };
         
+        
     }
 
     /**************************************************************************
