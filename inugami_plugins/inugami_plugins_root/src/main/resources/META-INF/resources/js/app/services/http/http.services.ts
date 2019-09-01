@@ -1,10 +1,11 @@
 import {Injectable}                              from '@angular/core';
-import {HttpClient, HttpResponse,
-       HttpHeaders, HttpRequest}                 from '@angular/common/http';
+import {HttpClient}                              from '@angular/common/http';
 import {SessionScope}                            from './../../scopes/session.scope';
 import {HeaderServices}                          from './../header.services'
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class HttpServices {
 
 

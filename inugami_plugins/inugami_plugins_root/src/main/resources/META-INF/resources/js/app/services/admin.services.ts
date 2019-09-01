@@ -2,7 +2,9 @@ import {Injectable}                              from '@angular/core';
 import {SessionScope}                            from './../scopes/session.scope';
 import {HttpServices}                            from './../services/http/http.services';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class AdminService {
 
     /**************************************************************************

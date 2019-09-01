@@ -4,7 +4,9 @@ import {MainMenuLink}             from './main.menu.link';
 export const MAIN_MENU_UPDATE   : string = "main_menu_update";
 export const MAIN_MENU_ON_CLICK : string = "main_menu_on_click";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class MainMenuService {
     /**************************************************************************
     * ATTRIBUTES

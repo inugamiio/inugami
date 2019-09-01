@@ -4,7 +4,9 @@ import {AlertEntity}                        from './../../models/alert.entity';
 
 
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class AlertsCrudServices extends GenericCrudServices<AlertEntity> {
 
     /**************************************************************************

@@ -5,7 +5,11 @@ import {HttpClient}                             from '@angular/common/http';
 import {HeaderServices}                         from './../services/header.services';
 import {SessionScope}                           from './../scopes/session.scope';
 
-@Injectable()
+import {DATA_EXTRACTORS} from './../angular/data.extractors';
+
+@Injectable({
+    providedIn: 'root',
+})
 export class SecurityServices {
 
     /**************************************************************************
@@ -24,6 +28,7 @@ export class SecurityServices {
             login  : CONTEXT_PATH+"rest/security/authenticate",
             logout : CONTEXT_PATH+"rest/security/authenticate/logout"
         };
+        
     }
 
     /**************************************************************************

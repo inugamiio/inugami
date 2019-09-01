@@ -66,17 +66,17 @@ import {LoginView}                      from './view/login.view';
 
 // SERVICES --------------------------------------------------------------------
 
-import {PluginsService}                 from './services/plugins.service';
-import {AdminService}                   from './services/admin.services';
-import {SecurityServices}               from './services/security.services';
-import {HeaderServices}                 from './services/header.services';
-import {SoundServices}                  from './services/sound.services';
-import {HttpServices}                   from './services/http/http.services';
-import {GenericCrudServices}            from './services/http/generic.crud.services';
-import {AlertsCrudServices}             from './services/http/alerts.crud.services';
-import {AlertsDynamicCrudServices}      from './services/http/alerts.dynamic.crud.services';
+import {PluginsService}                 from 'js/app/services/plugins.service';
+import {AdminService}                   from 'js/app/services/admin.services';
+import {SecurityServices}               from 'js/app/services/security.services';
+import {HeaderServices}                 from 'js/app/services/header.services';
+import {SoundServices}                  from 'js/app/services/sound.services';
+import {HttpServices}                   from 'js/app/services/http/http.services';
+import {GenericCrudServices}            from 'js/app/services/http/generic.crud.services';
+import {AlertsCrudServices}             from 'js/app/services/http/alerts.crud.services';
+import {AlertsDynamicCrudServices}      from 'js/app/services/http/alerts.dynamic.crud.services';
 
-import {MainMenuService}                from './components/main_menu/main.menu.service';
+import {MainMenuService}                from 'js/app/components/main_menu/main.menu.service';
 
 
 // MODULE ----------------------------------------------------------------------
@@ -174,6 +174,7 @@ import {MainMenuService}                from './components/main_menu/main.menu.s
     GitlabMergeRequestsComponent,
     JiraIssuesComponent,
     MainMenu
+
   ],
   providers: [
     SessionScope,
@@ -185,7 +186,8 @@ import {MainMenuService}                from './components/main_menu/main.menu.s
     HttpServices,
     AlertsCrudServices,
     AlertsDynamicCrudServices,
-    MainMenuService
+    MainMenuService,
+    GenericCrudServices
   ],
   bootstrap: []
 })

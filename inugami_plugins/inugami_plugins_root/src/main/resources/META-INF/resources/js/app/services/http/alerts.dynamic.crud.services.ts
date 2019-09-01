@@ -3,8 +3,9 @@ import {GenericCrudServices}                from './../http/generic.crud.service
 import {AlertEntity}                        from './../../models/alert.entity';
 
 
-
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class AlertsDynamicCrudServices extends GenericCrudServices<AlertEntity> {
 
     /**************************************************************************
