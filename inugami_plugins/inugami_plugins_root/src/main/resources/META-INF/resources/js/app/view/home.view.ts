@@ -6,6 +6,7 @@ import {SessionScope}                                         from './../scopes/
 import {MainMenuService}                                      from './../components/main_menu/main.menu.service';
 import {MainMenuLink}                                         from './../components/main_menu/main.menu.link';
 
+import {EVENTS} from './../angular/events';
 
 @Component({
     templateUrl: 'js/app/view/home.view.html',
@@ -28,6 +29,8 @@ export class HomeView implements OnInit, OnDestroy{
               private sessionScope : SessionScope,
               private mainMenuService  : MainMenuService){
       this.showLinks = true;
+
+
   }
 
 
