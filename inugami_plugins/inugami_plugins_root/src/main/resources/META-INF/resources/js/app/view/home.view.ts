@@ -6,8 +6,7 @@ import {SessionScope}                                         from './../scopes/
 import {MainMenuService}                                      from './../components/main_menu/main.menu.service';
 import {MainMenuLink}                                         from './../components/main_menu/main.menu.link';
 
-import {EVENTS} from './../angular/events';
-
+import {LOGGERS} from './../angular/logger';
 @Component({
     templateUrl: 'js/app/view/home.view.html',
     directives : []

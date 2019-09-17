@@ -14,3 +14,10 @@ export interface TimeValue{
     value:number,
     timestamp:number
 }
+
+
+export interface TrendValue{
+    trend:string,
+    trendClass:string
+}
+
