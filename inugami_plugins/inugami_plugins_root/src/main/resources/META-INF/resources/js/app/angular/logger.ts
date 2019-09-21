@@ -36,7 +36,7 @@ export const LOGGERS : InugamiLoggerService = {
 
 org.inugami.logger._appenders.push({
     log : (localTime,localLevel,localLoggerName,localMessage)=>{
-        localEvent.handler.next({
+        localEvent.fireEvent({
             time:localTime,
             level:localLevel,
             loggerName:localLoggerName,

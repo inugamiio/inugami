@@ -17,4 +17,10 @@ export class ObservableEvent<T>{
     getObserver():Observable<T>{
         return this.observer;
     }
+
+    fireEvent(data:T){
+        if(this.handler!=null){
+            this.handler.next(data);
+        }
+    }
 }

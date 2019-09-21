@@ -1,0 +1,39 @@
+import {Injectable} from '@angular/core';
+import {EventData} from './../models/events.interfaces';
+
+
+@Injectable()
+export class EventsService {
+
+    /**************************************************************************
+    * BUILDERS
+    **************************************************************************/
+    public buildEventFullName(pluginName:string, eventName:string){
+
+    }
+
+    /**************************************************************************
+    * FIRE EVENTS
+    **************************************************************************/
+    public fireEvent(eventName:string, data:EventData) {
+
+    }
+    public fireEventPlugin (pluginName:string, eventName:string, data:EventData, timestamp:number,alerts:any) {
+    }
+
+    public addEventListenerByPlugin (pluginName, eventName, eventHandler){
+    }
+
+    public updateResize(){
+    }
+
+    public addEventListener(eventName, eventHandler){
+    }
+    public addKeysListener(){
+
+    }
+
+    /**************************************************************************
+    * EVENTS LISTENERS
+    **************************************************************************/
+}
