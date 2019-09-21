@@ -256,7 +256,7 @@ svg.builder = {
      * @return point string representation
      */
     point : function(x,y){
-        return [x,y].join(',');
+        return [x==null?0:x,y==null?0:y].join(',');
     },
 
 
