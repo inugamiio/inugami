@@ -1,7 +1,9 @@
 import { Injectable }   from '@angular/core';
 import {User}           from './../models/user';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SessionScope {
     /**************************************************************************
     * ATTRIBUTES

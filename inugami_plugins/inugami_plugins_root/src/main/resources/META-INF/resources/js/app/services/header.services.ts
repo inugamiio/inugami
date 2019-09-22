@@ -4,7 +4,9 @@ import {SessionScope}                               from './../scopes/session.sc
 
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class HeaderServices {
 
     /**************************************************************************

@@ -121,7 +121,7 @@ org.inugami.data.extractors = {
             return result;
         }
       },
-
+      //@Deprecated
       calc :{
           simpleDiff : function(currentValue, previousValue){
             return previousValue - currentValue;

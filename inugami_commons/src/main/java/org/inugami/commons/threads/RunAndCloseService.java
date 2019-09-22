@@ -123,7 +123,8 @@ public class RunAndCloseService<T> implements ThreadFactory {
         threadGroup = Thread.currentThread().getThreadGroup();
         executor = Executors.newFixedThreadPool(howManyThreads, this);
         completion = new ExecutorCompletionService<>(executor);
-        
+
+
         this.requestContext = RequestContext.getInstance();
         
     }

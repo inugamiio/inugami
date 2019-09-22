@@ -70,6 +70,16 @@
     var MESSAGES           = <%=ResourceLoaderJSP.JAVASCRIPT_I18N%>;
     var PLUGINS_COMPONENTS = {};
 
+    document["root_application_context"]={
+      context           : CONTEXT_PATH,
+      resourcesPath     : RESOURCES_PATH,
+      appPath           : APP_PATH,
+      vendorPath        : VENDOR_PATH,
+      pluginsGavs       : PLUGINS_GAVS,
+      messages          : MESSAGES,
+      pluginsComponents : PLUGINS_COMPONENTS
+    };
+
     org.inugami.logger.rootLevel=org.inugami.logger.levels.debug;
     org.inugami.sse.enableLogger = false;
 

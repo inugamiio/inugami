@@ -76,6 +76,9 @@ public class SseRest {
         SseService.registerSocket(user == null ? null : user.getLoginName(), ip, agent,uuid);
     }
     
+
+    
+    
     private boolean isEmpty(String token) {
         return StringUtils.isEmpty(token);
     }

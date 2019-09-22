@@ -2,8 +2,11 @@ import {Injectable}                                 from '@angular/core';
 import {HttpClient}                                 from '@angular/common/http';
 import {Plugin}                                     from './../models/plugin';
 import {HttpServices}                               from './http/http.services';
+import {APP_ROOT_CONTEXT}                           from './../angular/constants';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class PluginsService {
 
     /**************************************************************************
@@ -18,12 +21,12 @@ export class PluginsService {
     **************************************************************************/
     constructor(private httpSerivce    : HttpServices) {
         this.urls = {
-            allPlugins                  : CONTEXT_PATH+"rest/plugins",
-            allMenuLinks                : CONTEXT_PATH+"rest/plugins/menu-links",
-            callPluginEventsProcessing  : CONTEXT_PATH+"rest/plugins/events-data",
-            allPluginData               : CONTEXT_PATH+"rest/plugins/all-plugins-data"
+            allPlugins                  : `${APP_ROOT_CONTEXT.context}rest/plugins`,
+            allMenuLinks                : `${APP_ROOT_CONTEXT.context}rest/plugins/menu-links`,
+            callPluginEventsProcessing  : `${APP_ROOT_CONTEXT.context}rest/plugins/events-data`,
+            allPluginData               : `${APP_ROOT_CONTEXT.context}rest/plugins/all-plugins-data`
         };
-
+        
         let self = this;
         org.inugami.events.addEventListenerByPlugin("globale","all-plugins-data", function(event){
             self.processCallAllPluginsData();

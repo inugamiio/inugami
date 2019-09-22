@@ -27,7 +27,8 @@ org.inugami.sse = {
 		UPDATE : "sseUpdate",
 		ALREADY_OPEN : "sseAlreadyOpen",
 		OPEN_OR_ALREADY_OPEN : "sseOpenOrAlreadyOpen",
-		FORCE_REFRESH : "forceRefresh"
+		FORCE_REFRESH : "forceRefresh",
+		ALERTS:"alerts"
 	},
 	_inner_data : {
 		connectInProgress    : false,
@@ -95,7 +96,11 @@ org.inugami.sse = {
 
 			if(isNotNull(org.inugami.sse.alertsHandler) && isNotNull(event.data) &&  isNotNull(event.data.alerts) ){
 				org.inugami.sse._inner_handler.cleanAlertsData(event);
-				org.inugami.sse.alertsHandler(event);
+
+				if(isNotNull(org.inugami.sse.alertsHandler)){
+					org.inugami.sse.alertsHandler(event);
+				}
+				org.inugami.events.fireEvent(org.inugami.sse.events.ALERTS, event);
 			}
 
 			org.inugami.initialize.initContext();
@@ -278,4 +283,8 @@ org.inugami.events.addEventListener(org.inugami.events.type.EVERY_PLAIN_MINUTE, 
 		org.inugami.sse.reconnect.fromCloseSocket();
 	}
 });
+
+window.addEventListener("beforeunload", function(e){
+	org.inugami.sse.closeSocket();
+ });
 

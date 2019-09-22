@@ -1,7 +1,9 @@
 import {Injectable}                              from '@angular/core';
 import {HttpServices}                            from './http.services'
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export abstract class GenericCrudServices<T> {
 
     /**************************************************************************
