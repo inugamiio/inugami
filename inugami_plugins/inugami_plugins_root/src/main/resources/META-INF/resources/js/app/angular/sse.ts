@@ -1,8 +1,7 @@
 import {HttpServices}  from './../services/http/http.services';
 import {EventResult}   from './../models/events.interfaces'
-export interface AlertsHandler {
 
-}
+
 export interface InugamiSseTimeReboot {
     hour:number,
     min :number
