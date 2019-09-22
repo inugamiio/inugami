@@ -148,6 +148,6 @@ org.inugami.services.generators = {
     },
     randomValues : function(values){
         var size = values.length;
-        return values[org.inugami.services.generators.randomNumber(0,size-1)];
+        return values[org.inugami.services.generators.randomNumber(0,size)];
     }   
 };

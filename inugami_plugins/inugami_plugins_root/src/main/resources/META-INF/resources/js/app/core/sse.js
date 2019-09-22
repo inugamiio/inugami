@@ -284,3 +284,7 @@ org.inugami.events.addEventListener(org.inugami.events.type.EVERY_PLAIN_MINUTE, 
 	}
 });
 
+window.addEventListener("beforeunload", function(e){
+	org.inugami.sse.closeSocket();
+ });
+
