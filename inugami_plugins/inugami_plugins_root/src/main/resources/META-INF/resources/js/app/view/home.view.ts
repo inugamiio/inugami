@@ -5,7 +5,7 @@ import {MenuLink}                                             from './../models/
 import {SessionScope}                                         from './../scopes/session.scope';
 import {MainMenuService}                                      from './../components/main_menu/main.menu.service';
 import {MainMenuLink}                                         from './../components/main_menu/main.menu.link';
-import {SVG_BUILDER} from './../angular/svg';
+import {VALUES} from './../angular/values';
 
 @Component({
     templateUrl: 'js/app/view/home.view.html',
@@ -28,8 +28,7 @@ export class HomeView implements OnInit, OnDestroy{
               private sessionScope : SessionScope,
               private mainMenuService  : MainMenuService){
       this.showLinks = true;
-
-
+  
   }
 
 
