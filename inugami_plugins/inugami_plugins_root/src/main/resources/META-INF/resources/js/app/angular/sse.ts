@@ -1,5 +1,5 @@
-import {HttpServices}                           from './../services/http/http.services';
-
+import {HttpServices}  from './../services/http/http.services';
+import {EventResult}   from './../models/events.interfaces'
 export interface AlertsHandler {
 
 }
@@ -25,7 +25,7 @@ export interface InugamiSse {
     times                 : InugamiSseTime,
     lastIncommingData     :number,
     forceRefresh          (),
-    register              (pluginName:string, filterHandler?:(eventName:string)=>boolean, alertsHandler?:AlertsHandler),
+    register              (pluginName:string, filterHandler?:(eventName:string)=>boolean, alertsHandler?:(event:EventResult)=>any),
     connect               (channelName:string),
     connectSSESocket      (force:boolean),
     closeSocket           (),
