@@ -15,9 +15,10 @@ class HandlerEvent<T>{
             this.handler=handlerEvent;
         });
 
-        document.addEventListener(eventName, ()=>{
+        let currentEvent = eventName;
+        document.addEventListener(eventName, (data)=>{
             if(this.handler!=null){
-                this.handler.next();
+                this.handler.next(data);
             }
         });
     }
