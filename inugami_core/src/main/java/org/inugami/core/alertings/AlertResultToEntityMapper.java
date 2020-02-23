@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import org.inugami.api.alertings.AlertingResult;
 import org.inugami.api.mapping.Mapper;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.models.data.basic.StringJson;
 
 import flexjson.JSONSerializer;

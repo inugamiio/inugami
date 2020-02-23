@@ -19,10 +19,10 @@ package org.inugami.monitoring.api.exceptions;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.inugami.api.exceptions.ErrorType;
+import org.inugami.api.exceptions.ErrorCode;
 
 public interface ExceptionHandlerMapper {
-    Map<Pattern, ErrorType> produceMapping();
+    Map<Pattern, ErrorCode> produceMapping();
     
     String ERROR_TECHNICAL  = "technical";
     

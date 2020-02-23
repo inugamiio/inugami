@@ -18,7 +18,7 @@ package org.inugami.core.model.system;
 
 import java.util.Date;
 
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.commons.security.EncryptionUtils;
 
 import flexjson.JSON;

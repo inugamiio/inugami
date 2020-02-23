@@ -16,9 +16,7 @@
  */
 package org.inugami.api.models.data.basic;
 
-import org.inugami.api.models.data.JsonObject;
-
-import flexjson.JSONDeserializer;
+import org.inugami.api.spi.SpiLoader;
 
 /**
  * RawJsonObject
@@ -53,7 +51,9 @@ public class RawJsonObject implements JsonObject {
     
     public static JsonObject buildFromJson(final String data) {
         final RawJsonObject result = new RawJsonObject();
-        result.setData(new JSONDeserializer<Object>().deserialize(data));
+        final JsonSerializerSpi jsonSerializer = SpiLoader.INSTANCE.loadSpiSingleService(JsonSerializerSpi.class);
+    
+        result.setData(jsonSerializer.deserialize(data));
         return result;
     }
     

@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.inugami.monitoring.core.interceptors;
-
+import static org.inugami.api.exceptions.ErrorCodeBuilder.newBuilder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +23,13 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.inugami.api.exceptions.ErrorType;
+import javax.lang.model.type.ErrorType;
+
+import org.inugami.api.exceptions.ErrorCode;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.monitoring.exceptions.ErrorResult;
 import org.inugami.api.monitoring.exceptions.ErrorResultBuilder;
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.monitoring.api.exceptions.ExceptionHandlerMapper;
 import org.inugami.monitoring.api.exceptions.ExceptionResolver;
 
@@ -43,21 +45,24 @@ public class FilterInterceptorErrorResolver implements ExceptionResolver {
     // ATTRIBUTES
     // =========================================================================
     
-    private static final Map<Pattern, ErrorType> ERRORS_TYPES = initErrorsType();
+    private static final Map<Pattern, ErrorCode> ERRORS_TYPES = initErrorsType();
     
     private static final Set<Pattern>            KEYS_SET     = ERRORS_TYPES.keySet();
     
     //@formatter:off
-    private static final ErrorType               DEFAULT_ERROR   = new ErrorType(500, "ERR-0-000", "unknow error",
-                                                                   (msg, error) -> {
-                                                                              Loggers.DEBUG.error(error.getMessage(),error);
-                                                                   });
+    private static final ErrorCode               DEFAULT_ERROR   = newBuilder().setStatusCode(500)
+                                                                            .setErrorCode("ERR-0-000")
+                                                                            .setMessage("unknow error")
+                                                                            .setErrorHandler((msg, error)-> Loggers.DEBUG.error(error.getMessage(),error))
+                                                                            .build();
+            
+
     //@formatter:on
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    private static Map<Pattern, ErrorType> initErrorsType() {
-        final Map<Pattern, ErrorType> errors = new LinkedHashMap<>();
+    private static Map<Pattern, ErrorCode> initErrorsType() {
+        final Map<Pattern, ErrorCode> errors = new LinkedHashMap<>();
         final List<ExceptionHandlerMapper> mappers = new SpiLoader().loadSpiServicesByPriority(ExceptionHandlerMapper.class);
         mappers.stream().map(ExceptionHandlerMapper::produceMapping).forEach(errors::putAll);
         return errors;
@@ -68,7 +73,7 @@ public class FilterInterceptorErrorResolver implements ExceptionResolver {
     // =========================================================================
     @Override
     public ErrorResult resolve(final Exception error) {
-        ErrorType errorType = DEFAULT_ERROR;
+        ErrorCode errorType = DEFAULT_ERROR;
         for (final Pattern pattern : KEYS_SET) {
             final Matcher matcher = pattern.matcher(error.getClass().getName());
             if (matcher.matches()) {
@@ -81,7 +86,7 @@ public class FilterInterceptorErrorResolver implements ExceptionResolver {
         errorBuilder.setErrorType(errorBuilder.getErrorType());
         errorBuilder.setErrorCode(errorType.getErrorCode());
         errorBuilder.setCause(buildCause(error));
-        errorBuilder.setHttpCode(errorType.getHttpCode());
+        errorBuilder.setHttpCode(errorType.getStatusCode());
         
         return errorBuilder.build();
     }

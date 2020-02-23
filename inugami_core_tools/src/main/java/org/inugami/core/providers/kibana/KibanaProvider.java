@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.inugami.api.exceptions.services.ProviderException;
 import org.inugami.api.models.Gav;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.models.data.basic.JsonObjects;
 import org.inugami.api.models.events.SimpleEvent;
 import org.inugami.api.processors.ClassBehavior;
@@ -34,7 +34,7 @@ import org.inugami.api.providers.concurrent.FutureData;
 import org.inugami.api.providers.concurrent.FutureDataBuilder;
 import org.inugami.api.providers.task.ProviderFutureResult;
 import org.inugami.api.providers.task.ProviderFutureResultBuilder;
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.core.context.ContextSPI;
 import org.inugami.core.services.connectors.HttpConnector;
 

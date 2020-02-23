@@ -19,7 +19,7 @@ package org.inugami.api.providers.task;
 import java.util.List;
 
 import org.inugami.api.alertings.AlertingResult;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.models.events.GenericEvent;
 
 /**

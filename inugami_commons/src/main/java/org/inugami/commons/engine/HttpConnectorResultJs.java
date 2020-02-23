@@ -18,7 +18,7 @@ package org.inugami.commons.engine;
 
 import java.util.List;
 
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.commons.connectors.HttpConnectorResult;
 import org.inugami.commons.engine.js.objects.JsListFactory;
 

@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.inugami.api.alertings.AlertingResult;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.JsonBuilder;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.models.data.basic.JsonObjects;
 import org.inugami.api.models.events.GenericEvent;
 

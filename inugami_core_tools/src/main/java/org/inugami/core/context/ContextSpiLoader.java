@@ -16,7 +16,7 @@
  */
 package org.inugami.core.context;
 
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 
 /**
  * ContextSpiLoader

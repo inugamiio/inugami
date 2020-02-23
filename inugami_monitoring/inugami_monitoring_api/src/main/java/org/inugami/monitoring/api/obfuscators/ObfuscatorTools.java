@@ -19,7 +19,7 @@ package org.inugami.monitoring.api.obfuscators;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 
 /**
  * ObfuscatorTools

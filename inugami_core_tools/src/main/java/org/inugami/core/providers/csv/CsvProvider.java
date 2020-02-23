@@ -23,7 +23,7 @@ import java.util.List;
 import org.inugami.api.exceptions.services.ProviderException;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.Gav;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.models.events.SimpleEvent;
 import org.inugami.api.models.plugins.ManifestInfo;
 import org.inugami.api.processors.ClassBehavior;

@@ -40,7 +40,7 @@ import org.inugami.api.models.tools.Chrono;
 import org.inugami.api.monitoring.MonitoringInitializer;
 import org.inugami.api.monitoring.RequestContext;
 import org.inugami.api.monitoring.RequestInformation;
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

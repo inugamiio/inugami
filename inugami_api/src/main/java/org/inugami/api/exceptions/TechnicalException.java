@@ -22,59 +22,53 @@ package org.inugami.api.exceptions;
  * @author patrick_guillerm
  * @since 22 juil. 2016
  */
-public class TechnicalException extends Exception {
+public class TechnicalException extends CheckedException {
     
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 389031756408740003L;
-    
-    public static final int   ERR_CODE         = 500;
-    
-    private final int         code;
-    
-    // =========================================================================
-    // PROTECTED CONSTRUCTORS
-    // =========================================================================
-    protected TechnicalException(final int code, final String message, final Throwable cause) {
-        super(message, cause);
-        this.code = code;
-    }
-    
+
     // =========================================================================
     // PUBLIC CONSTRUCTORS
     // =========================================================================
-    
+    public TechnicalException(int code, String message, Throwable cause) {
+        super(code, message, cause);
+    }
+
     public TechnicalException() {
-        this(ERR_CODE, null, null);
     }
-    
-    public TechnicalException(final String message, final Throwable cause) {
-        this(ERR_CODE, message, cause);
+
+    public TechnicalException(String message, Throwable cause) {
+        super(message, cause);
     }
-    
-    public TechnicalException(final String message, final Object... values) {
-        this(ERR_CODE, MessagesFormatter.format(message, values), null);
+
+    public TechnicalException(String message, Object... values) {
+        super(message, values);
     }
-    
-    public TechnicalException(final Throwable cause, final String message, final Object... values) {
-        this(ERR_CODE, MessagesFormatter.format(message, values), cause);
+
+    public TechnicalException(Throwable cause, String message, Object... values) {
+        super(cause, message, values);
     }
-    
-    public TechnicalException(final String message) {
-        this(ERR_CODE, message, null);
+
+    public TechnicalException(String message) {
+        super(message);
     }
-    
-    public TechnicalException(final Throwable cause) {
-        this(ERR_CODE, null, cause);
+
+    public TechnicalException(Throwable cause) {
+        super(cause);
     }
-    
-    // =========================================================================
-    // CODE
-    // =========================================================================
-    public int getCode() {
-        return code;
+
+    public TechnicalException(ErrorCode errorCode) {
+        super(errorCode);
     }
-    
+
+    public TechnicalException(ErrorCode errorCode, Throwable cause) {
+        super(errorCode, cause);
+    }
+
+    public TechnicalException(ErrorCode errorCode, Throwable cause, String message, Object... values) {
+        super(errorCode, cause, message, values);
+    }
 }

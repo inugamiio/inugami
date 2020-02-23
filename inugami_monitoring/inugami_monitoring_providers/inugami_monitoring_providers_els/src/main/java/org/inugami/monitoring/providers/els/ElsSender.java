@@ -23,7 +23,7 @@ import java.util.Queue;
 import java.util.concurrent.Callable;
 
 import org.inugami.api.loggers.Loggers;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.monitoring.models.GenericMonitoringModel;
 import org.inugami.api.monitoring.senders.MonitoringSender;
 import org.inugami.api.monitoring.senders.MonitoringSenderException;

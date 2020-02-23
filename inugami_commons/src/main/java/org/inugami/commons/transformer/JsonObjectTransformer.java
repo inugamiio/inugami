@@ -16,7 +16,7 @@
  */
 package org.inugami.commons.transformer;
 
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 
 import flexjson.JSONContext;
 import flexjson.SerializationType;

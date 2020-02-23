@@ -19,7 +19,7 @@ package org.inugami.monitoring.providers.els;
 import java.util.Arrays;
 import java.util.List;
 
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 
 /**
  * ElsData

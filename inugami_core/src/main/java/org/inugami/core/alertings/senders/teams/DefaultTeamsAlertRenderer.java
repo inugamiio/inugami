@@ -31,7 +31,7 @@ import org.inugami.api.alertings.AlertingResult;
 import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.exceptions.RenderingException;
 import org.inugami.api.loggers.Loggers;
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.core.alertings.messages.FormatAlertMessage;
 import org.inugami.core.alertings.senders.teams.icons.TeamIcon;
 import org.inugami.core.alertings.senders.teams.icons.TeamIconResolver;

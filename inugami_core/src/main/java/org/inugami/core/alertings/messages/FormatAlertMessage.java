@@ -21,8 +21,8 @@ import java.util.List;
 import org.inugami.api.alertings.AlertingResult;
 import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.exceptions.MessagesFormatter;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.commons.messages.MessagesServices;
-import org.inugami.commons.spi.SpiLoader;
 
 /**
  * FormatAlertMessage

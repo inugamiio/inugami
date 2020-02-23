@@ -20,7 +20,7 @@ import java.util.Date;
 
 import org.inugami.api.dao.Identifiable;
 import org.inugami.api.exceptions.Asserts;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.commons.security.EncryptionUtils;
 import org.inugami.core.model.system.SystemInformations;
 import org.inugami.core.providers.els.transformers.ElsDateTransformer;

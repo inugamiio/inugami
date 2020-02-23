@@ -33,6 +33,11 @@
             <groupId>org.inugami</groupId>
             <artifactId>inugami_api</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>org.inugami</groupId>
+            <artifactId>inugami_api_core</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>

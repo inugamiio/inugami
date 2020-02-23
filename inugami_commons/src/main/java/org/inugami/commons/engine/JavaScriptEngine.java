@@ -35,10 +35,10 @@ import org.inugami.api.exceptions.FatalException;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.JsonBuilder;
 import org.inugami.api.models.tools.Chrono;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.commons.engine.js.JavaScriptEngineFunctions;
 import org.inugami.commons.engine.js.objects.JsNamespaceFunction;
 import org.inugami.commons.files.FilesUtils;
-import org.inugami.commons.spi.SpiLoader;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
 

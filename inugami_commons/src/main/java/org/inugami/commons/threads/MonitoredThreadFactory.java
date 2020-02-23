@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.inugami.api.monitoring.MonitoringInitializer;
 import org.inugami.api.monitoring.RequestContext;
 import org.inugami.api.monitoring.RequestInformation;
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 
 public class MonitoredThreadFactory implements ThreadFactory {
     

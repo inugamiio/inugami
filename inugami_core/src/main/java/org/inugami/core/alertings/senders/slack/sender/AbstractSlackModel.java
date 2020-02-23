@@ -18,7 +18,7 @@ package org.inugami.core.alertings.senders.slack.sender;
 
 import java.io.Serializable;
 
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 
 /**
  * SlackModel

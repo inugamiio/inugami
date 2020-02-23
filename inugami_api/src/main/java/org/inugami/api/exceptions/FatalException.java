@@ -22,7 +22,7 @@ package org.inugami.api.exceptions;
  * @author patrick_guillerm
  * @since 22 juil. 2016
  */
-public class FatalException extends RuntimeException {
+public class FatalException extends UncheckedException {
     
     // =========================================================================
     // ATTRIBUTES
@@ -35,27 +35,29 @@ public class FatalException extends RuntimeException {
     // CONSTRUCTORS
     // =========================================================================
     public FatalException() {
-        super();
     }
-    
-    public FatalException(final String message, final Throwable cause) {
+
+    public FatalException(String message, Throwable cause) {
         super(message, cause);
     }
-    
-    public FatalException(final String message) {
+
+    public FatalException(String message) {
         super(message);
     }
-    
-    public FatalException(final Throwable cause) {
+
+    public FatalException(Throwable cause) {
         super(cause);
     }
-    
-    public FatalException(final String message, final Object... values) {
-        super(MessagesFormatter.format(message, values));
+
+    public FatalException(String message, Object... values) {
+        super(message, values);
     }
-    
-    public FatalException(final Throwable cause, final String message, final Object... values) {
-        super(MessagesFormatter.format(message, values), cause);
+
+    public FatalException(Throwable cause, String message, Object... values) {
+        super(cause, message, values);
     }
-    
+
+    public FatalException(ErrorCode errorCode, Throwable cause, String message, Object... values) {
+        super(errorCode, cause, message, values);
+    }
 }

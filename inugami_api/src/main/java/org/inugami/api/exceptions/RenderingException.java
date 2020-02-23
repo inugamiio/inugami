@@ -32,29 +32,42 @@ public class RenderingException extends TechnicalException {
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    
+    public RenderingException(int code, String message, Throwable cause) {
+        super(code, message, cause);
+    }
+
     public RenderingException() {
-        super();
     }
-    
-    public RenderingException(final String message, final Object... values) {
-        super(message, values);
-    }
-    
-    public RenderingException(final String message, final Throwable cause) {
+
+    public RenderingException(String message, Throwable cause) {
         super(message, cause);
     }
-    
-    public RenderingException(final String message) {
-        super(message);
+
+    public RenderingException(String message, Object... values) {
+        super(message, values);
     }
-    
-    public RenderingException(final Throwable cause, final String message, final Object... values) {
+
+    public RenderingException(Throwable cause, String message, Object... values) {
         super(cause, message, values);
     }
-    
-    public RenderingException(final Throwable cause) {
+
+    public RenderingException(String message) {
+        super(message);
+    }
+
+    public RenderingException(Throwable cause) {
         super(cause);
     }
-    
+
+    public RenderingException(ErrorCode errorCode) {
+        super(errorCode);
+    }
+
+    public RenderingException(ErrorCode errorCode, Throwable cause) {
+        super(errorCode, cause);
+    }
+
+    public RenderingException(ErrorCode errorCode, Throwable cause, String message, Object... values) {
+        super(errorCode, cause, message, values);
+    }
 }

@@ -20,9 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.inugami.api.models.JsonBuilder;
-import org.inugami.api.models.data.JsonObject;
-
-import flexjson.JSONSerializer;
+import org.inugami.api.models.data.basic.JsonObject;
+import org.inugami.api.models.data.basic.JsonSerializerSpi;
+import org.inugami.api.spi.SpiLoader;
 
 /**
  * AlertingResult
@@ -132,7 +132,8 @@ public class AlertingResult implements JsonObject {
                 result = ((JsonObject) data).convertToJson();
             }
             else {
-                result = new JSONSerializer().exclude("*.class").deepSerialize(data);
+                final JsonSerializerSpi jsonSerializer = SpiLoader.INSTANCE.loadSpiSingleService(JsonSerializerSpi.class);
+                result = jsonSerializer.serialize(data);
             }
         }
         return result;

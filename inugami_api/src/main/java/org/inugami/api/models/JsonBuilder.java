@@ -18,18 +18,11 @@ package org.inugami.api.models;
 
 import java.util.List;
 
-import org.inugami.api.models.data.JsonObject;
 import org.inugami.api.models.data.basic.Json;
+import org.inugami.api.models.data.basic.JsonObject;
 
-/**
- * JsonBuilder
- * 
- * @author patrick_guillerm
- * @since 23 févr. 2017
- */
 public class JsonBuilder {
-    
-    // =========================================================================
+ // =========================================================================
     // ATTRIBUTES
     // =========================================================================
     
@@ -42,7 +35,11 @@ public class JsonBuilder {
     // =========================================================================
     // METHODS
     // =========================================================================
-    public JsonBuilder writeFunction(final String name, final String... params) {
+    public <E extends JsonBuilder>  E returnInstance() {
+        return (E)this;
+    }
+    
+    public <E extends JsonBuilder>  E writeFunction(final String name, final String... params) {
         buffer.append(" function ");
         buffer.append(name);
         openTuple();
@@ -53,101 +50,101 @@ public class JsonBuilder {
             buffer.append(params[i]);
         }
         closeTuple();
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder addReturnKeyword() {
+    public <E extends JsonBuilder>  E addReturnKeyword() {
         buffer.append("return ");
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder openObject() {
+    public <E extends JsonBuilder>  E openObject() {
         buffer.append("{");
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder closeObject() {
+    public <E extends JsonBuilder>  E closeObject() {
         buffer.append("}");
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder openList() {
+    public <E extends JsonBuilder>  E openList() {
         buffer.append('[');
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder closeList() {
+    public <E extends JsonBuilder>  E closeList() {
         buffer.append(']');
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder openTuple() {
+    public <E extends JsonBuilder>  E openTuple() {
         buffer.append("(");
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder closeTuple() {
+    public <E extends JsonBuilder>  E closeTuple() {
         buffer.append(")");
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder openComment() {
+    public <E extends JsonBuilder>  E openComment() {
         buffer.append("/*");
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder closeComment() {
+    public <E extends JsonBuilder>  E closeComment() {
         buffer.append("*/");
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder addField(final String name) {
+    public <E extends JsonBuilder>  E addField(final String name) {
         valueQuot(name);
         buffer.append(':');
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder write(final Object value) {
+    public <E extends JsonBuilder>  E write(final Object value) {
         buffer.append(value);
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder write(final boolean value) {
+    public <E extends JsonBuilder>  E write(final boolean value) {
         buffer.append(value ? "true" : "false");
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder write(final byte value) {
+    public <E extends JsonBuilder>  E write(final byte value) {
         buffer.append(value);
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder write(final short value) {
+    public <E extends JsonBuilder>  E write(final short value) {
         buffer.append(value);
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder write(final int value) {
+    public <E extends JsonBuilder>  E write(final int value) {
         buffer.append(value);
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder write(final long value) {
+    public <E extends JsonBuilder>  E write(final long value) {
         buffer.append(value);
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder write(final float value) {
+    public <E extends JsonBuilder>  E write(final float value) {
         buffer.append(value);
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder write(final double value) {
+    public <E extends JsonBuilder>  E write(final double value) {
         buffer.append(value);
-        return this;
+        return returnInstance();
     }
     
-    private JsonBuilder writeParam(final String key, final String value) {
+    private <E extends JsonBuilder>  E writeParam(final String key, final String value) {
         buffer.append('"');
         buffer.append(key);
         buffer.append('"');
@@ -156,10 +153,10 @@ public class JsonBuilder {
         buffer.append(value);
         buffer.append('"');
         
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder valueQuot(final Object value) {
+    public <E extends JsonBuilder>  E valueQuot(final Object value) {
         if (value == null) {
             valueNull();
         }
@@ -168,27 +165,58 @@ public class JsonBuilder {
             buffer.append(value);
             buffer.append("\"");
         }
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder valueNull() {
+    public <E extends JsonBuilder>  E valueNull() {
         buffer.append(VALUE_NULL);
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder addLine() {
+    public <E extends JsonBuilder>  E addLine() {
         buffer.append("\n");
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder addSeparator() {
+    public <E extends JsonBuilder>  E addSeparator() {
         buffer.append(SEPARATOR_CHAR);
-        return this;
+        return returnInstance();
     }
     
-    public JsonBuilder addEndLine() {
+    public <E extends JsonBuilder>  E addEndLine() {
         buffer.append(";\n");
-        return this;
+        return returnInstance();
+    }
+    
+
+    
+    public <E extends JsonBuilder>  E writeListString(final List<String> values) {
+        if (values == null) {
+            valueNull();
+        }
+        else {
+            openList();
+            final int size = values.size();
+            for (int i = 0; i < size; i++) {
+                if (i != 0) {
+                    addSeparator();
+                }
+                valueQuot(values.get(i));
+            }
+            closeList();
+        }
+        
+        return returnInstance();
+    }
+    
+    public <E extends JsonBuilder>  E line() {
+        buffer.append('\n');
+        return returnInstance();
+    }
+    
+    public <E extends JsonBuilder>  E tab() {
+        buffer.append('\t');
+        return returnInstance();
     }
     
     public JsonBuilder writeListJsonObject(final List<? extends JsonObject> values) {
@@ -210,33 +238,8 @@ public class JsonBuilder {
         return this;
     }
     
-    public JsonBuilder writeListString(final List<String> values) {
-        if (values == null) {
-            valueNull();
-        }
-        else {
-            openList();
-            final int size = values.size();
-            for (int i = 0; i < size; i++) {
-                if (i != 0) {
-                    addSeparator();
-                }
-                valueQuot(values.get(i));
-            }
-            closeList();
-        }
-        
-        return this;
-    }
-    
-    public JsonBuilder line() {
-        buffer.append('\n');
-        return this;
-    }
-    
-    public JsonBuilder tab() {
-        buffer.append('\t');
-        return this;
+    public JsonObject toJsonObject() {
+        return new Json(toString());
     }
     
     public StringBuilder append(final Object value) {
@@ -299,13 +302,9 @@ public class JsonBuilder {
         return buffer.toString();
     }
     
-    public JsonObject toJsonObject() {
-        return new Json(toString());
-    }
-    
+  
     public void clear() {
         buffer.setLength(0);
         buffer.trimToSize();
     }
-    
 }

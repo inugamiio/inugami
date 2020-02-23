@@ -27,7 +27,7 @@ import org.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import org.inugami.api.monitoring.models.Monitoring;
 import org.inugami.api.monitoring.senders.MonitoringSender;
 import org.inugami.api.monitoring.sensors.MonitoringSensor;
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.monitoring.core.context.sensors.SensorsIntervalManagerTask;
 
 /**

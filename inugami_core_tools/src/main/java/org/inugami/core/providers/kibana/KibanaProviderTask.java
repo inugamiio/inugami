@@ -24,7 +24,7 @@ import java.util.Map;
 import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.mapping.Mapper;
 import org.inugami.api.models.Gav;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.models.data.basic.JsonObjects;
 import org.inugami.api.models.events.GenericEvent;
 import org.inugami.api.models.events.SimpleEvent;

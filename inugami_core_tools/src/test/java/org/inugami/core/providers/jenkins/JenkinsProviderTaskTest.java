@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.inugami.api.exceptions.services.ProviderException;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.models.events.SimpleEventBuilder;
 import org.inugami.api.processors.ConfigHandler;
 import org.inugami.api.providers.task.ProviderFutureResult;

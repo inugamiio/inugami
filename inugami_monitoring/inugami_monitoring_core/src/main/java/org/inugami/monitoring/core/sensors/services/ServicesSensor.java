@@ -27,7 +27,7 @@ import org.inugami.api.models.tools.BlockingQueue;
 import org.inugami.api.monitoring.models.GenericMonitoringModel;
 import org.inugami.api.monitoring.sensors.MonitoringSensor;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 
 /**
  * ServicesSensor

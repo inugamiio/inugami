@@ -19,7 +19,7 @@ package org.inugami.configuration.models.plugins.components.config;
 import java.util.List;
 
 import org.inugami.api.models.Gav;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;

@@ -22,8 +22,8 @@ import java.util.Optional;
 
 import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.monitoring.BootstrapMonitoringSpi;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.commons.files.FilesUtils;
-import org.inugami.commons.spi.SpiLoader;
 import org.inugami.commons.writer.RapportWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

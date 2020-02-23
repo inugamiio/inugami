@@ -25,7 +25,7 @@ import org.inugami.api.processors.ConfigHandler;
 import org.inugami.api.providers.ProviderRunner;
 import org.inugami.api.providers.task.ProviderFutureResult;
 import org.inugami.api.providers.task.ProviderTask;
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.commons.threads.ThreadsExecutorService;
 import org.inugami.core.context.ContextSPI;
 

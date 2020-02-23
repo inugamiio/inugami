@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.inugami.api.models.JsonBuilder;
-import org.inugami.api.models.data.JsonObject;
 
 /**
  * JsonMap

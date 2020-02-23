@@ -18,7 +18,7 @@ package org.inugami.api.models.data.graphite.number;
 
 import java.math.BigDecimal;
 
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 
 /**
  * GraphiteNumber

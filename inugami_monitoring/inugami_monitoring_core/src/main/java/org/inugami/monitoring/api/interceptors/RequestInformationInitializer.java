@@ -30,7 +30,7 @@ import org.inugami.api.monitoring.RequestContext;
 import org.inugami.api.monitoring.RequestInformation;
 import org.inugami.api.monitoring.RequestInformationBuilder;
 import org.inugami.api.monitoring.models.Monitoring;
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.monitoring.api.resolvers.DefaultServiceNameResolver;
 import org.inugami.monitoring.api.resolvers.ServiceNameResolver;
 

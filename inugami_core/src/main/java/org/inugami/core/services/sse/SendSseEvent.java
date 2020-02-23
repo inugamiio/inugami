@@ -16,7 +16,7 @@
  */
 package org.inugami.core.services.sse;
 
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 
 /**
  * SendSseEventTask

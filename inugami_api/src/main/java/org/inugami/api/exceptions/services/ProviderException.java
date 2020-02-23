@@ -16,6 +16,7 @@
  */
 package org.inugami.api.exceptions.services;
 
+import org.inugami.api.exceptions.ErrorCode;
 import org.inugami.api.exceptions.MessagesFormatter;
 import org.inugami.api.exceptions.TechnicalException;
 
@@ -32,39 +33,51 @@ public class ProviderException extends TechnicalException {
     // =========================================================================
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = -4976777345663055137L;
+
+  
     
-    // =========================================================================
-    // PROTECTED CONSTRUCTORS
-    // =========================================================================
-    protected ProviderException(final int code, final String message, final Throwable cause) {
-        super(code, message, cause);
-    }
-    
+
     // =========================================================================
     // PUBLIC CONSTRUCTORS
     // =========================================================================
-    
     public ProviderException() {
-        this(ERR_CODE, null, null);
+        super();
+    }
+
+    public ProviderException(ErrorCode errorCode, Throwable cause, String message, Object... values) {
+        super(errorCode, cause, message, values);
+    }
+
+    public ProviderException(ErrorCode errorCode, Throwable cause) {
+        super(errorCode, cause);
+    }
+
+    public ProviderException(ErrorCode errorCode) {
+        super(errorCode);
+    }
+
+    public ProviderException(int code, String message, Throwable cause) {
+        super(code, message, cause);
+    }
+
+    public ProviderException(String message, Object... values) {
+        super(message, values);
+    }
+
+    public ProviderException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ProviderException(String message) {
+        super(message);
+    }
+
+    public ProviderException(Throwable cause, String message, Object... values) {
+        super(cause, message, values);
+    }
+
+    public ProviderException(Throwable cause) {
+        super(cause);
     }
     
-    public ProviderException(final String message, final Throwable cause) {
-        this(ERR_CODE, message, cause);
-    }
-    
-    public ProviderException(final String message, final Object... values) {
-        this(ERR_CODE, MessagesFormatter.format(message, values), null);
-    }
-    
-    public ProviderException(final Throwable cause, final String message, final Object... values) {
-        this(ERR_CODE, MessagesFormatter.format(message, values), cause);
-    }
-    
-    public ProviderException(final String message) {
-        this(ERR_CODE, message, null);
-    }
-    
-    public ProviderException(final Throwable cause) {
-        this(ERR_CODE, null, cause);
-    }
 }

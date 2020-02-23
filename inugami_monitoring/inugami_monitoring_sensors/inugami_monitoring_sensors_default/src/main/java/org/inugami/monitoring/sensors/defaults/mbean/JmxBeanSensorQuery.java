@@ -16,7 +16,7 @@
  */
 package org.inugami.monitoring.sensors.defaults.mbean;
 
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 
 import flexjson.JSON;
 

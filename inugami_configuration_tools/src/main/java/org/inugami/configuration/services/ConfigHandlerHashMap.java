@@ -28,7 +28,7 @@ import org.inugami.api.processors.ClassBehavior;
 import org.inugami.api.processors.ClassBehaviorParametersSPI;
 import org.inugami.api.processors.Config;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.configuration.services.functions.FunctionsServices;
 import org.inugami.configuration.services.functions.ProviderAttributFunction;
 

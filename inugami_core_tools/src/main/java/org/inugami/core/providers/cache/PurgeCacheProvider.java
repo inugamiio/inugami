@@ -34,7 +34,7 @@ import org.inugami.api.providers.concurrent.FutureData;
 import org.inugami.api.providers.concurrent.FutureDataBuilder;
 import org.inugami.api.providers.task.ProviderFutureResult;
 import org.inugami.api.providers.task.ProviderFutureResultBuilder;
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.core.context.ContextSPI;
 import org.inugami.core.services.cache.CacheTypes;
 

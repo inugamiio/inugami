@@ -26,7 +26,7 @@ import org.inugami.api.alertings.AlertingResult;
 import org.inugami.api.alertings.AlertsSender;
 import org.inugami.api.alertings.AlertsSenderException;
 import org.inugami.api.loggers.Loggers;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.models.data.basic.JsonObjects;
 import org.inugami.api.models.data.basic.StringJson;
 import org.inugami.api.models.events.SimpleEventBuilder;

@@ -19,7 +19,7 @@ package org.inugami.core.alertings.senders.teams.sender.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 
 import flexjson.JSONSerializer;
 

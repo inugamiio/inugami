@@ -29,7 +29,7 @@ import org.inugami.api.exceptions.services.HandlerException;
 import org.inugami.api.handlers.Handler;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.Tuple;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.processors.ClassBehavior;
 import org.inugami.api.processors.Config;
 import org.inugami.api.processors.ConfigHandler;

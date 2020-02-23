@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.exceptions.services.ProcessorException;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.models.data.graphite.DataPoint;
 import org.inugami.api.models.data.graphite.GraphiteTarget;
 import org.inugami.api.models.data.graphite.GraphiteTargets;

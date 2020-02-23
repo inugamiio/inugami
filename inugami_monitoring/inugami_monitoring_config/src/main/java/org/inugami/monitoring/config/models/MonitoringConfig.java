@@ -23,7 +23,7 @@ import org.inugami.api.constants.JvmKeyValues;
 import org.inugami.api.exceptions.TechnicalException;
 import org.inugami.api.functionnals.ApplyIfNull;
 import org.inugami.api.functionnals.PostProcessing;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.processors.ConfigHandler;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;

@@ -31,7 +31,7 @@ import org.inugami.api.monitoring.models.Monitoring;
 import org.inugami.api.monitoring.senders.MonitoringSender;
 import org.inugami.api.monitoring.sensors.MonitoringSensor;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.configuration.services.ConfigHandlerHashMap;
 import org.inugami.monitoring.config.models.DefaultHeaderInformation;
 import org.inugami.monitoring.config.models.HeaderInformationsConfig;

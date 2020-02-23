@@ -34,27 +34,29 @@ public class NotYetImplementedException extends FatalException {
     // CONSTRUCTORS
     // =========================================================================
     public NotYetImplementedException() {
-        super();
     }
-    
-    public NotYetImplementedException(final String message, final Object... values) {
-        super(message, values);
-    }
-    
-    public NotYetImplementedException(final String message, final Throwable cause) {
+
+    public NotYetImplementedException(String message, Throwable cause) {
         super(message, cause);
     }
-    
-    public NotYetImplementedException(final String message) {
+
+    public NotYetImplementedException(String message) {
         super(message);
     }
-    
-    public NotYetImplementedException(final Throwable cause, final String message, final Object... values) {
-        super(cause, message, values);
-    }
-    
-    public NotYetImplementedException(final Throwable cause) {
+
+    public NotYetImplementedException(Throwable cause) {
         super(cause);
     }
-    
+
+    public NotYetImplementedException(String message, Object... values) {
+        super(message, values);
+    }
+
+    public NotYetImplementedException(Throwable cause, String message, Object... values) {
+        super(cause, message, values);
+    }
+
+    public NotYetImplementedException(ErrorCode errorCode, Throwable cause, String message, Object... values) {
+        super(errorCode, cause, message, values);
+    }
 }

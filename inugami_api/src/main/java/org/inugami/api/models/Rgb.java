@@ -18,7 +18,8 @@ package org.inugami.api.models;
 
 import java.io.Serializable;
 
-import org.apache.commons.codec.binary.Hex;
+import org.inugami.api.tools.Hex;
+
 
 /**
  * Rgb

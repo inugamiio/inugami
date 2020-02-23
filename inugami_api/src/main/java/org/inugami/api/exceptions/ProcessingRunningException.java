@@ -26,28 +26,42 @@ public class ProcessingRunningException extends TechnicalException {
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
+    public ProcessingRunningException(int code, String message, Throwable cause) {
+        super(code, message, cause);
+    }
+
     public ProcessingRunningException() {
-        super();
     }
-    
-    public ProcessingRunningException(final String message, final Object... values) {
-        super(message, values);
-    }
-    
-    public ProcessingRunningException(final String message, final Throwable cause) {
+
+    public ProcessingRunningException(String message, Throwable cause) {
         super(message, cause);
     }
-    
-    public ProcessingRunningException(final String message) {
-        super(message);
+
+    public ProcessingRunningException(String message, Object... values) {
+        super(message, values);
     }
-    
-    public ProcessingRunningException(final Throwable cause, final String message, final Object... values) {
+
+    public ProcessingRunningException(Throwable cause, String message, Object... values) {
         super(cause, message, values);
     }
-    
-    public ProcessingRunningException(final Throwable cause) {
+
+    public ProcessingRunningException(String message) {
+        super(message);
+    }
+
+    public ProcessingRunningException(Throwable cause) {
         super(cause);
     }
-    
+
+    public ProcessingRunningException(ErrorCode errorCode) {
+        super(errorCode);
+    }
+
+    public ProcessingRunningException(ErrorCode errorCode, Throwable cause) {
+        super(errorCode, cause);
+    }
+
+    public ProcessingRunningException(ErrorCode errorCode, Throwable cause, String message, Object... values) {
+        super(errorCode, cause, message, values);
+    }
 }

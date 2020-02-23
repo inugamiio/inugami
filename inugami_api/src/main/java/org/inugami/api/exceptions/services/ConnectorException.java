@@ -16,6 +16,7 @@
  */
 package org.inugami.api.exceptions.services;
 
+import org.inugami.api.exceptions.ErrorCode;
 import org.inugami.api.exceptions.MessagesFormatter;
 import org.inugami.api.exceptions.TechnicalException;
 
@@ -34,38 +35,49 @@ public class ConnectorException extends TechnicalException {
     private static final long serialVersionUID = 389031756408740003L;
     
     // =========================================================================
-    // PROTECTED CONSTRUCTORS
+    // PUBLIC CONSTRUCTORS
     // =========================================================================
     protected ConnectorException(final int code, final String message, final Throwable cause) {
         super(code, message, cause);
     }
-    
-    // =========================================================================
-    // PUBLIC CONSTRUCTORS
-    // =========================================================================
-    
+
     public ConnectorException() {
-        this(ERR_CODE, null, null);
+        super();
+    }
+
+    public ConnectorException(ErrorCode errorCode, Throwable cause, String message, Object... values) {
+        super(errorCode, cause, message, values);
+    }
+
+    public ConnectorException(ErrorCode errorCode, Throwable cause) {
+        super(errorCode, cause);
+    }
+
+    public ConnectorException(ErrorCode errorCode) {
+        super(errorCode);
+    }
+
+    public ConnectorException(String message, Object... values) {
+        super(message, values);
+    }
+
+    public ConnectorException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ConnectorException(String message) {
+        super(message);
+    }
+
+    public ConnectorException(Throwable cause, String message, Object... values) {
+        super(cause, message, values);
+    }
+
+    public ConnectorException(Throwable cause) {
+        super(cause);
     }
     
-    public ConnectorException(final String message, final Throwable cause) {
-        this(ERR_CODE, message, cause);
-    }
-    
-    public ConnectorException(final String message, final Object... values) {
-        this(ERR_CODE, MessagesFormatter.format(message, values), null);
-    }
-    
-    public ConnectorException(final Throwable cause, final String message, final Object... values) {
-        this(ERR_CODE, MessagesFormatter.format(message, values), cause);
-    }
-    
-    public ConnectorException(final String message) {
-        this(ERR_CODE, message, null);
-    }
-    
-    public ConnectorException(final Throwable cause) {
-        this(ERR_CODE, null, cause);
-    }
+
+
     
 }

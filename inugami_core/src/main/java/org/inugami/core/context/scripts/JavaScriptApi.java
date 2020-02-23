@@ -19,7 +19,7 @@ package org.inugami.core.context.scripts;
 import javax.script.Bindings;
 
 import org.inugami.api.alertings.AlertingResult;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.models.events.Event;
 import org.inugami.api.models.events.EventBuilder;
 import org.inugami.api.models.events.GenericEvent;

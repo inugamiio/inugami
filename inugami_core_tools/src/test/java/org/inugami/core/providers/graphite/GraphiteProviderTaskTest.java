@@ -29,7 +29,7 @@ import org.inugami.api.exceptions.FatalException;
 import org.inugami.api.exceptions.TechnicalException;
 import org.inugami.api.exceptions.services.ProviderException;
 import org.inugami.api.models.Tuple;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.models.data.graphite.GraphiteTarget;
 import org.inugami.api.models.data.graphite.GraphiteTargets;
 import org.inugami.api.models.events.SimpleEvent;

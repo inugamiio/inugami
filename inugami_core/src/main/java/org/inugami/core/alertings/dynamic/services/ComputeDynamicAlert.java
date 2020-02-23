@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import org.inugami.api.alertings.AlertingResult;
 import org.inugami.api.alertings.DynamicAlertingLevel;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.models.data.graphite.TimeValue;
 import org.inugami.api.models.data.graphite.TimeValuesConvertor;
 import org.inugami.api.models.data.graphite.number.GraphiteNumber;

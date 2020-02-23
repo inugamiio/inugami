@@ -25,7 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.inugami.api.loggers.Loggers;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.models.data.graphite.TimeValue;
 import org.inugami.api.models.data.graphite.number.FloatNumber;
 import org.inugami.api.models.data.graphite.number.GraphiteNumber;

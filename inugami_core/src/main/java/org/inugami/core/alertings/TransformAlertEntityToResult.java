@@ -22,8 +22,8 @@ import org.inugami.api.alertings.AlertingResult;
 import org.inugami.api.functionnals.ApplyIfNotNull;
 import org.inugami.api.mapping.Mapper;
 import org.inugami.api.models.JsonBuilder;
-import org.inugami.api.models.data.JsonObject;
 import org.inugami.api.models.data.basic.Json;
+import org.inugami.api.models.data.basic.JsonObject;
 
 /**
  * TransformAlertEntityToResult

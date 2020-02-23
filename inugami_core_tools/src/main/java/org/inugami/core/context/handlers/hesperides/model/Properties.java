@@ -20,7 +20,7 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 import org.inugami.api.loggers.Loggers;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 
 import flexjson.JSON;
 import flexjson.JSONDeserializer;

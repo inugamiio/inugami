@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.inugami.api.loggers.Loggers;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.models.data.graphite.DataPoint;
 import org.inugami.api.models.data.graphite.GraphiteTarget;
 import org.inugami.api.models.data.graphite.GraphiteTargets;

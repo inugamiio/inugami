@@ -26,7 +26,7 @@ import org.inugami.api.exceptions.Asserts;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.mapping.JsonUnmarshalling;
 import org.inugami.api.processors.ConfigHandler;
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.configuration.services.functions.FunctionsServices;
 import org.inugami.configuration.services.functions.ProviderAttributFunction;
 

@@ -24,7 +24,7 @@ import org.inugami.api.dao.Identifiable;
 import org.inugami.api.exceptions.services.ConnectorException;
 import org.inugami.api.loggers.Loggers;
 import org.inugami.api.models.JsonBuilder;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.commons.connectors.HttpBasicConnector;
 
 /**

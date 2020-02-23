@@ -30,7 +30,7 @@ import javax.management.ObjectName;
 import javax.management.ReflectionException;
 
 import org.inugami.api.loggers.Loggers;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.monitoring.models.GenericMonitoringModel;
 import org.inugami.api.monitoring.models.GenericMonitoringModelBuilder;
 import org.inugami.api.monitoring.sensors.MonitoringSensor;

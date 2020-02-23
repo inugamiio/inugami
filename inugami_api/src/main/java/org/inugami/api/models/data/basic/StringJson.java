@@ -18,8 +18,6 @@ package org.inugami.api.models.data.basic;
 
 import java.nio.charset.Charset;
 
-import org.inugami.api.models.data.JsonObject;
-
 /**
  * StringJson
  * 

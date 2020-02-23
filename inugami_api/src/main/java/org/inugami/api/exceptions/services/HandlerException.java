@@ -16,7 +16,7 @@
  */
 package org.inugami.api.exceptions.services;
 
-import org.inugami.api.exceptions.MessagesFormatter;
+import org.inugami.api.exceptions.ErrorCode;
 import org.inugami.api.exceptions.TechnicalException;
 
 public class HandlerException extends TechnicalException {
@@ -24,38 +24,51 @@ public class HandlerException extends TechnicalException {
     // ATTRIBUTES
     // =========================================================================
     private static final long serialVersionUID = -6414566846460005415L;
+
     
-    // =========================================================================
-    // PROTECTED CONSTRUCTORS
-    // =========================================================================
-    protected HandlerException(final int code, final String message, final Throwable cause) {
-        super(code, message, cause);
-    }
-    
+   
     // =========================================================================
     // PUBLIC CONSTRUCTORS
     // =========================================================================
     public HandlerException() {
-        this(ERR_CODE, null, null);
+        super();
+    }
+
+    public HandlerException(ErrorCode errorCode, Throwable cause, String message, Object... values) {
+        super(errorCode, cause, message, values);
+    }
+
+    public HandlerException(ErrorCode errorCode, Throwable cause) {
+        super(errorCode, cause);
+    }
+
+    public HandlerException(ErrorCode errorCode) {
+        super(errorCode);
+    }
+
+    public HandlerException(int code, String message, Throwable cause) {
+        super(code, message, cause);
+    }
+
+    public HandlerException(String message, Object... values) {
+        super(message, values);
+    }
+
+    public HandlerException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public HandlerException(String message) {
+        super(message);
+    }
+
+    public HandlerException(Throwable cause, String message, Object... values) {
+        super(cause, message, values);
+    }
+
+    public HandlerException(Throwable cause) {
+        super(cause);
     }
     
-    public HandlerException(final String message, final Throwable cause) {
-        this(ERR_CODE, message, cause);
-    }
     
-    public HandlerException(final String message, final Object... values) {
-        this(ERR_CODE, MessagesFormatter.format(message, values), null);
-    }
-    
-    public HandlerException(final Throwable cause, final String message, final Object... values) {
-        this(ERR_CODE, MessagesFormatter.format(message, values), cause);
-    }
-    
-    public HandlerException(final String message) {
-        this(ERR_CODE, message, null);
-    }
-    
-    public HandlerException(final Throwable cause) {
-        this(ERR_CODE, null, cause);
-    }
 }

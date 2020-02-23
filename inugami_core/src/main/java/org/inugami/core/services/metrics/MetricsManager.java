@@ -26,7 +26,7 @@ import org.inugami.api.metrics.MetricsData;
 import org.inugami.api.metrics.MetricsMapper;
 import org.inugami.api.metrics.MetricsProvider;
 import org.inugami.api.metrics.MetricsProviderException;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 import org.inugami.api.providers.task.ProviderFutureResult;
 import org.inugami.core.context.ApplicationContext;
 import org.slf4j.Logger;

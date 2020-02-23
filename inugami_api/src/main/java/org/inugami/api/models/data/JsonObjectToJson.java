@@ -21,8 +21,9 @@ import java.io.Serializable;
 import java.io.StringWriter;
 
 import org.inugami.api.models.JsonBuilder;
+import org.inugami.api.models.data.basic.JsonSerializerSpi;
+import org.inugami.api.spi.SpiLoader;
 
-import flexjson.JSONSerializer;
 
 /**
  * JsonObject
@@ -33,10 +34,12 @@ import flexjson.JSONSerializer;
 public interface JsonObjectToJson extends Serializable {
     
     default String convertToJson() {
-        return new JSONSerializer().exclude("*.class").deepSerialize(this);
+        final JsonSerializerSpi jsonSerializer = SpiLoader.INSTANCE.loadSpiSingleService(JsonSerializerSpi.class);
+        return jsonSerializer.serialize(this);
     }
     
     default String buildJsonError(final Exception error) {
+        final JsonSerializerSpi jsonSerializer = SpiLoader.INSTANCE.loadSpiSingleService(JsonSerializerSpi.class);
         final JsonBuilder json = new JsonBuilder();
         json.openObject();
         json.addField("message").valueQuot(error.getMessage());
@@ -46,7 +49,7 @@ public interface JsonObjectToJson extends Serializable {
         }
         
         json.addSeparator();
-        json.addField("stack").write(new JSONSerializer().exclude("*.class").deepSerialize(extractStack(error)));
+        json.addField("stack").write(jsonSerializer.serialize(extractStack(error)));
         
         json.closeObject();
         return json.toString();

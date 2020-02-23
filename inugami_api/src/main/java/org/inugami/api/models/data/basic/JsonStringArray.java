@@ -17,7 +17,6 @@
 package org.inugami.api.models.data.basic;
 
 import org.inugami.api.models.JsonBuilder;
-import org.inugami.api.models.data.JsonObject;
 
 /**
  * JsonStrings

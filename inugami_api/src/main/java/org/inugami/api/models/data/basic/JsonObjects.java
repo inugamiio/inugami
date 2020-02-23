@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.inugami.api.exceptions.NotYetImplementedException;
 import org.inugami.api.models.JsonBuilder;
-import org.inugami.api.models.data.JsonObject;
 
 /**
  * JsonObjects

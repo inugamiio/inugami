@@ -35,7 +35,7 @@ import org.inugami.api.providers.concurrent.FutureDataBuilder;
 import org.inugami.api.providers.task.ProviderFutureResult;
 import org.inugami.api.providers.task.ProviderFutureResultBuilder;
 import org.inugami.api.providers.task.ProviderTask;
-import org.inugami.commons.spi.SpiLoader;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.core.context.ContextSPI;
 import org.inugami.core.providers.jira.models.JiraIssue;
 import org.inugami.core.providers.jira.models.JiraSearch;

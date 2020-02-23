@@ -23,10 +23,10 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.inugami.api.exceptions.services.ConnectorException;
 import org.inugami.api.models.Tuple;
+import org.inugami.api.spi.SpiLoader;
 import org.inugami.commons.connectors.HttpBasicConnector;
 import org.inugami.commons.connectors.HttpConnectorResult;
 import org.inugami.commons.connectors.HttpProxy;
-import org.inugami.commons.spi.SpiLoader;
 import org.inugami.core.context.ContextSPI;
 import org.inugami.core.services.cache.CacheTypes;
 

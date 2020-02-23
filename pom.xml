@@ -230,6 +230,7 @@
     ======================================================================== -->
     <modules>
         <module>inugami_api</module>
+        <module>inugami_api_core</module>
         <module>inugami_commons</module>
         <module>inugami_commons_test</module>
         <module>inugami_monitoring</module>
@@ -304,6 +305,12 @@
             <dependency>
                 <groupId>org.inugami</groupId>
                 <artifactId>inugami_api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.inugami</groupId>
+                <artifactId>inugami_api_core</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

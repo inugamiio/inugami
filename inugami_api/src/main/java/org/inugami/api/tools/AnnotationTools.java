@@ -21,7 +21,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.inugami.api.loggers.Loggers;
-import org.jboss.weld.proxy.WeldClientProxy;
 
 public final class AnnotationTools {
     // =========================================================================
@@ -92,8 +91,8 @@ public final class AnnotationTools {
             }
             else {
                 Class<?> clazz = object.getClass();
-                if (object instanceof WeldClientProxy) {
-                    clazz = ((WeldClientProxy) object).getMetadata().getBean().getBeanClass();
+                if ("org.jboss.weld.proxy.WeldClientProxy".equals(clazz.getName())) {
+                    clazz =  extractCdiBeanClass(object);
                 }
                 
                 final Annotation annotation = searchAnnotation(clazz.getAnnotations(), JAVAX_NAMED);
@@ -114,6 +113,54 @@ public final class AnnotationTools {
             
         }
         
+        return result;
+    }
+    
+    private static Class<?> extractCdiBeanClass(final Object bean){
+        return invokeMethods(bean,"getMetadata","getBean","getBeanClass");
+        
+    }
+    
+    private static <T> T invokeMethods(final Object object, final String... methodeNames) {
+        Object result = null;
+        if(object != null) {
+            Object currentObject = object;
+            for(String methodeName : methodeNames) {
+                currentObject = invokeMethod(methodeName,currentObject);
+                if(currentObject==null) {
+                    break;
+                }
+            }
+            result = currentObject;
+        }
+        return (T)result;
+  
+
+      }
+    private static <T> T invokeMethod(String methodeName, Object currentObject) {
+        T result = null;
+        Method methodToInvoke = null;
+        Method[] methods = null;
+        if(currentObject != null) {
+            methods = currentObject.getClass().getDeclaredMethods();
+        }
+        
+        if(methods != null) {
+            for(Method method : methods) {
+                if(method.getName().equals(methodeName) && method.getParameterCount()==0) {
+                    methodToInvoke = method;
+                }
+            }
+        }
+        
+        if(methodToInvoke!= null) {
+            try {
+                result = (T)methodToInvoke.invoke(currentObject);
+            }
+            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+               Loggers.DEBUG.error(e.getMessage(),e);
+            }
+        }
         return result;
     }
 }

@@ -18,7 +18,7 @@ package org.inugami.core.alertings.senders.opsgenie.sender.model;
 
 
 
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 
 import flexjson.JSONSerializer;
 

@@ -23,7 +23,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 import org.inugami.api.models.JsonBuilder;
-import org.inugami.api.models.data.JsonObject;
+import org.inugami.api.models.data.basic.JsonObject;
 
 /**
  * SecurityContext
