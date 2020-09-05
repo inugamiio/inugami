@@ -202,7 +202,7 @@
         
         <!--[ Others ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <io.dropwizard.metrics.version>4.0.5</io.dropwizard.metrics.version>
-        <org.quartz.version>2.2.3</org.quartz.version>
+        <org.quartz.version>2.3.2</org.quartz.version>
         <org.ehcache.version>3.3.1</org.ehcache.version>
         <org.apache.tomcat.version>8.0.44</org.apache.tomcat.version>
         <cglib.cglib.version>3.2.5</cglib.cglib.version>
