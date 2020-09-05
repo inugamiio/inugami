@@ -179,7 +179,7 @@
         <org.apache.commons.cli.version>1.4</org.apache.commons.cli.version>
         <org.apache.commons.codec.version>1.9</org.apache.commons.codec.version>
         <!--[ Mapping ]++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <com.thoughtworks.xstream.version>1.4.10</com.thoughtworks.xstream.version>
+        <com.thoughtworks.xstream.version>1.4.10-java7</com.thoughtworks.xstream.version>
 
         <net.sf.flexjson.version>3.3</net.sf.flexjson.version>
         <org.jsoup.version>1.10.2</org.jsoup.version>
