@@ -1,7 +1,7 @@
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // CORE SERVICE
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-org.inugami.sse = {
+io.inugami.sse = {
 	httpConnector   : null,
 	enableLogger 	: true,
 	filterEvent 	: null,
@@ -37,16 +37,16 @@ org.inugami.sse = {
 		/** channels : [name: {}]**/
 		channels     : {},
 		eventSources : null,
-		logger : org.inugami.logger.factory("org.inugami.sse")
+		logger : io.inugami.logger.factory("io.inugami.sse")
 	},
 
 	_inner_handler : {
 		dispatcher : function(event) {
-			org.inugami.events.fireEvent(org.inugami.sse.events.OPEN_OR_ALREADY_OPEN);
-			org.inugami.sse.lastIncommingData = Date.now();
+			io.inugami.events.fireEvent(io.inugami.sse.events.OPEN_OR_ALREADY_OPEN);
+			io.inugami.sse.lastIncommingData = Date.now();
 
-			if (org.inugami.sse.enableLogger) {
-				org.inugami.sse._inner_data.logger.debug("recive event");
+			if (io.inugami.sse.enableLogger) {
+				io.inugami.sse._inner_data.logger.debug("recive event");
 			}
 
 			
@@ -60,12 +60,12 @@ org.inugami.sse = {
 					console.warn(except);
 				}
 
-				if (org.inugami.sse.enableLogger) {
-					org.inugami.sse._inner_data.logger.debug("process event : {0}", [ event.data ]);
+				if (io.inugami.sse.enableLogger) {
+					io.inugami.sse._inner_data.logger.debug("process event : {0}", [ event.data ]);
 				}
 
 				if (isNull(json)) {
-					org.inugami.sse._inner_data.logger.warn("can't parse {0}", [ event.data ]);
+					io.inugami.sse._inner_data.logger.warn("can't parse {0}", [ event.data ]);
 				} else {
 					if(json.mutliEvent !=undefined && json.mutliEvent){
 						for(var i=json.events.length-1; i>=0; i--){
@@ -74,13 +74,13 @@ org.inugami.sse = {
 							var isAdmin        = "administration"==currentEvent.channel;
 							var isAlert        = "alert"==currentEvent.name;
 							var isAlertControl = "alert-control" == currentEvent.name;
-							var filtered       = isNull(org.inugami.sse.filterEvent)?true:org.inugami.sse.filterEvent(currentEvent.name);
+							var filtered       = isNull(io.inugami.sse.filterEvent)?true:io.inugami.sse.filterEvent(currentEvent.name);
 
 							if(isAlertControl){
-								org.inugami.events.fireEvent(currentEvent.name, currentEvent);
+								io.inugami.events.fireEvent(currentEvent.name, currentEvent);
 							}
 							else if(filtered || isGlobale || isAdmin||isAlert){
-								org.inugami.sse._inner_handler.dispatcherProcess(currentEvent);
+								io.inugami.sse._inner_handler.dispatcherProcess(currentEvent);
 							} 						
 						}
 					}
@@ -91,23 +91,23 @@ org.inugami.sse = {
 		},
 		dispatcherProcess : function(event) {
 			var fullEventName = (isNull(event.channel)?'':event.channel)+'_'+event.name;
-			org.inugami.sse._inner_data.logger.debug("dispatche event : {0}",[fullEventName]);
-			org.inugami.events.fireEvent(fullEventName, event);
+			io.inugami.sse._inner_data.logger.debug("dispatche event : {0}",[fullEventName]);
+			io.inugami.events.fireEvent(fullEventName, event);
 
-			if(isNotNull(org.inugami.sse.alertsHandler) && isNotNull(event.data) &&  isNotNull(event.data.alerts) ){
-				org.inugami.sse._inner_handler.cleanAlertsData(event);
+			if(isNotNull(io.inugami.sse.alertsHandler) && isNotNull(event.data) &&  isNotNull(event.data.alerts) ){
+				io.inugami.sse._inner_handler.cleanAlertsData(event);
 
-				if(isNotNull(org.inugami.sse.alertsHandler)){
-					org.inugami.sse.alertsHandler(event);
+				if(isNotNull(io.inugami.sse.alertsHandler)){
+					io.inugami.sse.alertsHandler(event);
 				}
-				org.inugami.events.fireEvent(org.inugami.sse.events.ALERTS, event);
+				io.inugami.events.fireEvent(io.inugami.sse.events.ALERTS, event);
 			}
 
-			org.inugami.initialize.initContext();
-			if ("refresh" === event.name && !org.inugami.values.context.URL.endsWith("/admin")) {
-				org.inugami.sse.forceRefresh();
+			io.inugami.initialize.initContext();
+			if ("refresh" === event.name && !io.inugami.values.context.URL.endsWith("/admin")) {
+				io.inugami.sse.forceRefresh();
 			} else {
-				org.inugami.events.fireEvent(org.inugami.sse.events.UPDATE, event);
+				io.inugami.events.fireEvent(io.inugami.sse.events.UPDATE, event);
 			}
 			
 		},
@@ -127,17 +127,17 @@ org.inugami.sse = {
 		},
 
 		open : function(event) {
-			org.inugami.sse.state="open";
-			org.inugami.sse._inner_data.logger.info("event source opened");
-			org.inugami.events.fireEvent(org.inugami.sse.events.OPEN);
-			org.inugami.events.fireEvent(org.inugami.sse.events.OPEN_OR_ALREADY_OPEN);	
+			io.inugami.sse.state="open";
+			io.inugami.sse._inner_data.logger.info("event source opened");
+			io.inugami.events.fireEvent(io.inugami.sse.events.OPEN);
+			io.inugami.events.fireEvent(io.inugami.sse.events.OPEN_OR_ALREADY_OPEN);	
 		},
 		error : function(event) {
-			org.inugami.sse.state="close";
-			org.inugami.sse.closeSocket();
+			io.inugami.sse.state="close";
+			io.inugami.sse.closeSocket();
 			console.error("SSE error : "+JSON.stringify(event));
-			org.inugami.events.fireEvent(org.inugami.sse.events.ERROR, event);
-			setTimeout(org.inugami.sse.reconnect._forceReconnect, 5000);
+			io.inugami.events.fireEvent(io.inugami.sse.events.ERROR, event);
+			setTimeout(io.inugami.sse.reconnect._forceReconnect, 5000);
 		}
 	},
 
@@ -145,19 +145,19 @@ org.inugami.sse = {
 	 * Allow to force refresh current page
 	 */
 	forceRefresh : function() {
-		org.inugami.sse.closeSocket();
+		io.inugami.sse.closeSocket();
 		$(location).attr('href', window.location.href);
 	},
 
 	register : function(pluginName, filterHandler, alertsHandler){
-		org.inugami.sse.connect(pluginName);
+		io.inugami.sse.connect(pluginName);
 
 		if(isNotNull(filterHandler)){
-			org.inugami.sse.filterEvent =filterHandler;
+			io.inugami.sse.filterEvent =filterHandler;
 		}
 
 		if(isNotNull(alertsHandler)){
-			org.inugami.sse.alertsHandler = alertsHandler;
+			io.inugami.sse.alertsHandler = alertsHandler;
 		}
 	},
 
@@ -169,30 +169,30 @@ org.inugami.sse = {
 	 */
 	connect : function(channelName) {
 		if (typeof (EventSource) !== "undefined") {
-			org.inugami.sse.connectSSESocket();
+			io.inugami.sse.connectSSESocket();
 			var sseChannel = isNull(channelName)?"sse":channelName;
 
-			org.inugami.sse.registerChannelEventListener("globale");			
-			org.inugami.sse.registerChannelEventListener(sseChannel);
-			org.inugami.events.fireEventPlugin("globale","all-plugins-data");
+			io.inugami.sse.registerChannelEventListener("globale");			
+			io.inugami.sse.registerChannelEventListener(sseChannel);
+			io.inugami.events.fireEventPlugin("globale","all-plugins-data");
 		} else {
-			org.inugami.sse._inner_data.logger.error("Your browser dosn't support server send event!");
+			io.inugami.sse._inner_data.logger.error("Your browser dosn't support server send event!");
 		}
 	},
 	connectSSESocket : function(force) {
-		if(org.inugami.sse.state!="open" || org.inugami.sse._inner_data.eventSources==null){
-			var token     = localStorage.getItem(org.inugami.constants.token);
-			var sourceUrl = CONTEXT_PATH+"rest/sse/register?token="+token+"&uuid="+org.inugami.constants.uuid;
+		if(io.inugami.sse.state!="open" || io.inugami.sse._inner_data.eventSources==null){
+			var token     = localStorage.getItem(io.inugami.constants.token);
+			var sourceUrl = CONTEXT_PATH+"rest/sse/register?token="+token+"&uuid="+io.inugami.constants.uuid;
 			var socket    = null;
 			try {
 				var socket  = new EventSource(sourceUrl);
-				socket.onmessage = org.inugami.sse._inner_handler.dispatcher;
-				socket.onerror = org.inugami.sse._inner_handler.error;
+				socket.onmessage = io.inugami.sse._inner_handler.dispatcher;
+				socket.onerror = io.inugami.sse._inner_handler.error;
 	
 				socket.onopen = function(event){
-					org.inugami.sse._inner_handler.open(event);
+					io.inugami.sse._inner_handler.open(event);
 				}
-				org.inugami.sse._inner_data.eventSources = socket;
+				io.inugami.sse._inner_data.eventSources = socket;
 			} catch (e) {
 				console.error(e);
 			}
@@ -200,18 +200,18 @@ org.inugami.sse = {
 	},
 
 	registerChannelEventListener : function(name){
-		org.inugami.sse._inner_data.eventSources.addEventListener(name, function(event) {
-			org.inugami.sse._inner_handler.dispatcher(event);
+		io.inugami.sse._inner_data.eventSources.addEventListener(name, function(event) {
+			io.inugami.sse._inner_handler.dispatcher(event);
 		});
-		org.inugami.sse._inner_data.channels[name] = {};
+		io.inugami.sse._inner_data.channels[name] = {};
 	},
 
 	closeSocket : function(){
-		if(isNotNull(org.inugami.sse._inner_data.eventSources)){
+		if(isNotNull(io.inugami.sse._inner_data.eventSources)){
 			try{
-				org.inugami.sse._inner_data.eventSources.close();
-				org.inugami.sse._inner_data.eventSources = null;
-				org.inugami.constants.uuid=_buildUid();
+				io.inugami.sse._inner_data.eventSources.close();
+				io.inugami.sse._inner_data.eventSources = null;
+				io.inugami.constants.uuid=_buildUid();
 			} catch (error) {
 				console.error(error);
 			}
@@ -221,54 +221,54 @@ org.inugami.sse = {
 }
 
 
-org.inugami.events.addEventListener(org.inugami.sse.events.OPEN_OR_ALREADY_OPEN, function(event) {
-	org.inugami.events.updateResize();
+io.inugami.events.addEventListener(io.inugami.sse.events.OPEN_OR_ALREADY_OPEN, function(event) {
+	io.inugami.events.updateResize();
 });
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // RECONNECT
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-org.inugami.sse.reconnect = {
+io.inugami.sse.reconnect = {
 
 	reboot : function(){
 		var now = new Date();
-		if(now.getHours() == org.inugami.sse.times.reboot.hour && now.getMinutes() == org.inugami.sse.times.reboot.min){	
-			org.inugami.sse._httpConnector
+		if(now.getHours() == io.inugami.sse.times.reboot.hour && now.getMinutes() == io.inugami.sse.times.reboot.min){	
+			io.inugami.sse._httpConnector
 						.get(CONTEXT_PATH+"rest/administration/version")
 						.then(data =>{
-							org.inugami.sse.forceRefresh();
+							io.inugami.sse.forceRefresh();
 			});
 		}
 	},
 	fromLastIncommingData : function(){
-		if(org.inugami.sse.lastIncommingData > 0){
-			var diff = Date.now() - org.inugami.sse.lastIncommingData;
-			if(diff > org.inugami.sse.times.maxUnactivity){
-				org.inugami.sse.reconnect._forceReconnect();
+		if(io.inugami.sse.lastIncommingData > 0){
+			var diff = Date.now() - io.inugami.sse.lastIncommingData;
+			if(diff > io.inugami.sse.times.maxUnactivity){
+				io.inugami.sse.reconnect._forceReconnect();
 			}
 		}
 	},
 
 	fromCloseSocket : function(){
-		if(isNull(org.inugami.sse._inner_data.eventSources)){
-			org.inugami.sse.reconnect._forceReconnect();
-		}else if(EventSource.CLOSED == org.inugami.sse._inner_data.eventSources.readyState){
-			org.inugami.sse.reconnect._forceReconnect();
+		if(isNull(io.inugami.sse._inner_data.eventSources)){
+			io.inugami.sse.reconnect._forceReconnect();
+		}else if(EventSource.CLOSED == io.inugami.sse._inner_data.eventSources.readyState){
+			io.inugami.sse.reconnect._forceReconnect();
 		}
 	},
 
 	_forceReconnect : function(){
-		org.inugami.sse.closeSocket();
-		org.inugami.sse.connectSSESocket(true);
+		io.inugami.sse.closeSocket();
+		io.inugami.sse.connectSSESocket(true);
 
 		
-		var channels = Object.keys(org.inugami.sse._inner_data.channels);
+		var channels = Object.keys(io.inugami.sse._inner_data.channels);
 		for(var i=0; i<channels.length; i++){
-			org.inugami.sse.registerChannelEventListener(channels[i]);
+			io.inugami.sse.registerChannelEventListener(channels[i]);
 		}
 
 
-		org.inugami.events.fireEventPlugin("globale","all-plugins-data");
+		io.inugami.events.fireEventPlugin("globale","all-plugins-data");
 		
 	}
 }
@@ -276,15 +276,15 @@ org.inugami.sse.reconnect = {
 
 
 
-org.inugami.events.addEventListener(org.inugami.events.type.EVERY_PLAIN_MINUTE, function(event) {
-	if (isNotNull(org.inugami.sse._inner_data.eventSources)) {
-		org.inugami.sse.reconnect.reboot();
-		org.inugami.sse.reconnect.fromLastIncommingData();
-		org.inugami.sse.reconnect.fromCloseSocket();
+io.inugami.events.addEventListener(io.inugami.events.type.EVERY_PLAIN_MINUTE, function(event) {
+	if (isNotNull(io.inugami.sse._inner_data.eventSources)) {
+		io.inugami.sse.reconnect.reboot();
+		io.inugami.sse.reconnect.fromLastIncommingData();
+		io.inugami.sse.reconnect.fromCloseSocket();
 	}
 });
 
 window.addEventListener("beforeunload", function(e){
-	org.inugami.sse.closeSocket();
+	io.inugami.sse.closeSocket();
  });
 

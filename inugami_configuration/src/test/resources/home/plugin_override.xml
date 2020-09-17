@@ -4,7 +4,7 @@
     =   GAV
     =========================================================================-->
     <gav>
-        <groupId>org.inugami</groupId>
+        <groupId>io.inugami</groupId>
         <artifactId>inugami_configuration</artifactId>
         <version>x.y.z</version>
     </gav>

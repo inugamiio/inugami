@@ -27,20 +27,20 @@ export interface InugamiValues {
 
 export const VALUES : InugamiValues = {
     screen: {
-        height : org.inugami.values.screen.height,
-        width  : org.inugami.values.screen.width
+        height : io.inugami.values.screen.height,
+        width  : io.inugami.values.screen.width
     },
-    mouse: org.inugami.values.mouse,
+    mouse: io.inugami.values.mouse,
     size : {
-        font : org.inugami.values.size.font
+        font : io.inugami.values.size.font
     },
     context : {
-        URL         :org.inugami.values.context.URL,
-        URL_FULL    :org.inugami.values.context.URL_FULL,
-        PROTOCOLE   :org.inugami.values.context.PROTOCOLE,
-        CONTEXT     :org.inugami.values.context.CONTEXT,
-        PAGE        :org.inugami.values.context.PAGE,
-        OPTION      :org.inugami.values.context.OPTION,
-        OPTION_TYPE :org.inugami.values.context.OPTION_TYPE
+        URL         :io.inugami.values.context.URL,
+        URL_FULL    :io.inugami.values.context.URL_FULL,
+        PROTOCOLE   :io.inugami.values.context.PROTOCOLE,
+        CONTEXT     :io.inugami.values.context.CONTEXT,
+        PAGE        :io.inugami.values.context.PAGE,
+        OPTION      :io.inugami.values.context.OPTION,
+        OPTION_TYPE :io.inugami.values.context.OPTION_TYPE
     }
 }

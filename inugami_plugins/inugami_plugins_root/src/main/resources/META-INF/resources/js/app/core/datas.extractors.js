@@ -1,8 +1,8 @@
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // data EXTRACTORS
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-org.inugami.data = {};
-org.inugami.data.validators={
+io.inugami.data = {};
+io.inugami.data.validators={
     graphite:{
         simpleValue : function(target){
             var result = false;
@@ -19,9 +19,9 @@ org.inugami.data.validators={
         }
     }
 }
-org.inugami.data.extractors = {
+io.inugami.data.extractors = {
       _inner : {
-          LOGGER : org.inugami.logger.factory("org.inugami.data.extractors")
+          LOGGER : io.inugami.logger.factory("io.inugami.data.extractors")
       },
       graphite : {
           /**
@@ -35,14 +35,14 @@ org.inugami.data.extractors = {
            </code>
           **/
           simpleValue : function(target){
-              return org.inugami.data.extractors.graphite.simpleValueFiltred(target, function(result){
+              return io.inugami.data.extractors.graphite.simpleValueFiltred(target, function(result){
                 return isNotNull(result) && isNotNull(result.value);
               });
           }, 
 
           simpleValueFiltred : function(target, filter){
             var result = null;
-            if(org.inugami.data.validators.graphite.simpleValue(target)){
+            if(io.inugami.data.validators.graphite.simpleValue(target)){
                 var size =target.datapoints.length;
                 for(var index = size-1; index>=0; index--){
                     result = target.datapoints[index];
@@ -51,7 +51,7 @@ org.inugami.data.extractors = {
                     }
                 }
 
-            }else if(org.inugami.data.validators.graphite.isTimeValue(target)){
+            }else if(io.inugami.data.validators.graphite.isTimeValue(target)){
                 result = {
                     "target":target.path,
                     "value":target.value,
@@ -59,7 +59,7 @@ org.inugami.data.extractors = {
                 };
             }
             else{
-               org.inugami.data.extractors._inner.LOGGER.error("error on validating graphite data : {0}",[target]);
+               io.inugami.data.extractors._inner.LOGGER.error("error on validating graphite data : {0}",[target]);
             }
             return result;
           },
@@ -144,7 +144,7 @@ org.inugami.data.extractors = {
       }
 };
 
-org.inugami.data.aggregators = {
+io.inugami.data.aggregators = {
     sum : function(values){
         var result = null;
         if(isNotNull(values) && values.length>0){
@@ -158,7 +158,7 @@ org.inugami.data.aggregators = {
     
     avg : function(values){
         var result = null;
-        var sum = org.inugami.data.aggregators.sum(values);
+        var sum = io.inugami.data.aggregators.sum(values);
         if(sum!=null){
             result = sum / values.length;
         }
@@ -166,25 +166,25 @@ org.inugami.data.aggregators = {
     },
 
     min : function(values){
-        return org.inugami.data.aggregators.percentil(values,0);
+        return io.inugami.data.aggregators.percentil(values,0);
     },
     max : function(values){
-        return org.inugami.data.aggregators.percentil(values,1);
+        return io.inugami.data.aggregators.percentil(values,1);
     },
     p50 : function(values){
-        return org.inugami.data.aggregators.percentil(values,0.5);
+        return io.inugami.data.aggregators.percentil(values,0.5);
     },
     p70 : function(values){
-        return org.inugami.data.aggregators.percentil(values,0.7);
+        return io.inugami.data.aggregators.percentil(values,0.7);
     },
     p90 : function(values){
-        return org.inugami.data.aggregators.percentil(values,0.9);
+        return io.inugami.data.aggregators.percentil(values,0.9);
     },
     p95 : function(values){
-        return org.inugami.data.aggregators.percentil(values,0.95);
+        return io.inugami.data.aggregators.percentil(values,0.95);
     },
     p99 : function(values){
-        return org.inugami.data.aggregators.percentil(values,0.99);
+        return io.inugami.data.aggregators.percentil(values,0.99);
     },
 
     percentil :function(values, percentil){

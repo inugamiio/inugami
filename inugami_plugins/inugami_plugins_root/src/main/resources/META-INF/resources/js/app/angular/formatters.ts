@@ -30,24 +30,24 @@ export interface InugamiFormatterService{
 }
 
 export const FORMATTERS : InugamiFormatterService = {
-    extractJiraName             :(jiraUrl)=> org.inugami.formatters.extractJiraName(jiraUrl),
-    hour                        :(value, delimiter)=>org.inugami.formatters.hour(value, delimiter),
-    noFormatNumber              :(value)=>org.inugami.formatters.noFormatNumber(value),
-    truncateNumberOfMaxValue    :(value, nbFloatDigit, maxValue, resultMax)=>org.inugami.formatters.truncateNumberOfMaxValue(value, nbFloatDigit, maxValue, resultMax),
-    truncateNumber              :(value, nbFloatDigit)=>org.inugami.formatters.truncateNumber(value, nbFloatDigit),
-    truncate                    :(value, maxLength,suffix)=>org.inugami.formatters.truncate(value, maxLength,suffix),
-    defaultTrendFormat          :(value, oldValue, maxInt)=>org.inugami.formatters.defaultTrendFormat(value, oldValue, maxInt),
-    number                      :(value,nbDigit, digitToAppend)=>org.inugami.formatters.number(value,nbDigit, digitToAppend),
+    extractJiraName             :(jiraUrl)=> io.inugami.formatters.extractJiraName(jiraUrl),
+    hour                        :(value, delimiter)=>io.inugami.formatters.hour(value, delimiter),
+    noFormatNumber              :(value)=>io.inugami.formatters.noFormatNumber(value),
+    truncateNumberOfMaxValue    :(value, nbFloatDigit, maxValue, resultMax)=>io.inugami.formatters.truncateNumberOfMaxValue(value, nbFloatDigit, maxValue, resultMax),
+    truncateNumber              :(value, nbFloatDigit)=>io.inugami.formatters.truncateNumber(value, nbFloatDigit),
+    truncate                    :(value, maxLength,suffix)=>io.inugami.formatters.truncate(value, maxLength,suffix),
+    defaultTrendFormat          :(value, oldValue, maxInt)=>io.inugami.formatters.defaultTrendFormat(value, oldValue, maxInt),
+    number                      :(value,nbDigit, digitToAppend)=>io.inugami.formatters.number(value,nbDigit, digitToAppend),
     date                        :{
-        timestampToDate             : (timestamp)=>org.inugami.formatters.timestampToDate(timestamp),
-        timestampToDateTime         : (timestamp)=>org.inugami.formatters.timestampToDateTime(timestamp),
-        timestampToHour             : (timestamp)=>org.inugami.formatters.timestampToHour(timestamp),
-        timestampToTimeFormat       : (timestamp,format)=>org.inugami.formatters.timestampToTimeFormat(timestamp,format),
-        simpleTimeMin               : (value)=>org.inugami.formatters.time.simpleTimeMin(value)
+        timestampToDate             : (timestamp)=>io.inugami.formatters.timestampToDate(timestamp),
+        timestampToDateTime         : (timestamp)=>io.inugami.formatters.timestampToDateTime(timestamp),
+        timestampToHour             : (timestamp)=>io.inugami.formatters.timestampToHour(timestamp),
+        timestampToTimeFormat       : (timestamp,format)=>io.inugami.formatters.timestampToTimeFormat(timestamp,format),
+        simpleTimeMin               : (value)=>io.inugami.formatters.time.simpleTimeMin(value)
     },
     message                     :{
-        messageValue                : (key, values)=>org.inugami.formatters.messageValue(key, values),
-        message                     : (key, values)=>org.inugami.formatters.message(key, values),
-        messages                    : (baseKey, values)=>org.inugami.formatters.messages(baseKey, values),
+        messageValue                : (key, values)=>io.inugami.formatters.messageValue(key, values),
+        message                     : (key, values)=>io.inugami.formatters.message(key, values),
+        messages                    : (baseKey, values)=>io.inugami.formatters.messages(baseKey, values),
     }
 }

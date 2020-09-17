@@ -4,9 +4,9 @@ Build-Job-Node:
 Built-By: patrickguillerm
 Implementation-Sources-Tags: 
 Specification-Title: plugin-dashboard
-Implementation-Vendor-Id: org.inugami.plugins
+Implementation-Vendor-Id: io.inugami.plugins
 Build-Job-Name: ${env.BUILD_TAG} (${env.BUILD_URL})
-Implementation-Group: org.inugami.plugins
+Implementation-Group: io.inugami.plugins
 Build-Job-User: 
 Build-Jdk-Details: 1.8 (Oracle Corporation)
 Built-On-OS: Mac OS X (10.12.6 / x86_64)

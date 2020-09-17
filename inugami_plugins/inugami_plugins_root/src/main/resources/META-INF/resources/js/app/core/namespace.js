@@ -1,10 +1,10 @@
-var org = org||{};
+var io = io||{};
 
-if(org.inugami===undefined){
-    org.inugami={};
+if(io.inugami===undefined){
+    io.inugami={};
 }
 
-org.inugami._innerValues = {
+io.inugami._innerValues = {
     componentsIds:{}
 }
 

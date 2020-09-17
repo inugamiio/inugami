@@ -6,7 +6,7 @@
 
 
     <persistence-unit name="defaultPersistenceUnit" transaction-type="RESOURCE_LOCAL">
-        <provider>org.inugami.data.commons.DynamicPluginPersistenceProvider</provider>
+        <provider>io.inugami.data.commons.DynamicPluginPersistenceProvider</provider>
         
 
         <properties>

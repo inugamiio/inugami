@@ -65,7 +65,7 @@ private d3JsNode                       : any;
     if(isNotNull(this.event)){
       let self= this;
 
-      org.inugami.events.addEventListenerByPlugin(this.pluginName,this.event, function(event) {
+      io.inugami.events.addEventListenerByPlugin(this.pluginName,this.event, function(event) {
           if (isNotNull(event.detail.data) && isNotNull(event.detail.data.values)) {
             let realData = null;
             self.alerts = event.detail.data.alerts;
@@ -116,7 +116,7 @@ private d3JsNode                       : any;
     if(isNotNull(this.extractor)){
       result = this.extractor(value);
     }else{
-      result = org.inugami.data.extractors.graphite.simpleValue(value);
+      result = io.inugami.data.extractors.graphite.simpleValue(value);
     }
     return result;
   }
@@ -124,7 +124,7 @@ private d3JsNode                       : any;
   formatDataPoint(value){
     let result = null;
     if(isNull(this.formatter)){
-      result = org.inugami.formatters.truncateNumber(value);
+      result = io.inugami.formatters.truncateNumber(value);
     }else{
       result = this.formatter(value);
     }
@@ -135,7 +135,7 @@ private d3JsNode                       : any;
   formatDate(value){
     let result = null;
     if(isNull(this.dateFormatter)){
-      result = org.inugami.formatters.timestampToDate(value);
+      result = io.inugami.formatters.timestampToDate(value);
     }else{
       result = this.dateFormatter(value);
     }
@@ -143,7 +143,7 @@ private d3JsNode                       : any;
   }
 
   getStyleClass(){
-    return org.inugami.rendering.alertsStyles(this.styleClass,this.alerts); 
+    return io.inugami.rendering.alertsStyles(this.styleClass,this.alerts); 
   }
   /*****************************************************************************
   * IMPLEMENTS ControlValueAccessor

@@ -1,7 +1,7 @@
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // formatters API
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-org.inugami.formatters = {
+io.inugami.formatters = {
     selectFormatter : function(formatter, defaultFormatter){
         var result = defaultFormatter;
         if(isNotNull(formatter) && typeof formatter === "function"){
@@ -12,7 +12,7 @@ org.inugami.formatters = {
 
     extractJiraName: function (jiraUrl) {
         var result = "";
-        if(org.inugami.checks.isNotNull(jiraUrl)){
+        if(io.inugami.checks.isNotNull(jiraUrl)){
             var urlParts = jiraUrl.split("/");
             result = urlParts[urlParts.length-1];
         }
@@ -40,7 +40,7 @@ org.inugami.formatters = {
     truncateNumberOfMaxValue: function(value,nbFloatDigit, maxValue, resultMax){
         var result = "";
         if(value<maxValue){
-            result = org.inugami.formatters.truncateNumber(value,nbFloatDigit);
+            result = io.inugami.formatters.truncateNumber(value,nbFloatDigit);
         }else{
             result = resultMax;
         }
@@ -104,7 +104,7 @@ org.inugami.formatters = {
     		if(isNotNull(maxInt) && percent<maxInt){
     			trend.push(percent);
     		}else{
-    			trend.push(org.inugami.formatters.truncateNumber(percent));
+    			trend.push(io.inugami.formatters.truncateNumber(percent));
     		}
 
     		trend.push("%");
@@ -130,15 +130,15 @@ org.inugami.formatters = {
     },
 
     timestampToDate : function(value){
-      return org.inugami.formatters.timestampToTimeFormat(value,"YYYY-MM-DD HH:mm");
+      return io.inugami.formatters.timestampToTimeFormat(value,"YYYY-MM-DD HH:mm");
     },
 
     timestampToDateTime: function(value){
-      return org.inugami.formatters.timestampToTimeFormat(value,"YYYY-MM-DD HH:mm:ss");
+      return io.inugami.formatters.timestampToTimeFormat(value,"YYYY-MM-DD HH:mm:ss");
     },
 
     timestampToHour: function(value){
-        return org.inugami.formatters.timestampToTimeFormat(value,"HH:mm");
+        return io.inugami.formatters.timestampToTimeFormat(value,"HH:mm");
       },
 
     timestampToTimeFormat: function(value, timeFormat){
@@ -170,8 +170,8 @@ org.inugami.formatters = {
       var result =null;
       if(isNotNull(MESSAGES)){
 
-          if(isNotNull(MESSAGES[org.inugami.constants.context.LOCALE])){
-            var bundle = MESSAGES[org.inugami.constants.context.LOCALE];
+          if(isNotNull(MESSAGES[io.inugami.constants.context.LOCALE])){
+            var bundle = MESSAGES[io.inugami.constants.context.LOCALE];
             result = bundle[key];
           }
 
@@ -180,13 +180,13 @@ org.inugami.formatters = {
           }
       }
       if(isNotNull(result) && isNotNull(values)){
-        result = org.inugami.formatters.format(result,values);
+        result = io.inugami.formatters.format(result,values);
       }
       return result;
     },
 
     message :  function(key, values){
-      var result = org.inugami.formatters.messageValue(key, values);
+      var result = io.inugami.formatters.messageValue(key, values);
       if(isNull(result)){
         result = "??"+key+"??";
       }
@@ -197,19 +197,19 @@ org.inugami.formatters = {
         var result       = {};
         var properties   = {};
 
-        var propsLocal   = org.inugami.formatters._extractKeysValuesFromBundle(baseKey,MESSAGES[org.inugami.constants.context.LOCALE]);
-        var propsDefault = org.inugami.formatters._extractKeysValuesFromBundle(baseKey,MESSAGES["default"]);
+        var propsLocal   = io.inugami.formatters._extractKeysValuesFromBundle(baseKey,MESSAGES[io.inugami.constants.context.LOCALE]);
+        var propsDefault = io.inugami.formatters._extractKeysValuesFromBundle(baseKey,MESSAGES["default"]);
 
         var keys = Object.keys(propsLocal);
         for(var i=0;i<keys.length; i++){
             var value =propsLocal[keys[i]];
-            result[keys[i]]=org.inugami.formatters.format(value, values);
+            result[keys[i]]=io.inugami.formatters.format(value, values);
         }
 
         keys = Object.keys(propsDefault);
         for(var i=0;i<keys.length; i++){
             var value =propsDefault[keys[i]];
-            result[keys[i]]=org.inugami.formatters.format(value, values);
+            result[keys[i]]=io.inugami.formatters.format(value, values);
         }
 
         return result;

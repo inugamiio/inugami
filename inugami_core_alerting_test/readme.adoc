@@ -155,15 +155,15 @@ httpMock.buildData("ERR-500",500,"internal error")
 
 
 
-== org.inugami.builders :
-Les API dans l'objet *org.inugami.builders* permettent la construction de structure complexe (alert, événement, etc...)
+== io.inugami.builders :
+Les API dans l'objet *io.inugami.builders* permettent la construction de structure complexe (alert, événement, etc...)
 
 
-=== org.inugami.builders.alert :
+=== io.inugami.builders.alert :
 Le builder alert permet de construire des alertes. 
 [source,js]
 ----
-org.inugami.builders.alert(level, message, data);
+io.inugami.builders.alert(level, message, data);
 ----
 
 La structure résultante est du type :
@@ -186,12 +186,12 @@ La structure résultante est du type :
 Afin de faciliter la création des différents niveaux d'alerte disponible, des 
 fonctions spécifique sont implémentées :
 
-* org.inugami.builders.alertTrace(message, data)
-* org.inugami.builders.alertDebug(message, data)
-* org.inugami.builders.alertInfo(message, data)
-* org.inugami.builders.alertWarn(message, data)
-* org.inugami.builders.alertError(message, data)
-* org.inugami.builders.alertFatal(message, data)
+* io.inugami.builders.alertTrace(message, data)
+* io.inugami.builders.alertDebug(message, data)
+* io.inugami.builders.alertInfo(message, data)
+* io.inugami.builders.alertWarn(message, data)
+* io.inugami.builders.alertError(message, data)
+* io.inugami.builders.alertFatal(message, data)
 
 
 Les alertes ont un type (levelType) et un poid (levelNumber) définit via une énumération:

@@ -1,0 +1,194 @@
+/* --------------------------------------------------------------------
+ *  Inugami  
+ * --------------------------------------------------------------------
+ * 
+ * This program is free software: you can redistribute it and/or modify  
+ * it under the terms of the GNU General Public License as published by  
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but 
+ * WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License 
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package io.inugami.api.models.events;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import io.inugami.api.models.ClonableObject;
+import io.inugami.api.processors.ProcessorModel;
+
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
+
+/**
+ * GenericEvent
+ * 
+ * @author patrick_guillerm
+ * @since 6 oct. 2016
+ */
+public class GenericEvent implements Serializable, ClonableObject<GenericEvent> {
+    
+    // =========================================================================
+    // ATTRIBUTES
+    // =========================================================================
+    /** The Constant serialVersionUID. */
+    private static final long          serialVersionUID = -355683229478830003L;
+    
+    @XStreamAsAttribute
+    private final String               name;
+    
+    @XStreamAsAttribute
+    protected String                   fromFirstTime;
+    
+    @XStreamAsAttribute
+    protected String                   from;
+    
+    @XStreamAsAttribute
+    private String                     until;
+    
+    @XStreamAsAttribute
+    private String                     provider;
+    
+    @XStreamAsAttribute
+    private String                     mapper;
+    
+    @XStreamImplicit
+    private final List<ProcessorModel> processors;
+    
+    @XStreamImplicit
+    private final List<AlertingModel>  alertings;
+    
+    // =========================================================================
+    // CONSTRUCTORS
+    // =========================================================================
+    public GenericEvent() {
+        this(null, null, null, null, null, null, null);
+    }
+    
+    public GenericEvent(final String name) {
+        this(name, null, null, null, null, null, null);
+    }
+    
+    public GenericEvent(final String name, final String from, final String unitl, final String provider,
+                        final List<ProcessorModel> processors, final String mapper,
+                        final List<AlertingModel> alertings) {
+        super();
+        this.name = name;
+        this.from = from;
+        this.provider = provider;
+        this.processors = processors == null ? null : Collections.unmodifiableList(processors);
+        this.alertings = alertings == null ? null : Collections.unmodifiableList(alertings);
+        until = unitl;
+        this.mapper = mapper;
+    }
+    
+    // =========================================================================
+    // OVERRIDES
+    // =========================================================================
+    @Override
+    public String toString() {
+        //@formatter:off
+        return new StringBuilder(this.getClass().getSimpleName())
+                .append('@')
+                .append(System.identityHashCode(this))
+                .append('[')
+                .append("name=").append(name)
+                .append(", from=").append(from)
+                .append(", provider=").append(provider)
+                .append(", processors=").append(processors)
+                .append(']')
+                .toString();
+        //@formatter:on
+    }
+    
+    @Override
+    public int hashCode() {
+        return 31 * ((name == null) ? 0 : name.hashCode());
+    }
+    
+    @Override
+    public boolean equals(final Object obj) {
+        boolean result = this == obj;
+        if (!result && (obj != null) && (obj instanceof GenericEvent)) {
+            final GenericEvent other = (GenericEvent) obj;
+            result = name == null ? other.getName() == null : name.equals(other.getName());
+        }
+        
+        return result;
+    }
+    
+    // =========================================================================
+    // GETTERS & SETTERS
+    // =========================================================================
+    public String getName() {
+        return name;
+    }
+    
+    public Optional<String> getFrom() {
+        return Optional.ofNullable(from);
+    }
+    
+    public Optional<String> getProvider() {
+        return Optional.ofNullable(provider);
+    }
+    
+    public Optional<List<ProcessorModel>> getProcessors() {
+        return Optional.ofNullable(processors);
+    }
+    
+    public Optional<String> getUntil() {
+        return Optional.ofNullable(until);
+    }
+    
+    public Optional<String> getFromFirstTime() {
+        return Optional.ofNullable(fromFirstTime);
+    }
+    
+    public void buildFrom(final String from) {
+        this.from = from;
+    }
+    
+    public void buildUntil(final String until) {
+        this.until = until;
+    }
+    
+    public void buildProvider(final String provider) {
+        this.provider = provider;
+    }
+    
+    public void buildFromFirstTime(final String fromFirstTime) {
+        this.fromFirstTime = fromFirstTime;
+    }
+    
+    public Optional<String> getMapper() {
+        return Optional.ofNullable(mapper);
+    }
+    
+    public void buildMapper(final String mapper) {
+        this.mapper = mapper;
+    }
+    
+    public Optional<List<AlertingModel>> getAlertings() {
+        return Optional.ofNullable(alertings);
+    }
+    
+    @Override
+    public GenericEvent cloneObj() {
+        List<ProcessorModel> cpProcessors = null;
+        if (processors != null) {
+            cpProcessors = new ArrayList<>();
+            cpProcessors.addAll(processors);
+        }
+        
+        return new GenericEvent(name, from, until, provider, cpProcessors, mapper, alertings);
+    }
+    
+}

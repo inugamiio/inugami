@@ -62,7 +62,7 @@ export class BubbleLegend implements ControlValueAccessor, OnInit {
   @Input() tag               : string;
   @Input() unit              : string;
   @Input() numberSize        : number   = 0;
-  @Input() formatter         : any      = org.inugami.formatters.truncateNumber;
+  @Input() formatter         : any      = io.inugami.formatters.truncateNumber;
   @Input() dataExtractor     : any;
   @Input() alerts            : any[];
 
@@ -76,7 +76,7 @@ export class BubbleLegend implements ControlValueAccessor, OnInit {
 
     if (isNotNull(this.event)) {
       let self = this;
-      org.inugami.events.addEventListenerByPlugin(this.pluginName, this.event, function (event) {
+      io.inugami.events.addEventListenerByPlugin(this.pluginName, this.event, function (event) {
         self.processEvent(event);
       });
     }
@@ -90,7 +90,7 @@ export class BubbleLegend implements ControlValueAccessor, OnInit {
   updateValue() {
     if (isNotNull(this.innerValue)) {
       if(isNull(this.dataExtractor)){
-        this.currentValue = org.inugami.data.extractors.graphite.simpleValue(this.innerValue);
+        this.currentValue = io.inugami.data.extractors.graphite.simpleValue(this.innerValue);
       }else{
         this.currentValue = this.dataExtractor(this.innerValue);
       }
@@ -135,7 +135,7 @@ export class BubbleLegend implements ControlValueAccessor, OnInit {
   }
 
   getStyleClass(){
-    return org.inugami.rendering.alertsStyles(this.styleClass,this.alerts); 
+    return io.inugami.rendering.alertsStyles(this.styleClass,this.alerts); 
   }
 
 }

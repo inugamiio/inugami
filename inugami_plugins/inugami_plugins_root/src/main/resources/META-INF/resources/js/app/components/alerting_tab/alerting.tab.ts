@@ -54,7 +54,7 @@ export class AlertingTab extends SvgComponent {
     @Output() onOpen                       : EventEmitter<any> = new EventEmitter();
     @Output() onClose                      : EventEmitter<any> = new EventEmitter();
 
-    private alertTitle                     : string = org.inugami.formatters.message("title.alert").toUpperCase();
+    private alertTitle                     : string = io.inugami.formatters.message("title.alert").toUpperCase();
     private nbMessages                     : number = 0;
     private currentMsgId                   : string = null;
     
@@ -97,7 +97,7 @@ export class AlertingTab extends SvgComponent {
         setInterval(function(){self.updatePosition()}, 1000);
         this.refreshComponentBaseStyleClass();
 
-        org.inugami.events.addEventListener("alert-control", function(event){
+        io.inugami.events.addEventListener("alert-control", function(event){
             if(isNotNull(event.detail) && isNotNull(event.detail.data) && isNotNull(event.detail.data.data)){
                 self.deleteMessages(event.detail.data.data);
             }
@@ -352,7 +352,7 @@ export class AlertingTab extends SvgComponent {
     }
 
     private renderingMessageComponent(data:AlertingMessage){
-        let created     = org.inugami.formatters.timestampToDateTime(data.created/1000);
+        let created     = io.inugami.formatters.timestampToDateTime(data.created/1000);
         let result      = this.messagesGroup.append("g").attr("class", "message")
                                                         .attr("data-messageId",data.id)
                                                         .attr("data-created",created)
@@ -401,7 +401,7 @@ export class AlertingTab extends SvgComponent {
             }
         }
 
-        let time = org.inugami.formatters.timestampToTimeFormat(data.created/1000,"HH:mm").replace(':','h');
+        let time = io.inugami.formatters.timestampToTimeFormat(data.created/1000,"HH:mm").replace(':','h');
         result.push(new AlertingTagLabel(new AlertingTag(null,time,"alert-datetime"),tagsGroup));
 
         var tagMargin     = this.fontSizeMessage*0.50;

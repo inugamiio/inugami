@@ -162,7 +162,7 @@ export class ValueChart extends SvgComponent implements ControlValueAccessor,Aft
     }
 
     private checkIfalertPresent(data){
-        let alert = org.inugami.data.extractors.alertMax(data);
+        let alert = io.inugami.data.extractors.alertMax(data);
         if(isNotNull(alert)){
             this.alertLevel = [alert.levelType, alert.level].join(' ');
         }else{
@@ -194,7 +194,7 @@ export class ValueChart extends SvgComponent implements ControlValueAccessor,Aft
     private animateCurrentValue(){
         let self = this;
         let localFormatter = isNotNull(this.formatter)?this.formatter:function(value){
-            return org.inugami.formatters.truncateNumber(value,1);
+            return io.inugami.formatters.truncateNumber(value,1);
         }
 
         let enableLimit = isNotNull(this.valueLimit);

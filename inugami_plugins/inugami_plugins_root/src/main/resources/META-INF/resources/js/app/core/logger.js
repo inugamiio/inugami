@@ -1,7 +1,7 @@
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // LOGGER API
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-org.inugami.logger={
+io.inugami.logger={
     levels:{
         trace : {level :1,title : "TRACE"},
         debug : {level :2,title : "DEBUG"},
@@ -18,27 +18,27 @@ org.inugami.logger={
         };
 
         this.trace = function(message, values){
-            org.inugami.logger._processAppender(org.inugami.logger.levels.trace,this.option.name,message, values);
+            io.inugami.logger._processAppender(io.inugami.logger.levels.trace,this.option.name,message, values);
         };
 
         this.debug =function(message, values){
-            org.inugami.logger._processAppender(org.inugami.logger.levels.debug,this.option.name,message, values);
+            io.inugami.logger._processAppender(io.inugami.logger.levels.debug,this.option.name,message, values);
         };
 
         this.info = function(message, values){
-            org.inugami.logger._processAppender(org.inugami.logger.levels.info,this.option.name,message, values);
+            io.inugami.logger._processAppender(io.inugami.logger.levels.info,this.option.name,message, values);
         };
 
         this.warn = function(message, values){
-            org.inugami.logger._processAppender(org.inugami.logger.levels.warn,this.option.name,message, values);
+            io.inugami.logger._processAppender(io.inugami.logger.levels.warn,this.option.name,message, values);
         };
 
         this.error = function(message, values){
-            org.inugami.logger._processAppender(org.inugami.logger.levels.error,this.option.name,message, values);
+            io.inugami.logger._processAppender(io.inugami.logger.levels.error,this.option.name,message, values);
         };
 
         this.fatal = function(message, values){
-            org.inugami.logger._processAppender(org.inugami.logger.levels.fatal,this.option.name,message, values);
+            io.inugami.logger._processAppender(io.inugami.logger.levels.fatal,this.option.name,message, values);
         };
 
     } ,
@@ -123,7 +123,7 @@ org.inugami.logger={
         }
         if(this._appenders.length===0){
 
-            this._appenders.push(Object.create(org.inugami.logger._DefaultAppender));
+            this._appenders.push(Object.create(io.inugami.logger._DefaultAppender));
         }
     },
 
@@ -133,7 +133,7 @@ org.inugami.logger={
             throw  "Logger name mustn't be null!";
         }
         if(this._findRegistredIndex(loggerName)===-1){
-            this._registredLogger[loggerName]= new org.inugami.logger._Logger(loggerName);
+            this._registredLogger[loggerName]= new io.inugami.logger._Logger(loggerName);
 
             this._createDefaultAppenders();
         }
@@ -146,5 +146,5 @@ org.inugami.logger={
 // API SHORTCUT
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 function LOGGER(name){
-  return  org.inugami.logger.factory(name);
+  return  io.inugami.logger.factory(name);
 }

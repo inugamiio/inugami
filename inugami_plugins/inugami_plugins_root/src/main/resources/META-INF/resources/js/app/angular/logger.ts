@@ -30,11 +30,11 @@ export interface InugamiLoggerService{
 }
 
 export const LOGGERS : InugamiLoggerService = {
-    factory  : (loggerName) => org.inugami.logger.factory(loggerName),
+    factory  : (loggerName) => io.inugami.logger.factory(loggerName),
     appender : localObserver
 }
 
-org.inugami.logger._appenders.push({
+io.inugami.logger._appenders.push({
     log : (localTime,localLevel,localLoggerName,localMessage)=>{
         localEvent.fireEvent({
             time:localTime,

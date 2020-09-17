@@ -29,7 +29,7 @@ export class HttpServices {
             return this.http.get(url,{"headers":options,observe: "response" })
                 .toPromise()
                 .then(res  => {
-                    session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
+                    session.setCorrelationId(res.headers.get(io.inugami.constants.headers.CORRELATION_ID));
                     return res.body;
                 })
                 .catch(this.handleError);
@@ -46,7 +46,7 @@ export class HttpServices {
                    .post(url,JSON.stringify(data),{"headers":options,observe: "response" })
                    .toPromise()
                    .then(res  => {
-                        session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
+                        session.setCorrelationId(res.headers.get(io.inugami.constants.headers.CORRELATION_ID));
                         return res.body;
                    })
                    .catch(this.handleError);
@@ -59,7 +59,7 @@ export class HttpServices {
                    .put(url,JSON.stringify(data),{"headers":options,observe: "response" })
                    .toPromise()
                    .then(res  => {
-                        session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
+                        session.setCorrelationId(res.headers.get(io.inugami.constants.headers.CORRELATION_ID));
                         return res.body;
                    })
                    .catch(this.handleError);
@@ -73,7 +73,7 @@ export class HttpServices {
                    .delete(url,{"headers":options,observe: "response" })
                    .toPromise()
                    .then(res  => {
-                        session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
+                        session.setCorrelationId(res.headers.get(io.inugami.constants.headers.CORRELATION_ID));
                         return res.body;
                    })
                    .catch(this.handleError);

@@ -4,7 +4,7 @@
     =   GAV
     =========================================================================-->
     <gav>
-        <groupId>org.inugami</groupId>
+        <groupId>io.inugami</groupId>
         <artifactId>inugami_core_test</artifactId>
         <version>x.y.z</version>
     </gav>
@@ -14,13 +14,13 @@
     =   PROVIDERS
     =========================================================================-->
     <providers>
-        <provider name="graphite.bigdata" className="org.inugami.core.providers.graphite.GraphiteProvider">
+        <provider name="graphite.bigdata" className="io.inugami.core.providers.graphite.GraphiteProvider">
             <config key="url" value="https://graphiteapp.org/render" />
         </provider>
     </providers>
 
     <handlers>
-        <handler name="hesperides.handler" className="org.inugami.core.handlers.hesperides.HesperidesHandler">
+        <handler name="hesperides.handler" className="io.inugami.core.handlers.hesperides.HesperidesHandler">
             <config key="hesperides.host" value="hesperides" />
             <config key="realm" value="https" />
             <config key="port"  value="1234"/>

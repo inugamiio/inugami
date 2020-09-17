@@ -12,7 +12,7 @@ export class SessionScope {
     private showMainMenu          : boolean = false;
     private user                  : User;
     private data                  : any = {};
-    private deviceIdentifier      : string = org.inugami.constants.deviceIdentifier;
+    private deviceIdentifier      : string = io.inugami.constants.deviceIdentifier;
     private correlationId         : string = null;
 
 
@@ -30,14 +30,14 @@ export class SessionScope {
     public closeMainMenu(){
       if(this.showMainMenu){
         this.showMainMenu =false;
-        org.inugami.events.updateResize();
+        io.inugami.events.updateResize();
       }
     }
     
     public openMainMenu(){
         if(!this.showMainMenu){
           this.showMainMenu =true;
-          org.inugami.events.updateResize();
+          io.inugami.events.updateResize();
         }
     }
 
@@ -69,7 +69,7 @@ export class SessionScope {
     }
 
     public hasRole(role){
-      return isNotNull(this.user) && org.inugami.checks.contains(role,this.user.roles);
+      return isNotNull(this.user) && io.inugami.checks.contains(role,this.user.roles);
     }
 
     public isAdmin(){

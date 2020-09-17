@@ -1,7 +1,7 @@
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // EVENTS
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-org.inugami.events = {
+io.inugami.events = {
         _inner : {
           maxKey          : 10,
           enableCheat     : false,
@@ -51,36 +51,36 @@ org.inugami.events = {
             }
           };
 
-          var event = new CustomEvent(org.inugami.events.buildEventFullName(pluginName, eventName), { 'detail': eventData });
+          var event = new CustomEvent(io.inugami.events.buildEventFullName(pluginName, eventName), { 'detail': eventData });
           document.dispatchEvent(event);
         },
         addEventListenerByPlugin : function(pluginName, eventName, eventHandler){
-          org.inugami.events.addEventListener(org.inugami.events.buildEventFullName(pluginName, eventName) , eventHandler);
+          io.inugami.events.addEventListener(io.inugami.events.buildEventFullName(pluginName, eventName) , eventHandler);
         },
         addEventListener : function(eventName, eventHandler){
             document.addEventListener(eventName, eventHandler);
         },
         updateResize : function (){
           var data = {"height":$(window).height(),"width":$(window).width() };
-          org.inugami.events.fireEvent(org.inugami.events.type.RESIZE, data);
+          io.inugami.events.fireEvent(io.inugami.events.type.RESIZE, data);
         },
         _keyHandler : function(event){
           var key  = event.which;
 
-          org.inugami.events._inner.inputs.push(key);
-          if(org.inugami.events._inner.inputs.length > org.inugami.events._inner.maxKey){
-            org.inugami.events._inner.inputs = org.inugami.events._inner.inputs.slice(1);
+          io.inugami.events._inner.inputs.push(key);
+          if(io.inugami.events._inner.inputs.length > io.inugami.events._inner.maxKey){
+            io.inugami.events._inner.inputs = io.inugami.events._inner.inputs.slice(1);
           }
-          if(org.inugami.events._inner.enableCheat){
-            console.log(org.inugami.events._inner.inputs.join(" ")) ;
+          if(io.inugami.events._inner.enableCheat){
+            console.log(io.inugami.events._inner.inputs.join(" ")) ;
           }
 
-          var listnerName = Object.keys(org.inugami.events._inner.keysListener);
+          var listnerName = Object.keys(io.inugami.events._inner.keysListener);
           for(var i=0; i<listnerName.length; i++){
              var name = listnerName[i];
-             var listenerKeys = org.inugami.events._inner.keysListener[name];
-             if(org.inugami.events._keyHandlerMatches(org.inugami.events._inner.inputs,listenerKeys)){
-                org.inugami.events.fireEvent(name,null);
+             var listenerKeys = io.inugami.events._inner.keysListener[name];
+             if(io.inugami.events._keyHandlerMatches(io.inugami.events._inner.inputs,listenerKeys)){
+                io.inugami.events.fireEvent(name,null);
              }
           }
         },
@@ -105,35 +105,35 @@ org.inugami.events = {
 
 
 $(window ).resize(function() {
-  org.inugami.events.updateResize();
+  io.inugami.events.updateResize();
 });
 
 $(document).on('keydown', function ( e ) {
-  org.inugami.events._keyHandler(e);
+  io.inugami.events._keyHandler(e);
 });
 
 setInterval(function(){
-  org.inugami.events.fireEvent(org.inugami.events.type.EVERY_SECOND,{});
+  io.inugami.events.fireEvent(io.inugami.events.type.EVERY_SECOND,{});
   var now = new Date();
   if(now.getSeconds() == 0){
-    org.inugami.events.fireEvent(org.inugami.events.type.EVERY_PLAIN_MINUTE,{});  
+    io.inugami.events.fireEvent(io.inugami.events.type.EVERY_PLAIN_MINUTE,{});  
   }
   if(now.getSeconds() == 0 && now.getMinutes() == 0){
-    org.inugami.events.fireEvent(org.inugami.events.type.EVERY_PLAIN_HOUR,{});  
+    io.inugami.events.fireEvent(io.inugami.events.type.EVERY_PLAIN_HOUR,{});  
   }
   if(now.getSeconds() == 0 && now.getMinutes() == 0 && now.getHours()==0){
-    org.inugami.events.fireEvent(org.inugami.events.type.EVERY_PLAIN_DAY,{});  
+    io.inugami.events.fireEvent(io.inugami.events.type.EVERY_PLAIN_DAY,{});  
   }
 }, 1000) ;
 
 setInterval(function(){
-  org.inugami.events.fireEvent(org.inugami.events.type.EVERY_MINUTE,{});
+  io.inugami.events.fireEvent(io.inugami.events.type.EVERY_MINUTE,{});
 }, 60000) ;
 
 
-org.inugami.events.addEventListener("konami", function(event){
+io.inugami.events.addEventListener("konami", function(event){
   console.log("konami !!!");
 });
-org.inugami.events.addEventListener("hadoken", function(event){
+io.inugami.events.addEventListener("hadoken", function(event){
   console.log("haaaadookennnnnn ))))=================================");
 });

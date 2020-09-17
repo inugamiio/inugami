@@ -35,6 +35,6 @@ export class ClockComponent implements OnInit, AfterContentInit{
     **************************************************************************/
     updateTime() {
         let timeStamp = Math.round(Date.now()/1000);
-        this.time = org.inugami.formatters.timestampToTimeFormat(timeStamp.toFixed(0), this.timeFormat);
+        this.time = io.inugami.formatters.timestampToTimeFormat(timeStamp.toFixed(0), this.timeFormat);
     }
 }

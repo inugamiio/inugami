@@ -10,9 +10,9 @@ export interface InugamiRendering{
 }
 
 export const RENDERING : InugamiRendering = {
-    createNode      : (nodeName, styleClass, id)=>org.inugami.rendering.createNode(nodeName, styleClass, id)[0],
-    styleIfNotNull  : (node, styleClass)=>org.inugami.rendering.styleIfNotNull(node, styleClass),
-    styleIfNull     : (node, styleClass)=>org.inugami.rendering.styleIfNull(node, styleClass),
-    clearDiv        : ()=>org.inugami.rendering.clearDiv()[0],
-    alertsStyles    : (styleClass, alerts)=>org.inugami.rendering.alertsStyles(styleClass, alerts),
+    createNode      : (nodeName, styleClass, id)=>io.inugami.rendering.createNode(nodeName, styleClass, id)[0],
+    styleIfNotNull  : (node, styleClass)=>io.inugami.rendering.styleIfNotNull(node, styleClass),
+    styleIfNull     : (node, styleClass)=>io.inugami.rendering.styleIfNull(node, styleClass),
+    clearDiv        : ()=>io.inugami.rendering.clearDiv()[0],
+    alertsStyles    : (styleClass, alerts)=>io.inugami.rendering.alertsStyles(styleClass, alerts),
 }

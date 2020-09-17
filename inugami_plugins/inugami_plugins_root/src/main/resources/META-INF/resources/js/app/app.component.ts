@@ -18,7 +18,7 @@ export class AppComponent {
     /**************************************************************************
     * ATTRIBUTES
     **************************************************************************/
-    private LOGGER  : any = org.inugami.logger.factory("org.inugami.app.AppComponent");
+    private LOGGER  : any = io.inugami.logger.factory("io.inugami.app.AppComponent");
 
     
 
@@ -34,7 +34,7 @@ export class AppComponent {
                 private pluginsService   : PluginsService
                 ) {
                   
-      org.inugami.sse.httpConnector =httpServices;
+      io.inugami.sse.httpConnector =httpServices;
     
     
 
@@ -57,9 +57,9 @@ export class AppComponent {
       });
 
       var self = this;
-      org.inugami.events.addEventListener(org.inugami.events.type.APP_COMPONENTS_EVENT, function(event) {
-          var preEvent = org.inugami.events.type.APP_COMPONENTS_EVENT_CALLBACK_BEFORE;
-          var callBackEvent = org.inugami.events.type.APP_COMPONENTS_EVENT_CALLBACK;
+      io.inugami.events.addEventListener(io.inugami.events.type.APP_COMPONENTS_EVENT, function(event) {
+          var preEvent = io.inugami.events.type.APP_COMPONENTS_EVENT_CALLBACK_BEFORE;
+          var callBackEvent = io.inugami.events.type.APP_COMPONENTS_EVENT_CALLBACK;
           var eventData = null;
           var handler = null;
 
@@ -77,7 +77,7 @@ export class AppComponent {
               }
 
               if(isNotNull(event.detail.handler)){
-                handler = org.inugami.services.getFunction(event.detail.handler);
+                handler = io.inugami.services.getFunction(event.detail.handler);
               }
           }
 
@@ -90,13 +90,13 @@ export class AppComponent {
 
 
           if(isNotNull(preEvent)){
-            org.inugami.events.fireEvent(preEvent, data);
+            io.inugami.events.fireEvent(preEvent, data);
           }
 
           if(isNotNull(handler)){
             handler(data);
           }
-          org.inugami.events.fireEvent(callBackEvent, data);
+          io.inugami.events.fireEvent(callBackEvent, data);
       });
 
     }
@@ -117,7 +117,7 @@ export class AppComponent {
 
 
               if(isNotNull(token)){
-                localStorage.setItem(org.inugami.constants.token,token);
+                localStorage.setItem(io.inugami.constants.token,token);
               }
               
               
@@ -126,8 +126,8 @@ export class AppComponent {
                 this.router.navigate(['/login']);
               }else{
                 this.router.navigate(['/'+params['page']])
-                org.inugami.events.updateResize();
-                org.inugami.sse.filterEvent = null; 
+                io.inugami.events.updateResize();
+                io.inugami.sse.filterEvent = null; 
              }
          }
       });

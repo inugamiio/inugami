@@ -41,7 +41,7 @@ export class EvolutionValue implements ControlValueAccessor,AfterViewInit {
     @Input() nbDigit                    : number = 0;
     @Input() nbDigitDiff                : number = 1;
     @Input() unit                       : string;
-    @Input() formatter                  : any    = org.inugami.formatters.truncateNumber;
+    @Input() formatter                  : any    = io.inugami.formatters.truncateNumber;
     @Input() diffCalculator             : any;
     @Input() dataExtractor              : any;
     @Input() alerts                     : any[];
@@ -54,7 +54,7 @@ export class EvolutionValue implements ControlValueAccessor,AfterViewInit {
         if(isNotNull(this.event)){
           let self= this;
 
-          org.inugami.events.addEventListenerByPlugin(this.pluginName,this.event, function(event) {
+          io.inugami.events.addEventListenerByPlugin(this.pluginName,this.event, function(event) {
               if (isNotNull(event.detail.data) && isNotNull(event.detail.data.values)) {
                 self.alerts = event.detail.data.alerts;
                 let values = event.detail.data.values;
@@ -167,7 +167,7 @@ export class EvolutionValue implements ControlValueAccessor,AfterViewInit {
       let result = null;
       if(isNotNull(serie)){
         if(isNull(this.dataExtractor)){
-          result = org.inugami.data.extractors.graphite.simpleValue(serie);
+          result = io.inugami.data.extractors.graphite.simpleValue(serie);
         }else{
           result = this.dataExtractor(serie);
         }
@@ -180,7 +180,7 @@ export class EvolutionValue implements ControlValueAccessor,AfterViewInit {
     }
 
     getStyleClass(){
-      return org.inugami.rendering.alertsStyles(this.styleClass,this.alerts); 
+      return io.inugami.rendering.alertsStyles(this.styleClass,this.alerts); 
     }
     /***************************************************************************
     * IMPLEMENTS ControlValueAccessor

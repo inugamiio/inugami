@@ -21,7 +21,7 @@ export class JiraIssuesComponent implements OnInit, AfterContentInit{
     **************************************************************************/
     ngAfterContentInit() {
         if (isNotNull(this.event)) {
-            org.inugami.events.addEventListenerByPlugin(this.pluginName, this.event, (event) => this.injectData(event));
+            io.inugami.events.addEventListenerByPlugin(this.pluginName, this.event, (event) => this.injectData(event));
         }
     }
 

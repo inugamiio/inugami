@@ -43,6 +43,6 @@ export class MainMenuService {
     }
 
     public updateMenu(){
-        org.inugami.events.fireEvent(MAIN_MENU_UPDATE);
+        io.inugami.events.fireEvent(MAIN_MENU_UPDATE);
     }
 }

@@ -1,5 +1,5 @@
 
-QUnit.test("org.inugami.datas.extractors.graphite.cleanDatapoints",
+QUnit.test("io.inugami.datas.extractors.graphite.cleanDatapoints",
 		function(assert) {
 			var data = [];
 			data.push({
@@ -23,7 +23,7 @@ QUnit.test("org.inugami.datas.extractors.graphite.cleanDatapoints",
 				timestamp : 5
 			});
 
-			var cleanData = org.inugami.datas.extractors.graphite
+			var cleanData = io.inugami.datas.extractors.graphite
 					.cleanDatapoints(data);
 			assert.notOk(cleanData == null, "cleanData not null -> ok");
 			assert.equal(3, cleanData.length, "new data has 3 items -> ok");
@@ -32,7 +32,7 @@ QUnit.test("org.inugami.datas.extractors.graphite.cleanDatapoints",
 			assert.equal(24.123, cleanData[2].value, "third items -> ok");
 		});
 
-QUnit.test("org.inugami.data.extractors.graphite.sortTargets",
+QUnit.test("io.inugami.data.extractors.graphite.sortTargets",
 		function(assert) {
 			var data = [];
 			data.push({
@@ -48,7 +48,7 @@ QUnit.test("org.inugami.data.extractors.graphite.sortTargets",
 				datapoints : []
 			});
 
-			var result = org.inugami.data.extractors.graphite
+			var result = io.inugami.data.extractors.graphite
 					.sortTargets(data);
 			assert.notOk(result == null, "result not null -> ok");
 			assert.equal(3, result.length, "result has 3 items -> ok");
@@ -58,25 +58,25 @@ QUnit.test("org.inugami.data.extractors.graphite.sortTargets",
 
 		});
 
-QUnit.test("org.inugami.data.extractors.style.decomposeStyleClass", function(
+QUnit.test("io.inugami.data.extractors.style.decomposeStyleClass", function(
 		assert) {
 
-	var styleClass = org.inugami.data.extractors.style.decomposeStyleClass(
+	var styleClass = io.inugami.data.extractors.style.decomposeStyleClass(
 			'foo-bar', '-');
 	assert.notOk(styleClass == null, "styleClass not null   -> ok");
 	assert.equal(styleClass, "foo bar", "convert to 'foo bar'  -> ok");
 
-	var styleClassB = org.inugami.data.extractors.style.decomposeStyleClass(
+	var styleClassB = io.inugami.data.extractors.style.decomposeStyleClass(
 			'foo_bar', '_');
 	assert.notOk(styleClassB == null, "styleClass not null   -> ok");
 	assert.equal(styleClassB, "foo bar", "convert to 'foo bar'  -> ok");
 
-	var styleClassC = org.inugami.data.extractors.style.decomposeStyleClass(
+	var styleClassC = io.inugami.data.extractors.style.decomposeStyleClass(
 			'foo_bar', null);
 	assert.notOk(styleClassC == null, "styleClass not null   -> ok");
 	assert.equal(styleClassC, "foo_bar", "convert to 'foo_bar'  -> ok");
 
-	var styleClassD = org.inugami.data.extractors.style.decomposeStyleClass(
+	var styleClassD = io.inugami.data.extractors.style.decomposeStyleClass(
 			null, null);
 	assert.notOk(styleClassD == null, "styleClass not null   -> ok");
 	assert.equal(styleClassD, "", "convert to ''  -> ok");

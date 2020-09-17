@@ -21,7 +21,7 @@ export class Msg implements  OnInit{
   * ngAfterViewInit
   *****************************************************************************/
   ngOnInit(){
-      this.innerValue = org.inugami.formatters.message(this.key, this.values);
+      this.innerValue = io.inugami.formatters.message(this.key, this.values);
   }
 
 }

@@ -1,6 +1,6 @@
 
 function checkSimpleEvent(){
-	var simpleEvent = org.inugami.builders.simpleEvent({
+	var simpleEvent = io.inugami.builders.simpleEvent({
 		"name"       :"eventName",
 		"from"       : "-10min",
 		"until"      : "-5min",

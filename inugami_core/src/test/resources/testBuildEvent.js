@@ -1,6 +1,6 @@
 
 function checkEvent(){
-	var event = org.inugami.builders.event({
+	var event = io.inugami.builders.event({
 		"name"       :"event",
 		"from"       : "-10min",
 		"until"      : "-5min",

@@ -78,9 +78,9 @@ export class InputDaysSelector implements OnInit, ControlValueAccessor {
     ngOnInit() {
        
        this.daysList = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-       let labelProperty = org.inugami.formatters.message("days.selector.first.letters")
+       let labelProperty = io.inugami.formatters.message("days.selector.first.letters")
        
-       org.inugami.asserts.isFalse(labelProperty === "??days.selector.first.letters??");
+       io.inugami.asserts.isFalse(labelProperty === "??days.selector.first.letters??");
        this.labelList = labelProperty.split(" ");
        this.daysModel = []
        

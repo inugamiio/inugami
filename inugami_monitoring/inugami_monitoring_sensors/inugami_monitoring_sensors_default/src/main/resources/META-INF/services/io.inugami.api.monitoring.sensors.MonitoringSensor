@@ -1,0 +1,4 @@
+io.inugami.monitoring.sensors.defaults.system.CpuSensor
+io.inugami.monitoring.sensors.defaults.system.MemorySensor
+io.inugami.monitoring.sensors.defaults.system.ThreadsSensor
+io.inugami.monitoring.sensors.defaults.mbean.JmxBeanSensor

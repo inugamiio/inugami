@@ -67,9 +67,9 @@ export class CurveChart implements ControlValueAccessor,AfterViewInit {
 
     @Input() smallTickSizeRatio            : number  = 0.02;
     @Input() formatterTickBottom           : any     = null;
-    @Input() valuesAggregator              : any     = org.inugami.data.aggregators.avg;
+    @Input() valuesAggregator              : any     = io.inugami.data.aggregators.avg;
 
-    @Input() tickValueFormatter            : any     = org.inugami.formatters.truncateNumber;
+    @Input() tickValueFormatter            : any     = io.inugami.formatters.truncateNumber;
 
     @Input() tickValueAlign               : number  = 1;
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -174,7 +174,7 @@ export class CurveChart implements ControlValueAccessor,AfterViewInit {
 
         // DATA SOURCES EVENTS LISTENERS
         if(isNotNull(this.event)){
-          org.inugami.events.addEventListenerByPlugin(this.pluginName,this.event, function(event) {
+          io.inugami.events.addEventListenerByPlugin(this.pluginName,this.event, function(event) {
               if (isNotNull(event.detail.data) && isNotNull(event.detail.data.values)) {
                 self.writeValue(event.detail.data.values);
                 self.processRefresh();
@@ -183,7 +183,7 @@ export class CurveChart implements ControlValueAccessor,AfterViewInit {
         }
 
         if(isNotNull(this.eventPrevious)){
-          org.inugami.events.addEventListenerByPlugin(this.pluginName,this.eventPrevious, function(event) {
+          io.inugami.events.addEventListenerByPlugin(this.pluginName,this.eventPrevious, function(event) {
               if (isNotNull(event.detail.data) && isNotNull(event.detail.data.values)) {
                 self.writePreviousValue(event.detail.data.values);
                 self.processRefresh();
@@ -195,13 +195,13 @@ export class CurveChart implements ControlValueAccessor,AfterViewInit {
 
 
         // OTHER EVENTS LISTENERS
-        org.inugami.events.addEventListener(org.inugami.events.type.RESIZE, function(data){
+        io.inugami.events.addEventListener(io.inugami.events.type.RESIZE, function(data){
           self.updateSize(data.detail);
           self.processRefreshWithoutSize();
         });
 
 
-        org.inugami.events.addEventListener(org.inugami.events.type.UPDATE_CONFIGURATION, function(data){
+        io.inugami.events.addEventListener(io.inugami.events.type.UPDATE_CONFIGURATION, function(data){
           self.processRefresh();
         });
 
@@ -212,7 +212,7 @@ export class CurveChart implements ControlValueAccessor,AfterViewInit {
   
         if(this.heightAuto || this.widthAuto){
           this.computeDimension();
-          this.updateSize(org.inugami.values.screen);
+          this.updateSize(io.inugami.values.screen);
         }
         
         this.initData();
@@ -327,7 +327,7 @@ export class CurveChart implements ControlValueAccessor,AfterViewInit {
     private processRefresh(){
       if(this.heightAuto || this.widthAuto){
           this.computeDimension();
-          this.updateSize(org.inugami.values.screen);
+          this.updateSize(io.inugami.values.screen);
       }
       this.processRefreshWithoutSize();
     }
@@ -1227,8 +1227,8 @@ export class CurveChart implements ControlValueAccessor,AfterViewInit {
     * GETTERS
     ***************************************************************************/
     private getFormatterTickBottom(){
-       return org.inugami.formatters.selectFormatter(this.formatterTickBottom,
-                                                  org.inugami.formatters.time.simpleTimeMin);
+       return io.inugami.formatters.selectFormatter(this.formatterTickBottom,
+                                                  io.inugami.formatters.time.simpleTimeMin);
 
     }
 }

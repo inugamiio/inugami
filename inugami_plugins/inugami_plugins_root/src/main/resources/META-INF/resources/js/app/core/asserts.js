@@ -1,8 +1,8 @@
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // ASSERTS API
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-org.inugami.asserts= {
-    _LOGGER :org.inugami.logger.factory("org.inugami.asserts"),
+io.inugami.asserts= {
+    _LOGGER :io.inugami.logger.factory("io.inugami.asserts"),
 
     notNull: function (value, message) {
         if (value === undefined || value === null) {
@@ -24,14 +24,14 @@ org.inugami.asserts= {
     },
     type:{
         isString : function (value){
-            org.inugami.asserts.notNull(value,"can't verify object type with null object!");
+            io.inugami.asserts.notNull(value,"can't verify object type with null object!");
 
             var isString = ((typeof value) === 'string') || (value instanceof String);
             this._validate(isString,value,"String");
 
         },
         isArray : function (value){
-            org.inugami.asserts.notNull(value,"can't verify object type with null object!");
+            io.inugami.asserts.notNull(value,"can't verify object type with null object!");
             var isArray = ((typeof value) === 'array') || (value instanceof Array);
             this._validate(isArray,value,"Array");
 

@@ -1,17 +1,17 @@
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // RENDERING API
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-org.inugami.rendering={
+io.inugami.rendering={
     createNode : function(nodeName, styleClass, id){
-        org.inugami.asserts.notNull(nodeName,"can't create node, node name is null!");
+        io.inugami.asserts.notNull(nodeName,"can't create node, node name is null!");
 
         var result = $('<'+nodeName+'></'+nodeName+'>');
 
-        if(org.inugami.checks.notEmpty(id)){
+        if(io.inugami.checks.notEmpty(id)){
             result.attr("id",id);
         }
 
-        if(org.inugami.checks.notEmpty(styleClass)){
+        if(io.inugami.checks.notEmpty(styleClass)){
             result.attr("class",styleClass);
         }
 
@@ -20,11 +20,11 @@ org.inugami.rendering={
 
 
     styleIfNotNull : function (node, styleClass){
-        return org.inugami.checks.isNotNull(node)?styleClass:"";
+        return io.inugami.checks.isNotNull(node)?styleClass:"";
     },
 
     styleIfNull : function (node, styleClass){
-        return org.inugami.checks.isNull(node)?styleClass:"";
+        return io.inugami.checks.isNull(node)?styleClass:"";
     },
 
     clearDiv : function(){
@@ -157,7 +157,7 @@ svg.transform = {
     },
 
     extractTranformInformation : function (node){
-        org.inugami.asserts.notNull(node);
+        io.inugami.asserts.notNull(node);
         var result = {
             x:null,
             y:null,
@@ -202,17 +202,17 @@ svg.transform = {
     
 
     _noScale : function(data){
-        org.inugami.asserts.notNull(data);
+        io.inugami.asserts.notNull(data);
         return isNull(data.scaleX) &&  isNull(data.scaleY);
     },
     _noTranslate : function(data){
-        org.inugami.asserts.notNull(data);
+        io.inugami.asserts.notNull(data);
         return isNull(data.x) &&  isNull(data.y);
     },
 
     _genericTransform : function(node, transfo){
-        org.inugami.asserts.notNull(node);
-        org.inugami.asserts.notNull(transfo);
+        io.inugami.asserts.notNull(node);
+        io.inugami.asserts.notNull(transfo);
 
         if(svg.transform._noScale(transfo)){
             node.attr("transform", "translate("+[isNull(transfo.x)?0:transfo.x,
@@ -308,7 +308,7 @@ svg.animate = {
          currentNode.transition()
                     .delay(delay)
                     .duration(duration)
-                    .tween(org.inugami.services.generateId("svg.animate.tween"), function() {
+                    .tween(io.inugami.services.generateId("svg.animate.tween"), function() {
             var customInterpolate=isNotNull(interpolateFunction);
             return function(time) {
                 var t = customInterpolate?interpolateFunction(time):time;
@@ -446,8 +446,8 @@ svg.components.render= {
                 'group'         : group,
                 'value'         : value,
                 'position'      : function(){
-                    var posX = ['left:', org.inugami.values.mouse.x+offsetX, 'px;'].join("");
-                    var posY = ['top:', org.inugami.values.mouse.y+offsetY, 'px;'].join("");
+                    var posX = ['left:', io.inugami.values.mouse.x+offsetX, 'px;'].join("");
+                    var posY = ['top:', io.inugami.values.mouse.y+offsetY, 'px;'].join("");
                     return posX+';'+posY;
                 }
             }
@@ -462,7 +462,7 @@ svg.components.render= {
 // *****************************************************************************
 svg.math = {
     convertToRadian : function(angle){
-        return angle * org.inugami.constants.math.TWO_PI_RATIO;
+        return angle * io.inugami.constants.math.TWO_PI_RATIO;
     },
 
     /**
@@ -566,7 +566,7 @@ svg.math = {
     },
 
     computeFontSize : function(fontRatio, height, width, ratioByHeight, ratioByWidth ){
-        var result = org.inugami.values.size.font;
+        var result = io.inugami.values.size.font;
 
         if(isNotNull(ratioByHeight) || isNotNull(ratioByWidth)){
             if(ratioByHeight){

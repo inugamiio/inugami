@@ -10,7 +10,7 @@ function _buildUid(){
 
 
 
-org.inugami.constants = {
+io.inugami.constants = {
     mimetype : {
         JSON : "application/json"
     },
@@ -119,6 +119,6 @@ org.inugami.constants = {
         return isNotNull(navigator.connection)?navigator.connection.rtt:0;
     })(),
 }
-org.inugami.constants.lorem.size= org.inugami.constants.lorem.data.length;
+io.inugami.constants.lorem.size= io.inugami.constants.lorem.data.length;
 
 

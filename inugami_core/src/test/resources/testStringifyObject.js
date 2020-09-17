@@ -1,7 +1,7 @@
 function checkJsonStringify(){
 	
 	
-	var alert = org.inugami.builders.alertError("_services.err",{"seuil":"8"});
+	var alert = io.inugami.builders.alertError("_services.err",{"seuil":"8"});
 	alert.data.service="MFO";
 	alert.data.nominal="5";
 	alert.data.unit="%"

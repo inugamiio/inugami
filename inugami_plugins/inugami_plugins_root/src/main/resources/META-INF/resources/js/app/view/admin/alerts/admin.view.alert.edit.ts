@@ -47,7 +47,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
     @Input() edit: boolean = false;
 
     private detailData: string;
-    private validators: any = org.inugami.validators;
+    private validators: any = io.inugami.validators;
     private innerValue: AlertEntity;
     private innerValueChannels: string[];
     private isNotEdit: boolean;
@@ -63,10 +63,10 @@ export class AdminViewAlertEdit implements AfterViewInit {
     private resp: any;
     private formatter: any;
 
-    private labelInverseMin  :string = org.inugami.formatters.message("alert.edit.alert.inverse.min");
-    private labelInverseMax  :string = org.inugami.formatters.message("alert.edit.alert.inverse.max");
+    private labelInverseMin  :string = io.inugami.formatters.message("alert.edit.alert.inverse.min");
+    private labelInverseMax  :string = io.inugami.formatters.message("alert.edit.alert.inverse.max");
 
-    private dataProviderPlaceHolder : string = org.inugami.formatters.message("alert.edit.sources.data.provider");
+    private dataProviderPlaceHolder : string = io.inugami.formatters.message("alert.edit.sources.data.provider");
 
     @Output() onClose: EventEmitter<any> = new EventEmitter();
     @Output() onError: EventEmitter<any> = new EventEmitter();
@@ -188,7 +188,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
     * ACTIONS
     **************************************************************************/
     onSuccessSave() {
-        let msg = org.inugami.formatters.messageValue("action.success");
+        let msg = io.inugami.formatters.messageValue("action.success");
         this.onSuccess.emit({ "severity": 'success', "summary": msg });
     }
     cleanMessage() {
@@ -197,7 +197,7 @@ export class AdminViewAlertEdit implements AfterViewInit {
     handlerError(error) {
         let errorMsg = null;
         if (isNotNull(error.data) && isNotNull(error.data.errorCode)) {
-            errorMsg = org.inugami.formatters.messageValue(["org.inugami.error", error.data.errorCode].join("."))
+            errorMsg = io.inugami.formatters.messageValue(["io.inugami.error", error.data.errorCode].join("."))
         }
         if (isNull(errorMsg)) {
             errorMsg = error.data;
@@ -250,12 +250,12 @@ export class AdminViewAlertEdit implements AfterViewInit {
     addDynamicLevelsLevel(graph,levelName) {
         if (isNotNull(this.addedLevel.name) &&
             this.addedLevel.name != "" &&
-            isNull(org.inugami.validators.notNegativeNumber(this.addedLevel.pointsBeforeTriggered))) {
+            isNull(io.inugami.validators.notNegativeNumber(this.addedLevel.pointsBeforeTriggered))) {
 
                     if (contains(this.addedLevel, this.alertForm.get('levelPointsBeforeTriggered').controls, function (a, b) {
                         return a.value.name === b.name;
                     })) {
-                        alert(org.inugami.formatters.message("alert.edit.level.already.added"));
+                        alert(io.inugami.formatters.message("alert.edit.level.already.added"));
                     } else {
                         this.addFormLevelLine();
                         graph.addNewData(this.addedLevel.name);

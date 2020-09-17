@@ -17,7 +17,7 @@ export class JenkinsJobsComponent implements AfterContentInit {
     private jobsData                        : any;
     private color                           : any;
     private eventEmptyMessage               : string;
-    private dataMessage                     : string = org.inugami.formatters.message("jenkins.jobs.received.data");
+    private dataMessage                     : string = io.inugami.formatters.message("jenkins.jobs.received.data");
     private receivedData                    : boolean = false;
 
     /**************************************************************************
@@ -26,7 +26,7 @@ export class JenkinsJobsComponent implements AfterContentInit {
     ngAfterContentInit() {
         // EVENT LISTENER
         if (isNotNull(this.event)) {
-            org.inugami.events.addEventListenerByPlugin(this.pluginName, this.event, (event) => this.injectData(event));
+            io.inugami.events.addEventListenerByPlugin(this.pluginName, this.event, (event) => this.injectData(event));
         }
     }
 
@@ -56,13 +56,13 @@ export class JenkinsJobsComponent implements AfterContentInit {
 
     private setEventEmptyMessage(eventName: String) {
         if (eventName === "jenkins-jobs-failed-job") {
-            this.eventEmptyMessage = org.inugami.formatters.message("jenkins.jobs.failed.none");
+            this.eventEmptyMessage = io.inugami.formatters.message("jenkins.jobs.failed.none");
         }
         if (eventName === "jenkins-jobs-failed-and-running-jobs") {
-            this.eventEmptyMessage = org.inugami.formatters.message("jenkins.jobs.failed.and.running.none");
+            this.eventEmptyMessage = io.inugami.formatters.message("jenkins.jobs.failed.and.running.none");
         }
         if (eventName === "jenkins-jobs-filter-jobs") {
-            this.eventEmptyMessage = org.inugami.formatters.message("jenkins.jobs.filter.none");
+            this.eventEmptyMessage = io.inugami.formatters.message("jenkins.jobs.filter.none");
         }
     }
 }

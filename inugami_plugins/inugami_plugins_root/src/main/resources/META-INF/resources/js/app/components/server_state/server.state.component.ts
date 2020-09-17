@@ -22,14 +22,14 @@ export class ServerStateComponent{
     **************************************************************************/
     constructor() {
         let self = this;
-        org.inugami.events.addEventListener(org.inugami.sse.events.ERROR, function(event){
+        io.inugami.events.addEventListener(io.inugami.sse.events.ERROR, function(event){
             self.serverUp = false;
           });
       
-        org.inugami.events.addEventListener(org.inugami.sse.events.OPEN, function(event){
+        io.inugami.events.addEventListener(io.inugami.sse.events.OPEN, function(event){
             self.serverUp = true;
         });
-        org.inugami.events.addEventListener(org.inugami.sse.events.OPEN_OR_ALREADY_OPEN, function(event){
+        io.inugami.events.addEventListener(io.inugami.sse.events.OPEN_OR_ALREADY_OPEN, function(event){
             self.serverUp = true;
         });
     }
@@ -40,8 +40,8 @@ export class ServerStateComponent{
     private getTitleInfo(){
         let lastUpdate = null;
         let sseSocket = null;
-        if(isNotNull(org.inugami.sse._inner_data.eventSources)){
-            switch(org.inugami.sse._inner_data.eventSources.readyState) {
+        if(isNotNull(io.inugami.sse._inner_data.eventSources)){
+            switch(io.inugami.sse._inner_data.eventSources.readyState) {
                 case EventSource.CONNECTING:
                     sseSocket = "CONNECTING";
                     break;
@@ -53,9 +53,9 @@ export class ServerStateComponent{
                     sseSocket = "CLOSED";
             }
         }
-        if(org.inugami.sse.lastIncommingData>0){
-            let time = org.inugami.sse.lastIncommingData/1000
-            lastUpdate= org.inugami.formatters.timestampToTimeFormat(time.toFixed(0), "YYYY-MM-DD HH:mm:ss");
+        if(io.inugami.sse.lastIncommingData>0){
+            let time = io.inugami.sse.lastIncommingData/1000
+            lastUpdate= io.inugami.formatters.timestampToTimeFormat(time.toFixed(0), "YYYY-MM-DD HH:mm:ss");
         }else{
             lastUpdate= "undefine";
         }

@@ -48,7 +48,7 @@ export class SystemNotification implements AfterViewInit {
 
     ngAfterContentInit() {
         let self = this;
-        org.inugami.events.addEventListenerByPlugin(
+        io.inugami.events.addEventListenerByPlugin(
             "globale",
             "message",
             (event)=> {
@@ -56,7 +56,7 @@ export class SystemNotification implements AfterViewInit {
             }
         );
 
-        org.inugami.events.addEventListenerByPlugin(
+        io.inugami.events.addEventListenerByPlugin(
             "globale",
             "beginUpdate",
             (event)=> {
@@ -67,7 +67,7 @@ export class SystemNotification implements AfterViewInit {
             }
         );
 
-        org.inugami.events.addEventListenerByPlugin(
+        io.inugami.events.addEventListenerByPlugin(
             "globale",
             "endUpdate",
             (event)=> {
@@ -91,7 +91,7 @@ export class SystemNotification implements AfterViewInit {
         for(let msg of this.messages){
             msg.position=msg.position-3;
             if(msg.position < -msg.size){
-                msg.position = org.inugami.values.screen.width;
+                msg.position = io.inugami.values.screen.width;
             }
         }
         
@@ -110,11 +110,11 @@ export class SystemNotification implements AfterViewInit {
                 "duration" : isNull(message.level)?60:message.duration,
                 "created"  : Date.now(),
                 "size"     : self.computeTextSize(message.label),
-                "position" : org.inugami.values.screen.width
+                "position" : io.inugami.values.screen.width
 
             };
 
-            if(!org.inugami.checks.contains(message.id,
+            if(!io.inugami.checks.contains(message.id,
                                          this.messages,
                                          (ref,value)=>{return ref.id==value})){
                 this.messages.push(localMessage);
@@ -126,7 +126,7 @@ export class SystemNotification implements AfterViewInit {
 
     private removeMessage(messageId){
         if(isNotNull(messageId) && this.messages.length>0){
-            org.inugami.services.removeFromList(messageId,this.messages,(ref,value)=>{return ref.id==value});
+            io.inugami.services.removeFromList(messageId,this.messages,(ref,value)=>{return ref.id==value});
         }
         this.checkIfMustClose();
     }

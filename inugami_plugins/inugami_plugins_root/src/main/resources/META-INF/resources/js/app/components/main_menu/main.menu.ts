@@ -34,7 +34,7 @@ export class MainMenu{
         }); 
         
         let self = this;
-        org.inugami.events.addEventListener(MAIN_MENU_UPDATE, function(data){
+        io.inugami.events.addEventListener(MAIN_MENU_UPDATE, function(data){
             self.updateMainMenu();
         });
     }
@@ -55,7 +55,7 @@ export class MainMenu{
             link.selected = false;
         }
         subLink.selected = true;
-        org.inugami.events.fireEvent(MAIN_MENU_ON_CLICK,subLink);
+        io.inugami.events.fireEvent(MAIN_MENU_ON_CLICK,subLink);
     }
 
     public logout(){

@@ -14,8 +14,8 @@
     ======================================================================== -->
     <parent>
         <artifactId>inugami_core_security</artifactId>
-        <groupId>org.inugami.security</groupId>
-        <version>1.3.4-SNAPSHOT</version>
+        <groupId>io.inugami.security</groupId>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
     <!-- ======================================================================= 
     = PROJECT
@@ -27,7 +27,7 @@
     = PROPERTIES
     ======================================================================== -->
     <properties>
-        <super.uber.jar.main.class>org.inugami.commons.cli.MainUberJar</super.uber.jar.main.class>
+        <super.uber.jar.main.class>io.inugami.commons.cli.MainUberJar</super.uber.jar.main.class>
         <_super.plugins.maven-shade-plugin.version>3.0.0</_super.plugins.maven-shade-plugin.version>
     </properties>
 
@@ -36,7 +36,7 @@
     ======================================================================== -->
     <dependencies>
         <dependency>
-            <groupId>org.inugami</groupId>
+            <groupId>io.inugami</groupId>
             <artifactId>inugami_commons</artifactId>
         </dependency>
         <dependency>

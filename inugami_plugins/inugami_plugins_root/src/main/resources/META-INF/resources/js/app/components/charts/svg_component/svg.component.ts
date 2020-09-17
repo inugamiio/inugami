@@ -96,12 +96,12 @@ export abstract class SvgComponent implements AfterViewInit{
     
 
     if(isNotNull(this.event)){
-      org.inugami.events.addEventListenerByPlugin(this.pluginName,this.event, function(event) {
+      io.inugami.events.addEventListenerByPlugin(this.pluginName,this.event, function(event) {
         self._handlerOnData(event);
       });
     }
 
-    org.inugami.events.addEventListener(org.inugami.events.type.RESIZE, function(data){
+    io.inugami.events.addEventListener(io.inugami.events.type.RESIZE, function(data){
       self._computeSize(data.detail);
       self.updateComponentSize(self.size.svg);
       self._processRefresh();
@@ -110,14 +110,14 @@ export abstract class SvgComponent implements AfterViewInit{
 
     this.postConstruct();
     this._computeRatio();
-    this._computeSize(org.inugami.values.screen);
+    this._computeSize(io.inugami.values.screen);
     this._renderLayout();
     this.updateComponentSize(this.size.svg);
     this._processRefresh();
   }
 
   public buildEventName(){
-    return org.inugami.events.buildEventFullName(this.pluginName,this.event);
+    return io.inugami.events.buildEventFullName(this.pluginName,this.event);
   }
 
 

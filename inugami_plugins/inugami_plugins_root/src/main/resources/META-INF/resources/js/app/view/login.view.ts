@@ -19,7 +19,7 @@ export class LoginView implements OnInit, OnDestroy{
   private password              : string;
   private error                 : string;
   private disableAction         : string;
-  private localStorageTokenKey  : string = org.inugami.constants.token;
+  private localStorageTokenKey  : string = io.inugami.constants.token;
   private enableLoginForm       : string = "hidden";
 
   /**************************************************************************
@@ -83,7 +83,7 @@ export class LoginView implements OnInit, OnDestroy{
   private onLoginSuccess(data){
     if(isNotNull(data.token)){
       this.sessionScope.user=data;
-      org.inugami.sse.userToken=this.sessionScope.getToken();
+      io.inugami.sse.userToken=this.sessionScope.getToken();
   
       localStorage.setItem(this.localStorageTokenKey,data.token);
       this.processRedirect();

@@ -123,12 +123,12 @@ function lastGraphiteValue(data){
 //
 //##############################################################################
 var org    = {};
-    org.inugami = {};
+    io.inugami = {};
 
 
 
 /*******************************************************************************
- *  org.inugami.builders 
+ *  io.inugami.builders 
  ******************************************************************************/
 var mockInugami = {
 	alertTypes : {
@@ -387,26 +387,26 @@ mockInugami.data = {
 }
 
 /*******************************************************************************
- *  org.inugami.builders.data
+ *  io.inugami.builders.data
  ******************************************************************************/
-org.inugami.builders = {
+io.inugami.builders = {
 	alertTrace : function(message, data){
-		return org.inugami.builders.alert("trace",message, data);
+		return io.inugami.builders.alert("trace",message, data);
 	},
 	alertDebug : function(message, data){
-		return org.inugami.builders.alert("debug",message, data);
+		return io.inugami.builders.alert("debug",message, data);
 	},  
 	alertInfo : function(message, data){
-		return org.inugami.builders.alert("info",message, data);
+		return io.inugami.builders.alert("info",message, data);
 	},
 	alertWarn : function(message, data){
-		return org.inugami.builders.alert("warn",message, data);
+		return io.inugami.builders.alert("warn",message, data);
 	},
 	alertError : function(message, data){
-		return org.inugami.builders.alert("error",message, data);
+		return io.inugami.builders.alert("error",message, data);
 	},
 	alertFatal : function(message, data){
-		return org.inugami.builders.alert("fatal",message, data);
+		return io.inugami.builders.alert("fatal",message, data);
 	},
 	alert : function(level, message, data){
 		return mockInugami.alert({
@@ -416,7 +416,7 @@ org.inugami.builders = {
 		});
 	},
 	buildSimpleEvent : function(name,provider,query,from,until ){
-		return org.inugami.builders.simpleEvent({
+		return io.inugami.builders.simpleEvent({
 			"name"       : name,
 			"from"       : from,
 			"until"      : until,
@@ -426,7 +426,7 @@ org.inugami.builders = {
 		});
 	},
 	buildEvent : function(name,provider,from,until){
-		return org.inugami.builders.event({
+		return io.inugami.builders.event({
 			"name"       : name,
 			"from"       : from,
 			"until"      : until,
@@ -448,7 +448,7 @@ org.inugami.builders = {
 /*******************************************************************************
 * 
 *******************************************************************************/
-org.inugami.alerts = {
+io.inugami.alerts = {
 		levels : {
 			FATAL    : 1000000,
 		    ERROR    :  100000,

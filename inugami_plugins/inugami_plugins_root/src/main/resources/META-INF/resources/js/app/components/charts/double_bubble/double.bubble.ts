@@ -37,7 +37,7 @@ export class DoubleBubble implements ControlValueAccessor,AfterViewInit {
     @Input() unit                       : string;
     @Input() mainValueLabel             : string;
     @Input() secondValueLabel           : string;
-    @Input() mainValueFormatter         : any     = org.inugami.formatters.truncateNumber;
+    @Input() mainValueFormatter         : any     = io.inugami.formatters.truncateNumber;
     @Input() secondValueFormatter       : any     = null;
     @Input() secondValueUnit            : string  = "%";
     @Input() diffCalculator             : any;
@@ -87,7 +87,7 @@ export class DoubleBubble implements ControlValueAccessor,AfterViewInit {
         if(isNotNull(this.event)){
           let self= this;
 
-          org.inugami.events.addEventListenerByPlugin(this.pluginName,this.event, function(event) {
+          io.inugami.events.addEventListenerByPlugin(this.pluginName,this.event, function(event) {
             if (isNotNull(event.detail.data)){ 
               self.alerts = event.detail.data.alerts;  
               if (isNotNull(event.detail.data.values)) {
@@ -130,7 +130,7 @@ export class DoubleBubble implements ControlValueAccessor,AfterViewInit {
                                self.mainPreviousValue,
                                self.values.currentValue.current,
                                (data)  =>{
-                                 self.valueStr = org.inugami.formatters.truncateNumber(data ,self.nbDigit)
+                                 self.valueStr = io.inugami.formatters.truncateNumber(data ,self.nbDigit)
                                 },
                                (onDone)=>{
                                  self.mainPreviousValue=self.values.currentValue.current
@@ -163,7 +163,7 @@ export class DoubleBubble implements ControlValueAccessor,AfterViewInit {
 
     private extractData(data){
       if(isNull(this.dataExtractor)){
-        return org.inugami.data.extractors.graphite.simpleValue(data);
+        return io.inugami.data.extractors.graphite.simpleValue(data);
       }else{
         return this.dataExtractor(data);
       }
@@ -185,7 +185,7 @@ export class DoubleBubble implements ControlValueAccessor,AfterViewInit {
         }
       }
       
-      let valueResult =  org.inugami.formatters.truncateNumber(diff,this.nbDigit);
+      let valueResult =  io.inugami.formatters.truncateNumber(diff,this.nbDigit);
       let styleClass = "";
       if(diff<0){
         styleClass="negative";
@@ -227,7 +227,7 @@ export class DoubleBubble implements ControlValueAccessor,AfterViewInit {
        return result;
     }
     getStyleClass(){
-      return org.inugami.rendering.alertsStyles(this.styleClass,this.alerts); 
+      return io.inugami.rendering.alertsStyles(this.styleClass,this.alerts); 
     }
     /***************************************************************************
     * IMPLEMENTS ControlValueAccessor

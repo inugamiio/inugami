@@ -8,9 +8,9 @@ function simpleAlerting(gav, event, data){
 
     if(value!=null){
         if(value>10){
-            result = org.inugami.builders.alertError("error message");
+            result = io.inugami.builders.alertError("error message");
         }else if(value>5){
-            result = org.inugami.builders.alertWarn("warn message");
+            result = io.inugami.builders.alertWarn("warn message");
         }
     }
 
