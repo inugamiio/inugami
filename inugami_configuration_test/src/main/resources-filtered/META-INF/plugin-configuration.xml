@@ -27,7 +27,7 @@
     =   PROVIDERS
     =========================================================================-->
     <providers>
-        <provider name="foobar.system" type="system" className="org.inugami.configuration.test.MockCaller">
+        <provider name="foobar.system" type="system" className="io.inugami.configuration.test.MockCaller">
             <config key="data" value="FoobarData" />
         </provider>
     </providers>
@@ -36,14 +36,14 @@
     =   PROCESSORS
     =========================================================================-->
     <processors>
-        <processor name="foo" className="org.inugami.configuration.test.PluginProcessor" />
+        <processor name="foo" className="io.inugami.configuration.test.PluginProcessor" />
     </processors>
     
     <!--========================================================================
     =   LISTENERS
     =========================================================================-->
     <listeners>
-        <listener name="customListener" className="org.inugami.configuration.test.PluginListener">
+        <listener name="customListener" className="io.inugami.configuration.test.PluginListener">
             <config key="prefix" value="[foobar]" />
         </listener>
     </listeners>

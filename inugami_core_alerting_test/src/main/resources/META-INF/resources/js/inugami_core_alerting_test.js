@@ -84,11 +84,11 @@ QUnit.test("[inugami_core_alerting_test] http post", function( assert ) {
 //##############################################################################
 
 // -----------------------------------------------------------------------------
-//  [inugami_core_alerting_test] org.inugami.builders.alert
+//  [inugami_core_alerting_test] io.inugami.builders.alert
 // -----------------------------------------------------------------------------
-QUnit.test("[inugami_core_alerting_test] org.inugami.builders.alert", function( assert ) {
+QUnit.test("[inugami_core_alerting_test] io.inugami.builders.alert", function( assert ) {
 
-    var trace = org.inugami.builders.alertTrace("trace message",{"info":"trace data info"});
+    var trace = io.inugami.builders.alertTrace("trace message",{"info":"trace data info"});
     var now = Date.now();
 
     assert.ok(trace ,                                    "[trace] alert build  -> ok" );
@@ -102,7 +102,7 @@ QUnit.test("[inugami_core_alerting_test] org.inugami.builders.alert", function( 
     assert.ok(trace.data                               , "[trace] trace.data not null  -> ok" );
     assert.equal(trace.data.info   , "trace data info" , "[trace] trace.data.info = 'trace data info'  -> ok" );
 
-    var debug = org.inugami.builders.alertDebug("debug message",{"info":"debug data info"});
+    var debug = io.inugami.builders.alertDebug("debug message",{"info":"debug data info"});
     now = Date.now();
     assert.ok(debug ,                                    "[debug] alert build  -> ok" );
     assert.equal(debug.alerteName  , null              , "[debug] debug.alerteName = null  -> ok" );
@@ -115,7 +115,7 @@ QUnit.test("[inugami_core_alerting_test] org.inugami.builders.alert", function( 
     assert.ok(debug.data                               , "[debug] debug.data not null  -> ok" );
     assert.equal(debug.data.info   , "debug data info" , "[debug] debug.data.info = 'debug data info'  -> ok" );
     
-    var info = org.inugami.builders.alertInfo("info message",{"info":"info data info"});
+    var info = io.inugami.builders.alertInfo("info message",{"info":"info data info"});
     now = Date.now();
     assert.ok(info ,                                    "[info] alert build  -> ok" );
     assert.equal(info.alerteName  , null              , "[info] info.alerteName = null  -> ok" );
@@ -128,7 +128,7 @@ QUnit.test("[inugami_core_alerting_test] org.inugami.builders.alert", function( 
     assert.ok(info.data                               , "[info] info.data not null  -> ok" );
     assert.equal(info.data.info   , "info data info"  , "[info] info.data.info = 'info data info'  -> ok" );
     
-    var warn = org.inugami.builders.alertWarn("warn message",{"info":"warn data info"});
+    var warn = io.inugami.builders.alertWarn("warn message",{"info":"warn data info"});
     now = Date.now();
     assert.ok(warn ,                                    "[info] alert build  -> ok" );
     assert.equal(warn.alerteName  , null              , "[info] warn.alerteName = null  -> ok" );
@@ -141,7 +141,7 @@ QUnit.test("[inugami_core_alerting_test] org.inugami.builders.alert", function( 
     assert.ok(warn.data                               , "[info] warn.data not null  -> ok" );
     assert.equal(warn.data.info   , "warn data info"  , "[info] warn.data.info = 'warn data info'  -> ok" );
     
-    var error = org.inugami.builders.alertError("error message",{"info":"error data info"});
+    var error = io.inugami.builders.alertError("error message",{"info":"error data info"});
     now = Date.now();
     assert.ok(error ,                                    "[error] alert build  -> ok" );
     assert.equal(error.alerteName  , null              , "[error] error.alerteName = null  -> ok" );
@@ -154,7 +154,7 @@ QUnit.test("[inugami_core_alerting_test] org.inugami.builders.alert", function( 
     assert.ok(error.data                               , "[error] error.data not null  -> ok" );
     assert.equal(error.data.info   , "error data info" , "[error] error.data.info = 'error data info'  -> ok" );
     
-    var fatal = org.inugami.builders.alertFatal("fatal message",{"info":"fatal data info"});
+    var fatal = io.inugami.builders.alertFatal("fatal message",{"info":"fatal data info"});
     now = Date.now();
     assert.ok(fatal ,                                    "[fatal] alert build  -> ok" );
     assert.equal(fatal.alerteName  , null              , "[fatal] fatal.alerteName = null  -> ok" );
@@ -171,10 +171,10 @@ QUnit.test("[inugami_core_alerting_test] org.inugami.builders.alert", function( 
 
 
 // -----------------------------------------------------------------------------
-//  [inugami_core_alerting_test] org.inugami.builders.alert
+//  [inugami_core_alerting_test] io.inugami.builders.alert
 // -----------------------------------------------------------------------------
-QUnit.test("[inugami_core_alerting_test] org.inugami.builders.simpleEvent", function( assert ) {
-    var simpleEvent = org.inugami.builders.buildSimpleEvent("simpleEvent");
+QUnit.test("[inugami_core_alerting_test] io.inugami.builders.simpleEvent", function( assert ) {
+    var simpleEvent = io.inugami.builders.buildSimpleEvent("simpleEvent");
 
     assert.ok(simpleEvent ,                               "[case-1] simpleEvent isn't null  -> ok" );
     assert.equal(simpleEvent.name      , "simpleEvent"  , "[case-1] simpleEvent.name = simpleEvent  -> ok" );
@@ -189,7 +189,7 @@ QUnit.test("[inugami_core_alerting_test] org.inugami.builders.simpleEvent", func
     assert.equal(simpleEvent.processors, null           , "[case-1] simpleEvent.processors = null  -> ok" );
 
     var query =  "org.foo.bar.service.10min";
-    simpleEvent = org.inugami.builders.buildSimpleEvent("simpleEvent", "my-provider", query,"-20min", "-10min");
+    simpleEvent = io.inugami.builders.buildSimpleEvent("simpleEvent", "my-provider", query,"-20min", "-10min");
     assert.ok(simpleEvent ,                               "[case-2] simpleEvent isn't null  -> ok" );
     assert.equal(simpleEvent.name      , "simpleEvent"  , "[case-2] simpleEvent.name = simpleEvent  -> ok" );
     assert.equal(simpleEvent.from      , "-20min"       , "[case-2] simpleEvent.from = null  -> ok" );
@@ -203,7 +203,7 @@ QUnit.test("[inugami_core_alerting_test] org.inugami.builders.simpleEvent", func
     assert.equal(simpleEvent.processors, null           , "[case-2] simpleEvent.processors = null  -> ok" );
 
 
-    simpleEvent = org.inugami.builders.simpleEvent({
+    simpleEvent = io.inugami.builders.simpleEvent({
         "name"       :"eventName",
 		"from"       : "-10min",
 		"until"      : "-5min",
@@ -271,11 +271,11 @@ QUnit.test("[inugami_core_alerting_test] org.inugami.builders.simpleEvent", func
 
 
 // -----------------------------------------------------------------------------
-//  [inugami_core_alerting_test] org.inugami.builders.alert
+//  [inugami_core_alerting_test] io.inugami.builders.alert
 // -----------------------------------------------------------------------------
-QUnit.test("[inugami_core_alerting_test] org.inugami.builders.event", function( assert ) {
+QUnit.test("[inugami_core_alerting_test] io.inugami.builders.event", function( assert ) {
     var query =  "org.foo.bar.service.10min";
-    var event = org.inugami.builders.buildEvent("event");
+    var event = io.inugami.builders.buildEvent("event");
 
     assert.ok(event ,                               "[case-1] event isn't null  -> ok" );
     assert.equal(event.name      , "event"        , "[case-1] event.name = event  -> ok" );
@@ -289,7 +289,7 @@ QUnit.test("[inugami_core_alerting_test] org.inugami.builders.event", function( 
     assert.equal(event.processors, null           , "[case-1] event.processors = null  -> ok" );
     assert.equal(event.targets   , null           , "[case-1] event.targets = null  -> ok" );
 
-    event = org.inugami.builders.buildEvent("event", "my-provider", "-20min", "-10min");
+    event = io.inugami.builders.buildEvent("event", "my-provider", "-20min", "-10min");
     assert.equal(event.name      , "event"        , "[case-2] event.name = event  -> ok" );
     assert.equal(event.from      , "-20min"       , "[case-2] event.from = '-20min'  -> ok" );
     assert.equal(event.until     , "-10min"       , "[case-2] event.until = '-10min'  -> ok" );
@@ -302,7 +302,7 @@ QUnit.test("[inugami_core_alerting_test] org.inugami.builders.event", function( 
     assert.equal(event.targets   , null           , "[case-2] event.targets = null  -> ok" );
 
 
-    event = org.inugami.builders.event({
+    event = io.inugami.builders.event({
 		"name"       :"event",
 		"from"       : "-10min",
 		"until"      : "-5min",

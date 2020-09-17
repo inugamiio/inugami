@@ -7,7 +7,7 @@
 
 QUnit.test("[alerting_example_test] simple alert", function( assert ) {
     var gav   = mockInugami.buildGav("org.foobar", "my-plugin");
-    var event = org.inugami.builders.buildSimpleEvent("simpleEvent","graphite.provider","prd.serice.foo", "-30min");
+    var event = io.inugami.builders.buildSimpleEvent("simpleEvent","graphite.provider","prd.serice.foo", "-30min");
 
     var case1 = simpleAlerting(gav, event, mockInugami.data.graphite.simpleData(1));
     assert.notOk(case1 , "[case1] case1 must be null null -> ok" );

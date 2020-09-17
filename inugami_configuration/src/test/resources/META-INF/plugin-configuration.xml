@@ -4,7 +4,7 @@
     =   GAV
     =========================================================================-->
     <gav>
-        <groupId>org.inugami</groupId>
+        <groupId>io.inugami</groupId>
         <artifactId>inugami_configuration</artifactId>
         <version>x.y.z</version>
     </gav>
@@ -14,7 +14,7 @@
     =   LISTENERS
     =========================================================================-->
     <listeners>
-        <listener name="testListener" className="org.inugami.configuration.listener.Listener">
+        <listener name="testListener" className="io.inugami.configuration.listener.Listener">
             <config key="data" value="FoobarData" />
             <config key="title" value="Hello the world" />
         </listener>

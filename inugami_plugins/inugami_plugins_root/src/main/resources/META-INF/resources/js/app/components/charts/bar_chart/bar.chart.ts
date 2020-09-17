@@ -135,7 +135,7 @@ export class BarChart implements ControlValueAccessor,AfterViewInit {
     
 
     ngAfterContentInit() {
-        org.inugami.asserts.isTrue(this.resolution>0,"can't render current compoent with this resolution :"+this.resolution);
+        io.inugami.asserts.isTrue(this.resolution>0,"can't render current compoent with this resolution :"+this.resolution);
         this.heightAuto = isNotNull(this.heightRatio);
         this.widthAuto  = isNotNull(this.widthRatio);
 
@@ -149,24 +149,24 @@ export class BarChart implements ControlValueAccessor,AfterViewInit {
         // binding events ::::::::::::::::::::::::::::::::::
         let self= this;
         if(isNotNull(this.event)){
-            org.inugami.events.addEventListenerByPlugin(this.pluginName,this.event, function(event) {
+            io.inugami.events.addEventListenerByPlugin(this.pluginName,this.event, function(event) {
                 if (isNotNull(event.detail.data) && isNotNull(event.detail.data.values)) {
                   self.writeValue(event.detail.data.values);
                 }
             });
           }
   
-        org.inugami.events.addEventListener(org.inugami.events.type.RESIZE, function(data){
+        io.inugami.events.addEventListener(io.inugami.events.type.RESIZE, function(data){
             self.updateSize(data.detail);
             self.processRefresh();
         });
 
-        org.inugami.events.addEventListener(org.inugami.events.type.UPDATE_CONFIGURATION, function(data){
-            self.updateSize(org.inugami.values.screen);
+        io.inugami.events.addEventListener(io.inugami.events.type.UPDATE_CONFIGURATION, function(data){
+            self.updateSize(io.inugami.values.screen);
             self.processRefresh();
         });
   
-        this.updateSize(org.inugami.values.screen);
+        this.updateSize(io.inugami.values.screen);
         self.processRefresh();
     }
 
@@ -377,7 +377,7 @@ export class BarChart implements ControlValueAccessor,AfterViewInit {
     }
 
     private extractData(data){
-        let sortData = org.inugami.data.extractors.graphite.sortTargets(data);
+        let sortData = io.inugami.data.extractors.graphite.sortTargets(data);
         for(let target of sortData){
             this.extractTargetData(target);
         }
@@ -395,12 +395,12 @@ export class BarChart implements ControlValueAccessor,AfterViewInit {
 
     private initTargetData(data){
         let key = data.target;
-        let specificStyleClass = org.inugami.data.extractors.style.decomposeStyleClass(key, '-');
+        let specificStyleClass = io.inugami.data.extractors.style.decomposeStyleClass(key, '-');
                                
         let group              = this.compos.data.points.append("g").attr("class","datapoint "+specificStyleClass);
 
         let values             = [];
-        let realDatapoints     = org.inugami.data.extractors.graphite.cleanDatapoints(data.datapoints);
+        let realDatapoints     = io.inugami.data.extractors.graphite.cleanDatapoints(data.datapoints);
 
         let resolutionDelta    = realDatapoints.length - this.resolution;
         let cursor             = this.resolution;

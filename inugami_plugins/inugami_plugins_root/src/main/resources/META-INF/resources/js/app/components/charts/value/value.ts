@@ -51,7 +51,7 @@ import {Component,
       if(isNotNull(this.event)){
         let self= this;
   
-        org.inugami.events.addEventListenerByPlugin(this.pluginName,this.event, function(event) {
+        io.inugami.events.addEventListenerByPlugin(this.pluginName,this.event, function(event) {
             if (isNotNull(event.detail.data) && isNotNull(event.detail.data.values)) {
               let realData = null;
               self.alerts = event.detail.data.alerts;
@@ -84,7 +84,7 @@ import {Component,
       if(isNotNull(this.extractor)){
         result = this.extractor(value);
       }else{
-        result = org.inugami.data.extractors.graphite.simpleValue(value);
+        result = io.inugami.data.extractors.graphite.simpleValue(value);
       }
       return result;
     }
@@ -92,7 +92,7 @@ import {Component,
     formatDataPoint(value){
       let result = null;
       if(isNull(this.formatter)){
-        result = org.inugami.formatters.truncateNumber(value);
+        result = io.inugami.formatters.truncateNumber(value);
       }else{
         result = this.formatter(value);
       }
@@ -103,7 +103,7 @@ import {Component,
     formatDate(value){
       let result = null;
       if(isNull(this.dateFormatter)){
-        result = org.inugami.formatters.timestampToHour(value);
+        result = io.inugami.formatters.timestampToHour(value);
       }else{
         result = this.dateFormatter(value);
       }
@@ -111,7 +111,7 @@ import {Component,
     }
 
     getStyleClass(){
-      return org.inugami.rendering.alertsStyles(this.styleClass,this.alerts); 
+      return io.inugami.rendering.alertsStyles(this.styleClass,this.alerts); 
     }
     /*****************************************************************************
     * IMPLEMENTS ControlValueAccessor

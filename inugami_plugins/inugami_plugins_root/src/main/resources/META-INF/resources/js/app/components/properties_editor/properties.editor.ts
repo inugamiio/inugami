@@ -27,7 +27,7 @@ export class PropertiesEditor  implements ControlValueAccessor{
     @Input() tabindex                   : number;
     //private property                    : Property = new Property();
     private innerValue                  : any      = null;
-    private validators                  : any      = org.inugami.validators;
+    private validators                  : any      = io.inugami.validators;
     private displayState                : any      = {};
     private focus                       : any      = {};
 
@@ -55,7 +55,7 @@ export class PropertiesEditor  implements ControlValueAccessor{
 
     public removeProperty(index:number){
         let property = this.innerValue[index];
-        let confirmationLable   = org.inugami.formatters.message("properties.delete.confirmation",[property.key]);
+        let confirmationLable   = io.inugami.formatters.message("properties.delete.confirmation",[property.key]);
 /*
         this.confirmationService.confirm({
 

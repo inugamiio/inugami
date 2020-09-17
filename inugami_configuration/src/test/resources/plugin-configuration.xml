@@ -28,7 +28,7 @@
     =   PROVIDERS
     =========================================================================-->
     <providers>
-        <provider name="foobar.system" type="system" className="org.inugami.plugins.callers.SystemCaller">
+        <provider name="foobar.system" type="system" className="io.inugami.plugins.callers.SystemCaller">
             <config key="data" value="FoobarData" />
         </provider>
     </providers>
@@ -37,14 +37,14 @@
     =   PROCESSORS
     =========================================================================-->
     <processors>
-        <processor name="foo" className="org.inugami.plugins.processors.Foo" />
+        <processor name="foo" className="io.inugami.plugins.processors.Foo" />
     </processors>
 
     <!--========================================================================
     =   LISTENERS
     =========================================================================-->
     <listeners>
-        <listener name="customListener" className="org.inugami.plugins.listeners.CustomListerner" />
+        <listener name="customListener" className="io.inugami.plugins.listeners.CustomListerner" />
     </listeners>
     
     <!--========================================================================

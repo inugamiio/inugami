@@ -74,8 +74,8 @@ export class InputTimeSlots implements OnInit, ControlValueAccessor {
     *****************************************************************************/
 
     ngOnInit() {
-      this.separator= org.inugami.formatters.message("time.slots.to");
-      org.inugami.asserts.isFalse("??time.slots.to??"===this.separator, "property time.slots.to not found");
+      this.separator= io.inugami.formatters.message("time.slots.to");
+      io.inugami.asserts.isFalse("??time.slots.to??"===this.separator, "property time.slots.to not found");
        if(this.timeSlotsModel.length == 0){
          let initialTimeSlot = new TimeSlot("00:00","00:00"); 
          this.timeSlotsModel.push(initialTimeSlot);

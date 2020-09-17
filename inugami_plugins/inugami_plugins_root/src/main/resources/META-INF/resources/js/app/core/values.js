@@ -1,7 +1,7 @@
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // VALUES
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-org.inugami.values = {
+io.inugami.values = {
     screen : {
         height : $(window).height(),
         width : $(window).width()
@@ -26,6 +26,6 @@ org.inugami.values = {
 
 
 $(document).mousemove(function(event) {
-    org.inugami.values.mouse.x=event.pageX;
-    org.inugami.values.mouse.y=event.pageY;
+    io.inugami.values.mouse.x=event.pageX;
+    io.inugami.values.mouse.y=event.pageY;
 });

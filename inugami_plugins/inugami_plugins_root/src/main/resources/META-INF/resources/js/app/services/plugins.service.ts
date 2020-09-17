@@ -12,7 +12,7 @@ export class PluginsService {
     /**************************************************************************
     * ATTRIBUTES
     **************************************************************************/
-    private LOGGER      : any =  org.inugami.logger.factory("PluginsService");
+    private LOGGER      : any =  io.inugami.logger.factory("PluginsService");
     private urls        : any;
     private lastCalls   : any = {};
 
@@ -28,7 +28,7 @@ export class PluginsService {
         };
         
         let self = this;
-        org.inugami.events.addEventListenerByPlugin("globale","all-plugins-data", function(event){
+        io.inugami.events.addEventListenerByPlugin("globale","all-plugins-data", function(event){
             self.processCallAllPluginsData();
         });
     }
@@ -47,11 +47,11 @@ export class PluginsService {
     callPluginEventsProcessingGav(groupId, artifactId,excludeEvents){
         if(this.allowToCallServer(groupId, artifactId,excludeEvents)){
             this.LOGGER.info("call plugin events processing for : {0}:{1}",[groupId, artifactId]);
-            org.inugami.asserts.notNull(groupId, "Plugin groupId is mandatory");
-            org.inugami.asserts.notNull(artifactId, "Plugin artifactId is mandatory");
+            io.inugami.asserts.notNull(groupId, "Plugin groupId is mandatory");
+            io.inugami.asserts.notNull(artifactId, "Plugin artifactId is mandatory");
             let shortGav = [groupId,artifactId].join(':');
             let gav = PLUGINS_GAVS.plugins[pluginName];
-            org.inugami.asserts.notNull(gav, "Can't found plugin GAV for name :"+pluginName);
+            io.inugami.asserts.notNull(gav, "Can't found plugin GAV for name :"+pluginName);
             this.processCallPluginEvents(gav,excludeEvents);
         }
     }
@@ -60,9 +60,9 @@ export class PluginsService {
     callPluginEventsProcessingBaseName(pluginName, excludeEvents){
       if(this.allowToCallServer(pluginName, pluginName,excludeEvents)){
         this.LOGGER.info("call plugin events processing for : {0}",[pluginName]);
-        org.inugami.asserts.notNull(pluginName, "Plugin angular module name is mandatory");
+        io.inugami.asserts.notNull(pluginName, "Plugin angular module name is mandatory");
         let gav = PLUGINS_GAVS.frontPlugins[pluginName];
-        org.inugami.asserts.notNull(gav, "Can't found plugin GAV for name :"+pluginName);
+        io.inugami.asserts.notNull(gav, "Can't found plugin GAV for name :"+pluginName);
         this.processCallPluginEvents(gav,excludeEvents);
       }
     }
@@ -142,8 +142,8 @@ export class PluginsService {
                   };
 
 
-                let eventName = org.inugami.events.buildEventFullName(localData.channel,localData.name);
-                org.inugami.events.fireEvent(eventName,localData);
+                let eventName = io.inugami.events.buildEventFullName(localData.channel,localData.name);
+                io.inugami.events.fireEvent(eventName,localData);
             }catch(error){
                 console.log(error);
             }

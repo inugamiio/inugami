@@ -30,11 +30,11 @@ export class AdminViewAlerts{
     private sectionSelected       : string = "table";
 
     private msgLabels         : any = {
-        uid     : org.inugami.formatters.message("alert.edit.alert.name"),
-        created : org.inugami.formatters.message("alert.edit.alert.created"),
-        level   : org.inugami.formatters.message("alert.edit.alert.level"),
-        label   : org.inugami.formatters.message("alert.edit.alert.label"),
-        actions : org.inugami.formatters.message("title.generic.actions")
+        uid     : io.inugami.formatters.message("alert.edit.alert.name"),
+        created : io.inugami.formatters.message("alert.edit.alert.created"),
+        level   : io.inugami.formatters.message("alert.edit.alert.level"),
+        label   : io.inugami.formatters.message("alert.edit.alert.label"),
+        actions : io.inugami.formatters.message("title.generic.actions")
     }
     /**************************************************************************
     * CONSTRUCTOR
@@ -43,7 +43,7 @@ export class AdminViewAlerts{
         this.initAlerts();
 
         let self = this;
-        org.inugami.events.addEventListener("administration_alerts_update", function(event){
+        io.inugami.events.addEventListener("administration_alerts_update", function(event){
             self.initAlerts();
         });
         
@@ -101,14 +101,14 @@ export class AdminViewAlerts{
         if(alert.enable){
             this.alertsCrudServices.enableAlert(alert.uid)
                                    .then((data)=>{
-                                        let msg = org.inugami.formatters.messageValue("alert.enable.success");
+                                        let msg = io.inugami.formatters.messageValue("alert.enable.success");
                                         this.addMessageAndWait({"severity":'success', "summary":msg});
                                    })
                                    .catch((error)=>this.addMessageAndWait(error));
         }else{
             this.alertsCrudServices.disableAlert(alert.uid)
                                    .then((data)=>{
-                                        let msg = org.inugami.formatters.messageValue("alert.disable.success");
+                                        let msg = io.inugami.formatters.messageValue("alert.disable.success");
                                         this.addMessageAndWait({"severity":'warn', "summary":msg});
                                     })
                                     .catch((error)=>this.addMessageAndWait(error));
@@ -118,7 +118,7 @@ export class AdminViewAlerts{
     deleteAlert(alert:AlertEntity){
         let uids = [alert.uid];
         this.alertsCrudServices.delete(uids).then((data)=>{
-            let msg = org.inugami.formatters.messageValue("alert.delete.success");
+            let msg = io.inugami.formatters.messageValue("alert.delete.success");
             this.onMessage({"severity":'success', "summary":msg});;
         })
         .catch((error)=>this.handlerError(error));
@@ -130,7 +130,7 @@ export class AdminViewAlerts{
     handlerError(error){
         let errorMsg = null;
         if(isNotNull(error.data) && isNotNull(error.data.errorCode)){
-            errorMsg = org.inugami.formatters.messageValue(["dashboard.tv.error",error.data.errorCode].join("."));
+            errorMsg = io.inugami.formatters.messageValue(["dashboard.tv.error",error.data.errorCode].join("."));
         }
         if(isNull(errorMsg)){
             errorMsg = error.statusText;
@@ -155,7 +155,7 @@ export class AdminViewAlerts{
 
     formateDate(time:number){
         let timestamp = Math.round(time/1000);
-        return org.inugami.formatters.timestampToDate(timestamp);
+        return io.inugami.formatters.timestampToDate(timestamp);
     }
     
     isDynamicAlert(value:boolean){

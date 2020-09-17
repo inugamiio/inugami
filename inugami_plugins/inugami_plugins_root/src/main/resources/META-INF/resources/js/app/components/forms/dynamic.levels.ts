@@ -141,8 +141,8 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
 
 
 
-        this.axisXPointsNumber = parseInt(org.inugami.formatters.messageValue("alert.edit.dynamic.levels.axis.x.points.number"));
-        this.axisYPointsNumber = parseInt(org.inugami.formatters.messageValue("alert.edit.dynamic.levels.axis.y.points.number"));
+        this.axisXPointsNumber = parseInt(io.inugami.formatters.messageValue("alert.edit.dynamic.levels.axis.x.points.number"));
+        this.axisYPointsNumber = parseInt(io.inugami.formatters.messageValue("alert.edit.dynamic.levels.axis.y.points.number"));
     }
 
     /***************************************************************************
@@ -543,7 +543,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
     }
 
     private _moveDataPoints(yPos: any) {
-        org.inugami.asserts.isTrue(this.innerValue.minValue < this.innerValue.maxValue, "min value should be lower than max value");
+        io.inugami.asserts.isTrue(this.innerValue.minValue < this.innerValue.maxValue, "min value should be lower than max value");
         if (isNotNull(this.selectedDataPoint)) {
 
             if (!this.dynamicMode) {
@@ -563,7 +563,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
             let lineData = this.innerValue.data.find(function (element) {
                 return element.name == name;
             })
-            org.inugami.asserts.notNull(lineData, "no line with level same as selected point found");
+            io.inugami.asserts.notNull(lineData, "no line with level same as selected point found");
 
             let self = this;
 
@@ -580,13 +580,13 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         let lineData = this.innerValue.data.find(function (element) {
             return element.name == name;
         })
-        org.inugami.asserts.notNull(lineData, "no line with level same as selected point found");
+        io.inugami.asserts.notNull(lineData, "no line with level same as selected point found");
 
         let self = this;
         let pointData = lineData.data.find(function (element) {
             return element.hour == self.selectedDataPoint.attr("hour");
         })
-        org.inugami.asserts.notNull(pointData, "no datapoint with same hour as selected point found");
+        io.inugami.asserts.notNull(pointData, "no datapoint with same hour as selected point found");
 
 
         pointData.level = this.computeDataPointsLevel(this.position.axisY.y1, this.position.axisY.y2 - this.elementSize.axisYPointsMargin,
@@ -599,7 +599,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         let lineData = this.innerValue.data.find(function (element) {
             return element.name == name;
         })
-        org.inugami.asserts.notNull(lineData, "no line with level same as selected point found");
+        io.inugami.asserts.notNull(lineData, "no line with level same as selected point found");
 
         let self = this;
 
@@ -617,7 +617,7 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
         let lineData = this.innerValue.data.find(function (element) {
             return element.name == name;
         })
-        org.inugami.asserts.notNull(lineData, "no line with level same as selected point found");
+        io.inugami.asserts.notNull(lineData, "no line with level same as selected point found");
 
         let self = this;
 
@@ -907,8 +907,8 @@ export class DynamicLevels extends SvgComponent implements ControlValueAccessor 
                 this.setMaxValue(innerValue.maxValue);
                 this.setMinValue(innerValue.minValue);
                 for (let dataLine of innerValue.data) {
-                    org.inugami.asserts.notNull(dataLine.name, "data lines must have names");
-                    org.inugami.asserts.isTrue(dataLine.data.length == this.axisXPointsNumber, "there must be the same number of points as there is of x axis points");
+                    io.inugami.asserts.notNull(dataLine.name, "data lines must have names");
+                    io.inugami.asserts.isTrue(dataLine.data.length == this.axisXPointsNumber, "there must be the same number of points as there is of x axis points");
                 }
 
                 for (let keys of Object.keys(this.groups.dataPoints)) {

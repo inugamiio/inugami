@@ -1,7 +1,7 @@
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // CHECK API
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-org.inugami.checks = {
+io.inugami.checks = {
     /**
      * Allow to check if value is null
      * @param value
@@ -16,7 +16,7 @@ org.inugami.checks = {
      * @returns true if value isn't null
      */
     isNotNull: function (value) {
-        return !org.inugami.checks.isNull(value);
+        return !io.inugami.checks.isNull(value);
     },
 
 
@@ -26,8 +26,8 @@ org.inugami.checks = {
 
     indexOf : function(value, list, functionEquals){
         var result = -1;
-        if(org.inugami.checks.isNotNull(list)){
-            var useFunction = org.inugami.checks.isNotNull(functionEquals);
+        if(io.inugami.checks.isNotNull(list)){
+            var useFunction = io.inugami.checks.isNotNull(functionEquals);
             for(var i=list.length-1; i>=0;i--){
 
                 var same = useFunction ? functionEquals(list[i],value) :list[i]===value;
@@ -41,10 +41,10 @@ org.inugami.checks = {
     },
 
     contains : function(value, list, functionEquals){
-        return org.inugami.checks.indexOf(value, list,functionEquals) != -1;
+        return io.inugami.checks.indexOf(value, list,functionEquals) != -1;
     },
     containsDefault : function(value, list){
-        return org.inugami.checks.indexOf(value, list,function(ref,value){
+        return io.inugami.checks.indexOf(value, list,function(ref,value){
             return ref===value;
         }) != -1;
     },
@@ -63,40 +63,40 @@ org.inugami.checks = {
 // CHECK API SHORTCUT
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 function isNull(value){
-    return org.inugami.checks.isNull(value);
+    return io.inugami.checks.isNull(value);
 }
 
 function isNotNull(value){
-    return org.inugami.checks.isNotNull(value);
+    return io.inugami.checks.isNotNull(value);
 }
 
 function notEmpty(value){
-    return org.inugami.checks.isNotNull(value);
+    return io.inugami.checks.isNotNull(value);
 }
 
 function indexOf(value, list, functionEquals){
-    return org.inugami.checks.indexOf(value, list, functionEquals);
+    return io.inugami.checks.indexOf(value, list, functionEquals);
 }
 
 function contains(value, list, functionEquals){
     var result = null;
-    if(org.inugami.checks.isNull(functionEquals)){
-        result =  org.inugami.checks.containsDefault(value, list);
+    if(io.inugami.checks.isNull(functionEquals)){
+        result =  io.inugami.checks.containsDefault(value, list);
     }else{
-        result =  org.inugami.checks.contains(value, list, functionEquals);
+        result =  io.inugami.checks.contains(value, list, functionEquals);
     }
     return result;
 }
 
 function isArray(value){
-    return org.inugami.checks.isArray(value);
+    return io.inugami.checks.isArray(value);
 }
 
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // VALIDATOR API
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-org.inugami.validators = {
+io.inugami.validators = {
     notNull  : function(value){
         return isNotNull(value)?null:"javax.validation.constraints.NotNull.message";
     },
@@ -104,13 +104,13 @@ org.inugami.validators = {
         var result = null;
         if(isNotNull(value)){
             if(isNaN(value)){
-                result = "org.inugami.validator.type.not.number";
+                result = "io.inugami.validator.type.not.number";
             }
         }
         return result;
     },
     notNegativeNumber : function(value){
-        var result = org.inugami.validators.isNumber(value);
+        var result = io.inugami.validators.isNumber(value);
         if(isNotNull(value) && isNull(result)){
             if(value<0){
                 result = "javax.validation.constraints.PositiveOrZero.message";
@@ -119,7 +119,7 @@ org.inugami.validators = {
         return result;
     },
     notEmptyString: function(value){
-        var result = org.inugami.validators.notNull(value);
+        var result = io.inugami.validators.notNull(value);
         if(isNull(result)){
             result  = (""+value).trim().length==0?"javax.validation.constraints.NotEmpty.message":null;
         }

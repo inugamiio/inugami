@@ -13,15 +13,15 @@
     = PARENT
     ======================================================================== -->
     <parent>
-        <groupId>org.inugami</groupId>
+        <groupId>io.inugami</groupId>
         <artifactId>inugami</artifactId>
-        <version>1.3.3-SNAPSHOT</version>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
 
     <!-- ======================================================================= 
     = PROJECT
     ======================================================================== -->
-    <groupId>org.inugami.plugins</groupId>
+    <groupId>io.inugami.plugins</groupId>
     <artifactId>inugami_plugins</artifactId>
     <packaging>pom</packaging>
 
@@ -55,7 +55,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.inugami</groupId>
+            <groupId>io.inugami</groupId>
             <artifactId>inugami_core</artifactId>
         </dependency>
     </dependencies>    
@@ -83,7 +83,7 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>org.inugami.maven.plugin.lifecycle</groupId>
+                    <groupId>io.inugami.maven.plugin.lifecycle</groupId>
                     <artifactId>inugami-maven-lifecycle</artifactId>
                     <version>${_super.plugin.inugami_plugin_lifecycle.version}</version>
                     <extensions>true</extensions>
@@ -91,7 +91,7 @@
 
 
                 <plugin>
-                    <groupId>org.inugami.maven.plugin</groupId>
+                    <groupId>io.inugami.maven.plugin</groupId>
                     <artifactId>inugami-maven-plugin</artifactId>
                     <version>${_super.plugin.inugami-plugin-maven.version}</version>
                     <executions>
@@ -163,7 +163,7 @@
                             <pluginExecutions>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
-                                        <groupId>org.inugami.maven.plugin</groupId>
+                                        <groupId>io.inugami.maven.plugin</groupId>
                                         <artifactId>inugami-maven-plugin</artifactId>
                                         <versionRange>[1.0.0,)</versionRange>
                                         <goals>
@@ -198,12 +198,12 @@
         </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.inugami.maven.plugin.lifecycle</groupId>
+                <groupId>io.inugami.maven.plugin.lifecycle</groupId>
                 <artifactId>inugami-maven-lifecycle</artifactId>
             </plugin>
 
             <plugin>
-                <groupId>org.inugami.maven.plugin</groupId>
+                <groupId>io.inugami.maven.plugin</groupId>
                 <artifactId>inugami-maven-plugin</artifactId>
             </plugin>
         </plugins>

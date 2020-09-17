@@ -1,4 +1,0 @@
-org.inugami.core.providers.functions.StartHourAtFunction
-org.inugami.core.providers.kibana.functions.HostsFunction
-org.inugami.core.providers.kibana.functions.TimestampFunction
-org.inugami.core.providers.kibana.functions.ElsIndexDate

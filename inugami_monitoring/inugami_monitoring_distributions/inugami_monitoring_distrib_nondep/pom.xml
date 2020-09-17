@@ -13,9 +13,9 @@
     = PARENT
     ======================================================================== -->
     <parent>
-        <groupId>org.inugami.monitoring.distributions</groupId>
+        <groupId>io.inugami.monitoring.distributions</groupId>
         <artifactId>inugami_monitoring_distributions</artifactId>
-        <version>1.3.3-SNAPSHOT</version>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
 
 
@@ -50,36 +50,36 @@
                                     </manifestEntries>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.inugami.commons.cli.MainCliAction</resource>
+                                    <resource>META-INF/services/io.inugami.commons.cli.MainCliAction</resource>
                                 </transformer>
 
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.inugami.commons.engine.JavaScriptEngineScriptLoaderSpi</resource>
+                                    <resource>META-INF/services/io.inugami.commons.engine.JavaScriptEngineScriptLoaderSpi</resource>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.inugami.configuration.services.functions.ProviderAttributFunction</resource>
+                                    <resource>META-INF/services/io.inugami.configuration.services.functions.ProviderAttributFunction</resource>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.inugami.core.context.ContextSPI</resource>
+                                    <resource>META-INF/services/io.inugami.core.context.ContextSPI</resource>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor</resource>
+                                    <resource>META-INF/services/io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor</resource>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.inugami.monitoring.api.obfuscators.Obfuscator</resource>
+                                    <resource>META-INF/services/io.inugami.monitoring.api.obfuscators.Obfuscator</resource>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.inugami.monitoring.api.resolvers.Interceptable</resource>
+                                    <resource>META-INF/services/io.inugami.monitoring.api.resolvers.Interceptable</resource>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.inugami.api.monitoring.sensors.MonitoringSensor</resource>
+                                    <resource>META-INF/services/io.inugami.api.monitoring.sensors.MonitoringSensor</resource>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.inugami.monitoring.core.sensors.services.ServicesSensorAggregator</resource>
+                                    <resource>META-INF/services/io.inugami.monitoring.core.sensors.services.ServicesSensorAggregator</resource>
                                 </transformer>
 
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/org.inugami.api.monitoring.senders.MonitoringSender</resource>
+                                    <resource>META-INF/services/io.inugami.api.monitoring.senders.MonitoringSender</resource>
                                 </transformer>
 
                             </transformers>

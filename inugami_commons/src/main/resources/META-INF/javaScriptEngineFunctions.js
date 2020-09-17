@@ -1,6 +1,6 @@
-var _tools          = Java.type('org.inugami.commons.engine.js.JavaScriptEngineFunctions');
-var _toolsBuilders  = Java.type('org.inugami.commons.engine.js.JavaScriptEngineBuildersFunctions');
-var _toolsRegex     = Java.type('org.inugami.commons.engine.js.JsRegex');
+var _tools          = Java.type('io.inugami.commons.engine.js.JavaScriptEngineFunctions');
+var _toolsBuilders  = Java.type('io.inugami.commons.engine.js.JavaScriptEngineBuildersFunctions');
+var _toolsRegex     = Java.type('io.inugami.commons.engine.js.JsRegex');
 //=========================================================================
 // JSON
 //=========================================================================

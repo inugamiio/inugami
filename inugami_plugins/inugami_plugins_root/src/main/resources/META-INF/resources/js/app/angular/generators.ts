@@ -6,8 +6,8 @@ export interface InugamiGenerators {
 }
 
 export const GENERATORS : InugamiGenerators = {
-    lorem            :(sizeMin, sizeMax)=>org.inugami.services.generators.lorem(sizeMin, sizeMax),
-    randomBoolean    :()=>org.inugami.services.generators.randomBoolean(),
-    randomNumber     :(min, max)=>org.inugami.services.generators.randomNumber(min, max),
-    randomValues     :(values)=>org.inugami.services.generators.randomValues(values)
+    lorem            :(sizeMin, sizeMax)=>io.inugami.services.generators.lorem(sizeMin, sizeMax),
+    randomBoolean    :()=>io.inugami.services.generators.randomBoolean(),
+    randomNumber     :(min, max)=>io.inugami.services.generators.randomNumber(min, max),
+    randomValues     :(values)=>io.inugami.services.generators.randomValues(values)
 }

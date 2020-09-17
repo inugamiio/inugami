@@ -88,7 +88,7 @@ export class InputBloc implements ControlValueAccessor,AfterViewInit {
 
   private applyProperty(key:string){
     let result = key;
-    let bundleMsg =  org.inugami.formatters.messageValue(key);
+    let bundleMsg =  io.inugami.formatters.messageValue(key);
     if(isNotNull(bundleMsg)){
       result = bundleMsg;
     }

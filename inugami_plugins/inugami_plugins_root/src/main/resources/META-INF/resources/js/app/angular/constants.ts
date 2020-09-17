@@ -75,53 +75,53 @@ export interface InugamiConstants{
 
 export const CONSTANTS : InugamiConstants  = {
     mimetype : {
-        JSON:org.inugami.constants.mimetype.JSON
+        JSON:io.inugami.constants.mimetype.JSON
     },
     headers : {
         defaultJson:{
-           contentType: org.inugami.constants.headers.DEFAULT_JSON
+           contentType: io.inugami.constants.headers.DEFAULT_JSON
         },
-        deviceIdentifier            : org.inugami.constants.headers.DEVICE_IDENTIFIER,
-        correlationId               : org.inugami.constants.headers.CORRELATION_ID,
-        deviceType                  : org.inugami.constants.headers.DEVICE_TYPE,
-        deviceClass                 : org.inugami.constants.headers.DEVICE_CLASS,
-        deviceOsVersion             : org.inugami.constants.headers.DEVICE_OS_VERSION,
-        deviceVersion               : org.inugami.constants.headers.DEVICE_VERSION,
-        deviceNetworkType           : org.inugami.constants.headers.DEVICE_NETWORK_TYPE,
-        deviceNetworkSpeedDown      : org.inugami.constants.headers.DEVICE_NETWORK_SPEED_DOWN,
-        deviceNetworkSpeedLatency   : org.inugami.constants.headers.DEVICE_NETWORK_SPEED_LATENCY
+        deviceIdentifier            : io.inugami.constants.headers.DEVICE_IDENTIFIER,
+        correlationId               : io.inugami.constants.headers.CORRELATION_ID,
+        deviceType                  : io.inugami.constants.headers.DEVICE_TYPE,
+        deviceClass                 : io.inugami.constants.headers.DEVICE_CLASS,
+        deviceOsVersion             : io.inugami.constants.headers.DEVICE_OS_VERSION,
+        deviceVersion               : io.inugami.constants.headers.DEVICE_VERSION,
+        deviceNetworkType           : io.inugami.constants.headers.DEVICE_NETWORK_TYPE,
+        deviceNetworkSpeedDown      : io.inugami.constants.headers.DEVICE_NETWORK_SPEED_DOWN,
+        deviceNetworkSpeedLatency   : io.inugami.constants.headers.DEVICE_NETWORK_SPEED_LATENCY
     },
     code  :{
-        types:org.inugami.constants.codes.types
+        types:io.inugami.constants.codes.types
     },
     lorem : {
-        data:org.inugami.constants.lorem.data,
-        size:org.inugami.constants.lorem.size
+        data:io.inugami.constants.lorem.data,
+        size:io.inugami.constants.lorem.size
 
     },
     context:{
-        url         :org.inugami.constants.context.URL,
-        protocole   :org.inugami.constants.context.PROTOCOLE,
-        context     :org.inugami.constants.context.CONTEXT,
-        page        :org.inugami.constants.context.PAGE,
-        option      :org.inugami.constants.context.OPTION,
-        optionType  :org.inugami.constants.context.OPTION_TYPE,
-        locale      :org.inugami.constants.context.LOCALE
+        url         :io.inugami.constants.context.URL,
+        protocole   :io.inugami.constants.context.PROTOCOLE,
+        context     :io.inugami.constants.context.CONTEXT,
+        page        :io.inugami.constants.context.PAGE,
+        option      :io.inugami.constants.context.OPTION,
+        optionType  :io.inugami.constants.context.OPTION_TYPE,
+        locale      :io.inugami.constants.context.LOCALE
     },
     math:{
-        twoPi       :org.inugami.constants.math.TWO_PI,
-        twoPiRatio  :org.inugami.constants.math.TWO_PI_RATIO
+        twoPi       :io.inugami.constants.math.TWO_PI,
+        twoPiRatio  :io.inugami.constants.math.TWO_PI_RATIO
     },
-    token                       :org.inugami.constants.token,
-    uuid                        :org.inugami.constants.uuid,
-    deviceIdentifier            :org.inugami.constants.deviceIdentifier,
-    deviceClass                 :org.inugami.constants.deviceClass,
-    deviceType                  :org.inugami.constants.deviceType,
-    deviceOsVersion             :org.inugami.constants.deviceOsVersion,
-    deviceVersion               :org.inugami.constants.deviceVersion,
-    deviceNetworkType           :org.inugami.constants.deviceNetworkType,
-    deviceNetworkSpeedDown      :org.inugami.constants.deviceNetworkSpeedDown,
-    deviceNetworkSpeedLatency   :org.inugami.constants.deviceNetworkSpeedLatency,
+    token                       :io.inugami.constants.token,
+    uuid                        :io.inugami.constants.uuid,
+    deviceIdentifier            :io.inugami.constants.deviceIdentifier,
+    deviceClass                 :io.inugami.constants.deviceClass,
+    deviceType                  :io.inugami.constants.deviceType,
+    deviceOsVersion             :io.inugami.constants.deviceOsVersion,
+    deviceVersion               :io.inugami.constants.deviceVersion,
+    deviceNetworkType           :io.inugami.constants.deviceNetworkType,
+    deviceNetworkSpeedDown      :io.inugami.constants.deviceNetworkSpeedDown,
+    deviceNetworkSpeedLatency   :io.inugami.constants.deviceNetworkSpeedLatency,
 };
 
 

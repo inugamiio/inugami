@@ -25,26 +25,26 @@ class HandlerEvent<T>{
 }
 
 const localObservers = {
-    onResize                            :new HandlerEvent<any>(org.inugami.events.type.RESIZE),
-    onUpdateConfiguration               :new HandlerEvent<any>(org.inugami.events.type.UPDATE_CONFIGURATION),
-    onChangeScreenBefore                :new HandlerEvent<any>(org.inugami.events.type.CHANGE_SCREEN_BEFORE),
-    onChangeScreen                      :new HandlerEvent<any>(org.inugami.events.type.CHANGE_SCREEN),
-    onAppComponentsEvent                :new HandlerEvent<any>(org.inugami.events.type.APP_COMPONENTS_EVENT),
-    onAppComponentsEventCallBackBefore  :new HandlerEvent<any>(org.inugami.events.type.APP_COMPONENTS_EVENT_CALLBACK_BEFORE),
-    onAppComponentsEventCallBack        :new HandlerEvent<any>(org.inugami.events.type.APP_COMPONENTS_EVENT_CALLBACK),
-    onEverySecond                       :new HandlerEvent<any>(org.inugami.events.type.EVERY_SECOND),
-    onEveryMinute                       :new HandlerEvent<any>(org.inugami.events.type.EVERY_MINUTE),
-    onEveryPlainMinute                  :new HandlerEvent<any>(org.inugami.events.type.EVERY_PLAIN_MINUTE),
-    onEveryPlainHour                    :new HandlerEvent<any>(org.inugami.events.type.EVERY_PLAIN_HOUR),
-    onEveryPlainDay                     :new HandlerEvent<any>(org.inugami.events.type.EVERY_PLAIN_DAY),
+    onResize                            :new HandlerEvent<any>(io.inugami.events.type.RESIZE),
+    onUpdateConfiguration               :new HandlerEvent<any>(io.inugami.events.type.UPDATE_CONFIGURATION),
+    onChangeScreenBefore                :new HandlerEvent<any>(io.inugami.events.type.CHANGE_SCREEN_BEFORE),
+    onChangeScreen                      :new HandlerEvent<any>(io.inugami.events.type.CHANGE_SCREEN),
+    onAppComponentsEvent                :new HandlerEvent<any>(io.inugami.events.type.APP_COMPONENTS_EVENT),
+    onAppComponentsEventCallBackBefore  :new HandlerEvent<any>(io.inugami.events.type.APP_COMPONENTS_EVENT_CALLBACK_BEFORE),
+    onAppComponentsEventCallBack        :new HandlerEvent<any>(io.inugami.events.type.APP_COMPONENTS_EVENT_CALLBACK),
+    onEverySecond                       :new HandlerEvent<any>(io.inugami.events.type.EVERY_SECOND),
+    onEveryMinute                       :new HandlerEvent<any>(io.inugami.events.type.EVERY_MINUTE),
+    onEveryPlainMinute                  :new HandlerEvent<any>(io.inugami.events.type.EVERY_PLAIN_MINUTE),
+    onEveryPlainHour                    :new HandlerEvent<any>(io.inugami.events.type.EVERY_PLAIN_HOUR),
+    onEveryPlainDay                     :new HandlerEvent<any>(io.inugami.events.type.EVERY_PLAIN_DAY),
 
-    onSseOpen                           :new HandlerEvent<any>(org.inugami.sse.events.OPEN),
-    onSseError                          :new HandlerEvent<any>(org.inugami.sse.events.ERROR),
-    onSseUpdate                         :new HandlerEvent<any>(org.inugami.sse.events.UPDATE),
-    onSseAlreadyOpen                    :new HandlerEvent<any>(org.inugami.sse.events.ALREADY_OPEN),
-    onSseOpenOrAlreadyOpen              :new HandlerEvent<any>(org.inugami.sse.events.OPEN_OR_ALREADY_OPEN),
-    onSseForceRefresh                   :new HandlerEvent<any>(org.inugami.sse.events.FORCE_REFRESH),
-    onAlerts                            :new HandlerEvent<EventResult>(org.inugami.sse.events.ALERTS),
+    onSseOpen                           :new HandlerEvent<any>(io.inugami.sse.events.OPEN),
+    onSseError                          :new HandlerEvent<any>(io.inugami.sse.events.ERROR),
+    onSseUpdate                         :new HandlerEvent<any>(io.inugami.sse.events.UPDATE),
+    onSseAlreadyOpen                    :new HandlerEvent<any>(io.inugami.sse.events.ALREADY_OPEN),
+    onSseOpenOrAlreadyOpen              :new HandlerEvent<any>(io.inugami.sse.events.OPEN_OR_ALREADY_OPEN),
+    onSseForceRefresh                   :new HandlerEvent<any>(io.inugami.sse.events.FORCE_REFRESH),
+    onAlerts                            :new HandlerEvent<EventResult>(io.inugami.sse.events.ALERTS),
 
     onKonami                            :new HandlerEvent<any>("konami"),
     onHadoken                           :new HandlerEvent<any>("hadoken"),
@@ -125,10 +125,10 @@ export const EVENTS : InugamiEventsService = {
         onAlerts                            : localObservers.onAlerts.observer
     },
 
-    buildEventFullName    : (pluginName, eventName) => org.inugami.events.buildEventFullName(pluginName,eventName),
-    fireEvent             : (eventName,data)        =>org.inugami.events.fireEvent(eventName,data),
-    fireEventPlugin       : (pluginName, eventName, data,timestamp, alerts)=>org.inugami.events.fireEventPlugin(pluginName, eventName, data,timestamp, alerts),
-    updateResize          : ()=> org.inugami.events.updateResize(),
+    buildEventFullName    : (pluginName, eventName) => io.inugami.events.buildEventFullName(pluginName,eventName),
+    fireEvent             : (eventName,data)        =>io.inugami.events.fireEvent(eventName,data),
+    fireEventPlugin       : (pluginName, eventName, data,timestamp, alerts)=>io.inugami.events.fireEventPlugin(pluginName, eventName, data,timestamp, alerts),
+    updateResize          : ()=> io.inugami.events.updateResize(),
     eventListenerByPlugin : (pluginName,eventName) => {
         let fullEventName = EVENTS.buildEventFullName(pluginName,eventName);
 
@@ -154,8 +154,8 @@ export const EVENTS : InugamiEventsService = {
         onHadoken : localObservers.onHadoken.observer,
 
         addKeyListener : (identifier, keysInput) => {
-            org.inugami.events._inner.enableCheat=true;
-            org.inugami.events._inner.keysListener[identifier]=keysInput;
+            io.inugami.events._inner.enableCheat=true;
+            io.inugami.events._inner.keysListener[identifier]=keysInput;
             let result = localObservers.genericsEvents[identifier];
             if(result == undefined || result == null){
                 result = new HandlerEvent<any>(identifier);
@@ -164,8 +164,8 @@ export const EVENTS : InugamiEventsService = {
             return result.observer;
         },
 
-        enableKeysListerner  : ()=> org.inugami.events._inner.enableCheat=true,
-        disableKeysListerner : ()=> org.inugami.events._inner.enableCheat=false,
-        defineMaxKeys        : (max)=> org.inugami.events._inner.maxKey=max
+        enableKeysListerner  : ()=> io.inugami.events._inner.enableCheat=true,
+        disableKeysListerner : ()=> io.inugami.events._inner.enableCheat=false,
+        defineMaxKeys        : (max)=> io.inugami.events._inner.maxKey=max
     }
 }

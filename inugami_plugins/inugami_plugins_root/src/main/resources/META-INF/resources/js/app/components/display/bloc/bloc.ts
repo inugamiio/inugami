@@ -43,11 +43,11 @@ export class Bloc implements AfterViewInit{
   *****************************************************************************/
   constructor(private el: ElementRef){
      let self = this;
-     org.inugami.events.addEventListener(org.inugami.events.type.RESIZE, function(data){
+     io.inugami.events.addEventListener(io.inugami.events.type.RESIZE, function(data){
        self._updateSize(data.detail);
      });
 
-     org.inugami.events.addEventListener(org.inugami.events.type.UPDATE_CONFIGURATION, function(data){
+     io.inugami.events.addEventListener(io.inugami.events.type.UPDATE_CONFIGURATION, function(data){
       self._initSize();
     });
   }
@@ -67,7 +67,7 @@ export class Bloc implements AfterViewInit{
   * INITIALIZE
   *****************************************************************************/
   private _initSize(){
-    this._updateSize(org.inugami.values.screen);
+    this._updateSize(io.inugami.values.screen);
   }
   private _computeDimension(){
        let ratio            = svg.math.computeDimension(this.parents,this.height,this.width, this.fontRatio);

@@ -34,28 +34,28 @@ export interface InugamiSse {
 }
 
 export const SSE : InugamiSse = {
-	httpConnector         : org.inugami.sse.httpConnector,
-	enableLogger 	      : org.inugami.sse.enableLogger,
-	state 			      : org.inugami.sse.state,
-    nbRetry               : org.inugami.sse.nbRetry,
+	httpConnector         : io.inugami.sse.httpConnector,
+	enableLogger 	      : io.inugami.sse.enableLogger,
+	state 			      : io.inugami.sse.state,
+    nbRetry               : io.inugami.sse.nbRetry,
     times                 : {
-        MIN                   :org.inugami.sse.times.MIN,
-        TWO_MIN               :org.inugami.sse.times.TWO_MIN,
-        TEN_MIN               :org.inugami.sse.times.TEN_MIN,
-        HOUR                  :org.inugami.sse.times.HOUR,
-        maxUnactivity         :org.inugami.sse.times.maxUnactivity,
+        MIN                   :io.inugami.sse.times.MIN,
+        TWO_MIN               :io.inugami.sse.times.TWO_MIN,
+        TEN_MIN               :io.inugami.sse.times.TEN_MIN,
+        HOUR                  :io.inugami.sse.times.HOUR,
+        maxUnactivity         :io.inugami.sse.times.maxUnactivity,
         reboot                :{
-            hour:org.inugami.sse.times.reboot.hour,
-            min :org.inugami.sse.times.reboot.min
+            hour:io.inugami.sse.times.reboot.hour,
+            min :io.inugami.sse.times.reboot.min
         }
     },
-    lastIncommingData     :org.inugami.sse.lastIncommingData,
-    forceRefresh          :()=>org.inugami.sse.forceRefresh(),
-    register              :(pluginName, filterHandler, alertsHandler)=>org.inugami.sse.register(pluginName, filterHandler, alertsHandler),
-    connect               :(channelName)=>org.inugami.sse.connect(channelName),
-    connectSSESocket      :(force)=>org.inugami.sse.connectSSESocket(force),
-    closeSocket           :()=>org.inugami.sse.closeSocket(),
-    reboot                :()=>org.inugami.sse.reconnect.reboot(),
-    fromLastIncommingData :()=>org.inugami.sse.reconnect.fromLastIncommingData(),
-    fromCloseSocket       :()=>org.inugami.sse.reconnect.fromCloseSocket()
+    lastIncommingData     :io.inugami.sse.lastIncommingData,
+    forceRefresh          :()=>io.inugami.sse.forceRefresh(),
+    register              :(pluginName, filterHandler, alertsHandler)=>io.inugami.sse.register(pluginName, filterHandler, alertsHandler),
+    connect               :(channelName)=>io.inugami.sse.connect(channelName),
+    connectSSESocket      :(force)=>io.inugami.sse.connectSSESocket(force),
+    closeSocket           :()=>io.inugami.sse.closeSocket(),
+    reboot                :()=>io.inugami.sse.reconnect.reboot(),
+    fromLastIncommingData :()=>io.inugami.sse.reconnect.fromLastIncommingData(),
+    fromCloseSocket       :()=>io.inugami.sse.reconnect.fromCloseSocket()
 }

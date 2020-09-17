@@ -45,7 +45,7 @@ export class AdminView implements OnInit, OnDestroy{
 
     private sectionToDisplay     : string = "health"
 
-    private noFormatNumber       : any    = org.inugami.formatters.noFormatNumber;
+    private noFormatNumber       : any    = io.inugami.formatters.noFormatNumber;
 
     private menuItems            : any [] = [
       {"label":"Health"  ,"name":"health"},
@@ -64,15 +64,15 @@ export class AdminView implements OnInit, OnDestroy{
                 private adminService:AdminService,
                 private sessionScope : SessionScope,
                 private mainMenuService  : MainMenuService){
-        org.inugami.sse.register("administration");
+        io.inugami.sse.register("administration");
 
         let self = this;
-        org.inugami.events.addEventListener("konami", function(event){
+        io.inugami.events.addEventListener("konami", function(event){
           self.msgKonami="";
           self.konamiMode= true;
         });
 
-        org.inugami.events.addEventListener(MAIN_MENU_ON_CLICK, function(data){
+        io.inugami.events.addEventListener(MAIN_MENU_ON_CLICK, function(data){
           self.updateSectionToDisplay(data);
         });
     }
@@ -83,21 +83,21 @@ export class AdminView implements OnInit, OnDestroy{
       let self = this;
       this.sub = this.route.params.subscribe(params => {
          this.sessionScope.openMainMenu();
-         org.inugami.values.context.CONTEXT=window.location.href+"/admin";
+         io.inugami.values.context.CONTEXT=window.location.href+"/admin";
 
 
          this.initData();
 
-         org.inugami.events.addEventListener(org.inugami.sse.events.ERROR, function(event){
+         io.inugami.events.addEventListener(io.inugami.sse.events.ERROR, function(event){
            self.onServerDown(event);
          });
-         org.inugami.events.addEventListener(org.inugami.sse.events.OPEN, function(event){
+         io.inugami.events.addEventListener(io.inugami.sse.events.OPEN, function(event){
            self.onServerUp(event);
          });
-         org.inugami.events.addEventListener("administration_start_stop_events", function(event){
+         io.inugami.events.addEventListener("administration_start_stop_events", function(event){
            self.onEventStartStop(event);
          });
-         org.inugami.events.addEventListener("administration_system", function(event){
+         io.inugami.events.addEventListener("administration_system", function(event){
           self.onSystemInfo(event);
         });
          
@@ -232,7 +232,7 @@ export class AdminView implements OnInit, OnDestroy{
       return {"value":data};
     }
     percentFormatter(data){
-      return isNull(data)?"0.00":org.inugami.formatters.truncateNumber(data,2);
+      return isNull(data)?"0.00":io.inugami.formatters.truncateNumber(data,2);
     }
 
     percentAlertHandler(data){
@@ -299,11 +299,11 @@ export class AdminView implements OnInit, OnDestroy{
     }
 
     formatMillisTime(value){
-      return org.inugami.formatters.timestampToDateTime(value/1000);
+      return io.inugami.formatters.timestampToDateTime(value/1000);
     }
 
     formatTime(value): string{
-        return org.inugami.formatters.number(value, 2);
+        return io.inugami.formatters.number(value, 2);
     }
 
 

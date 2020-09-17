@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="org.inugami.plugins.root.jsp.ResourceLoaderJSP"%>
+<%@page import="io.inugami.plugins.root.jsp.ResourceLoaderJSP"%>
 <!DOCTYPE html>
 <html>
 
@@ -80,8 +80,8 @@
       pluginsComponents : PLUGINS_COMPONENTS
     };
 
-    org.inugami.logger.rootLevel=org.inugami.logger.levels.debug;
-    org.inugami.sse.enableLogger = false;
+    io.inugami.logger.rootLevel=io.inugami.logger.levels.debug;
+    io.inugami.sse.enableLogger = false;
 
     // =====================================================================
     // SYSTEM JS CONFIG

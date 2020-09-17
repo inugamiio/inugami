@@ -21,7 +21,7 @@ export class SoundServices {
     public load(id,path){
         let sound = this.sounds[id];
         if(isNull(sound)){
-            org.inugami.asserts.notNull(path,"Sound path must'nt be null!");
+            io.inugami.asserts.notNull(path,"Sound path must'nt be null!");
             sound = new Audio();
             sound.src = CONTEXT_PATH+path;
             sound.load();
@@ -32,7 +32,7 @@ export class SoundServices {
 
 
     public loadAll(data){
-        org.inugami.asserts.notNull(data,"data is mandatory!");
+        io.inugami.asserts.notNull(data,"data is mandatory!");
         for(let soundItem of data){
             this.load(soundItem[0],soundItem[1]);
         }

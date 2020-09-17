@@ -48,7 +48,7 @@ export class SecurityServices {
         return this.http.post(this.urls.login,json,{"headers":options,observe: "response" })
                         .toPromise()
                         .then(res  => {
-                            session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
+                            session.setCorrelationId(res.headers.get(io.inugami.constants.headers.CORRELATION_ID));
                             return res.body;
                         })
                         .catch(this.handleError);
@@ -63,7 +63,7 @@ export class SecurityServices {
         return this.http.post(this.urls.login,null,{"headers":options,observe: "response" })
                         .toPromise()
                         .then(res  => {
-                            session.setCorrelationId(res.headers.get(org.inugami.constants.headers.CORRELATION_ID));
+                            session.setCorrelationId(res.headers.get(io.inugami.constants.headers.CORRELATION_ID));
                             return res.body;
                         })
                         .catch(this.handleError);

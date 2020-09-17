@@ -1,0 +1,2 @@
+io.inugami.monitoring.core.sensors.services.aggregators.ServicesSensorAggregatorHits
+io.inugami.monitoring.core.sensors.services.aggregators.ServicesSensorAggregatorResponseTime

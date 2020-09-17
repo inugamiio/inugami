@@ -22,7 +22,7 @@
     </logger>
 
 
-    <logger name="org.inugami.scheduling">
+    <logger name="io.inugami.scheduling">
         <level value="INFO" />
         <appender-ref ref="STDOUT" />
     </logger>

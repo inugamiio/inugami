@@ -1,0 +1,3 @@
+io.inugami.monitoring.core.interceptors.spi.IoLogInterceptor
+io.inugami.monitoring.core.interceptors.spi.ServiceCounterInterceptor
+io.inugami.monitoring.core.interceptors.spi.MdcInterceptor

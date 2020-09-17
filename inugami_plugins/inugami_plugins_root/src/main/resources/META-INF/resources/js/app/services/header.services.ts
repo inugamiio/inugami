@@ -12,7 +12,7 @@ export class HeaderServices {
     /**************************************************************************
     * ATTRIBUTES
     **************************************************************************/
-    private LOGGER      : any =  org.inugami.logger.factory("PluginsService");
+    private LOGGER      : any =  io.inugami.logger.factory("PluginsService");
     private urls        : any;
 
     /**************************************************************************
@@ -31,15 +31,15 @@ export class HeaderServices {
         result["Authorization"]=this.sessionScope.getToken();
       }
 
-      result[org.inugami.constants.headers.DEVICE_IDENTIFIER]            = org.inugami.constants.deviceIdentifier;
-      result[org.inugami.constants.headers.CORRELATION_ID]               = this.sessionScope.getCorrelationId();
-      result[org.inugami.constants.headers.DEVICE_TYPE]                  = org.inugami.constants.deviceType;
-      result[org.inugami.constants.headers.DEVICE_CLASS]                 = org.inugami.constants.deviceClass;
-      result[org.inugami.constants.headers.DEVICE_OS_VERSION]            = org.inugami.constants.deviceOsVersion;
-      result[org.inugami.constants.headers.DEVICE_VERSION]               = org.inugami.constants.deviceVersion;
-      result[org.inugami.constants.headers.DEVICE_NETWORK_TYPE]          = org.inugami.constants.deviceNetworkType;
-      result[org.inugami.constants.headers.DEVICE_NETWORK_SPEED_DOWN]    = org.inugami.constants.deviceNetworkSpeedDown;
-      result[org.inugami.constants.headers.DEVICE_NETWORK_SPEED_LATENCY] = org.inugami.constants.deviceNetworkSpeedLatency;
+      result[io.inugami.constants.headers.DEVICE_IDENTIFIER]            = io.inugami.constants.deviceIdentifier;
+      result[io.inugami.constants.headers.CORRELATION_ID]               = this.sessionScope.getCorrelationId();
+      result[io.inugami.constants.headers.DEVICE_TYPE]                  = io.inugami.constants.deviceType;
+      result[io.inugami.constants.headers.DEVICE_CLASS]                 = io.inugami.constants.deviceClass;
+      result[io.inugami.constants.headers.DEVICE_OS_VERSION]            = io.inugami.constants.deviceOsVersion;
+      result[io.inugami.constants.headers.DEVICE_VERSION]               = io.inugami.constants.deviceVersion;
+      result[io.inugami.constants.headers.DEVICE_NETWORK_TYPE]          = io.inugami.constants.deviceNetworkType;
+      result[io.inugami.constants.headers.DEVICE_NETWORK_SPEED_DOWN]    = io.inugami.constants.deviceNetworkSpeedDown;
+      result[io.inugami.constants.headers.DEVICE_NETWORK_SPEED_LATENCY] = io.inugami.constants.deviceNetworkSpeedLatency;
       
       
       if(isNotNull(headerInfos)){

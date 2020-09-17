@@ -67,7 +67,7 @@ export class TimeHandler implements ControlValueAccessor,AfterViewInit {
             let allEvents = this.events.split(";");
             for(let i =0; i<allEvents.length;i++){
                 let currentEvent = allEvents[i].trim();
-                org.inugami.events.addEventListenerByPlugin(this.pluginName,currentEvent, function(event) {
+                io.inugami.events.addEventListenerByPlugin(this.pluginName,currentEvent, function(event) {
                    self.handlerEventDone(event.detail);
                 });
             }
@@ -103,9 +103,9 @@ export class TimeHandler implements ControlValueAccessor,AfterViewInit {
             time = now;
         }
 
-        this.timeLabel= org.inugami.formatters.timestampToTimeFormat(time,"HH:mm");
+        this.timeLabel= io.inugami.formatters.timestampToTimeFormat(time,"HH:mm");
         
-        let timeReceived= org.inugami.formatters.timestampToTimeFormat(now,"HH:mm");
+        let timeReceived= io.inugami.formatters.timestampToTimeFormat(now,"HH:mm");
 
         this.timeReceivedLabel = ["dernier événement reçu à : ",timeReceived].join('');
     }

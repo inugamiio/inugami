@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ======================================================================= 
@@ -13,9 +14,9 @@
     <!-- ======================================================================= 
     = PROJECT
     ======================================================================== -->
-    <groupId>org.inugami</groupId>
+    <groupId>io.inugami</groupId>
     <artifactId>inugami</artifactId>
-    <version>1.3.3-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
 
@@ -36,18 +37,19 @@
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PROJECT
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-        <super.jdk>1.8</super.jdk>
+        <super.jdk>11</super.jdk>
         <super.jdk.arg>-parameters</super.jdk.arg>
 
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.datePattern>yyyy-MM-dd'T'HH:mm:ss.SSSZ</project.build.datePattern>
-        <project.build.sourceProperties.path>${project.build.directory}/source.properties</project.build.sourceProperties.path>
+        <project.build.sourceProperties.path>${project.build.directory}/source.properties
+        </project.build.sourceProperties.path>
 
         <environment.ci>false</environment.ci>
 
-        <_super.plugin.inugami_plugin_lifecycle.version>1.0.0</_super.plugin.inugami_plugin_lifecycle.version>
-        <_super.plugin.inugami-plugin-maven.version>1.0.0</_super.plugin.inugami-plugin-maven.version>
+        <_super.plugin.inugami_plugin_lifecycle.version>2.0.0-SNAPSHOT</_super.plugin.inugami_plugin_lifecycle.version>
+        <_super.plugin.inugami-plugin-maven.version>2.0.0-SNAPSHOT</_super.plugin.inugami-plugin-maven.version>
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: MAVEN SITE
@@ -58,12 +60,12 @@
         <docArtifactFinalName>${project.build.finalName}</docArtifactFinalName>
         <superSiteSkinVersion>1.2.1</superSiteSkinVersion>
 
-        <site.deploy.url />
+        <site.deploy.url/>
         <plugin.site.disable>true</plugin.site.disable>
         <plugin.site.path>src/site</plugin.site.path>
         <plugin.site.inputEncoding>${project.build.sourceEncoding}</plugin.site.inputEncoding>
         <plugin.site.outputEncoding>${project.build.sourceEncoding}</plugin.site.outputEncoding>
-        
+
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: SCM
@@ -79,19 +81,19 @@
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: JDK
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-        <jdk>1.8</jdk>
-        <jdk.env.java.home />
-        <jdk.env.property.name />
-        <jdk.test.executable />
+        <jdk>11</jdk>
+        <jdk.env.java.home/>
+        <jdk.env.property.name/>
+        <jdk.test.executable/>
         <jdk.javac.executable>${jdk.env.java.home}/bin/javac</jdk.javac.executable>
-    
+
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: CI
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-        <ci.host />
+        <ci.host/>
         <ci.host.context>/jenkins</ci.host.context>
-        <ci.view />
+        <ci.view/>
 
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -99,29 +101,40 @@
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <org.jboss.arquillian.junit>1.4.0.Final</org.jboss.arquillian.junit>
         <org.jboss.shrinkwrap.resolver>3.1.3</org.jboss.shrinkwrap.resolver>
-        <org.apache.tomcat.embed.version>8.0.48</org.apache.tomcat.embed.version>
+        <org.apache.tomcat.embed.version>8.5.58</org.apache.tomcat.embed.version>
+        <org.apache.tomcat.embed.tomcat-embed-logging-juli.version>8.0.53
+        </org.apache.tomcat.embed.tomcat-embed-logging-juli.version>
         <org.eclipse.jdt.core.compiler.version>4.6.1</org.eclipse.jdt.core.compiler.version>
         <com.sun.el.version>1.0</com.sun.el.version>
         <de.odysseus.juel.version>2.2.7</de.odysseus.juel.version>
-        
+
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PLUGINS VERSIONS
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <!--[ org.maven ]++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <plugins.org-apache-maven-plugins.maven-compiler-plugin>3.1</plugins.org-apache-maven-plugins.maven-compiler-plugin>
-        <plugins.org-apache-maven-plugins.maven-javadoc-plugin>2.10.1</plugins.org-apache-maven-plugins.maven-javadoc-plugin>
+        <plugins.org-apache-maven-plugins.maven-compiler-plugin>3.1
+        </plugins.org-apache-maven-plugins.maven-compiler-plugin>
+        <plugins.org-apache-maven-plugins.maven-javadoc-plugin>2.10.1
+        </plugins.org-apache-maven-plugins.maven-javadoc-plugin>
         <plugins.org-apache-maven-plugins.maven-jar-plugin>2.6</plugins.org-apache-maven-plugins.maven-jar-plugin>
         <plugins.org-apache-maven-plugins.maven-source-plugin>2.4</plugins.org-apache-maven-plugins.maven-source-plugin>
-        <plugins.org-apache-maven-plugins.maven-resources-plugin>2.7</plugins.org-apache-maven-plugins.maven-resources-plugin>
-        <plugins.org-apache-maven-plugins.maven-assembly-plugin>2.5.2</plugins.org-apache-maven-plugins.maven-assembly-plugin>
-        <plugins.org-apache-maven-plugins.maven-dependency-plugin>2.8</plugins.org-apache-maven-plugins.maven-dependency-plugin>
+        <plugins.org-apache-maven-plugins.maven-resources-plugin>2.7
+        </plugins.org-apache-maven-plugins.maven-resources-plugin>
+        <plugins.org-apache-maven-plugins.maven-assembly-plugin>2.5.2
+        </plugins.org-apache-maven-plugins.maven-assembly-plugin>
+        <plugins.org-apache-maven-plugins.maven-dependency-plugin>2.8
+        </plugins.org-apache-maven-plugins.maven-dependency-plugin>
         <plugins.org-apache-maven-shared.maven-filtering>1.3</plugins.org-apache-maven-shared.maven-filtering>
         <plugins.org-apache-maven-plugins.maven-clean-plugin>2.6.1</plugins.org-apache-maven-plugins.maven-clean-plugin>
-        <plugins.org-apache-maven-plugins.maven-release-plugin>2.5.1</plugins.org-apache-maven-plugins.maven-release-plugin>
-        <plugins.org-apache-maven-plugins.maven-enforcer-plugin>1.3</plugins.org-apache-maven-plugins.maven-enforcer-plugin>
+        <plugins.org-apache-maven-plugins.maven-release-plugin>2.5.1
+        </plugins.org-apache-maven-plugins.maven-release-plugin>
+        <plugins.org-apache-maven-plugins.maven-enforcer-plugin>1.3
+        </plugins.org-apache-maven-plugins.maven-enforcer-plugin>
         <plugins.org-apache-maven-plugins.maven-site-plugin>3.3</plugins.org-apache-maven-plugins.maven-site-plugin>
-        <plugins.org-apache-maven-plugins.maven-surefire-plugin>2.19.1</plugins.org-apache-maven-plugins.maven-surefire-plugin>
-        <plugins.org-apache-maven-plugins.maven-failsafe-plugin>2.19.1</plugins.org-apache-maven-plugins.maven-failsafe-plugin>
+        <plugins.org-apache-maven-plugins.maven-surefire-plugin>2.19.1
+        </plugins.org-apache-maven-plugins.maven-surefire-plugin>
+        <plugins.org-apache-maven-plugins.maven-failsafe-plugin>2.19.1
+        </plugins.org-apache-maven-plugins.maven-failsafe-plugin>
         <plugins.org-codehaus-mojo.cobertura-maven-plugin>2.7</plugins.org-codehaus-mojo.cobertura-maven-plugin>
 
 
@@ -132,20 +145,23 @@
         <plugins.org-codehaus-mojo.build-helper-maven-plugin>1.9.1</plugins.org-codehaus-mojo.build-helper-maven-plugin>
         <plugins.org-codehaus-mojo.buildnumber-maven-plugin>1.3</plugins.org-codehaus-mojo.buildnumber-maven-plugin>
         <plugins.org-eclipse-m2e.lifecycle-mapping>1.0.0</plugins.org-eclipse-m2e.lifecycle-mapping>
-        
-        <!--[ others ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <plugins.external-atlassian-jgitflow.jgitflow-maven-plugin>1.0-m4.3</plugins.external-atlassian-jgitflow.jgitflow-maven-plugin>
-        <plugins.pl-project13-maven.git-commit-id-plugin>2.1.15</plugins.pl-project13-maven.git-commit-id-plugin>
 
+        <!--[ others ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+        <plugins.external-atlassian-jgitflow.jgitflow-maven-plugin>1.0-m4.3
+        </plugins.external-atlassian-jgitflow.jgitflow-maven-plugin>
+        <plugins.pl-project13-maven.git-commit-id-plugin>2.1.15</plugins.pl-project13-maven.git-commit-id-plugin>
 
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: REPORTING VERSIONS
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-        <reporting.org-apache-maven-plugins.maven-changes-plugin>2.7.1</reporting.org-apache-maven-plugins.maven-changes-plugin>
+        <reporting.org-apache-maven-plugins.maven-changes-plugin>2.7.1
+        </reporting.org-apache-maven-plugins.maven-changes-plugin>
         <reporting.org-apache-maven-plugins.maven-jxr-plugin>2.3</reporting.org-apache-maven-plugins.maven-jxr-plugin>
-        <reporting.org-apache-maven-plugins.maven-project-info-reports-plugin>2.7</reporting.org-apache-maven-plugins.maven-project-info-reports-plugin>
-        <reporting.org-apache-maven-plugins.maven-plugin-plugin>3.1</reporting.org-apache-maven-plugins.maven-plugin-plugin>
+        <reporting.org-apache-maven-plugins.maven-project-info-reports-plugin>2.7
+        </reporting.org-apache-maven-plugins.maven-project-info-reports-plugin>
+        <reporting.org-apache-maven-plugins.maven-plugin-plugin>3.1
+        </reporting.org-apache-maven-plugins.maven-plugin-plugin>
 
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -160,13 +176,12 @@
         <org.jboss.resteasy.version>4.0.0.Beta1</org.jboss.resteasy.version>
         <org.jboss.async-http-servlet.version>3.1.0.Beta2</org.jboss.async-http-servlet.version>
         <org.picketlink.version>2.7.1.Final</org.picketlink.version>
-        <com.jackson-annotations.version>2.9.2</com.jackson-annotations.version>
+        <com.jackson-annotations.version>2.11.2</com.jackson-annotations.version>
 
 
         <org.hibernate.ogm.version>5.1.0.Final</org.hibernate.ogm.version>
         <org.hibernate.validator.version>6.0.7.Final</org.hibernate.validator.version>
         <javax.validation.version>2.0.1.Final</javax.validation.version>
-
 
 
         <!--[ LOGGER ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
@@ -179,7 +194,7 @@
         <org.apache.commons.cli.version>1.4</org.apache.commons.cli.version>
         <org.apache.commons.codec.version>1.9</org.apache.commons.codec.version>
         <!--[ Mapping ]++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <com.thoughtworks.xstream.version>1.4.10</com.thoughtworks.xstream.version>
+        <com.thoughtworks.xstream.version>1.4.13</com.thoughtworks.xstream.version>
 
         <net.sf.flexjson.version>3.3</net.sf.flexjson.version>
         <org.jsoup.version>1.10.2</org.jsoup.version>
@@ -199,17 +214,18 @@
 
         <jaxb.version>2.3.0</jaxb.version>
         <javax.activation.version>1.1.1</javax.activation.version>
-        
+
         <!--[ Others ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <io.dropwizard.metrics.version>4.0.5</io.dropwizard.metrics.version>
-        <org.quartz.version>2.2.3</org.quartz.version>
+        <org.quartz.version>2.3.2</org.quartz.version>
         <org.ehcache.version>3.3.1</org.ehcache.version>
-        <org.apache.tomcat.version>8.0.44</org.apache.tomcat.version>
+        <org.apache.tomcat.version>8.5.58</org.apache.tomcat.version>
         <cglib.cglib.version>3.2.5</cglib.cglib.version>
         <findbugs.annotations.version>1.0.0</findbugs.annotations.version>
         <swagger-jaxrs2.version>2.0.0</swagger-jaxrs2.version>
         <com.google.guava.version>27.0.1-jre</com.google.guava.version>
-            
+        <org.junit.jupiter>5.7.0-M1</org.junit.jupiter>
+        <org.projectlombok.version>1.18.12</org.projectlombok.version>
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PLUGINS CONFIGURATION
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -297,31 +313,31 @@
     ======================================================================== -->
     <dependencyManagement>
         <dependencies>
-            
+
             <!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             :: PROJECT
             :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
             <!--[ Project base ]+++++++++++++++++++++++++++++++++++++++++++++-->
             <dependency>
-                <groupId>org.inugami</groupId>
+                <groupId>io.inugami</groupId>
                 <artifactId>inugami_api</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            
+
             <dependency>
-                <groupId>org.inugami</groupId>
+                <groupId>io.inugami</groupId>
                 <artifactId>inugami_api_core</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.inugami</groupId>
+                <groupId>io.inugami</groupId>
                 <artifactId>inugami_commons</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.inugami</groupId>
+                <groupId>io.inugami</groupId>
                 <artifactId>inugami_commons_test</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -329,31 +345,31 @@
 
             <!--[ Project core ]+++++++++++++++++++++++++++++++++++++++++++++-->
             <dependency>
-                <groupId>org.inugami</groupId>
+                <groupId>io.inugami</groupId>
                 <artifactId>inugami_configuration_test</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.inugami</groupId>
+                <groupId>io.inugami</groupId>
                 <artifactId>inugami_configuration_tools</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.inugami</groupId>
+                <groupId>io.inugami</groupId>
                 <artifactId>inugami_configuration</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <artifactId>inugami_core_tools</artifactId>
-                <groupId>org.inugami</groupId>
+                <groupId>io.inugami</groupId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.inugami</groupId>
+                <groupId>io.inugami</groupId>
                 <artifactId>inugami_core_cdi</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -361,25 +377,25 @@
 
             <dependency>
                 <artifactId>inugami_core</artifactId>
-                <groupId>org.inugami</groupId>
+                <groupId>io.inugami</groupId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <artifactId>inugami_core_test</artifactId>
-                <groupId>org.inugami</groupId>
+                <groupId>io.inugami</groupId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <artifactId>inugami_plugins_root</artifactId>
-                <groupId>org.inugami.plugins</groupId>
+                <groupId>io.inugami.plugins</groupId>
                 <version>${project.version}</version>
             </dependency>
 
 
             <dependency>
-                <groupId>org.inugami</groupId>
+                <groupId>io.inugami</groupId>
                 <artifactId>inugami_webapp</artifactId>
                 <version>${project.version}</version>
                 <type>war</type>
@@ -387,106 +403,106 @@
 
             <!--[ Project security ]+++++++++++++++++++++++++++++++++++++++++-->
             <dependency>
-                <groupId>org.inugami.security</groupId>
+                <groupId>io.inugami.security</groupId>
                 <artifactId>inugami_core_security</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
             </dependency>
 
             <dependency>
-                <groupId>org.inugami.security</groupId>
+                <groupId>io.inugami.security</groupId>
                 <artifactId>inugami_core_security_commons</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
 
             <dependency>
-                <groupId>org.inugami.security</groupId>
+                <groupId>io.inugami.security</groupId>
                 <artifactId>inugami_core_security_technical</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.inugami.security</groupId>
+                <groupId>io.inugami.security</groupId>
                 <artifactId>inugami_core_security_ldap</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            
+
             <!--[ Project data ]+++++++++++++++++++++++++++++++++++++++++++++-->
             <dependency>
-                <groupId>org.inugami.data</groupId>
+                <groupId>io.inugami.data</groupId>
                 <artifactId>inugami_data_commons</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.inugami.data</groupId>
+                <groupId>io.inugami.data</groupId>
                 <artifactId>inugami_data_sql</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.inugami.data</groupId>
+                <groupId>io.inugami.data</groupId>
                 <artifactId>inugami_data_sql_h2</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            
-            
+
+
             <!--[ Project monitoring ]+++++++++++++++++++++++++++++++++++++++-->
             <dependency>
-                <groupId>org.inugami</groupId>
+                <groupId>io.inugami</groupId>
                 <artifactId>inugami_metrics</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.inugami.monitoring</groupId>
+                <groupId>io.inugami.monitoring</groupId>
                 <artifactId>inugami_monitoring_api</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.inugami.monitoring</groupId>
+                <groupId>io.inugami.monitoring</groupId>
                 <artifactId>inugami_monitoring_config</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.inugami.monitoring</groupId>
+                <groupId>io.inugami.monitoring</groupId>
                 <artifactId>inugami_monitoring_core</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
 
             <dependency>
-                <groupId>org.inugami.monitoring.providers</groupId>
+                <groupId>io.inugami.monitoring.providers</groupId>
                 <artifactId>inugami_monitoring_providers_els</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.inugami.monitoring.providers</groupId>
+                <groupId>io.inugami.monitoring.providers</groupId>
                 <artifactId>inugami_monitoring_providers_log</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.inugami.monitoring.providers</groupId>
+                <groupId>io.inugami.monitoring.providers</groupId>
                 <artifactId>inugami_monitoring_providers_graphite</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.inugami.monitoring.sensors</groupId>
+                <groupId>io.inugami.monitoring.sensors</groupId>
                 <artifactId>inugami_monitoring_sensors</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
             </dependency>
 
             <dependency>
-                <groupId>org.inugami.monitoring.sensors</groupId>
+                <groupId>io.inugami.monitoring.sensors</groupId>
                 <artifactId>inugami_sensors_default</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            
+
 
             <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             :: IMPORT
@@ -647,7 +663,6 @@
             </dependency>
 
 
-
             <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             :: LOGGER
             :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -780,8 +795,36 @@
                 <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
                 <version>${org.jboss.shrinkwrap.resolver}</version>
             </dependency>
-            
-            
+
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${org.junit.jupiter}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${org.junit.jupiter}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>3.17.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>2.21.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-junit-jupiter</artifactId>
+                <version>2.23.0</version>
+            </dependency>
+
             <!--[ Arquillian ]+++++++++++++++++++++++++++++++++++++++++++++++-->
             <dependency>
                 <groupId>org.apache.tomcat.embed</groupId>
@@ -792,7 +835,7 @@
             <dependency>
                 <groupId>org.apache.tomcat.embed</groupId>
                 <artifactId>tomcat-embed-logging-juli</artifactId>
-                <version>${org.apache.tomcat.embed.version}</version>
+                <version>${org.apache.tomcat.embed.tomcat-embed-logging-juli.version}</version>
             </dependency>
 
             <dependency>
@@ -812,7 +855,7 @@
                 <artifactId>juel-impl</artifactId>
                 <version>${de.odysseus.juel.version}</version>
             </dependency>
-            
+
 
             <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             :: Data base drivers
@@ -869,10 +912,20 @@
                 <version>${com.google.guava.version}</version>
             </dependency>
 
-
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${org.projectlombok.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
     <!-- ======================================================================= 
     = BUILD
     =========================================================================-->
@@ -896,7 +949,7 @@
                 </includes>
             </resource>
         </resources>
-        
+
         <!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: 
         :: PLUGIN MANAGEMENT
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -916,6 +969,13 @@
                             <arg>-verbose</arg>
                             <arg>${super.jdk.arg}</arg>
                         </compilerArgs>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${org.projectlombok.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -951,26 +1011,33 @@
                                 <Implementation-Group>${project.groupId}</Implementation-Group>
                                 <Implementation-Module>${project.artifactId}</Implementation-Module>
                                 <Implementation-Encoding>${project.build.sourceEncoding}</Implementation-Encoding>
-                               
+
                                 <!-- Source info generated by git-commit-id-plugin -->
                                 <Implementation-Sources-Tags>${git.tags}</Implementation-Sources-Tags>
                                 <Implementation-Sources-Commit-Id>${git.commit.id}</Implementation-Sources-Commit-Id>
-                                <Implementation-Sources-Commit-Date>${git.commit.time}</Implementation-Sources-Commit-Date>
-                                <Implementation-Sources-Commit-Author>${git.commit.user.name}(${git.commit.user.email})</Implementation-Sources-Commit-Author>
-                                <Implementation-Sources-Commit-Message>${git.commit.message.short}</Implementation-Sources-Commit-Message>
+                                <Implementation-Sources-Commit-Date>${git.commit.time}
+                                </Implementation-Sources-Commit-Date>
+                                <Implementation-Sources-Commit-Author>
+                                    ${git.commit.user.name}(${git.commit.user.email})
+                                </Implementation-Sources-Commit-Author>
+                                <Implementation-Sources-Commit-Message>${git.commit.message.short}
+                                </Implementation-Sources-Commit-Message>
                                 <Implementation-Sources-Branch>${git.branch}</Implementation-Sources-Branch>
-                                <Implementation-Sources-Describe>${git.commit.id.describe-short}</Implementation-Sources-Describe>
+                                <Implementation-Sources-Describe>${git.commit.id.describe-short}
+                                </Implementation-Sources-Describe>
 
                                 <Built-On-OS>${os.name} (${os.version} /
-                                    ${os.arch})</Built-On-OS>
+                                    ${os.arch})
+                                </Built-On-OS>
                                 <Built-On-Host>${git.build.host}</Built-On-Host>
                                 <Build-Jdk-Details>${jdk}
-                                    (${java.vendor})</Build-Jdk-Details>
+                                    (${java.vendor})
+                                </Build-Jdk-Details>
                                 <Build-Job-Name>${env.BUILD_TAG}(${env.BUILD_URL})</Build-Job-Name>
                                 <Build-Job-Date>${env.BUILD_ID}</Build-Job-Date>
                                 <Build-Job-Node>${env.NODE_NAME}</Build-Job-Node>
                                 <Build-Job-User>${env.BUILD_USER_ID}</Build-Job-User>
-                                
+
                                 <!-- Timestamp generated by buildnumber-maven-plugin -->
                                 <Build-Date>${timestamp}</Build-Date>
                                 <ArtifactType>${super.artifact.type}</ArtifactType>
@@ -1002,7 +1069,7 @@
                             <pluginExecutions>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
-                                        <groupId>org.inugami.maven.plugin</groupId>
+                                        <groupId>io.inugami.maven.plugin</groupId>
                                         <artifactId>inugami-maven-plugin</artifactId>
                                         <versionRange>[0.0.0,)</versionRange>
                                         <goals>
@@ -1010,7 +1077,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute />
+                                        <execute/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -1021,7 +1088,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.2.1</version>
                     <executions>
                         <execution>
                             <id>attach-sources</id>
@@ -1035,6 +1102,8 @@
 
             </plugins>
         </pluginManagement>
+
+
         <!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: 
         :: PLUGINS - BUILD
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -1069,6 +1138,13 @@
                         <exclude>**/*IT.java</exclude>
                     </excludes>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-surefire-provider</artifactId>
+                        <version>1.0.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
 

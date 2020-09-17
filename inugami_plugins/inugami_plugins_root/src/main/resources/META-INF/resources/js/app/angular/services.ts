@@ -10,12 +10,12 @@ export interface InugamiService {
 }
 
 export const SERVICES : InugamiService = {
-    generateId          :(componentName)=>org.inugami.services.generateId(componentName),
-    getIdOrGeneratedId  :(id, componentName)=>org.inugami.services.getIdOrGeneratedId(id, componentName),
-    normalizeId         :(value)=>org.inugami.services.normalizeId(value),
-    defaultValueEmpty   :(value)=>org.inugami.services.defaultValueEmpty(value),
-    defaultValue        :(value, defaultValue)=>org.inugami.services.defaultValue(value, defaultValue),
-    getParent           :(nodeName, currentNode)=>org.inugami.services.getParent(nodeName, currentNode),
-    getFunction         :(name)=>org.inugami.services.getFunction(name),
-    removeFromList      :(value, list, functionEquals)=>org.inugami.services.removeFromList(value, list, functionEquals),
+    generateId          :(componentName)=>io.inugami.services.generateId(componentName),
+    getIdOrGeneratedId  :(id, componentName)=>io.inugami.services.getIdOrGeneratedId(id, componentName),
+    normalizeId         :(value)=>io.inugami.services.normalizeId(value),
+    defaultValueEmpty   :(value)=>io.inugami.services.defaultValueEmpty(value),
+    defaultValue        :(value, defaultValue)=>io.inugami.services.defaultValue(value, defaultValue),
+    getParent           :(nodeName, currentNode)=>io.inugami.services.getParent(nodeName, currentNode),
+    getFunction         :(name)=>io.inugami.services.getFunction(name),
+    removeFromList      :(value, list, functionEquals)=>io.inugami.services.removeFromList(value, list, functionEquals),
 }

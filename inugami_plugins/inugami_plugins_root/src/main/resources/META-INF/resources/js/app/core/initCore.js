@@ -1,9 +1,9 @@
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //INIT CORE
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-org.inugami.initialize = {
+io.inugami.initialize = {
     initContext : function(){
-        org.inugami.initialize._initContext(org.inugami.values.context);  
+        io.inugami.initialize._initContext(io.inugami.values.context);  
     },
     _initContext : function(value){
         
@@ -22,6 +22,6 @@ org.inugami.initialize = {
 };
 
 new function(){
-    org.inugami.initialize._initContext(org.inugami.constants.context);
+    io.inugami.initialize._initContext(io.inugami.constants.context);
 }();
 

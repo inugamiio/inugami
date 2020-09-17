@@ -1,17 +1,17 @@
 //=========================================================================
 // INUGAMI API : NAMESPACES
 //=========================================================================
-var _inugamiApi = Java.type('org.inugami.core.context.scripts.JavaScriptApi');
+var _inugamiApi = Java.type('io.inugami.core.context.scripts.JavaScriptApi');
 
-var org    = {};
-    org.inugami = {};
+var io    = {};
+    io.inugami = {};
 
     
     
 //=========================================================================
 //INUGAMI API : CONFIG
 //=========================================================================
-org.inugami.builders = {
+io.inugami.builders = {
 	alert : function(level, message, data){
 		return _inugamiApi.buildAlert(level,message, data);
 	},
@@ -34,7 +34,7 @@ org.inugami.builders = {
 		return _inugamiApi.buildAlert("fatal",message, data);
 	},
 	buildSimpleEvent : function(name,provider,query,from,until ){
-		return org.inugami.builders.simpleEvent({
+		return io.inugami.builders.simpleEvent({
 			"name"       : name,
 			"from"       : from,
 			"until"      : until,
@@ -43,7 +43,7 @@ org.inugami.builders = {
 		});
 	},
 	buildEvent : function(name,provider,from,until){
-		return org.inugami.builders.event({
+		return io.inugami.builders.event({
 			"name"       : name,
 			"from"       : from,
 			"until"      : until,
@@ -61,7 +61,7 @@ org.inugami.builders = {
 //=========================================================================
 //INUGAMI API : CONFIG
 //=========================================================================
-org.inugami.config = {
+io.inugami.config = {
 	/**
 	* Allow to grab global property form inugami Context
 	*/
@@ -82,7 +82,7 @@ org.inugami.config = {
 //=========================================================================
 //INUGAMI API : PROVIDER 
 //=========================================================================
-org.inugami.provider = {
+io.inugami.provider = {
 		
 		callGraphiteProvider : function(providerName, query, from, until){
 			return _inugamiApi.callGraphiteProvider(providerName, query, from, until);
@@ -96,7 +96,7 @@ org.inugami.provider = {
 //=========================================================================
 //INUGAMI API : ALERTS
 //=========================================================================
-org.inugami.alerts = {
+io.inugami.alerts = {
 		levels : {
 			FATAL    : 1000000,
 		    ERROR    :  100000,

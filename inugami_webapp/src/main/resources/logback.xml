@@ -23,7 +23,7 @@
     </logger>
 
 
-    <logger name="org.inugami.datasource.jdbc">
+    <logger name="io.inugami.datasource.jdbc">
         <level value="INFO" />
         <appender-ref ref="STDOUT" />
     </logger>

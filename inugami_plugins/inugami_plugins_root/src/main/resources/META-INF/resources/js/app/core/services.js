@@ -1,26 +1,26 @@
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // CORE SERVICE
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-org.inugami.services = {
+io.inugami.services = {
 
     generateId: function (componentName) {
-        var index = org.inugami._innerValues.componentsIds[componentName];
+        var index = io.inugami._innerValues.componentsIds[componentName];
 
         if (index === undefined || index === null) {
             index = 0;
         }
         index++;
-        org.inugami._innerValues.componentsIds[componentName] = index;
+        io.inugami._innerValues.componentsIds[componentName] = index;
         return componentName + "_" + index;
     },
 
     getIdOrGeneratedId : function (id, componentName){
         var result = null;
-        if(org.inugami.check.isNull(id)) {
-            org.inugami.asserts.notNull(componentName,"component name mustn't be null!");
-            result =org.inugami.services.generateId(componentName);
+        if(io.inugami.check.isNull(id)) {
+            io.inugami.asserts.notNull(componentName,"component name mustn't be null!");
+            result =io.inugami.services.generateId(componentName);
         } else{
-            org.inugami.asserts.notNull(id,"component id mustn't be null!");
+            io.inugami.asserts.notNull(id,"component id mustn't be null!");
             result = id;
         }
         return result;
@@ -49,7 +49,7 @@ org.inugami.services = {
 
 
     defaultValueEmpty: function (value) {
-        return org.inugami.services.defaultValue(value, "");
+        return io.inugami.services.defaultValue(value, "");
     },
 
     defaultValue: function (value, defaultValue) {
@@ -63,7 +63,7 @@ org.inugami.services = {
     },
 
     getParent: function (nodeName, currentNode) {
-        org.inugami.asserts.notNull(nodeName, "can't search node parent without this name!")
+        io.inugami.asserts.notNull(nodeName, "can't search node parent without this name!")
         return this._processGetParent(nodeName.toUpperCase(), currentNode);
     },
 
@@ -85,7 +85,7 @@ org.inugami.services = {
     },
 
     getFunction: function (name) {
-        org.inugami.asserts.notNull(name, "function name mustn't be null !");
+        io.inugami.asserts.notNull(name, "function name mustn't be null !");
         var result = null;
 
         if (name.indexOf(".") == -1) {
@@ -96,7 +96,7 @@ org.inugami.services = {
             for (var index = 0; index < packageNames.length; index++) {
                 if (index == 0) {
                     result = window[packageNames[index]];
-                    org.inugami.asserts.notNull(result, "no namespace found :" + packageNames[index]);
+                    io.inugami.asserts.notNull(result, "no namespace found :" + packageNames[index]);
                 } else {
                     result = result[packageNames[index]];
                 }
@@ -107,11 +107,11 @@ org.inugami.services = {
     },
 
     removeFromList : function(value, list, functionEquals){
-        org.inugami.asserts.notNull(value, "value mustn't be null");
-        org.inugami.asserts.notNull(list, "list values mustn't be null");
-        org.inugami.asserts.notNull(functionEquals, "equals function mustn't be null");
+        io.inugami.asserts.notNull(value, "value mustn't be null");
+        io.inugami.asserts.notNull(list, "list values mustn't be null");
+        io.inugami.asserts.notNull(functionEquals, "equals function mustn't be null");
 
-        var index = org.inugami.checks.indexOf(value, list,functionEquals);
+        var index = io.inugami.checks.indexOf(value, list,functionEquals);
         if(index >= 0) {
             list.splice(index, 1);
         }
@@ -124,22 +124,22 @@ org.inugami.services = {
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // CORE SERVICE GENERATORS
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-org.inugami.services.generators = {
+io.inugami.services.generators = {
     lorem : function(sizeMin, sizeMax){
-        var nbWord = isNull(sizeMax)?sizeMin:org.inugami.services.generators.randomNumber(sizeMin, sizeMax);
+        var nbWord = isNull(sizeMax)?sizeMin:io.inugami.services.generators.randomNumber(sizeMin, sizeMax);
         if(isNull(nbWord) || nbWord<=0){
             nbWord = 1;
         }
         var result = [];
         for(var i=0; i<nbWord; i++){
-            var index =org.inugami.services.generators.randomNumber(0, org.inugami.constants.lorem.size);
-            var item = org.inugami.constants.lorem.data[index];
+            var index =io.inugami.services.generators.randomNumber(0, io.inugami.constants.lorem.size);
+            var item = io.inugami.constants.lorem.data[index];
             result.push(item);
         }
         return result.join(" ");
     },
     randomBoolean : function(){
-        return org.inugami.services.generators.randomNumber(0,10)%2==0;
+        return io.inugami.services.generators.randomNumber(0,10)%2==0;
     },
     randomNumber  : function(min, max){
         var currentMin = Math.ceil(min);
@@ -148,6 +148,6 @@ org.inugami.services.generators = {
     },
     randomValues : function(values){
         var size = values.length;
-        return values[org.inugami.services.generators.randomNumber(0,size)];
+        return values[io.inugami.services.generators.randomNumber(0,size)];
     }   
 };

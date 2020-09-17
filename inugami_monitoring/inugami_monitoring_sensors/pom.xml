@@ -13,16 +13,16 @@
     = PARENT
     ======================================================================== -->
     <parent>
-        <groupId>org.inugami.monitoring</groupId>
+        <groupId>io.inugami.monitoring</groupId>
         <artifactId>inugami_monitoring</artifactId>
-        <version>1.3.3-SNAPSHOT</version>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
 
 
     <!-- ======================================================================= 
     = PROJECT
     ======================================================================== -->
-    <groupId>org.inugami.monitoring.sensors</groupId>
+    <groupId>io.inugami.monitoring.sensors</groupId>
     <artifactId>inugami_monitoring_sensors</artifactId>
     <packaging>pom</packaging>
 
@@ -37,14 +37,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.inugami.monitoring</groupId>
+            <groupId>io.inugami.monitoring</groupId>
             <artifactId>inugami_monitoring_api</artifactId>
             <scope>provided</scope>
         </dependency>
 
 
         <dependency>
-            <groupId>org.inugami</groupId>
+            <groupId>io.inugami</groupId>
             <artifactId>inugami_commons</artifactId>
             <scope>provided</scope>
         </dependency>
