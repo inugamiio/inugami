@@ -310,12 +310,12 @@ public class UnitTestHelper {
 
     public static void assertTextRelatif(final String value, final String path) {
         final String refJson = loadJsonReference(path);
-        assertText(value, path);
+        assertText(value, refJson);
     }
 
     public static void assertTextRelatif(final Object value, final String path) {
         final String refJson = loadJsonReference(path);
-        assertText(value, path);
+        assertText(value, refJson);
     }
 
     public static void assertText(final Object value, final String jsonRef) {
