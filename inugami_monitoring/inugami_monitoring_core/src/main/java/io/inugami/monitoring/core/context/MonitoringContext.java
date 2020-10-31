@@ -16,10 +16,6 @@
  */
 package io.inugami.monitoring.core.context;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import io.inugami.api.ctx.BootstrapContext;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.monitoring.MonitoringLoaderSpi;
@@ -29,6 +25,10 @@ import io.inugami.api.monitoring.senders.MonitoringSender;
 import io.inugami.api.monitoring.sensors.MonitoringSensor;
 import io.inugami.api.spi.SpiLoader;
 import io.inugami.monitoring.core.context.sensors.SensorsIntervalManagerTask;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * MonitoringContext
@@ -65,7 +65,7 @@ public class MonitoringContext implements BootstrapContext<Void> {
     };
     
     private static Monitoring loadConfiguration() {
-        final MonitoringLoaderSpi loader = new SpiLoader().loadSpiSingleService(MonitoringLoaderSpi.class);
+        final MonitoringLoaderSpi loader = new SpiLoader().loadSpiSingleServicesByPriority(MonitoringLoaderSpi.class);
         return loader == null ? null : loader.load();
     }
     
