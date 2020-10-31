@@ -48,8 +48,8 @@
 
         <environment.ci>false</environment.ci>
 
-        <_super.plugin.inugami_plugin_lifecycle.version>2.0.0-SNAPSHOT</_super.plugin.inugami_plugin_lifecycle.version>
-        <_super.plugin.inugami-plugin-maven.version>2.0.0-SNAPSHOT</_super.plugin.inugami-plugin-maven.version>
+        <_super.plugin.inugami_plugin_lifecycle.version>2.0.0</_super.plugin.inugami_plugin_lifecycle.version>
+        <_super.plugin.inugami-plugin-maven.version>2.0.0</_super.plugin.inugami-plugin-maven.version>
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: MAVEN SITE
