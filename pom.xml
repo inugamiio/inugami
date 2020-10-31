@@ -204,7 +204,7 @@
         <com.yahoo.yuicompressor.version>2.4.8</com.yahoo.yuicompressor.version>
 
         <!--[ Test ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <junit.junit>4.11</junit.junit>
+        <junit.junit>4.13.1</junit.junit>
         <org-assertj.assertj-core>1.7.0</org-assertj.assertj-core>
         <org-mockito.mockito-core>2.0.31-beta</org-mockito.mockito-core>
 
