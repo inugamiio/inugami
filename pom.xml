@@ -272,40 +272,35 @@
         <url>https://github.com/inugamiio/inugami-maven-plugin</url>
         <connection>scm:git:git@github.com:inugamiio/inugami.git</connection>
         <developerConnection>scm:git:git@github.com:inugamiio/inugami.git</developerConnection>
-        <tag>inugami-1.3.1</tag>
+        <tag>inugami-2.0.0</tag>
     </scm>
-
     <distributionManagement>
-        <repository>
-            <id>inugami-release</id>
-            <name>inugami-release</name>
-            <url>http://inugami.io/artifactory/inugami-release</url>
-        </repository>
         <snapshotRepository>
-            <id>inugami-snapshot</id>
-            <name>inugami-snapshot</name>
-            <url>http://inugami.io/artifactory/inugami-snapshot</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
+
 
     <repositories>
         <repository>
-            <id>inugami-release</id>
-            <name>inugami-release</name>
-            <url>http://inugami.io/artifactory/inugami-release</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
         <repository>
-            <id>inugami-snapshot</id>
-            <name>inugami-snapshot</name>
-            <url>http://inugami.io/artifactory/inugami-snapshot</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
-            <id>inugami-release</id>
-            <name>inugami-release</name>
-            <url>http://inugami.io/artifactory/inugami-release</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </pluginRepository>
     </pluginRepositories>
     <!-- ======================================================================= 

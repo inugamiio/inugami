@@ -89,6 +89,11 @@ public class SpiLoader {
         return loadSpiServicesByPriority(type, null);
     }
 
+    public synchronized <T> T loadSpiSingleServicesByPriority(final Class<?> type) {
+        final List<T> services = loadSpiServicesByPriority(type, null);
+        return services == null || services.isEmpty() ? null : services.get(0);
+    }
+
     public synchronized <T> List<T> loadSpiServicesByPriority(final Class<?> type, final T defaultImplementation) {
         final List<T>          result          = new ArrayList<>();
         final ServiceLoader<T> servicesLoaders = (ServiceLoader<T>) ServiceLoader.load(type);

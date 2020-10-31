@@ -24,6 +24,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import flexjson.JSONSerializer;
 import io.inugami.api.exceptions.*;
 import io.inugami.api.loggers.Loggers;
+import io.inugami.api.models.JsonBuilder;
+import io.inugami.api.tools.ConsoleColors;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.mockito.invocation.InvocationOnMock;
 
@@ -37,6 +41,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UnitTestHelper {
     // =========================================================================
     // ATTRIBUTES
@@ -44,11 +49,6 @@ public class UnitTestHelper {
     private final static Pattern UID_PATTERN = Pattern.compile("(?:[^_-]+[_-]){0,1}(?<uid>[0-9]+)");
     public static final  String  UTF_8       = "UTF-8";
 
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    private UnitTestHelper() {
-    }
 
     // =========================================================================
     // LOAD / READ FILE
@@ -255,45 +255,6 @@ public class UnitTestHelper {
         throw new RuntimeException(error.getMessage(), error);
     }
 
-    public static void assertJson(final Object value, final String jsonRef) {
-        if (jsonRef == null) {
-            Asserts.isNull(value, TestHelpersErrorCodes.MUST_BE_NULL);
-        }
-        else {
-            Asserts.notNull(value, TestHelpersErrorCodes.MUST_BE_NOT_NULL);
-            final String json = convertToJson(value);
-            assertJson(jsonRef, json);
-        }
-
-
-    }
-
-    public static void assertJson(final String jsonRef, final String json) {
-        Asserts.notNull(jsonRef, TestHelpersErrorCodes.MUST_BE_NOT_NULL);
-        Asserts.notNull(json, TestHelpersErrorCodes.MUST_BE_NOT_NULL);
-        final String[] jsonValue = json.split("\n");
-        final String[] refLines  = jsonRef.split("\n");
-
-        try {
-            Asserts.equalsObj(TestHelpersErrorCodes.MUST_BE_EQUALS, jsonValue.length, refLines.length);
-        }
-        catch (final Throwable e) {
-            Loggers.DEBUG.error("\nactual :\n{}\nreference:\n{}\n----------", json, jsonRef);
-            throw e;
-        }
-
-
-        for (int i = 0; i < refLines.length; i++) {
-            try {
-                Asserts.equalsObj(TestHelpersErrorCodes.MUST_BE_EQUALS, jsonValue[i].trim(), refLines[i].trim());
-            }
-            catch (final Throwable e) {
-                Loggers.DEBUG.error("\nactual :\n{}\nreference:\n{}----------", json, jsonRef);
-                throw e;
-            }
-
-        }
-    }
 
     public static <T> void checkMapper(final String relativePath, final TypeReference<T> refObjectType,
                                        final Function<Object, Object> mapperFunction)
@@ -322,14 +283,13 @@ public class UnitTestHelper {
         for (final File jsonLoaderFile : jsonLoaderFiles) {
             final String jsonLoader       = readFile(jsonLoaderFile);
             final String refJson          = readFile(buildRefJsonPath(jsonLoaderFile));
-            String       mappedObjectJson = null;
+            final String mappedObjectJson = null;
 
             final Object initialResult = new ObjectMapper().readValue(jsonLoader, refObjectType);
             final Object mappedObject  = mapperFunction.apply(initialResult);
             try {
                 Asserts.notNull(TestHelpersErrorCodes.MUST_BE_NOT_NULL, mappedObject);
-                mappedObjectJson = convertToJson(mappedObject);
-                Asserts.equalsObj(TestHelpersErrorCodes.MUST_BE_EQUALS, refJson, mappedObjectJson);
+                assertText(mappedObject, refJson);
             }
             catch (final Exception error) {
                 Loggers.DEBUG.error("\nref:\n---------\n{}current:\n---------\n{}\n---------",
@@ -337,6 +297,66 @@ public class UnitTestHelper {
                                     mappedObjectJson);
                 throw error;
             }
+        }
+    }
+
+    public static void assertJson(final Object value, final String jsonRef) {
+        assertText(jsonRef, jsonRef);
+    }
+
+    public static void assertJson(final String jsonRef, final String json) {
+        assertText(jsonRef, json);
+    }
+
+    public static void assertTextRelatif(final String value, final String path) {
+        final String refJson = loadJsonReference(path);
+        assertText(value, refJson);
+    }
+
+    public static void assertTextRelatif(final Object value, final String path) {
+        final String refJson = loadJsonReference(path);
+        assertText(value, refJson);
+    }
+
+    public static void assertText(final Object value, final String jsonRef) {
+        if (jsonRef == null) {
+            Asserts.isNull("json must be null", value);
+        }
+        else {
+            Asserts.notNull("json mustn't be null", value);
+            final String json = convertToJson(value);
+            assertText(jsonRef, json);
+        }
+
+
+    }
+
+    public static void assertText(final String jsonRef, final String json) {
+        Asserts.notNull("json ref mustn't be null", jsonRef);
+        Asserts.notNull("json mustn't be null", json);
+        final String[] jsonValue = json.split("\n");
+        final String[] refLines  = jsonRef.split("\n");
+
+        try {
+            if (jsonValue.length != refLines.length) {
+                Loggers.DEBUG.error(renderDiff(jsonValue, refLines));
+            }
+            Asserts.isTrue(
+                    String.format("reference and json have not same size : %s,%s", jsonValue.length, refLines.length),
+                    jsonValue.length == refLines.length);
+        }
+        catch (final Throwable e) {
+            throw e;
+        }
+
+
+        for (int i = 0; i < refLines.length; i++) {
+            if (!jsonValue[i].trim().equals(refLines[i].trim())) {
+                Loggers.DEBUG.error(renderDiff(jsonValue, refLines));
+                throw new RuntimeException(
+                        String.format("[%s] %s != %s", i + 1, jsonValue[i].trim(), refLines[i].trim()));
+            }
+
         }
     }
 
@@ -378,5 +398,79 @@ public class UnitTestHelper {
         }
     }
 
+    private static String renderDiff(final String[] jsonValue, final String[] refLines) {
+        final JsonBuilder writer = new JsonBuilder();
+        writer.line();
+        writer.write("Current:").line().write(ConsoleColors.createLine("-", 80)).line();
+        writer.write(String.join("\n", jsonValue)).line();
+        writer.write(ConsoleColors.createLine("-", 80));
 
+        writer.line().line();
+        final int    currentNbLine    = jsonValue.length;
+        final int    refNbLines       = refLines.length;
+        final int    nbLines          = jsonValue.length > refLines.length ? jsonValue.length : refLines.length;
+        final int    lineColumn       = String.valueOf(nbLines).length() + 2;
+        final int    maxCurrentColumn = computeMaxColumnSize(jsonValue);
+        final int    maxRefColumn     = computeMaxColumnSize(refLines);
+        final String lineDeco         = " |";
+        final String diffMiddleOk     = "     ";
+        final String diffMiddleKO     = " <-> ";
+        final int    fullSize         = lineColumn + maxCurrentColumn + diffMiddleOk.length() + maxRefColumn;
+
+        writer.write(ConsoleColors.createLine("=", fullSize)).line();
+        writer.write(ConsoleColors.createLine(" ", lineColumn)).write(lineDeco);
+        writer.write(writeCenter("Current", maxCurrentColumn));
+        writer.write(diffMiddleOk);
+        writer.write(writeCenter("Reference", maxRefColumn));
+        writer.line();
+        writer.write(ConsoleColors.createLine("=", fullSize)).line();
+
+        for (int i = 0; i < nbLines; i++) {
+            final String  currentLine = i >= currentNbLine ? "" : jsonValue[i];
+            final String  refLine     = i >= refNbLines ? "" : refLines[i];
+            final boolean diff        = !currentLine.trim().equals(refLine.trim());
+            if (diff) {
+                writer.write(ConsoleColors.RED);
+            }
+            writer.write(i).write(ConsoleColors.createLine(" ", lineColumn - String.valueOf(i).length()));
+            writer.write(lineDeco);
+            writer.write(currentLine).write(ConsoleColors.createLine(" ", maxCurrentColumn - currentLine.length()));
+            writer.write(diff ? diffMiddleKO : diffMiddleOk);
+            writer.write(refLine);
+            if (diff) {
+                writer.write(ConsoleColors.RESET);
+            }
+            writer.line();
+        }
+
+        return writer.toString();
+    }
+
+
+    private static int computeMaxColumnSize(final String[] lines) {
+        int result = 20;
+        if (lines != null) {
+            for (final String line : lines) {
+                if (line.length() > result) {
+                    result = line.length();
+                }
+            }
+        }
+        return result;
+    }
+
+    private static String writeCenter(final String title, final int columnSize) {
+        final StringBuilder result = new StringBuilder();
+        if (columnSize < title.length()) {
+            result.append(title.substring(0, columnSize));
+        }
+        else {
+            final int titleOffset = title.length() / 2;
+
+            result.append(ConsoleColors.createLine(" ", titleOffset));
+            result.append(title);
+            result.append(ConsoleColors.createLine(" ", columnSize - (titleOffset + title.length())));
+        }
+        return result.toString();
+    }
 }
