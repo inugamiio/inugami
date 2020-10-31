@@ -50,9 +50,6 @@ public class StartHourAtFunctionTest {
         final long timeTodayMs = calendar.getTimeInMillis();
         final long timeToday = timeTodayMs/1000;
         final long timeYesterday = new Cal(timeTodayMs).add(Calendar.DAY_OF_YEAR, -1).toTimestamp();
-        final long timeWeek = new Cal(timeTodayMs).add(Calendar.WEEK_OF_YEAR, -1).toTimestamp();
-        final long timeMonth= new Cal(timeTodayMs).add(Calendar.MONTH, -1).toTimestamp();
-        final long timeYear= new Cal(timeTodayMs).add(Calendar.YEAR, -1).toTimestamp();
         
         
         final String timestampToday = function.apply(new FunctionData("startHourAt", new String[] { "06:00" },0,0));
@@ -63,23 +60,6 @@ public class StartHourAtFunctionTest {
         assertNotNull(timestampYesterday);
         assertEquals(String.valueOf(timeYesterday), timestampYesterday);
 
-        
-        final String five = function.apply(new FunctionData("startHourAt", new String[] { "05:59"},0,0));
-        
-        final String timestampWeek = function.apply(new FunctionData("startHourAt", new String[] { "06:00", "-1w" },0,0));
-        assertNotNull(timestampWeek);
-        assertEquals(String.valueOf(timeWeek), timestampWeek);
-        
-        
-        
-
-        final String timestampMonth = function.apply(new FunctionData("startHourAt", new String[] { "06:00", "-1M" },0,0));
-        assertNotNull(timestampMonth);
-        assertEquals(String.valueOf(timeMonth), timestampMonth);
-
-        final String timestampYear = function.apply(new FunctionData("startHourAt", new String[] { "06:00", "-1y" },0,0));
-        assertNotNull(timestampYear);
-        assertEquals(String.valueOf(timeYear), timestampYear);
 
     }
 
