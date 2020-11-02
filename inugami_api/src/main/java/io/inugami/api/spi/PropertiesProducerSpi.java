@@ -19,13 +19,6 @@ package io.inugami.api.spi;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * PropertiesInjectorSpi <label>SPI
- * file:</label><strong>io.inugami.api.spi.PropertiesProducerSpi</strong>
- * 
- * @author patrickguillerm
- * @since 3 sept. 2018
- */
 public interface PropertiesProducerSpi {
     Map<String, String> produce();
     

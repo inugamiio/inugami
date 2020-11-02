@@ -16,20 +16,13 @@
  */
 package io.inugami.core.cdi.extensions.startup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.Annotated;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.Extension;
-import javax.enterprise.inject.spi.ProcessBean;
+import javax.enterprise.inject.spi.*;
 import javax.inject.Singleton;
-
-import io.inugami.api.exceptions.TechnicalException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * StartupCDI
@@ -49,14 +42,7 @@ public class StartupCdi<X> implements Extension {
     // =========================================================================
     // METHODS
     // =========================================================================
-    /**
-     * Pre load.
-     * 
-     * @param <X> the generic type
-     * @param event the event
-     * @param beanManager the bean manager
-     * @throws TechnicalException the technical exception
-     */
+
     @SuppressWarnings("hiding")
     public <X> void preLoad(final @Observes ProcessBean<X> event, final BeanManager beanManager) {
         this.beanManager=beanManager;
@@ -73,18 +59,4 @@ public class StartupCdi<X> implements Extension {
 
     }
 
-    /**
-     * Load.
-     * 
-     * @param event the event
-     * @param beanManager the bean manager
-     */
-    /*
-    public void load(@Observes @Initialized(ApplicationScoped.class) Object init) {
-        for (final Bean<?> bean : eagerBeansList) {
-            CreationalContext<?> ctx = beanManager.createCreationalContext(bean);
-            beanManager.getReference(bean, bean.getBeanClass(), ctx);
-        }
-    }
-    */
 }

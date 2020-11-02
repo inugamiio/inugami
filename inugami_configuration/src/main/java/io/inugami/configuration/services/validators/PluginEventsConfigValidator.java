@@ -16,27 +16,18 @@
  */
 package io.inugami.configuration.services.validators;
 
-import static io.inugami.configuration.services.validators.ValidatorProcessor.condition;
-import static io.inugami.configuration.services.validators.ValidatorProcessor.format;
-import static io.inugami.configuration.services.validators.ValidatorProcessor.isEmpty;
-import static io.inugami.configuration.services.validators.ValidatorProcessor.isNotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.script.ScriptException;
-
 import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.models.events.AlertingModel;
-import io.inugami.api.models.events.Event;
-import io.inugami.api.models.events.GenericEvent;
-import io.inugami.api.models.events.SimpleEvent;
-import io.inugami.api.models.events.TargetConfig;
+import io.inugami.api.models.events.*;
 import io.inugami.api.processors.ClassBehavior;
 import io.inugami.commons.engine.JavaScriptEngine;
 import io.inugami.configuration.exceptions.ConfigurationException;
 import io.inugami.configuration.models.EventConfig;
+
+import javax.script.ScriptException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static io.inugami.configuration.services.validators.ValidatorProcessor.*;
 
 /**
  * PluginEventsConfigValidator.
@@ -48,24 +39,15 @@ public class PluginEventsConfigValidator implements Validator {
     
     // =========================================================================
     // ATTRIBUTES
-    /** The event config. */
     // =========================================================================
     private final EventConfig      eventConfig;
-    
-    /** The config file. */
     private final String           configFile;
-    
     private final JavaScriptEngine jsEngine;
     
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    /**
-     * Instantiates a new plugin events config validator.
-     *
-     * @param eventConfig the event config
-     * @param configFile the config file
-     */
+
     public PluginEventsConfigValidator(final EventConfig eventConfig, final String configFile) {
         this.eventConfig = eventConfig;
         this.configFile = configFile;
@@ -74,12 +56,7 @@ public class PluginEventsConfigValidator implements Validator {
     // =========================================================================
     // METHODS
     // =========================================================================
-    
-    /**
-     * Validate.
-     *
-     * @throws TechnicalException the technical exception
-     */
+
     @Override
     public void validate() throws ConfigurationException {
         final List<Condition> conditions = new ArrayList<>();
@@ -108,12 +85,6 @@ public class PluginEventsConfigValidator implements Validator {
     // =========================================================================
     // EVENTS / SIMPLE EVENT
     // =========================================================================
-    /**
-     * Builds the condition for generic event.
-     *
-     * @param event the event
-     * @return the list
-     */
     private List<Condition> buildConditionForGenericEvent(final GenericEvent event) {
         final List<Condition> conditions = new ArrayList<>();
         conditions.add(condition("event must have name!", event.getName() == null));
@@ -140,12 +111,7 @@ public class PluginEventsConfigValidator implements Validator {
         return conditions;
     }
     
-    /**
-     * Builds the conditions for event.
-     *
-     * @param event the event
-     * @return the list
-     */
+
     private List<Condition> buildConditionsForEvent(final Event event) {
         final List<Condition> conditions = buildConditionForGenericEvent(event);
         
@@ -173,12 +139,7 @@ public class PluginEventsConfigValidator implements Validator {
         return conditions;
     }
     
-    /**
-     * Builds the conditions for simple event.
-     *
-     * @param event the event
-     * @return the list
-     */
+
     private List<Condition> buildConditionsForSimpleEvent(final SimpleEvent event) {
         final List<Condition> conditions = buildConditionForGenericEvent(event);
         final String eventName = event.getName() == null ? "" : event.getName();
@@ -189,12 +150,7 @@ public class PluginEventsConfigValidator implements Validator {
         return conditions;
     }
     
-    /**
-     * Builds the condition for class behavior.
-     *
-     * @param behavior the behavior
-     * @return the list
-     */
+
     private List<Condition> buildConditionForClassBehavior(final ClassBehavior behavior) {
         final List<Condition> conditions = new ArrayList<>();
         Asserts.notNull(behavior);

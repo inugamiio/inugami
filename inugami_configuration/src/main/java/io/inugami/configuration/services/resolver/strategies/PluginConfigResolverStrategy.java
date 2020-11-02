@@ -16,14 +16,14 @@
  */
 package io.inugami.configuration.services.resolver.strategies;
 
-import java.util.List;
-import java.util.Optional;
-
 import io.inugami.api.exceptions.TechnicalException;
 import io.inugami.configuration.models.EventConfig;
 import io.inugami.configuration.models.plugins.EventsFileModel;
 import io.inugami.configuration.models.plugins.PluginConfiguration;
 import io.inugami.configuration.services.resolver.ConfigurationResolverException;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * ConfigurationResolverStrategy
@@ -32,22 +32,10 @@ import io.inugami.configuration.services.resolver.ConfigurationResolverException
  * @since 27 déc. 2016
  */
 public interface PluginConfigResolverStrategy {
-    /**
-     * Allow to resolve plugins configurations
-     * 
-     * @return List of plugins configurations
-     * @throws ConfigurationResolverException if exception is occur
-     */
+
     Optional<List<PluginConfiguration>> resolve() throws ConfigurationResolverException;
     
-    /**
-     * Resolve event file.
-     *
-     * @param config the config
-     * @param eventFile the event file
-     * @return the optional
-     * @throws TechnicalException
-     */
+
     Optional<EventConfig> resolveEventFile(final PluginConfiguration config,
                                            final EventsFileModel eventFile) throws TechnicalException;
     

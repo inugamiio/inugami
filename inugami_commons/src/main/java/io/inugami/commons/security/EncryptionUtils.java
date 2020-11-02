@@ -16,6 +16,21 @@
  */
 package io.inugami.commons.security;
 
+import io.inugami.api.constants.JvmKeyValues;
+import io.inugami.api.exceptions.Asserts;
+import io.inugami.api.exceptions.FatalException;
+import io.inugami.api.loggers.Loggers;
+import io.inugami.commons.files.FilesUtils;
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -23,33 +38,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Random;
-import java.util.UUID;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.apache.commons.codec.Charsets;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
-import io.inugami.api.constants.JvmKeyValues;
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.FatalException;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.commons.files.FilesUtils;
 
 /**
  * EncryptionUtils
@@ -157,11 +147,6 @@ public class EncryptionUtils {
     // =========================================================================
     // Token
     // =========================================================================
-    /**
-     * Make unique token.
-     * 
-     * @return the string
-     */
     public synchronized String makeUniqueToken() {
         String result = null;
         
@@ -169,7 +154,7 @@ public class EncryptionUtils {
         final long timeNano = System.nanoTime();
         final String timeStr = String.valueOf(time) + String.valueOf(timeNano);
         
-        String timeSha1;
+        final String timeSha1;
         timeSha1 = encodeSha1(timeStr);
         
         String randomToken = "";
@@ -186,13 +171,7 @@ public class EncryptionUtils {
     // =========================================================================
     // SHA 1
     // =========================================================================
-    /**
-     * Encode to sha1.
-     * 
-     * @param value the value
-     * @return the string
-     * @throws TechnicalException the technical exception
-     */
+
     private static String encodeToSha1(final String value) {
         String result = null;
         try {
@@ -207,13 +186,7 @@ public class EncryptionUtils {
         return result;
     }
     
-    /**
-     * Encode sha1.
-     * 
-     * @param value the value
-     * @return the string
-     * @throws TechnicalException the technical exception
-     */
+
     public String encodeSha1(final String value) {
         return encodeToSha1(value);
     }
@@ -221,14 +194,6 @@ public class EncryptionUtils {
     // =========================================================================
     // AES
     // =========================================================================
-    
-    /**
-     * Encode aes.
-     * 
-     * @param value the value
-     * @return the string
-     * @throws TechnicalException the technical exception
-     */
     public String encodeAES(final String value) {
         byte[] data = null;
         try {
@@ -237,7 +202,7 @@ public class EncryptionUtils {
             data = cipher.doFinal(value.getBytes(Charsets.UTF_8));
             
         }
-        catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException
+        catch (final NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException
                 | BadPaddingException e) {
             throw new SecurityException(e.getMessage(), e);
         }
@@ -245,14 +210,7 @@ public class EncryptionUtils {
         return encodeBase64(data);
     }
     
-    /**
-     * Decode aes.
-     * 
-     * @param value the value
-     * @return the string
-     * @throws TechnicalException the technical exception
-     * @throws DecoderException
-     */
+
     public String decodeAES(final String value) {
         
         try {
@@ -260,7 +218,7 @@ public class EncryptionUtils {
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(SECRET_KEY, KEY_ALGORITHM));
             return new String(cipher.doFinal(Base64.decodeBase64(value)), Charsets.UTF_8);
         }
-        catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException
+        catch (final NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException
                 | BadPaddingException e) {
             throw new SecurityException(e.getMessage(), e);
         }
@@ -270,23 +228,12 @@ public class EncryptionUtils {
     // =========================================================================
     // AES
     // =========================================================================
-    /**
-     * Encode hexa.
-     * 
-     * @param value the value
-     * @return the string
-     */
+
     public String encodeHexa(final String value) {
         return Hex.encodeHexString(value.getBytes());
     }
     
-    /**
-     * Decode hexa.
-     * 
-     * @param value the value
-     * @return the string
-     * @throws DecoderException the decoder exception
-     */
+
     public String decodeHexa(final String value) throws DecoderException {
         return new String(Hex.decodeHex(value.toCharArray()));
     }
@@ -294,12 +241,7 @@ public class EncryptionUtils {
     // =========================================================================
     // BASE 64
     // =========================================================================
-    /**
-     * Encode base64.
-     * 
-     * @param value the value
-     * @return the string
-     */
+
     public String encodeBase64(final String value) {
         return encodeBase64(value == null ? null : value.getBytes(UTF_8));
     }
@@ -311,12 +253,7 @@ public class EncryptionUtils {
         return Base64.encodeBase64URLSafeString(value);
     }
     
-    /**
-     * Decode base64.
-     * 
-     * @param value the value
-     * @return the string
-     */
+
     public String decodeBase64(final String value) {
         return new String(decodeBase64Bytes(value));
         
@@ -332,12 +269,7 @@ public class EncryptionUtils {
     // =========================================================================
     // Map<String,String> <-> String
     // =========================================================================
-    /**
-     * Encode map.
-     * 
-     * @param value the value
-     * @return the string
-     */
+
     public String encodeMap(final Map<String, String> value) {
         final StringBuilder result = new StringBuilder();
         if ((value == null) || value.isEmpty()) {
@@ -358,12 +290,7 @@ public class EncryptionUtils {
         return result.toString();
     }
     
-    /**
-     * Decode map.
-     * 
-     * @param value the value
-     * @return the map
-     */
+
     public Map<String, String> decodeMap(final String value) {
         final Map<String, String> result = new HashMap<>();
         

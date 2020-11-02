@@ -16,18 +16,6 @@
  */
 package io.inugami.core.context;
 
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
 import io.inugami.api.alertings.AlertingProvider;
 import io.inugami.api.exceptions.FatalException;
 import io.inugami.api.exceptions.TechnicalException;
@@ -51,11 +39,13 @@ import io.inugami.configuration.models.plugins.PluginConfiguration;
 import io.inugami.configuration.models.plugins.PropertyModel;
 import io.inugami.configuration.services.ConfigHandlerHashMap;
 import io.inugami.configuration.services.resolver.ConfigurationResolver;
-import io.inugami.core.context.loading.AlertsResourcesLoader;
-import io.inugami.core.context.loading.AlertsResourcesLoaderFileSystem;
-import io.inugami.core.context.loading.AlertsResourcesLoaderZip;
-import io.inugami.core.context.loading.PropertiesResourcesLoader;
-import io.inugami.core.context.loading.PropertiesResourcesLoaderZip;
+import io.inugami.core.context.loading.*;
+
+import java.io.File;
+import java.net.URL;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * ConfigurationHolder
@@ -116,7 +106,7 @@ public class ConfigurationHolder {
         try {
             applicationConfig = initializeApplicationConfig();
             
-            Optional<List<PluginConfiguration>> pluginsConfigs;
+            final Optional<List<PluginConfiguration>> pluginsConfigs;
             pluginsConfigs = resolvePlugins();
             if (pluginsConfigs.isPresent()) {
                 loadGlobalProperties(pluginsConfigs.get());
@@ -344,10 +334,7 @@ public class ConfigurationHolder {
         return eventFileConfig;
     }
     
-    // =========================================================================
-    // LOAD ALERTING RESOURCES
-    // =========================================================================
-    
+
     // =========================================================================
     // TOOLS
     // =========================================================================
@@ -370,22 +357,12 @@ public class ConfigurationHolder {
     // =========================================================================
     // PUBLIC API
     // =========================================================================
-    /**
-     * Gets the plugins.
-     *
-     * @return the plugins
-     * @Allow to grab all plugins
-     */
+
     public Optional<List<Plugin>> getPlugins() {
         return pluginsRefs == null ? Optional.empty() : Optional.of(pluginsRefs);
     }
     
-    /**
-     * Allow to call all enable listeners with Functional function.
-     *
-     * @param listenerProcessor the specific function to execute on all
-     *            listeners
-     */
+
     public void callAllListener(final EngineListenerProcessor listenerProcessor) {
         coreListeners.ifPresent(engineListeners -> engineListeners.forEach(listenerProcessor::process));
         
