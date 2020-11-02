@@ -785,13 +785,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>${org-assertj.assertj-core}</version>
-            </dependency>
-
-
-            <dependency>
                 <groupId>org.jboss.arquillian.junit</groupId>
                 <artifactId>arquillian-junit-container</artifactId>
                 <version>${org.jboss.arquillian.junit}</version>
