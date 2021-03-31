@@ -244,7 +244,7 @@
         <cglib.cglib.version>3.2.5</cglib.cglib.version>
         <findbugs.annotations.version>1.0.0</findbugs.annotations.version>
         <swagger-jaxrs2.version>2.0.0</swagger-jaxrs2.version>
-        <com.google.guava.version>27.0.1-jre</com.google.guava.version>
+        <com.google.guava.version>29.0-jre</com.google.guava.version>
         <org.junit.jupiter>5.7.0-M1</org.junit.jupiter>
         <org.projectlombok.version>1.18.12</org.projectlombok.version>
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
