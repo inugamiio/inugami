@@ -211,7 +211,7 @@
 
         <!--[ Apache ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <org.apache.httpcomponents.version>4.5.3</org.apache.httpcomponents.version>
-        <org.apache.commons.io.version>2.5</org.apache.commons.io.version>
+        <org.apache.commons.io.version>2.7</org.apache.commons.io.version>
         <org.apache.commons.cli.version>1.4</org.apache.commons.cli.version>
         <org.apache.commons.codec.version>1.9</org.apache.commons.codec.version>
         <!--[ Mapping ]++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
