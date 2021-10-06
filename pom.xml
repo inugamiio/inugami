@@ -126,7 +126,7 @@
         <org.apache.tomcat.embed.tomcat-embed-logging-juli.version>8.0.53
         </org.apache.tomcat.embed.tomcat-embed-logging-juli.version>
         <org.eclipse.jdt.core.compiler.version>4.6.1</org.eclipse.jdt.core.compiler.version>
-        <com.sun.el.version>1.0</com.sun.el.version>
+        <com.sun.el.version>3.0.4</com.sun.el.version>
         <de.odysseus.juel.version>2.2.7</de.odysseus.juel.version>
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
