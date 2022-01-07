@@ -230,7 +230,7 @@
         <org-mockito.mockito-core>2.0.31-beta</org-mockito.mockito-core>
 
         <!--[ Data base drivers ]++++++++++++++++++++++++++++++++++++++++++++-->
-        <com.h2database.h2.version>1.4.196</com.h2database.h2.version>
+        <com.h2database.h2.version>2.0.206</com.h2database.h2.version>
 
 
         <jaxb.version>2.3.0</jaxb.version>
