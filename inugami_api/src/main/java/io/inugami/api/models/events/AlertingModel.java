@@ -21,6 +21,9 @@ import java.util.Optional;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * AlertingModel
@@ -28,6 +31,9 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  * @author patrick_guillerm
  * @since 20 déc. 2017
  */
+@ToString
+@Setter
+@Getter
 @XStreamAlias("alerting")
 public class AlertingModel implements Serializable {
     
@@ -80,56 +86,7 @@ public class AlertingModel implements Serializable {
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(final String name) {
-        this.name = name;
-    }
-    
-    public String getProvider() {
-        return provider;
-    }
-    
-    public void setProvider(final String provider) {
-        this.provider = provider;
-    }
-    
-    public String getMessage() {
-        return message;
-    }
-    
-    public void setMessage(final String message) {
-        this.message = message;
-    }
-    
-    public String getLevel() {
-        return level;
-    }
-    
-    public void setLevel(final String level) {
-        this.level = level;
-    }
-    
-    public String getCondition() {
-        return condition;
-    }
-    
-    public void setCondition(final String condition) {
-        this.condition = condition;
-    }
-    
     public Optional<String> grabFunction() {
         return Optional.ofNullable(function);
     }
-    
-    public String getFunction() {
-        return function;
-    }
-    
-    public void setFunction(final String function) {
-        this.function = function;
-    }
-    
 }

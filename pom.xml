@@ -184,8 +184,8 @@
 
 
         <!--[ LOGGER ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <org.slf4j.version>1.7.21</org.slf4j.version>
-        <ch.qos.logback.version>1.2.3</ch.qos.logback.version>
+        <org.slf4j.version>1.7.36</org.slf4j.version>
+        <ch.qos.logback.version>1.2.11</ch.qos.logback.version>
 
         <!--[ Apache ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <org.apache.httpcomponents.version>4.5.3</org.apache.httpcomponents.version>
@@ -193,10 +193,10 @@
         <org.apache.commons.cli.version>1.4</org.apache.commons.cli.version>
         <org.apache.commons.codec.version>1.9</org.apache.commons.codec.version>
         <!--[ Mapping ]++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <com.thoughtworks.xstream.version>1.4.13</com.thoughtworks.xstream.version>
+        <com.thoughtworks.xstream.version>1.4.19</com.thoughtworks.xstream.version>
 
         <net.sf.flexjson.version>3.3</net.sf.flexjson.version>
-        <org.jsoup.version>1.10.2</org.jsoup.version>
+        <org.jsoup.version>1.14.2</org.jsoup.version>
 
         <!--[ Front ]++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <org.tuckey.urlrewritefilter.version>4.0.4</org.tuckey.urlrewritefilter.version>
@@ -208,7 +208,7 @@
         <org-mockito.mockito-core>2.0.31-beta</org-mockito.mockito-core>
 
         <!--[ Data base drivers ]++++++++++++++++++++++++++++++++++++++++++++-->
-        <com.h2database.h2.version>1.4.196</com.h2database.h2.version>
+        <com.h2database.h2.version>2.0.206</com.h2database.h2.version>
 
 
         <jaxb.version>2.3.0</jaxb.version>

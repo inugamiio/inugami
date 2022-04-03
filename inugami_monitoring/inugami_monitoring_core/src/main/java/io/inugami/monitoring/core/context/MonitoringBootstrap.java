@@ -32,7 +32,7 @@ public class MonitoringBootstrap implements ServletContextListener {
     // =========================================================================
     // ATTRIBUTE
     // =========================================================================
-    private static final MonitoringContext CONTEXT        = new MonitoringContext();
+    public static final MonitoringContext CONTEXT        = new MonitoringContext();
     
     private static boolean                 hasInitialized = false;
     

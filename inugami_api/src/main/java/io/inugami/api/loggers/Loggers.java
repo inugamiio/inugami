@@ -90,6 +90,8 @@ public final class Loggers {
 
     public static final Logger REST = LoggerFactory.getLogger("REST");
 
+    public static final Logger IOLOG   = LoggerFactory.getLogger("IOLOG");
+
 
     // =========================================================================
     // METHODS

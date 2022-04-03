@@ -17,8 +17,13 @@
 package io.inugami.api.monitoring.data;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import io.inugami.api.models.ClonableObject;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 
 /**
  * ResponseData
@@ -26,6 +31,10 @@ import io.inugami.api.models.ClonableObject;
  * @author patrickguillerm
  * @since Jan 7, 2019
  */
+@AllArgsConstructor
+@Builder(toBuilder = true)
+@ToString(onlyExplicitlyIncluded = true)
+@Getter
 public class ResponseData implements Serializable, ClonableObject<ResponseData> {
     
     // =========================================================================
@@ -36,13 +45,16 @@ public class ResponseData implements Serializable, ClonableObject<ResponseData> 
     private final long        duration;
     
     private final long        datetime;
-    
+
+    @ToString.Include
     private final int         code;
     
     private final String      content;
-    
+    @ToString.Include
     private final String      contentType;
-    
+
+    private Map<String, String> hearder;
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -57,45 +69,9 @@ public class ResponseData implements Serializable, ClonableObject<ResponseData> 
     
     @Override
     public ResponseData cloneObj() {
-        return new ResponseData(code, content, contentType, duration, datetime);
+        return toBuilder().build();
     }
     
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    @Override
-    public String toString() {
-        //@formatter:off
-        StringBuilder builder = new StringBuilder();
-        builder.append("ResponseData [code=").append(code)
-               .append(", contentType=").append(contentType)
-               .append(", hasContent=").append(content!=null && !content.isEmpty())
-               .append("]");
-        //@formatter:on
-        return builder.toString();
-    }
-    
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public int getCode() {
-        return code;
-    }
-    
-    public String getContent() {
-        return content;
-    }
-    
-    public String getContentType() {
-        return contentType;
-    }
-    
-    public long getDuration() {
-        return duration;
-    }
-    
-    public long getDatetime() {
-        return datetime;
-    }
+
     
 }
