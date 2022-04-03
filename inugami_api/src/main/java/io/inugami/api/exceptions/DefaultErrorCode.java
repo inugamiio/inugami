@@ -20,6 +20,7 @@ package io.inugami.api.exceptions;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.io.Serializable;
 import java.util.function.BiConsumer;
@@ -47,7 +48,24 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     private final BiConsumer<String, Exception> errorHandler;
 
     public static ErrorCode buildUndefineError() {
-        return DefaultErrorCode.builder().statusCode(500).errorCode("err-undefine").build();
+        return DefaultErrorCode.builder()
+                               .statusCode(500)
+                               .errorCode("err-undefine")
+                               .errorTypeTechnical()
+                               .build();
+    }
+
+    public static DefaultErrorCode.DefaultErrorCodeBuilder fromErrorCode(final ErrorCode errorCode) {
+        final DefaultErrorCodeBuilder result           = DefaultErrorCode.builder();
+        final ErrorCode               currentErrorCode = errorCode == null ? buildUndefineError() : errorCode;
+
+
+        return result.errorCode(errorCode.getErrorCode())
+                     .statusCode(errorCode.getStatusCode())
+                     .message(errorCode.getMessage())
+                     .errorType(errorCode.getErrorType())
+                     .payload(errorCode.getPayload())
+                     .errorHandler(errorCode.getErrorHandler());
     }
 
     public static DefaultErrorCode.DefaultErrorCodeBuilder newBuilder() {
@@ -55,6 +73,7 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     }
 
     public static class DefaultErrorCodeBuilder {
+
         public DefaultErrorCodeBuilder errorTypeTechnical() {
             this.errorType = "technical";
             return this;
@@ -74,7 +93,15 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
             this.errorType = "security";
             return this;
         }
+
+        public DefaultErrorCodeBuilder addMessageDetail(String message, Object... values) {
+            if (message != null) {
+                this.messageDetail = MessagesFormatter.format(message, values);
+            }
+            return this;
+        }
     }
+
 
     @Override
     public ErrorCode getCurrentErrorCode() {

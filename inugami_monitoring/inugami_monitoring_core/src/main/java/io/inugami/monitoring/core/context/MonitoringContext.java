@@ -134,5 +134,11 @@ public class MonitoringContext implements BootstrapContext<Void> {
     public List<MonitoringFilterInterceptor> getInterceptors() {
         return CONFIG.getInterceptors();
     }
-    
+
+    public MonitoringContext addInterceptor(MonitoringFilterInterceptor interceptor){
+        if(interceptor!=null){
+            CONFIG.getInterceptors().add(interceptor);
+        }
+        return this;
+    }
 }

@@ -15,12 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.monitoring.core.interceptors.spi;
-
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 
+import io.inugami.api.loggers.Loggers;
 import io.inugami.api.models.JsonBuilder;
+import io.inugami.api.monitoring.MdcService;
 import io.inugami.api.monitoring.data.ResponseData;
 import io.inugami.api.monitoring.data.ResquestData;
 import io.inugami.api.monitoring.exceptions.ErrorResult;
@@ -29,7 +29,6 @@ import io.inugami.api.monitoring.models.GenericMonitoringModel;
 import io.inugami.api.processors.ConfigHandler;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * LogInterceptor
@@ -42,7 +41,7 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final Logger LOGGER        = LoggerFactory.getLogger(IoLogInterceptor.class.getSimpleName());
+    private static final Logger LOGGER        = Loggers.IOLOG;
     
     private static final String EMPTY_CONTENT = "empty";
     
@@ -84,101 +83,58 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     // =========================================================================
     @Override
     public List<GenericMonitoringModel> onBegin(final ResquestData request) {
-        final String playload = buildPlayload(request, null);
-        //@formatter:off
-        final String msg = String.join("|", 
-                                       renderMethod(request.getMethod()),
-                                       renderContentType(request.getContentType()),
-                                       request.getUri(),
-                                       playload
-                                       );
-        //@formatter:on
-        LOGGER.info((enableDecorator ? inputDecorator : EMPTY) + msg);
-        
+        final JsonBuilder msg = buildIologIn(request );
+        MdcService.lifecycleIn();
+        LOGGER.info((enableDecorator ? inputDecorator : EMPTY) +  ObfuscatorTools.applyObfuscators(msg.toString()));
+        MdcService.lifecycleRemove();
         return null;
     }
-    
+
+    private JsonBuilder buildIologIn(final ResquestData request) {
+
+        final JsonBuilder result = new JsonBuilder();
+        result.openList().write(request.getMethod()).closeList();
+        result.writeSpace().write(request.getContextPath()).write(request.getUri()).line();
+        result.write("headers :").line();
+        for ( Map.Entry<String, String>  entry : request.getHearder().entrySet()) {
+            result.tab().write(entry.getKey()).write(":").writeSpace().write(entry.getValue()).line();
+        }
+
+        result.write("payload :").line();
+        result.write(request.getContent()==null?JsonBuilder.VALUE_NULL:request.getContent());
+        return result;
+    }
+
     @Override
     public List<GenericMonitoringModel> onDone(final ResquestData request, final ResponseData httpResponse,
                                                final ErrorResult error) {
-        final String playload = buildPlayload(request, httpResponse);
-        //@formatter:off
-        final String msg = String.join("|", 
-                                       renderMethod(request.getMethod()),
-                                       renderContentType(request.getContentType()),
-                                       request.getUri(),
-                                       String.valueOf(httpResponse.getDuration()),
-                                       playload
-                                       );
+        final JsonBuilder msg = buildIologIn(request );
+
+        msg.addLine();
+        msg.write("response:").line();
+        msg.tab().write("status:").write(httpResponse.getCode()).line();;
+        msg.tab().write("datetime:").write(httpResponse.getDatetime()).line();;
+        msg.tab().write("duration:").write(httpResponse.getDuration()).line();;
+        msg.tab().write("contentType:").write(httpResponse.getContentType()).line();;
+        msg.tab().write("headers:").line();
+        for ( Map.Entry<String, String>  entry : httpResponse.getHearder().entrySet()) {
+            msg.tab().tab().write(entry.getKey()).write(":").writeSpace().write(entry.getValue()).line();
+        }
+        msg.tab().write("payloadd:").write(httpResponse.getContent());
+
+
+
         //@formatter:on
+        MdcService.lifecycleIn();
         if (error == null) {
             LOGGER.info((enableDecorator ? outputDecorator : EMPTY) + msg);
         }
         else {
             LOGGER.error((enableDecorator ? outputDecorator : EMPTY) + msg);
         }
-        
+        MdcService.lifecycleRemove();
         return null;
     }
     
-    // =========================================================================
-    // RENDERING
-    // =========================================================================
-    
-    private String buildPlayload(final ResquestData request, final ResponseData httpResponse) {
-        final StringBuilder result = new StringBuilder();
-        result.append(buildHeader(request));
-        result.append('|');
-        result.append(renderContent(request.getContentType(), request.getContent()));
-        
-        if (httpResponse != null) {
-            result.append('|');
-            result.append(renderContent(request.getContentType(), httpResponse.getContent()));
-        }
-        
-        return result.toString();
-    }
-    
-    private String buildHeader(final ResquestData request) {
-        final JsonBuilder json = new JsonBuilder();
-        json.openObject();
-        if (request.getHearder() != null) {
-            final Iterator<Entry<String, String>> entrySet = request.getHearder().entrySet().iterator();
-            
-            while (entrySet.hasNext()) {
-                final Entry<String, String> entry = entrySet.next();
-                json.addField(entry.getKey().toLowerCase()).valueQuot(entry.getValue());
-                if (entrySet.hasNext()) {
-                    json.addSeparator();
-                }
-                
-            }
-        }
-        
-        json.closeObject();
-        return ObfuscatorTools.applyObfuscators(json.toString());
-    }
-    
-    private String renderContent(final String contentType, final String content) {
-        String result = null;
-        if (content == null) {
-            result = JsonBuilder.VALUE_NULL;
-        }
-        else if (content.isEmpty()) {
-            result = EMPTY_CONTENT;
-        }
-        else {
-            result = content;
-        }
-        return result;
-    }
-    
-    private String renderMethod(final String method) {
-        return "[" + method + "]";
-    }
-    
-    private String renderContentType(final String contentType) {
-        return contentType == null ? EMPTY : "|" + contentType;
-    }
-    
+
 }

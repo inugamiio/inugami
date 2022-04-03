@@ -32,6 +32,7 @@
     <modules>
         <module>inugami_monitoring_distrib_zip</module>
         <module>inugami_monitoring_distrib_nondep</module>
+        <module>inugami_monitoring_spingboot</module>
     </modules>
 
 

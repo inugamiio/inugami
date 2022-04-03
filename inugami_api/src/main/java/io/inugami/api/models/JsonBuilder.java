@@ -29,7 +29,8 @@ public class JsonBuilder {
     public static final char    SEPARATOR_CHAR = ',';
     
     public static final String  VALUE_NULL     = "null";
-    
+    public static final String SPACE = " ";
+
     private final StringBuilder buffer         = new StringBuilder();
     
     // =========================================================================
@@ -143,7 +144,18 @@ public class JsonBuilder {
         buffer.append(value);
         return returnInstance();
     }
-    
+
+    public  <E extends JsonBuilder>  E  writeSpace() {
+        return writeSpace(1);
+    }
+    public  <E extends JsonBuilder>  E  writeSpace(final int size) {
+        if(size>0){
+            for(int i=size-1; i>=0; i--){
+                write(SPACE);
+            }
+        }
+        return returnInstance();
+    }
     private <E extends JsonBuilder>  E writeParam(final String key, final String value) {
         buffer.append('"');
         buffer.append(key);
@@ -307,4 +319,6 @@ public class JsonBuilder {
         buffer.setLength(0);
         buffer.trimToSize();
     }
+
+
 }
