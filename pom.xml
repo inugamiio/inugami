@@ -15,7 +15,7 @@
     ======================================================================== -->
     <groupId>io.inugami</groupId>
     <artifactId>inugami</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>2.0.1</version>
     <packaging>pom</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Specifics maven lifecycle to package and run inugami project</description>
@@ -293,7 +293,7 @@
         <url>https://github.com/inugamiio/inugami-maven-plugin</url>
         <connection>scm:git:git@github.com:inugamiio/inugami.git</connection>
         <developerConnection>scm:git:git@github.com:inugamiio/inugami.git</developerConnection>
-        <tag>inugami-2.0.0</tag>
+        <tag>inugami-2.0.1</tag>
     </scm>
     <distributionManagement>
         <snapshotRepository>
