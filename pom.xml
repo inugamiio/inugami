@@ -15,11 +15,33 @@
     ======================================================================== -->
     <groupId>io.inugami</groupId>
     <artifactId>inugami</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>2.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Specifics maven lifecycle to package and run inugami project</description>
+    <url>http://inugami.io</url>
 
+    <!-- =======================================================================
+    = DEVELOPERS
+    ======================================================================== -->
+    <developers>
+        <developer>
+            <name>Mikhaïl Sadovnikov</name>
+            <email>mis.strator@inugami.io</email>
+            <organization>Inugami.io</organization>
+            <organizationUrl>http://inugami.io</organizationUrl>
+        </developer>
 
-    <!-- ======================================================================= 
+        <developer>
+            <name>Patrick Guillerm</name>
+            <email>patrickguillerm@inugami.io</email>
+            <organization>Inugami.io</organization>
+            <organizationUrl>http://inugami.io</organizationUrl>
+        </developer>
+
+    </developers>
+
+    <!-- =======================================================================
     = LICENSE
     ======================================================================== -->
     <licenses>
@@ -29,7 +51,7 @@
         </license>
     </licenses>
 
-    <!-- ======================================================================= 
+    <!-- =======================================================================
     = PROPERTIES
     ======================================================================== -->
     <properties>
@@ -240,7 +262,7 @@
     </properties>
 
 
-    <!-- ======================================================================= 
+    <!-- =======================================================================
     = MODULES
     ======================================================================== -->
     <modules>
@@ -264,7 +286,7 @@
         <module>inugami_server</module>
     </modules>
 
-    <!-- ======================================================================= 
+    <!-- =======================================================================
     = SCM
     ======================================================================== -->
     <scm>
@@ -298,7 +320,7 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </pluginRepository>
     </pluginRepositories>
-    <!-- ======================================================================= 
+    <!-- =======================================================================
     = DEPENDENCIES
     ======================================================================== -->
     <dependencyManagement>
@@ -737,7 +759,7 @@
                 <version>${com.yahoo.yuicompressor.version}</version>
             </dependency>
 
-            <!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: 
+            <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             :: METRICS
             :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
             <dependency>
@@ -760,18 +782,6 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.junit}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>${org-assertj.assertj-core}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${org-mockito.mockito-core}</version>
             </dependency>
 
             <dependency>
@@ -916,11 +926,11 @@
             <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
-    <!-- ======================================================================= 
+    <!-- =======================================================================
     = BUILD
     =========================================================================-->
     <build>
-        <!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: 
+        <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: RESOURCES
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <resources>
@@ -940,7 +950,7 @@
             </resource>
         </resources>
 
-        <!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: 
+        <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PLUGIN MANAGEMENT
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <pluginManagement>
@@ -1094,30 +1104,10 @@
         </pluginManagement>
 
 
-        <!--:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: 
+        <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PLUGINS - BUILD
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <plugins>
-
-            <plugin>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <phase>${environment.ci}package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-            </plugin>
-
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1157,6 +1147,73 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <source>${super.jdk}</source>
+                    <target>${super.jdk}</target>
+                    <javadocVersion>13.0.1</javadocVersion>
+                    <quiet>true</quiet>
+                    <charset>${project.build.sourceEncoding}</charset>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <docencoding>${project.build.sourceEncoding}</docencoding>
+                    <additionalJOption>-J-Xmx512m</additionalJOption>
+                    <author>false</author>
+                    <additionalparam>-Xdoclint:none</additionalparam>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <useAgent>true</useAgent>
+                    <passphrase>${gpg.passphrase}</passphrase>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

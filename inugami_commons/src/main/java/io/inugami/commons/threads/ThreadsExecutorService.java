@@ -16,19 +16,6 @@
  */
 package io.inugami.commons.threads;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.function.BiConsumer;
-
 import io.inugami.api.exceptions.Asserts;
 import io.inugami.api.exceptions.TechnicalException;
 import io.inugami.api.listeners.TaskFinishListener;
@@ -36,6 +23,12 @@ import io.inugami.api.listeners.TaskStartListener;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.models.tools.Chrono;
 import io.inugami.api.providers.concurrent.LifecycleBootstrap;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.concurrent.*;
+import java.util.function.BiConsumer;
 
 /**
  * ThreadsExecutorService
@@ -115,17 +108,7 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
         return runAndGrab(tasks, onDone, null, timeout);
     }
     
-    /**
-     * Allow to run and waitting for multi threading processing. TODO doc ...
-     * 
-     * @param <T> the generic type
-     * @param threadName the thread name
-     * @param tasks the tasks
-     * @param maxThreads the max threads
-     * @param timeout the timeout
-     * @return the list
-     * @throws TechnicalException the technical exception
-     */
+
     public <T> List<T> runAndGrab(final List<Callable<T>> tasks, final BiConsumer<T, Callable<T>> onDone,
                                   final BiConsumer<Exception, Callable<T>> onError,
                                   final long timeout) throws TechnicalException {
@@ -157,7 +140,7 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
                     try {
                         future.get(localTimeout, TimeUnit.MILLISECONDS);
                     }
-                    catch (InterruptedException | ExecutionException | TimeoutException e) {
+                    catch (final InterruptedException | ExecutionException | TimeoutException e) {
                         Loggers.PLUGINS.error(e.getMessage());
                         throw new TechnicalException(e.getMessage(), e);
                     }
@@ -194,7 +177,7 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
                 futureResult = future.get(timeout, TimeUnit.MILLISECONDS);
                 
             }
-            catch (InterruptedException | ExecutionException | TimeoutException e) {
+            catch (final InterruptedException | ExecutionException | TimeoutException e) {
                 if ((e instanceof ExecutionException) && (e.getCause() instanceof NoSuchElementException)) {
                     futureResult = null;
                 }

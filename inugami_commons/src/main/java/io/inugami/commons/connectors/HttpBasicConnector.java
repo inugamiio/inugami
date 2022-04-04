@@ -16,39 +16,16 @@
  */
 package io.inugami.commons.connectors;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.ProxySelector;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLException;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocket;
-
+import io.inugami.api.constants.JvmKeyValues;
+import io.inugami.api.exceptions.Asserts;
+import io.inugami.api.exceptions.FatalException;
+import io.inugami.api.exceptions.services.ConnectorException;
+import io.inugami.api.loggers.Loggers;
+import io.inugami.api.models.Tuple;
+import io.inugami.api.models.tools.Chrono;
+import io.inugami.api.providers.concurrent.ThreadSleep;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
+import org.apache.http.*;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.client.CredentialsProvider;
@@ -74,14 +51,28 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.conn.SystemDefaultRoutePlanner;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.ssl.SSLContextBuilder;
-import io.inugami.api.constants.JvmKeyValues;
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.FatalException;
-import io.inugami.api.exceptions.services.ConnectorException;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.models.Tuple;
-import io.inugami.api.models.tools.Chrono;
-import io.inugami.api.providers.concurrent.ThreadSleep;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.*;
+import java.nio.charset.Charset;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 /**
  * HttpConnector.
@@ -231,17 +222,9 @@ public class HttpBasicConnector {
     // =========================================================================
     // CLOSE
     // =========================================================================
-    /**
-     * Builds the http client.
-     *
-     * @return the closeable http client
-     * @throws KeyManagementException the key management exception
-     * @throws NoSuchAlgorithmException the no such algorithm exception
-     * @throws KeyStoreException the key store exception
-     */
     private CloseableHttpClient buildHttpClient() throws KeyManagementException, NoSuchAlgorithmException,
                                                   KeyStoreException {
-        CloseableHttpClient result;
+        final CloseableHttpClient result;
         //@formatter:off
         final RequestConfig.Builder requestBuilder = RequestConfig.custom()
                                                             .setConnectTimeout(timeout)
@@ -330,28 +313,13 @@ public class HttpBasicConnector {
         builder.append("]");
         return builder.toString();
     }
-    
-    /**
-     * Builds the request.
-     *
-     * @param baseUrl the base url
-     * @param parameters the parameters
-     * @return the string
-     * @throws ConnectorException the connector exception
-     */
+
     public static String buildRequest(final String baseUrl,
                                       final Tuple<String, String>... parameters) throws ConnectorException {
         return buildRequest(baseUrl, Arrays.asList(parameters));
     }
     
-    /**
-     * Builds the request.
-     *
-     * @param baseUrl the base url
-     * @param parameters the parameters
-     * @return the string
-     * @throws ConnectorException the connector exception
-     */
+
     public static String buildRequest(final String baseUrl,
                                       final List<Tuple<String, String>> parameters) throws ConnectorException {
         Asserts.notNull("Request base url mustn't be null!", baseUrl);
@@ -399,15 +367,7 @@ public class HttpBasicConnector {
         return get(url, retry, credentialsProvider, null);
     }
     
-    /**
-     * Gets the.
-     *
-     * @param url the url
-     * @param retry the retry
-     * @param credentialsProvider the credentials provider
-     * @return the http connector result
-     * @throws ConnectorException the connector exception
-     */
+
     public HttpConnectorResult get(final String url, final int retry, final CredentialsProvider credentialsProvider,
                                    final Map<String, String> header) throws ConnectorException {
         appendUrlToPool(url);
@@ -451,24 +411,18 @@ public class HttpBasicConnector {
         try {
             return processGet(realUrl, credentialsProvider, header);
         }
-        catch (URISyntaxException | IOException e) {
+        catch (final URISyntaxException | IOException e) {
             throw new ConnectorException(e.getMessage(), e);
         }
     }
     
-    /**
-     * Gets the.
-     *
-     * @param url the url
-     * @return the http connector result
-     * @throws ConnectorException the connector exception
-     */
+
     public HttpConnectorResult get(final String url) throws ConnectorException {
         final URL realUrl = buildUrl(url);
         try {
             return processGet(realUrl, null, null);
         }
-        catch (URISyntaxException | IOException e) {
+        catch (final URISyntaxException | IOException e) {
             throw new ConnectorException(e.getMessage(), e);
         }
     }
@@ -477,22 +431,12 @@ public class HttpBasicConnector {
         try {
             return processGet(new URL(url), null, header);
         }
-        catch (URISyntaxException | IOException e) {
+        catch (final URISyntaxException | IOException e) {
             throw new HttpConnectorException(500, e.getMessage());
         }
     }
     
-    /**
-     * Allow to execute GET request to webservice.
-     *
-     * @param url the webservice url
-     * @param credentialsProvider http client api
-     * @return webservice result
-     * @throws URISyntaxException
-     * @throws IOException
-     * @throws HttpConnectorException
-     * @throws ConnectorException if exception is occurs.
-     */
+
     protected HttpConnectorResult processGet(final URL url, final CredentialsProvider credentialsProvider,
                                              final Map<String, String> header) throws URISyntaxException, IOException,
                                                                                HttpConnectorException {
@@ -581,15 +525,7 @@ public class HttpBasicConnector {
         return post(url, urlEncodedData, null, header);
     }
     
-    /**
-     * Post with Json Body.
-     *
-     * @param url the url
-     * @param jsonData the json data
-     * @param credentialsProvider
-     * @return the http connector result
-     * @throws ConnectorException the connector exception
-     */
+
     public HttpConnectorResult post(final String url, final String jsonData,
                                     final CredentialsProvider credentialsProvider,
                                     final Map<String, String> header) throws ConnectorException {
@@ -613,15 +549,7 @@ public class HttpBasicConnector {
         return result;
     }
     
-    /**
-     * Post with Form-Data Body.
-     *
-     * @param url the url
-     * @param urlEncodedData urlEncodedData
-     * @param credentialsProvider
-     * @return the http connector result
-     * @throws ConnectorException the connector exception
-     */
+
     public HttpConnectorResult post(final String url, final Map<String, String> urlEncodedData,
                                     final CredentialsProvider credentialsProvider,
                                     final Map<String, String> header) throws ConnectorException {
@@ -640,12 +568,7 @@ public class HttpBasicConnector {
         return result;
     }
     
-    /**
-     * Close.
-     *
-     * @param httpclient the httpclient
-     * @throws HttpConnectorException the http connector exception
-     */
+
     public void close(final CloseableHttpClient httpclient) throws HttpConnectorException {
         try {
             httpclient.close();
@@ -655,17 +578,7 @@ public class HttpBasicConnector {
         }
     }
     
-    /**
-     * Process post.
-     *
-     * @param url the url
-     * @param jsonData the json data
-     * @param httpclient the httpclient
-     * @param header
-     * @return the http connector result
-     * @throws ConnectorException the connector exception
-     * @throws IOException Signals that an I/O exception has occurred.
-     */
+
     private HttpConnectorResult processPost(final String url, final String jsonData,
                                             final CloseableHttpClient httpclient, final Map<String, String> header,
                                             final CredentialsProvider credentialsProvider) throws ConnectorException,
@@ -709,16 +622,7 @@ public class HttpBasicConnector {
         return executePost(request, httpclient, realUrl, url, resultBuilder);
     }
     
-    /**
-     * Process post.
-     *
-     * @param url the url
-     * @param urlEncodedData the x-www-form-urlencoded
-     * @param httpclient the httpclient
-     * @param header
-     * @return the http connector result
-     * @throws ConnectorException the connector exception
-     */
+
     private HttpConnectorResult processPost(final String url, final Map<String, String> urlEncodedData,
                                             final CloseableHttpClient httpclient, final Map<String, String> header,
                                             final CredentialsProvider credentialsProvider) throws ConnectorException {
@@ -770,7 +674,7 @@ public class HttpBasicConnector {
                                             final URL realUrl, final String url,
                                             final HttpConnectorResultBuilder resultBuilder) {
         
-        HttpResponse response;
+        final HttpResponse response;
         try {
             response = httpClient.execute(request);
             assertResponseOk(response);
@@ -792,7 +696,7 @@ public class HttpBasicConnector {
                 resultBuilder.addData(rawData);
             }
         }
-        catch (IOException | ConnectorException e) {
+        catch (final IOException | ConnectorException e) {
             Loggers.DEBUG.error(e.getMessage(), e);
             Loggers.IO.error(e.getMessage() + " : " + url);
         }
@@ -803,15 +707,7 @@ public class HttpBasicConnector {
     // =========================================================================
     // TOOLS
     // =========================================================================
-    /**
-     * Read data.
-     *
-     * @param inputStream the input stream
-     * @param dataLength the data length
-     * @param url the url
-     * @return the byte[]
-     * @throws ConnectorException the connector exception
-     */
+
     private byte[] readData(final InputStream inputStream, final long dataLength,
                             final URL url) throws ConnectorException {
         byte[] result = null;
@@ -841,13 +737,7 @@ public class HttpBasicConnector {
     // =========================================================================
     // BUILDERS
     // =========================================================================
-    /**
-     * Builds the url.
-     *
-     * @param url the url
-     * @return the url
-     * @throws ConnectorException the connector exception
-     */
+
     public URL buildUrl(final String url) throws ConnectorException {
         URL result = null;
         try {
@@ -859,30 +749,18 @@ public class HttpBasicConnector {
         return result;
     }
     
-    /**
-     * Builds the client.
-     *
-     * @return the closeable http client
-     * @throws HttpConnectorException the http connector exception
-     */
+
     private CloseableHttpClient buildClient() {
-        CloseableHttpClient result;
+        final CloseableHttpClient result;
         try {
             result = buildHttpClient();
         }
-        catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
+        catch (final KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
             throw new FatalException(e.getMessage(), e);
         }
         return result;
     }
-    
-    /**
-     * Builds the json entry.
-     *
-     * @param data the data
-     * @return the string entity
-     * @throws UnsupportedEncodingException the unsupported encoding exception
-     */
+
     private StringEntity buildJsonEntry(final String data) throws UnsupportedEncodingException {
         return new StringEntity(data);
     }
@@ -904,28 +782,17 @@ public class HttpBasicConnector {
     // =========================================================================
     // EXCEPTION
     // =========================================================================
-    /**
-     * Assert response ok.
-     *
-     * @param response the response
-     * @throws ConnectorException the connector exception
-     */
+
     private void assertResponseOk(final HttpResponse response) throws ConnectorException {
         Asserts.notNull(response);
-        int statusCode = response.getStatusLine().getStatusCode();
+        final int statusCode = response.getStatusLine().getStatusCode();
         if (200  > statusCode || 400 <= statusCode) {
             throw new HttpConnectorException(response.getStatusLine().getStatusCode(),
                                              response.getStatusLine().getReasonPhrase());
         }
     }
     
-    /**
-     * Assert data length.
-     *
-     * @param url the url
-     * @param contentLength the content length
-     * @throws HttpConnectorException the http connector exception
-     */
+
     private void assertDataLength(final String url, final long contentLength) throws HttpConnectorException {
         if (contentLength > Integer.MAX_VALUE) {
             final String message = String.format("response grab to many bytes! (%s)", url);
@@ -934,9 +801,7 @@ public class HttpBasicConnector {
         }
     }
     
-    /**
-     * The Class HttpConnectorException.
-     */
+
     private class HttpConnectorException extends ConnectorException {
         HttpConnectorException(final int code, final Exception e) {
             super(new DecimalFormat("####").format(code) + " " + e.getMessage(), e);

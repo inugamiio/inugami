@@ -16,47 +16,24 @@
  */
 package io.inugami.core.cdi.services.dao;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.apache.commons.lang.StringEscapeUtils;
-import io.inugami.api.dao.Dao;
-import io.inugami.api.dao.DaoEntityNotFoundException;
-import io.inugami.api.dao.DaoEntityNullException;
-import io.inugami.api.dao.DaoException;
-import io.inugami.api.dao.Identifiable;
-import io.inugami.api.exceptions.Asserts;
+import flexjson.JSONDeserializer;
+import io.inugami.api.dao.*;
 import io.inugami.api.exceptions.TechnicalException;
 import io.inugami.commons.security.SecurityTools;
 import io.inugami.commons.tools.ProxyBuilder;
-import org.picketlink.Identity;
-
-import flexjson.JSONDeserializer;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.picketlink.Identity;
+
+import javax.inject.Inject;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * AbstractCrudRest
@@ -126,12 +103,7 @@ public abstract class AbstractCrudRest<E extends Identifiable<PK>, PK extends Se
     // =========================================================================
     // METHODS GET/FIND/COUNT
     // =========================================================================
-    /**
-     * [GET: {entityName}/ ] will return all entities
-     * 
-     * @return entities saved
-     * @throws DaoException if exception is occurs
-     */
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<E> find() throws DaoException {
@@ -143,16 +115,6 @@ public abstract class AbstractCrudRest<E extends Identifiable<PK>, PK extends Se
     }
     
     //@formatter:off
-    /**
-     * [GET: {entityName}/find?first=0&pageSize=10&field=filedNameForOrdering&sort=ASC&filter={'foo':'bar'} ] will return all entities found
-     * @param  first  first element index
-     * @param  pageSize how many elements will be return by query 
-     * @param  field When ordering by field, this value will specify which field DAO must ordering.
-     * @param  sort will define sort ordering, ASC or DSC
-     * @param  filters specific filters on entity field
-     * @return list of entity found
-     * @throws DaoException if exception is occurs
-     */
     @GET
     @Path("/find")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -175,14 +137,7 @@ public abstract class AbstractCrudRest<E extends Identifiable<PK>, PK extends Se
         return  secureXssEntities(result);
     }
     
-    /**
-     * [GET: {entityName}/count?filter={'foo':'bar'}] Will count entities
-     * stored.
-     * 
-     * @param filters optional field, for filter on entity field.
-     * @return how many entities saved
-     * @throws DaoException if exception is occurs.
-     */
+
     @GET
     @Path("/count")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -204,13 +159,7 @@ public abstract class AbstractCrudRest<E extends Identifiable<PK>, PK extends Se
         return result;
     }
     
-    /**
-     * [GET: {entityName}/{uid} ] will return entity found with speicfied uid
-     * 
-     * @param uid entity uid
-     * @return entity or null
-     * @throws TechnicalException
-     */
+
     @GET
     @Path("{uid}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -231,13 +180,6 @@ public abstract class AbstractCrudRest<E extends Identifiable<PK>, PK extends Se
     // =========================================================================
     // METHODS SAVE/MERGE
     // =========================================================================
-    /**
-     * [POST: {entityName}/ | body : [entities] ] will save all entities
-     * 
-     * @param listEntity entities to save
-     * @return all entities uid saved
-     * @throws DaoException if exception is occurs
-     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -254,13 +196,7 @@ public abstract class AbstractCrudRest<E extends Identifiable<PK>, PK extends Se
         //@formatter:on
     }
     
-    /**
-     * [PUT: {entityName}/ | body : [entities] ] will merge all entities
-     * 
-     * @param listEntity entities to merge
-     * @return all merged entities
-     * @throws DaoException if exception is occurs
-     */
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -273,13 +209,7 @@ public abstract class AbstractCrudRest<E extends Identifiable<PK>, PK extends Se
         return  secureXssEntities(listEntity);
     }
     
-    /**
-     * [POST: {entityName}/register | body : [entities] ] will save all entities
-     * 
-     * @param listEntity entities to save
-     * @return all entities uid saved
-     * @throws DaoException if exception is occurs
-     */
+
     @Path("register")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -310,13 +240,7 @@ public abstract class AbstractCrudRest<E extends Identifiable<PK>, PK extends Se
     // =========================================================================
     // METHODS DELETE
     // =========================================================================
-    /**
-     * [DELETE: {entityName}/{uid}] will delete specified entity
-     * 
-     * @param uid entity uid
-     * @return void or error
-     * @throws TechnicalException if exception is occurs
-     */
+
     @Path("{uid}")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
@@ -331,13 +255,7 @@ public abstract class AbstractCrudRest<E extends Identifiable<PK>, PK extends Se
         return buildResponse(Response.Status.OK);
     }
     
-    /**
-     * [DELETE: {entityName}/ | body : [uids] ] will deletes all entities
-     * 
-     * @param uid entity uid
-     * @return void or error
-     * @throws TechnicalException if exception is occurs
-     */
+
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
