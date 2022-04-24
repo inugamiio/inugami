@@ -43,6 +43,8 @@ import io.inugami.api.monitoring.data.ResquestDataBuilder;
 import io.inugami.api.monitoring.exceptions.ErrorResult;
 import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.api.monitoring.models.Headers;
+import io.inugami.api.monitoring.warn.WarnCode;
+import io.inugami.api.monitoring.warn.WarnContext;
 import io.inugami.api.spi.SpiLoader;
 import io.inugami.api.tools.CalendarTools;
 import io.inugami.monitoring.api.exceptions.ExceptionResolver;
@@ -71,7 +73,7 @@ public class FilterInterceptor implements Filter {
     private final static List<Interceptable>               INTERCEPTABLE_RESOLVER     = SPI_LOADER.loadSpiServicesByPriority(Interceptable.class);
     private final static List<ExceptionResolver>           EXCEPTION_RESOLVER         = SPI_LOADER.loadSpiServicesByPriority(ExceptionResolver.class,new FilterInterceptorErrorResolver());
     private final static Map<String, Boolean>              INTERCEPTABLE_URI_RESOLVED = new ConcurrentHashMap<>();
-    private final static int KILO                                                     = 1024;
+    private final static int KILO                                                     = 1024; public static final String X_WARN_CODES = "x-warn-codes";
     //@formatter:on
 
     // =========================================================================
@@ -139,10 +141,13 @@ public class FilterInterceptor implements Filter {
         }
         finally {
             chrono.stop();
+            addWarns(response);
             final ErrorResult errorResult = error == null ? null : resolveError(error);
             onEnd(httpRequest, responseWrapper, errorResult, chrono.getDelaisInMillis(), content);
         }
     }
+
+
 
     private void addTrackingInformation(final HttpServletResponse response, final RequestInformation requestInfo) {
         final Headers headers = MonitoringBootstrap.CONTEXT.getConfig().getHeaders();
@@ -205,6 +210,13 @@ public class FilterInterceptor implements Filter {
         for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
             interceptor.onDone(requestData, responseData, error);
         }
+    }
+
+    private void addWarns(final HttpServletResponse response) {
+        final Map<String, List<WarnCode>> warns = WarnContext.getInstance().getWarns();
+
+        final String warnCodes = String.join(";", warns.keySet());
+        response.setHeader(X_WARN_CODES, warnCodes);
     }
 
     // =========================================================================

@@ -113,7 +113,7 @@ public class InugamiMonitoringConfig {
 
                          SpringConfigBinding.fromKey("inugami.monitoring.headers.correlationId","x-correlation-id"),
                          SpringConfigBinding.fromKey("inugami.monitoring.headers.requestId","x-b3-traceid"),
-                         SpringConfigBinding.fromKey("inugami.monitoring.headers.conversationId","x-conversationn-id"),
+                         SpringConfigBinding.fromKey("inugami.monitoring.headers.conversationId","x-conversation-id"),
                          SpringConfigBinding.fromKey("inugami.monitoring.headers.token","Authorization"),
                          SpringConfigBinding.fromKey("inugami.monitoring.headers.deviceIdentifier","x-device-identifier"),
                          SpringConfigBinding.fromKey("inugami.monitoring.headers.deviceType","x-device-type"),
