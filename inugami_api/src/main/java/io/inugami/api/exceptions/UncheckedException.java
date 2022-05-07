@@ -31,6 +31,12 @@ public class UncheckedException extends RuntimeException implements ExceptionWit
         this(null, null, null, null);
     }
 
+    public UncheckedException(final ErrorCode errorCode) {
+        super(errorCode==null?"undefined error": errorCode.getMessage());
+        this.errorCode =errorCode;
+    }
+
+
     public UncheckedException(final String message, final Throwable cause) {
         this(null, cause, message, null);
     }

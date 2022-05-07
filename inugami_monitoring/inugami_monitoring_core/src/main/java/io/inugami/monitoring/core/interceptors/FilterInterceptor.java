@@ -33,6 +33,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import io.inugami.api.exceptions.CurrentWarningContext;
+import io.inugami.api.exceptions.Warning;
+import io.inugami.api.exceptions.WarningContext;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.models.tools.Chrono;
 import io.inugami.api.monitoring.RequestContext;
@@ -53,6 +56,7 @@ import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 import io.inugami.monitoring.api.resolvers.Interceptable;
 import io.inugami.monitoring.core.context.MonitoringBootstrap;
 import io.inugami.monitoring.core.context.MonitoringContext;
+import lombok.extern.slf4j.Slf4j;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 
@@ -62,6 +66,7 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
  * @author patrick_guillerm
  * @since 28 déc. 2018
  */
+@Slf4j
 @WebFilter(urlPatterns = "*", asyncSupported = true)
 public class FilterInterceptor implements Filter {
 
@@ -143,10 +148,29 @@ public class FilterInterceptor implements Filter {
             chrono.stop();
             addWarns(response);
             final ErrorResult errorResult = error == null ? null : resolveError(error);
+            addWarning(responseWrapper);
             onEnd(httpRequest, responseWrapper, errorResult, chrono.getDelaisInMillis(), content);
         }
     }
 
+    private void addWarning(final ResponseWrapper response) {
+        final CurrentWarningContext warnings = WarningContext.getInstance();
+        if(warnings != null){
+            final List<Warning> currentWarning = warnings.getWarnings();
+            if(currentWarning !=null){
+                for(Warning warning : currentWarning){
+                    addWarningInresponse(warning,response);
+                }
+            }
+        }
+    }
+
+    private void addWarningInresponse(final Warning warning, final ResponseWrapper response) {
+        if(warning.getWarningCode()!=null && warning.getMessage()!=null){
+            log.warn("[{}-{}] {} : {}",warning.getWarningType(), warning.getWarningCode(), warning.getMessage(), warning.getMessageDetail());
+            response.setHeader(warning.getWarningCode(),warning.getMessage());
+        }
+    }
 
 
     private void addTrackingInformation(final HttpServletResponse response, final RequestInformation requestInfo) {

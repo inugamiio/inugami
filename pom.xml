@@ -60,7 +60,7 @@
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <super.jdk>11</super.jdk>
         <super.jdk.arg>-parameters</super.jdk.arg>
-
+        <maven-gpg-plugin.enabled></maven-gpg-plugin.enabled>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.datePattern>yyyy-MM-dd'T'HH:mm:ss.SSSZ</project.build.datePattern>
@@ -197,7 +197,7 @@
         <org.jboss.resteasy.version>4.0.0.Beta1</org.jboss.resteasy.version>
         <org.jboss.async-http-servlet.version>3.1.0.Beta2</org.jboss.async-http-servlet.version>
         <org.picketlink.version>2.7.1.Final</org.picketlink.version>
-        <com.jackson-annotations.version>2.11.2</com.jackson-annotations.version>
+        <com.jackson-annotations.version>2.13.2</com.jackson-annotations.version>
 
 
         <org.hibernate.ogm.version>5.1.0.Final</org.hibernate.ogm.version>
@@ -604,6 +604,22 @@
                 <artifactId>jackson-annotations</artifactId>
                 <version>${com.jackson-annotations.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${com.jackson-annotations.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jdk8</artifactId>
+                <version>${com.jackson-annotations.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-parameter-names</artifactId>
+                <version>${com.jackson-annotations.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>javax.servlet</groupId>
@@ -1203,7 +1219,7 @@
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
-                        <phase>verify</phase>
+                        <phase>${maven-gpg-plugin.enabled}verify</phase>
                         <goals>
                             <goal>sign</goal>
                         </goals>
@@ -1217,4 +1233,13 @@
         </plugins>
     </build>
 
+
+    <profiles>
+        <profile>
+            <id>local</id>
+            <properties>
+                <maven-gpg-plugin.enabled>false</maven-gpg-plugin.enabled>
+            </properties>
+        </profile>
+    </profiles>
 </project>

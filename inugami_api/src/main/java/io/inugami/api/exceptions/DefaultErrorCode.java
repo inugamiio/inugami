@@ -43,7 +43,8 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     private final String messageDetail;
     private final String errorType;
 
-    private final String payload;
+    private final String  payload;
+    private final boolean exploitationError;
 
     private final BiConsumer<String, Exception> errorHandler;
 
@@ -65,7 +66,8 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
                      .message(errorCode.getMessage())
                      .errorType(errorCode.getErrorType())
                      .payload(errorCode.getPayload())
-                     .errorHandler(errorCode.getErrorHandler());
+                     .errorHandler(errorCode.getErrorHandler())
+                     .exploitationError(errorCode.isExploitationError());
     }
 
     public static DefaultErrorCode.DefaultErrorCodeBuilder newBuilder() {
@@ -91,6 +93,14 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
 
         public DefaultErrorCodeBuilder errorTypeSecurity() {
             this.errorType = "security";
+            return this;
+        }
+        public DefaultErrorCodeBuilder exploitationError() {
+            this.exploitationError= true;
+            return this;
+        }
+        public DefaultErrorCodeBuilder exploitationError(boolean value) {
+            this.exploitationError= value;
             return this;
         }
 

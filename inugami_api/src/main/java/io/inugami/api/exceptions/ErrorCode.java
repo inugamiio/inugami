@@ -41,7 +41,9 @@ public interface ErrorCode {
     default String getMessageDetail() {
         return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getMessageDetail();
     }
-
+    default boolean isExploitationError() {
+        return getCurrentErrorCode() == null ? false : getCurrentErrorCode().isExploitationError();
+    }
 
     default String getErrorType() {
         return getCurrentErrorCode() == null ? "technical" : getCurrentErrorCode().getErrorType();

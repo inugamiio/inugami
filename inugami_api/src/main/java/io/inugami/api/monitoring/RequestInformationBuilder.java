@@ -90,6 +90,7 @@ public class RequestInformationBuilder {
     private String country;
     
     private Map<String, String> specific;
+
     // =========================================================================
     // BUILD
     // =========================================================================

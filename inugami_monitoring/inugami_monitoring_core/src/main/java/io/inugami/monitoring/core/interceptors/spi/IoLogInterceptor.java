@@ -149,6 +149,10 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
             LOGGER.info((enableDecorator ? outputDecorator : EMPTY) + msg);
         }
         else {
+            if(error.isExploitationError()){
+
+                Loggers.XLLOG.error("[HTTP-{}:{}] {} : {}",error.getHttpCode(), error.getErrorCode(), error.getMessage(), error.getCause());
+            }
             LOGGER.error((enableDecorator ? outputDecorator : EMPTY) + msg);
         }
         MdcService.lifecycleRemove();

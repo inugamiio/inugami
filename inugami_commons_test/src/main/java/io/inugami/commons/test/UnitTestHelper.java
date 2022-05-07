@@ -26,6 +26,7 @@ import io.inugami.api.exceptions.*;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.models.JsonBuilder;
 import io.inugami.api.tools.ConsoleColors;
+import io.inugami.commons.marshaling.JsonMarshaller;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.io.FileUtils;
@@ -182,10 +183,9 @@ public class UnitTestHelper {
     public static String convertToJson(final Object value) {
         String result = null;
         try {
-            result = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
-                                       .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
-                                       .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-                                       .writeValueAsString(value);
+            result = JsonMarshaller.getInstance()
+                                   .getIndentedObjectMapper()
+                                   .writeValueAsString(value);
         }
         catch (final Exception e) {
             throwException(e);
@@ -202,9 +202,9 @@ public class UnitTestHelper {
     public static String convertToJsonWithoutIndent(final Object value) {
         String result = null;
         try {
-            result = new ObjectMapper().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
-                                       .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-                                       .writeValueAsString(value);
+            result = JsonMarshaller.getInstance()
+                                   .getDefaultObjectMapper()
+                                   .writeValueAsString(value);
         }
         catch (final Exception e) {
             throwException(e);

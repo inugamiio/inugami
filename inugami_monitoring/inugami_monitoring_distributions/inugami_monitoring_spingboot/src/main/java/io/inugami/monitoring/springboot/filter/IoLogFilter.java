@@ -18,6 +18,8 @@ package io.inugami.monitoring.springboot.filter;
 
 import io.inugami.monitoring.core.interceptors.FilterInterceptor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -27,6 +29,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
 
+@Order(Ordered.LOWEST_PRECEDENCE)
 @Component
 public class IoLogFilter extends GenericFilterBean {
 
