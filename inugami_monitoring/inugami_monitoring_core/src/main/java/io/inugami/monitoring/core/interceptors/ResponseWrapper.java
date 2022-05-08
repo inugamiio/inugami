@@ -18,8 +18,8 @@ package io.inugami.monitoring.core.interceptors;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collection;
-import java.util.Locale;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
@@ -27,6 +27,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import io.inugami.api.exceptions.FatalException;
+import io.inugami.api.spi.SpiLoader;
 
 /**
  * ResponseWrapper
@@ -35,14 +36,16 @@ import io.inugami.api.exceptions.FatalException;
  * @since Jan 8, 2019
  */
 final class ResponseWrapper implements ServletResponse, HttpServletResponse {
-    
+
+    public static final String        HEADER_SEP = ",";
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
     private final HttpServletResponse response;
     
-    private final OutputWriterWrapper outputWrapper;
-    
+    private final OutputWriterWrapper       outputWrapper;
+    private final Map<String, List<String>> localHeaders = new ConcurrentHashMap<>();
+    private final List<ResponseListener> responseListeners = SpiLoader.INSTANCE.loadSpiService(ResponseListener.class);
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -79,6 +82,7 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     
     @Override
     public ServletOutputStream getOutputStream() throws IOException {
+        responseListeners.forEach(listener-> listener.beforeWriting(response));
         return outputWrapper;
     }
     
@@ -119,6 +123,7 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     
     @Override
     public void flushBuffer() throws IOException {
+        responseListeners.forEach(listener-> listener.onFlush(response));
         response.flushBuffer();
     }
     
@@ -208,23 +213,32 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     
     @Override
     public void setHeader(final String name, final String value) {
+        if(name == null || value == null){
+            return;
+        }
+
         response.setHeader(name, value);
-        
+        List<String> currentHeader = localHeaders.get(name);
+        if(currentHeader ==null){
+            currentHeader= new ArrayList<>();
+            localHeaders.put(name, currentHeader);
+        }
+        currentHeader.add(value);
     }
     
     @Override
     public void addHeader(final String name, final String value) {
-        response.setHeader(name, value);
+        setHeader(name,value);
     }
     
     @Override
     public void setIntHeader(final String name, final int value) {
-        response.setIntHeader(name, value);
+        setHeader(name,String.valueOf(value));
     }
     
     @Override
     public void addIntHeader(final String name, final int value) {
-        response.addIntHeader(name, value);
+        setHeader(name,String.valueOf(value));
         
     }
     
@@ -246,17 +260,32 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     
     @Override
     public String getHeader(final String name) {
-        return response.getHeader(name);
+        String value = response.getHeader(name);
+        if(value == null){
+            final List<String> values = localHeaders.get(name);
+            if(values != null){
+                value = String.join(HEADER_SEP, values);
+            }
+        }
+        return value;
     }
     
     @Override
     public Collection<String> getHeaders(final String name) {
-        return response.getHeaders(name);
+        Collection<String> result = response.getHeaders(name);
+        if(result==null){
+            result= localHeaders.get(name);
+        }
+        return result;
     }
     
     @Override
     public Collection<String> getHeaderNames() {
-        return response.getHeaderNames();
+        List<String> result = new ArrayList<>();
+        result.addAll(response.getHeaderNames());
+        result.addAll(localHeaders.keySet());
+
+        return result;
     }
     
 }

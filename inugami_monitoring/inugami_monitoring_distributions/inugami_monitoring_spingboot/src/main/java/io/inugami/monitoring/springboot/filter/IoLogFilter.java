@@ -36,7 +36,7 @@ public class IoLogFilter extends GenericFilterBean {
     @Value("${inugami.monitoring.iolog.enabled:true}")
     private boolean enabled;
 
-    private final FilterInterceptor filter =new FilterInterceptor();
+    private final FilterInterceptor filter = new FilterInterceptor();
 
     // =========================================================================
     // API
@@ -44,12 +44,11 @@ public class IoLogFilter extends GenericFilterBean {
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response,
                          final FilterChain chain) throws IOException, ServletException {
-
-        if(enabled){
-            filter.doFilter(request,response,chain);
-        }else{
-            chain.doFilter(request,response);
+        if (enabled) {
+            filter.doFilter(request, response, chain);
+        }
+        else {
+            chain.doFilter(request, response);
         }
     }
-
 }

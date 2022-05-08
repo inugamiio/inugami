@@ -64,7 +64,11 @@ final class OutputWriterWrapper extends ServletOutputStream {
     
     @Override
     public void write(final byte b[], final int off, final int len) throws IOException {
-        buffer.append(new String(b));
+
+        byte[] data = new byte[len];
+        System.arraycopy(b,off, data, 0, len);
+
+        buffer.append(new String(data));
         super.write(b, off, len);
     }
     

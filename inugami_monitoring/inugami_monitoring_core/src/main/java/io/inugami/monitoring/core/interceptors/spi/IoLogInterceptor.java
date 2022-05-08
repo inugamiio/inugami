@@ -26,7 +26,6 @@ import io.inugami.api.monitoring.data.ResquestData;
 import io.inugami.api.monitoring.exceptions.ErrorResult;
 import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.warn.DefaultWarn;
 import io.inugami.api.monitoring.warn.WarnCode;
 import io.inugami.api.monitoring.warn.WarnContext;
 import io.inugami.api.processors.ConfigHandler;

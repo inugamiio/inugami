@@ -46,8 +46,6 @@ import io.inugami.api.monitoring.data.ResquestDataBuilder;
 import io.inugami.api.monitoring.exceptions.ErrorResult;
 import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.api.monitoring.models.Headers;
-import io.inugami.api.monitoring.warn.WarnCode;
-import io.inugami.api.monitoring.warn.WarnContext;
 import io.inugami.api.spi.SpiLoader;
 import io.inugami.api.tools.CalendarTools;
 import io.inugami.monitoring.api.exceptions.ExceptionResolver;
@@ -55,7 +53,6 @@ import io.inugami.monitoring.api.interceptors.RequestInformationInitializer;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 import io.inugami.monitoring.api.resolvers.Interceptable;
 import io.inugami.monitoring.core.context.MonitoringBootstrap;
-import io.inugami.monitoring.core.context.MonitoringContext;
 import lombok.extern.slf4j.Slf4j;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
@@ -78,7 +75,8 @@ public class FilterInterceptor implements Filter {
     private final static List<Interceptable>               INTERCEPTABLE_RESOLVER     = SPI_LOADER.loadSpiServicesByPriority(Interceptable.class);
     private final static List<ExceptionResolver>           EXCEPTION_RESOLVER         = SPI_LOADER.loadSpiServicesByPriority(ExceptionResolver.class,new FilterInterceptorErrorResolver());
     private final static Map<String, Boolean>              INTERCEPTABLE_URI_RESOLVED = new ConcurrentHashMap<>();
-    private final static int KILO                                                     = 1024; public static final String X_WARN_CODES = "x-warn-codes";
+    private final static int KILO                                                     = 1024;
+
     //@formatter:on
 
     // =========================================================================
@@ -100,9 +98,10 @@ public class FilterInterceptor implements Filter {
                          final FilterChain chain) throws IOException, ServletException {
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
         final String             currentPath = buildCurrentPath(httpRequest);
+
         if (mustIntercept(currentPath)) {
             try {
-                processIntercepting(request, (HttpServletResponse)response, chain, httpRequest);
+                processIntercepting(request, (HttpServletResponse) response, chain, httpRequest);
             }
             catch (final Exception e) {
                 throw new IOException(e.getMessage(), e);
@@ -111,6 +110,8 @@ public class FilterInterceptor implements Filter {
         else {
             chain.doFilter(request, response);
         }
+
+
     }
 
     private void processIntercepting(final ServletRequest request, final HttpServletResponse response,
@@ -129,7 +130,7 @@ public class FilterInterceptor implements Filter {
         final Map<String, String> headers = RequestInformationInitializer.buildHeadersMap(httpRequest);
         final RequestInformation requestInfo = RequestInformationInitializer.buildRequestInformation(
                 httpRequest, headers);
-        addTrackingInformation(response,requestInfo );
+        addTrackingInformation(response, requestInfo);
 
         onBegin(httpRequest, headers, content);
 
@@ -146,29 +147,8 @@ public class FilterInterceptor implements Filter {
         }
         finally {
             chrono.stop();
-            addWarns(response);
             final ErrorResult errorResult = error == null ? null : resolveError(error);
-            addWarning(responseWrapper);
             onEnd(httpRequest, responseWrapper, errorResult, chrono.getDelaisInMillis(), content);
-        }
-    }
-
-    private void addWarning(final ResponseWrapper response) {
-        final CurrentWarningContext warnings = WarningContext.getInstance();
-        if(warnings != null){
-            final List<Warning> currentWarning = warnings.getWarnings();
-            if(currentWarning !=null){
-                for(Warning warning : currentWarning){
-                    addWarningInresponse(warning,response);
-                }
-            }
-        }
-    }
-
-    private void addWarningInresponse(final Warning warning, final ResponseWrapper response) {
-        if(warning.getWarningCode()!=null && warning.getMessage()!=null){
-            log.warn("[{}-{}] {} : {}",warning.getWarningType(), warning.getWarningCode(), warning.getMessage(), warning.getMessageDetail());
-            response.setHeader(warning.getWarningCode(),warning.getMessage());
         }
     }
 
@@ -176,10 +156,12 @@ public class FilterInterceptor implements Filter {
     private void addTrackingInformation(final HttpServletResponse response, final RequestInformation requestInfo) {
         final Headers headers = MonitoringBootstrap.CONTEXT.getConfig().getHeaders();
 
-        applyIfNotNull(requestInfo.getDeviceIdentifier(), value->  response.setHeader(headers.getDeviceIdentifier(), value));
-        applyIfNotNull(requestInfo.getCorrelationId(), value->  response.setHeader(headers.getCorrelationId(), value));
-        applyIfNotNull(requestInfo.getConversationId(), value->  response.setHeader(headers.getConversationId(), value));
-        applyIfNotNull(requestInfo.getRequestId(), value->  response.setHeader(headers.getRequestId(), value));
+        applyIfNotNull(requestInfo.getDeviceIdentifier(),
+                       value -> response.setHeader(headers.getDeviceIdentifier(), value));
+        applyIfNotNull(requestInfo.getCorrelationId(), value -> response.setHeader(headers.getCorrelationId(), value));
+        applyIfNotNull(requestInfo.getConversationId(),
+                       value -> response.setHeader(headers.getConversationId(), value));
+        applyIfNotNull(requestInfo.getRequestId(), value -> response.setHeader(headers.getRequestId(), value));
 
     }
 
@@ -236,12 +218,6 @@ public class FilterInterceptor implements Filter {
         }
     }
 
-    private void addWarns(final HttpServletResponse response) {
-        final Map<String, List<WarnCode>> warns = WarnContext.getInstance().getWarns();
-
-        final String warnCodes = String.join(";", warns.keySet());
-        response.setHeader(X_WARN_CODES, warnCodes);
-    }
 
     // =========================================================================
     // CONVERTERS
@@ -293,7 +269,7 @@ public class FilterInterceptor implements Filter {
         Map<String, String> hearders = new LinkedHashMap<>();
 
         final Collection<String> headerNames = httpResponse.getHeaderNames();
-        for(String key : headerNames){
+        for (String key : headerNames) {
             hearders.put(key, httpResponse.getHeader(key));
         }
         return ResponseData.builder()
@@ -319,5 +295,8 @@ public class FilterInterceptor implements Filter {
         }
         return result;
     }
+
+
+
 
 }
