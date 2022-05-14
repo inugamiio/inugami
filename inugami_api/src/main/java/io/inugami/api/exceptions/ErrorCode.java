@@ -41,6 +41,7 @@ public interface ErrorCode {
     default String getMessageDetail() {
         return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getMessageDetail();
     }
+
     default boolean isExploitationError() {
         return getCurrentErrorCode() == null ? false : getCurrentErrorCode().isExploitationError();
     }
@@ -58,4 +59,21 @@ public interface ErrorCode {
     default BiConsumer<String, Exception> getErrorHandler() {
         return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getErrorHandler();
     }
+
+    default ErrorCode addDetail(final String detail, Object... values) {
+        return toBuilder().addMessageDetail(detail, values).build();
+    }
+
+
+    default DefaultErrorCode.DefaultErrorCodeBuilder toBuilder() {
+        DefaultErrorCode.DefaultErrorCodeBuilder builder = null;
+        if (getCurrentErrorCode() == null) {
+            builder = DefaultErrorCode.fromErrorCode(DefaultErrorCode.buildUndefineError());
+        }
+        else {
+            builder = DefaultErrorCode.fromErrorCode(getCurrentErrorCode());
+        }
+        return builder;
+    }
+
 }

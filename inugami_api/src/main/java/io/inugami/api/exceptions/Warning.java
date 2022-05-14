@@ -34,4 +34,18 @@ public interface Warning {
     default String getWarningType() {
         return getCurrentWaring() == null ? "functional" : getCurrentWaring().getWarningType();
     }
+
+    default Warning addDetail(final String detail, Object... values) {
+        return toBuilder().addMessageDetail(detail, values).build();
+    }
+    default DefaultWarning.DefaultWarningBuilder toBuilder() {
+        DefaultWarning.DefaultWarningBuilder  builder = null;
+        if ( getCurrentWaring() == null) {
+            builder = DefaultWarning.builder();
+        }
+        else {
+            builder = DefaultWarning.fromWarningCode(getCurrentWaring());
+        }
+        return builder;
+    }
 }
