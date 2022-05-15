@@ -25,6 +25,7 @@ import lombok.Getter;
 import java.io.Serializable;
 import java.util.function.BiConsumer;
 
+@Getter
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder(toBuilder = true)
@@ -151,5 +152,10 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     @Override
     public BiConsumer<String, Exception> getErrorHandler() {
         return errorHandler;
+    }
+
+    @Override
+    public boolean isExploitationError() {
+        return exploitationError;
     }
 }
