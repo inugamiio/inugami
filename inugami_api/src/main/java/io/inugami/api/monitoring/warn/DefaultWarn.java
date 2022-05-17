@@ -14,38 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.api.monitoring.exceptions;
+package io.inugami.api.monitoring.warn;
 
-import io.inugami.api.exceptions.ErrorCode;
+import io.inugami.api.exceptions.MessagesFormatter;
 import lombok.*;
 
-import java.io.Serializable;
-
-/**
- * ErrorResult
- *
- * @author patrick_guillerm
- * @since 28 déc. 2018
- */
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @ToString
-@Builder
 @Getter
-public class ErrorResult implements Serializable {
+public class DefaultWarn implements WarnCode{
 
-    private static final long serialVersionUID = 6750655178043958203L;
+   @EqualsAndHashCode.Include
+   private final String warnCode;
+   private final String message;
+   private final String messageDetail;
+   private final String warnType;
 
-    /* package */ static final String DEFAULT_ERROR_TYPE = "technical";
+   @Override
+   public WarnCode getCurrentWarnCode() {
+      return this;
+   }
 
-    private final int       httpCode;
-    @EqualsAndHashCode.Include
-    private final String    errorCode;
-    private final String    errorType;
-    private final String    message;
-    private final String    stack;
-    private final String    cause;
-    private final String    fallBack;
-    private final boolean   exploitationError;
-    private final ErrorCode currentErrorCode;
+   public static class DefaultWarnBuilder{
+      public DefaultWarnBuilder message(String template, Object...values){
+         message = MessagesFormatter.format(template,values);
+         return this;
+      }
+      public DefaultWarnBuilder messageDetail(String template, Object...values){
+         messageDetail = MessagesFormatter.format(template,values);
+         return this;
+      }
+   }
 }

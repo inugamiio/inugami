@@ -73,7 +73,7 @@ toc::[4]
 
 |inugami.monitoring.headers.conversationId
 |String
-|x-conversationn-id
+|x-conversation-id
 |
 
 |inugami.monitoring.headers.token

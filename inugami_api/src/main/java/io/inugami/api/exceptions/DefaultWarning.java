@@ -34,7 +34,25 @@ public class DefaultWarning implements Warning {
     private final String messageDetail;
     private final String warningType;
 
+    public static DefaultWarningBuilder fromWarningCode(final Warning warning) {
+        DefaultWarningBuilder builder = builder();
+        if(warning != null){
+            builder.warningCode(warning.getWarningCode());
+            builder.message(warning.getMessage());
+            builder.messageDetail(warning.getMessageDetail());
+            builder.warningType(warning.getWarningType());
+        }
+        return builder;
+    }
 
+    public static class DefaultWarningBuilder {
+        public DefaultWarning.DefaultWarningBuilder addMessageDetail(String message, Object... values) {
+            if (message != null) {
+                this.messageDetail = MessagesFormatter.format(message, values);
+            }
+            return this;
+        }
+    }
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================

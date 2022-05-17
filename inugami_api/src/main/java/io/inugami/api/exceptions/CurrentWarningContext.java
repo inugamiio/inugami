@@ -21,23 +21,32 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class WarningContext {
+public class CurrentWarningContext {
+    private final List<Warning> warnings = new ArrayList<>();
 
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
-    private static ThreadLocal<CurrentWarningContext> INSTANCE = new ThreadLocal<>();
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public static synchronized CurrentWarningContext getInstance() {
-        CurrentWarningContext instance = INSTANCE.get();
-        if (instance == null) {
-            instance = new CurrentWarningContext();
-            INSTANCE.set(instance);
-        }
-        return instance;
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("CurrentWarningContext{");
+        sb.append("warnings=")
+          .append(warnings);
+        sb.append('}');
+        return sb.toString();
     }
 
+    public List<Warning> getWarnings() {
+        return Collections.unmodifiableList(warnings);
+    }
+
+    public CurrentWarningContext addWarnings(Warning... warnings) {
+        this.warnings.addAll(Arrays.asList(warnings));
+        return this;
+    }
+
+    public CurrentWarningContext setWarnings(final List<Warning> warnings) {
+        this.warnings.clear();
+        if (warnings != null) {
+            this.warnings.addAll(warnings);
+        }
+        return this;
+    }
 }

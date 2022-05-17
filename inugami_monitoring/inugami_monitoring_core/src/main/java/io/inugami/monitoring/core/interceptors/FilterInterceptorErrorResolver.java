@@ -19,7 +19,6 @@ package io.inugami.monitoring.core.interceptors;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.monitoring.exceptions.ErrorResult;
-import io.inugami.api.monitoring.exceptions.ErrorResultBuilder;
 import io.inugami.api.spi.SpiLoader;
 import io.inugami.monitoring.api.exceptions.ExceptionHandlerMapper;
 import io.inugami.monitoring.api.exceptions.ExceptionResolver;
@@ -83,12 +82,13 @@ public class FilterInterceptorErrorResolver implements ExceptionResolver {
             }
         }
 
-        final ErrorResultBuilder errorBuilder = new ErrorResultBuilder();
-        errorBuilder.setErrorType(errorBuilder.getErrorType());
-        errorBuilder.setErrorCode(errorType.getErrorCode());
-        errorBuilder.setCause(buildCause(error));
-        errorBuilder.setHttpCode(errorType.getStatusCode());
-
+        final ErrorResult.ErrorResultBuilder errorBuilder = ErrorResult.builder();
+        errorBuilder.errorType(errorType.getErrorType());
+        errorBuilder.errorCode(errorType.getErrorCode());
+        errorBuilder.cause(buildCause(error));
+        errorBuilder.httpCode(errorType.getStatusCode());
+        errorBuilder.currentErrorCode(errorType);
+        errorBuilder.exploitationError(errorType.isExploitationError());
         return errorBuilder.build();
     }
 

@@ -60,4 +60,8 @@ public class FatalException extends UncheckedException {
     public FatalException(ErrorCode errorCode, Throwable cause, String message, Object... values) {
         super(errorCode, cause, message, values);
     }
+
+    public FatalException(final ErrorCode errorCode) {
+        super(errorCode);
+    }
 }

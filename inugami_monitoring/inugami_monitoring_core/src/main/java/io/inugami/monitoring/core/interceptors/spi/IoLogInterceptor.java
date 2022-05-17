@@ -26,6 +26,8 @@ import io.inugami.api.monitoring.data.ResquestData;
 import io.inugami.api.monitoring.exceptions.ErrorResult;
 import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.api.monitoring.models.GenericMonitoringModel;
+import io.inugami.api.monitoring.warn.WarnCode;
+import io.inugami.api.monitoring.warn.WarnContext;
 import io.inugami.api.processors.ConfigHandler;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 import org.slf4j.Logger;
@@ -91,7 +93,6 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     }
 
     private JsonBuilder buildIologIn(final ResquestData request) {
-
         final JsonBuilder result = new JsonBuilder();
         result.openList().write(request.getMethod()).closeList();
         result.writeSpace().write(request.getContextPath()).write(request.getUri()).line();
@@ -108,28 +109,49 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     @Override
     public List<GenericMonitoringModel> onDone(final ResquestData request, final ResponseData httpResponse,
                                                final ErrorResult error) {
-        final JsonBuilder msg = buildIologIn(request );
+        final JsonBuilder msg = buildIologIn(request);
 
         msg.addLine();
         msg.write("response:").line();
-        msg.tab().write("status:").write(httpResponse.getCode()).line();;
-        msg.tab().write("datetime:").write(httpResponse.getDatetime()).line();;
-        msg.tab().write("duration:").write(httpResponse.getDuration()).line();;
-        msg.tab().write("contentType:").write(httpResponse.getContentType()).line();;
+        msg.tab().write("status:").write(httpResponse.getCode()).line();
+        msg.tab().write("datetime:").write(httpResponse.getDatetime()).line();
+        msg.tab().write("duration:").write(httpResponse.getDuration()).line();
+        msg.tab().write("contentType:").write(httpResponse.getContentType()).line();
         msg.tab().write("headers:").line();
         for ( Map.Entry<String, String>  entry : httpResponse.getHearder().entrySet()) {
             msg.tab().tab().write(entry.getKey()).write(":").writeSpace().write(entry.getValue()).line();
         }
-        msg.tab().write("payloadd:").write(httpResponse.getContent());
 
+
+
+
+        final Map<String, List<WarnCode>> warns = WarnContext.getInstance().getWarns();
+        if(!warns.isEmpty()){
+            msg.tab().write("warning:").line();
+            for ( Map.Entry<String, List<WarnCode>>  entry : warns.entrySet()) {
+                msg.tab().tab().write(entry.getKey()).write(":").line();
+                for(WarnCode warn : entry.getValue()){
+                    msg.tab().tab().tab().write(warn.getMessage());
+                    if(warn.getMessageDetail()!=null){
+                        msg.write(":").write(warn.getMessageDetail());
+                    }
+                    msg.line();
+                }
+            }
+        }
+        msg.tab().write("payload:").write(httpResponse.getContent());
 
 
         //@formatter:on
-        MdcService.lifecycleIn();
+        MdcService.lifecycleOut();
         if (error == null) {
             LOGGER.info((enableDecorator ? outputDecorator : EMPTY) + msg);
         }
         else {
+            if(error.isExploitationError()){
+
+                Loggers.XLLOG.error("[HTTP-{}:{}] {} : {}",error.getHttpCode(), error.getErrorCode(), error.getMessage(), error.getCause());
+            }
             LOGGER.error((enableDecorator ? outputDecorator : EMPTY) + msg);
         }
         MdcService.lifecycleRemove();

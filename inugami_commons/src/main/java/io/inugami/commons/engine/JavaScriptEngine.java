@@ -39,6 +39,7 @@ import io.inugami.api.spi.SpiLoader;
 import io.inugami.commons.engine.js.JavaScriptEngineFunctions;
 import io.inugami.commons.engine.js.objects.JsNamespaceFunction;
 import io.inugami.commons.files.FilesUtils;
+import io.inugami.commons.marshaling.JsonMarshaller;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
 
@@ -304,7 +305,7 @@ public class JavaScriptEngine implements ErrorReporter {
     }
     
     private void buildJsonObject(final String json) throws IOException {
-        new ObjectMapper().readTree(json);
+        JsonMarshaller.getInstance().getDefaultObjectMapper().readTree(json);
     }
     
 }

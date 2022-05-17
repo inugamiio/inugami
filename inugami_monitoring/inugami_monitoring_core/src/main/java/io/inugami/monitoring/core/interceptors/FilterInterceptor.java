@@ -33,6 +33,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import io.inugami.api.exceptions.CurrentWarningContext;
+import io.inugami.api.exceptions.Warning;
+import io.inugami.api.exceptions.WarningContext;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.models.tools.Chrono;
 import io.inugami.api.monitoring.RequestContext;
@@ -50,7 +53,7 @@ import io.inugami.monitoring.api.interceptors.RequestInformationInitializer;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 import io.inugami.monitoring.api.resolvers.Interceptable;
 import io.inugami.monitoring.core.context.MonitoringBootstrap;
-import io.inugami.monitoring.core.context.MonitoringContext;
+import lombok.extern.slf4j.Slf4j;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 
@@ -60,6 +63,7 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
  * @author patrick_guillerm
  * @since 28 déc. 2018
  */
+@Slf4j
 @WebFilter(urlPatterns = "*", asyncSupported = true)
 public class FilterInterceptor implements Filter {
 
@@ -72,6 +76,7 @@ public class FilterInterceptor implements Filter {
     private final static List<ExceptionResolver>           EXCEPTION_RESOLVER         = SPI_LOADER.loadSpiServicesByPriority(ExceptionResolver.class,new FilterInterceptorErrorResolver());
     private final static Map<String, Boolean>              INTERCEPTABLE_URI_RESOLVED = new ConcurrentHashMap<>();
     private final static int KILO                                                     = 1024;
+
     //@formatter:on
 
     // =========================================================================
@@ -93,9 +98,10 @@ public class FilterInterceptor implements Filter {
                          final FilterChain chain) throws IOException, ServletException {
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
         final String             currentPath = buildCurrentPath(httpRequest);
+
         if (mustIntercept(currentPath)) {
             try {
-                processIntercepting(request, (HttpServletResponse)response, chain, httpRequest);
+                processIntercepting(request, (HttpServletResponse) response, chain, httpRequest);
             }
             catch (final Exception e) {
                 throw new IOException(e.getMessage(), e);
@@ -104,6 +110,8 @@ public class FilterInterceptor implements Filter {
         else {
             chain.doFilter(request, response);
         }
+
+
     }
 
     private void processIntercepting(final ServletRequest request, final HttpServletResponse response,
@@ -122,7 +130,7 @@ public class FilterInterceptor implements Filter {
         final Map<String, String> headers = RequestInformationInitializer.buildHeadersMap(httpRequest);
         final RequestInformation requestInfo = RequestInformationInitializer.buildRequestInformation(
                 httpRequest, headers);
-        addTrackingInformation(response,requestInfo );
+        addTrackingInformation(response, requestInfo);
 
         onBegin(httpRequest, headers, content);
 
@@ -144,13 +152,16 @@ public class FilterInterceptor implements Filter {
         }
     }
 
+
     private void addTrackingInformation(final HttpServletResponse response, final RequestInformation requestInfo) {
         final Headers headers = MonitoringBootstrap.CONTEXT.getConfig().getHeaders();
 
-        applyIfNotNull(requestInfo.getDeviceIdentifier(), value->  response.setHeader(headers.getDeviceIdentifier(), value));
-        applyIfNotNull(requestInfo.getCorrelationId(), value->  response.setHeader(headers.getCorrelationId(), value));
-        applyIfNotNull(requestInfo.getConversationId(), value->  response.setHeader(headers.getConversationId(), value));
-        applyIfNotNull(requestInfo.getRequestId(), value->  response.setHeader(headers.getRequestId(), value));
+        applyIfNotNull(requestInfo.getDeviceIdentifier(),
+                       value -> response.setHeader(headers.getDeviceIdentifier(), value));
+        applyIfNotNull(requestInfo.getCorrelationId(), value -> response.setHeader(headers.getCorrelationId(), value));
+        applyIfNotNull(requestInfo.getConversationId(),
+                       value -> response.setHeader(headers.getConversationId(), value));
+        applyIfNotNull(requestInfo.getRequestId(), value -> response.setHeader(headers.getRequestId(), value));
 
     }
 
@@ -207,6 +218,7 @@ public class FilterInterceptor implements Filter {
         }
     }
 
+
     // =========================================================================
     // CONVERTERS
     // =========================================================================
@@ -257,7 +269,7 @@ public class FilterInterceptor implements Filter {
         Map<String, String> hearders = new LinkedHashMap<>();
 
         final Collection<String> headerNames = httpResponse.getHeaderNames();
-        for(String key : headerNames){
+        for (String key : headerNames) {
             hearders.put(key, httpResponse.getHeader(key));
         }
         return ResponseData.builder()
@@ -283,5 +295,8 @@ public class FilterInterceptor implements Filter {
         }
         return result;
     }
+
+
+
 
 }
