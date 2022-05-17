@@ -143,7 +143,7 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
 
 
         //@formatter:on
-        MdcService.lifecycleIn();
+        MdcService.lifecycleOut();
         if (error == null) {
             LOGGER.info((enableDecorator ? outputDecorator : EMPTY) + msg);
         }
