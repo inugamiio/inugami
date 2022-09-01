@@ -218,7 +218,7 @@
         <com.thoughtworks.xstream.version>1.4.19</com.thoughtworks.xstream.version>
 
         <net.sf.flexjson.version>3.3</net.sf.flexjson.version>
-        <org.jsoup.version>1.14.2</org.jsoup.version>
+        <org.jsoup.version>1.15.3</org.jsoup.version>
 
         <!--[ Front ]++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <org.tuckey.urlrewritefilter.version>4.0.4</org.tuckey.urlrewritefilter.version>
