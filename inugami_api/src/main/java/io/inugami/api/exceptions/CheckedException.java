@@ -32,6 +32,13 @@ public class CheckedException extends Exception implements ExceptionWithErrorCod
         this(DefaultErrorCode.builder().statusCode(code).build(), cause, message, null);
     }
 
+    public CheckedException(final ErrorCode errorCode, final Throwable cause) {
+        super(errorCode==null?DefaultErrorCode.buildUndefineError().getMessage(): errorCode.getMessage(),cause);
+        this.errorCode =errorCode==null?DefaultErrorCode.buildUndefineError() : errorCode;
+    }
+
+
+
     public CheckedException() {
         this(null, null, null, null);
     }
@@ -64,9 +71,6 @@ public class CheckedException extends Exception implements ExceptionWithErrorCod
         this(errorCode, null, message, null);
     }
 
-    public CheckedException(final ErrorCode errorCode, final Throwable cause) {
-        this(errorCode, cause, errorCode == null ? null : errorCode.getMessage(), null);
-    }
 
     public CheckedException(final ErrorCode errorCode, final Throwable cause, final String message,
                             final Object... values) {
