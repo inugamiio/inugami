@@ -57,6 +57,10 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
                                .build();
     }
 
+    public static DefaultErrorCode.DefaultErrorCodeBuilder buildUndefineErrorCode() {
+        return fromErrorCode(buildUndefineError());
+    }
+
     public static DefaultErrorCode.DefaultErrorCodeBuilder fromErrorCode(final ErrorCode errorCode) {
         final DefaultErrorCodeBuilder result           = DefaultErrorCode.builder();
         final ErrorCode               currentErrorCode = errorCode == null ? buildUndefineError() : errorCode;
@@ -96,12 +100,14 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
             this.errorType = "security";
             return this;
         }
+
         public DefaultErrorCodeBuilder exploitationError() {
-            this.exploitationError= true;
+            this.exploitationError = true;
             return this;
         }
+
         public DefaultErrorCodeBuilder exploitationError(boolean value) {
-            this.exploitationError= value;
+            this.exploitationError = value;
             return this;
         }
 
