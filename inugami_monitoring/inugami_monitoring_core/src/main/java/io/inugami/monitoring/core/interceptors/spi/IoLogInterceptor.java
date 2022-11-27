@@ -86,9 +86,9 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     @Override
     public List<GenericMonitoringModel> onBegin(final ResquestData request) {
         final JsonBuilder msg = buildIologIn(request );
-        MdcService.lifecycleIn();
+        MdcService.getInstance().lifecycleIn();
         LOGGER.info((enableDecorator ? inputDecorator : EMPTY) +  ObfuscatorTools.applyObfuscators(msg.toString()));
-        MdcService.lifecycleRemove();
+        MdcService.getInstance().lifecycleRemove();
         return null;
     }
 
@@ -143,7 +143,7 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
 
 
         //@formatter:on
-        MdcService.lifecycleOut();
+        MdcService.getInstance().lifecycleOut();
         if (error == null) {
             LOGGER.info((enableDecorator ? outputDecorator : EMPTY) + msg);
         }
@@ -154,7 +154,7 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
             }
             LOGGER.error((enableDecorator ? outputDecorator : EMPTY) + msg);
         }
-        MdcService.lifecycleRemove();
+        MdcService.getInstance().lifecycleRemove();
         return null;
     }
     

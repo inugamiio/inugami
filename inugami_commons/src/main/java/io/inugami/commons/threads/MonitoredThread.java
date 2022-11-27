@@ -33,7 +33,7 @@ public class MonitoredThread extends Thread {
     @Override
     public void run() {
         RequestContext.setInstance(requestContext);
-        MdcService.initialize();
+        MdcService.getInstance().initialize();
         monitoringInitializer.forEach(MonitoringInitializer::initialize);
         super.run();
     }
