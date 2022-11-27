@@ -17,7 +17,7 @@
 package io.inugami.api.exceptions;
 
 @FunctionalInterface
-public interface ErrorCodeResolverSPI {
+public interface ErrorCodeResolver {
 
     ErrorCode resolve(final Throwable exception);
 }
