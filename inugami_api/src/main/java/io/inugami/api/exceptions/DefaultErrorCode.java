@@ -46,6 +46,7 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     private final boolean retryable;
     private final boolean rollback;
     private final String  payload;
+    private final String  category;
     private final boolean exploitationError;
 
     private final BiConsumer<String, Exception> errorHandler;
@@ -75,7 +76,8 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
                      .errorHandler(errorCode.getErrorHandler())
                      .exploitationError(errorCode.isExploitationError())
                      .retryable(errorCode.isRetryable())
-                     .rollback(errorCode.isRollbackRequire());
+                     .rollback(errorCode.isRollbackRequire())
+                     .category(errorCode.getCategory());
     }
 
     public static DefaultErrorCode.DefaultErrorCodeBuilder newBuilder() {

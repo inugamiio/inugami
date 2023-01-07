@@ -71,6 +71,10 @@ public interface ErrorCode {
     default ErrorCode addDetail(final String detail, Object... values) {
         return toBuilder().addMessageDetail(detail, values).build();
     }
+    
+    default String getCategory() {
+        return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getCategory();
+    }
 
 
     default DefaultErrorCode.DefaultErrorCodeBuilder toBuilder() {
