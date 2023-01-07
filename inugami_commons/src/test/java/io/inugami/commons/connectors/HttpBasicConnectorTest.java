@@ -3,6 +3,7 @@ package io.inugami.commons.connectors;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import com.github.tomakehurst.wiremock.matching.UrlPattern;
 import io.inugami.api.exceptions.services.ConnectorException;
 import io.inugami.api.exceptions.services.exceptions.ConnectorBadUrException;
 import io.inugami.api.exceptions.services.exceptions.ConnectorNotFoundException;
@@ -176,17 +177,103 @@ public class HttpBasicConnectorTest {
 
 
     }
+
     // =========================================================================
     // PUT
     // =========================================================================
+    @Test
+    public void put_withHttpRequest_nominal() throws ConnectorException {
+        final HttpBasicConnector connector = buildConnector();
+
+        stubFor(put("/?page=1")
+                        .willReturn(aResponse()
+                                            .withStatus(200)
+                                            .withHeader("Content-Type", "application/json")
+                                            .withBody("\"testing-library\": \"WireMock\"")));
+
+        final BasicConnectorListener listener = buildListener();
+        MdcService.getInstance()
+                  .deviceIdentifier("912c8721-f7d5-4bea-84ba-f13381a4fcdb")
+                  .correlationId("0d9e9d18-f5cf-44ff-8537-276506d884b0")
+                  .traceId("bff3187a6760")
+                  .requestId("59cf058fc08b");
+
+        List<String> payload = List.of("joe", "foobar");
+        final HttpConnectorResult result = connector.put(HttpRequest.builder()
+                                                                    .url(buildUrl(""))
+                                                                    .body(payload)
+                                                                    .options(Map.of("page", "1"))
+                                                                    .listener(listener)
+                                                                    .build());
+
+        assertListenerSuccess(listener);
+        assertTextRelatif(result, "commons/connectors/put_withHttpRequest_nominal.json", 4);
+        assertThat(new String(result.getData())).isEqualTo("\"testing-library\": \"WireMock\"");
+    }
 
     // =========================================================================
     // DELETE
     // =========================================================================
+    @Test
+    public void delete_withHttpRequest_nominal() throws ConnectorException {
+        final HttpBasicConnector connector = buildConnector();
+
+        stubFor(delete("/?page=1")
+                        .willReturn(aResponse()
+                                            .withStatus(200)
+                                            .withHeader("Content-Type", "application/json")
+                                            .withBody("\"testing-library\": \"WireMock\"")));
+
+        final BasicConnectorListener listener = buildListener();
+        MdcService.getInstance()
+                  .deviceIdentifier("912c8721-f7d5-4bea-84ba-f13381a4fcdb")
+                  .correlationId("0d9e9d18-f5cf-44ff-8537-276506d884b0")
+                  .traceId("bff3187a6760")
+                  .requestId("59cf058fc08b");
+
+        List<String> payload = List.of("joe", "foobar");
+        final HttpConnectorResult result = connector.delete(HttpRequest.builder()
+                                                                       .url(buildUrl(""))
+                                                                       .options(Map.of("page", "1"))
+                                                                       .listener(listener)
+                                                                       .build());
+
+        assertListenerSuccess(listener);
+        assertTextRelatif(result, "commons/connectors/delete_withHttpRequest_nominal.json", 4);
+        assertThat(new String(result.getData())).isEqualTo("\"testing-library\": \"WireMock\"");
+    }
 
     // =========================================================================
     // OPTION
     // =========================================================================
+    @Test
+    public void option_withHttpRequest_nominal() throws ConnectorException {
+        final HttpBasicConnector connector = buildConnector();
+
+        stubFor(options(UrlPattern.ANY)
+                        .willReturn(aResponse()
+                                            .withStatus(200)
+                                            .withHeader("Content-Type", "application/json")
+                                            .withBody("\"testing-library\": \"WireMock\"")));
+
+        final BasicConnectorListener listener = buildListener();
+        MdcService.getInstance()
+                  .deviceIdentifier("912c8721-f7d5-4bea-84ba-f13381a4fcdb")
+                  .correlationId("0d9e9d18-f5cf-44ff-8537-276506d884b0")
+                  .traceId("bff3187a6760")
+                  .requestId("59cf058fc08b");
+
+        List<String> payload = List.of("joe", "foobar");
+        final HttpConnectorResult result = connector.option(HttpRequest.builder()
+                                                                       .url(buildUrl(""))
+                                                                       .options(Map.of("page", "1"))
+                                                                       .listener(listener)
+                                                                       .build());
+
+        assertListenerSuccess(listener);
+        assertTextRelatif(result, "commons/connectors/option_withHttpRequest_nominal.json", 4);
+        assertThat(new String(result.getData())).isEqualTo("\"testing-library\": \"WireMock\"");
+    }
 
     // =========================================================================
     // TOOLS

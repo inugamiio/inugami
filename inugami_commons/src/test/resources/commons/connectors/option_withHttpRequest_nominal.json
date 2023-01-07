@@ -1,0 +1,15 @@
+{
+  "charset" : "UTF-8",
+  "contentType" : "application/json",
+  "data" : "InRlc3RpbmctbGlicmFyeSI6ICJXaXJlTW9jayI=",
+  "delais" : 254,
+  "encoding" : "UTF-8",
+  "hashCode" : 338369602,
+  "hashHumanReadable" : "[null]null",
+  "length" : 29,
+  "message" : "OK",
+  "requestHeaders" : { },
+  "responseAt" : 0,
+  "responseHeaders" : { },
+  "statusCode" : 200
+}

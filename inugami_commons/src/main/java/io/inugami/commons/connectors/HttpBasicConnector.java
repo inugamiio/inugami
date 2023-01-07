@@ -61,9 +61,6 @@ public class HttpBasicConnector {
 
     // =========================================================================
     // ATTRIBUTES
-    /**
-     * The Constant LOGGER.
-     */
     // =========================================================================
 
     private final PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
@@ -288,7 +285,7 @@ public class HttpBasicConnector {
 
     private HttpConnectorResult processPost(final GenericRequestContext context) throws ConnectorException {
         final HttpConnectorResultBuilder resultBuilder = new HttpConnectorResultBuilder();
-
+        resultBuilder.addVerb(HTTP_POST).addUrl(context.getRequest().getUrl());
 
         final HttpPost request = new HttpPost(context.getRequest().getUrl());
         HttpBasicConnectorDelegateUtils.defineRequestConfig(request, context.getRequest().getRequestConfig(),
@@ -375,7 +372,7 @@ public class HttpBasicConnector {
 
     private HttpConnectorResult processPut(final GenericRequestContext context) throws ConnectorException {
         final HttpConnectorResultBuilder resultBuilder = new HttpConnectorResultBuilder();
-
+        resultBuilder.addVerb(PUT).addUrl(context.getRequest().getUrl());
 
         final HttpPut request = new HttpPut(context.getRequest().getUrl());
         HttpBasicConnectorDelegateUtils.defineRequestConfig(request, context.getRequest().getRequestConfig(),
@@ -386,9 +383,9 @@ public class HttpBasicConnector {
                                                            resultBuilder.addRequestHeader(key, value);
                                                        });
 
-        if (context.getRequest().getHttpBody() != null) {
-            request.setEntity(context.getRequest().getHttpBody());
-        }
+        HttpEntity bodyPayload = buildBodyPayload(context.getRequest());
+        request.setEntity(bodyPayload);
+
 
         CloseableHttpResponse response = HttpBasicConnectorDelegateUtils.execute(request, context.getHttpclient());
 
@@ -422,7 +419,7 @@ public class HttpBasicConnector {
 
     private HttpConnectorResult processPatch(final GenericRequestContext context) throws ConnectorException {
         final HttpConnectorResultBuilder resultBuilder = new HttpConnectorResultBuilder();
-
+        resultBuilder.addVerb(PATCH).addUrl(context.getRequest().getUrl());
 
         final HttpPatch request = new HttpPatch(context.getRequest().getUrl());
         HttpBasicConnectorDelegateUtils.defineRequestConfig(request, context.getRequest().getRequestConfig(),
@@ -470,17 +467,14 @@ public class HttpBasicConnector {
 
     private HttpConnectorResult processDelete(final GenericRequestContext context) throws ConnectorException {
         final HttpConnectorResultBuilder resultBuilder = new HttpConnectorResultBuilder();
+        resultBuilder.addVerb(DELETE).addUrl(context.getRequest().getUrl());
 
-
-        final HttpPatch request = new HttpPatch(context.getRequest().getUrl());
+        final HttpDelete request = new HttpDelete(context.getRequest().getUrl());
         HttpBasicConnectorDelegateUtils.defineRequestConfig(request, context.getRequest().getRequestConfig(),
                                                             request::setConfig);
         HttpBasicConnectorDelegateUtils.defineHearders(context.getRequest(),
                                                        (key, value) -> request.setHeader(key, value));
 
-        if (context.getRequest().getHttpBody() != null) {
-            request.setEntity(context.getRequest().getHttpBody());
-        }
 
         CloseableHttpResponse response = HttpBasicConnectorDelegateUtils.execute(request, context.getHttpclient());
 
