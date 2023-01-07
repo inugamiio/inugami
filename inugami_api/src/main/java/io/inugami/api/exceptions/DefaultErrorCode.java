@@ -40,10 +40,11 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     @EqualsAndHashCode.Include
     private final String errorCode;
 
-    private final String message;
-    private final String messageDetail;
-    private final String errorType;
-
+    private final String  message;
+    private final String  messageDetail;
+    private final String  errorType;
+    private final boolean retryable;
+    private final boolean rollback;
     private final String  payload;
     private final boolean exploitationError;
 
@@ -72,7 +73,9 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
                      .errorType(errorCode.getErrorType())
                      .payload(errorCode.getPayload())
                      .errorHandler(errorCode.getErrorHandler())
-                     .exploitationError(errorCode.isExploitationError());
+                     .exploitationError(errorCode.isExploitationError())
+                     .retryable(errorCode.isRetryable())
+                     .rollback(errorCode.isRollbackRequire());
     }
 
     public static DefaultErrorCode.DefaultErrorCodeBuilder newBuilder() {
@@ -117,6 +120,18 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
             }
             return this;
         }
+
+        public DefaultErrorCodeBuilder rollbackRequire() {
+            this.rollback = true;
+            return this;
+        }
+
+
+        public DefaultErrorCodeBuilder isRetryable() {
+            this.retryable = true;
+            return this;
+        }
+
     }
 
 

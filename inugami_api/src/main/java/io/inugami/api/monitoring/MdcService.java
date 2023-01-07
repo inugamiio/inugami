@@ -17,6 +17,8 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MdcService {
 
+    private static final String X_B_3_TRACE_ID = "X-B3-TraceId";
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
@@ -334,7 +336,7 @@ public class MdcService {
         result.put(MDCKeys.deviceIdentifier.name(), deviceIdentifier());
         result.put(MDCKeys.correlation_id.name(), correlationId());
         result.put(MDCKeys.request_id.name(), requestId());
-        result.put(MDCKeys.traceId.name(), traceId());
+        result.put(X_B_3_TRACE_ID, traceId());
 
         applyIfNotNull(conversationId(), value -> result.put(MDCKeys.conversation_id.name(), value));
         applyIfNotNull(functionalUid(), value -> result.put(MDCKeys.functionalUid.name(), value));

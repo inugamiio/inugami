@@ -30,22 +30,22 @@ public class JenkinsProviderTask implements ProviderTask {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final HttpConnector                        httpConnector;
-    
-    private final SimpleEvent                          event;
-    
-    private final String                               url;
-    
-    private final Gav                                  pluginGav;
-    
-    private final ConfigHandler<String, String>        config;
-    
-    private final CredentialsProvider                  credentials;
-    
-    private static final JenkinsProviderTaskResolver   jenkinsResolver    = new JenkinsProviderTaskResolver();
-    
+    private final HttpConnector httpConnector;
+
+    private final SimpleEvent event;
+
+    private final String url;
+
+    private final Gav pluginGav;
+
+    private final ConfigHandler<String, String> config;
+
+    private final CredentialsProvider credentials;
+
+    private static final JenkinsProviderTaskResolver jenkinsResolver = new JenkinsProviderTaskResolver();
+
     private static final JenkinsInformationTransformer jenkinsTransformer = new JenkinsInformationTransformer();
-    
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -58,21 +58,21 @@ public class JenkinsProviderTask implements ProviderTask {
                                                        final CredentialsProvider credentials) {
         
         //@formatter:on
-        this.event = event;
-        this.url = url;
+        this.event         = event;
+        this.url           = url;
         this.httpConnector = httpConnector;
-        this.pluginGav = pluginGav;
-        this.config = config == null ? new ConfigHandlerHashMap(new HashMap<>()) : config;
-        this.credentials = credentials;
+        this.pluginGav     = pluginGav;
+        this.config        = config == null ? new ConfigHandlerHashMap(new HashMap<>()) : config;
+        this.credentials   = credentials;
     }
-    
+
     // =========================================================================
     // OVERRIDES
     // =========================================================================
     @Override
     public ProviderFutureResult callProvider() {
         ProviderFutureResult result;
-        
+
         try {
             result = process();
         }
@@ -81,23 +81,23 @@ public class JenkinsProviderTask implements ProviderTask {
         }
         return result;
     }
-    
+
     @Override
     public GenericEvent getEvent() {
         return event;
     }
-    
+
     @Override
     public Gav getPluginGav() {
         return pluginGav;
     }
-    
+
     // =========================================================================
     // PROCESS
     // =========================================================================
     private ProviderFutureResult process() throws ProviderException {
         final String request = buildRequest(event);
-        
+
         HttpConnectorResult httpResult;
         try {
             httpResult = callJenkins(request);
@@ -105,41 +105,41 @@ public class JenkinsProviderTask implements ProviderTask {
         catch (ConnectorException e) {
             throw new ProviderException(e.getMessage(), e);
         }
-        
+
         if (httpResult.getStatusCode() != 200) {
-            Loggers.IO.error("error-http-{} on request : {}", httpResult.getStatusCode(), request);
+            Loggers.PARTNERLOG.error("error-http-{} on request : {}", httpResult.getStatusCode(), request);
         }
-        
+
         return buildResult(event, httpResult);
     }
-    
+
     /*package*/ HttpConnectorResult callJenkins(String request) throws ConnectorException {
-       
+
         return httpConnector.get(request, credentials);
     }
-    
+
     // =========================================================================
     // BUILDERS
     // =========================================================================
     protected <T extends SimpleEvent> String buildRequest(final T event) throws ProviderException {
-        String result;
+        String                            result;
         final List<Tuple<String, String>> params = new ArrayList<>();
-        
+
         params.add(new Tuple<>(config.grab("treeKey"), config.grab("treeValue")));
-        
+
         try {
             result = httpConnector.buildRequest(url, params);
         }
         catch (ConnectorException e) {
             throw new JenkinsProviderTaskException(e.getMessage(), e);
         }
-        
+
         return result;
     }
-    
+
     protected ProviderFutureResult buildResult(final SimpleEvent currentEvent, HttpConnectorResult httpResult) {
         ProviderFutureResultBuilder result;
-        
+
         if (httpResult.getStatusCode() == 200) {
             result = buildSuccessResult(currentEvent, httpResult.getData(), httpResult.getCharset());
         }
@@ -148,31 +148,31 @@ public class JenkinsProviderTask implements ProviderTask {
             result.addException(new ProviderException("HTTP-{0} on calling {1}", httpResult.getStatusCode(),
                                                       httpResult.getHashHumanReadable()));
         }
-        
+
         return result.build();
     }
-    
+
     private ProviderFutureResultBuilder buildSuccessResult(final SimpleEvent currentEvent, byte[] data,
                                                            Charset charset) {
-        final ProviderFutureResultBuilder result = new ProviderFutureResultBuilder();
-        JenkinsInformation eventData = new JenkinsInformation().convertToObject(data, charset);
-        
+        final ProviderFutureResultBuilder result    = new ProviderFutureResultBuilder();
+        JenkinsInformation                eventData = new JenkinsInformation().convertToObject(data, charset);
+
         result.addData(jenkinsResolver.build(currentEvent.getQuery(), jenkinsTransformer.process(eventData)));
         result.addEvent(currentEvent);
         return result;
     }
-    
+
     // =========================================================================
     // Exception
     // =========================================================================
     public class JenkinsProviderTaskException extends ProviderException {
-        
+
         private static final long serialVersionUID = -4201970876341805157L;
-        
+
         public JenkinsProviderTaskException(String message, Object... values) {
             super(message, values);
         }
-        
+
         public JenkinsProviderTaskException(String message, Throwable cause) {
             super(message, cause);
         }

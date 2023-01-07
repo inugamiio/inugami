@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ======================================================================= 
@@ -60,7 +61,7 @@
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <super.jdk>11</super.jdk>
         <super.jdk.arg>-parameters</super.jdk.arg>
-        <maven-gpg-plugin.enabled />
+        <maven-gpg-plugin.enabled/>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.datePattern>yyyy-MM-dd'T'HH:mm:ss.SSSZ</project.build.datePattern>
@@ -81,7 +82,7 @@
         <docArtifactFinalName>${project.build.finalName}</docArtifactFinalName>
         <superSiteSkinVersion>1.2.1</superSiteSkinVersion>
 
-        <site.deploy.url />
+        <site.deploy.url/>
         <plugin.site.disable>true</plugin.site.disable>
         <plugin.site.path>src/site</plugin.site.path>
         <plugin.site.inputEncoding>${project.build.sourceEncoding}</plugin.site.inputEncoding>
@@ -103,18 +104,18 @@
         :: JDK
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <jdk>11</jdk>
-        <jdk.env.java.home />
-        <jdk.env.property.name />
-        <jdk.test.executable />
+        <jdk.env.java.home/>
+        <jdk.env.property.name/>
+        <jdk.test.executable/>
         <jdk.javac.executable>${jdk.env.java.home}/bin/javac</jdk.javac.executable>
 
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: CI
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-        <ci.host />
+        <ci.host/>
         <ci.host.context>/jenkins</ci.host.context>
-        <ci.view />
+        <ci.view/>
 
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -215,7 +216,7 @@
         <org.apache.commons.cli.version>1.4</org.apache.commons.cli.version>
         <org.apache.commons.codec.version>1.9</org.apache.commons.codec.version>
         <!--[ Mapping ]++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <com.thoughtworks.xstream.version>1.4.19</com.thoughtworks.xstream.version>
+        <com.thoughtworks.xstream.version>1.4.18</com.thoughtworks.xstream.version>
 
         <net.sf.flexjson.version>3.3</net.sf.flexjson.version>
         <org.jsoup.version>1.14.2</org.jsoup.version>
@@ -604,6 +605,18 @@
                 <artifactId>jackson-annotations</artifactId>
                 <version>${com.jackson-annotations.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${com.jackson-annotations.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${com.jackson-annotations.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-jsr310</artifactId>
@@ -941,6 +954,20 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+        </dependency>
+
     </dependencies>
     <!-- =======================================================================
     = BUILD
@@ -1093,7 +1120,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute />
+                                        <execute/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
