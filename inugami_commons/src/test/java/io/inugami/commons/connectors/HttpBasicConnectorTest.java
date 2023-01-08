@@ -172,11 +172,45 @@ public class HttpBasicConnectorTest {
                                                                      .build());
 
         assertListenerSuccess(listener);
-        assertTextRelatif(result, "commons/connectors/post_withHttpRequest_nominal.json", 4);
+        assertTextRelatif(result, "commons/connectors/post_withHttpRequest_nominal.json", 5);
         assertThat(new String(result.getData())).isEqualTo("\"testing-library\": \"WireMock\"");
-
-
     }
+
+    @Test
+    public void post_withError_shouldTraceError() throws ConnectorException {
+        final HttpBasicConnector connector = buildConnector();
+
+        stubFor(post("/?page=1")
+                        .willReturn(aResponse()
+                                            .withStatus(500)
+                                            .withHeader("Content-Type", "application/json")
+                                            .withBody("{\"someError\": \"ERR-001\"}")));
+
+        final BasicConnectorListener listener = buildListener();
+        MdcService.getInstance()
+                  .deviceIdentifier("912c8721-f7d5-4bea-84ba-f13381a4fcdb")
+                  .correlationId("0d9e9d18-f5cf-44ff-8537-276506d884b0")
+                  .traceId("bff3187a6760")
+                  .requestId("59cf058fc08b");
+
+        List<String> payload = List.of("joe", "foobar");
+        final HttpConnectorResult result = connector.post(HttpRequest.builder()
+                                                                     .nbRetry(0)
+                                                                     .url(buildUrl(""))
+                                                                     .body(payload)
+                                                                     .options(Map.of("page", "1"))
+                                                                     .listener(listener)
+                                                                     .build());
+
+        assertThat(listener.getRequest().size()).isEqualTo(1);
+        assertThat(listener.getException().size()).isEqualTo(0);
+        assertThat(listener.getDone().size()).isEqualTo(0);
+        assertThat(listener.getError().size()).isEqualTo(1);
+
+        assertTextRelatif(result, "commons/connectors/post_withError_shouldTraceError.json", 5);
+        assertThat(new String(result.getData())).isEqualTo("{\"someError\": \"ERR-001\"}");
+    }
+
 
     // =========================================================================
     // PUT
@@ -207,7 +241,7 @@ public class HttpBasicConnectorTest {
                                                                     .build());
 
         assertListenerSuccess(listener);
-        assertTextRelatif(result, "commons/connectors/put_withHttpRequest_nominal.json", 4);
+        assertTextRelatif(result, "commons/connectors/put_withHttpRequest_nominal.json", 5);
         assertThat(new String(result.getData())).isEqualTo("\"testing-library\": \"WireMock\"");
     }
 

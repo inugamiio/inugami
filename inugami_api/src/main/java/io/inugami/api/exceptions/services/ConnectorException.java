@@ -19,6 +19,7 @@ package io.inugami.api.exceptions.services;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.exceptions.TechnicalException;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * TechnicalException
@@ -26,6 +27,7 @@ import lombok.Getter;
  * @author patrick_guillerm
  * @since 22 juil. 2016
  */
+@Setter
 @Getter
 public class ConnectorException extends TechnicalException {
 
@@ -35,8 +37,9 @@ public class ConnectorException extends TechnicalException {
     /**
      * The Constant serialVersionUID.
      */
-    private static final long serialVersionUID = 389031756408740003L;
-    private final        int  code;
+    private static final long   serialVersionUID = 389031756408740003L;
+    private final        int    code;
+    private              Object result;
 
     // =========================================================================
     // PUBLIC CONSTRUCTORS

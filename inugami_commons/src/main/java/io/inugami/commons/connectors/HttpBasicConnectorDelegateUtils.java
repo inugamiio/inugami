@@ -101,11 +101,6 @@ class HttpBasicConnectorDelegateUtils {
     private static final List<Strategy<StatusLine, ConnectorException>> EXCEPTIONS_STRATEGIES =
             List.of(
                     new DefaultStrategy<>(
-                            statusLine -> statusLine.getStatusCode() == 400,
-                            statusLine -> new ConnectorBadRequestException(statusLine.getStatusCode(),
-                                                                           statusLine.getReasonPhrase())
-                    ),
-                    new DefaultStrategy<>(
                             statusLine -> statusLine.getStatusCode() == 401,
                             statusLine -> new ConnectorUnauthorizedException(statusLine.getStatusCode(),
                                                                              statusLine.getReasonPhrase())
@@ -116,19 +111,9 @@ class HttpBasicConnectorDelegateUtils {
                                                                           statusLine.getReasonPhrase())
                     ),
                     new DefaultStrategy<>(
-                            statusLine -> statusLine.getStatusCode() == 404,
-                            statusLine -> new ConnectorNotFoundException(statusLine.getStatusCode(),
-                                                                         statusLine.getReasonPhrase())
-                    ),
-                    new DefaultStrategy<>(
                             statusLine -> statusLine.getStatusCode() > 404 && statusLine.getStatusCode() < 500,
                             statusLine -> new ConnectorBadRequestException(statusLine.getStatusCode(),
                                                                            statusLine.getReasonPhrase())
-                    ),
-                    new DefaultStrategy<>(
-                            statusLine -> statusLine.getStatusCode() == 500,
-                            statusLine -> new ConnectorInternalErrorException(statusLine.getStatusCode(),
-                                                                              statusLine.getReasonPhrase())
                     ),
                     new DefaultStrategy<>(
                             statusLine -> statusLine.getStatusCode() == 502,
@@ -139,16 +124,6 @@ class HttpBasicConnectorDelegateUtils {
                             statusLine -> statusLine.getStatusCode() == 503,
                             statusLine -> new ConnectorServiceUnavailablException(statusLine.getStatusCode(),
                                                                                   statusLine.getReasonPhrase())
-                    ),
-                    new DefaultStrategy<>(
-                            statusLine -> statusLine.getStatusCode() == 504,
-                            statusLine -> new ConnectorGatewayTimeoutException(statusLine.getStatusCode(),
-                                                                               statusLine.getReasonPhrase())
-                    ),
-                    new DefaultStrategy<>(
-                            statusLine -> statusLine.getStatusCode() > 504,
-                            statusLine -> new ConnectorInternalErrorException(statusLine.getStatusCode(),
-                                                                              statusLine.getReasonPhrase())
                     )
                    );
 
@@ -373,29 +348,37 @@ class HttpBasicConnectorDelegateUtils {
     // EXECUTE REQUEST
     // =========================================================================
     static CloseableHttpResponse execute(final HttpRequestBase request,
-                                         final CloseableHttpClient httpclient) throws ConnectorException {
+                                         final CloseableHttpClient httpclient,
+                                         final HttpConnectorResult result) throws ConnectorException {
         CloseableHttpResponse response = null;
         try {
             response = httpclient.execute(request);
         }
         catch (IOException e) {
-            throw new ConnectorUndefinedCallException(e.getMessage(), e);
+            final ConnectorUndefinedCallException exception = new ConnectorUndefinedCallException(e.getMessage(), e);
+            exception.setResult(result);
+            throw exception;
         }
 
 
-        final ConnectorException exception = resolveException(response.getStatusLine());
+        final ConnectorException exception = resolveException(response.getStatusLine(), result);
         if (exception != null) {
             throw exception;
         }
         return response;
     }
 
-    public static ConnectorException resolveException(final int httpCode, final String messqge) {
-        return resolveException(StatusLineDTO.builder()
-                                             .statusCode(httpCode)
-                                             .reasonPhrase(messqge)
-                                             .build());
+    public static ConnectorException resolveException(final StatusLine httpCode, final HttpConnectorResult httpResult) {
+        final ConnectorException result = resolveException(StatusLineDTO.builder()
+                                                                        .statusCode(httpCode.getStatusCode())
+                                                                        .reasonPhrase(httpCode.getReasonPhrase())
+                                                                        .build());
 
+        if (result != null) {
+            result.setResult(httpResult);
+        }
+
+        return result;
     }
 
     public static ConnectorException resolveException(final StatusLine statusLine) {

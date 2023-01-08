@@ -23,6 +23,10 @@ public interface ConnectorListener {
         return null;
     }
 
+    default HttpRequest processCalling(final HttpRequest request, HttpConnectorResult connectorResult) {
+        return null;
+    }
+
     default void onError(final ConnectorException exception) {
 
     }

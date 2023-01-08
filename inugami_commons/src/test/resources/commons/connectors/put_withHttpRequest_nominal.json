@@ -1,8 +1,9 @@
 {
+  "bodyData" : "WyAiam9lIiwgImZvb2JhciIgXQ==",
   "charset" : "UTF-8",
   "contentType" : "application/json",
   "data" : "InRlc3RpbmctbGlicmFyeSI6ICJXaXJlTW9jayI=",
-  "delais" : 250,
+  "delais" : 258,
   "encoding" : "UTF-8",
   "hashCode" : -1443214512,
   "hashHumanReadable" : "[PUT]http://localhost:1234?page=1",
