@@ -542,7 +542,7 @@ public class HttpBasicConnector {
 
     private HttpConnectorResult processOption(final GenericRequestContext context) throws ConnectorException {
         final HttpConnectorResult.HttpConnectorResultBuilder resultBuilder = HttpConnectorResult.builder();
-
+        resultBuilder.verb(DELETE).url(context.getRequest().getUrl());
 
         final HttpOptions request = new HttpOptions(context.getRequest().getUrl());
         HttpBasicConnectorDelegateUtils.defineRequestConfig(request, context.getRequest().getRequestConfig(),
