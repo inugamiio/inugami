@@ -17,7 +17,8 @@
 package io.inugami.api.functionnals;
 
 /**
- * ConsumerWithException
+ * When a consumer uses data, exception can occur. To manage this use case, the <strong>ConsumerWithException<T></strong>
+ * has been designed.
  * 
  * @author patrick_guillerm
  * @since 15 mars 2018

@@ -17,7 +17,12 @@
 package io.inugami.api.mapping;
 
 /**
- * JsonUnmarshaling
+ *
+ * The unmarshalling process is a very commons process in software application.
+ * But in many case, your implementation only need to invoke this process. The
+ * concrete implementation doesn't matter. The <strong>JsonUnmarshalling</strong> interface is
+ * designed to provide an unmarshalling solution without the requirement to specify
+ * how the application should do it.
  * 
  * @author patrick_guillerm
  * @since 5 janv. 2017

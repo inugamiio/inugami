@@ -19,7 +19,8 @@ package io.inugami.api.functionnals;
 import io.inugami.api.exceptions.TechnicalException;
 
 /**
- * FunctionMustThrow
+ * Commonly used in unit test, the <strong>FunctionMustThrow<strong> interface design a function
+ * who will throw an exception. This approach is very helpful to verify error code returned.
  * 
  * @author patrickguillerm
  * @since 20 déc. 2017

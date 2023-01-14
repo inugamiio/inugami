@@ -19,7 +19,8 @@ package io.inugami.api.functionnals;
 import io.inugami.api.exceptions.TechnicalException;
 
 /**
- * PostProcessing
+ * The <strong>PostProcessing<T></strong> interface is designed to materialize a visitor pattern.
+ * In Inugami, it is used to manipulate data after it has been recovered.
  * 
  * @author patrickguillerm
  * @since 17 déc. 2017

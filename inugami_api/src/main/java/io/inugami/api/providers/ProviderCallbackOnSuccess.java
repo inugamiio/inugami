@@ -17,8 +17,8 @@
 package io.inugami.api.providers;
 
 /**
- * ProviderCallbackOnSuccess
- * 
+ * The <strong>ProviderCallbackOnError</strong> allows to intercept provider successfully processing.
+ * @see io.inugami.api.providers.ProviderCallbackOnError
  * @author patrick_guillerm
  * @since 5 janv. 2017
  */

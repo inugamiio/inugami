@@ -19,7 +19,8 @@ package io.inugami.api.spi;
 import io.inugami.api.processors.ConfigHandler;
 
 /**
- * SpiConfigurable
+ * The monitoring context require to be initialized and has a shutdown process.
+ * The <strong>BootstrapMonitoringSpi</strong> allow to materialize this lifecycle.
  * 
  * @author patrick_guillerm
  * @since 8 juin 2017

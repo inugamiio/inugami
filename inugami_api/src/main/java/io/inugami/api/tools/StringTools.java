@@ -1,5 +1,8 @@
 package io.inugami.api.tools;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.ArrayList;
@@ -7,7 +10,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StringTools {
     // =========================================================================
     // ATTRIBUTES
@@ -19,9 +22,6 @@ public final class StringTools {
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    private StringTools() {
-    }
-    
     private static List<Function<String, String>> initializeStrategies() {
         final List<Function<String, String>> result = new ArrayList<>();
         

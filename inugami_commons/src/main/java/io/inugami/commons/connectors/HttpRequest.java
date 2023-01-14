@@ -57,6 +57,7 @@ public class HttpRequest {
     public static class HttpRequestBuilder {
 
         public HttpRequestBuilder addHeader(final String key, final String value) {
+
             if (headers == null) {
                 headers = new LinkedHashMap<>();
             }

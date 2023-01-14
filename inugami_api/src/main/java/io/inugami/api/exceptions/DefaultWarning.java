@@ -33,6 +33,7 @@ public class DefaultWarning implements Warning {
     private final String message;
     private final String messageDetail;
     private final String warningType;
+    private final String category;
 
     public static DefaultWarningBuilder fromWarningCode(final Warning warning) {
         DefaultWarningBuilder builder = builder();
@@ -41,6 +42,7 @@ public class DefaultWarning implements Warning {
             builder.message(warning.getMessage());
             builder.messageDetail(warning.getMessageDetail());
             builder.warningType(warning.getWarningType());
+            builder.category(warning.getCategory());
         }
         return builder;
     }
@@ -80,5 +82,10 @@ public class DefaultWarning implements Warning {
     @Override
     public String getWarningType() {
         return warningType;
+    }
+
+    @Override
+    public String getCategory(){
+        return category;
     }
 }

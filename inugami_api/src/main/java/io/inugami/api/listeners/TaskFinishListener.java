@@ -17,7 +17,10 @@
 package io.inugami.api.listeners;
 
 /**
- * TaskListener
+ * Inugami heavily use multi-threading principle. To handle when a task is completed,
+ * you can create listeners. To designed this listener we have the
+ * <strong>TaskFinishListener</strong> interface.
+ * This interface can be used in common use cases.
  * 
  * @author patrick_guillerm
  * @since 16 janv. 2017

@@ -24,7 +24,9 @@ import io.inugami.api.spi.SpiLoader;
 
 
 /**
- * JsonObject
+ * In Inugami all information should be able to be converted to the JSON format.
+ * The <strong>JsonObject</strong> interface can track all serializable objects and offers
+ * a generic solution for marshalling the current object.
  * 
  * @author patrick_guillerm
  * @since 12 janv. 2017

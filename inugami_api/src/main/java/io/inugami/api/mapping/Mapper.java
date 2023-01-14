@@ -17,7 +17,7 @@
 package io.inugami.api.mapping;
 
 /**
- * Mapper
+ * Most commonly used to materialize the mapper pattern.
  * 
  * @author patrick_guillerm
  * @since 29 mai 2017

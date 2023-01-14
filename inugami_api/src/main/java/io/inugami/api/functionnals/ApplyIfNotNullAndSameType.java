@@ -20,8 +20,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * ApplyIfNotNull
- * 
+ * Same as <strong>ApplyIfNotNull</strong> but it will check also the data type.
+ * @see io.inugami.api.functionnals.ApplyIfNotNull
  * @author patrick_guillerm
  * @since 15 janv. 2018
  */

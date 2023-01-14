@@ -27,7 +27,8 @@ import io.inugami.api.processors.ConfigHandler;
 import io.inugami.api.spi.NamedSpi;
 
 /**
- * MonitoringFilterInterceptor
+ * In Java application we can uses request filters. But on JavaEE or Spring (or other) it's not the same approach.
+ * The <strong>MonitoringFilterInterceptor</strong> is designed to unify the filter principle.
  * 
  * @author patrick_guillerm
  * @since 28 déc. 2018

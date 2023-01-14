@@ -16,6 +16,14 @@
  */
 package io.inugami.api.functionnals;
 
+/**
+ * When a generic function is used, it can throw an exception.
+ * To materialize this principle, the <strong>FunctionWithException</strong> is designed.
+ * You can specify the input, output and exception types.
+ * @param <I> the input type
+ * @param <O> the output type
+ * @param <E> the exception type (should extend from Throwable)
+ */
 @FunctionalInterface
 public interface FunctionWithException<I, O, E extends Throwable> {
 

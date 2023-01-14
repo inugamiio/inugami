@@ -27,8 +27,20 @@ import io.inugami.api.providers.task.ProviderFutureResult;
 import io.inugami.api.tools.NamedComponent;
 
 /**
- * Provider
- * 
+ * Inugami is a solution that gathers information from various sources, combines it and sends it to the front-end.
+ * To accomplish this, Inugami uses data providers, which are represented by the <strong>Provider</strong> interface.
+ * These providers have two main functions :
+ * <ul>
+ *     <li>
+ *      first one is **callEvent**, which which retrieves data and takes in an event
+ *      (simple or composite) and plugin information
+ *     </li>
+ *     <li>
+ *         the second is the <strong>aggregate</strong>, which is used to process the data once
+ *         it has been retrieved and is only activated when "callEvent" is run with a composite event.
+ *     </li>
+ * </ul>
+ * @see io.inugami.api.providers.ProviderWithHttpConnector
  * @author patrick_guillerm
  * @since 3 janv. 2017
  */

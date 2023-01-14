@@ -16,6 +16,9 @@
  */
 package io.inugami.api.tools;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.TimeZone;
@@ -26,18 +29,13 @@ import java.util.TimeZone;
  * @author patrickguillerm
  * @since Jan 7, 2019
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CalendarTools {
     
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
     private final static TimeZone TIME_ZONE = TimeZone.getTimeZone(Optional.ofNullable(System.getProperty("user.timezone")).orElse("Europe/Paris"));
-    
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    private CalendarTools() {
-    }
     
     // =========================================================================
     // METHODS

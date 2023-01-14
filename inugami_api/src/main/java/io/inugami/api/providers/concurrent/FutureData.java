@@ -24,7 +24,7 @@ import io.inugami.api.models.events.GenericEvent;
 import io.inugami.api.providers.task.ProviderTask;
 
 /**
- * FutureData
+ * Inugami heavily use multi-threading principle. All tasks will return a <strong>FutureData<T></strong>.
  * 
  * @author patrick_guillerm
  * @since 9 août 2017

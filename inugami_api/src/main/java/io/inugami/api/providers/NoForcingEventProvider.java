@@ -17,7 +17,8 @@
 package io.inugami.api.providers;
 
 /**
- * NoForcingEventProvider
+ * In Inugami, it's possible to force providers invocation. However, some providers mustn't be forced.
+ * In this case we have the <strong>NoForcingEventProvider</strong> to prevent this action.
  * 
  * @author patrick_guillerm
  * @since 4 oct. 2017

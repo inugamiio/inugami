@@ -17,7 +17,11 @@
 package io.inugami.api.functionnals;
 
 /**
- * VoidFunction
+ * The Java <strong>Function</strong> interface should return a value.
+ * However if you need only to invoke a handler without a result you need a functional
+ * interface such as <strong>VoidFunctionWithException</strong>.
+ * The <strong>VoidFunctionWithException</strong> inteface is designed
+ * to manage the potential exception that a function can throw.
  * 
  * @author patrick_guillerm
  * @since 2 nov. 2017

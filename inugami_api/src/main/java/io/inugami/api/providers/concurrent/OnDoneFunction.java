@@ -19,8 +19,9 @@ package io.inugami.api.providers.concurrent;
 import io.inugami.api.models.events.GenericEvent;
 
 /**
- * OnDoneFunction
- * 
+ * Inugami use events to retrieve information. To be able to aggregate information Inugami required to known
+ * when a provider have complete its process. The <strong>OnDoneFunction<T></strong> is designed to intercept this event.
+ * @see io.inugami.api.providers.concurrent.OnErrorFunction
  * @author patrick_guillerm
  * @since 9 août 2017
  */

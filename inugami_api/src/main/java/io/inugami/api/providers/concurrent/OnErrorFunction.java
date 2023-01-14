@@ -22,8 +22,10 @@ import io.inugami.api.models.events.GenericEvent;
 import io.inugami.api.providers.task.ProviderFutureResult;
 
 /**
- * OnErrorFunction
- * 
+ * Inugami use events to retrieve information. To be able to aggregate information Inugami required to known
+ * when a provider have complete its process.
+ * The <strong>OnErrorFunction<T></strong> is designed to intercept the case where a provider throws an error.
+ * @see io.inugami.api.providers.concurrent.OnDoneFunction
  * @author patrick_guillerm
  * @since 9 août 2017
  */

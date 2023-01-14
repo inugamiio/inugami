@@ -31,7 +31,7 @@ import io.inugami.core.context.ContextSPI;
 
 /**
  * MultiThreadedProviderRunner
- * 
+ * @see io.inugami.api.providers.ProviderRunner
  * @author patrick_guillerm
  * @since 5 janv. 2017
  */

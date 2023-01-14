@@ -21,19 +21,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import io.inugami.api.loggers.Loggers;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AnnotationTools {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
     private static final String JAVAX_NAMED = "javax.inject.Named";
-    
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    private AnnotationTools() {
-    }
-    
+
     // =========================================================================
     // METHODS
     // =========================================================================

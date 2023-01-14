@@ -20,6 +20,8 @@ public class MdcService {
     private static final String X_B_3_TRACE_ID = "X-B3-TraceId";
 
 
+
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
@@ -82,8 +84,12 @@ public class MdcService {
         userId,
         productId,
         orderId,
-        reservationNumber;
+        reservationNumber,
 
+        appClass,
+        appClassShortName,
+        appMethod,
+        warning;
     }
 
     private static final MdcService INSTANCE = new MdcService();
@@ -848,4 +854,23 @@ public class MdcService {
     public String reservationNumber() {
         return getMdc(MDCKeys.reservationNumber);
     }
+
+
+    public MdcService appClass(final String value) {
+        setMdc(MDCKeys.appClass, value);
+        return this;
+    }
+    public MdcService appClassShortName(final String value) {
+        setMdc(MDCKeys.appClassShortName, value);
+        return this;
+    }
+    public MdcService appMethod(final String value) {
+        setMdc(MDCKeys.appMethod, value);
+        return this;
+    }
+    public MdcService warning(final String warningCode) {
+        setMdc(MDCKeys.warning, warningCode);
+        return this;
+    }
+
 }

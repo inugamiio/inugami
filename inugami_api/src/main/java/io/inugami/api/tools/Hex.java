@@ -16,6 +16,10 @@
  */
 package io.inugami.api.tools;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Hex {
     // =========================================================================
     // ATTRIBUTES

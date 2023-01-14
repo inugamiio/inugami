@@ -16,6 +16,8 @@
  */
 package io.inugami.commons.cli;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 
 /**
@@ -24,18 +26,14 @@ import org.slf4j.Logger;
  * @author patrick_guillerm
  * @since 20 juin 2017
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CliHelper {
     
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
     public static final String EMPTY_STR = "";
-    
-    // =========================================================================
-    // METHODS
-    // =========================================================================
-    private CliHelper() {
-    }
+
     
     // =========================================================================
     // METHODS

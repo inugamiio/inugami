@@ -22,8 +22,17 @@ import io.inugami.api.exceptions.services.ProviderException;
 import io.inugami.api.providers.task.ProviderFutureResult;
 
 /**
- * Aggregator
- * 
+ * In Inugami, a lot of events are managed. Each event retrieves information from a provider.
+ * Inugami has two event types:
+ *  <ul>
+ *      <li>
+ *          simple event : which only one query for a provider
+ *      </li>
+ *      <li>
+ *          composite :  which multi queries on multi providers. However, to ensure coherent data,
+ *          an <strong>Aggregator</strong> is required to aggreate results form each provider.
+ *      </li>
+ *  </ul>
  * @author patrick_guillerm
  * @since 29 mai 2017
  */

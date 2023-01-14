@@ -14,14 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.api.exceptions;
+package io.inugami.api.monitoring;
 
 /**
- * <strong>ErrorCodeResolver</strong> is used to resolve an error code from exception. This interface is designed to
- * be used as strategy pattern,
+ * The <strong>JavaRestMethodTracker</strong> interface allows to track java method information in MDC.
+ * It's a SPI interface. To add your implementation you should create a new file in
+ * <strong>/META-INF/services/io.inugami.api.monitoring.JavaRestMethodTracker</strong> with your implementations
  */
 @FunctionalInterface
-public interface ErrorCodeResolver {
+public interface JavaRestMethodTracker {
+    default boolean accept(final JavaRestMethodDTO data){
+        return true;
+    }
 
-    ErrorCode resolve(final Throwable exception);
+    void track(final JavaRestMethodDTO data);
 }

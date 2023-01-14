@@ -17,7 +17,7 @@
 package io.inugami.api.models;
 
 /**
- * Builder
+ * This functional interface allows for the design of basic builder.
  * 
  * @author patrick_guillerm
  * @since 6 janv. 2017

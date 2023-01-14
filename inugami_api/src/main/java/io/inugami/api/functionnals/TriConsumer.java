@@ -17,7 +17,10 @@
 package io.inugami.api.functionnals;
 
 /**
- * TriConsumer
+ * In Java we have the Consumer and BiConsumer interfaces. But in specific use case,
+ * we need  to have three parameters. The **TriConsumer** is designed for that.
+ * However, if you have more than three parameters, the best approach is to
+ * define a DTO object as parameter.
  * 
  * @author patrick_guillerm
  * @since 17 oct. 2017

@@ -16,6 +16,13 @@
  */
 package io.inugami.api.processors;
 
+/**
+ * Inugami use a lot of SPI implementation, Some components required to be configured.
+ * SPI implementation required to have on implementation a constructor without parameters.
+ * In Java is not possible to create an final SPI implementation with some initialized fields.
+ * To do it, the <strong>ClassBehaviorParametersSPI</strong> allows to build a newer SPI instance with given
+ * configuration.
+ */
 public interface ClassBehaviorParametersSPI {
     boolean accept(Class<?> clazz);
     
