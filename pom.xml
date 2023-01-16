@@ -267,6 +267,7 @@
     = MODULES
     ======================================================================== -->
     <modules>
+        <module>inugami_logs_obfuscator</module>
         <module>inugami_api</module>
         <module>inugami_api_core</module>
         <module>inugami_commons</module>
@@ -962,10 +963,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
         </dependency>
 
     </dependencies>

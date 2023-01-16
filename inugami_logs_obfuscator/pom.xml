@@ -23,27 +23,16 @@
     <!-- ======================================================================= 
     = PROJECT
     ======================================================================== -->
-    <artifactId>inugami_api</artifactId>
+    <artifactId>inugami_logs_obfuscator</artifactId>
 
     <!-- ======================================================================= 
     = DEPENDENCIES
     ======================================================================== -->
     <dependencies>
-
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-        </dependency>
         
-        <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
