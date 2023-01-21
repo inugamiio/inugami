@@ -21,18 +21,17 @@ import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
 
 import java.util.regex.Pattern;
 
-import static io.inugami.logs.obfuscator.api.Constants.MASK;
-import static io.inugami.logs.obfuscator.api.Constants.PASSWORD;
-import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.buildRegex;
-import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.replaceAll;
+import static io.inugami.logs.obfuscator.api.Constants.*;
+import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.*;
 
-public class BasicPasswordObfuscator implements ObfuscatorSpi {
+public class JsonPasswordObfuscator implements ObfuscatorSpi {
 
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final Pattern REGEX = buildRegex(PASSWORD, "=|:");
+    private static final Pattern REGEX = buildJsonRegex(PASSWORD);
+    public static final String QUOT = "\"";
 
     private final boolean enabled = enabled();
 
@@ -49,13 +48,11 @@ public class BasicPasswordObfuscator implements ObfuscatorSpi {
     // =========================================================================
     @Override
     public boolean accept(final LogEventDto event) {
-        return contains(event.getMessage(), PASSWORD, PASSWORD.toUpperCase(), PASSWORD.toLowerCase());
+         return contains(event.getMessage(), PASSWORD, PASSWORD.toUpperCase(), PASSWORD.toLowerCase());
     }
 
     @Override
     public String obfuscate(final LogEventDto event) {
-        return replaceAll(event.getMessage(), REGEX, (value) -> MASK);
+        return replaceAll(event.getMessage(), REGEX, (value) -> MASK_JSON);
     }
-
-
 }

@@ -47,7 +47,7 @@ public class WarningResponseListener implements ResponseListener {
                 trackWarning(currentWarning);
                 for (Warning warning : currentWarning) {
                     warningCodes.add(warning.getWarningCode());
-                    addWarningInresponse(warning, response);
+                    addWarningInResponse(warning, response);
                 }
 
                 response.setHeader(X_WARNINGS, String.join(HEADER_SEPARATOR, warningCodes));
@@ -65,7 +65,7 @@ public class WarningResponseListener implements ResponseListener {
         }
     }
 
-    private void addWarningInresponse(final Warning warning, final HttpServletResponse response) {
+    private void addWarningInResponse(final Warning warning, final HttpServletResponse response) {
         if (warning.getWarningCode() != null && warning.getMessage() != null) {
             log.warn("[{}-{}] {} {}", warning.getWarningType(), warning.getWarningCode(), warning.getMessage(),
                      warning.getMessageDetail() == null ? "" : ":" + warning.getMessageDetail());

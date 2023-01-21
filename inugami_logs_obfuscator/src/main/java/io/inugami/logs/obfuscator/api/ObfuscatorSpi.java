@@ -16,10 +16,8 @@
  */
 package io.inugami.logs.obfuscator.api;
 
-import io.inugami.logs.obfuscator.tools.ConfigurationSpiFactory;
+import io.inugami.api.configurtation.ConfigurationSpiFactory;
 import io.inugami.logs.obfuscator.tools.ObfuscatorUtils;
-
-import java.util.regex.Pattern;
 
 /**
  * the <strong>ObfuscatorSpi</strong> interface allows creating logs obfuscator implementation.
@@ -27,6 +25,8 @@ import java.util.regex.Pattern;
  */
 public interface ObfuscatorSpi {
     /**
+     * By default, this method retrieve Obfuscator enabled configuration.
+     * The corresponding configuration key should be <strong>{{full.obfuscator.Name}}.enabled</strong>
      * @return true is obfuscator is enabled
      */
     default boolean enabled() {

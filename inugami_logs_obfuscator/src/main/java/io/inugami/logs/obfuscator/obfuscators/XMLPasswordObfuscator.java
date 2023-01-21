@@ -21,18 +21,16 @@ import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
 
 import java.util.regex.Pattern;
 
-import static io.inugami.logs.obfuscator.api.Constants.MASK;
-import static io.inugami.logs.obfuscator.api.Constants.PASSWORD;
-import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.buildRegex;
-import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.replaceAll;
+import static io.inugami.logs.obfuscator.api.Constants.*;
+import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.*;
 
-public class BasicPasswordObfuscator implements ObfuscatorSpi {
+public class XMLPasswordObfuscator implements ObfuscatorSpi {
 
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final Pattern REGEX = buildRegex(PASSWORD, "=|:");
+    private static final Pattern REGEX = buildXmlRegex(PASSWORD);
 
     private final boolean enabled = enabled();
 
@@ -49,12 +47,28 @@ public class BasicPasswordObfuscator implements ObfuscatorSpi {
     // =========================================================================
     @Override
     public boolean accept(final LogEventDto event) {
-        return contains(event.getMessage(), PASSWORD, PASSWORD.toUpperCase(), PASSWORD.toLowerCase());
+        return contains(event.getMessage(), PASSWORD);
     }
 
     @Override
     public String obfuscate(final LogEventDto event) {
-        return replaceAll(event.getMessage(), REGEX, (value) -> MASK);
+        return replaceAllWithGroup(event.getMessage(), REGEX, (values) -> {
+            String args = "";
+            if(!values.get(2).isEmpty()){
+                args = values.get(2);
+            }
+
+            return new StringBuilder()
+                    .append(OPEN_TAG)
+                    .append(values.get(1))
+                    .append(args)
+                    .append(CLOSE_TAG)
+                    .append(MASK)
+                    .append(OPEN_TAG)
+                    .append(values.get(1))
+                    .append(CLOSE_TAG)
+                    .toString();
+        });
     }
 
 

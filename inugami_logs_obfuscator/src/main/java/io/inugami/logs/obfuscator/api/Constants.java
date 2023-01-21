@@ -23,4 +23,10 @@ import lombok.NoArgsConstructor;
 public class Constants {
     public static final String PASSWORD = "password";
     public static final String MASK     = "xxxxx";
+    public static final String MASK_JSON     = "xxxxx\"";
+
+    public static final String QUOT = "\"";
+    public static final String OPEN_TAG = "<";
+    public static final String CLOSE_TAG = ">";
+
 }

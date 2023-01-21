@@ -19,10 +19,14 @@ package io.inugami.logs.obfuscator.tools;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static io.inugami.logs.obfuscator.api.Constants.MASK;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObfuscatorUtils {
@@ -77,10 +81,24 @@ public class ObfuscatorUtils {
              .append(delimiter)
              .append("]\\s*)");
         regex.append("([^\\s]+)");
-        return Pattern.compile(regex.toString());
+        return Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
     }
 
+    public static Pattern buildJsonRegex(final String field) {
+        final StringBuilder regex = new StringBuilder();
+        regex.append("(?:\"");
+        regex.append(field);
+        regex.append("\")(?:\\s*:\\s*)(?:\")([^\"]+)(?:\")");
+        return Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
+    }
 
+    public static Pattern buildXmlRegex(final String field) {
+        final StringBuilder regex = new StringBuilder();
+        regex.append("(?:[<])(?:(");
+        regex.append(field);
+        regex.append(")([^>]*)[>])([^<]*)([<][^>]+[>])");
+        return Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
+    }
     // =========================================================================
     // REPLACE ALL
     // =========================================================================
@@ -115,4 +133,43 @@ public class ObfuscatorUtils {
         return buffer.toString();
     }
 
+    public static String keepLastChars(final String value, final int nbChars){
+        String result = "";
+        if(value!=null && value.length()> nbChars){
+            result = value.substring(value.length()-(nbChars+1));
+        }
+        return MASK + result;
+    }
+
+    public static String replaceAllWithGroup(final String message,
+                                    final Pattern pattern,
+                                    final Function<List<String>, String> obfuscateFunction) {
+        if (message == null || pattern == null || obfuscateFunction == null) {
+            return message;
+        }
+
+
+        int                 cursor  = 0;
+        final Matcher       matcher = pattern.matcher(message);
+        final StringBuilder buffer  = new StringBuilder();
+        while (matcher.find(cursor)) {
+            final MatchResult matchResult = matcher.toMatchResult();
+            List<String> groups = new ArrayList<>();
+            for(int i = 0; i< matchResult.groupCount(); i++){
+                groups.add(matchResult.group(i));
+            }
+            buffer.append(obfuscateFunction.apply(groups));
+
+            cursor = matchResult.end();
+        }
+
+        if (cursor == 0) {
+            return message;
+        }
+        else if (cursor > 0 && cursor < message.length() - 1) {
+            buffer.append(message.substring(cursor));
+        }
+
+        return buffer.toString();
+    }
 }

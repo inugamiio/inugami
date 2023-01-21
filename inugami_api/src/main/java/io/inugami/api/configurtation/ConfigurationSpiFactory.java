@@ -14,17 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.logs.obfuscator.api;
+package io.inugami.api.configurtation;
 
-/**
- * NamedSpi
- *
- * @author patrickguillerm
- * @since 15 avr. 2018
- */
-public interface NamedSpi {
-    default String getName() {
-        final String name = this.getClass().getSimpleName();
-        return name.substring(0, 1).toLowerCase() + name.substring(1);
-    }
+import io.inugami.api.spi.SpiLoader;
+
+
+public class ConfigurationSpiFactory{
+    public static final ConfigurationSpi INSTANCE = SpiLoader.INSTANCE.loadSpiServiceByPriority(ConfigurationSpi.class,
+                                                                                                new DefaultConfigurationSpi());
 }

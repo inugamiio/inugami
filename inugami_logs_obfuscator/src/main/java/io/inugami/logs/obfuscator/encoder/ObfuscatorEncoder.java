@@ -18,9 +18,9 @@ package io.inugami.logs.obfuscator.encoder;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.pattern.PatternLayoutEncoderBase;
+import io.inugami.api.spi.SpiLoader;
 import io.inugami.logs.obfuscator.api.LogEventDto;
 import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
-import io.inugami.logs.obfuscator.tools.SpiLoader;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;

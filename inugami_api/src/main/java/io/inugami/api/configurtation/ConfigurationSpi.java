@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.logs.obfuscator.api;
+package io.inugami.api.configurtation;
 
 /**
  * The <strong>ConfigurationSpi</strong> allows to retrieve global configuration.
- * Your implementation should be listed in file <strong>/MTA-INF/services/io.inugami.logs.obfuscator.api.ConfigurationSpi</strong>
+ * Your implementation should be listed in file <strong>/MTA-INF/services/io.inugami.api.configurtation.ConfigurationSpi</strong>
  */
 public interface ConfigurationSpi {
 
