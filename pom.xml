@@ -198,7 +198,7 @@
         <org.jboss.resteasy.version>4.0.0.Beta1</org.jboss.resteasy.version>
         <org.jboss.async-http-servlet.version>3.1.0.Beta2</org.jboss.async-http-servlet.version>
         <org.picketlink.version>2.7.1.Final</org.picketlink.version>
-        <com.jackson-annotations.version>2.13.2</com.jackson-annotations.version>
+        <com.jackson-annotations.version>2.13.4.1</com.jackson-annotations.version>
 
 
         <org.hibernate.ogm.version>5.1.0.Final</org.hibernate.ogm.version>
