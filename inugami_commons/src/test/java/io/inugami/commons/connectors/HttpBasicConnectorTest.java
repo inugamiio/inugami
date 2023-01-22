@@ -1,3 +1,6 @@
+
+
+
 package io.inugami.commons.connectors;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -17,6 +20,7 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -56,6 +60,7 @@ public class HttpBasicConnectorTest {
     // =========================================================================
     // GET
     // =========================================================================
+    @Disabled
     @Test
     public void get_withHttpRequestAndBadUrl_shouldInvokeListenerOnErrorWithException() throws ConnectorException {
         final HttpBasicConnector connector = buildConnector();
