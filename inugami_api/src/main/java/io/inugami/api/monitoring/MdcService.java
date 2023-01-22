@@ -20,8 +20,6 @@ public class MdcService {
     private static final String X_B_3_TRACE_ID = "X-B3-TraceId";
 
 
-
-
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
@@ -281,6 +279,10 @@ public class MdcService {
                MDCKeys.partnerSubService,
                MDCKeys.partnerUrl);
         return this;
+    }
+
+    public void clear() {
+        MDC.clear();
     }
 
 
@@ -860,14 +862,17 @@ public class MdcService {
         setMdc(MDCKeys.appClass, value);
         return this;
     }
+
     public MdcService appClassShortName(final String value) {
         setMdc(MDCKeys.appClassShortName, value);
         return this;
     }
+
     public MdcService appMethod(final String value) {
         setMdc(MDCKeys.appMethod, value);
         return this;
     }
+
     public MdcService warning(final String warningCode) {
         setMdc(MDCKeys.warning, warningCode);
         return this;

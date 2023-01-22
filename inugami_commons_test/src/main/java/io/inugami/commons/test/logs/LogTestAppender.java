@@ -2,7 +2,11 @@ package io.inugami.commons.test.logs;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.OutputStreamAppender;
+import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import ch.qos.logback.core.encoder.Encoder;
+import ch.qos.logback.core.spi.FilterReply;
+import ch.qos.logback.core.status.ErrorStatus;
+import ch.qos.logback.core.status.WarnStatus;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -13,6 +17,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class LogTestAppender extends OutputStreamAppender<ILoggingEvent> {
 
     public static final Map<Integer, LogListener> LISTENERS = new ConcurrentHashMap<>();
+
+    @Override
+    public void start() {
+    }
+
 
     public static synchronized void register(final LogListener listener) {
         if (listener != null) {
@@ -26,6 +35,10 @@ public class LogTestAppender extends OutputStreamAppender<ILoggingEvent> {
         }
     }
 
+    @Override
+    public void doAppend(ILoggingEvent eventObject) {
+        append(eventObject);
+    }
 
     @Override
     protected void append(final ILoggingEvent iLoggingEvent) {
@@ -44,7 +57,8 @@ public class LogTestAppender extends OutputStreamAppender<ILoggingEvent> {
         final Encoder<ILoggingEvent> currentEncoder = getEncoder();
         if (currentEncoder == null) {
             message = event.getFormattedMessage();
-        } else {
+        }
+        else {
             final byte[] rawMessage = currentEncoder.encode(event);
             message = new String(rawMessage, StandardCharsets.UTF_8);
         }
