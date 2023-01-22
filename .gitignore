@@ -43,3 +43,4 @@ dist-ts
 dependency-reduced-pom.xml
 .vscode/
 *.factorypath
+pom.xml.versionsBackup
