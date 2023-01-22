@@ -17,7 +17,8 @@
 package io.inugami.api.tools;
 
 /**
- * NamedComponent
+ * Used for SPI implementations or Inugami plugin, the <strong>NamedComponent</strong> allows to retrieve the
+ * component name.
  * 
  * @author patrick_guillerm
  * @since 21 déc. 2017

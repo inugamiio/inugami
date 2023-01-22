@@ -19,7 +19,7 @@ package io.inugami.api.functionnals;
 import java.util.function.Supplier;
 
 /**
- * ApplyIfNull
+ * Same as <strong>ApplyIfNotNull</strong> but it will invoke the supplier only if the data is null.
  * 
  * @author patrickguillerm
  * @since Jan 14, 2019

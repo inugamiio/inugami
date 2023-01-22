@@ -56,12 +56,24 @@ public interface ErrorCode {
     }
 
 
+    default boolean isRollbackRequire() {
+        return getCurrentErrorCode() == null ? false : getCurrentErrorCode().isRollbackRequire();
+    }
+
+    default boolean isRetryable() {
+        return getCurrentErrorCode() == null ? false : getCurrentErrorCode().isRetryable();
+    }
+
     default BiConsumer<String, Exception> getErrorHandler() {
         return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getErrorHandler();
     }
 
     default ErrorCode addDetail(final String detail, Object... values) {
         return toBuilder().addMessageDetail(detail, values).build();
+    }
+    
+    default String getCategory() {
+        return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getCategory();
     }
 
 

@@ -17,8 +17,9 @@
 package io.inugami.api.providers.concurrent;
 
 /**
- * OnStart
- * 
+ * The <strong>OnStart</strong> is very generic functional interface to invoke listeners when some tasks starting.
+ * @see io.inugami.api.providers.concurrent.OnDoneFunction
+ * @see io.inugami.api.providers.concurrent.OnErrorFunction
  * @author pguillerm
  * @since 26 sept. 2017
  */

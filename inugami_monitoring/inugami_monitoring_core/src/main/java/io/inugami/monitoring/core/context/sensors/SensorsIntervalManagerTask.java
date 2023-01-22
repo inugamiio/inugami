@@ -120,7 +120,7 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
         
         @Override
         public void run() {
-            MdcService.initialize();
+            MdcService.getInstance().initialize();
             final int nbThreads = tasks.size() < maxTheads ? tasks.size() : maxTheads;
             final RunAndCloseService<List<GenericMonitoringModel>> sensorThreads = new RunAndCloseService<>(nameSensor,
                                                                                                             timeout,

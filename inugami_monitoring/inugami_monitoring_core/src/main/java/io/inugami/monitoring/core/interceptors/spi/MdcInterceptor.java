@@ -36,7 +36,7 @@ public class MdcInterceptor implements MonitoringFilterInterceptor {
     
     @Override
     public List<GenericMonitoringModel> onBegin(final ResquestData request) {
-        MdcService.initialize();
+        MdcService.getInstance().initialize();
         return null;
     }
     

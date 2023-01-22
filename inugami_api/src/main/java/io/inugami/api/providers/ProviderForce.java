@@ -20,7 +20,8 @@ import io.inugami.api.models.events.SimpleEvent;
 import io.inugami.api.providers.task.ProviderFutureResult;
 
 /**
- * Provider
+ * The <strong>ProviderForce</strong> is an interface marker to identify all providers
+ * how allow to force retrieve information.
  * 
  * @author patrick_guillerm
  * @since 3 janv. 2017

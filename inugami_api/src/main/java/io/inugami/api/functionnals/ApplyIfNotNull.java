@@ -19,7 +19,7 @@ package io.inugami.api.functionnals;
 import java.util.function.Consumer;
 
 /**
- * ApplyIfNotNull
+ * Most facet than interface, The <strong>ApplyIfNotNull</strong> interface allow to prevent NullPopinterException.
  * 
  * @author patrick_guillerm
  * @since 15 janv. 2018

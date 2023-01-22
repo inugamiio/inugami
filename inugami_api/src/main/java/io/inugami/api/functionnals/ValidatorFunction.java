@@ -17,7 +17,9 @@
 package io.inugami.api.functionnals;
 
 /**
- * ValidatorFunction
+ * Basically, the **ValidatorFunction** is designed to create a validation strategy.
+ * Your implementation should have a list of <strong>ValidatorFunction</strong> and execute
+ * all of them. If one of them throw an exception, you know that your input is not valid.
  * 
  * @author patrick_guillerm
  * @since 15 déc. 2017

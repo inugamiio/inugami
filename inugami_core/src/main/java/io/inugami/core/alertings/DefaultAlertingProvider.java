@@ -347,7 +347,7 @@ public class DefaultAlertingProvider implements AlertingProvider {
         }
         
         final Callable<String> task = () -> {
-            MdcService.initialize();
+            MdcService.getInstance().initialize();
             String result = null;
             try {
                 JsonObject jsonObj = null;

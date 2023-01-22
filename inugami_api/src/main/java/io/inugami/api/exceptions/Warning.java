@@ -38,6 +38,11 @@ public interface Warning {
     default Warning addDetail(final String detail, Object... values) {
         return toBuilder().addMessageDetail(detail, values).build();
     }
+
+    default String getCategory() {
+        return getCurrentWaring() == null ? null : getCurrentWaring().getCategory();
+    }
+
     default DefaultWarning.DefaultWarningBuilder toBuilder() {
         DefaultWarning.DefaultWarningBuilder  builder = null;
         if ( getCurrentWaring() == null) {

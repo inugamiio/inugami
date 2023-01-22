@@ -19,7 +19,8 @@ package io.inugami.api.providers;
 import io.inugami.api.models.data.basic.JsonObject;
 
 /**
- * ProviderWriter
+ * The <strong>ProviderWriter</strong> is designed to create writer providers.
+ * These will be able to write a <strong>JsonObject</strong> to datasource.
  * 
  * @author patrick_guillerm
  * @since 28 mai 2018

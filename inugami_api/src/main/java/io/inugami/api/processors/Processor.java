@@ -22,7 +22,11 @@ import io.inugami.api.providers.task.ProviderFutureResult;
 import io.inugami.api.tools.NamedComponent;
 
 /**
- * PostProcessor
+ * In Inugami, when a provider retrieve the data, it can invoke a Processor to manipulate
+ * and transform the data.
+ * For example, if we have a SQL provider how retrieve information from a table,
+ * the data should not be formatted directly as time serie data.
+ * In this case the Processor will transform your entity to another format.
  * 
  * @author patrick_guillerm
  * @since 6 oct. 2016

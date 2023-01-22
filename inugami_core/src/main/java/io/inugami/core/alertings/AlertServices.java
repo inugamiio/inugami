@@ -87,7 +87,7 @@ public class AlertServices implements Serializable {
     //@formatter:off
     public void manageAlertsSaved(@Observes  final SystemEvent event) {
         //@formatter:on
-        MdcService.initialize();
+        MdcService.getInstance().initialize();
         try {
             processManageAlertsSaved();
         }

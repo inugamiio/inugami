@@ -33,13 +33,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import io.inugami.api.exceptions.CurrentWarningContext;
-import io.inugami.api.exceptions.Warning;
-import io.inugami.api.exceptions.WarningContext;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.models.tools.Chrono;
-import io.inugami.api.monitoring.RequestContext;
-import io.inugami.api.monitoring.RequestInformation;
+import io.inugami.api.monitoring.*;
 import io.inugami.api.monitoring.data.ResponseData;
 import io.inugami.api.monitoring.data.ResquestData;
 import io.inugami.api.monitoring.data.ResquestDataBuilder;
@@ -72,6 +68,9 @@ public class FilterInterceptor implements Filter {
     // =========================================================================
     //@formatter:off
     private final static SpiLoader SPI_LOADER = new SpiLoader();
+
+    private final static List<JavaRestMethodResolver> JAVA_REST_METHOD_RESOLVERS      =   SPI_LOADER.loadSpiServicesByPriority(JavaRestMethodResolver.class);
+    private final static List<JavaRestMethodTracker> JAVA_REST_METHOD_TRACKERS      =   SPI_LOADER.loadSpiServicesByPriority(JavaRestMethodTracker.class);
     private final static List<Interceptable>               INTERCEPTABLE_RESOLVER     = SPI_LOADER.loadSpiServicesByPriority(Interceptable.class);
     private final static List<ExceptionResolver>           EXCEPTION_RESOLVER         = SPI_LOADER.loadSpiServicesByPriority(ExceptionResolver.class,new FilterInterceptorErrorResolver());
     private final static Map<String, Boolean>              INTERCEPTABLE_URI_RESOLVED = new ConcurrentHashMap<>();
@@ -130,7 +129,9 @@ public class FilterInterceptor implements Filter {
         final Map<String, String> headers = RequestInformationInitializer.buildHeadersMap(httpRequest);
         final RequestInformation requestInfo = RequestInformationInitializer.buildRequestInformation(
                 httpRequest, headers);
-        addTrackingInformation(response, requestInfo);
+
+        final JavaRestMethodDTO javaRestMethod = resolveJavaRestMethod(request);
+        addTrackingInformation(response, requestInfo,javaRestMethod);
 
         onBegin(httpRequest, headers, content);
 
@@ -152,8 +153,26 @@ public class FilterInterceptor implements Filter {
         }
     }
 
+    private JavaRestMethodDTO resolveJavaRestMethod(final ServletRequest request) {
+        JavaRestMethodDTO result = null;
+        HttpServletRequest httpRequest = (HttpServletRequest)request;
+        for (JavaRestMethodResolver resolver: JAVA_REST_METHOD_RESOLVERS){
+            try{
+                result = resolver.resolve(httpRequest);
+                if(result != null){
+                    break;
+                }
+            }catch (Throwable e){
+                log.error(e.getMessage(),e );
+            }
+        }
+        return result;
+    }
 
-    private void addTrackingInformation(final HttpServletResponse response, final RequestInformation requestInfo) {
+
+    private void addTrackingInformation(final HttpServletResponse response,
+                                        final RequestInformation requestInfo,
+                                        final JavaRestMethodDTO javaRestMethod) {
         final Headers headers = MonitoringBootstrap.CONTEXT.getConfig().getHeaders();
 
         applyIfNotNull(requestInfo.getDeviceIdentifier(),
@@ -163,6 +182,13 @@ public class FilterInterceptor implements Filter {
                        value -> response.setHeader(headers.getConversationId(), value));
         applyIfNotNull(requestInfo.getRequestId(), value -> response.setHeader(headers.getRequestId(), value));
 
+        if(javaRestMethod !=null){
+            for(JavaRestMethodTracker tracker : JAVA_REST_METHOD_TRACKERS){
+                if(tracker.accept(javaRestMethod)) {
+                    tracker.track(javaRestMethod);
+                }
+            }
+        }
     }
 
     private ServletRequest buildRequestProxy(final ServletRequest request, final byte[] content) {

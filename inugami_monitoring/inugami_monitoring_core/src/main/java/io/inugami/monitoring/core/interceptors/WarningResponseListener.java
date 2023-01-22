@@ -19,6 +19,8 @@ package io.inugami.monitoring.core.interceptors;
 import io.inugami.api.exceptions.CurrentWarningContext;
 import io.inugami.api.exceptions.Warning;
 import io.inugami.api.exceptions.WarningContext;
+import io.inugami.api.exceptions.WarningTracker;
+import io.inugami.api.spi.SpiLoader;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +30,7 @@ import java.util.Set;
 
 @Slf4j
 public class WarningResponseListener implements ResponseListener {
-
+    private static final List<WarningTracker> WARNING_TRACKERS = SpiLoader.INSTANCE.loadSpiServicesByPriority(WarningTracker.class);
     public static final String X_WARNINGS = "x-warnings";
     public static final String HEADER_SEPARATOR = ",";
 
@@ -42,16 +44,28 @@ public class WarningResponseListener implements ResponseListener {
             final List<Warning> currentWarning = warnings.getWarnings();
             final Set<String>   warningCodes   = new LinkedHashSet<>();
             if (currentWarning != null) {
+                trackWarning(currentWarning);
                 for (Warning warning : currentWarning) {
                     warningCodes.add(warning.getWarningCode());
-                    addWarningInresponse(warning, response);
+                    addWarningInResponse(warning, response);
                 }
 
                 response.setHeader(X_WARNINGS, String.join(HEADER_SEPARATOR, warningCodes));
             }
         }
     }
-    private void addWarningInresponse(final Warning warning, final HttpServletResponse response) {
+
+    private void trackWarning(final List<Warning> warnings) {
+        for(WarningTracker  warningTracker :WARNING_TRACKERS ){
+            try{
+                warningTracker.track(warnings);
+            }catch (Throwable e){
+                log.error(e.getMessage(),e);
+            }
+        }
+    }
+
+    private void addWarningInResponse(final Warning warning, final HttpServletResponse response) {
         if (warning.getWarningCode() != null && warning.getMessage() != null) {
             log.warn("[{}-{}] {} {}", warning.getWarningType(), warning.getWarningCode(), warning.getMessage(),
                      warning.getMessageDetail() == null ? "" : ":" + warning.getMessageDetail());

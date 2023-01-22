@@ -17,7 +17,9 @@
 package io.inugami.api.providers.concurrent;
 
 /**
- * LifecycleBootstrap
+ * Some components required to have an initialization and shutdown process.
+ * To desgin this approach in Inugami we have the <strong>LifecycleBootstrap</strong>.
+ * Commonly used on Inugai main thread manager and SSE context.
  * 
  * @author patrick_guillerm
  * @since 26 sept. 2017

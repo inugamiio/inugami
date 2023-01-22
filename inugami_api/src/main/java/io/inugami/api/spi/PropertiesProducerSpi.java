@@ -19,6 +19,14 @@ package io.inugami.api.spi;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * In Inugami, the root configuration is defined in XML files. One XML file per plugin with another XML
+ * to define all events. It's possible to define properties in the plugin XML file. However, if your plugin
+ * required to generate programmatically some properties, use the <strong>PropertiesProducerSpi</strong>.
+ * It's a SPI interface, so it's required to create the file
+ * <strong>/META-INF/services/io.inugami.api.spi.PropertiesProducerSpi</strong>
+ * with all implementations.
+ */
 public interface PropertiesProducerSpi {
     Map<String, String> produce();
     

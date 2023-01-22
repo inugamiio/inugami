@@ -19,7 +19,7 @@ package io.inugami.api.tools;
 import java.util.regex.Pattern;
 
 /**
- * StringDataCleaner
+ * Commonly used in Inugami to obfuscate data.
  * 
  * @author patrick_guillerm
  * @since 3 mai 2018

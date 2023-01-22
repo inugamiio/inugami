@@ -17,6 +17,7 @@
 package io.inugami.monitoring.springboot.filter;
 
 import io.inugami.monitoring.core.interceptors.FilterInterceptor;
+import io.inugami.monitoring.springboot.request.SpringRestMethodResolver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -37,6 +38,8 @@ public class IoLogFilter extends GenericFilterBean {
     private boolean enabled;
 
     private final FilterInterceptor filter = new FilterInterceptor();
+
+
 
     // =========================================================================
     // API

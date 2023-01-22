@@ -21,7 +21,15 @@ import io.inugami.api.mapping.JsonUnmarshalling;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * In Inugami, the <strong>ConfigHandler</strong> is the root principle for configuration management.
+ * All configuration in Inugami are sent to components with this object.
+ * The configuration in Inugami are not static, values or functions can be injected or invoked
+ * using specific tags. To inject properties, use mustache template (<strong>{{someValue}}</strong>).
+ * For functions, it's the same approach than **EL**  expression (<strong>#{myFunction(param1, param2)}</strong>)
+ * @param <K> the key type
+ * @param <V> the value type
+ */
 public interface ConfigHandler<K, V> extends Map<K, V> {
     
 

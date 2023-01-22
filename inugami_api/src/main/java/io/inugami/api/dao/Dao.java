@@ -1,17 +1,17 @@
 /* --------------------------------------------------------------------
- *  Inugami  
+ *  Inugami
  * --------------------------------------------------------------------
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.api.dao;
@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * Dao
- * 
+ *
  * @author patrick_guillerm
  * @since 9 janv. 2018
  */
@@ -38,7 +38,7 @@ public interface Dao extends Serializable {
      * @param uid entity uid
      * @return the entity
      * @throws DaoEntityNotFoundException if entity isn't found in datasource
-     * @throws DaoException if exception is occur.
+     * @throws DaoException if exception is occurs.
      */
      <E extends Identifiable<PK>, PK extends Serializable> 
      E getByUid(final Class<? extends E> type,final PK uid) throws DaoEntityNotFoundException, DaoException;
@@ -48,8 +48,8 @@ public interface Dao extends Serializable {
       * @param type Entities type
       * @param uids  entities uids
       * @return empty or list of entities
-      * @throws DaoEntityNotFoundException
-      * @throws DaoException
+      * @throws DaoEntityNotFoundException if entity isn't found in datasource
+      * @throws DaoException if exception is occurs.
       */
      <E extends Identifiable<PK>, PK extends Serializable> 
      List<E> getByUids(final Class<? extends E> type,final List<PK> uids) throws DaoEntityNotFoundException, DaoException;

@@ -142,7 +142,7 @@ public final class Context implements ApplicationContext,
     // CONSTRUCTORS
     // =========================================================================
     protected Context(final EngineListener listener, final boolean disableCron) {
-        MdcService.initialize();
+        MdcService.getInstance().initialize();
         cache = new CacheService();
         this.disableCron = disableCron;
         spiLoader = new SpiLoader();

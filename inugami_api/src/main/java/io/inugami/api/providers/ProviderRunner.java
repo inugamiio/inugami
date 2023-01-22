@@ -22,7 +22,9 @@ import io.inugami.api.providers.task.ProviderFutureResult;
 import io.inugami.api.providers.task.ProviderTask;
 
 /**
- * The Interface ProviderRunner.
+ *
+ * The <strong>ProviderRunner</strong> allow to abstract the concrete implementation of provider runner.
+ * The main implementation is <strong>io.inugami.core.providers.MultiThreadedProviderRunner</strong>
  */
 public interface ProviderRunner {
     Future<ProviderFutureResult> run(final String name, ProviderTask tasks);

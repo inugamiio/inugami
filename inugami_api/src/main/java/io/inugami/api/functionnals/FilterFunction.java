@@ -17,7 +17,7 @@
 package io.inugami.api.functionnals;
 
 /**
- * FilterFunction
+ * The <strong>FilterFunction</strong> is design to have a semantic term to designate a filter.
  * 
  * @author patrick_guillerm
  * @since 15 déc. 2017

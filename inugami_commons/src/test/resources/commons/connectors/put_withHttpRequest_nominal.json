@@ -1,0 +1,23 @@
+{
+  "bodyData" : "WyAiam9lIiwgImZvb2JhciIgXQ==",
+  "charset" : "UTF-8",
+  "contentType" : "application/json",
+  "data" : "InRlc3RpbmctbGlicmFyeSI6ICJXaXJlTW9jayI=",
+  "delais" : 258,
+  "encoding" : "UTF-8",
+  "hashCode" : -1443214512,
+  "hashHumanReadable" : "[PUT]http://localhost:1234?page=1",
+  "length" : 29,
+  "message" : "OK",
+  "requestHeaders" : {
+    "deviceIdentifier" : "912c8721-f7d5-4bea-84ba-f13381a4fcdb",
+    "correlation_id" : "0d9e9d18-f5cf-44ff-8537-276506d884b0",
+    "request_id" : "59cf058fc08b",
+    "X-B3-TraceId" : "bff3187a6760"
+  },
+  "responseAt" : 0,
+  "responseHeaders" : { },
+  "statusCode" : 200,
+  "url" : "http://localhost:1234?page=1",
+  "verb" : "PUT"
+}

@@ -16,6 +16,10 @@
  */
 package io.inugami.api.exceptions;
 
+/**
+ * The <strong>ExceptionWithErrorCode</strong> is designed to be a type maker. With this interface we are able to
+ * identify an exception with an error code.
+ */
 public interface ExceptionWithErrorCode {
     ErrorCode getErrorCode();
 }

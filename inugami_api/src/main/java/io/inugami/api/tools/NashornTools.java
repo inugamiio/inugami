@@ -16,9 +16,13 @@
  */
 package io.inugami.api.tools;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.PrimitiveIterator;
 
 import javax.script.Bindings;
 
@@ -28,6 +32,8 @@ import javax.script.Bindings;
  * @author patrick_guillerm
  * @since 7 févr. 2018
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Deprecated
 public final class NashornTools {
     
     // =========================================================================
@@ -36,13 +42,7 @@ public final class NashornTools {
     private static final String OBJECT_ARRAY      = "[object Array]";
     
     private static final String NASHORN_UNDEFINED = "jdk.nashorn.internal.runtime.Undefined";
-    
-    // =========================================================================
-    // CONSTRUCTOR
-    // =========================================================================
-    private NashornTools() {
-    }
-    
+
     // =========================================================================
     // METHODS
     // =========================================================================

@@ -40,11 +40,13 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     @EqualsAndHashCode.Include
     private final String errorCode;
 
-    private final String message;
-    private final String messageDetail;
-    private final String errorType;
-
+    private final String  message;
+    private final String  messageDetail;
+    private final String  errorType;
+    private final boolean retryable;
+    private final boolean rollback;
     private final String  payload;
+    private final String  category;
     private final boolean exploitationError;
 
     private final BiConsumer<String, Exception> errorHandler;
@@ -55,6 +57,10 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
                                .errorCode("err-undefine")
                                .errorTypeTechnical()
                                .build();
+    }
+
+    public static DefaultErrorCode.DefaultErrorCodeBuilder buildUndefineErrorCode() {
+        return fromErrorCode(buildUndefineError());
     }
 
     public static DefaultErrorCode.DefaultErrorCodeBuilder fromErrorCode(final ErrorCode errorCode) {
@@ -68,7 +74,10 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
                      .errorType(errorCode.getErrorType())
                      .payload(errorCode.getPayload())
                      .errorHandler(errorCode.getErrorHandler())
-                     .exploitationError(errorCode.isExploitationError());
+                     .exploitationError(errorCode.isExploitationError())
+                     .retryable(errorCode.isRetryable())
+                     .rollback(errorCode.isRollbackRequire())
+                     .category(errorCode.getCategory());
     }
 
     public static DefaultErrorCode.DefaultErrorCodeBuilder newBuilder() {
@@ -96,12 +105,14 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
             this.errorType = "security";
             return this;
         }
+
         public DefaultErrorCodeBuilder exploitationError() {
-            this.exploitationError= true;
+            this.exploitationError = true;
             return this;
         }
+
         public DefaultErrorCodeBuilder exploitationError(boolean value) {
-            this.exploitationError= value;
+            this.exploitationError = value;
             return this;
         }
 
@@ -111,6 +122,18 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
             }
             return this;
         }
+
+        public DefaultErrorCodeBuilder rollbackRequire() {
+            this.rollback = true;
+            return this;
+        }
+
+
+        public DefaultErrorCodeBuilder isRetryable() {
+            this.retryable = true;
+            return this;
+        }
+
     }
 
 

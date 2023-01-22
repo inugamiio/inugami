@@ -49,6 +49,7 @@ public class UnitTestHelper {
     // =========================================================================
     private final static Pattern UID_PATTERN = Pattern.compile("(?:[^_-]+[_-]){0,1}(?<uid>[0-9]+)");
     public static final  String  UTF_8       = "UTF-8";
+    public static final String NULL = "null";
 
 
     // =========================================================================
@@ -182,6 +183,9 @@ public class UnitTestHelper {
     // =========================================================================
     public static String convertToJson(final Object value) {
         String result = null;
+        if(value==null){
+            return NULL;
+        }
         try {
             result = JsonMarshaller.getInstance()
                                    .getIndentedObjectMapper()
@@ -301,7 +305,7 @@ public class UnitTestHelper {
     }
 
     public static void assertJson(final Object value, final String jsonRef) {
-        assertText(jsonRef, jsonRef);
+        assertText(jsonRef,convertToJson(value));
     }
 
     public static void assertJson(final String jsonRef, final String json) {
@@ -310,7 +314,7 @@ public class UnitTestHelper {
 
     public static void assertTextRelatif(final String value, final String path) {
         final String refJson = loadJsonReference(path);
-        assertText(value, refJson);
+        assertText(refJson,value);
     }
 
     public static void assertTextRelatif(final Object value, final String path) {
