@@ -7,10 +7,15 @@ import java.util.regex.Pattern;
 
 public class DefaultLineAssertion {
 
+    public static LineAssertion skipLine(final int line){
+        return new Skip(line);
+    }
     @Builder
     @AllArgsConstructor
     public static class Skip implements LineAssertion{
         private final int lineNumber;
+
+
         @Override
         public boolean accept(final int lineNumber,final String value) {
             return lineNumber==this.lineNumber;

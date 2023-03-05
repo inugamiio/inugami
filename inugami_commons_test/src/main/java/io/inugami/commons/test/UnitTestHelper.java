@@ -288,7 +288,7 @@ public class UnitTestHelper {
             final Object mappedObject  = mapperFunction.apply(initialResult);
             try {
                 Asserts.assertNotNull(TestHelpersErrorCodes.MUST_BE_NOT_NULL, mappedObject);
-                assertText(mappedObject, refJson);
+                assertText(mappedObject, refJson,new LineAssertion[]{});
             } catch (final Exception error) {
                 Loggers.DEBUG.error("\nref:\n---------\n{}current:\n---------\n{}\n---------",
                                     refJson,
@@ -298,34 +298,64 @@ public class UnitTestHelper {
         }
     }
 
-    public static void assertJson(final Object value, final String jsonRef) {
-        assertText(jsonRef, convertToJson(value));
+    public static void assertJson(final Object value, final String jsonRef, final  int... skipLines) {
+        assertJson(value,jsonRef,buildSkipLine(skipLines));
+    }
+    public static void assertJson(final Object value, final String jsonRef, final  LineAssertion... lineAssertions) {
+        assertText(jsonRef, convertToJson(value),lineAssertions);
     }
 
-    public static void assertJson(final String jsonRef, final String json) {
-        assertText(jsonRef, json);
+    public static void assertJson(final String jsonRef, final String json, final  int... skipLines) {
+        assertJson(jsonRef,json,buildSkipLine(skipLines));
+    }
+    public static void assertJson(final String jsonRef, final String json, final  LineAssertion... lineAssertions) {
+        assertText(jsonRef, json,lineAssertions);
     }
 
-    public static void assertTextRelatif(final String value, final String path) {
+    @Deprecated
+    public static void assertTextRelatif(final String value, final String path, final  LineAssertion... lineAssertions) {
+        assertTextRelative(value,path,lineAssertions);
+    }
+
+    public static void assertTextRelative(final String value, final String path, final  int... skipLines) {
+        assertTextRelative(value,path,buildSkipLine(skipLines));
+    }
+    public static void assertTextRelative(final String value, final String path, final  LineAssertion... lineAssertions) {
         final String refJson = loadJsonReference(path);
-        assertText(refJson, value);
+        assertText(refJson, value,lineAssertions);
     }
 
-    public static void assertTextRelatif(final Object value, final String path) {
+    @Deprecated
+    public static void assertTextRelatif(final Object value, final String path, final  LineAssertion... lineAssertions) {
+        assertTextRelative(value,path,lineAssertions);
+    }
+
+    public static void assertTextRelative(final Object value, final String path, final  int... skipLines) {
+        assertTextRelative(value,path, buildSkipLine(skipLines));
+    }
+    public static void assertTextRelative(final Object value, final String path, final  LineAssertion... lineAssertions) {
         final String refJson = loadJsonReference(path);
-        assertText(value, refJson);
+        assertText(value, refJson,lineAssertions);
+
     }
 
-    public static void assertText(final Object value, final String jsonRef) {
+    public static void assertText(final Object value, final String jsonRef, final  int... skipLines) {
+        assertText(value,jsonRef, buildSkipLine(skipLines));
+    }
+    public static void assertText(final Object value, final String jsonRef, final  LineAssertion... lineAssertions) {
         if (jsonRef == null) {
             Asserts.assertNull("json must be null", value);
         } else {
             Asserts.assertNotNull("json mustn't be null", value);
             final String json = convertToJson(value);
-            assertText(jsonRef, json);
+            assertText(jsonRef, json,lineAssertions);
         }
 
 
+    }
+
+    public static void assertText(final String jsonRef, final String json, int... skipLines) {
+        assertText(jsonRef,json, buildSkipLine(skipLines));
     }
 
     public static void assertText(final String jsonRef, final String json, LineAssertion... lineAssertions) {
@@ -385,7 +415,15 @@ public class UnitTestHelper {
         }
         return null;
     }
-
+    private static LineAssertion[] buildSkipLine(final int[] skipLines) {
+        List<LineAssertion> result = new ArrayList<>();
+        if(skipLines!=null){
+            for(int line : skipLines){
+                result.add(DefaultLineAssertion.skipLine(line));
+            }
+        }
+        return result.toArray(new LineAssertion[]{});
+    }
     private static File buildRefJsonPath(final File jsonLoaderFile) {
         final String fullPath    = jsonLoaderFile.getAbsolutePath();
         final String usecasePath = fullPath.substring(0, fullPath.length() - ".load.json".length()) + ".json";
