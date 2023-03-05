@@ -27,6 +27,7 @@ import io.inugami.api.processors.ProcessorModel;
 
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import lombok.Getter;
 
 /**
  * GenericEvent
