@@ -3,11 +3,9 @@ package io.inugami.commons.test;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 public class UnitTestHelperTest {
 
@@ -19,7 +17,7 @@ public class UnitTestHelperTest {
         values.put("name", "joe");
 
         UnitTestHelper.assertTextRelative(values, "assertTextRelative_withSkipLine_shouldPass.json", DefaultLineAssertion.skipLine(2));
-        UnitTestHelper.assertTextRelative(values, "assertTextRelative_withSkipLine_shouldPass.json",2);
+        UnitTestHelper.assertTextRelativeSkipLine(values, "assertTextRelative_withSkipLine_shouldPass.json",2);
 
     }
 }

@@ -22,6 +22,7 @@ import io.inugami.api.functionnals.VoidFunctionWithException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -171,7 +172,7 @@ public final class Asserts {
 
     public static void assertNull(final String message,
                                   final Object... values) {
-        if(values==null){
+        if (values == null) {
             return;
         }
         for (final Object item : values) {
@@ -189,7 +190,7 @@ public final class Asserts {
 
     public static void assertNull(final Supplier<String> messageProducer,
                                   final Object... values) {
-        if(values==null){
+        if (values == null) {
             return;
         }
         for (final Object item : values) {
@@ -207,7 +208,7 @@ public final class Asserts {
 
     public static void assertNull(final ErrorCode errorCode,
                                   final Object... values) {
-        if(values==null){
+        if (values == null) {
             return;
         }
         for (final Object item : values) {
@@ -383,9 +384,9 @@ public final class Asserts {
     }
 
     public static void assertNotEmpty(final String message,
-                                final IsEmptyFacet value) {
+                                      final IsEmptyFacet value) {
         if (value == null || value.isEmpty()) {
-            throwException(message == null ? ASSERT_NOT_EMPTY_DEFAULT_MSG :message);
+            throwException(message == null ? ASSERT_NOT_EMPTY_DEFAULT_MSG : message);
         }
     }
 
@@ -395,6 +396,7 @@ public final class Asserts {
             throwException(messageProducer == null ? ASSERT_NOT_EMPTY_DEFAULT_MSG : messageProducer.get());
         }
     }
+
     public static void assertNotEmpty(final ErrorCode errorCode,
                                       final IsEmptyFacet value) {
         if (value == null || value.isEmpty()) {
@@ -532,8 +534,6 @@ public final class Asserts {
             throwException(errorCode);
         }
     }
-
-
 
 
     public static void assertEmpty(final IsEmptyFacet value) {
@@ -1611,6 +1611,92 @@ public final class Asserts {
         AssertHigherOrEquals.assertHigherOrEquals(errorCode, ref, value);
     }
 
+    // -------------------------------------------------------------------------
+    // Assert FILES
+    // -------------------------------------------------------------------------
+    public static File assertExists(final String path) {
+        return AssertFiles.assertExists(path);
+    }
+
+    public static void assertExists(final File file) {
+        AssertFiles.assertExists(file);
+    }
+
+    public static File assertExists(final ErrorCode errorCode, final String path) {
+        return AssertFiles.assertExists(path);
+    }
+
+    public static void assertExists(final ErrorCode errorCode, final File file) {
+        AssertFiles.assertExists(file);
+    }
+
+
+    public static File assertFile(final String path) {
+        return AssertFiles.assertFile(path);
+    }
+
+    public static void assertFile(final File file) {
+        AssertFiles.assertFile(file);
+    }
+
+    public static File assertFile(final ErrorCode errorCode, final String path) {
+        return AssertFiles.assertFile(errorCode, path);
+    }
+
+    public static void assertFile(final ErrorCode errorCode, final File file) {
+        AssertFiles.assertFile(errorCode, file);
+    }
+
+
+    public static File assertDirectory(final String path) {
+        return AssertFiles.assertDirectory(path);
+    }
+
+    public static void assertDirectory(final File file) {
+        AssertFiles.assertDirectory(file);
+    }
+
+    public static File assertDirectory(final ErrorCode errorCode, final String path) {
+        return AssertFiles.assertDirectory(errorCode, path);
+    }
+
+
+    public static void assertDirectory(final ErrorCode errorCode, final File file) {
+        AssertFiles.assertDirectory(errorCode, file);
+    }
+
+
+    public static File assertFileReadable(final String path) {
+        return AssertFiles.assertFileReadable(path);
+    }
+
+    public static void assertFileReadable(final File file) {
+        AssertFiles.assertFileReadable(file);
+    }
+
+    public static void assertFileReadable(final ErrorCode errorCode, final File file) {
+        AssertFiles.assertFileReadable(errorCode, file);
+    }
+
+    public static void assertFileReadable(final ErrorCode errorCode, final String path) {
+        AssertFiles.assertFileReadable(errorCode, path);
+    }
+
+    public static File assertFileWritable(final String path) {
+        return AssertFiles.assertFileWritable(path);
+    }
+
+    public static void assertFileWritable(final File file) {
+        AssertFiles.assertFileWritable(file);
+    }
+
+    public static File assertFileWritable(final ErrorCode errorCode, final String path) {
+        return AssertFiles.assertFileWritable(path);
+    }
+
+    public static void assertFileWritable(final ErrorCode errorCode, final File file) {
+        AssertFiles.assertFileWritable(file);
+    }
 
     // -------------------------------------------------------------------------
     // Assert throws

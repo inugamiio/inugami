@@ -247,6 +247,8 @@
         <com.google.guava.version>27.0.1-jre</com.google.guava.version>
         <org.junit.jupiter>5.7.0-M1</org.junit.jupiter>
         <org.projectlombok.version>1.18.12</org.projectlombok.version>
+        <org.yaml.snakeyaml.version>2.0</org.yaml.snakeyaml.version>
+
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PLUGINS CONFIGURATION
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -271,7 +273,6 @@
         <module>inugami_api_core</module>
         <module>inugami_commons</module>
         <module>inugami_commons_test</module>
-        <module>inugami_commons_integration_test</module>
         <module>inugami_monitoring</module>
         <module>inugami_configuration_tools</module>
         <module>inugami_configuration_test</module>
@@ -855,6 +856,27 @@
                 <version>2.23.0</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.github.tomakehurst</groupId>
+                <artifactId>wiremock-jre8</artifactId>
+                <version>2.35.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-util</artifactId>
+                <version>9.4.49.v20220914</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-io</artifactId>
+                <version>9.4.49.v20220914</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-server</artifactId>
+                <version>9.4.49.v20220914</version>
+            </dependency>
+
             <!--[ Arquillian ]+++++++++++++++++++++++++++++++++++++++++++++++-->
             <dependency>
                 <groupId>org.apache.tomcat.embed</groupId>
@@ -946,6 +968,12 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${org.projectlombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${org.yaml.snakeyaml.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
