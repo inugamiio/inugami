@@ -17,36 +17,21 @@
 package io.inugami.commons.test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inugami.api.exceptions.*;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.models.JsonBuilder;
-import io.inugami.api.tools.ConsoleColors;
 import io.inugami.commons.test.helpers.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.commons.io.FileUtils;
 import org.mockito.invocation.InvocationOnMock;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UnitTestHelper {
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
-
     // =========================================================================
     // LOAD / READ FILE
     // =========================================================================
@@ -137,9 +122,7 @@ public class UnitTestHelper {
     // =========================================================================
     // CONVERT TO JSON
     // =========================================================================
-    public static <T> T loadJsonFromResponse(final byte[] data, final TypeReference<T> refObjectType) {
-        return JsonHelper.loadJsonFromResponse(data, refObjectType);
-    }
+
 
     public static String convertToJson(final Object value) {
         return JsonHelper.convertToJson(value);
@@ -156,6 +139,17 @@ public class UnitTestHelper {
 
     public static <T> T loadJson(final String path, final TypeReference<T> refObjectType) {
         return JsonHelper.loadJson(path, refObjectType);
+    }
+
+
+    @Deprecated
+    public static <T> T loadJsonFromResponse(final byte[] data, final TypeReference<T> refObjectType) {
+        return JsonHelper.convertFromJson(data, refObjectType);
+    }
+
+
+    public static <T> T convertFromJson(final byte[] data, final TypeReference<T> refObjectType) {
+        return JsonHelper.convertFromJson(data, refObjectType);
     }
 
     public static <T> T convertFromJson(final String json, final TypeReference<T> refObjectType) {

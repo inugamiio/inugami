@@ -11,11 +11,21 @@ public class UnitTestHelperLoadYamlTest {
 
 
     @Test
-    public void loadYaml_withPath_shouldPass() {
+    public void loadYaml_nominal_shouldPass() {
         Map<String, Object> result = UnitTestHelper.loadYaml(UnitTestHelper.buildTestFilePath("basic_yaml_config.yaml"));
         UnitTestHelper.assertTextRelative(result, "basic_yaml_config.json");
 
         Config config = UnitTestHelper.loadYaml(UnitTestHelper.buildTestFilePath("basic_yaml_config.yaml"), Config.class);
+        UnitTestHelper.assertTextRelative(result, "basic_yaml_config.json");
+    }
+
+
+    @Test
+    public void loadRelativeYaml_nominal_shouldPass() {
+        Map<String, Object> result = UnitTestHelper.loadRelativeYaml("basic_yaml_config.yaml");
+        UnitTestHelper.assertTextRelative(result, "basic_yaml_config.json");
+
+        Config config = UnitTestHelper.loadRelativeYaml("basic_yaml_config.yaml", Config.class);
         UnitTestHelper.assertTextRelative(result, "basic_yaml_config.json");
     }
 

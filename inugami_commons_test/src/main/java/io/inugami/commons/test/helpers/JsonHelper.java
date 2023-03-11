@@ -62,7 +62,7 @@ public final class JsonHelper {
         }
     }
 
-    public static <T> T loadJsonFromResponse(final byte[] data, final TypeReference<T> refObjectType) {
+    public static <T> T convertFromJson(final byte[] data, final TypeReference<T> refObjectType) {
         T result = null;
         if (data != null && refObjectType != null) {
             try {
