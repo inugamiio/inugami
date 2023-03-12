@@ -2,6 +2,7 @@ package io.inugami.api.exceptions;
 
 import io.inugami.api.functionnals.IsEmptyFacet;
 import io.inugami.api.functionnals.VoidFunctionWithException;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+@Slf4j
 public class AssertsTest {
 
     // =========================================================================
@@ -47,14 +49,14 @@ public class AssertsTest {
     public void assertTrue__shouldThrow() {
         List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertTrue(false),
-                () -> Asserts.assertTrue(MESSAGE,false),
+                () -> Asserts.assertTrue(MESSAGE, false),
                 () -> Asserts.assertTrue(MESSAGE_PRODUCER, false),
                 () -> Asserts.assertTrue(ERROR_CODE, false)
 
         );
         for (int i = 0; i < functions.size(); i++) {
             final int index = i;
-            Asserts.assertThrow("assertFalse__shouldThrow  " + i, () -> functions.get(index).process());
+            Asserts.assertThrow(() -> functions.get(index).process());
         }
     }
 
@@ -73,14 +75,14 @@ public class AssertsTest {
     public void assertFalse__shouldThrow() {
         List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertFalse(true),
-                () -> Asserts.assertFalse(MESSAGE,true),
+                () -> Asserts.assertFalse(MESSAGE, true),
                 () -> Asserts.assertFalse(MESSAGE_PRODUCER, true),
                 () -> Asserts.assertFalse(ERROR_CODE, true)
 
         );
         for (int i = 0; i < functions.size(); i++) {
             final int index = i;
-            Asserts.assertThrow("assertFalse__shouldThrow  " + i, () -> functions.get(index).process());
+            Asserts.assertThrow(() -> functions.get(index).process());
         }
     }
 
@@ -99,16 +101,22 @@ public class AssertsTest {
     public void assertNull__shouldThrow() {
         List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertNull(VALUE),
-                () -> Asserts.assertNull(MESSAGE,VALUE),
+                () -> Asserts.assertNull(MESSAGE, VALUE),
                 () -> Asserts.assertNull(MESSAGE_PRODUCER, VALUE),
                 () -> Asserts.assertNull(ERROR_CODE, VALUE)
 
         );
         for (int i = 0; i < functions.size(); i++) {
             final int index = i;
-            Asserts.assertThrow("assertNotNull__shouldThrow  " + i, () -> functions.get(index).process());
+            try{
+                Asserts.assertThrow(() -> functions.get(index).process());
+            }catch (Throwable e ){
+                log.error("[{}] {}", i, e.getMessage(),e);
+                throw e;
+            }
         }
     }
+
     // =========================================================================
     // assertNotNull
     // =========================================================================
@@ -131,7 +139,7 @@ public class AssertsTest {
         );
         for (int i = 0; i < functions.size(); i++) {
             final int index = i;
-            Asserts.assertThrow("assertNotNull__shouldThrow  " + i, () -> functions.get(index).process());
+            Asserts.assertThrow(() -> functions.get(index).process());
         }
     }
 
@@ -193,7 +201,7 @@ public class AssertsTest {
         );
         for (int i = 0; i < functions.size(); i++) {
             final int index = i;
-            Asserts.assertThrow("assertNotEmpty__shouldThrow  " + i, () -> functions.get(index).process());
+            Asserts.assertThrow(() -> functions.get(index).process());
         }
     }
 
@@ -252,7 +260,7 @@ public class AssertsTest {
         );
         for (int i = 0; i < functions.size(); i++) {
             final int index = i;
-            Asserts.assertThrow("assertEmpty__shouldThrow  " + i, () -> functions.get(index).process());
+            Asserts.assertThrow(() -> functions.get(index).process());
         }
     }
 
@@ -316,7 +324,7 @@ public class AssertsTest {
         );
         for (int i = 0; i < functions.size(); i++) {
             final int index = i;
-            Asserts.assertThrow("assertEquals__shouldThrow  " + i, () -> functions.get(index).process());
+            Asserts.assertThrow(() -> functions.get(index).process());
         }
     }
 
@@ -378,7 +386,7 @@ public class AssertsTest {
         );
         for (int i = 0; i < functions.size(); i++) {
             final int index = i;
-            Asserts.assertThrow("assertNotEquals__shouldThrow  " + i, () -> functions.get(index).process());
+            Asserts.assertThrow(() -> functions.get(index).process());
         }
     }
 
@@ -505,7 +513,12 @@ public class AssertsTest {
         );
         for (int i = 0; i < functions.size(); i++) {
             final int index = i;
-            Asserts.assertThrow("assertLower__shouldThrow  " + i, () -> functions.get(index).process());
+            try{
+                Asserts.assertThrow(() -> functions.get(index).process());
+            }catch (Throwable e ){
+                log.error("[{}] {}", i, e.getMessage(),e);
+                throw e;
+            }
         }
     }
 
@@ -632,7 +645,7 @@ public class AssertsTest {
         );
         for (int i = 0; i < functions.size(); i++) {
             final int index = i;
-            Asserts.assertThrow("assertLowerOrEquals_shouldThrow  " + i, () -> functions.get(index).process());
+            Asserts.assertThrow(() -> functions.get(index).process());
         }
     }
 
@@ -685,6 +698,8 @@ public class AssertsTest {
     @Test
     public void assertHigher_shouldThrow() {
         List<VoidFunctionWithException> functions = List.of(
+                () -> Asserts.assertHigher(Integer.valueOf(10), Integer.valueOf(10)),
+
                 () -> Asserts.assertHigher(10, 9),
                 () -> Asserts.assertHigher(10, 10),
                 () -> Asserts.assertHigher(MESSAGE, 10, 9),
@@ -760,7 +775,12 @@ public class AssertsTest {
         );
         for (int i = 0; i < functions.size(); i++) {
             final int index = i;
-            Asserts.assertThrow("assertHigher_shouldThrow  " + i, () -> functions.get(index).process());
+            try{
+                Asserts.assertThrow(() -> functions.get(index).process());
+            }catch (Throwable e ){
+                log.error("[{}] {}", i, e.getMessage(),e);
+                throw e;
+            }
         }
     }
 
@@ -888,7 +908,7 @@ public class AssertsTest {
         );
         for (int i = 0; i < functions.size(); i++) {
             final int index = i;
-            Asserts.assertThrow("assertHigherOrEquals_shouldThrow  " + i, () -> functions.get(index).process());
+            Asserts.assertThrow(() -> functions.get(index).process());
         }
     }
 

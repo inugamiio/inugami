@@ -72,8 +72,7 @@ public final class JsonMarshaller  {
         public ObjectMapper buildObjectMapper() {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.findAndRegisterModules();
-            objectMapper.enable(SerializationFeature.INDENT_OUTPUT)
-                        .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+            objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
 
             objectMapper.registerModule(new ParameterNamesModule())
                         .registerModule(new Jdk8Module())

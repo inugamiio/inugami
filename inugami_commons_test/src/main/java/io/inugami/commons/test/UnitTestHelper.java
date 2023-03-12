@@ -153,7 +153,7 @@ public class UnitTestHelper {
     }
 
     public static <T> T convertFromJson(final String json, final TypeReference<T> refObjectType) {
-        return JsonHelper.loadJson(json, refObjectType);
+        return JsonHelper.convertFromJson(json, refObjectType);
     }
 
     // =========================================================================

@@ -1,0 +1,11 @@
+{
+  "facetes": {
+    "name": "YamlTest",
+    "value": "some value"
+  },
+  "name": "Simple test",
+  "tags": [
+    "test",
+    "unit"
+  ]
+}

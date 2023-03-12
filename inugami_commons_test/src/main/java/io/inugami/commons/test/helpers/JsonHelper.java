@@ -49,14 +49,15 @@ public final class JsonHelper {
     }
 
     public static <T> T loadJson(final String path, final TypeReference<T> refObjectType) {
-        Asserts.notNull(path, "can't load Json Object from null path");
         final String json = FileReaderHelper.loadRelativeFile(path);
         return convertFromJson(json, refObjectType);
     }
 
     public static <T> T convertFromJson(final String json, final TypeReference<T> refObjectType) {
         try {
-            return json == null ? null : new ObjectMapper().readValue(json, refObjectType);
+            return json == null ? null : JsonMarshaller.getInstance()
+                                                       .getDefaultObjectMapper()
+                                                       .readValue(json, refObjectType);
         } catch (final IOException e) {
             throw new UncheckedException(DefaultErrorCode.buildUndefineError(), e, e.getMessage());
         }

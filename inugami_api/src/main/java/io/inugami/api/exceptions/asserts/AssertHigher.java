@@ -262,16 +262,16 @@ public final class AssertHigher {
 
     // ------------------------------------------------------------------------
     private static boolean checkLower(final Integer ref, final Integer value) {
-        return ref==null?value!=null: ref.compareTo(value)>0;
+        return ref==null?value!=null: ref.compareTo(value)>=0;
     }
 
     private static boolean checkLower(final Long ref, final Long value) {
-        return ref==null?value!=null:ref.compareTo(value)>0;
+        return ref==null?value!=null:ref.compareTo(value)>=0;
     }
     private static boolean checkLower(final Double ref, final Double value) {
-        return ref==null?value!=null: ref.compareTo(value)>0;
+        return ref==null?value!=null: ref.compareTo(value)>=0;
     }
     private static boolean checkLower(final BigDecimal ref, final BigDecimal value) {
-        return ref==null?value!=null: ref.compareTo(value)>0;
+        return ref==null?value!=null: ref.compareTo(value)>=0;
     }
 }

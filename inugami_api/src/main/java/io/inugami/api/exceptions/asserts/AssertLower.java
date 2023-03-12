@@ -28,7 +28,7 @@ public final class AssertLower {
     public static void assertLower(final String message,
                                    final int ref,
                                    final int value) {
-        if (ref < value) {
+        if (ref <= value) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
             AssertCommons.throwException(message);
         }

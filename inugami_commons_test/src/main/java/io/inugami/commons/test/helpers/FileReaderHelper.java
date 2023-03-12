@@ -14,18 +14,16 @@ import java.nio.charset.Charset;
 public final class FileReaderHelper {
 
 
+    private static final String FILE_NULL_OR_EMPTY = "can't read file from  \"{0}\" relative path!";
 
     public static String loadRelativeFile(final String relativePath) {
         return loadRelativeFile(relativePath, CommonsHelper.UTF_8);
     }
 
     public static String loadRelativeFile(final String relativePath, Charset charset) {
-        if (relativePath == null) {
-            throw new RuntimeException("can't read file from null relative path!");
-        }
-
+        Asserts.assertNotEmpty(MessagesFormatter.format(FILE_NULL_OR_EMPTY, relativePath == null ? "null" : relativePath), relativePath);
         final File path = PathHelper.buildTestFilePath(relativePath.split("/"));
-        return path.exists() ? readFile(path, charset) : null;
+        return readFile(path, charset);
     }
 
     public static String readFile(final File file) {
@@ -34,6 +32,8 @@ public final class FileReaderHelper {
 
     public static String readFile(final File file, Charset charset) {
         String result = null;
+        Asserts.assertFileReadable(file);
+
         try {
             result = FileUtils.readFileToString(file, CommonsHelper.UTF_8);
         } catch (final IOException e) {

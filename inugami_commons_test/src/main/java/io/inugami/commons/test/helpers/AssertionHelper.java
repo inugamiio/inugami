@@ -24,11 +24,6 @@ public final class AssertionHelper {
         assertText(jsonRef, json, lineAssertions);
     }
 
-    @Deprecated
-    public static void assertTextRelatif(final String value, final String path, final LineAssertion... lineAssertions) {
-        assertTextRelative(value, path, lineAssertions);
-    }
-
     public static void assertTextRelative(final String value, final String path, final int... skipLines) {
         assertTextRelative(value, path, LineAssertionHelper.buildSkipLine(skipLines));
     }
@@ -38,10 +33,6 @@ public final class AssertionHelper {
         assertText(refJson, value, lineAssertions);
     }
 
-    @Deprecated
-    public static void assertTextRelatif(final String path, final Object value, final LineAssertion... lineAssertions) {
-        assertTextRelative(path, value, lineAssertions);
-    }
 
     public static void assertTextRelative(final String path, final Object value, final int... skipLines) {
         assertTextRelative(path, value, LineAssertionHelper.buildSkipLine(skipLines));
@@ -84,8 +75,6 @@ public final class AssertionHelper {
 
 
         for (int i = 0; i < refLines.length; i++) {
-
-
             final String        currentJsonValue = jsonValue[i].trim();
             final String        currentRefLine   = refLines[i].trim();
             final LineAssertion lineAssertion    = LineAssertionHelper.searchLineAssertion(i, currentJsonValue, lineAssertions);

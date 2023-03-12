@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 /**
  * Asserts
@@ -175,11 +176,18 @@ public final class Asserts {
         if (values == null) {
             return;
         }
-        for (final Object item : values) {
-            if (item != null) {
-                throwException(message == null ? ASSERT_NULL_DEFAULT_MSG : message);
+        if (values == null || values.length == 0) {
+            if (message != null) {
+                throwException(ASSERT_NULL_DEFAULT_MSG);
+            }
+        } else {
+            for (final Object item : values) {
+                if (item != null) {
+                    throwException(message == null ? ASSERT_NULL_DEFAULT_MSG : message);
+                }
             }
         }
+
     }
 
     @Deprecated
@@ -1701,13 +1709,53 @@ public final class Asserts {
     // -------------------------------------------------------------------------
     // Assert throws
     // -------------------------------------------------------------------------
-    public static void assertThrow(final String message,
+    public static void assertThrow(final VoidFunctionWithException function) {
+        AssertThrow.assertThrow(function);
+    }
+
+
+    public static void assertThrow(final Pattern errorMessage,
                                    final VoidFunctionWithException function) {
-        try {
-            function.process();
-            throwException(message);
-        } catch (Exception error) {
-        }
+        assertThrow(errorMessage, null, function);
+    }
+
+    public static void assertThrow(final Pattern errorMessage,
+                                   final String message,
+                                   final VoidFunctionWithException function) {
+        AssertThrow.assertThrow(errorMessage, message, function);
+    }
+
+    public static void assertThrow(final String errorMessage,
+                                   final VoidFunctionWithException function) {
+        assertThrow(errorMessage, null, function);
+    }
+
+    public static void assertThrow(final String errorMessage,
+                                   final String message,
+                                   final VoidFunctionWithException function) {
+        AssertThrow.assertThrow(errorMessage, message, function);
+    }
+
+    public static void assertThrow(final ErrorCode errorCode,
+                                   final VoidFunctionWithException function) {
+        assertThrow(errorCode, null, function);
+    }
+
+    public static void assertThrow(final ErrorCode errorCode,
+                                   final String message,
+                                   final VoidFunctionWithException function) {
+        AssertThrow.assertThrow(errorCode, message, function);
+    }
+
+    public static void assertThrow(final Class<? extends Throwable> errorClass,
+                                   final VoidFunctionWithException function) {
+        assertThrow(errorClass, null, function);
+    }
+
+    public static void assertThrow(final Class<? extends Throwable> errorClass,
+                                   final String message,
+                                   final VoidFunctionWithException function) {
+        AssertThrow.assertThrow(errorClass, message, function);
     }
 
 
