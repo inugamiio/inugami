@@ -17,14 +17,12 @@
 package io.inugami.api.exceptions;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.function.BiConsumer;
 
+@ToString
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -181,4 +179,16 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     public boolean isExploitationError() {
         return exploitationError;
     }
+
+    @Override
+    public boolean isRollbackRequire() {
+        return retryable;
+    }
+
+    @Override
+    public boolean isRetryable() {
+        return retryable;
+    }
+
+
 }
