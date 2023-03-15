@@ -47,6 +47,8 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     private final String  category;
     private final boolean exploitationError;
 
+    private final String field;
+
     private final BiConsumer<String, Exception> errorHandler;
 
     public static ErrorCode buildUndefineError() {
@@ -75,7 +77,8 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
                      .exploitationError(errorCode.isExploitationError())
                      .retryable(errorCode.isRetryable())
                      .rollback(errorCode.isRollbackRequire())
-                     .category(errorCode.getCategory());
+                     .category(errorCode.getCategory())
+                     .field(errorCode.getField());
     }
 
     public static DefaultErrorCode.DefaultErrorCodeBuilder newBuilder() {
@@ -190,5 +193,9 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
         return retryable;
     }
 
+    @Override
+    public String getField() {
+        return field;
+    }
 
 }

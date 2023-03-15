@@ -76,6 +76,10 @@ public interface ErrorCode {
         return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getCategory();
     }
 
+    default String getField() {
+        return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getField();
+    }
+
 
     default DefaultErrorCode.DefaultErrorCodeBuilder toBuilder() {
         DefaultErrorCode.DefaultErrorCodeBuilder builder = null;

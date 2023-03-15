@@ -12,7 +12,7 @@ public class DefaultErrorCodeTest {
     @Test
     public void addDetail_nominal_shouldAddDetail(){
         assertThat(TestErrorCode.REQUEST_REQUIRE.addDetail("simple message {0}" , "hello").toString())
-                .isEqualTo("DefaultErrorCode(statusCode=500, errorCode=HTTP-1, message=request is require, messageDetail=simple message hello, errorType=null, retryable=false, rollback=false, payload=null, category=null, exploitationError=false, errorHandler=null)");
+                .isEqualTo("DefaultErrorCode(statusCode=500, errorCode=HTTP-1, message=request is require, messageDetail=simple message hello, errorType=null, retryable=false, rollback=false, payload=null, category=null, exploitationError=false, field=null, errorHandler=null)");
     }
 
 
