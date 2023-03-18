@@ -33,6 +33,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import io.inugami.api.listeners.ApplicationLifecycleSPI;
+import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.models.tools.Chrono;
 import io.inugami.api.monitoring.*;
@@ -61,20 +63,18 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
  */
 @Slf4j
 @WebFilter(urlPatterns = "*", asyncSupported = true)
-public class FilterInterceptor implements Filter {
+public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
     //@formatter:off
-    private final static SpiLoader SPI_LOADER = new SpiLoader();
-
-    private final static List<JavaRestMethodResolver> JAVA_REST_METHOD_RESOLVERS      =   SPI_LOADER.loadSpiServicesByPriority(JavaRestMethodResolver.class);
-    private final static List<JavaRestMethodTracker> JAVA_REST_METHOD_TRACKERS      =   SPI_LOADER.loadSpiServicesByPriority(JavaRestMethodTracker.class);
-    private final static List<Interceptable>               INTERCEPTABLE_RESOLVER     = SPI_LOADER.loadSpiServicesByPriority(Interceptable.class);
-    private final static List<ExceptionResolver>           EXCEPTION_RESOLVER         = SPI_LOADER.loadSpiServicesByPriority(ExceptionResolver.class,new FilterInterceptorErrorResolver());
-    private final static Map<String, Boolean>              INTERCEPTABLE_URI_RESOLVED = new ConcurrentHashMap<>();
-    private final static int KILO                                                     = 1024;
+    private              List<JavaRestMethodResolver> javaRestMethodResolvers    = null;
+    private              List<JavaRestMethodTracker>  javaRestMethodTrackers     = null;
+    private              List<Interceptable>          interceptableResolver      = null;
+    private              List<ExceptionResolver>      exceptionResolver          = null;
+    private final static Map<String, Boolean>         INTERCEPTABLE_URI_RESOLVED = new ConcurrentHashMap<>();
+    private final static int                          KILO                       = 1024;
 
     //@formatter:on
 
@@ -83,10 +83,23 @@ public class FilterInterceptor implements Filter {
     // =========================================================================
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
+        initAttributes();
     }
 
     @Override
     public void destroy() {
+    }
+
+    @Override
+    public void onContextRefreshed(Object event) {
+        initAttributes();
+    }
+
+    public void initAttributes() {
+        javaRestMethodResolvers = SpiLoader.INSTANCE.loadSpiServicesByPriority(JavaRestMethodResolver.class);
+        javaRestMethodTrackers = SpiLoader.INSTANCE.loadSpiServicesByPriority(JavaRestMethodTracker.class);
+        interceptableResolver = SpiLoader.INSTANCE.loadSpiServicesByPriority(Interceptable.class);
+        exceptionResolver = SpiLoader.INSTANCE.loadSpiServicesByPriority(ExceptionResolver.class, new FilterInterceptorErrorResolver());
     }
 
     // =========================================================================
@@ -95,22 +108,28 @@ public class FilterInterceptor implements Filter {
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response,
                          final FilterChain chain) throws IOException, ServletException {
+
+        if (isAttributesNotInitialized()) {
+            initAttributes();
+        }
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
         final String             currentPath = buildCurrentPath(httpRequest);
 
         if (mustIntercept(currentPath)) {
             try {
                 processIntercepting(request, (HttpServletResponse) response, chain, httpRequest);
-            }
-            catch (final Exception e) {
+            } catch (final Exception e) {
                 throw new IOException(e.getMessage(), e);
             }
-        }
-        else {
+        } else {
             chain.doFilter(request, response);
         }
 
 
+    }
+
+    private boolean isAttributesNotInitialized() {
+        return javaRestMethodResolvers == null || javaRestMethodTrackers == null || interceptableResolver == null || exceptionResolver == null;
     }
 
     private void processIntercepting(final ServletRequest request, final HttpServletResponse response,
@@ -118,10 +137,9 @@ public class FilterInterceptor implements Filter {
         byte[] data    = null;
         String content = null;
         try {
-            data    = readInput(httpRequest.getInputStream());
+            data = readInput(httpRequest.getInputStream());
             content = data == null ? null : ObfuscatorTools.applyObfuscators(new String(data));
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             Loggers.DEBUG.error(e.getMessage(), e);
             Loggers.METRICS.error(e.getMessage());
         }
@@ -131,7 +149,7 @@ public class FilterInterceptor implements Filter {
                 httpRequest, headers);
 
         final JavaRestMethodDTO javaRestMethod = resolveJavaRestMethod(request);
-        addTrackingInformation(response, requestInfo,javaRestMethod);
+        addTrackingInformation(response, requestInfo, javaRestMethod);
 
         onBegin(httpRequest, headers, content);
 
@@ -141,12 +159,10 @@ public class FilterInterceptor implements Filter {
         final Chrono          chrono          = Chrono.startChrono();
         try {
             chain.doFilter(buildRequestProxy(request, data), responseWrapper);
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             error = e;
             throw e;
-        }
-        finally {
+        } finally {
             chrono.stop();
             final ErrorResult errorResult = error == null ? null : resolveError(error);
             onEnd(httpRequest, responseWrapper, errorResult, chrono.getDelaisInMillis(), content);
@@ -154,16 +170,16 @@ public class FilterInterceptor implements Filter {
     }
 
     private JavaRestMethodDTO resolveJavaRestMethod(final ServletRequest request) {
-        JavaRestMethodDTO result = null;
-        HttpServletRequest httpRequest = (HttpServletRequest)request;
-        for (JavaRestMethodResolver resolver: JAVA_REST_METHOD_RESOLVERS){
-            try{
+        JavaRestMethodDTO  result      = null;
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        for (JavaRestMethodResolver resolver : javaRestMethodResolvers) {
+            try {
                 result = resolver.resolve(httpRequest);
-                if(result != null){
+                if (result != null) {
                     break;
                 }
-            }catch (Throwable e){
-                log.error(e.getMessage(),e );
+            } catch (Throwable e) {
+                log.error(e.getMessage(), e);
             }
         }
         return result;
@@ -182,9 +198,9 @@ public class FilterInterceptor implements Filter {
                        value -> response.setHeader(headers.getConversationId(), value));
         applyIfNotNull(requestInfo.getRequestId(), value -> response.setHeader(headers.getRequestId(), value));
 
-        if(javaRestMethod !=null){
-            for(JavaRestMethodTracker tracker : JAVA_REST_METHOD_TRACKERS){
-                if(tracker.accept(javaRestMethod)) {
+        if (javaRestMethod != null) {
+            for (JavaRestMethodTracker tracker : javaRestMethodTrackers) {
+                if (tracker.accept(javaRestMethod)) {
                     tracker.track(javaRestMethod);
                 }
             }
@@ -196,7 +212,7 @@ public class FilterInterceptor implements Filter {
         //@formatter:off
         final ServletRequest proxy = (ServletRequest) Proxy.newProxyInstance(this.getClass().getClassLoader(),
                                                                              types,
-                                                                             new RequestCallBackInterceptor(request,content));
+                                                                             new RequestCallBackInterceptor(request, content));
         //@formatter:on
 
         return proxy;
@@ -209,7 +225,7 @@ public class FilterInterceptor implements Filter {
     private boolean mustIntercept(final String currentPath) {
         Boolean result = INTERCEPTABLE_URI_RESOLVED.get(currentPath);
         if (result == null) {
-            for (final Interceptable resolver : INTERCEPTABLE_RESOLVER) {
+            for (final Interceptable resolver : interceptableResolver) {
                 result = resolver.isInterceptable(currentPath);
                 if (!result) {
                     break;
@@ -281,8 +297,7 @@ public class FilterInterceptor implements Filter {
             while (-1 != (bytesLeft = inputStream.read(buffer))) {
                 out.write(buffer, 0, bytesLeft);
             }
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             Loggers.DEBUG.error(e.getMessage(), e);
         }
 
@@ -313,7 +328,7 @@ public class FilterInterceptor implements Filter {
     // =========================================================================
     private ErrorResult resolveError(final Exception error) {
         ErrorResult result = null;
-        for (final ExceptionResolver resolver : EXCEPTION_RESOLVER) {
+        for (final ExceptionResolver resolver : exceptionResolver) {
             result = resolver.resolve(error);
             if (result != null) {
                 break;
@@ -321,8 +336,6 @@ public class FilterInterceptor implements Filter {
         }
         return result;
     }
-
-
 
 
 }

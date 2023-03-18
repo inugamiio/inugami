@@ -62,8 +62,7 @@ public class FilterInterceptorErrorResolver implements ExceptionResolver {
     // =========================================================================
     private static Map<Pattern, ErrorCode> initErrorsType() {
         final Map<Pattern, ErrorCode>      errors  = new LinkedHashMap<>();
-        final List<ExceptionHandlerMapper> mappers = new SpiLoader()
-                .loadSpiServicesByPriority(ExceptionHandlerMapper.class);
+        final List<ExceptionHandlerMapper> mappers = SpiLoader.INSTANCE.loadSpiServicesByPriority(ExceptionHandlerMapper.class);
         mappers.stream().map(ExceptionHandlerMapper::produceMapping).forEach(errors::putAll);
         return errors;
     }

@@ -75,7 +75,7 @@ public class ElasticSearchWriter extends AbstractProvider
         this.name = classBehavior.getName();
         this.url = config.grab("url_bulk") + "/_bulk";
         kibanaProvider = new KibanaProvider(classBehavior, config, providerRunner);
-        final ContextSPI ctx = new SpiLoader().loadSpiSingleService(ContextSPI.class);
+        final ContextSPI ctx = SpiLoader.INSTANCE.loadSpiSingleService(ContextSPI.class);
         
         this.timeout = Long.parseLong(config.grabOrDefault("timeout", "60000"));
         this.maxThreads = config.grabInt("maxThreads", 20);

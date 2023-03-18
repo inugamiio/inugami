@@ -50,7 +50,7 @@ public class DefaultTeamsAlertRenderer implements TeamsAlertRenderer {
     // =========================================================================
     private static final String          YYYY_MM_DD_HH_SS = "yyyy-MM-dd HH:ss";
     
-    private final List<TeamIconResolver> iconResolvers    = new SpiLoader().loadSpiService(TeamIconResolver.class);
+    private final List<TeamIconResolver> iconResolvers    = SpiLoader.INSTANCE.loadSpiService(TeamIconResolver.class);
     
     @Override
     public boolean accept(final AlertingResult alert) {

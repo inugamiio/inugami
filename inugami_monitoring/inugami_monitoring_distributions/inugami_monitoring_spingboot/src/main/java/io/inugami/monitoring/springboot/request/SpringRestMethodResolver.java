@@ -18,8 +18,10 @@ package io.inugami.monitoring.springboot.request;
 
 import io.inugami.api.monitoring.JavaRestMethodDTO;
 import io.inugami.api.monitoring.JavaRestMethodResolver;
+import io.inugami.api.spi.SpiLoader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -34,12 +36,17 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class SpringRestMethodResolver implements JavaRestMethodResolver {
     public static final String               PATH_ATTRIBUTE = ServletRequestPathUtils.class.getName() + ".PATH";
     private final       List<HandlerMapping> handlerMappings;
     private final       MultipartResolver    multipartResolver;
 
+    public SpringRestMethodResolver() {
+        handlerMappings = SpiLoader.INSTANCE.loadSpiServicesByPriority(HandlerMapping.class);
+        multipartResolver = SpiLoader.INSTANCE.loadSpiSingleServicesByPriority(MultipartResolver.class);
+    }
 
     public JavaRestMethodDTO resolve(final HttpServletRequest request) {
         final HandlerExecutionChain handler = resolveHandlerMethod(request);

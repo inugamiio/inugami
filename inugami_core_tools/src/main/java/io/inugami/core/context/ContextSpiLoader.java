@@ -36,6 +36,6 @@ public final class ContextSpiLoader {
     // METHODS
     // =========================================================================
     public static ContextSPI load() {
-        return new SpiLoader().loadSpiSingleService(ContextSPI.class);
+        return SpiLoader.INSTANCE.loadSpiSingleService(ContextSPI.class);
     }
 }

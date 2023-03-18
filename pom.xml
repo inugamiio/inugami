@@ -167,6 +167,10 @@
         <plugins.org-codehaus-mojo.buildnumber-maven-plugin>1.3</plugins.org-codehaus-mojo.buildnumber-maven-plugin>
         <plugins.org-eclipse-m2e.lifecycle-mapping>1.0.0</plugins.org-eclipse-m2e.lifecycle-mapping>
 
+        <!--[ org.springframework ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+        <org.springframework.version>5.2.19.RELEASE</org.springframework.version>
+        <org.springframework.boot.version>2.4.13</org.springframework.boot.version>
+
         <!--[ others ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <plugins.external-atlassian-jgitflow.jgitflow-maven-plugin>1.0-m4.3
         </plugins.external-atlassian-jgitflow.jgitflow-maven-plugin>
@@ -270,6 +274,7 @@
         <module>inugami_api</module>
         <module>inugami_api_core</module>
         <module>inugami_commons</module>
+        <module>inugami_commmons_spring</module>
         <module>inugami_commons_test</module>
         <module>inugami_monitoring</module>
         <module>inugami_configuration_tools</module>
@@ -346,6 +351,12 @@
             <dependency>
                 <groupId>io.inugami</groupId>
                 <artifactId>inugami_commons</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami</groupId>
+                <artifactId>inugami_commmons_spring</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -803,6 +814,20 @@
                 <version>${io.dropwizard.metrics.version}</version>
             </dependency>
 
+            <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+            :: SPRING
+            :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${org.springframework.boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${org.springframework.version}</version>
+            </dependency>
 
             <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             :: TEST

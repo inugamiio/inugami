@@ -65,7 +65,7 @@ public class ConfigHandlerHashMap extends HashMap<String, String>
         this.serviceName = serviceName;
         optional = new ConfigHandlerOptionalHashMap();
         
-        functions = new FunctionsServices(new SpiLoader().loadSpiService(ProviderAttributFunction.class), this);
+        functions = new FunctionsServices(SpiLoader.INSTANCE.loadSpiService(ProviderAttributFunction.class), this);
     }
     
     public ConfigHandlerHashMap(final Map<String, String> map) {
