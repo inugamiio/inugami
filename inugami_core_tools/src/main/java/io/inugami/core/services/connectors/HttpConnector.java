@@ -51,23 +51,23 @@ public class HttpConnector {
     // =========================================================================
     public HttpConnector() {
         connector = new HttpBasicConnector();
-        context   = SpiLoader.INSTANCE.loadSpiSingleService(ContextSPI.class);
+        context   = SpiLoader.getInstance().loadSpiSingleService(ContextSPI.class);
     }
 
     public HttpConnector(final int maxConnections) {
         connector = new HttpBasicConnector(maxConnections);
-        context   = SpiLoader.INSTANCE.loadSpiSingleService(ContextSPI.class);
+        context   = SpiLoader.getInstance().loadSpiSingleService(ContextSPI.class);
     }
 
     public HttpConnector(final int timeToLive, final int maxConnections) {
         connector = new HttpBasicConnector(timeToLive, maxConnections);
-        context   = SpiLoader.INSTANCE.loadSpiSingleService(ContextSPI.class);
+        context   = SpiLoader.getInstance().loadSpiSingleService(ContextSPI.class);
     }
 
     public HttpConnector(final int timeout, final int timeToLive, final int maxConnections, final int maxPerRoute,
                          final int socketTimeout) {
         connector = new HttpBasicConnector(timeout, timeToLive, maxConnections, maxPerRoute, socketTimeout);
-        context   = SpiLoader.INSTANCE.loadSpiSingleService(ContextSPI.class);
+        context   = SpiLoader.getInstance().loadSpiSingleService(ContextSPI.class);
     }
 
     // =========================================================================

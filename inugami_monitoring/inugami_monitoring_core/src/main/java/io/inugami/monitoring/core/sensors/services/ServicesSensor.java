@@ -42,7 +42,7 @@ public class ServicesSensor implements MonitoringSensor {
     // =========================================================================
     private final static BlockingQueue<GenericMonitoringModel> BUFFER      = new BlockingQueue<>();
     
-    private static final List<ServicesSensorAggregator>        AGGREGATORS = SpiLoader.INSTANCE.loadSpiServicesByPriority(ServicesSensorAggregator.class);
+    private static final List<ServicesSensorAggregator>        AGGREGATORS = SpiLoader.getInstance().loadSpiServicesByPriority(ServicesSensorAggregator.class);
     
     private static long                                        interval;
     

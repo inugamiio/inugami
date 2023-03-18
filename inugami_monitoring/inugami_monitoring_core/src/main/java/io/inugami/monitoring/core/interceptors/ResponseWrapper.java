@@ -45,7 +45,7 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     
     private final OutputWriterWrapper       outputWrapper;
     private final Map<String, List<String>> localHeaders = new ConcurrentHashMap<>();
-    private final List<ResponseListener> responseListeners = SpiLoader.INSTANCE.loadSpiService(ResponseListener.class);
+    private final List<ResponseListener> responseListeners = SpiLoader.getInstance().loadSpiService(ResponseListener.class);
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================

@@ -23,7 +23,7 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_configuration_test</artifactId>
-
+    <url>http://inugami.io/inugami/inugami_configuration_test</url>
     
     <!-- ======================================================================= 
     = DEPENDENCIES

@@ -23,7 +23,11 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_monitoring_spingboot</artifactId>
+    <url>http://inugami.io/inugami/inugami_monitoring_spingboot</url>
 
+    <!-- =======================================================================
+    = DEPENDENCIES
+    ======================================================================== -->
     <dependencies>
         <dependency>
             <groupId>io.inugami</groupId>

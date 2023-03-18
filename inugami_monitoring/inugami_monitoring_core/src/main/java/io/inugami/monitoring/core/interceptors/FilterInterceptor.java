@@ -96,10 +96,10 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     }
 
     public void initAttributes() {
-        javaRestMethodResolvers = SpiLoader.INSTANCE.loadSpiServicesByPriority(JavaRestMethodResolver.class);
-        javaRestMethodTrackers = SpiLoader.INSTANCE.loadSpiServicesByPriority(JavaRestMethodTracker.class);
-        interceptableResolver = SpiLoader.INSTANCE.loadSpiServicesByPriority(Interceptable.class);
-        exceptionResolver = SpiLoader.INSTANCE.loadSpiServicesByPriority(ExceptionResolver.class, new FilterInterceptorErrorResolver());
+        javaRestMethodResolvers = SpiLoader.getInstance().loadSpiServicesByPriority(JavaRestMethodResolver.class);
+        javaRestMethodTrackers = SpiLoader.getInstance().loadSpiServicesByPriority(JavaRestMethodTracker.class);
+        interceptableResolver = SpiLoader.getInstance().loadSpiServicesByPriority(Interceptable.class);
+        exceptionResolver = SpiLoader.getInstance().loadSpiServicesByPriority(ExceptionResolver.class, new FilterInterceptorErrorResolver());
     }
 
     // =========================================================================

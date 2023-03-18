@@ -23,6 +23,7 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_logs_obfuscator</artifactId>
+    <url>http://inugami.io/inugami/inugami_logs_obfuscator</url>
 
     <!-- ======================================================================= 
     = DEPENDENCIES

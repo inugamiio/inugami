@@ -22,6 +22,7 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_core_security_commons</artifactId>
+    <url>http://inugami.io/inugami/inugami_core_security_commons</url>
 
     <!-- =======================================================================
     = DEPENDENCIES

@@ -24,7 +24,7 @@
     ======================================================================== -->
     <artifactId>inugami_monitoring_distrib_nondep</artifactId>
     <packaging>pom</packaging>
-
+    <url>http://inugami.io/inugami/inugami_monitoring_distrib_nondep</url>
 
     <!-- ======================================================================= 
     = BUILD

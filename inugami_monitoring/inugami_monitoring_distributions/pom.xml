@@ -24,7 +24,7 @@
     <groupId>io.inugami.monitoring.distributions</groupId>
     <artifactId>inugami_monitoring_distributions</artifactId>
     <packaging>pom</packaging>
-
+    <url>http://inugami.io/inugami/inugami_monitoring_distributions</url>
     
     <!-- ======================================================================= 
     = DEPENDENCIES

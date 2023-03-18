@@ -33,7 +33,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final static List<ObfuscatorSpi> OBFUSCATORS = SpiLoader.INSTANCE.loadSpiServicesByPriority(
+    private final static List<ObfuscatorSpi> OBFUSCATORS = SpiLoader.getInstance().loadSpiServicesByPriority(
             ObfuscatorSpi.class);
     private final static byte[]              EMPTY       = "".getBytes(StandardCharsets.UTF_8);
 

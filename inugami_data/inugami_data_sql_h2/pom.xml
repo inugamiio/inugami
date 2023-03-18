@@ -23,7 +23,7 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_data_sql_h2</artifactId>
-
+    <url>http://inugami.io/inugami/inugami_data_sql_h2</url>
     
     <!-- ======================================================================= 
     = DEPENDENCIES

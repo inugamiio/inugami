@@ -23,6 +23,7 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_commmons_spring</artifactId>
+    <url>http://inugami.io/inugami/inugami_commmons_spring</url>
 
     <!-- =======================================================================
     = DEPENDENCIES
@@ -37,11 +38,23 @@
         <dependency>
             <groupId>io.inugami</groupId>
             <artifactId>inugami_api_core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jboss.weld</groupId>
+                    <artifactId>weld-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>io.inugami</groupId>
             <artifactId>inugami_commons</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache</groupId>
+                    <artifactId>ant</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

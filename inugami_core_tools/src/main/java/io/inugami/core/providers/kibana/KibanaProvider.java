@@ -67,7 +67,7 @@ public class KibanaProvider extends AbstractProvider implements Provider, Provid
         this.config = config;
         this.timeout = Long.parseLong(config.optionnal().grabOrDefault(CONFIG_TIMEOUT, "15000"));
         
-        final ContextSPI ctx = SpiLoader.INSTANCE.loadSpiSingleService(ContextSPI.class);
+        final ContextSPI ctx = SpiLoader.getInstance().loadSpiSingleService(ContextSPI.class);
         //@formatter:off
         this.httpConnector = ctx.getHttpConnector(classBehavior.getClassName(),
                                                   getMaxConnections(config,   10 ),

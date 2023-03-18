@@ -23,6 +23,7 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_core_test</artifactId>
+    <url>http://inugami.io/inugami/inugami_core_test</url>
 
     <!-- ======================================================================= 
     = PROPERTIES

@@ -20,6 +20,6 @@ import io.inugami.api.spi.SpiLoader;
 
 
 public class ConfigurationSpiFactory{
-    public static final ConfigurationSpi INSTANCE = SpiLoader.INSTANCE.loadSpiServiceByPriority(ConfigurationSpi.class,
+    public static final ConfigurationSpi INSTANCE = SpiLoader.getInstance().loadSpiServiceByPriority(ConfigurationSpi.class,
                                                                                                 new DefaultConfigurationSpi());
 }

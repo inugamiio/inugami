@@ -35,7 +35,7 @@ public interface JsonObject extends JsonObjectToJson, ClonableObject<JsonObject>
     
     default <T extends JsonObject> T convertToObject(final byte[] data, final Charset encoding) {
         final String json = new String(data, encoding);
-        final JsonSerializerSpi jsonSerializer = SpiLoader.INSTANCE.loadSpiSingleService(JsonSerializerSpi.class);
+        final JsonSerializerSpi jsonSerializer = SpiLoader.getInstance().loadSpiSingleService(JsonSerializerSpi.class);
         return jsonSerializer.deserialize(json);
     }
     

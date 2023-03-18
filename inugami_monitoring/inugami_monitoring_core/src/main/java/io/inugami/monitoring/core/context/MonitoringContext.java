@@ -65,7 +65,7 @@ public class MonitoringContext implements BootstrapContext<Void> {
     };
     
     private static Monitoring loadConfiguration() {
-        final MonitoringLoaderSpi loader = SpiLoader.INSTANCE.loadSpiSingleServicesByPriority(MonitoringLoaderSpi.class);
+        final MonitoringLoaderSpi loader = SpiLoader.getInstance().loadSpiSingleServicesByPriority(MonitoringLoaderSpi.class);
         return loader == null ? null : loader.load();
     }
     

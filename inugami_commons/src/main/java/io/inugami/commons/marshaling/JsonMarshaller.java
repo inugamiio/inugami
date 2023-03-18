@@ -45,7 +45,7 @@ public final class JsonMarshaller  {
     }
     private JsonMarshaller(){
         final JsonMarshallerSpi defaultBuilder = new DefaultObjectMapperBuilder();
-        final JsonMarshallerSpi builder = SpiLoader.INSTANCE.loadSpiServiceByPriority(JsonMarshallerSpi.class,
+        final JsonMarshallerSpi builder = SpiLoader.getInstance().loadSpiServiceByPriority(JsonMarshallerSpi.class,
                                                                                 defaultBuilder);
 
         ObjectMapper mapper = builder.buildObjectMapper();

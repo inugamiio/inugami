@@ -44,8 +44,8 @@ public class SpringRestMethodResolver implements JavaRestMethodResolver {
     private final       MultipartResolver    multipartResolver;
 
     public SpringRestMethodResolver() {
-        handlerMappings = SpiLoader.INSTANCE.loadSpiServicesByPriority(HandlerMapping.class);
-        multipartResolver = SpiLoader.INSTANCE.loadSpiSingleServicesByPriority(MultipartResolver.class);
+        handlerMappings = SpiLoader.getInstance().loadSpiServicesByPriority(HandlerMapping.class);
+        multipartResolver = SpiLoader.getInstance().loadSpiSingleServicesByPriority(MultipartResolver.class);
     }
 
     public JavaRestMethodDTO resolve(final HttpServletRequest request) {

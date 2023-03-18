@@ -41,7 +41,11 @@ public class SpiLoader {
     // =========================================================================
     private static final String JAVAX_BEAN_NAMED = "javax.inject.Named";
 
-    public static final SpiLoader INSTANCE = new SpiLoader();
+    private  static final SpiLoader INSTANCE = new SpiLoader();
+
+    public static SpiLoader getInstance(){
+        return INSTANCE;
+    }
 
     private SpiLoaderServiceSPI loaderService = new JavaSpiLoaderServiceSPI();
 
@@ -87,7 +91,11 @@ public class SpiLoader {
     }
 
     public synchronized <T> T loadSpiServiceByPriority(final Class<?> type, final T defaultImplementation) {
-        return loadSpiServicesByPriority(type, defaultImplementation).get(0);
+        try{
+            return loadSpiServicesByPriority(type, defaultImplementation).get(0);
+        }catch (Throwable e){
+            return defaultImplementation;
+        }
     }
 
 

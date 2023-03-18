@@ -25,7 +25,7 @@
     <groupId>io.inugami.monitoring.providers</groupId>
     <artifactId>inugami_monitoring_providers</artifactId>
     <packaging>pom</packaging>
-
+    <url>http://inugami.io/inugami/inugami_monitoring_providers</url>
     
     <!-- ======================================================================= 
     = DEPENDENCIES

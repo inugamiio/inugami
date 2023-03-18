@@ -24,7 +24,7 @@
     ======================================================================== -->
     <artifactId>inugami_server</artifactId>
     <packaging>pom</packaging>
-
+    <url>http://inugami.io/inugami/inugami_server</url>
 
     <properties>
         <tomcat.full.name>apache-tomcat-8.0.44</tomcat.full.name>

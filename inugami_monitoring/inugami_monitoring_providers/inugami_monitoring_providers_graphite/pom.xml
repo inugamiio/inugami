@@ -23,7 +23,7 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_monitoring_providers_graphite</artifactId>
-
+    <url>http://inugami.io/inugami/inugami_monitoring_providers_graphite</url>
 
     <!-- ======================================================================= 
     = DEPENDENCIES

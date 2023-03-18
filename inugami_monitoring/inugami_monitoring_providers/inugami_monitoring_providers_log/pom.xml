@@ -23,6 +23,6 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_monitoring_providers_log</artifactId>
-
+    <url>http://inugami.io/inugami/inugami_monitoring_providers_log</url>
 
 </project>

@@ -76,7 +76,7 @@ public class GraphiteProvider extends AbstractProvider implements Provider, Prov
         this.config = config;
         url = config.grab(CONFIG_URL);
         timeout = Integer.parseInt(config.optionnal().grabOrDefault(CONFIG_TIMEOUT, "15000"));
-        final SpiLoader spiLoader = SpiLoader.INSTANCE;
+        final SpiLoader spiLoader = SpiLoader.getInstance();
         
         attributsFunctions = spiLoader.loadSpiService(ProviderAttributFunction.class);
         

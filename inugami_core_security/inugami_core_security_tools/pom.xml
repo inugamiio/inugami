@@ -21,6 +21,7 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_core_security_tools</artifactId>
+    <url>http://inugami.io/inugami/inugami_core_security_tools</url>
 
 
     <!-- ======================================================================= 

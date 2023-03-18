@@ -32,7 +32,7 @@ public class MonitoredThreadFactory implements ThreadFactory {
     // CONSTRUCTORS
     // =========================================================================
     private static List<MonitoringInitializer> initMonitoringInitializers() {
-        final List<MonitoringInitializer> spiServices = SpiLoader.INSTANCE.loadSpiService(MonitoringInitializer.class);
+        final List<MonitoringInitializer> spiServices = SpiLoader.getInstance().loadSpiService(MonitoringInitializer.class);
         return spiServices == null ? Collections.emptyList() : spiServices;
     }
     

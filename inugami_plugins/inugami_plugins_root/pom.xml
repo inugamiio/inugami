@@ -22,7 +22,7 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_plugins_root</artifactId>
-    <packaging>jar</packaging>
+    <url>http://inugami.io/inugami/inugami_plugins_root</url>
 
     <properties>
         <super.env.dev />

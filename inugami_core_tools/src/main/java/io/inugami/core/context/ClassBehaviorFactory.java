@@ -47,7 +47,7 @@ public class ClassBehaviorFactory {
     // CONSTRUCTORS
     // =========================================================================
     public ClassBehaviorFactory() {
-        classBehaviorParameters = SpiLoader.INSTANCE.loadSpiService(ClassBehaviorParametersSPI.class);
+        classBehaviorParameters = SpiLoader.getInstance().loadSpiService(ClassBehaviorParametersSPI.class);
     }
     
     // =========================================================================

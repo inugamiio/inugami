@@ -24,6 +24,7 @@
     <groupId>io.inugami.monitoring</groupId>
     <artifactId>inugami_monitoring</artifactId>
     <packaging>pom</packaging>
+    <url>http://inugami.io/inugami/inugami_monitoring</url>
 
     
     <!-- ======================================================================= 

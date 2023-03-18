@@ -34,12 +34,12 @@ import io.inugami.api.spi.SpiLoader;
 public interface JsonObjectToJson extends Serializable {
     
     default String convertToJson() {
-        final JsonSerializerSpi jsonSerializer = SpiLoader.INSTANCE.loadSpiSingleService(JsonSerializerSpi.class);
+        final JsonSerializerSpi jsonSerializer = SpiLoader.getInstance().loadSpiSingleService(JsonSerializerSpi.class);
         return jsonSerializer.serialize(this);
     }
     
     default String buildJsonError(final Exception error) {
-        final JsonSerializerSpi jsonSerializer = SpiLoader.INSTANCE.loadSpiSingleService(JsonSerializerSpi.class);
+        final JsonSerializerSpi jsonSerializer = SpiLoader.getInstance().loadSpiSingleService(JsonSerializerSpi.class);
         final JsonBuilder json = new JsonBuilder();
         json.openObject();
         json.addField("message").valueQuot(error.getMessage());

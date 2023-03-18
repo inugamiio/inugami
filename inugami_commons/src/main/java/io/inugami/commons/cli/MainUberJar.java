@@ -41,7 +41,7 @@ public class MainUberJar {
     // =========================================================================
     private final static Logger                 LOGGER               = LoggerFactory.getLogger("ROOT");
     
-    private final static BootstrapMonitoringSpi BOOTSTRAP_MONITORING = SpiLoader.INSTANCE.loadSpiSingleService(BootstrapMonitoringSpi.class);
+    private final static BootstrapMonitoringSpi BOOTSTRAP_MONITORING = SpiLoader.getInstance().loadSpiSingleService(BootstrapMonitoringSpi.class);
     
     // =========================================================================
     // METHODS
@@ -80,7 +80,7 @@ public class MainUberJar {
         final DefaultOptions defaultOptions = new DefaultOptions(args);
         
         //@formatter:off
-        final List<MainCliAction> services = SpiLoader.INSTANCE.loadSpiService(MainCliAction.class);
+        final List<MainCliAction> services = SpiLoader.getInstance().loadSpiService(MainCliAction.class);
         final Optional<MainCliAction> serviceOptional = services.stream()
                                                                 .filter(name -> matchSpiService(name,defaultOptions.getAction()))
                                                                 .findFirst();

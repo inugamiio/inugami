@@ -23,6 +23,7 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_commons</artifactId>
+    <url>http://inugami.io/inugami/inugami_commons</url>
 
     <!-- =======================================================================
     = DEPENDENCIES
@@ -47,6 +48,12 @@
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.ant</groupId>
+                    <artifactId>ant</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

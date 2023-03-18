@@ -24,7 +24,8 @@
     <groupId>io.inugami.data</groupId>
     <artifactId>inugami_data</artifactId>
     <packaging>pom</packaging>
-    
+    <url>http://inugami.io/inugami/inugami_core_tools</url>
+
     <!-- ======================================================================= 
     = MODULES
     ======================================================================== -->

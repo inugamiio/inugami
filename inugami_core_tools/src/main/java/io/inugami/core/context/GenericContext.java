@@ -57,7 +57,7 @@ public class GenericContext<T> implements BootstrapContext<T> {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final SpiLoader                           SPI_LOADER       = SpiLoader.INSTANCE;
+    private static final SpiLoader                           SPI_LOADER       = SpiLoader.getInstance();
     
     private static final boolean                             VERBOSE          = Boolean.parseBoolean(JvmKeyValues.APPLICATION_VERBOSE.or("false"));
     

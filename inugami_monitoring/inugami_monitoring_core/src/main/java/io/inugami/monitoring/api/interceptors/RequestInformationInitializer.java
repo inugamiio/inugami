@@ -47,7 +47,7 @@ public final class RequestInformationInitializer {
     private final static Monitoring CONFIG = RequestContext.loadConfig();
 
 
-    private static final ServiceNameResolver SERVICE_NAME_RESOLVER = SpiLoader.INSTANCE.loadSpiServiceByPriority(
+    private static final ServiceNameResolver SERVICE_NAME_RESOLVER = SpiLoader.getInstance().loadSpiServiceByPriority(
             ServiceNameResolver.class,
             new DefaultServiceNameResolver());
     private static final int                 MAX_SIZE              = 512;

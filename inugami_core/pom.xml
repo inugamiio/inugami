@@ -22,7 +22,7 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_core</artifactId>
-
+    <url>http://inugami.io/inugami/inugami_core</url>
     
     <!-- ======================================================================= 
     = DEPENDENCIES

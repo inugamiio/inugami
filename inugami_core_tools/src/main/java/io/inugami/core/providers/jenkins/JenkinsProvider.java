@@ -67,7 +67,7 @@ public class JenkinsProvider extends AbstractProvider implements Provider, Provi
                            ProviderRunner providerRunner) {
         super(classBehavior, config, providerRunner);
         this.config = config;
-        final ContextSPI ctx = SpiLoader.INSTANCE.loadSpiSingleService(ContextSPI.class);
+        final ContextSPI ctx = SpiLoader.getInstance().loadSpiSingleService(ContextSPI.class);
         final String host = config.grab(CONFIG_JENKINS_HOST);
         
         final StringBuilder builder = new StringBuilder();

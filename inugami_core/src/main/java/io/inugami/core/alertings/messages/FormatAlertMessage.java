@@ -73,7 +73,7 @@ public final class FormatAlertMessage {
 
     private static AlertMessageDataExtractorSPI resolveExtractor(final String key, final AlertingResult alert) {
         AlertMessageDataExtractorSPI result = null;
-        final List<AlertMessageDataExtractorSPI> extractors = SpiLoader.INSTANCE.loadSpiServicesWithDefault(AlertMessageDataExtractorSPI.class,
+        final List<AlertMessageDataExtractorSPI> extractors = SpiLoader.getInstance().loadSpiServicesWithDefault(AlertMessageDataExtractorSPI.class,
                                                                                                     DEFAULT_DATA_EXCTRACTOR);
 
         for (final AlertMessageDataExtractorSPI extractor : extractors) {

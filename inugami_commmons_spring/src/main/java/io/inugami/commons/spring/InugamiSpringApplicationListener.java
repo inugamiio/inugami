@@ -127,7 +127,7 @@ public class InugamiSpringApplicationListener implements ApplicationListener<App
 
 
     private void loadListeners() {
-        final List<ApplicationLifecycleSPI> instances = SpiLoader.INSTANCE.loadSpiServicesByPriority(ApplicationLifecycleSPI.class);
+        final List<ApplicationLifecycleSPI> instances = SpiLoader.getInstance().loadSpiServicesByPriority(ApplicationLifecycleSPI.class);
 
         if (instances == null) {
             listeners = new ArrayList<>();

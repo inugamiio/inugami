@@ -65,7 +65,7 @@ public class MultiThreadedProviderRunner implements ProviderRunner, ThreadFactor
         
         nbMaxThreads = Integer.parseInt(config.getOrDefault(CONFIG_THREADS, "1"));
         
-        final ContextSPI ctx = SpiLoader.INSTANCE.loadSpiSingleService(ContextSPI.class);
+        final ContextSPI ctx = SpiLoader.getInstance().loadSpiSingleService(ContextSPI.class);
         
         threadsExecutor = ctx == null ? initThreadsExecutor()
                                       : ctx.getThreadsExecutor(behavior.getName(), nbMaxThreads);

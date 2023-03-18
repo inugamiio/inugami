@@ -23,7 +23,7 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_data_commons</artifactId>
-
+    <url>http://inugami.io/inugami/inugami_data_commons</url>
     
     <!-- ======================================================================= 
     = DEPENDENCIES

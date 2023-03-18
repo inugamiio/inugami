@@ -29,7 +29,7 @@ public class SpringDefaultRequestPath implements RequestPath {
     }
 
     private static PathContainer initContextPath(PathContainer path, @Nullable String contextPath) {
-        if (!StringUtils.hasText(contextPath) || StringUtils.matchesCharacter(contextPath, '/')) {
+        if (!StringUtils.hasText(contextPath) || "/".equals(path)) {
             return PathContainer.parsePath("");
         }
 

@@ -25,7 +25,7 @@
     <artifactId>inugami_core_security</artifactId>
     <groupId>io.inugami.security</groupId>
     <packaging>pom</packaging>
-
+    <url>http://inugami.io/inugami/inugami_core_security</url>
     
     <!-- ======================================================================= 
     = MODULES
