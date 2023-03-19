@@ -2,22 +2,22 @@ package io.inugami.api.monitoring;
 
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.functionnals.VoidFunctionWithException;
+import io.inugami.api.loggers.mdc.mapper.LoggerMdcMappingSPI;
 import io.inugami.api.models.Tuple;
+import io.inugami.api.spi.SpiLoader;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.slf4j.MDC;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.io.Serializable;
+import java.util.*;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MdcService {
 
-    private static final String X_B_3_TRACE_ID = "X-B3-TraceId";
+    private static final String                    X_B_3_TRACE_ID = "X-B3-TraceId";
 
 
     // =========================================================================
@@ -56,6 +56,7 @@ public class MdcService {
         appSubService,
 
         errorCode,
+        errorCategory,
         errorStatus,
         errorMessage,
         errorType,
@@ -143,18 +144,18 @@ public class MdcService {
     // =========================================================================
     // PUBLIC API
     // =========================================================================
-    public MdcService setMdc(final Map<String, String> values) {
+    public MdcService setMdc(final Map<String, Serializable> values) {
         if (values == null) {
             return this;
         }
 
-        for (Map.Entry<String, String> value : values.entrySet()) {
+        for (Map.Entry<String, Serializable> value : values.entrySet()) {
             setMdc(value.getKey(), value.getValue());
         }
         return this;
     }
 
-    public MdcService setMdc(final MDCKeys key, final String value) {
+    public MdcService setMdc(final MDCKeys key, final Serializable value) {
         if (key == null) {
             return this;
         }
@@ -162,22 +163,22 @@ public class MdcService {
         return setMdc(key.name(), value);
     }
 
-    public MdcService setMdc(final String key, final String value) {
+    public MdcService setMdc(final String key, final Serializable value) {
         if (key == null) {
             return this;
         }
 
         if (value == null) {
             remove(key);
-        }
-        else {
-            MDC.put(key, value);
+        } else {
+            MDC.put(key, (String) value);
         }
 
         return this;
     }
 
-    public String getMdc(final MDCKeys key) {
+
+    public <T extends Serializable> T getMdc(final MDCKeys key) {
         if (key == null) {
             return null;
         }
@@ -185,15 +186,27 @@ public class MdcService {
     }
 
 
-    public String getMdc(final String key) {
+    public <T extends Serializable> T getMdc(final String key) {
         if (key == null) {
             return null;
         }
-        return MDC.get(key);
+
+        String result = MDC.get(key);
+        return result == null ? null : (T) result;
     }
 
     public Map<String, String> getAllMdc() {
         return MDC.getCopyOfContextMap();
+    }
+
+    public Map<String, Serializable> getAllMdcExtended() {
+        Map<String, Serializable> result = new LinkedHashMap<>();
+
+        final Map<String, String> standardMdc = getAllMdc();
+        if (standardMdc != null) {
+            result.putAll(standardMdc);
+        }
+        return result;
     }
 
     public MdcService remove(final MDCKeys... keys) {
@@ -214,18 +227,18 @@ public class MdcService {
         return this;
     }
 
-    public MdcService addMdc(Tuple<String, String>... keys) {
+    public MdcService addMdc(Tuple<String, Serializable>... keys) {
         if (keys != null) {
-            for (Tuple<String, String> key : keys) {
+            for (Tuple<String, Serializable> key : keys) {
                 setMdc(key.getKey(), key.getValue());
             }
         }
         return this;
     }
 
-    public MdcService addMdc(Collection<Tuple<String, String>> keys) {
+    public MdcService addMdc(Collection<Tuple<String, Serializable>> keys) {
         if (keys != null) {
-            for (Tuple<String, String> key : keys) {
+            for (Tuple<String, Serializable> key : keys) {
                 setMdc(key.getKey(), key.getValue());
             }
         }
@@ -251,8 +264,7 @@ public class MdcService {
     public MdcService errorCode(ErrorCode errorCode) {
         if (errorCode == null) {
             errorCodeRemove();
-        }
-        else {
+        } else {
             setMdc(MDCKeys.errorCode, errorCode.getErrorCode());
             setMdc(MDCKeys.errorMessage, errorCode.getMessage());
             setMdc(MDCKeys.errorType, errorCode.getErrorType());
@@ -266,6 +278,7 @@ public class MdcService {
         remove(MDCKeys.errorCode,
                MDCKeys.errorMessage,
                MDCKeys.errorType,
+               MDCKeys.errorCategory,
                MDCKeys.errorMessageDetail,
                MDCKeys.errorStatus);
         return this;
@@ -567,11 +580,9 @@ public class MdcService {
             lifecycleIn();
             try {
                 function.process();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 error = e;
-            }
-            finally {
+            } finally {
                 lifecycleRemove();
             }
         }
@@ -590,11 +601,9 @@ public class MdcService {
             lifecycleOut();
             try {
                 function.process();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 error = e;
-            }
-            finally {
+            } finally {
                 lifecycleRemove();
             }
         }
@@ -662,6 +671,7 @@ public class MdcService {
         return getMdc(MDCKeys.errorType);
     }
 
+
     public MdcService errorMessageDetail(final String value) {
         setMdc(MDCKeys.errorMessageDetail, value);
         return this;
@@ -670,6 +680,17 @@ public class MdcService {
     public String errorMessageDetail() {
         return getMdc(MDCKeys.errorMessageDetail);
     }
+
+
+    public MdcService errorCategory(final String value) {
+        setMdc(MDCKeys.errorCategory, value);
+        return this;
+    }
+
+    public String errorCategory() {
+        return getMdc(MDCKeys.errorCategory);
+    }
+
 
     public MdcService partner(final String value) {
         setMdc(MDCKeys.partner, value);
@@ -726,11 +747,11 @@ public class MdcService {
     }
 
     public MdcService duration(final long value) {
-        setMdc(MDCKeys.duration, String.valueOf(value));
+        setMdc(MDCKeys.duration, value);
         return this;
     }
 
-    public String duration() {
+    public Long duration() {
         return getMdc(MDCKeys.duration);
     }
 

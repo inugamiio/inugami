@@ -1,0 +1,3 @@
+io.inugami.api.loggers.mdc.mapper.MdcMapperDefault
+io.inugami.api.loggers.mdc.mapper.MdcMapperDuration
+io.inugami.api.loggers.mdc.mapper.MdcMapperPrice

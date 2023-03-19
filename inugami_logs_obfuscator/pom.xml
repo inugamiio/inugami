@@ -40,6 +40,11 @@
             <artifactId>inugami_api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.inugami</groupId>
+            <artifactId>inugami_commons</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>io.inugami</groupId>

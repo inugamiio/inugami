@@ -198,7 +198,7 @@
         <javax.mail-api.version>1.6.1</javax.mail-api.version>
         <javax.servlet.version>3.1.0</javax.servlet.version>
         <org.jboss.weld.version>3.1.9.Final</org.jboss.weld.version>
-        <org.jboss.resteasy.version>4.5.7.Final</org.jboss.resteasy.version>
+        <org.jboss.resteasy.version>4.0.0.Beta1</org.jboss.resteasy.version>
         <org.jboss.async-http-servlet.version>3.1.0.Beta2</org.jboss.async-http-servlet.version>
         <org.picketlink.version>2.7.1.Final</org.picketlink.version>
         <com.jackson-annotations.version>2.14.2</com.jackson-annotations.version>
