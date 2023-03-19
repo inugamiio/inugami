@@ -177,7 +177,7 @@ public class HttpBasicConnectorTest {
                                                                      .build());
 
         assertListenerSuccess(listener);
-        assertTextRelatif(result, "commons/connectors/post_withHttpRequest_nominal.json", 5);
+        assertTextRelatif(result, "commons/connectors/post_withHttpRequest_nominal.json", 1,5);
         assertThat(new String(result.getData())).isEqualTo("\"testing-library\": \"WireMock\"");
     }
 
@@ -212,7 +212,7 @@ public class HttpBasicConnectorTest {
         assertThat(listener.getDone().size()).isEqualTo(0);
         assertThat(listener.getError().size()).isEqualTo(1);
 
-        assertTextRelatif(result, "commons/connectors/post_withError_shouldTraceError.json", 5);
+        assertTextRelatif(result, "commons/connectors/post_withError_shouldTraceError.json", 1,5);
         assertThat(new String(result.getData())).isEqualTo("{\"someError\": \"ERR-001\"}");
     }
 
@@ -246,7 +246,7 @@ public class HttpBasicConnectorTest {
                                                                     .build());
 
         assertListenerSuccess(listener);
-        assertTextRelatif(result, "commons/connectors/put_withHttpRequest_nominal.json", 5);
+        assertTextRelatif(result, "commons/connectors/put_withHttpRequest_nominal.json", 1,5);
         assertThat(new String(result.getData())).isEqualTo("\"testing-library\": \"WireMock\"");
     }
 

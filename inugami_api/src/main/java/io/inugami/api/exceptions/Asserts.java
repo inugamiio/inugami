@@ -24,9 +24,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
@@ -1763,7 +1761,7 @@ public final class Asserts {
 
     public static void assertRegexNotFind(final Pattern regex,
                                           final String value) {
-        AssertRegex.assertRegexNotFind( regex, value);
+        AssertRegex.assertRegexNotFind(regex, value);
     }
 
     public static void assertRegexNotFind(final String message,
@@ -1808,6 +1806,35 @@ public final class Asserts {
                                           final String value) {
         AssertRegex.assertRegexNotFind(errorCode, regex, value);
     }
+
+
+    public List<ErrorCode> checkModel(List<VoidFunctionWithException> assertions) {
+        List<ErrorCode> result = new ArrayList<>();
+        if (assertions != null) {
+            for (VoidFunctionWithException function : assertions) {
+                try {
+                    function.process();
+                } catch (Exception e) {
+
+                    if (e instanceof ExceptionWithErrorCode) {
+                        result.add(((ExceptionWithErrorCode) e).getErrorCode());
+                    } else {
+                        result.add(DefaultErrorCode.fromErrorCode(DefaultErrorCode.buildUndefineError()).message(e.getMessage()).build());
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+
+    public void assertModel(List<VoidFunctionWithException> assertions) {
+        final List<ErrorCode> errors = checkModel(assertions);
+        if(!errors.isEmpty()){
+            AssertCommons.throwException(errors);
+        }
+    }
+
 
     // -------------------------------------------------------------------------
     // Assert throws

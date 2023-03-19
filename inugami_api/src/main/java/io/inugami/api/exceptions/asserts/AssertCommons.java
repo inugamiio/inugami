@@ -2,11 +2,13 @@ package io.inugami.api.exceptions.asserts;
 
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.exceptions.MessagesFormatter;
+import io.inugami.api.exceptions.MultiUncheckedException;
 import io.inugami.api.exceptions.UncheckedException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class  AssertCommons {
@@ -27,4 +29,7 @@ public final class  AssertCommons {
                                      MessagesFormatter.format(message, args));
     }
 
+    public static void throwException(final List<ErrorCode> errors) {
+        throw new MultiUncheckedException(errors);
+    }
 }
