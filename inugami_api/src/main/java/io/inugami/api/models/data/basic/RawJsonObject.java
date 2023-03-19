@@ -51,7 +51,7 @@ public class RawJsonObject implements JsonObject {
     
     public static JsonObject buildFromJson(final String data) {
         final RawJsonObject result = new RawJsonObject();
-        final JsonSerializerSpi jsonSerializer = SpiLoader.INSTANCE.loadSpiSingleService(JsonSerializerSpi.class);
+        final JsonSerializerSpi jsonSerializer = SpiLoader.getInstance().loadSpiSingleService(JsonSerializerSpi.class);
     
         result.setData(jsonSerializer.deserialize(data));
         return result;

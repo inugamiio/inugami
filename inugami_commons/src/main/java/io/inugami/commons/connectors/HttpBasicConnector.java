@@ -67,7 +67,7 @@ public class HttpBasicConnector {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final List<ConnectorListener> CONNECTOR_LISTENERS = SpiLoader.INSTANCE.loadSpiService(
+    private static final List<ConnectorListener> CONNECTOR_LISTENERS = SpiLoader.getInstance().loadSpiService(
             ConnectorListener.class);
 
     private final PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();

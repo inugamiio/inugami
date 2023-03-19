@@ -80,7 +80,7 @@ public class JiraProvider extends AbstractProvider implements Provider, Provider
         
         timeout = Integer.parseInt(config.optionnal().grabOrDefault(CONFIG_TIMEOUT, "5000"));
         
-        final ContextSPI ctx = new SpiLoader().loadSpiSingleService(ContextSPI.class);
+        final ContextSPI ctx = SpiLoader.getInstance().loadSpiSingleService(ContextSPI.class);
         httpConnector = ctx.getHttpConnector(classBehavior.getName(), getMaxConnections(config, 5),
                                              getTimeout(config, 6000), getTTL(config, 50), getMaxPerRoute(config, 10),
                                              getSocketTimeout(config, 60000));

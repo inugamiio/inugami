@@ -19,7 +19,9 @@ package io.inugami.api.exceptions;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+@ToString
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder(toBuilder = true)
@@ -76,7 +78,7 @@ public class DefaultWarning implements Warning {
 
     @Override
     public String getMessageDetail() {
-        return null;
+        return messageDetail;
     }
 
     @Override

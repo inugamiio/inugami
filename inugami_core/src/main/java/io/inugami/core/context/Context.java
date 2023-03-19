@@ -145,7 +145,7 @@ public final class Context implements ApplicationContext,
         MdcService.getInstance().initialize();
         cache = new CacheService();
         this.disableCron = disableCron;
-        spiLoader = new SpiLoader();
+        spiLoader = SpiLoader.getInstance();
         
         MessagesServices.registerFromClassloader("META-INF/inugami-core.properties");
         MessagesServices.registerFromClassloader("META-INF/inugami-core_fr.properties", "fr");

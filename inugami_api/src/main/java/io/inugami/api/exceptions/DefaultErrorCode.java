@@ -17,14 +17,12 @@
 package io.inugami.api.exceptions;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.function.BiConsumer;
 
+@ToString
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -48,6 +46,8 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     private final String  payload;
     private final String  category;
     private final boolean exploitationError;
+
+    private final String field;
 
     private final BiConsumer<String, Exception> errorHandler;
 
@@ -77,7 +77,8 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
                      .exploitationError(errorCode.isExploitationError())
                      .retryable(errorCode.isRetryable())
                      .rollback(errorCode.isRollbackRequire())
-                     .category(errorCode.getCategory());
+                     .category(errorCode.getCategory())
+                     .field(errorCode.getField());
     }
 
     public static DefaultErrorCode.DefaultErrorCodeBuilder newBuilder() {
@@ -181,4 +182,20 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     public boolean isExploitationError() {
         return exploitationError;
     }
+
+    @Override
+    public boolean isRollbackRequire() {
+        return retryable;
+    }
+
+    @Override
+    public boolean isRetryable() {
+        return retryable;
+    }
+
+    @Override
+    public String getField() {
+        return field;
+    }
+
 }

@@ -32,7 +32,7 @@ public final class ObfuscatorTools {
     // =========================================================================
     // ATTRIBTUTES
     // =========================================================================
-    private final static List<Obfuscator> OBFUSCATORS = new SpiLoader().loadSpiServicesByPriority(Obfuscator.class);
+    private final static List<Obfuscator> OBFUSCATORS = SpiLoader.getInstance().loadSpiServicesByPriority(Obfuscator.class);
     
     // =========================================================================
     // CONSTRUCTORS

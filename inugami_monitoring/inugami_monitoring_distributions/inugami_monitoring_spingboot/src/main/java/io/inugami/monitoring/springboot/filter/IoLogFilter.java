@@ -16,14 +16,15 @@
  */
 package io.inugami.monitoring.springboot.filter;
 
+import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
 import io.inugami.monitoring.core.interceptors.FilterInterceptor;
-import io.inugami.monitoring.springboot.request.SpringRestMethodResolver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -37,8 +38,13 @@ public class IoLogFilter extends GenericFilterBean {
     @Value("${inugami.monitoring.iolog.enabled:true}")
     private boolean enabled;
 
-    private final FilterInterceptor filter = new FilterInterceptor();
+    private FilterInterceptor filter = null;
 
+    @PostConstruct
+    public void init(){
+        filter = new FilterInterceptor();
+        DefaultApplicationLifecycleSPI.register(filter);
+    }
 
 
     // =========================================================================

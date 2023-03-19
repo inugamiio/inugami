@@ -64,7 +64,7 @@ public class PurgeCacheProvider extends AbstractProvider implements Provider, No
                               final ProviderRunner providerRunner) {
         super(classBehavior, config, providerRunner);
         
-        context = new SpiLoader().loadSpiSingleService(ContextSPI.class);
+        context = SpiLoader.getInstance().loadSpiSingleService(ContextSPI.class);
         this.region = CacheTypes.getEnum(config.optionnal().grab("region"));
         if (this.region != null) {
             cache = context.getCache().getCache(region);

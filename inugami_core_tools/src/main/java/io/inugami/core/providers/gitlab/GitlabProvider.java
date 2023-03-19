@@ -82,7 +82,7 @@ public class GitlabProvider extends AbstractProvider implements Provider, Provid
         
         timeout = Integer.parseInt(config.optionnal().grabOrDefault(CONFIG_TIMEOUT, "5000"));
         
-        final ContextSPI ctx = new SpiLoader().loadSpiSingleService(ContextSPI.class);
+        final ContextSPI ctx = SpiLoader.getInstance().loadSpiSingleService(ContextSPI.class);
         //@formatter:off
         httpConnector = ctx.getHttpConnector(classBehavior.getName(),
                                                   getMaxConnections(config,   5),

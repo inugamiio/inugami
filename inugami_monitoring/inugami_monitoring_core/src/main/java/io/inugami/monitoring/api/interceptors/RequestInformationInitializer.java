@@ -46,9 +46,8 @@ public final class RequestInformationInitializer {
     // =========================================================================
     private final static Monitoring CONFIG = RequestContext.loadConfig();
 
-    private static final SpiLoader SPI_LOADER = new SpiLoader();
 
-    private static final ServiceNameResolver SERVICE_NAME_RESOLVER = SPI_LOADER.loadSpiServiceByPriority(
+    private static final ServiceNameResolver SERVICE_NAME_RESOLVER = SpiLoader.getInstance().loadSpiServiceByPriority(
             ServiceNameResolver.class,
             new DefaultServiceNameResolver());
     private static final int                 MAX_SIZE              = 512;
@@ -57,7 +56,7 @@ public final class RequestInformationInitializer {
     // BUILDER
     // =========================================================================
     public static synchronized RequestInformation buildRequestInformation(final HttpServletRequest request,
-                                                            final Map<String, String> headers) {
+                                                                          final Map<String, String> headers) {
         final RequestInformation information = buildInformation(request, headers);
         RequestContext.setInstance(information);
         return information;
@@ -176,8 +175,7 @@ public final class RequestInformationInitializer {
         if (value != null) {
             try {
                 result = Double.parseDouble(value);
-            }
-            catch (final Exception e) {
+            } catch (final Exception e) {
                 Loggers.DEBUG.error(e.getMessage(), e);
             }
         }

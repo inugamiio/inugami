@@ -30,7 +30,7 @@ import java.util.Set;
 
 @Slf4j
 public class WarningResponseListener implements ResponseListener {
-    private static final List<WarningTracker> WARNING_TRACKERS = SpiLoader.INSTANCE.loadSpiServicesByPriority(WarningTracker.class);
+    private static final List<WarningTracker> WARNING_TRACKERS = SpiLoader.getInstance().loadSpiServicesByPriority(WarningTracker.class);
     public static final String X_WARNINGS = "x-warnings";
     public static final String HEADER_SEPARATOR = ",";
 

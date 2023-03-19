@@ -85,7 +85,7 @@ public class RunAndCloseService<T> implements ThreadFactory {
     // CONSTRUCTORS
     // =========================================================================
     private static List<MonitoringInitializer> initMonitoringInitializers() {
-        final List<MonitoringInitializer> spiServices = new SpiLoader().loadSpiService(MonitoringInitializer.class);
+        final List<MonitoringInitializer> spiServices = SpiLoader.getInstance().loadSpiService(MonitoringInitializer.class);
         return spiServices == null ? Collections.emptyList() : spiServices;
     }
     

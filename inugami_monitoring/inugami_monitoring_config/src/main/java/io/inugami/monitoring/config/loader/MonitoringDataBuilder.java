@@ -65,7 +65,7 @@ final class MonitoringDataBuilder {
     static Monitoring build(final MonitoringConfig config, final ConfigHandler<String, String> configHandler) {
         Asserts.notNull("monitoring configuration is mandatory", config);
         Asserts.notNull("configuration handler is mandatory", configHandler);
-        final SpiLoader spiloader = new SpiLoader();
+        final SpiLoader spiloader = SpiLoader.getInstance();
 
         final List<MonitoringFilterInterceptor> interceptors = buildInterceptors(config.getInterceptors(),
                                                                                  configHandler, spiloader);

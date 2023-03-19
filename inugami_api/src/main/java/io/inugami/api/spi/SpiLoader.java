@@ -19,6 +19,8 @@ package io.inugami.api.spi;
 import io.inugami.api.exceptions.Asserts;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.tools.AnnotationTools;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ import java.util.ServiceLoader;
  * @author patrick_guillerm
  * @since 6 juin 2017
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SpiLoader {
 
     // =========================================================================
@@ -38,16 +41,26 @@ public class SpiLoader {
     // =========================================================================
     private static final String JAVAX_BEAN_NAMED = "javax.inject.Named";
 
-    public static final SpiLoader INSTANCE = new SpiLoader();
+    private  static final SpiLoader INSTANCE = new SpiLoader();
+
+    public static SpiLoader getInstance(){
+        return INSTANCE;
+    }
+
+    private SpiLoaderServiceSPI loaderService = new JavaSpiLoaderServiceSPI();
+
+
+    void reloadLoaderService(SpiLoaderServiceSPI loaderService) {
+        if (loaderService != null) {
+            this.loaderService = loaderService;
+        }
+    }
 
     // =========================================================================
     // METHODS
     // =========================================================================
     public synchronized <T> List<T> loadSpiService(final Class<?> type) {
-        final List<T>          result          = new ArrayList<>();
-        final ServiceLoader<T> servicesLoaders = (ServiceLoader<T>) ServiceLoader.load(type);
-        servicesLoaders.forEach(result::add);
-
+        final List<T> result = loaderService.loadServices(type);
         if (result.isEmpty()) {
             Loggers.CONFIG.warn("no SPI implementation of {} found! please check your dependencies!", type.getName());
         }
@@ -60,9 +73,7 @@ public class SpiLoader {
     }
 
     public synchronized <T> List<T> loadSpiService(final Class<?> type, final T defaultImplementation) {
-        final List<T>          result          = new ArrayList<>();
-        final ServiceLoader<T> servicesLoaders = (ServiceLoader<T>) ServiceLoader.load(type);
-        servicesLoaders.forEach(result::add);
+        final List<T> result = loaderService.loadServices(type);
 
         result.sort(new PriorityComparator<T>());
         if (result.isEmpty() && (defaultImplementation != null)) {
@@ -72,9 +83,7 @@ public class SpiLoader {
     }
 
     public synchronized <T> List<T> loadSpiServicesWithDefault(final Class<?> type, final T defaultImplementation) {
-        final List<T>          result          = new ArrayList<>();
-        final ServiceLoader<T> servicesLoaders = (ServiceLoader<T>) ServiceLoader.load(type);
-        servicesLoaders.forEach(result::add);
+        final List<T> result = loaderService.loadServices(type);
         if (defaultImplementation != null) {
             result.add(defaultImplementation);
         }
@@ -82,8 +91,13 @@ public class SpiLoader {
     }
 
     public synchronized <T> T loadSpiServiceByPriority(final Class<?> type, final T defaultImplementation) {
-        return loadSpiServicesByPriority(type, defaultImplementation).get(0);
+        try{
+            return loadSpiServicesByPriority(type, defaultImplementation).get(0);
+        }catch (Throwable e){
+            return defaultImplementation;
+        }
     }
+
 
     public synchronized <T> List<T> loadSpiServicesByPriority(final Class<?> type) {
         return loadSpiServicesByPriority(type, null);
@@ -95,9 +109,7 @@ public class SpiLoader {
     }
 
     public synchronized <T> List<T> loadSpiServicesByPriority(final Class<?> type, final T defaultImplementation) {
-        final List<T>          result          = new ArrayList<>();
-        final ServiceLoader<T> servicesLoaders = (ServiceLoader<T>) ServiceLoader.load(type);
-        servicesLoaders.forEach(result::add);
+        final List<T> result = loaderService.loadServices(type);
         if (defaultImplementation != null) {
             result.add(defaultImplementation);
         }
@@ -119,14 +131,11 @@ public class SpiLoader {
 
             if (serviceClass.getName().equals(name)) {
                 result = service;
-            }
-            else if ((service instanceof NamedSpi) && name.equals(((NamedSpi) service).getName())) {
+            } else if ((service instanceof NamedSpi) && name.equals(((NamedSpi) service).getName())) {
                 result = service;
-            }
-            else if (classHasNamedAnnotation(serviceClass)) {
+            } else if (classHasNamedAnnotation(serviceClass)) {
                 result = service;
-            }
-            else if (serviceClass.getSimpleName().equalsIgnoreCase(name)) {
+            } else if (serviceClass.getSimpleName().equalsIgnoreCase(name)) {
                 result = service;
             }
 
@@ -135,7 +144,7 @@ public class SpiLoader {
             }
         }
         if (mandatory) {
-            Asserts.notNull(String.format("SPI implementation found %s is mandatory!", name), result);
+            Asserts.assertNotNull(String.format("SPI implementation found %s is mandatory!", name), result);
         }
         return result;
     }

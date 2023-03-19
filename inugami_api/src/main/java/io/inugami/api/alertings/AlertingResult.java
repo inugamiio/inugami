@@ -132,7 +132,7 @@ public class AlertingResult implements JsonObject {
                 result = ((JsonObject) data).convertToJson();
             }
             else {
-                final JsonSerializerSpi jsonSerializer = SpiLoader.INSTANCE.loadSpiSingleService(JsonSerializerSpi.class);
+                final JsonSerializerSpi jsonSerializer = SpiLoader.getInstance().loadSpiSingleService(JsonSerializerSpi.class);
                 result = jsonSerializer.serialize(data);
             }
         }

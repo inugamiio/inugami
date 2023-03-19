@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
+    <appender name="json" class="io.inugami.logs.obfuscator.appender.JsonAppender">
+        <configuration>
+            <encodeAsJson>true</encodeAsJson>
+            <additionalFields>
+                {
+                "useCase":"test"
+                }
+            </additionalFields>
+        </configuration>
+    </appender>
+
     <appender name="logTest" class="io.inugami.commons.test.logs.LogTestAppender">
         <encoder class="io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder">
-            <pattern>%d{dd/MM HH:mm:ss} %5p [%c:%L] - %m%n</pattern>
+            <pattern>%m</pattern>
         </encoder>
     </appender>
 
@@ -21,7 +32,8 @@
 
 
     <root level="DEBUG">
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="json"/>
+
         <appender-ref ref="logTest"/>
     </root>
 

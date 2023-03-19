@@ -84,7 +84,7 @@ public class JavaScriptEngine implements ErrorReporter {
         registerFromClassLoader("META-INF/javaScriptEngineFunctions.js",
                                 "META-INF/javaScriptEngineDataExtractor.js");
         
-        final List<JavaScriptEngineScriptLoaderSpi> loaders = new SpiLoader().loadSpiService(JavaScriptEngineScriptLoaderSpi.class);
+        final List<JavaScriptEngineScriptLoaderSpi> loaders = SpiLoader.getInstance().loadSpiService(JavaScriptEngineScriptLoaderSpi.class);
         Optional.ofNullable(loaders)
                 .orElse(new ArrayList<>())
                 .stream()
