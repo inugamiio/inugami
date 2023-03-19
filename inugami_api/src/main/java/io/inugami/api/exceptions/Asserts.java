@@ -26,7 +26,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 /**
  * Asserts
@@ -171,7 +173,7 @@ public final class Asserts {
 
     public static void assertNull(final String message,
                                   final Object... values) {
-        if(values==null){
+        if (values == null) {
             return;
         }
         for (final Object item : values) {
@@ -189,7 +191,7 @@ public final class Asserts {
 
     public static void assertNull(final Supplier<String> messageProducer,
                                   final Object... values) {
-        if(values==null){
+        if (values == null) {
             return;
         }
         for (final Object item : values) {
@@ -207,7 +209,7 @@ public final class Asserts {
 
     public static void assertNull(final ErrorCode errorCode,
                                   final Object... values) {
-        if(values==null){
+        if (values == null) {
             return;
         }
         for (final Object item : values) {
@@ -383,9 +385,9 @@ public final class Asserts {
     }
 
     public static void assertNotEmpty(final String message,
-                                final IsEmptyFacet value) {
+                                      final IsEmptyFacet value) {
         if (value == null || value.isEmpty()) {
-            throwException(message == null ? ASSERT_NOT_EMPTY_DEFAULT_MSG :message);
+            throwException(message == null ? ASSERT_NOT_EMPTY_DEFAULT_MSG : message);
         }
     }
 
@@ -395,6 +397,7 @@ public final class Asserts {
             throwException(messageProducer == null ? ASSERT_NOT_EMPTY_DEFAULT_MSG : messageProducer.get());
         }
     }
+
     public static void assertNotEmpty(final ErrorCode errorCode,
                                       final IsEmptyFacet value) {
         if (value == null || value.isEmpty()) {
@@ -532,8 +535,6 @@ public final class Asserts {
             throwException(errorCode);
         }
     }
-
-
 
 
     public static void assertEmpty(final IsEmptyFacet value) {
@@ -1611,6 +1612,202 @@ public final class Asserts {
         AssertHigherOrEquals.assertHigherOrEquals(errorCode, ref, value);
     }
 
+
+    // -------------------------------------------------------------------------
+    // REGEX
+    // -------------------------------------------------------------------------
+    public static void assertRegexMatch(final Pattern regex,
+                                        final String value) {
+        AssertRegex.assertRegexMatch(regex, value);
+    }
+
+    public static void assertRegexMatch(final String message,
+                                        final Pattern regex,
+                                        final String value) {
+        AssertRegex.assertRegexMatch(message, regex, value);
+    }
+
+    public static void assertRegexMatch(final Supplier<String> messageProducer,
+                                        final Pattern regex,
+                                        final String value) {
+        AssertRegex.assertRegexMatch(messageProducer, regex, value);
+    }
+
+    public static void assertRegexMatch(final ErrorCode errorCode,
+                                        final Pattern regex,
+                                        final String value) {
+        AssertRegex.assertRegexMatch(errorCode, regex, value);
+    }
+
+
+    public static void assertRegexMatch(final String regex,
+                                        final String value) {
+        AssertRegex.assertRegexMatch(regex, value);
+    }
+
+    public static void assertRegexMatch(final String message,
+                                        final String regex,
+                                        final String value) {
+        AssertRegex.assertRegexMatch(message, regex, value);
+    }
+
+
+    public static void assertRegexMatch(final Supplier<String> messageProducer,
+                                        final String regex,
+                                        final String value) {
+        AssertRegex.assertRegexMatch(messageProducer, regex, value);
+    }
+
+    public static void assertRegexMatch(final ErrorCode errorCode,
+                                        final String regex,
+                                        final String value) {
+        AssertRegex.assertRegexMatch(errorCode, regex, value);
+    }
+
+
+    public static void assertRegexNotMatch(final Pattern regex,
+                                           final String value) {
+        AssertRegex.assertRegexNotMatch(regex, value);
+    }
+
+    public static void assertRegexNotMatch(final String message,
+                                           final Pattern regex,
+                                           final String value) {
+        AssertRegex.assertRegexNotMatch(message, regex, value);
+    }
+
+    public static void assertRegexNotMatch(final Supplier<String> messageProducer,
+                                           final Pattern regex,
+                                           final String value) {
+        AssertRegex.assertRegexNotMatch(messageProducer, regex, value);
+    }
+
+    public static void assertRegexNotMatch(final ErrorCode errorCode,
+                                           final Pattern regex,
+                                           final String value) {
+        AssertRegex.assertRegexNotMatch(errorCode, regex, value);
+    }
+
+
+    public static void assertRegexNotMatch(final String regex,
+                                           final String value) {
+        AssertRegex.assertRegexNotMatch(regex, value);
+    }
+
+    public static void assertRegexNotMatch(final String message,
+                                           final String regex,
+                                           final String value) {
+        AssertRegex.assertRegexNotMatch(message, regex, value);
+    }
+
+
+    public static void assertRegexNotMatch(final Supplier<String> messageProducer,
+                                           final String regex,
+                                           final String value) {
+        AssertRegex.assertRegexNotMatch(messageProducer, regex, value);
+    }
+
+    public static void assertRegexNotMatch(final ErrorCode errorCode,
+                                           final String regex,
+                                           final String value) {
+        AssertRegex.assertRegexNotMatch(errorCode, regex, value);
+    }
+
+    public static void assertRegexFind(final Pattern regex,
+                                       final String value) {
+        AssertRegex.assertRegexFind(regex, value);
+    }
+
+    public static void assertRegexFind(final String message,
+                                       final Pattern regex,
+                                       final String value) {
+        AssertRegex.assertRegexFind(message, regex, value);
+    }
+
+    public static void assertRegexFind(final Supplier<String> messageProducer,
+                                       final Pattern regex,
+                                       final String value) {
+        AssertRegex.assertRegexFind(messageProducer, regex, value);
+    }
+
+    public static void assertRegexFind(final ErrorCode errorCode,
+                                       final Pattern regex,
+                                       final String value) {
+        AssertRegex.assertRegexFind(errorCode, regex, value);
+    }
+
+
+    public static void assertRegexFind(final String regex,
+                                       final String value) {
+        AssertRegex.assertRegexFind(regex, value);
+    }
+
+    public static void assertRegexFind(final String message,
+                                       final String regex,
+                                       final String value) {
+        AssertRegex.assertRegexFind(message, regex, value);
+    }
+
+
+    public static void assertRegexFind(final Supplier<String> messageProducer,
+                                       final String regex,
+                                       final String value) {
+        AssertRegex.assertRegexFind(messageProducer, regex, value);
+    }
+
+    public static void assertRegexFind(final ErrorCode errorCode,
+                                       final String regex,
+                                       final String value) {
+        AssertRegex.assertRegexFind(errorCode, regex, value);
+    }
+
+    public static void assertRegexNotFind(final Pattern regex,
+                                          final String value) {
+        AssertRegex.assertRegexNotFind( regex, value);
+    }
+
+    public static void assertRegexNotFind(final String message,
+                                          final Pattern regex,
+                                          final String value) {
+        AssertRegex.assertRegexNotFind(message, regex, value);
+    }
+
+    public static void assertRegexNotFind(final Supplier<String> messageProducer,
+                                          final Pattern regex,
+                                          final String value) {
+        AssertRegex.assertRegexNotFind(messageProducer, regex, value);
+    }
+
+    public static void assertRegexNotFind(final ErrorCode errorCode,
+                                          final Pattern regex,
+                                          final String value) {
+        AssertRegex.assertRegexNotFind(errorCode, regex, value);
+    }
+
+
+    public static void assertRegexNotFind(final String regex,
+                                          final String value) {
+        AssertRegex.assertRegexNotFind(regex, value);
+    }
+
+    public static void assertRegexNotFind(final String message,
+                                          final String regex,
+                                          final String value) {
+        AssertRegex.assertRegexNotFind(message, regex, value);
+    }
+
+
+    public static void assertRegexNotFind(final Supplier<String> messageProducer,
+                                          final String regex,
+                                          final String value) {
+        AssertRegex.assertRegexNotFind(messageProducer, regex, value);
+    }
+
+    public static void assertRegexNotFind(final ErrorCode errorCode,
+                                          final String regex,
+                                          final String value) {
+        AssertRegex.assertRegexNotFind(errorCode, regex, value);
+    }
 
     // -------------------------------------------------------------------------
     // Assert throws
