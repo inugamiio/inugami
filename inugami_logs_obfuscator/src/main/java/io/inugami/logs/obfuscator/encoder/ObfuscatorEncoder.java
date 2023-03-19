@@ -48,6 +48,7 @@ import java.util.Map;
 public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> implements ContextAware, ApplicationLifecycleSPI {
 
     private static final String                    MESSAGE        = "message";
+    private static final String LINE = "\n";
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
@@ -222,7 +223,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
                                  .toString());
             }
         }
-        return String.join("\n", result);
+        return String.join(LINE, result);
     }
 
     private Map<String, Serializable> buildBaseData(final ILoggingEvent event) {
