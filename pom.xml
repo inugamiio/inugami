@@ -168,7 +168,7 @@
         <plugins.org-eclipse-m2e.lifecycle-mapping>1.0.0</plugins.org-eclipse-m2e.lifecycle-mapping>
 
         <!--[ org.springframework ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <org.springframework.version>5.2.22.RELEASE</org.springframework.version>
+        <org.springframework.version>5.2.20.RELEASE</org.springframework.version>
         <org.springframework.boot.version>2.7.9</org.springframework.boot.version>
 
         <!--[ others ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
