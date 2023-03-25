@@ -33,6 +33,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.listeners.ApplicationLifecycleSPI;
 import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
 import io.inugami.api.loggers.Loggers;
@@ -164,7 +165,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             throw e;
         } finally {
             chrono.stop();
-            final ErrorResult errorResult = error == null ? null : resolveError(error);
+            final ErrorResult errorResult = resolveError(error);
             onEnd(httpRequest, responseWrapper, errorResult, chrono.getDelaisInMillis(), content);
         }
     }
@@ -333,6 +334,25 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             if (result != null) {
                 break;
             }
+        }
+        ErrorCode currentErrorCode = null;
+        if (result == null) {
+            currentErrorCode = MdcService.getInstance().getErrorCode();
+        }
+
+        if (currentErrorCode != null) {
+            result = ErrorResult.builder()
+                                .httpCode(currentErrorCode.getStatusCode())
+                                .errorCode(currentErrorCode.getErrorCode())
+                                .errorType(currentErrorCode.getErrorType())
+                                .message(currentErrorCode.getMessage())
+                                .exploitationError(currentErrorCode.isExploitationError())
+                                .currentErrorCode(currentErrorCode)
+                                .build();
+        }
+
+        if (result != null) {
+            result = result.toBuilder().exception(error).build();
         }
         return result;
     }

@@ -1,5 +1,6 @@
 package io.inugami.api.monitoring;
 
+import io.inugami.api.exceptions.DefaultErrorCode;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.functionnals.VoidFunctionWithException;
 import io.inugami.api.loggers.mdc.mapper.LoggerMdcMappingSPI;
@@ -17,7 +18,7 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MdcService {
 
-    private static final String                    X_B_3_TRACE_ID = "X-B3-TraceId";
+    private static final String X_B_3_TRACE_ID = "X-B3-TraceId";
 
 
     // =========================================================================
@@ -52,6 +53,7 @@ public class MdcService {
         service,
 
         lifecycle,
+        globalStatus,
         appService,
         appSubService,
 
@@ -61,6 +63,12 @@ public class MdcService {
         errorMessage,
         errorType,
         errorMessageDetail,
+        errorRetryable,
+        errorRollback,
+        errorUrl,
+        errorExploitationError,
+        errorField,
+
 
         partner,
         partnerType,
@@ -178,7 +186,7 @@ public class MdcService {
     }
 
 
-    public <T extends Serializable> T getMdc(final MDCKeys key) {
+    public String getMdc(final MDCKeys key) {
         if (key == null) {
             return null;
         }
@@ -186,13 +194,62 @@ public class MdcService {
     }
 
 
-    public <T extends Serializable> T getMdc(final String key) {
+    public String getMdc(final String key) {
         if (key == null) {
             return null;
         }
+        return MDC.get(key);
+    }
 
-        String result = MDC.get(key);
-        return result == null ? null : (T) result;
+    public boolean getBoolean(final MDCKeys key) {
+        return key == null ? false : getBoolean(key.name());
+    }
+
+    public boolean getBoolean(final String key) {
+        final String value = getMdc(key);
+        return Boolean.parseBoolean(value);
+    }
+
+    private int getInt(final MDCKeys key) {
+        return key == null ? 0 : getInt(key.name());
+    }
+
+    private int getInt(final String key) {
+        try {
+            final String value = getMdc(key);
+            return value == null ? 0 : Integer.parseInt(value);
+        } catch (Throwable e) {
+            return 0;
+        }
+    }
+
+    private long getLong(final MDCKeys key) {
+        return key == null ? 0L : getLong(key.name());
+    }
+
+    private long getLong(final String key) {
+        try {
+            final String value = getMdc(key);
+            return value == null ? 0 : Long.parseLong(value);
+        } catch (Throwable e) {
+            return 0;
+        }
+    }
+
+    private double getDouble(final MDCKeys key) {
+        return key == null ? 0.0 : getDouble(key.name());
+    }
+
+    private double getDouble(final String key) {
+        if (key == null) {
+            return 0.0;
+        }
+        try {
+            final String value = getMdc(key);
+            return value == null ? 0.0 : Double.parseDouble(value);
+        } catch (Throwable e) {
+            return 0.0;
+        }
     }
 
     public Map<String, String> getAllMdc() {
@@ -257,34 +314,6 @@ public class MdcService {
     }
 
 
-    public boolean hasError() {
-        return errorCode() != null;
-    }
-
-    public MdcService errorCode(ErrorCode errorCode) {
-        if (errorCode == null) {
-            errorCodeRemove();
-        } else {
-            setMdc(MDCKeys.errorCode, errorCode.getErrorCode());
-            setMdc(MDCKeys.errorMessage, errorCode.getMessage());
-            setMdc(MDCKeys.errorType, errorCode.getErrorType());
-            setMdc(MDCKeys.errorMessageDetail, errorCode.getMessageDetail());
-            setMdc(MDCKeys.errorStatus, String.valueOf(errorCode.getStatusCode()));
-        }
-        return this;
-    }
-
-    public MdcService errorCodeRemove() {
-        remove(MDCKeys.errorCode,
-               MDCKeys.errorMessage,
-               MDCKeys.errorType,
-               MDCKeys.errorCategory,
-               MDCKeys.errorMessageDetail,
-               MDCKeys.errorStatus);
-        return this;
-    }
-
-
     public MdcService partnerRemove() {
         remove(MDCKeys.partner,
                MDCKeys.partnerType,
@@ -298,6 +327,16 @@ public class MdcService {
         MDC.clear();
     }
 
+    public void globalStatusSuccess() {
+        setMdc(MDCKeys.globalStatus, "success");
+    }
+    public void globalStatusError() {
+        setMdc(MDCKeys.globalStatus, "error");
+    }
+    public MdcService removeGlobalStatus(){
+        remove(MDCKeys.globalStatus);
+        return this;
+    }
 
     // =========================================================================
     // BUILDER
@@ -691,6 +730,67 @@ public class MdcService {
         return getMdc(MDCKeys.errorCategory);
     }
 
+    public boolean hasError() {
+        return errorCode() != null;
+    }
+
+    public MdcService errorCodeRemove() {
+        remove(MDCKeys.errorCode,
+               MDCKeys.errorCategory,
+               MDCKeys.errorStatus,
+               MDCKeys.errorMessage,
+               MDCKeys.errorMessageDetail,
+               MDCKeys.errorMessageDetail,
+               MDCKeys.errorType,
+               MDCKeys.errorRetryable,
+               MDCKeys.errorRollback,
+               MDCKeys.errorExploitationError,
+               MDCKeys.errorField,
+               MDCKeys.errorUrl
+        );
+        return this;
+    }
+
+    public MdcService errorCode(final ErrorCode errorCode) {
+        if (errorCode == null) {
+            errorCodeRemove();
+            return this;
+        }
+        setMdc(MDCKeys.errorCode, errorCode.getErrorCode());
+        setMdc(MDCKeys.errorCategory, errorCode.getCategory());
+        setMdc(MDCKeys.errorStatus, errorCode.getStatusCode());
+        setMdc(MDCKeys.errorMessage, errorCode.getMessage());
+        setMdc(MDCKeys.errorMessageDetail, errorCode.getMessageDetail());
+        setMdc(MDCKeys.errorType, errorCode.getErrorType());
+        setMdc(MDCKeys.errorRetryable, errorCode.isRetryable());
+        setMdc(MDCKeys.errorRollback, errorCode.isRetryable());
+        setMdc(MDCKeys.errorExploitationError, errorCode.isExploitationError());
+        setMdc(MDCKeys.errorField, errorCode.getField());
+        setMdc(MDCKeys.errorUrl, errorCode.getUrl());
+        return this;
+    }
+
+    public ErrorCode getErrorCode() {
+        ErrorCode result = null;
+        if (hasError()) {
+            result = DefaultErrorCode.buildUndefineErrorCode()
+                                     .errorCode(getMdc(MDCKeys.errorCode))
+                                     .category(getMdc(MDCKeys.errorCategory))
+                                     .statusCode(getInt(MDCKeys.errorStatus))
+                                     .message(getMdc(MDCKeys.errorMessage))
+                                     .messageDetail(getMdc(MDCKeys.errorMessageDetail))
+                                     .errorType(getMdc(MDCKeys.errorType))
+                                     .retryable(getBoolean(MDCKeys.errorRetryable))
+                                     .rollback(getBoolean(MDCKeys.errorRollback))
+                                     .exploitationError(getBoolean(MDCKeys.errorExploitationError))
+                                     .field(getMdc(MDCKeys.errorField))
+                                     .url(getMdc(MDCKeys.errorUrl))
+                                     .build();
+        }
+
+        return result;
+    }
+
 
     public MdcService partner(final String value) {
         setMdc(MDCKeys.partner, value);
@@ -752,7 +852,7 @@ public class MdcService {
     }
 
     public Long duration() {
-        return getMdc(MDCKeys.duration);
+        return getLong(MDCKeys.duration);
     }
 
 
