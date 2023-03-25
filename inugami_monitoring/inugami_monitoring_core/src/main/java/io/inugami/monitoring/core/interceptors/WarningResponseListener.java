@@ -53,6 +53,7 @@ public class WarningResponseListener implements ResponseListener {
                 response.setHeader(X_WARNINGS, String.join(HEADER_SEPARATOR, warningCodes));
             }
         }
+        WarningContext.getInstance().setWarnings(List.of());
     }
 
     private void trackWarning(final List<Warning> warnings) {
