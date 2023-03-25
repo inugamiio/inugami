@@ -48,4 +48,5 @@ public class ErrorResult implements Serializable {
     private final String    fallBack;
     private final boolean   exploitationError;
     private final ErrorCode currentErrorCode;
+    private final Throwable exception;
 }
