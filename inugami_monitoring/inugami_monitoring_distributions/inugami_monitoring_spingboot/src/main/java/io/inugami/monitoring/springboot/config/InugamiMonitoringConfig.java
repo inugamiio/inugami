@@ -188,7 +188,7 @@ public class InugamiMonitoringConfig {
 
     @EqualsAndHashCode
     @ToString
-    @Builder
+    @Builder(toBuilder = true)
     @Getter
     private static class SpringConfigBinding {
         private final String springKey;

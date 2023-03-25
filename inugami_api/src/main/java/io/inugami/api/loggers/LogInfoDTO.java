@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-@Builder
+@Builder(toBuilder = true)
 public class LogInfoDTO {
     private Map<String, Serializable> data = new LinkedHashMap<>();
 

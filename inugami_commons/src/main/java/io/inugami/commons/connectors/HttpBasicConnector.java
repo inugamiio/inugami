@@ -579,7 +579,7 @@ public class HttpBasicConnector {
     // TOOLS
     // =========================================================================
     @Getter
-    @Builder
+    @Builder(toBuilder = true)
     private static class GenericRequestContext {
         final HttpRequest         request;
         final CloseableHttpClient httpclient;
