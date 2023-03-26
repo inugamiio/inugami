@@ -3,9 +3,7 @@ package io.inugami.api.monitoring;
 import io.inugami.api.exceptions.DefaultErrorCode;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.functionnals.VoidFunctionWithException;
-import io.inugami.api.loggers.mdc.mapper.LoggerMdcMappingSPI;
 import io.inugami.api.models.Tuple;
-import io.inugami.api.spi.SpiLoader;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.slf4j.MDC;
@@ -22,8 +20,12 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MdcService {
 
-    private static final String X_B_3_TRACE_ID = "X-B3-TraceId";
-    public static final  String ISO_DATE       = "yyyy-MM-dd'T'HH:mm:ss.sss";
+    private static final String X_B_3_TRACE_ID     = "X-B3-TraceId";
+    public static final  String ISO_DATE           = "yyyy-MM-dd'T'HH:mm:ss.sss";
+    public static final  String CALL_TYPE_REST     = "REST";
+    public static final  String CALL_TYPE_JMS      = "JMS";
+    public static final  String CALL_TYPE_RABBITMQ = "RABBITMQ";
+
 
     // =========================================================================
     // ATTRIBUTES
@@ -38,6 +40,9 @@ public class MdcService {
         request_id,
         conversation_id,
         sessionId,
+        messageId,
+        healthStatus,
+
         applicationVersion,
         deviceIdentifier,
         deviceType,
@@ -57,7 +62,7 @@ public class MdcService {
         service,
 
         lifecycle,
-
+        callType,
 
         globalStatus,
         appService,
@@ -119,8 +124,7 @@ public class MdcService {
         from,
         fromTimestamp,
         until,
-        untilTimestamp
-        ;
+        untilTimestamp;
     }
 
     private static final MdcService INSTANCE = new MdcService();
