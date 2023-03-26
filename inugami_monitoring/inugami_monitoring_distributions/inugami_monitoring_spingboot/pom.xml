@@ -34,7 +34,6 @@
             <artifactId>inugami_commmons_spring</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>io.inugami.monitoring</groupId>
             <artifactId>inugami_monitoring_core</artifactId>
@@ -43,6 +42,16 @@
         <dependency>
             <groupId>io.inugami.monitoring.providers</groupId>
             <artifactId>inugami_monitoring_providers_log</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-jackson</artifactId>
         </dependency>
     </dependencies>
 

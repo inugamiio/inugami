@@ -141,4 +141,11 @@ public class MonitoringContext implements BootstrapContext<Void> {
         }
         return this;
     }
+
+    // =========================================================================
+    // UTILS
+    // =========================================================================
+    public Map<String,String> getTrackingInformation(){
+        return MonitoringContextUtils.getTrackingInformation(CONFIG);
+    }
 }
