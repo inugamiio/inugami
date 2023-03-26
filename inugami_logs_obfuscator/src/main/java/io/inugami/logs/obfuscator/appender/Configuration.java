@@ -3,6 +3,7 @@ package io.inugami.logs.obfuscator.appender;
 public class Configuration {
     private boolean encodeAsJson;
     private String  additionalFields;
+    private String  file;
 
     public Configuration() {
     }
@@ -39,5 +40,13 @@ public class Configuration {
 
     public void setAdditionalFields(final String additionalFields) {
         this.additionalFields = additionalFields;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(final String file) {
+        this.file = file;
     }
 }

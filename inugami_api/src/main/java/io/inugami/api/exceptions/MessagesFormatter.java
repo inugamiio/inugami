@@ -35,6 +35,7 @@ public final class MessagesFormatter {
     // CONSTRUCTORS
     // =========================================================================
     private final static Pattern REGEX = Pattern.compile("[{][^}]+[}]");
+    private final static String  NBSP  = " ";
 
 
     // =========================================================================
@@ -45,15 +46,14 @@ public final class MessagesFormatter {
         if (format != null) {
             if ((values == null) || (values.length == 0)) {
                 result = format;
-            }
-            else if (REGEX.matcher(format).find()) {
+            } else if (REGEX.matcher(format).find()) {
                 final MessageFormat formater = new MessageFormat(format.replaceAll("'", "''"));
                 result = formater.format(values);
-            }
-            else {
+            } else {
                 result = format;
             }
         }
-        return result;
+
+        return result == null ? null : result.replaceAll(NBSP, " ");
     }
 }

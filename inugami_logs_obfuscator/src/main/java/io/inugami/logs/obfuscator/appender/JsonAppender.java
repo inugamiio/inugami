@@ -2,27 +2,68 @@ package io.inugami.logs.obfuscator.appender;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
+import io.inugami.logs.obfuscator.appender.writer.AppenderWriterStrategy;
+import io.inugami.logs.obfuscator.appender.writer.FileWriter;
 import io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder;
+
+import java.io.IOException;
+import java.util.List;
 
 public class JsonAppender extends ConsoleAppender<ILoggingEvent> {
     private Configuration configuration;
+
+    private List<AppenderWriterStrategy> WRITERS = List.of(
+            new FileWriter(),
+            (event) -> this.superWriteOut(event)
+    );
+
+
+    private AppenderWriterStrategy writer = null;
 
     @Override
     public void start() {
         if (this.encoder == null) {
             this.encoder = new ObfuscatorEncoder(configuration);
         }
+
+        writer = resolveWriter(configuration);
+        writer.start(encoder);
         super.start();
     }
+
+    @Override
+    public void stop() {
+        writer.stop();
+    }
+
 
     @Override
     protected void append(final ILoggingEvent iLoggingEvent) {
 
         if (this.isStarted()) {
             try {
-                writeOut(iLoggingEvent);
+                writer.write(iLoggingEvent);
             } catch (Throwable e) {
             }
+        }
+    }
+
+
+    private AppenderWriterStrategy resolveWriter(final Configuration configuration) {
+        AppenderWriterStrategy result = null;
+        for (AppenderWriterStrategy writer : WRITERS) {
+            if (writer.accept(configuration)) {
+                result = writer;
+                break;
+            }
+        }
+        return result;
+    }
+
+    private void superWriteOut(final ILoggingEvent event) {
+        try {
+            this.writeOut(event);
+        } catch (IOException e) {
         }
     }
 

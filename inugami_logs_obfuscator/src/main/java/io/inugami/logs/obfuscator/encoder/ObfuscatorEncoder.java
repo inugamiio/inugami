@@ -47,8 +47,9 @@ import java.util.Map;
 
 public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> implements ContextAware, ApplicationLifecycleSPI {
 
-    private static final String                    MESSAGE        = "message";
-    private static final String LINE = "\n";
+    private static final String MESSAGE = "message";
+    private static final String LINE    =  "\n";
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
@@ -178,7 +179,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     // RENDER AS JSON
     // =========================================================================
     private byte[] renderAsJson(final String message, final ILoggingEvent event) {
-        String json = renderJson(message, event);
+        String json = renderJson(message, event) + ObfuscatorEncoder.LINE;
         return json == null ? EMPTY : json.getBytes(StandardCharsets.UTF_8);
     }
 
@@ -257,9 +258,11 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
 
         if (mdc != null) {
             for (Map.Entry<String, String> entry : mdc.entrySet()) {
-                Serializable mdcValue = convertMdcValue(entry.getKey(), entry.getValue());
-                if (mdcValue != null) {
-                    result.put(entry.getKey(), mdcValue);
+                if (entry.getKey() != null && entry.getValue() != null) {
+                    Serializable mdcValue = convertMdcValue(entry.getKey(), entry.getValue());
+                    if (mdcValue != null) {
+                        result.put(entry.getKey(), mdcValue);
+                    }
                 }
             }
         }

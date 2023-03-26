@@ -1,3 +1,5 @@
 io.inugami.api.loggers.mdc.mapper.MdcMapperDefault
-io.inugami.api.loggers.mdc.mapper.MdcMapperDuration
-io.inugami.api.loggers.mdc.mapper.MdcMapperPrice
+io.inugami.api.loggers.mdc.mapper.MdcMapperDefaultBooleanValue
+io.inugami.api.loggers.mdc.mapper.MdcMapperDefaultIntValue
+io.inugami.api.loggers.mdc.mapper.MdcMapperDefaultLongValue
+io.inugami.api.loggers.mdc.mapper.MdcMapperDefaultDoubleValue

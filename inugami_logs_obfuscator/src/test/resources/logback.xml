@@ -4,6 +4,7 @@
     <appender name="json" class="io.inugami.logs.obfuscator.appender.JsonAppender">
         <configuration>
             <encodeAsJson>true</encodeAsJson>
+            <file>target/log.json</file>
             <additionalFields>
                 {
                 "useCase":"test"

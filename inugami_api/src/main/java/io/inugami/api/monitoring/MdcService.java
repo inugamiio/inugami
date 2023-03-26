@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 import org.slf4j.MDC;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
@@ -19,7 +23,7 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 public class MdcService {
 
     private static final String X_B_3_TRACE_ID = "X-B3-TraceId";
-
+    public static final  String ISO_DATE       = "yyyy-MM-dd'T'HH:mm:ss.sss";
 
     // =========================================================================
     // ATTRIBUTES
@@ -53,12 +57,18 @@ public class MdcService {
         service,
 
         lifecycle,
+
+
         globalStatus,
         appService,
         appSubService,
 
         errorCode,
         errorCategory,
+
+        /**
+         * errorStatus is <strong>int value</strong>
+         */
         errorStatus,
         errorMessage,
         errorType,
@@ -81,6 +91,11 @@ public class MdcService {
         functionalUid,
         methodInCause,
         uri,
+        url,
+        verb,
+        httpStatus,
+        principal,
+        authProtocol,
         requestHeaders,
         responseHeaders,
         parentSpanId,
@@ -96,7 +111,17 @@ public class MdcService {
         appClass,
         appClassShortName,
         appMethod,
-        warning;
+        warning,
+
+        price,
+        size,
+        quantity,
+        from,
+        fromTimestamp,
+        until,
+        unitlTimestamp,
+
+        ;
     }
 
     private static final MdcService INSTANCE = new MdcService();
@@ -171,15 +196,23 @@ public class MdcService {
         return setMdc(key.name(), value);
     }
 
+
     public MdcService setMdc(final String key, final Serializable value) {
         if (key == null) {
+            remove(key);
             return this;
         }
 
-        if (value == null) {
-            remove(key);
+        if (value instanceof Date) {
+            MDC.put(key, new SimpleDateFormat(ISO_DATE).format((Date) value));
+        } else if (value instanceof Calendar) {
+            MDC.put(key, new SimpleDateFormat(ISO_DATE).format(((Calendar) value).getTime()));
+        } else if (value instanceof LocalDateTime) {
+            MDC.put(key, ((LocalDateTime) value).format(DateTimeFormatter.ISO_DATE_TIME));
+        } else if (value instanceof LocalDate) {
+            MDC.put(key, ((LocalDate) value).format(DateTimeFormatter.ISO_DATE));
         } else {
-            MDC.put(key, (String) value);
+            MDC.put(key, String.valueOf(value));
         }
 
         return this;
@@ -330,10 +363,12 @@ public class MdcService {
     public void globalStatusSuccess() {
         setMdc(MDCKeys.globalStatus, "success");
     }
+
     public void globalStatusError() {
         setMdc(MDCKeys.globalStatus, "error");
     }
-    public MdcService removeGlobalStatus(){
+
+    public MdcService removeGlobalStatus() {
         remove(MDCKeys.globalStatus);
         return this;
     }
@@ -683,13 +718,13 @@ public class MdcService {
         return getMdc(MDCKeys.errorCode);
     }
 
-    public MdcService errorStatus(final String value) {
-        setMdc(MDCKeys.errorStatus, value);
+    public MdcService errorStatus(final int value) {
+        setMdc(MDCKeys.errorStatus, String.valueOf(value));
         return this;
     }
 
-    public String errorStatus() {
-        return getMdc(MDCKeys.errorStatus);
+    public int errorStatus() {
+        return getInt(MDCKeys.errorStatus);
     }
 
     public MdcService errorMessage(final String value) {
@@ -999,4 +1034,38 @@ public class MdcService {
         return this;
     }
 
+    public MdcService from(final LocalDateTime from) {
+        setMdc(MDCKeys.from, from);
+        return this;
+    }
+
+    public MdcService from(final long fromTimestamp) {
+        setMdc(MDCKeys.fromTimestamp, fromTimestamp);
+        return this;
+    }
+
+    public MdcService until(final LocalDateTime unitl) {
+        setMdc(MDCKeys.until, unitl);
+        return this;
+    }
+
+    public MdcService until(final long unitlTimestamp) {
+        setMdc(MDCKeys.unitlTimestamp, unitlTimestamp);
+        return this;
+    }
+
+    public MdcService price(final double value) {
+        setMdc(MDCKeys.price, value);
+        return this;
+    }
+
+    public MdcService quantity(final double value) {
+        setMdc(MDCKeys.quantity, value);
+        return this;
+    }
+
+    public MdcService size(final double value) {
+        setMdc(MDCKeys.size, value);
+        return this;
+    }
 }
