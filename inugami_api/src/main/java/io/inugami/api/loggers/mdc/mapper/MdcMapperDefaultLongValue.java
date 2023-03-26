@@ -10,7 +10,7 @@ public class MdcMapperDefaultLongValue implements LoggerMdcMappingSPI {
     private static final List<String> MATCHING_KEYS = List.of(
             MdcService.MDCKeys.duration.name(),
             MdcService.MDCKeys.fromTimestamp.name(),
-            MdcService.MDCKeys.unitlTimestamp.name()
+            MdcService.MDCKeys.untilTimestamp.name()
     );
 
     @Override

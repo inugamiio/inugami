@@ -119,8 +119,7 @@ public class MdcService {
         from,
         fromTimestamp,
         until,
-        unitlTimestamp,
-
+        untilTimestamp
         ;
     }
 
@@ -1050,7 +1049,7 @@ public class MdcService {
     }
 
     public MdcService until(final long unitlTimestamp) {
-        setMdc(MDCKeys.unitlTimestamp, unitlTimestamp);
+        setMdc(MDCKeys.untilTimestamp, unitlTimestamp);
         return this;
     }
 

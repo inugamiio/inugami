@@ -1,5 +1,7 @@
 package io.inugami.api.listeners;
 
+import io.inugami.api.loggers.mdc.initializer.MdcInitializer;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -56,6 +58,7 @@ public class DefaultApplicationLifecycleSPI implements ApplicationLifecycleSPI {
 
     @Override
     public void onApplicationStarted(Object event) {
+        MdcInitializer.initialize();
         for (Map.Entry<Class<? extends ApplicationLifecycleSPI>, ApplicationLifecycleSPI> entry : LISTENERS.entrySet()) {
             entry.getValue().onApplicationStarted(event);
         }
