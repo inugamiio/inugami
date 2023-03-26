@@ -54,6 +54,9 @@ public interface ErrorCode {
     default String getPayload() {
         return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getPayload();
     }
+    default String getUrl() {
+        return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getUrl();
+    }
 
 
     default boolean isRollbackRequire() {

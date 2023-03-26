@@ -23,7 +23,7 @@ import lombok.Builder;
 import java.util.function.Function;
 
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class DefaultStrategy<IN, OUT> implements Strategy<IN, OUT> {
 
 

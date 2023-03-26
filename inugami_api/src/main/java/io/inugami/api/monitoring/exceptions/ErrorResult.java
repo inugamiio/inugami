@@ -30,7 +30,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @ToString
-@Builder
+@Builder(toBuilder = true)
 @Getter
 public class ErrorResult implements Serializable {
 
@@ -48,4 +48,5 @@ public class ErrorResult implements Serializable {
     private final String    fallBack;
     private final boolean   exploitationError;
     private final ErrorCode currentErrorCode;
+    private final Throwable exception;
 }

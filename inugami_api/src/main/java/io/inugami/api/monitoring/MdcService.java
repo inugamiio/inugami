@@ -1,15 +1,21 @@
 package io.inugami.api.monitoring;
 
+import io.inugami.api.exceptions.DefaultErrorCode;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.functionnals.VoidFunctionWithException;
-import io.inugami.api.loggers.mdc.mapper.LoggerMdcMappingSPI;
 import io.inugami.api.models.Tuple;
-import io.inugami.api.spi.SpiLoader;
+import io.inugami.api.monitoring.models.IoInfoDTO;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.slf4j.MDC;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
@@ -17,12 +23,18 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MdcService {
 
-    private static final String                    X_B_3_TRACE_ID = "X-B3-TraceId";
+    private static final String X_B_3_TRACE_ID       = "X-B3-TraceId";
+    public static final  String ISO_DATE             = "yyyy-MM-dd'T'HH:mm:ss.sss";
+    public static final  String CALL_TYPE_REST       = "REST";
+    public static final  String CALL_TYPE_JMS        = "JMS";
+    public static final  String CALL_TYPE_RABBITMQ   = "RABBITMQ";
+    private static final String DEFAULT_STRING_VALUE = "xxxx";
 
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
+    @Getter
     public enum MDCKeys {
         env,
         asset,
@@ -33,6 +45,9 @@ public class MdcService {
         request_id,
         conversation_id,
         sessionId,
+        messageId,
+        healthStatus("up"),
+
         applicationVersion,
         deviceIdentifier,
         deviceType,
@@ -41,9 +56,9 @@ public class MdcService {
         majorVersion,
         osVersion,
         deviceNetworkType,
-        deviceNetworkSpeedDown,
-        deviceNetworkSpeedUp,
-        deviceNetworkSpeedLatency,
+        deviceNetworkSpeedDown(Double.valueOf(0.0)),
+        deviceNetworkSpeedUp(Double.valueOf(0.0)),
+        deviceNetworkSpeedLatency(Double.valueOf(0.0)),
         remoteAddress,
         deviceIp,
         userAgent,
@@ -52,27 +67,51 @@ public class MdcService {
         service,
 
         lifecycle,
+        callType,
+
+        globalStatus,
         appService,
         appSubService,
 
         errorCode,
         errorCategory,
+
+        /**
+         * errorStatus is <strong>int value</strong>
+         */
         errorStatus,
         errorMessage,
         errorType,
         errorMessageDetail,
+        errorRetryable(Boolean.FALSE),
+        errorRollback(Boolean.FALSE),
+        errorUrl,
+        errorExploitationError(Boolean.FALSE),
+        errorField,
+
 
         partner,
         partnerType,
         partnerService,
         partnerSubService,
+        partnerRequestCharset,
+        partnerResponseStatus(Integer.valueOf(0)),
+        partnerResponseDuration(Long.valueOf(0)),
+        partnerResponseMessage,
+        partnerResponseCharset,
         partnerUrl,
+        partnerVerb,
 
         exceptionName,
-        duration,
+        duration(Long.valueOf(0)),
         functionalUid,
         methodInCause,
         uri,
+        url,
+        verb,
+        httpStatus(Integer.valueOf(0)),
+        principal,
+        authProtocol,
         requestHeaders,
         responseHeaders,
         parentSpanId,
@@ -88,7 +127,29 @@ public class MdcService {
         appClass,
         appClassShortName,
         appMethod,
-        warning;
+        warning,
+
+        price(Double.valueOf(0.0)),
+        size(Double.valueOf(0.0)),
+        quantity(Double.valueOf(0.0)),
+        from(LocalDateTime.now()),
+        fromTimestamp(Long.valueOf(0)),
+        until(LocalDateTime.now()),
+        untilTimestamp(Long.valueOf(0));
+
+        public static final MDCKeys[]                     VALUES = values();
+        private             Serializable                  defaultValue;
+        private             Class<? extends Serializable> type;
+
+        private MDCKeys() {
+            this.defaultValue = DEFAULT_STRING_VALUE;
+            type = String.class;
+        }
+
+        private MDCKeys(Serializable defaultValue) {
+            this.defaultValue = defaultValue;
+            type = defaultValue.getClass();
+        }
     }
 
     private static final MdcService INSTANCE = new MdcService();
@@ -163,22 +224,30 @@ public class MdcService {
         return setMdc(key.name(), value);
     }
 
+
     public MdcService setMdc(final String key, final Serializable value) {
         if (key == null) {
+            remove(key);
             return this;
         }
 
-        if (value == null) {
-            remove(key);
+        if (value instanceof Date) {
+            MDC.put(key, new SimpleDateFormat(ISO_DATE).format((Date) value));
+        } else if (value instanceof Calendar) {
+            MDC.put(key, new SimpleDateFormat(ISO_DATE).format(((Calendar) value).getTime()));
+        } else if (value instanceof LocalDateTime) {
+            MDC.put(key, ((LocalDateTime) value).format(DateTimeFormatter.ISO_DATE_TIME));
+        } else if (value instanceof LocalDate) {
+            MDC.put(key, ((LocalDate) value).format(DateTimeFormatter.ISO_DATE));
         } else {
-            MDC.put(key, (String) value);
+            MDC.put(key, String.valueOf(value));
         }
 
         return this;
     }
 
 
-    public <T extends Serializable> T getMdc(final MDCKeys key) {
+    public String getMdc(final MDCKeys key) {
         if (key == null) {
             return null;
         }
@@ -186,13 +255,62 @@ public class MdcService {
     }
 
 
-    public <T extends Serializable> T getMdc(final String key) {
+    public String getMdc(final String key) {
         if (key == null) {
             return null;
         }
+        return MDC.get(key);
+    }
 
-        String result = MDC.get(key);
-        return result == null ? null : (T) result;
+    public boolean getBoolean(final MDCKeys key) {
+        return key == null ? false : getBoolean(key.name());
+    }
+
+    public boolean getBoolean(final String key) {
+        final String value = getMdc(key);
+        return Boolean.parseBoolean(value);
+    }
+
+    private int getInt(final MDCKeys key) {
+        return key == null ? 0 : getInt(key.name());
+    }
+
+    private int getInt(final String key) {
+        try {
+            final String value = getMdc(key);
+            return value == null ? 0 : Integer.parseInt(value);
+        } catch (Throwable e) {
+            return 0;
+        }
+    }
+
+    private long getLong(final MDCKeys key) {
+        return key == null ? 0L : getLong(key.name());
+    }
+
+    private long getLong(final String key) {
+        try {
+            final String value = getMdc(key);
+            return value == null ? 0 : Long.parseLong(value);
+        } catch (Throwable e) {
+            return 0;
+        }
+    }
+
+    private double getDouble(final MDCKeys key) {
+        return key == null ? 0.0 : getDouble(key.name());
+    }
+
+    private double getDouble(final String key) {
+        if (key == null) {
+            return 0.0;
+        }
+        try {
+            final String value = getMdc(key);
+            return value == null ? 0.0 : Double.parseDouble(value);
+        } catch (Throwable e) {
+            return 0.0;
+        }
     }
 
     public Map<String, String> getAllMdc() {
@@ -257,34 +375,6 @@ public class MdcService {
     }
 
 
-    public boolean hasError() {
-        return errorCode() != null;
-    }
-
-    public MdcService errorCode(ErrorCode errorCode) {
-        if (errorCode == null) {
-            errorCodeRemove();
-        } else {
-            setMdc(MDCKeys.errorCode, errorCode.getErrorCode());
-            setMdc(MDCKeys.errorMessage, errorCode.getMessage());
-            setMdc(MDCKeys.errorType, errorCode.getErrorType());
-            setMdc(MDCKeys.errorMessageDetail, errorCode.getMessageDetail());
-            setMdc(MDCKeys.errorStatus, String.valueOf(errorCode.getStatusCode()));
-        }
-        return this;
-    }
-
-    public MdcService errorCodeRemove() {
-        remove(MDCKeys.errorCode,
-               MDCKeys.errorMessage,
-               MDCKeys.errorType,
-               MDCKeys.errorCategory,
-               MDCKeys.errorMessageDetail,
-               MDCKeys.errorStatus);
-        return this;
-    }
-
-
     public MdcService partnerRemove() {
         remove(MDCKeys.partner,
                MDCKeys.partnerType,
@@ -298,6 +388,18 @@ public class MdcService {
         MDC.clear();
     }
 
+    public void globalStatusSuccess() {
+        setMdc(MDCKeys.globalStatus, "success");
+    }
+
+    public void globalStatusError() {
+        setMdc(MDCKeys.globalStatus, "error");
+    }
+
+    public MdcService removeGlobalStatus() {
+        remove(MDCKeys.globalStatus);
+        return this;
+    }
 
     // =========================================================================
     // BUILDER
@@ -644,13 +746,13 @@ public class MdcService {
         return getMdc(MDCKeys.errorCode);
     }
 
-    public MdcService errorStatus(final String value) {
-        setMdc(MDCKeys.errorStatus, value);
+    public MdcService errorStatus(final int value) {
+        setMdc(MDCKeys.errorStatus, String.valueOf(value));
         return this;
     }
 
-    public String errorStatus() {
-        return getMdc(MDCKeys.errorStatus);
+    public int errorStatus() {
+        return getInt(MDCKeys.errorStatus);
     }
 
     public MdcService errorMessage(final String value) {
@@ -689,6 +791,67 @@ public class MdcService {
 
     public String errorCategory() {
         return getMdc(MDCKeys.errorCategory);
+    }
+
+    public boolean hasError() {
+        return errorCode() != null;
+    }
+
+    public MdcService errorCodeRemove() {
+        remove(MDCKeys.errorCode,
+               MDCKeys.errorCategory,
+               MDCKeys.errorStatus,
+               MDCKeys.errorMessage,
+               MDCKeys.errorMessageDetail,
+               MDCKeys.errorMessageDetail,
+               MDCKeys.errorType,
+               MDCKeys.errorRetryable,
+               MDCKeys.errorRollback,
+               MDCKeys.errorExploitationError,
+               MDCKeys.errorField,
+               MDCKeys.errorUrl
+        );
+        return this;
+    }
+
+    public MdcService errorCode(final ErrorCode errorCode) {
+        if (errorCode == null) {
+            errorCodeRemove();
+            return this;
+        }
+        setMdc(MDCKeys.errorCode, errorCode.getErrorCode());
+        setMdc(MDCKeys.errorCategory, errorCode.getCategory());
+        setMdc(MDCKeys.errorStatus, errorCode.getStatusCode());
+        setMdc(MDCKeys.errorMessage, errorCode.getMessage());
+        setMdc(MDCKeys.errorMessageDetail, errorCode.getMessageDetail());
+        setMdc(MDCKeys.errorType, errorCode.getErrorType());
+        setMdc(MDCKeys.errorRetryable, errorCode.isRetryable());
+        setMdc(MDCKeys.errorRollback, errorCode.isRetryable());
+        setMdc(MDCKeys.errorExploitationError, errorCode.isExploitationError());
+        setMdc(MDCKeys.errorField, errorCode.getField());
+        setMdc(MDCKeys.errorUrl, errorCode.getUrl());
+        return this;
+    }
+
+    public ErrorCode getErrorCode() {
+        ErrorCode result = null;
+        if (hasError()) {
+            result = DefaultErrorCode.buildUndefineErrorCode()
+                                     .errorCode(getMdc(MDCKeys.errorCode))
+                                     .category(getMdc(MDCKeys.errorCategory))
+                                     .statusCode(getInt(MDCKeys.errorStatus))
+                                     .message(getMdc(MDCKeys.errorMessage))
+                                     .messageDetail(getMdc(MDCKeys.errorMessageDetail))
+                                     .errorType(getMdc(MDCKeys.errorType))
+                                     .retryable(getBoolean(MDCKeys.errorRetryable))
+                                     .rollback(getBoolean(MDCKeys.errorRollback))
+                                     .exploitationError(getBoolean(MDCKeys.errorExploitationError))
+                                     .field(getMdc(MDCKeys.errorField))
+                                     .url(getMdc(MDCKeys.errorUrl))
+                                     .build();
+        }
+
+        return result;
     }
 
 
@@ -752,7 +915,7 @@ public class MdcService {
     }
 
     public Long duration() {
-        return getMdc(MDCKeys.duration);
+        return getLong(MDCKeys.duration);
     }
 
 
@@ -899,4 +1062,74 @@ public class MdcService {
         return this;
     }
 
+    public MdcService from(final LocalDateTime from) {
+        setMdc(MDCKeys.from, from);
+        return this;
+    }
+
+    public MdcService from(final long fromTimestamp) {
+        setMdc(MDCKeys.fromTimestamp, fromTimestamp);
+        return this;
+    }
+
+    public MdcService until(final LocalDateTime unitl) {
+        setMdc(MDCKeys.until, unitl);
+        return this;
+    }
+
+    public MdcService until(final long unitlTimestamp) {
+        setMdc(MDCKeys.untilTimestamp, unitlTimestamp);
+        return this;
+    }
+
+    public MdcService price(final double value) {
+        setMdc(MDCKeys.price, value);
+        return this;
+    }
+
+    public MdcService quantity(final double value) {
+        setMdc(MDCKeys.quantity, value);
+        return this;
+    }
+
+    public MdcService size(final double value) {
+        setMdc(MDCKeys.size, value);
+        return this;
+    }
+
+    public MdcService ioinfo(final IoInfoDTO info) {
+        if (info == null) {
+            removeIoinfo();
+        }
+
+        setMdc(MDCKeys.partnerUrl, info.getUrl());
+        setMdc(MDCKeys.partnerVerb, info.getMethod());
+        setMdc(MDCKeys.partner, info.getPartnerName());
+        setMdc(MDCKeys.partnerService, info.getPartnerService());
+        setMdc(MDCKeys.partnerSubService, info.getPartnerSubService());
+        setMdc(MDCKeys.partnerRequestCharset, info.getRequestCharset() == null ? StandardCharsets.UTF_8.name() : info.getRequestCharset().name());
+
+        if (info.getStatus() != 0) {
+            setMdc(MDCKeys.partnerResponseStatus, info.getStatus());
+            setMdc(MDCKeys.partnerResponseDuration, info.getDuration());
+            setMdc(MDCKeys.partnerResponseMessage, info.getDuration());
+            setMdc(MDCKeys.partnerResponseCharset, info.getResponseCharset() == null ? StandardCharsets.UTF_8.name() : info.getResponseCharset().name());
+        }
+        return this;
+    }
+
+    private void removeIoinfo() {
+        remove(MDCKeys.partnerUrl,
+               MDCKeys.partnerVerb,
+               MDCKeys.partner,
+               MDCKeys.partnerService,
+               MDCKeys.partnerSubService,
+               MDCKeys.partnerRequestCharset,
+               MDCKeys.partnerResponseStatus,
+               MDCKeys.partnerResponseDuration,
+               MDCKeys.partnerResponseMessage,
+               MDCKeys.partnerResponseCharset
+        );
+
+    }
 }

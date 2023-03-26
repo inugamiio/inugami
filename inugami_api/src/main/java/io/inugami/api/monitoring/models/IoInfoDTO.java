@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 public class IoInfoDTO {
     private static final String                          HEADER_SEP        = " : ";

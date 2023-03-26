@@ -19,6 +19,7 @@ public class ObfuscatorEncoderTest {
 
     @Test
     public void encode_nominal_shouldObfuscate() {
+        MdcService.getInstance().clear();
         final List<BasicLogEvent> logs     = new ArrayList<>();
         final LogListener         listener = new DefaultLogListener(ObfuscatorEncoderTest.class, logs::add);
         LogTestAppender.register(listener);

@@ -16,6 +16,7 @@
  */
 package io.inugami.monitoring.springboot.filter;
 
+import io.inugami.api.exceptions.WarningContext;
 import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
 import io.inugami.monitoring.core.interceptors.FilterInterceptor;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Order(Ordered.LOWEST_PRECEDENCE)
 @Component
@@ -53,6 +55,7 @@ public class IoLogFilter extends GenericFilterBean {
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response,
                          final FilterChain chain) throws IOException, ServletException {
+        WarningContext.getInstance().setWarnings(List.of());
         if (enabled) {
             filter.doFilter(request, response, chain);
         }

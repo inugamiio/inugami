@@ -38,6 +38,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.ConfigurableEnvironment;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -54,9 +55,7 @@ public class InugamiMonitoringConfig {
 
     @Bean
     public MonitoringBootstrap initMonitoringContext() {
-
         initializeConfig();
-
         final Monitoring config = MonitoringBootstrap.CONTEXT.getConfig();
         config.refreshConfig(configuration);
         config.setHeaders(Headers.buildFromConfig(configuration));
@@ -65,6 +64,12 @@ public class InugamiMonitoringConfig {
         initializeInterceptors(monitoringBootstrap);
         monitoringBootstrap.contextInitialized();
         return monitoringBootstrap;
+    }
+
+
+    @Bean
+    public MonitoringContext monitoringContext(final MonitoringBootstrap monitoringBootstrap) {
+        return MonitoringBootstrap.CONTEXT;
     }
 
     private void initializeConfig() {
@@ -188,7 +193,7 @@ public class InugamiMonitoringConfig {
 
     @EqualsAndHashCode
     @ToString
-    @Builder
+    @Builder(toBuilder = true)
     @Getter
     private static class SpringConfigBinding {
         private final String springKey;

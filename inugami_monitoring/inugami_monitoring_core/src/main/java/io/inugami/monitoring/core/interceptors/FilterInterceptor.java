@@ -33,8 +33,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.listeners.ApplicationLifecycleSPI;
-import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.models.tools.Chrono;
 import io.inugami.api.monitoring.*;
@@ -164,7 +164,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             throw e;
         } finally {
             chrono.stop();
-            final ErrorResult errorResult = error == null ? null : resolveError(error);
+            final ErrorResult errorResult = resolveError(error);
             onEnd(httpRequest, responseWrapper, errorResult, chrono.getDelaisInMillis(), content);
         }
     }
@@ -244,19 +244,59 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
                          final String content) {
 
         final ResquestData requestData = convertToRequestData(httpRequest, content);
+        onBeginInitMdcFields(requestData, httpRequest);
+
         for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
             interceptor.onBegin(requestData);
         }
     }
 
+
     private void onEnd(final HttpServletRequest httpRequest, final ResponseWrapper httpResponse,
                        final ErrorResult error, final long duration, final String content) {
         RequestInformationInitializer.appendResponseHeaderInformation(httpResponse);
         RequestContext.getInstance();
+        onEndInitMdcFields(error, duration, httpResponse);
+
         final ResquestData requestData  = convertToRequestData(httpRequest, content);
         final ResponseData responseData = convertToResponseData(httpResponse, duration);
         for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
             interceptor.onDone(requestData, responseData, error);
+        }
+    }
+
+    // =========================================================================
+    // MDC
+    // =========================================================================
+    private void onBeginInitMdcFields(final ResquestData requestData, final HttpServletRequest httpRequest) {
+        final MdcService mdc = MdcService.getInstance();
+        try {
+            mdc.setMdc(MdcService.MDCKeys.callType, MdcService.CALL_TYPE_REST);
+            mdc.setMdc(MdcService.MDCKeys.uri, requestData.getUri());
+
+            mdc.setMdc(MdcService.MDCKeys.verb, httpRequest.getMethod());
+            mdc.setMdc(MdcService.MDCKeys.sessionId, httpRequest.getRequestedSessionId());
+            mdc.setMdc(MdcService.MDCKeys.authProtocol, httpRequest.getAuthType());
+
+            if (httpRequest.getUserPrincipal() != null) {
+                mdc.setMdc(MdcService.MDCKeys.principal, httpRequest.getUserPrincipal().getName());
+            }
+            mdc.setMdc(MdcService.MDCKeys.url, httpRequest.getRequestURL().toString());
+        } catch (Throwable e) {
+        }
+
+    }
+
+    private void onEndInitMdcFields(final ErrorResult error, final long duration, final ResponseWrapper httpResponse) {
+        final MdcService mdc = MdcService.getInstance();
+        try {
+            mdc.duration(duration);
+            mdc.setMdc(MdcService.MDCKeys.httpStatus, httpResponse.getStatus());
+
+            if (error != null && error.getCurrentErrorCode() != null) {
+                mdc.errorCode(error.getCurrentErrorCode());
+            }
+        } catch (Throwable e) {
         }
     }
 
@@ -333,6 +373,25 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             if (result != null) {
                 break;
             }
+        }
+        ErrorCode currentErrorCode = null;
+        if (result == null) {
+            currentErrorCode = MdcService.getInstance().getErrorCode();
+        }
+
+        if (currentErrorCode != null) {
+            result = ErrorResult.builder()
+                                .httpCode(currentErrorCode.getStatusCode())
+                                .errorCode(currentErrorCode.getErrorCode())
+                                .errorType(currentErrorCode.getErrorType())
+                                .message(currentErrorCode.getMessage())
+                                .exploitationError(currentErrorCode.isExploitationError())
+                                .currentErrorCode(currentErrorCode)
+                                .build();
+        }
+
+        if (result != null) {
+            result = result.toBuilder().exception(error).build();
         }
         return result;
     }

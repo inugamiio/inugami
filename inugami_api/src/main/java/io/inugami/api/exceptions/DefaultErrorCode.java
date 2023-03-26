@@ -45,6 +45,7 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     private final boolean rollback;
     private final String  payload;
     private final String  category;
+    private final String  url;
     private final boolean exploitationError;
 
     private final String field;
@@ -196,6 +197,11 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     @Override
     public String getField() {
         return field;
+    }
+
+    @Override
+    public String getUrl() {
+        return url;
     }
 
 }

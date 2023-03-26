@@ -38,7 +38,7 @@ import lombok.*;
  * @author patrickguillerm
  * @since Jan 16, 2019
  */
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @ToString
 @Setter

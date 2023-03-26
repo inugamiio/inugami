@@ -1808,7 +1808,14 @@ public final class Asserts {
     }
 
 
-    public List<ErrorCode> checkModel(List<VoidFunctionWithException> assertions) {
+    public static List<ErrorCode> checkModel(VoidFunctionWithException... assertions) {
+        if (assertions == null) {
+            return new ArrayList<>();
+        }
+        return checkModel(Arrays.asList(assertions));
+    }
+
+    public static List<ErrorCode> checkModel(List<VoidFunctionWithException> assertions) {
         List<ErrorCode> result = new ArrayList<>();
         if (assertions != null) {
             for (VoidFunctionWithException function : assertions) {
@@ -1828,9 +1835,16 @@ public final class Asserts {
     }
 
 
-    public void assertModel(List<VoidFunctionWithException> assertions) {
+    public static void assertModel(VoidFunctionWithException... assertions) {
+        if (assertions == null) {
+            return;
+        }
+        assertModel(Arrays.asList(assertions));
+    }
+
+    public static void assertModel(List<VoidFunctionWithException> assertions) {
         final List<ErrorCode> errors = checkModel(assertions);
-        if(!errors.isEmpty()){
+        if (!errors.isEmpty()) {
             AssertCommons.throwException(errors);
         }
     }

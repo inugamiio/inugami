@@ -409,7 +409,7 @@ class HttpBasicConnectorDelegateUtils {
 
 
     @Getter
-    @Builder
+    @Builder(toBuilder = true)
     @AllArgsConstructor
     public static class StatusLineDTO implements StatusLine {
         private final ProtocolVersion protocolVersion;
@@ -445,7 +445,7 @@ class HttpBasicConnectorDelegateUtils {
         return result.build();
     }
 
-    @Builder
+    @Builder(toBuilder = true)
     @Getter
     @AllArgsConstructor
     public static class ReadResponseResultDTO {

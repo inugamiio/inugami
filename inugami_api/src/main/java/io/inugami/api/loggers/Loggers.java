@@ -94,7 +94,8 @@ public final class Loggers {
 
     public static final Logger PARTNERLOG = LoggerFactory.getLogger("PARTNERLOG");
 
-    public static final Logger KPI = LoggerFactory.getLogger("KPI");
+    public static final Logger KPI             = LoggerFactory.getLogger("KPI");
+    public static final Logger LOG_INITIALIZER = LoggerFactory.getLogger("LOG_INITIALIZER");
 
 
     // =========================================================================
