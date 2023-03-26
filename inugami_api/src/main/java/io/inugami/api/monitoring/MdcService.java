@@ -4,11 +4,14 @@ import io.inugami.api.exceptions.DefaultErrorCode;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.functionnals.VoidFunctionWithException;
 import io.inugami.api.models.Tuple;
+import io.inugami.api.monitoring.models.IoInfoDTO;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.slf4j.MDC;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,16 +23,18 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MdcService {
 
-    private static final String X_B_3_TRACE_ID     = "X-B3-TraceId";
-    public static final  String ISO_DATE           = "yyyy-MM-dd'T'HH:mm:ss.sss";
-    public static final  String CALL_TYPE_REST     = "REST";
-    public static final  String CALL_TYPE_JMS      = "JMS";
-    public static final  String CALL_TYPE_RABBITMQ = "RABBITMQ";
+    private static final String X_B_3_TRACE_ID       = "X-B3-TraceId";
+    public static final  String ISO_DATE             = "yyyy-MM-dd'T'HH:mm:ss.sss";
+    public static final  String CALL_TYPE_REST       = "REST";
+    public static final  String CALL_TYPE_JMS        = "JMS";
+    public static final  String CALL_TYPE_RABBITMQ   = "RABBITMQ";
+    private static final String DEFAULT_STRING_VALUE = "xxxx";
 
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
+    @Getter
     public enum MDCKeys {
         env,
         asset,
@@ -41,7 +46,7 @@ public class MdcService {
         conversation_id,
         sessionId,
         messageId,
-        healthStatus,
+        healthStatus("up"),
 
         applicationVersion,
         deviceIdentifier,
@@ -51,9 +56,9 @@ public class MdcService {
         majorVersion,
         osVersion,
         deviceNetworkType,
-        deviceNetworkSpeedDown,
-        deviceNetworkSpeedUp,
-        deviceNetworkSpeedLatency,
+        deviceNetworkSpeedDown(Double.valueOf(0.0)),
+        deviceNetworkSpeedUp(Double.valueOf(0.0)),
+        deviceNetworkSpeedLatency(Double.valueOf(0.0)),
         remoteAddress,
         deviceIp,
         userAgent,
@@ -78,10 +83,10 @@ public class MdcService {
         errorMessage,
         errorType,
         errorMessageDetail,
-        errorRetryable,
-        errorRollback,
+        errorRetryable(Boolean.FALSE),
+        errorRollback(Boolean.FALSE),
         errorUrl,
-        errorExploitationError,
+        errorExploitationError(Boolean.FALSE),
         errorField,
 
 
@@ -89,16 +94,22 @@ public class MdcService {
         partnerType,
         partnerService,
         partnerSubService,
+        partnerRequestCharset,
+        partnerResponseStatus(Integer.valueOf(0)),
+        partnerResponseDuration(Long.valueOf(0)),
+        partnerResponseMessage,
+        partnerResponseCharset,
         partnerUrl,
+        partnerVerb,
 
         exceptionName,
-        duration,
+        duration(Long.valueOf(0)),
         functionalUid,
         methodInCause,
         uri,
         url,
         verb,
-        httpStatus,
+        httpStatus(Integer.valueOf(0)),
         principal,
         authProtocol,
         requestHeaders,
@@ -118,13 +129,27 @@ public class MdcService {
         appMethod,
         warning,
 
-        price,
-        size,
-        quantity,
-        from,
-        fromTimestamp,
-        until,
-        untilTimestamp;
+        price(Double.valueOf(0.0)),
+        size(Double.valueOf(0.0)),
+        quantity(Double.valueOf(0.0)),
+        from(LocalDateTime.now()),
+        fromTimestamp(Long.valueOf(0)),
+        until(LocalDateTime.now()),
+        untilTimestamp(Long.valueOf(0));
+
+        public static final MDCKeys[]                     VALUES = values();
+        private             Serializable                  defaultValue;
+        private             Class<? extends Serializable> type;
+
+        private MDCKeys() {
+            this.defaultValue = DEFAULT_STRING_VALUE;
+            type = String.class;
+        }
+
+        private MDCKeys(Serializable defaultValue) {
+            this.defaultValue = defaultValue;
+            type = defaultValue.getClass();
+        }
     }
 
     private static final MdcService INSTANCE = new MdcService();
@@ -1070,5 +1095,41 @@ public class MdcService {
     public MdcService size(final double value) {
         setMdc(MDCKeys.size, value);
         return this;
+    }
+
+    public MdcService ioinfo(final IoInfoDTO info) {
+        if (info == null) {
+            removeIoinfo();
+        }
+
+        setMdc(MDCKeys.partnerUrl, info.getUrl());
+        setMdc(MDCKeys.partnerVerb, info.getMethod());
+        setMdc(MDCKeys.partner, info.getPartnerName());
+        setMdc(MDCKeys.partnerService, info.getPartnerService());
+        setMdc(MDCKeys.partnerSubService, info.getPartnerSubService());
+        setMdc(MDCKeys.partnerRequestCharset, info.getRequestCharset() == null ? StandardCharsets.UTF_8.name() : info.getRequestCharset().name());
+
+        if (info.getStatus() != 0) {
+            setMdc(MDCKeys.partnerResponseStatus, info.getStatus());
+            setMdc(MDCKeys.partnerResponseDuration, info.getDuration());
+            setMdc(MDCKeys.partnerResponseMessage, info.getDuration());
+            setMdc(MDCKeys.partnerResponseCharset, info.getResponseCharset() == null ? StandardCharsets.UTF_8.name() : info.getResponseCharset().name());
+        }
+        return this;
+    }
+
+    private void removeIoinfo() {
+        remove(MDCKeys.partnerUrl,
+               MDCKeys.partnerVerb,
+               MDCKeys.partner,
+               MDCKeys.partnerService,
+               MDCKeys.partnerSubService,
+               MDCKeys.partnerRequestCharset,
+               MDCKeys.partnerResponseStatus,
+               MDCKeys.partnerResponseDuration,
+               MDCKeys.partnerResponseMessage,
+               MDCKeys.partnerResponseCharset
+        );
+
     }
 }

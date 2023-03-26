@@ -3,15 +3,24 @@ package io.inugami.api.loggers.mdc.mapper;
 import io.inugami.api.monitoring.MdcService;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MdcMapperDefaultBooleanValue implements LoggerMdcMappingSPI {
 
-    private static final List<String> MATCHING_KEYS = List.of(
-            MdcService.MDCKeys.errorRetryable.name(),
-            MdcService.MDCKeys.errorRollback.name(),
-            MdcService.MDCKeys.errorExploitationError.name()
-    );
+    private static final List<String> MATCHING_KEYS = initializeKeys();
+
+    private static List<String> initializeKeys() {
+        List<String> result = new ArrayList<>();
+
+        for (MdcService.MDCKeys key : MdcService.MDCKeys.VALUES) {
+            if (key.getDefaultValue() instanceof Boolean) {
+                result.add(key.name());
+            }
+        }
+
+        return result;
+    }
 
     @Override
     public boolean accept(final String key) {
