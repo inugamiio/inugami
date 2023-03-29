@@ -51,6 +51,8 @@ import io.inugami.monitoring.api.interceptors.RequestInformationInitializer;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 import io.inugami.monitoring.api.resolvers.Interceptable;
 import io.inugami.monitoring.core.context.MonitoringBootstrap;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
@@ -61,6 +63,8 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
  * @author patrick_guillerm
  * @since 28 déc. 2018
  */
+@AllArgsConstructor
+@NoArgsConstructor
 @Slf4j
 @WebFilter(urlPatterns = "*", asyncSupported = true)
 public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
@@ -366,7 +370,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     // =========================================================================
     // ERROR RESOLVER
     // =========================================================================
-    private ErrorResult resolveError(final Exception error) {
+    protected ErrorResult resolveError(final Exception error) {
         ErrorResult result = null;
 
         if (error != null) {

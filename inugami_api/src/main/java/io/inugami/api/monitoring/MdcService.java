@@ -384,8 +384,9 @@ public class MdcService {
         return this;
     }
 
-    public void clear() {
+    public MdcService clear() {
         MDC.clear();
+        return this;
     }
 
     public void globalStatusSuccess() {
