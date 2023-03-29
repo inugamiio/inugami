@@ -63,8 +63,8 @@ public class IoInfoDTO {
         if (status > 0) {
             result.write("response:").line();
             result.tab().write("status: ").write(status).line();
-            result.tab().write("duration: ").write(status).write("ms").line();
-            result.tab().write("message: ").write(status).line();
+            result.tab().write("duration: ").write(duration).write("ms").line();
+            result.tab().write("message: ").write(message).line();
             result.write(writeHeaders(responseHeaders));
             result.write(writePayload(responsePayload, responseCharset));
         }
