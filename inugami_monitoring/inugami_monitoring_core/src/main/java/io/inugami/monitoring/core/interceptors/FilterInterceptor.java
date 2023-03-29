@@ -368,12 +368,21 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     // =========================================================================
     private ErrorResult resolveError(final Exception error) {
         ErrorResult result = null;
-        for (final ExceptionResolver resolver : exceptionResolver) {
-            result = resolver.resolve(error);
-            if (result != null) {
-                break;
+
+        if (error != null) {
+            for (final ExceptionResolver resolver : exceptionResolver) {
+                try {
+                    result = resolver.resolve(error);
+                } catch (Throwable e) {
+                    log.error(e.getMessage(), e);
+                }
+
+                if (result != null) {
+                    break;
+                }
             }
         }
+
         ErrorCode currentErrorCode = null;
         if (result == null) {
             currentErrorCode = MdcService.getInstance().getErrorCode();
@@ -390,7 +399,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
                                 .build();
         }
 
-        if (result != null) {
+        if (result != null && error != null) {
             result = result.toBuilder().exception(error).build();
         }
         return result;
