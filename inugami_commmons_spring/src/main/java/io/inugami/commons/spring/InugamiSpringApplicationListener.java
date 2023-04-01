@@ -1,7 +1,10 @@
 package io.inugami.commons.spring;
 
 import io.inugami.api.listeners.ApplicationLifecycleSPI;
+import io.inugami.api.processors.ConfigHandler;
 import io.inugami.api.spi.SpiLoader;
+import io.inugami.commons.spring.configuration.ConfigConfiguration;
+import io.inugami.configuration.services.ConfigHandlerHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.availability.AvailabilityChangeEvent;
@@ -19,15 +22,27 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public class InugamiSpringApplicationListener implements ApplicationListener<ApplicationEvent> {
 
-
-    private static final AtomicReference<ConfigurableEnvironment> SPRING_ENV = new AtomicReference<>();
-
+    // =========================================================================
+    // ATTRIBUTES
+    // =========================================================================
     private List<ApplicationLifecycleSPI> listeners = null;
 
-    public static ConfigurableEnvironment getConfigurableEnvironment() {
-        return SPRING_ENV.get();
+    // =========================================================================
+    // PRIVATE
+    // =========================================================================
+    private void loadListeners() {
+        final List<ApplicationLifecycleSPI> instances = SpiLoader.getInstance().loadSpiServicesByPriority(ApplicationLifecycleSPI.class);
+
+        if (instances == null) {
+            listeners = new ArrayList<>();
+        } else {
+            listeners = instances;
+        }
     }
 
+    // =========================================================================
+    // LISTENER
+    // =========================================================================
     @Override
     public void onApplicationEvent(final ApplicationEvent event) {
         log.debug("event:{}", event.getClass());
@@ -61,6 +76,10 @@ public class InugamiSpringApplicationListener implements ApplicationListener<App
     }
 
 
+    // =========================================================================
+    // EVENTS
+    // =========================================================================
+
     private void onApplicationStarting(final ApplicationStartingEvent event) {
         for (ApplicationLifecycleSPI listener : listeners) {
             listener.onApplicationStarting(event);
@@ -68,9 +87,11 @@ public class InugamiSpringApplicationListener implements ApplicationListener<App
     }
 
     private void onEnvironmentPrepared(final ApplicationEnvironmentPreparedEvent event) {
-        SPRING_ENV.set(event.getEnvironment());
+        ConfigConfiguration.initializeConfig(event.getEnvironment());
+
         for (ApplicationLifecycleSPI listener : listeners) {
             listener.onEnvironmentPrepared(event);
+            listener.onConfigurationReady(ConfigConfiguration.CONFIGURATION);
         }
     }
 
@@ -125,15 +146,5 @@ public class InugamiSpringApplicationListener implements ApplicationListener<App
         }
     }
 
-
-    private void loadListeners() {
-        final List<ApplicationLifecycleSPI> instances = SpiLoader.getInstance().loadSpiServicesByPriority(ApplicationLifecycleSPI.class);
-
-        if (instances == null) {
-            listeners = new ArrayList<>();
-        } else {
-            listeners = instances;
-        }
-    }
 
 }

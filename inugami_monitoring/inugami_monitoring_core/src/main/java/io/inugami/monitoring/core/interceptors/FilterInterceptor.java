@@ -389,7 +389,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
         ErrorCode currentErrorCode = null;
         if (result == null) {
-            currentErrorCode = MdcService.getInstance().getErrorCode();
+            currentErrorCode = MdcService.getInstance().errorCode();
         }
 
         if (currentErrorCode != null) {

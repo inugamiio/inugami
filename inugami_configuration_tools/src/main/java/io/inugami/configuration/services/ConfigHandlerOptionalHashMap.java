@@ -27,6 +27,8 @@ import io.inugami.api.loggers.Loggers;
 import io.inugami.api.mapping.JsonUnmarshalling;
 import io.inugami.api.processors.ConfigHandler;
 import io.inugami.api.spi.SpiLoader;
+import io.inugami.api.tools.ConfigTemplateValues;
+import io.inugami.api.tools.TemplateProviderSPI;
 import io.inugami.configuration.services.functions.FunctionsServices;
 import io.inugami.configuration.services.functions.ProviderAttributFunction;
 
@@ -50,8 +52,9 @@ public class ConfigHandlerOptionalHashMap extends HashMap<String, String> implem
                                                                          Pattern.CASE_INSENSITIVE);
     
     private static final Pattern    BOOLEAN_TRUE_MATCH = Pattern.compile("^(true|yes|y)$", Pattern.CASE_INSENSITIVE);
-    
-    private final FunctionsServices functions;
+
+    private    TemplateProviderSPI template;
+    private final FunctionsServices   functions;
     
     // =========================================================================
     // CONSTRUCTOR
@@ -59,12 +62,14 @@ public class ConfigHandlerOptionalHashMap extends HashMap<String, String> implem
     public ConfigHandlerOptionalHashMap() {
         super();
         final List<ProviderAttributFunction> attributFunctions = SpiLoader.getInstance().loadSpiService(ProviderAttributFunction.class);
+        template = SpiLoader.getInstance().loadSpiServiceByPriority(TemplateProviderSPI.class, new ConfigTemplateValues());
         functions = new FunctionsServices(attributFunctions, this);
     }
     
     public ConfigHandlerOptionalHashMap(final boolean enableFunction) {
         super();
         final List<ProviderAttributFunction> attributFunctions = new ArrayList<>();
+        template = SpiLoader.getInstance().loadSpiServiceByPriority(TemplateProviderSPI.class, new ConfigTemplateValues());
         if (enableFunction) {
             SpiLoader.getInstance().loadSpiService(ProviderAttributFunction.class);
         }

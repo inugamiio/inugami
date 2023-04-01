@@ -290,6 +290,7 @@ class HttpBasicConnectorDelegateUtils {
             return;
         }
 
+
         final Map<String, String> tracking = MdcService.getInstance().getTrackingInformation();
         for (Map.Entry<String, String> trackingEntry : tracking.entrySet()) {
             consumer.accept(trackingEntry.getKey(), trackingEntry.getValue());

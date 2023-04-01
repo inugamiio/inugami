@@ -1,10 +1,15 @@
 package io.inugami.api.listeners;
 
+import io.inugami.api.processors.ConfigHandler;
+
 public interface ApplicationLifecycleSPI {
     default void onApplicationStarting(Object event){
     }
 
     default void onEnvironmentPrepared(Object event){
+    }
+
+    default void onConfigurationReady(final ConfigHandler<String, String> configuration){
     }
 
     default void onApplicationContextInitialized(Object event){

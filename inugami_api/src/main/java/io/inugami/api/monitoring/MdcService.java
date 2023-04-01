@@ -3,14 +3,20 @@ package io.inugami.api.monitoring;
 import io.inugami.api.exceptions.DefaultErrorCode;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.functionnals.VoidFunctionWithException;
+import io.inugami.api.listeners.ApplicationLifecycleSPI;
+import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
+import io.inugami.api.loggers.mdc.mapper.LoggerMdcMappingSPI;
 import io.inugami.api.models.Tuple;
+import io.inugami.api.monitoring.models.Headers;
 import io.inugami.api.monitoring.models.IoInfoDTO;
-import lombok.AccessLevel;
+import io.inugami.api.processors.ConfigHandler;
+import io.inugami.api.spi.SpiLoader;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -20,8 +26,9 @@ import java.util.*;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MdcService {
+
+@Slf4j
+public class MdcService implements ApplicationLifecycleSPI {
 
     private static final String X_B_3_TRACE_ID       = "X-B3-TraceId";
     public static final  String ISO_DATE             = "yyyy-MM-dd'T'HH:mm:ss.sss";
@@ -29,6 +36,32 @@ public class MdcService {
     public static final  String CALL_TYPE_JMS        = "JMS";
     public static final  String CALL_TYPE_RABBITMQ   = "RABBITMQ";
     private static final String DEFAULT_STRING_VALUE = "xxxx";
+    private static final String SEP                  = ";";
+    private static final String IN                   = "in";
+    private static final String OUT                  = "out";
+    private static final String SUCCESS              = "success";
+    private static final String ERROR                = "error";
+
+    private Headers headers;
+
+    private List<LoggerMdcMappingSPI> mdcMappers = SpiLoader.getInstance().loadSpiServicesByPriority(LoggerMdcMappingSPI.class);
+
+
+    // =========================================================================
+    // CONSTRUCTOR
+    // =========================================================================
+    private MdcService() {
+        DefaultApplicationLifecycleSPI.register(this);
+        headers = new Headers().refreshConfig();
+    }
+
+    public void onConfigurationReady(final ConfigHandler<String, String> configuration) {
+        headers = new Headers().refreshConfig(configuration);
+    }
+
+    public void onContextRefreshed(Object event) {
+        mdcMappers = SpiLoader.getInstance().loadSpiServicesByPriority(LoggerMdcMappingSPI.class);
+    }
 
 
     // =========================================================================
@@ -36,106 +69,100 @@ public class MdcService {
     // =========================================================================
     @Getter
     public enum MDCKeys {
-        env,
-        asset,
-        hostname,
-        instanceName,
-        instanceNumber,
-        correlation_id,
-        request_id,
-        conversation_id,
-        sessionId,
-        messageId,
-        healthStatus("up"),
-
-        applicationVersion,
-        deviceIdentifier,
-        deviceType,
-        deviceClass,
-        version,
-        majorVersion,
-        osVersion,
-        deviceNetworkType,
-        deviceNetworkSpeedDown(Double.valueOf(0.0)),
-        deviceNetworkSpeedUp(Double.valueOf(0.0)),
-        deviceNetworkSpeedLatency(Double.valueOf(0.0)),
-        remoteAddress,
-        deviceIp,
-        userAgent,
-        language,
-        country,
-        service,
-
-        lifecycle,
-        callType,
-
-        globalStatus,
+        appClass,
+        appClassShortName,
+        appMethod,
         appService,
         appSubService,
-
-        errorCode,
+        applicationVersion,
+        asset,
+        authProtocol,
+        callType,
+        conversation_id,
+        correlation_id,
+        country,
+        customerId,
+        deviceClass,
+        deviceIdentifier,
+        deviceIp,
+        deviceNetworkSpeedDown(Double.valueOf(0.0)),
+        deviceNetworkSpeedLatency(Double.valueOf(0.0)),
+        deviceNetworkSpeedUp(Double.valueOf(0.0)),
+        deviceNetworkType,
+        deviceType,
+        duration(Long.valueOf(0)),
+        env,
         errorCategory,
-
+        errorCode,
+        errorExploitationError(Boolean.FALSE),
+        errorField,
+        errorMessage,
+        errorMessageDetail,
+        errorRetryable(Boolean.FALSE),
+        errorRollback(Boolean.FALSE),
         /**
          * errorStatus is <strong>int value</strong>
          */
         errorStatus,
-        errorMessage,
         errorType,
-        errorMessageDetail,
-        errorRetryable(Boolean.FALSE),
-        errorRollback(Boolean.FALSE),
         errorUrl,
-        errorExploitationError(Boolean.FALSE),
-        errorField,
-
-
-        partner,
-        partnerType,
-        partnerService,
-        partnerSubService,
-        partnerRequestCharset,
-        partnerResponseStatus(Integer.valueOf(0)),
-        partnerResponseDuration(Long.valueOf(0)),
-        partnerResponseMessage,
-        partnerResponseCharset,
-        partnerUrl,
-        partnerVerb,
-
         exceptionName,
-        duration(Long.valueOf(0)),
-        functionalUid,
-        methodInCause,
-        uri,
-        url,
-        verb,
-        httpStatus(Integer.valueOf(0)),
-        principal,
-        authProtocol,
-        requestHeaders,
-        responseHeaders,
-        parentSpanId,
-        traceId,
         flags,
-
-        customerId,
-        userId,
-        productId,
-        orderId,
-        reservationNumber,
-
-        appClass,
-        appClassShortName,
-        appMethod,
-        warning,
-
-        price(Double.valueOf(0.0)),
-        size(Double.valueOf(0.0)),
-        quantity(Double.valueOf(0.0)),
         from(LocalDateTime.now()),
         fromTimestamp(Long.valueOf(0)),
+        functionalUid,
+        globalStatus,
+        healthStatus("up"),
+        hostname,
+        httpStatus(Integer.valueOf(0)),
+        instanceName,
+        instanceNumber,
+        language,
+        lifecycle,
+        majorVersion,
+        messageId,
+        methodInCause,
+        orderId,
+        osVersion,
+        parentSpanId,
+        partner,
+        partnerRequestCharset,
+        partnerResponseCharset,
+        partnerResponseDuration(Long.valueOf(0)),
+        partnerResponseMessage,
+        partnerResponseStatus(Integer.valueOf(0)),
+        partnerService,
+        partnerSubService,
+        partnerType,
+        partnerUrl,
+        partnerVerb,
+        price(Double.valueOf(0.0)),
+        principal,
+        productId,
+        processId,
+        processName,
+        processStatus,
+        quantity(Double.valueOf(0.0)),
+        remoteAddress,
+        requestHeaders,
+        request_id,
+        reservationNumber,
+        responseHeaders,
+        service,
+        sessionId,
+        size(Double.valueOf(0.0)),
+        traceId,
         until(LocalDateTime.now()),
-        untilTimestamp(Long.valueOf(0));
+        untilTimestamp(Long.valueOf(0)),
+        uri,
+        url,
+        urlPattern,
+        userAgent,
+        userId,
+        status,
+        verb,
+        version,
+        warning;
 
         public static final MDCKeys[]                     VALUES = values();
         private             Serializable                  defaultValue;
@@ -203,7 +230,7 @@ public class MdcService {
 
 
     // =========================================================================
-    // PUBLIC API
+    // SET MDC
     // =========================================================================
     public MdcService setMdc(final Map<String, Serializable> values) {
         if (values == null) {
@@ -218,6 +245,7 @@ public class MdcService {
 
     public MdcService setMdc(final MDCKeys key, final Serializable value) {
         if (key == null) {
+            remove(key);
             return this;
         }
 
@@ -247,6 +275,27 @@ public class MdcService {
     }
 
 
+    public MdcService addMdc(Tuple<String, Serializable>... keys) {
+        if (keys != null) {
+            for (Tuple<String, Serializable> key : keys) {
+                setMdc(key.getKey(), key.getValue());
+            }
+        }
+        return this;
+    }
+
+    public MdcService addMdc(Collection<Tuple<String, Serializable>> keys) {
+        if (keys != null) {
+            for (Tuple<String, Serializable> key : keys) {
+                setMdc(key.getKey(), key.getValue());
+            }
+        }
+        return this;
+    }
+
+    // =========================================================================
+    // GET MDC
+    // =========================================================================
     public String getMdc(final MDCKeys key) {
         if (key == null) {
             return null;
@@ -313,6 +362,52 @@ public class MdcService {
         }
     }
 
+    public Charset getCharset(final MDCKeys key) {
+        return key == null ? null : getCharset(key.name());
+    }
+
+    public Charset getCharset(final String key) {
+        if (key == null) {
+            return null;
+        }
+        final String value  = getMdc(key);
+        Charset      result = null;
+
+        if (value != null) {
+            try {
+                result = Charset.forName(value);
+            } catch (Throwable e) {
+                result = StandardCharsets.UTF_8;
+            }
+
+        }
+
+        return result;
+    }
+
+
+    public LocalDateTime getLocalDateTime(final MDCKeys key) {
+        return key == null ? null : getLocalDateTime(key.name());
+    }
+
+    public LocalDateTime getLocalDateTime(final String key) {
+        if (key == null) {
+            return null;
+        }
+        LocalDateTime result = null;
+        final String  value  = getMdc(key);
+        if (value != null) {
+            try {
+                result = LocalDateTime.parse(value);
+            } catch (Throwable e) {
+                log.error(e.getMessage(), e);
+            }
+
+        }
+
+        return result;
+    }
+
     public Map<String, String> getAllMdc() {
         return MDC.getCopyOfContextMap();
     }
@@ -321,12 +416,25 @@ public class MdcService {
         Map<String, Serializable> result = new LinkedHashMap<>();
 
         final Map<String, String> standardMdc = getAllMdc();
-        if (standardMdc != null) {
+
+        if (mdcMappers == null) {
             result.putAll(standardMdc);
+        } else {
+            for (Map.Entry<String, String> entry : standardMdc.entrySet()) {
+                for (LoggerMdcMappingSPI mapper : mdcMappers) {
+                    if (mapper.accept(entry.getKey())) {
+                        result.put(entry.getKey(), mapper.convert(entry.getValue()));
+                    }
+                }
+            }
         }
         return result;
     }
 
+
+    // =========================================================================
+    // REMOVE
+    // =========================================================================
     public MdcService remove(final MDCKeys... keys) {
         if (keys != null) {
             for (MDCKeys key : keys) {
@@ -345,77 +453,70 @@ public class MdcService {
         return this;
     }
 
-    public MdcService addMdc(Tuple<String, Serializable>... keys) {
-        if (keys != null) {
-            for (Tuple<String, Serializable> key : keys) {
-                setMdc(key.getKey(), key.getValue());
-            }
-        }
-        return this;
-    }
-
-    public MdcService addMdc(Collection<Tuple<String, Serializable>> keys) {
-        if (keys != null) {
-            for (Tuple<String, Serializable> key : keys) {
-                setMdc(key.getKey(), key.getValue());
-            }
-        }
-        return this;
-    }
-
-
-    public MdcService applicationService(String name) {
-        setMdc(MDCKeys.appService, name);
-        return this;
-    }
-
-    public MdcService applicationSubService(String name) {
-        setMdc(MDCKeys.appSubService, name);
-        return this;
-    }
-
-
-    public MdcService partnerRemove() {
-        remove(MDCKeys.partner,
-               MDCKeys.partnerType,
-               MDCKeys.partnerService,
-               MDCKeys.partnerSubService,
-               MDCKeys.partnerUrl);
-        return this;
-    }
-
     public MdcService clear() {
         MDC.clear();
         return this;
     }
 
-    public void globalStatusSuccess() {
-        setMdc(MDCKeys.globalStatus, "success");
-    }
-
-    public void globalStatusError() {
-        setMdc(MDCKeys.globalStatus, "error");
-    }
-
-    public MdcService removeGlobalStatus() {
-        remove(MDCKeys.globalStatus);
+    // =========================================================================
+    // FIELDS
+    // =========================================================================
+    public MdcService appClass(String value) {
+        setMdc(MDCKeys.appClass, value);
         return this;
     }
 
-    // =========================================================================
-    // BUILDER
-    // =========================================================================
-    public MdcService env(final String value) {
-        setMdc(MDCKeys.env, value);
+    public String appClass() {
+        return getMdc(MDCKeys.appClass);
+    }
+
+    public MdcService appClassShortName(String value) {
+        setMdc(MDCKeys.appClassShortName, value);
         return this;
     }
 
-    public String env() {
-        return getMdc(MDCKeys.env);
+    public String appClassShortName() {
+        return getMdc(MDCKeys.appClassShortName);
+    }
+
+    public MdcService appMethod(String value) {
+        setMdc(MDCKeys.appMethod, value);
+        return this;
+    }
+
+    public String appMethod() {
+        return getMdc(MDCKeys.appMethod);
     }
 
 
-    public MdcService asset(final String value) {
+    public MdcService appService(String value) {
+        setMdc(MDCKeys.appService, value);
+        return this;
+    }
+
+    public String appService() {
+        return getMdc(MDCKeys.appService);
+    }
+
+    public MdcService appSubService(String value) {
+        setMdc(MDCKeys.appSubService, value);
+        return this;
+    }
+
+    public String appSubService() {
+        return getMdc(MDCKeys.appSubService);
+    }
+
+    public MdcService applicationVersion(String value) {
+        setMdc(MDCKeys.applicationVersion, value);
+        return this;
+    }
+
+    public String applicationVersion() {
+        return getMdc(MDCKeys.applicationVersion);
+    }
+
+    public MdcService asset(String value) {
         setMdc(MDCKeys.asset, value);
         return this;
     }
@@ -424,50 +525,36 @@ public class MdcService {
         return getMdc(MDCKeys.asset);
     }
 
-    public MdcService hostname(final String value) {
-        setMdc(MDCKeys.hostname, value);
+    public MdcService authProtocol(String value) {
+        setMdc(MDCKeys.authProtocol, value);
         return this;
     }
 
-    public String hostname() {
-        return getMdc(MDCKeys.hostname);
+    public String authProtocol() {
+        return getMdc(MDCKeys.authProtocol);
     }
 
-    public MdcService instanceName(final String value) {
-        setMdc(MDCKeys.instanceName, value);
+    public MdcService callType(String value) {
+        setMdc(MDCKeys.callType, value);
         return this;
     }
 
-    public String instanceName() {
-        return getMdc(MDCKeys.instanceName);
+    public String callType() {
+        return getMdc(MDCKeys.callType);
     }
 
-    public MdcService instanceNumber(final String value) {
-        setMdc(MDCKeys.instanceNumber, value);
+    public MdcService conversationId(String value) {
+        setMdc(MDCKeys.conversation_id, value);
         return this;
     }
 
-    public String instanceNumber() {
-        return getMdc(MDCKeys.instanceNumber);
+    public String conversationId() {
+        return getMdc(MDCKeys.conversation_id);
     }
 
-    public MdcService correlationId(final String value) {
+    public MdcService correlationId(String value) {
         setMdc(MDCKeys.correlation_id, value);
         return this;
-    }
-
-    public Map<String, String> getTrackingInformation() {
-        Map<String, String> result = new LinkedHashMap<>();
-        result.put(MDCKeys.deviceIdentifier.name(), deviceIdentifier());
-        result.put(MDCKeys.correlation_id.name(), correlationId());
-        result.put(MDCKeys.request_id.name(), requestId());
-        result.put(X_B_3_TRACE_ID, traceId());
-
-        applyIfNotNull(conversationId(), value -> result.put(MDCKeys.conversation_id.name(), value));
-        applyIfNotNull(functionalUid(), value -> result.put(MDCKeys.functionalUid.name(), value));
-
-
-        return result;
     }
 
     public String correlationId() {
@@ -479,181 +566,7 @@ public class MdcService {
         return value;
     }
 
-    public MdcService requestId(final String value) {
-        setMdc(MDCKeys.request_id, value);
-        return this;
-    }
-
-    public String requestId() {
-        String value = getMdc(MDCKeys.request_id);
-        if (value == null) {
-            value = UUID.randomUUID().toString();
-            requestId(value);
-        }
-        return value;
-    }
-
-    public MdcService conversationId(final String value) {
-        setMdc(MDCKeys.conversation_id, value);
-        return this;
-    }
-
-    public String conversationId() {
-        return getMdc(MDCKeys.conversation_id);
-    }
-
-    public MdcService sessionId(final String value) {
-        setMdc(MDCKeys.sessionId, value);
-        return this;
-    }
-
-    public String sessionId() {
-        return getMdc(MDCKeys.sessionId);
-    }
-
-    public MdcService applicationVersion(final String value) {
-        setMdc(MDCKeys.applicationVersion, value);
-        return this;
-    }
-
-    public String applicationVersion() {
-        return getMdc(MDCKeys.applicationVersion);
-    }
-
-    public MdcService deviceIdentifier(final String value) {
-        setMdc(MDCKeys.deviceIdentifier, value);
-        return this;
-    }
-
-    public String deviceIdentifier() {
-        String value = getMdc(MDCKeys.deviceIdentifier);
-        if (value == null) {
-            value = UUID.randomUUID().toString();
-            deviceIdentifier(value);
-        }
-        return value;
-    }
-
-    public MdcService deviceType(final String value) {
-        setMdc(MDCKeys.deviceType, value);
-        return this;
-    }
-
-    public String deviceType() {
-        return getMdc(MDCKeys.deviceType);
-    }
-
-    public MdcService deviceClass(final String value) {
-        setMdc(MDCKeys.deviceClass, value);
-        return this;
-    }
-
-    public String deviceClass() {
-        return getMdc(MDCKeys.deviceClass);
-    }
-
-    public MdcService version(final String value) {
-        setMdc(MDCKeys.version, value);
-        return this;
-    }
-
-    public String version() {
-        return getMdc(MDCKeys.version);
-    }
-
-    public MdcService majorVersion(final String value) {
-        setMdc(MDCKeys.majorVersion, value);
-        return this;
-    }
-
-    public String majorVersion() {
-        return getMdc(MDCKeys.majorVersion);
-    }
-
-    public MdcService osVersion(final String value) {
-        setMdc(MDCKeys.osVersion, value);
-        return this;
-    }
-
-    public String osVersion() {
-        return getMdc(MDCKeys.osVersion);
-    }
-
-    public MdcService deviceNetworkType(final String value) {
-        setMdc(MDCKeys.deviceNetworkType, value);
-        return this;
-    }
-
-    public String deviceNetworkType() {
-        return getMdc(MDCKeys.deviceNetworkType);
-    }
-
-
-    public MdcService deviceNetworkSpeedDown(final String value) {
-        setMdc(MDCKeys.deviceNetworkSpeedDown, value);
-        return this;
-    }
-
-    public String deviceNetworkSpeedDown() {
-        return getMdc(MDCKeys.deviceNetworkSpeedDown);
-    }
-
-    public MdcService deviceNetworkSpeedUp(final String value) {
-        setMdc(MDCKeys.deviceNetworkSpeedUp, value);
-        return this;
-    }
-
-    public String deviceNetworkSpeedUp() {
-        return getMdc(MDCKeys.deviceNetworkSpeedUp);
-    }
-
-    public MdcService deviceNetworkSpeedLatency(final String value) {
-        setMdc(MDCKeys.deviceNetworkSpeedLatency, value);
-        return this;
-    }
-
-    public String deviceNetworkSpeedLatency() {
-        return getMdc(MDCKeys.deviceNetworkSpeedLatency);
-    }
-
-    public MdcService remoteAddress(final String value) {
-        setMdc(MDCKeys.remoteAddress, value);
-        return this;
-    }
-
-    public String remoteAddress() {
-        return getMdc(MDCKeys.remoteAddress);
-    }
-
-    public MdcService deviceIp(final String value) {
-        setMdc(MDCKeys.deviceIp, value);
-        return this;
-    }
-
-    public String deviceIp() {
-        return getMdc(MDCKeys.deviceIp);
-    }
-
-    public MdcService userAgent(final String value) {
-        setMdc(MDCKeys.userAgent, value);
-        return this;
-    }
-
-    public String userAgent() {
-        return getMdc(MDCKeys.userAgent);
-    }
-
-    public MdcService language(final String value) {
-        setMdc(MDCKeys.language, value);
-        return this;
-    }
-
-    public String language() {
-        return getMdc(MDCKeys.language);
-    }
-
-
-    public MdcService country(final String value) {
+    public MdcService country(String value) {
         setMdc(MDCKeys.country, value);
         return this;
     }
@@ -662,18 +575,461 @@ public class MdcService {
         return getMdc(MDCKeys.country);
     }
 
-    public MdcService service(final String value) {
-        setMdc(MDCKeys.service, value);
+    public MdcService customerId(String value) {
+        setMdc(MDCKeys.customerId, value);
         return this;
     }
 
-    public String service() {
-        return getMdc(MDCKeys.service);
+    public String customerId() {
+        return getMdc(MDCKeys.customerId);
+    }
+
+    public MdcService deviceClass(String value) {
+        setMdc(MDCKeys.deviceClass, value);
+        return this;
+    }
+
+    public String deviceClass() {
+        return getMdc(MDCKeys.deviceClass);
+    }
+
+    public MdcService deviceIdentifier(String value) {
+        setMdc(MDCKeys.deviceIdentifier, value);
+        return this;
+    }
+
+    public String deviceIdentifier() {
+        return getMdc(MDCKeys.deviceIdentifier);
+    }
+
+    public MdcService deviceIp(String value) {
+        setMdc(MDCKeys.deviceIp, value);
+        return this;
+    }
+
+    public String deviceIp() {
+        return getMdc(MDCKeys.deviceIp);
+    }
+
+    public MdcService deviceNetworkSpeedDown(double value) {
+        setMdc(MDCKeys.deviceNetworkSpeedDown, value);
+        return this;
+    }
+
+    public double deviceNetworkSpeedDown() {
+        return getDouble(MDCKeys.deviceNetworkSpeedDown);
+    }
+
+    public MdcService deviceNetworkSpeedLatency(double value) {
+        setMdc(MDCKeys.deviceNetworkSpeedLatency, value);
+        return this;
+    }
+
+    public double deviceNetworkSpeedLatency() {
+        return getDouble(MDCKeys.deviceNetworkSpeedLatency);
+    }
+
+    public MdcService deviceNetworkSpeedUp(double value) {
+        setMdc(MDCKeys.deviceNetworkSpeedUp, value);
+        return this;
+    }
+
+    public double deviceNetworkSpeedUp() {
+        return getDouble(MDCKeys.deviceNetworkSpeedUp);
+    }
+
+    public MdcService deviceNetworkType(String value) {
+        setMdc(MDCKeys.deviceNetworkType, value);
+        return this;
+    }
+
+    public String deviceNetworkType() {
+        return getMdc(MDCKeys.deviceNetworkType);
+    }
+
+    public MdcService deviceType(String value) {
+        setMdc(MDCKeys.deviceType, value);
+        return this;
+    }
+
+    public String deviceType() {
+        return getMdc(MDCKeys.deviceType);
+    }
+
+    public MdcService duration(long value) {
+        setMdc(MDCKeys.duration, value);
+        return this;
+    }
+
+    public long duration() {
+        return getLong(MDCKeys.duration);
+    }
+
+    public MdcService env(String value) {
+        setMdc(MDCKeys.env, value);
+        return this;
+    }
+
+    public String env() {
+        return getMdc(MDCKeys.env);
+    }
+
+    public MdcService errorCategory(String value) {
+        setMdc(MDCKeys.errorCategory, value);
+        return this;
+    }
+
+    public String errorCategory() {
+        return getMdc(MDCKeys.errorCategory);
+    }
+
+    public MdcService errorCode(String value) {
+        setMdc(MDCKeys.errorCode, value);
+        return this;
     }
 
 
+    public boolean hasError() {
+        return errorCode() != null;
+    }
+
+    public MdcService errorCode(final ErrorCode errorCode) {
+        if (errorCode == null) {
+            errorCodeRemove();
+            return this;
+        }
+        setMdc(MDCKeys.errorCode, errorCode.getErrorCode());
+        setMdc(MDCKeys.errorCategory, errorCode.getCategory());
+        setMdc(MDCKeys.errorStatus, errorCode.getStatusCode());
+        setMdc(MDCKeys.errorMessage, errorCode.getMessage());
+        setMdc(MDCKeys.errorMessageDetail, errorCode.getMessageDetail());
+        setMdc(MDCKeys.errorType, errorCode.getErrorType());
+        setMdc(MDCKeys.errorRetryable, errorCode.isRetryable());
+        setMdc(MDCKeys.errorRollback, errorCode.isRetryable());
+        setMdc(MDCKeys.errorExploitationError, errorCode.isExploitationError());
+        setMdc(MDCKeys.errorField, errorCode.getField());
+        setMdc(MDCKeys.errorUrl, errorCode.getUrl());
+        return this;
+    }
+
+    public MdcService errorCodeRemove() {
+        remove(MDCKeys.errorCode,
+               MDCKeys.errorCategory,
+               MDCKeys.errorStatus,
+               MDCKeys.errorMessage,
+               MDCKeys.errorMessageDetail,
+               MDCKeys.errorMessageDetail,
+               MDCKeys.errorType,
+               MDCKeys.errorRetryable,
+               MDCKeys.errorRollback,
+               MDCKeys.errorExploitationError,
+               MDCKeys.errorField,
+               MDCKeys.errorUrl
+        );
+        return this;
+    }
+
+    public ErrorCode errorCode() {
+        final String code = getMdc(MDCKeys.errorCode);
+        if (code == null) {
+            return null;
+        }
+        return DefaultErrorCode.buildUndefineErrorCode()
+                               .errorCode(code)
+                               .category(errorCategory())
+                               .statusCode(errorStatus())
+                               .message(errorMessage())
+                               .messageDetail(errorMessageDetail())
+                               .errorType(errorType())
+                               .retryable(errorRetryable())
+                               .exploitationError(errorExploitationError())
+                               .field(errorField())
+                               .rollback(errorRollback())
+                               .url(errorUrl())
+                               .build();
+    }
+
+    public MdcService errorExploitationError(boolean value) {
+        setMdc(MDCKeys.errorExploitationError, value);
+        return this;
+    }
+
+    public boolean errorExploitationError() {
+        return getBoolean(MDCKeys.errorExploitationError);
+    }
+
+    public MdcService errorField(String... value) {
+        if (value == null) {
+            remove(MDCKeys.errorField);
+        }
+        setMdc(MDCKeys.errorField, String.join(SEP, value));
+        return this;
+    }
+
+    public String errorField() {
+        return getMdc(MDCKeys.errorField);
+    }
+
+
+    public MdcService errorMessage(String value) {
+        setMdc(MDCKeys.errorMessage, value);
+        return this;
+    }
+
+    public String errorMessage() {
+        return getMdc(MDCKeys.errorMessage);
+    }
+
+    public MdcService errorMessageDetail(String value) {
+        setMdc(MDCKeys.errorMessageDetail, value);
+        return this;
+    }
+
+    public String errorMessageDetail() {
+        return getMdc(MDCKeys.errorMessageDetail);
+    }
+
+    public MdcService errorRetryable(boolean value) {
+        setMdc(MDCKeys.errorRetryable, value);
+        return this;
+    }
+
+    public boolean errorRetryable() {
+        return getBoolean(MDCKeys.errorRetryable);
+    }
+
+    public MdcService errorRollback(boolean value) {
+        setMdc(MDCKeys.errorRollback, value);
+        return this;
+    }
+
+    public boolean errorRollback() {
+        return getBoolean(MDCKeys.errorRollback);
+    }
+
+    /**
+     * errorStatus is <strong>int value</strong>
+     */
+    public MdcService errorStatus(int value) {
+        setMdc(MDCKeys.errorStatus, value);
+        return this;
+    }
+
+    public int errorStatus() {
+        return getInt(MDCKeys.errorStatus);
+    }
+
+    public MdcService errorType(String value) {
+        setMdc(MDCKeys.errorType, value);
+        return this;
+    }
+
+    public String errorType() {
+        return getMdc(MDCKeys.errorType);
+    }
+
+    public MdcService errorUrl(String value) {
+        setMdc(MDCKeys.errorUrl, value);
+        return this;
+    }
+
+    public String errorUrl() {
+        return getMdc(MDCKeys.errorUrl);
+    }
+
+    public MdcService exceptionName(String value) {
+        setMdc(MDCKeys.exceptionName, value);
+        return this;
+    }
+
+    public String exceptionName() {
+        return getMdc(MDCKeys.exceptionName);
+    }
+
+    public MdcService flags(String value) {
+        setMdc(MDCKeys.flags, value);
+        return this;
+    }
+
+    public String flags() {
+        return getMdc(MDCKeys.flags);
+    }
+
+    public MdcService from(LocalDateTime value) {
+        setMdc(MDCKeys.from, value);
+        return this;
+    }
+
+    public LocalDateTime from() {
+        return getLocalDateTime(MDCKeys.from);
+    }
+
+    public MdcService fromTimestamp(long value) {
+        setMdc(MDCKeys.fromTimestamp, value);
+        return this;
+    }
+
+    public long fromTimestamp() {
+        return getLong(MDCKeys.fromTimestamp);
+    }
+
+    public MdcService functionalUid(String value) {
+        setMdc(MDCKeys.functionalUid, value);
+        return this;
+    }
+
+    public String functionalUid() {
+        return getMdc(MDCKeys.functionalUid);
+    }
+
+    public MdcService globalStatus(String value) {
+        setMdc(MDCKeys.globalStatus, value);
+        return this;
+    }
+
+    public String globalStatus() {
+        return getMdc(MDCKeys.globalStatus);
+    }
+
+    public void globalStatusSuccess() {
+        setMdc(MDCKeys.globalStatus, SUCCESS);
+    }
+
+    public void globalStatusError() {
+        setMdc(MDCKeys.globalStatus, ERROR);
+    }
+
+    public MdcService removeGlobalStatus() {
+        remove(MDCKeys.globalStatus);
+        return this;
+    }
+
+    public MdcService healthStatus(String value) {
+        setMdc(MDCKeys.healthStatus, value);
+        return this;
+    }
+
+    public String healthStatus() {
+        return getMdc(MDCKeys.healthStatus);
+    }
+
+    public MdcService hostname(String value) {
+        setMdc(MDCKeys.hostname, value);
+        return this;
+    }
+
+    public String hostname() {
+        return getMdc(MDCKeys.hostname);
+    }
+
+    public MdcService httpStatus(int value) {
+        setMdc(MDCKeys.httpStatus, value);
+        return this;
+    }
+
+    public int httpStatus() {
+        return getInt(MDCKeys.httpStatus);
+    }
+
+    public MdcService instanceName(String value) {
+        setMdc(MDCKeys.instanceName, value);
+        return this;
+    }
+
+    public String instanceName() {
+        return getMdc(MDCKeys.instanceName);
+    }
+
+    public MdcService instanceNumber(String value) {
+        setMdc(MDCKeys.instanceNumber, value);
+        return this;
+    }
+
+    public String instanceNumber() {
+        return getMdc(MDCKeys.instanceNumber);
+    }
+
+    public MdcService ioinfoIoLog(final IoInfoDTO info) {
+        if (info == null) {
+            return removeIoinfoIoLog();
+        }
+
+        url(info.getUrl());
+        verb(info.getMethod());
+        service(info.getPartnerService());
+        appSubService(info.getPartnerSubService());
+        status(info.getStatus());
+        duration(info.getDuration());
+        return this;
+    }
+
+    private MdcService removeIoinfoIoLog() {
+        remove(MDCKeys.url,
+               MDCKeys.verb,
+               MDCKeys.service,
+               MDCKeys.appSubService,
+               MDCKeys.status,
+               MDCKeys.duration
+        );
+        return this;
+    }
+
+    public MdcService ioinfoPartner(final IoInfoDTO info) {
+        if (info == null) {
+            return removeIoinfoPartner();
+        }
+        partner(info.getPartnerName());
+        partnerUrl(info.getUrl());
+        partnerVerb(info.getMethod());
+        partnerService(info.getPartnerService());
+        partnerSubService(info.getPartnerSubService());
+        partnerRequestCharset(info.getRequestCharset());
+        partnerResponseStatus(info.getStatus());
+        partnerResponseCharset(info.getResponseCharset());
+        partnerResponseDuration(info.getDuration());
+        partnerResponseMessage(info.getMessage());
+        return this;
+    }
+
+    public MdcService partnerRemove() {
+        return removeIoinfoPartner();
+    }
+
+    public MdcService removeIoinfoPartner() {
+        remove(MDCKeys.partnerUrl,
+               MDCKeys.partnerVerb,
+               MDCKeys.partner,
+               MDCKeys.partnerService,
+               MDCKeys.partnerSubService,
+               MDCKeys.partnerRequestCharset,
+               MDCKeys.partnerResponseStatus,
+               MDCKeys.partnerResponseDuration,
+               MDCKeys.partnerResponseMessage,
+               MDCKeys.partnerResponseCharset
+        );
+        return this;
+    }
+
+    public MdcService language(String value) {
+        setMdc(MDCKeys.language, value);
+        return this;
+    }
+
+    public String language() {
+        return getMdc(MDCKeys.language);
+    }
+
+    public MdcService lifecycle(String value) {
+        setMdc(MDCKeys.lifecycle, value);
+        return this;
+    }
+
+    public String lifecycle() {
+        return getMdc(MDCKeys.lifecycle);
+    }
+
     public MdcService lifecycleIn() {
-        setMdc(MDCKeys.lifecycle, "in");
+        setMdc(MDCKeys.lifecycle, IN);
         return this;
     }
 
@@ -694,7 +1050,7 @@ public class MdcService {
     }
 
     public MdcService lifecycleOut() {
-        setMdc(MDCKeys.lifecycle, "out");
+        setMdc(MDCKeys.lifecycle, OUT);
         return this;
     }
 
@@ -720,216 +1076,25 @@ public class MdcService {
         return this;
     }
 
-    public MdcService appService(final String value) {
-        setMdc(MDCKeys.appService, value);
+    public MdcService majorVersion(String value) {
+        setMdc(MDCKeys.majorVersion, value);
         return this;
     }
 
-    public String appService() {
-        return getMdc(MDCKeys.appService);
+    public String majorVersion() {
+        return getMdc(MDCKeys.majorVersion);
     }
 
-    public MdcService appSubService(final String value) {
-        setMdc(MDCKeys.appSubService, value);
+    public MdcService messageId(String value) {
+        setMdc(MDCKeys.messageId, value);
         return this;
     }
 
-    public String appSubService() {
-        return getMdc(MDCKeys.appSubService);
+    public String messageId() {
+        return getMdc(MDCKeys.messageId);
     }
 
-    public MdcService errorCode(final String value) {
-        setMdc(MDCKeys.errorCode, value);
-        return this;
-    }
-
-    public String errorCode() {
-        return getMdc(MDCKeys.errorCode);
-    }
-
-    public MdcService errorStatus(final int value) {
-        setMdc(MDCKeys.errorStatus, String.valueOf(value));
-        return this;
-    }
-
-    public int errorStatus() {
-        return getInt(MDCKeys.errorStatus);
-    }
-
-    public MdcService errorMessage(final String value) {
-        setMdc(MDCKeys.errorMessage, value);
-        return this;
-    }
-
-    public String errorMessage() {
-        return getMdc(MDCKeys.errorMessage);
-    }
-
-    public MdcService errorType(final String value) {
-        setMdc(MDCKeys.errorType, value);
-        return this;
-    }
-
-    public String errorType() {
-        return getMdc(MDCKeys.errorType);
-    }
-
-
-    public MdcService errorMessageDetail(final String value) {
-        setMdc(MDCKeys.errorMessageDetail, value);
-        return this;
-    }
-
-    public String errorMessageDetail() {
-        return getMdc(MDCKeys.errorMessageDetail);
-    }
-
-
-    public MdcService errorCategory(final String value) {
-        setMdc(MDCKeys.errorCategory, value);
-        return this;
-    }
-
-    public String errorCategory() {
-        return getMdc(MDCKeys.errorCategory);
-    }
-
-    public boolean hasError() {
-        return errorCode() != null;
-    }
-
-    public MdcService errorCodeRemove() {
-        remove(MDCKeys.errorCode,
-               MDCKeys.errorCategory,
-               MDCKeys.errorStatus,
-               MDCKeys.errorMessage,
-               MDCKeys.errorMessageDetail,
-               MDCKeys.errorMessageDetail,
-               MDCKeys.errorType,
-               MDCKeys.errorRetryable,
-               MDCKeys.errorRollback,
-               MDCKeys.errorExploitationError,
-               MDCKeys.errorField,
-               MDCKeys.errorUrl
-        );
-        return this;
-    }
-
-    public MdcService errorCode(final ErrorCode errorCode) {
-        if (errorCode == null) {
-            errorCodeRemove();
-            return this;
-        }
-        setMdc(MDCKeys.errorCode, errorCode.getErrorCode());
-        setMdc(MDCKeys.errorCategory, errorCode.getCategory());
-        setMdc(MDCKeys.errorStatus, errorCode.getStatusCode());
-        setMdc(MDCKeys.errorMessage, errorCode.getMessage());
-        setMdc(MDCKeys.errorMessageDetail, errorCode.getMessageDetail());
-        setMdc(MDCKeys.errorType, errorCode.getErrorType());
-        setMdc(MDCKeys.errorRetryable, errorCode.isRetryable());
-        setMdc(MDCKeys.errorRollback, errorCode.isRetryable());
-        setMdc(MDCKeys.errorExploitationError, errorCode.isExploitationError());
-        setMdc(MDCKeys.errorField, errorCode.getField());
-        setMdc(MDCKeys.errorUrl, errorCode.getUrl());
-        return this;
-    }
-
-    public ErrorCode getErrorCode() {
-        ErrorCode result = null;
-        if (hasError()) {
-            result = DefaultErrorCode.buildUndefineErrorCode()
-                                     .errorCode(getMdc(MDCKeys.errorCode))
-                                     .category(getMdc(MDCKeys.errorCategory))
-                                     .statusCode(getInt(MDCKeys.errorStatus))
-                                     .message(getMdc(MDCKeys.errorMessage))
-                                     .messageDetail(getMdc(MDCKeys.errorMessageDetail))
-                                     .errorType(getMdc(MDCKeys.errorType))
-                                     .retryable(getBoolean(MDCKeys.errorRetryable))
-                                     .rollback(getBoolean(MDCKeys.errorRollback))
-                                     .exploitationError(getBoolean(MDCKeys.errorExploitationError))
-                                     .field(getMdc(MDCKeys.errorField))
-                                     .url(getMdc(MDCKeys.errorUrl))
-                                     .build();
-        }
-
-        return result;
-    }
-
-
-    public MdcService partner(final String value) {
-        setMdc(MDCKeys.partner, value);
-        return this;
-    }
-
-    public String partner() {
-        return getMdc(MDCKeys.partner);
-    }
-
-    public MdcService partnerType(final String value) {
-        setMdc(MDCKeys.partnerType, value);
-        return this;
-    }
-
-    public String partnerType() {
-        return getMdc(MDCKeys.partnerType);
-    }
-
-    public MdcService partnerService(final String value) {
-        setMdc(MDCKeys.partnerService, value);
-        return this;
-    }
-
-    public String partnerService() {
-        return getMdc(MDCKeys.partnerService);
-    }
-
-    public MdcService partnerSubService(final String value) {
-        setMdc(MDCKeys.partnerSubService, value);
-        return this;
-    }
-
-    public String partnerSubService() {
-        return getMdc(MDCKeys.partnerSubService);
-    }
-
-    public MdcService partnerUrl(final String value) {
-        setMdc(MDCKeys.partnerUrl, value);
-        return this;
-    }
-
-    public String partnerUrl() {
-        return getMdc(MDCKeys.partnerUrl);
-    }
-
-    public MdcService exceptionName(final String value) {
-        setMdc(MDCKeys.exceptionName, value);
-        return this;
-    }
-
-    public String exceptionName() {
-        return getMdc(MDCKeys.exceptionName);
-    }
-
-    public MdcService duration(final long value) {
-        setMdc(MDCKeys.duration, value);
-        return this;
-    }
-
-    public Long duration() {
-        return getLong(MDCKeys.duration);
-    }
-
-
-    public MdcService functionalUid(final String value) {
-        setMdc(MDCKeys.functionalUid, value);
-        return this;
-    }
-
-    public String functionalUid() {
-        return getMdc(MDCKeys.functionalUid);
-    }
-
-    public MdcService methodInCause(final String value) {
+    public MdcService methodInCause(String value) {
         setMdc(MDCKeys.methodInCause, value);
         return this;
     }
@@ -938,34 +1103,41 @@ public class MdcService {
         return getMdc(MDCKeys.methodInCause);
     }
 
-    public MdcService uri(final String value) {
-        setMdc(MDCKeys.uri, value);
+    public Map<String, String> getTrackingInformation() {
+        return getTrackingInformation(null);
+    }
+
+    public Map<String, String> getTrackingInformation(final Headers headers) {
+        final Map<String, String> result         = new LinkedHashMap<>();
+        final Headers             currentHeaders = headers == null ? this.headers : headers;
+
+        applyIfNotNull(deviceIdentifier(), value -> result.put(currentHeaders.getDeviceIdentifier(), value));
+        applyIfNotNull(correlationId(), value -> result.put(currentHeaders.getCorrelationId(), value));
+        applyIfNotNull(conversationId(), value -> result.put(currentHeaders.getConversationId(), value));
+        applyIfNotNull(traceId(), value -> result.put(currentHeaders.getRequestId(), value));
+
+        return result;
+    }
+
+    public MdcService orderId(String value) {
+        setMdc(MDCKeys.orderId, value);
         return this;
     }
 
-    public String uri() {
-        return getMdc(MDCKeys.uri);
+    public String orderId() {
+        return getMdc(MDCKeys.orderId);
     }
 
-    public MdcService requestHeaders(final String value) {
-        setMdc(MDCKeys.requestHeaders, value);
+    public MdcService osVersion(String value) {
+        setMdc(MDCKeys.osVersion, value);
         return this;
     }
 
-    public String requestHeaders() {
-        return getMdc(MDCKeys.requestHeaders);
+    public String osVersion() {
+        return getMdc(MDCKeys.osVersion);
     }
 
-    public MdcService responseHeaders(final String value) {
-        setMdc(MDCKeys.responseHeaders, value);
-        return this;
-    }
-
-    public String responseHeaders() {
-        return getMdc(MDCKeys.responseHeaders);
-    }
-
-    public MdcService parentSpanId(final String value) {
+    public MdcService parentSpanId(String value) {
         setMdc(MDCKeys.parentSpanId, value);
         return this;
     }
@@ -974,7 +1146,265 @@ public class MdcService {
         return getMdc(MDCKeys.parentSpanId);
     }
 
-    public MdcService traceId(final String value) {
+    public MdcService partner(String value) {
+        setMdc(MDCKeys.partner, value);
+        return this;
+    }
+
+    public String partner() {
+        return getMdc(MDCKeys.partner);
+    }
+
+    public MdcService partnerRequestCharset(String value) {
+        setMdc(MDCKeys.partnerRequestCharset, value);
+        return this;
+    }
+
+    public MdcService partnerRequestCharset(Charset value) {
+        if (value == null) {
+            remove(MDCKeys.partnerRequestCharset);
+        } else {
+            setMdc(MDCKeys.partnerRequestCharset, value.name());
+        }
+        return this;
+    }
+
+    public Charset partnerRequestCharset() {
+        return getCharset(MDCKeys.partnerRequestCharset);
+    }
+
+
+    public MdcService partnerResponseCharset(String value) {
+        setMdc(MDCKeys.partnerRequestCharset, value);
+        return this;
+    }
+
+    public MdcService partnerResponseCharset(Charset value) {
+        if (value == null) {
+            remove(MDCKeys.partnerResponseCharset);
+        } else {
+            setMdc(MDCKeys.partnerResponseCharset, value.name());
+        }
+        return this;
+    }
+
+    public Charset partnerResponseCharset() {
+        return getCharset(MDCKeys.partnerResponseCharset);
+    }
+
+    public MdcService partnerResponseDuration(long value) {
+        setMdc(MDCKeys.partnerResponseDuration, value);
+        return this;
+    }
+
+    public long partnerResponseDuration() {
+        return getLong(MDCKeys.partnerResponseDuration);
+    }
+
+    public MdcService partnerResponseMessage(String value) {
+        setMdc(MDCKeys.partnerResponseMessage, value);
+        return this;
+    }
+
+    public String partnerResponseMessage() {
+        return getMdc(MDCKeys.partnerResponseMessage);
+    }
+
+    public MdcService partnerResponseStatus(int value) {
+        setMdc(MDCKeys.partnerResponseStatus, value);
+        return this;
+    }
+
+    public int partnerResponseStatus() {
+        return getInt(MDCKeys.partnerResponseStatus);
+    }
+
+    public MdcService partnerService(String value) {
+        setMdc(MDCKeys.partnerService, value);
+        return this;
+    }
+
+    public String partnerService() {
+        return getMdc(MDCKeys.partnerService);
+    }
+
+    public MdcService partnerSubService(String value) {
+        setMdc(MDCKeys.partnerSubService, value);
+        return this;
+    }
+
+    public String partnerSubService() {
+        return getMdc(MDCKeys.partnerSubService);
+    }
+
+    public MdcService partnerType(String value) {
+        setMdc(MDCKeys.partnerType, value);
+        return this;
+    }
+
+    public String partnerType() {
+        return getMdc(MDCKeys.partnerType);
+    }
+
+    public MdcService partnerUrl(String value) {
+        setMdc(MDCKeys.partnerUrl, value);
+        return this;
+    }
+
+    public String partnerUrl() {
+        return getMdc(MDCKeys.partnerUrl);
+    }
+
+    public MdcService partnerVerb(String value) {
+        setMdc(MDCKeys.partnerVerb, value);
+        return this;
+    }
+
+    public String partnerVerb() {
+        return getMdc(MDCKeys.partnerVerb);
+    }
+
+    public MdcService price(double value) {
+        setMdc(MDCKeys.price, value);
+        return this;
+    }
+
+    public double price() {
+        return getDouble(MDCKeys.price);
+    }
+
+    public MdcService principal(String value) {
+        setMdc(MDCKeys.principal, value);
+        return this;
+    }
+
+    public String principal() {
+        return getMdc(MDCKeys.principal);
+    }
+
+    public MdcService productId(String value) {
+        setMdc(MDCKeys.productId, value);
+        return this;
+    }
+
+    public String productId() {
+        return getMdc(MDCKeys.productId);
+    }
+
+    public MdcService processId(String value) {
+        setMdc(MDCKeys.processId, value);
+        return this;
+    }
+
+    public String processId() {
+        return getMdc(MDCKeys.processId);
+    }
+
+    public MdcService processName(String value) {
+        setMdc(MDCKeys.processName, value);
+        return this;
+    }
+
+    public String processName() {
+        return getMdc(MDCKeys.processName);
+    }
+
+    public MdcService processStatus(String value) {
+        setMdc(MDCKeys.processStatus, value);
+        return this;
+    }
+
+    public String processStatus() {
+        return getMdc(MDCKeys.processStatus);
+    }
+
+    public MdcService quantity(double value) {
+        setMdc(MDCKeys.quantity, value);
+        return this;
+    }
+
+    public double quantity() {
+        return getDouble(MDCKeys.quantity);
+    }
+
+    public MdcService remoteAddress(String value) {
+        setMdc(MDCKeys.remoteAddress, value);
+        return this;
+    }
+
+    public String remoteAddress() {
+        return getMdc(MDCKeys.remoteAddress);
+    }
+
+    public MdcService requestHeaders(String value) {
+        setMdc(MDCKeys.requestHeaders, value);
+        return this;
+    }
+
+    public String requestHeaders() {
+        return getMdc(MDCKeys.requestHeaders);
+    }
+
+    public MdcService requestId(String value) {
+        setMdc(MDCKeys.request_id, value);
+        return this;
+    }
+
+    public String requestId() {
+        String value = getMdc(MDCKeys.request_id);
+        if (value == null) {
+            value = UUID.randomUUID().toString();
+            requestId(value);
+        }
+        return value;
+    }
+
+    public MdcService reservationNumber(String value) {
+        setMdc(MDCKeys.reservationNumber, value);
+        return this;
+    }
+
+    public String reservationNumber() {
+        return getMdc(MDCKeys.reservationNumber);
+    }
+
+    public MdcService responseHeaders(String value) {
+        setMdc(MDCKeys.responseHeaders, value);
+        return this;
+    }
+
+    public String responseHeaders() {
+        return getMdc(MDCKeys.responseHeaders);
+    }
+
+    public MdcService service(String value) {
+        setMdc(MDCKeys.service, value);
+        return this;
+    }
+
+    public String service() {
+        return getMdc(MDCKeys.service);
+    }
+
+    public MdcService sessionId(String value) {
+        setMdc(MDCKeys.sessionId, value);
+        return this;
+    }
+
+    public String sessionId() {
+        return getMdc(MDCKeys.sessionId);
+    }
+
+    public MdcService size(double value) {
+        setMdc(MDCKeys.size, value);
+        return this;
+    }
+
+    public double size() {
+        return getDouble(MDCKeys.size);
+    }
+
+    public MdcService traceId(String value) {
         setMdc(MDCKeys.traceId, value);
         return this;
     }
@@ -988,25 +1418,62 @@ public class MdcService {
         return value;
     }
 
-    public MdcService flags(final String value) {
-        setMdc(MDCKeys.flags, value);
+    public MdcService until(LocalDateTime value) {
+        setMdc(MDCKeys.until, value);
         return this;
     }
 
-    public String flags() {
-        return getMdc(MDCKeys.flags);
+    public LocalDateTime until() {
+        return getLocalDateTime(MDCKeys.until);
     }
 
-    public MdcService customerId(final String value) {
-        setMdc(MDCKeys.customerId, value);
+    public MdcService untilTimestamp(long value) {
+        setMdc(MDCKeys.untilTimestamp, value);
         return this;
     }
 
-    public String customerId() {
-        return getMdc(MDCKeys.customerId);
+    public long untilTimestamp() {
+        return getLong(MDCKeys.untilTimestamp);
     }
 
-    public MdcService userId(final String value) {
+    public MdcService uri(String value) {
+        setMdc(MDCKeys.uri, value);
+        return this;
+    }
+
+    public String uri() {
+        return getMdc(MDCKeys.uri);
+    }
+
+    public MdcService url(String value) {
+        setMdc(MDCKeys.url, value);
+        return this;
+    }
+
+    public String url() {
+        return getMdc(MDCKeys.url);
+    }
+
+    public MdcService urlPattern(String value) {
+        setMdc(MDCKeys.urlPattern, value);
+        return this;
+    }
+
+    public String urlPattern() {
+        return getMdc(MDCKeys.urlPattern);
+    }
+
+
+    public MdcService userAgent(String value) {
+        setMdc(MDCKeys.userAgent, value);
+        return this;
+    }
+
+    public String userAgent() {
+        return getMdc(MDCKeys.userAgent);
+    }
+
+    public MdcService userId(String value) {
         setMdc(MDCKeys.userId, value);
         return this;
     }
@@ -1015,122 +1482,43 @@ public class MdcService {
         return getMdc(MDCKeys.userId);
     }
 
-    public MdcService productId(final String value) {
-        setMdc(MDCKeys.productId, value);
+    public MdcService verb(String value) {
+        setMdc(MDCKeys.verb, value);
         return this;
     }
 
-    public String useproductIdrId() {
-        return getMdc(MDCKeys.productId);
-    }
-
-    public MdcService orderId(final String value) {
-        setMdc(MDCKeys.orderId, value);
+    public MdcService status(int status) {
+        setMdc(MDCKeys.status, status);
         return this;
     }
 
-    public String orderId() {
-        return getMdc(MDCKeys.orderId);
+    public int status() {
+        final int status = getInt(MDCKeys.status);
+        return status < 200 ? 200 : status;
     }
 
-    public MdcService reservationNumber(final String value) {
-        setMdc(MDCKeys.reservationNumber, value);
+    public String verb() {
+        return getMdc(MDCKeys.verb);
+    }
+
+    public MdcService version(String value) {
+        setMdc(MDCKeys.version, value);
         return this;
     }
 
-    public String reservationNumber() {
-        return getMdc(MDCKeys.reservationNumber);
+    public String version() {
+        return getMdc(MDCKeys.version);
     }
 
-
-    public MdcService appClass(final String value) {
-        setMdc(MDCKeys.appClass, value);
+    public MdcService warning(String value) {
+        setMdc(MDCKeys.warning, value);
         return this;
     }
 
-    public MdcService appClassShortName(final String value) {
-        setMdc(MDCKeys.appClassShortName, value);
-        return this;
+    public String warning() {
+        return getMdc(MDCKeys.warning);
     }
 
-    public MdcService appMethod(final String value) {
-        setMdc(MDCKeys.appMethod, value);
-        return this;
-    }
 
-    public MdcService warning(final String warningCode) {
-        setMdc(MDCKeys.warning, warningCode);
-        return this;
-    }
-
-    public MdcService from(final LocalDateTime from) {
-        setMdc(MDCKeys.from, from);
-        return this;
-    }
-
-    public MdcService from(final long fromTimestamp) {
-        setMdc(MDCKeys.fromTimestamp, fromTimestamp);
-        return this;
-    }
-
-    public MdcService until(final LocalDateTime unitl) {
-        setMdc(MDCKeys.until, unitl);
-        return this;
-    }
-
-    public MdcService until(final long unitlTimestamp) {
-        setMdc(MDCKeys.untilTimestamp, unitlTimestamp);
-        return this;
-    }
-
-    public MdcService price(final double value) {
-        setMdc(MDCKeys.price, value);
-        return this;
-    }
-
-    public MdcService quantity(final double value) {
-        setMdc(MDCKeys.quantity, value);
-        return this;
-    }
-
-    public MdcService size(final double value) {
-        setMdc(MDCKeys.size, value);
-        return this;
-    }
-
-    public MdcService ioinfo(final IoInfoDTO info) {
-        if (info == null) {
-            removeIoinfo();
-        }
-
-        setMdc(MDCKeys.partnerUrl, info.getUrl());
-        setMdc(MDCKeys.partnerVerb, info.getMethod());
-        setMdc(MDCKeys.partner, info.getPartnerName());
-        setMdc(MDCKeys.partnerService, info.getPartnerService());
-        setMdc(MDCKeys.partnerSubService, info.getPartnerSubService());
-        setMdc(MDCKeys.partnerRequestCharset, info.getRequestCharset() == null ? StandardCharsets.UTF_8.name() : info.getRequestCharset().name());
-
-        if (info.getStatus() != 0) {
-            setMdc(MDCKeys.partnerResponseStatus, info.getStatus());
-            setMdc(MDCKeys.partnerResponseDuration, info.getDuration());
-            setMdc(MDCKeys.partnerResponseMessage, info.getDuration());
-            setMdc(MDCKeys.partnerResponseCharset, info.getResponseCharset() == null ? StandardCharsets.UTF_8.name() : info.getResponseCharset().name());
-        }
-        return this;
-    }
-
-    private void removeIoinfo() {
-        remove(MDCKeys.partnerUrl,
-               MDCKeys.partnerVerb,
-               MDCKeys.partner,
-               MDCKeys.partnerService,
-               MDCKeys.partnerSubService,
-               MDCKeys.partnerRequestCharset,
-               MDCKeys.partnerResponseStatus,
-               MDCKeys.partnerResponseDuration,
-               MDCKeys.partnerResponseMessage,
-               MDCKeys.partnerResponseCharset
-        );
-
-    }
 }
+

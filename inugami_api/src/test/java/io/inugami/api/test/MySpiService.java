@@ -1,4 +1,4 @@
-package io.inugami.api.spi.test;
+package io.inugami.api.test;
 
 public interface MySpiService {
     void process();

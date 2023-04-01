@@ -24,7 +24,7 @@ public class FeignPartnerResponseDecoder implements Decoder {
         Response  wrappedResponse = FeignCommon.wrapResponse(response);
         IoInfoDTO ioInfo          = FeignCommon.buildInfo(wrappedResponse, now - callDate);
 
-        MdcService.getInstance().ioinfo(ioInfo);
+        MdcService.getInstance().ioinfoPartner(ioInfo);
 
         if (ioInfo.getStatus() >= 400) {
             Loggers.PARTNERLOG.error(ioInfo.toString());

@@ -33,7 +33,7 @@ public class FeignPartnerErrorDecoder implements ErrorDecoder {
         final ErrorCode           errorCode = resolveErrorCode(resolver, wrappedResponse, feignClient, urlTemplate);
 
         MdcService.getInstance()
-                  .ioinfo(ioInfo)
+                  .ioinfoPartner(ioInfo)
                   .errorCode(errorCode);
 
         Loggers.PARTNERLOG.error(ioInfo.toString());

@@ -34,6 +34,10 @@
             <groupId>io.inugami</groupId>
             <artifactId>inugami_api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.inugami</groupId>
+            <artifactId>inugami_configuration_tools</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>io.inugami</groupId>
