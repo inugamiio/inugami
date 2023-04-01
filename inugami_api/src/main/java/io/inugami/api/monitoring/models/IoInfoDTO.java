@@ -66,6 +66,20 @@ public class IoInfoDTO {
                 }
 
             }
+            return this;
+        }
+
+        public IoInfoDTOBuilder addHeaders(final Iterator<Map.Entry<String, String>> values) {
+            if (headers == null) {
+                headers = new LinkedHashMap<>();
+            }
+
+            if (values != null) {
+                while (values.hasNext()) {
+                    final Map.Entry<String, String> value = values.next();
+                    addHeader(value.getKey(), value.getValue());
+                }
+            }
 
             return this;
         }

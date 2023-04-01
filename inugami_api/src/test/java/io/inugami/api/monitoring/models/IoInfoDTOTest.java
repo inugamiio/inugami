@@ -62,7 +62,7 @@ public class IoInfoDTOTest {
 
 
     @Test
-    public void addHeader_withKeyValue_shouldAdd(){
+    public void addHeader_withKeyValue_shouldAdd() {
         final IoInfoDTO.IoInfoDTOBuilder builder = IoInfoDTO.builder();
         builder.addHeader(KEY, "AAA");
         assertThat(builder.build().getHeaders()).isNotNull();
@@ -71,6 +71,21 @@ public class IoInfoDTOTest {
 
         builder.addHeader(KEY, "BBB");
         assertThat(builder.build().getHeaders().get(KEY).size()).isEqualTo(2);
-        assertThat(builder.build().getHeaders().get(KEY)).isEqualTo(List.of("AAA","BBB"));
+        assertThat(builder.build().getHeaders().get(KEY)).isEqualTo(List.of("AAA", "BBB"));
+    }
+
+    @Test
+    public void addHeader_withIterator_shouldAdd() {
+        final IoInfoDTO.IoInfoDTOBuilder builder = IoInfoDTO.builder();
+
+        Map<String, String> values = Map.ofEntries(
+                Map.entry(KEY, "AAA")
+        );
+
+        builder.addHeaders(values.entrySet().iterator());
+        assertThat(builder.build().getHeaders()).isNotNull();
+        assertThat(builder.build().getHeaders().get(KEY).size()).isEqualTo(1);
+        assertThat(builder.build().getHeaders().get(KEY)).isEqualTo(List.of("AAA"));
+
     }
 }
