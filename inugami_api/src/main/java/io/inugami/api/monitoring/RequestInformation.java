@@ -56,6 +56,7 @@ public class RequestInformation implements Serializable {
     private final String correlationId;
     
     private final String requestId;
+    private final String traceId;
     
     private final String conversationId;
     

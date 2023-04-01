@@ -28,7 +28,6 @@ import javax.servlet.http.HttpServletResponse;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.monitoring.RequestContext;
 import io.inugami.api.monitoring.RequestInformation;
-import io.inugami.api.monitoring.RequestInformationBuilder;
 import io.inugami.api.monitoring.models.Monitoring;
 import io.inugami.api.spi.SpiLoader;
 import io.inugami.monitoring.api.resolvers.DefaultServiceNameResolver;
@@ -65,43 +64,44 @@ public final class RequestInformationInitializer {
     private static RequestInformation buildInformation(final HttpServletRequest request,
                                                        final Map<String, String> headers) {
 
-        final RequestInformationBuilder builder = new RequestInformationBuilder();
-        builder.setEnv(CONFIG.getEnv());
-        builder.setAsset(CONFIG.getAsset());
-        builder.setHostname(CONFIG.getHostname());
-        builder.setInstanceName(CONFIG.getInstanceName());
-        builder.setInstanceNumber(CONFIG.getInstanceNumber());
-        builder.setApplicationVersion(CONFIG.getApplicationVersion());
+        final RequestInformation.RequestInformationBuilder builder = RequestInformation.builder();
+        builder.env(CONFIG.getEnv());
+        builder.asset(CONFIG.getAsset());
+        builder.hostname(CONFIG.getHostname());
+        builder.instanceName(CONFIG.getInstanceName());
+        builder.instanceNumber(CONFIG.getInstanceNumber());
+        builder.applicationVersion(CONFIG.getApplicationVersion());
 
-        builder.setCorrelationId(cleanInput(buildUid(headers.get(CONFIG.getHeaders().getCorrelationId()))));
-        builder.setRequestId(cleanInput(buildUid(headers.get(CONFIG.getHeaders().getRequestId()))));
-        builder.setConversationId(cleanInput(headers.get(CONFIG.getHeaders().getConversationId())));
-        builder.setSessionId(cleanInput(request.getRequestedSessionId()));
+        builder.correlationId(cleanInput(buildUid(headers.get(CONFIG.getHeaders().getCorrelationId()))));
+        builder.requestId(cleanInput(buildUid(headers.get(CONFIG.getHeaders().getRequestId()))));
+        builder.traceId(cleanInput(buildUid(headers.get(CONFIG.getHeaders().getRequestId()))));
+        builder.conversationId(cleanInput(headers.get(CONFIG.getHeaders().getConversationId())));
+        builder.sessionId(cleanInput(request.getRequestedSessionId()));
 
-        builder.setService(SERVICE_NAME_RESOLVER.resolve(buildUriPath(request)));
+        builder.service(SERVICE_NAME_RESOLVER.resolve(buildUriPath(request)));
 
-        builder.setDeviceIdentifier(cleanInput(headers.get(CONFIG.getHeaders().getDeviceIdentifier())));
-        builder.setDeviceType(cleanInput(headers.get(CONFIG.getHeaders().getDeviceType())));
-        builder.setDeviceClass(cleanInput(headers.get(CONFIG.getHeaders().getDeviceClass())));
+        builder.deviceIdentifier(cleanInput(headers.get(CONFIG.getHeaders().getDeviceIdentifier())));
+        builder.deviceType(cleanInput(headers.get(CONFIG.getHeaders().getDeviceType())));
+        builder.deviceClass(cleanInput(headers.get(CONFIG.getHeaders().getDeviceClass())));
 
         final String clientVersion = headers.get(CONFIG.getHeaders().getDeviceVersion());
-        builder.setVersion(cleanInput(clientVersion));
-        builder.setMajorVersion(clientVersion == null ? null : cleanInput(clientVersion.split("[.]")[0]));
-        builder.setOsVersion(cleanInput(headers.get(CONFIG.getHeaders().getDeviceOsVersion())));
-        builder.setDeviceNetworkType(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkType())));
-        builder.setDeviceNetworkSpeedDown(
+        builder.version(cleanInput(clientVersion));
+        builder.majorVersion(clientVersion == null ? null : cleanInput(clientVersion.split("[.]")[0]));
+        builder.osVersion(cleanInput(headers.get(CONFIG.getHeaders().getDeviceOsVersion())));
+        builder.deviceNetworkType(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkType())));
+        builder.deviceNetworkSpeedDown(
                 parseDouble(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkSpeedDown()))));
-        builder.setDeviceNetworkSpeedUp(
+        builder.deviceNetworkSpeedUp(
                 parseDouble(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkSpeedUp()))));
-        builder.setDeviceNetworkSpeedLatency(
+        builder.deviceNetworkSpeedLatency(
                 parseDouble(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkSpeedLatency()))));
 
-        builder.setRemoteAddress(request.getRemoteAddr());
-        builder.setDeviceIp(cleanInput(headers.get(CONFIG.getHeaders().getDeviceIp())));
-        builder.setUserAgent(cleanInput(headers.get(CONFIG.getHeaders().getUserAgent())));
+        builder.remoteAddress(request.getRemoteAddr());
+        builder.deviceIp(cleanInput(headers.get(CONFIG.getHeaders().getDeviceIp())));
+        builder.userAgent(cleanInput(headers.get(CONFIG.getHeaders().getUserAgent())));
 
-        builder.setLanguage(cleanInput(headers.get(CONFIG.getHeaders().getLanguage())));
-        builder.setCountry(cleanInput(headers.get(CONFIG.getHeaders().getCountry())));
+        builder.language(cleanInput(headers.get(CONFIG.getHeaders().getLanguage())));
+        builder.country(cleanInput(headers.get(CONFIG.getHeaders().getCountry())));
 
         final Map<String, String> specific = new HashMap<>();
         if ((CONFIG.getHeaders().getSpecificHeaders() != null) && !CONFIG.getHeaders().getSpecificHeaders().isEmpty()) {
@@ -113,7 +113,7 @@ public final class RequestInformationInitializer {
 
             }
         }
-        builder.setSpecific(specific);
+        builder.specific(specific);
         return builder.build();
     }
 

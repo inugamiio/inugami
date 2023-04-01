@@ -206,6 +206,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
                        value -> response.setHeader(headers.getConversationId(), value));
         applyIfNotNull(requestInfo.getRequestId(), value -> response.setHeader(headers.getRequestId(), value));
 
+
         if (javaRestMethod != null) {
             for (JavaRestMethodTracker tracker : javaRestMethodTrackers) {
                 if (tracker.accept(javaRestMethod)) {

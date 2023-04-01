@@ -198,6 +198,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         setMdc(MDCKeys.instanceNumber, requestContext.getInstanceNumber());
         setMdc(MDCKeys.correlation_id, requestContext.getCorrelationId());
         setMdc(MDCKeys.request_id, requestContext.getRequestId());
+        setMdc(MDCKeys.traceId, requestContext.getTraceId());
         setMdc(MDCKeys.conversation_id, requestContext.getConversationId());
         setMdc(MDCKeys.sessionId, requestContext.getSessionId());
         setMdc(MDCKeys.applicationVersion, requestContext.getApplicationVersion());

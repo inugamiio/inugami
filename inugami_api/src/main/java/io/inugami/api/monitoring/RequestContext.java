@@ -38,6 +38,7 @@ public final class RequestContext {
 
     private static final ThreadLocal<RequestInformation> INSTANCE = new ThreadLocal<>();
 
+
     // =========================================================================
     // METHODS
     // =========================================================================
@@ -71,20 +72,23 @@ public final class RequestContext {
     // INIT
     // =========================================================================
     private static RequestInformation initializeTechnicalRequest() {
-        final RequestInformationBuilder builder = new RequestInformationBuilder();
+        final RequestInformation.RequestInformationBuilder builder = RequestInformation.builder();
+
 
         if (config != null) {
-            builder.setEnv(config.getEnv());
-            builder.setAsset(config.getAsset());
-            builder.setHostname(config.getHostname());
-            builder.setInstanceName(config.getInstanceName());
-            builder.setInstanceNumber(config.getInstanceNumber());
-            builder.setApplicationVersion(config.getApplicationVersion());
+            builder.env(config.getEnv());
+            builder.asset(config.getAsset());
+            builder.hostname(config.getHostname());
+            builder.instanceName(config.getInstanceName());
+            builder.instanceNumber(config.getInstanceNumber());
+            builder.applicationVersion(config.getApplicationVersion());
         }
-        builder.setDeviceIdentifier("system");
-        builder.setCorrelationId(UUID.randomUUID().toString());
-        builder.setRequestId(UUID.randomUUID().toString());
-        builder.setService(String.join("_", "technical", Thread.currentThread().getName()));
+        builder.deviceIdentifier("system");
+        builder.correlationId(UUID.randomUUID().toString());
+        final String traceId = UUID.randomUUID().toString();
+        builder.requestId(traceId);
+        builder.traceId(traceId);
+        builder.service(String.join("_", "technical", Thread.currentThread().getName()));
 
         final RequestInformation result = builder.build();
         RequestContext.setInstance(result);
