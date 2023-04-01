@@ -73,12 +73,14 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     // ATTRIBUTES
     // =========================================================================
     //@formatter:off
-    private              List<JavaRestMethodResolver> javaRestMethodResolvers    = null;
-    private              List<JavaRestMethodTracker>  javaRestMethodTrackers     = null;
-    private              List<Interceptable>          interceptableResolver      = null;
-    private              List<ExceptionResolver>      exceptionResolver          = null;
-    private final static Map<String, Boolean>         INTERCEPTABLE_URI_RESOLVED = new ConcurrentHashMap<>();
-    private final static int                          KILO                       = 1024;
+    private List<JavaRestMethodResolver> javaRestMethodResolvers = null;
+    private List<JavaRestMethodTracker>  javaRestMethodTrackers  = null;
+    private List<Interceptable>          interceptableResolver   = null;
+
+    private              List<ExceptionResolver>           exceptionResolver            = null;
+    private              List<MonitoringFilterInterceptor> monitoringFilterInterceptors = null;
+    private final static Map<String, Boolean>              INTERCEPTABLE_URI_RESOLVED   = new ConcurrentHashMap<>();
+    private final static int                               KILO                         = 1024;
 
     //@formatter:on
 
@@ -97,6 +99,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     @Override
     public void onContextRefreshed(Object event) {
         initAttributes();
+
     }
 
     public void initAttributes() {
@@ -104,6 +107,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         javaRestMethodTrackers = SpiLoader.getInstance().loadSpiServicesByPriority(JavaRestMethodTracker.class);
         interceptableResolver = SpiLoader.getInstance().loadSpiServicesByPriority(Interceptable.class);
         exceptionResolver = SpiLoader.getInstance().loadSpiServicesByPriority(ExceptionResolver.class, new FilterInterceptorErrorResolver());
+        monitoringFilterInterceptors = SpiLoader.getInstance().loadSpiServicesByPriority(MonitoringFilterInterceptor.class);
     }
 
     // =========================================================================
@@ -251,7 +255,21 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         onBeginInitMdcFields(requestData, httpRequest);
 
         for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
-            interceptor.onBegin(requestData);
+            try {
+                interceptor.onBegin(requestData);
+            } catch (Throwable e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        if (monitoringFilterInterceptors != null) {
+            for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptors) {
+                try {
+                    interceptor.onBegin(requestData);
+                } catch (Throwable e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
         }
     }
 
@@ -265,7 +283,20 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         final ResquestData requestData  = convertToRequestData(httpRequest, content);
         final ResponseData responseData = convertToResponseData(httpResponse, duration);
         for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
-            interceptor.onDone(requestData, responseData, error);
+            try {
+                interceptor.onDone(requestData, responseData, error);
+            } catch (Throwable e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        if (monitoringFilterInterceptors != null) {
+            for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptors) {
+                try {
+                    interceptor.onDone(requestData, responseData, error);
+                } catch (Throwable e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
         }
     }
 

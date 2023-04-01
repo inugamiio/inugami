@@ -57,7 +57,8 @@ public class FilterInterceptorTest {
                 List.of(javaRestMethodResolver),
                 List.of(javaRestMethodTracker),
                 List.of(interceptable),
-                List.of(exceptionResolver)
+                List.of(exceptionResolver),
+                List.of()
         );
     }
 
