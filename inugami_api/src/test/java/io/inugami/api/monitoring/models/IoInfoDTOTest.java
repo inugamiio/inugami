@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class IoInfoDTOTest {
 
 
+    private static final String KEY = "tracking";
+
     @Test
     public void toString_withResponse_shouldRender() {
         Map<String, Collection<String>> header = new LinkedHashMap<>();
@@ -56,5 +58,19 @@ public class IoInfoDTOTest {
                                                       "\tpayload:\n" +
                                                       "{\"id\":1,\"name\":\"John Foobar\"}" +
                                                       "\n");
+    }
+
+
+    @Test
+    public void addHeader_withKeyValue_shouldAdd(){
+        final IoInfoDTO.IoInfoDTOBuilder builder = IoInfoDTO.builder();
+        builder.addHeader(KEY, "AAA");
+        assertThat(builder.build().getHeaders()).isNotNull();
+        assertThat(builder.build().getHeaders().get(KEY).size()).isEqualTo(1);
+        assertThat(builder.build().getHeaders().get(KEY)).isEqualTo(List.of("AAA"));
+
+        builder.addHeader(KEY, "BBB");
+        assertThat(builder.build().getHeaders().get(KEY).size()).isEqualTo(2);
+        assertThat(builder.build().getHeaders().get(KEY)).isEqualTo(List.of("AAA","BBB"));
     }
 }

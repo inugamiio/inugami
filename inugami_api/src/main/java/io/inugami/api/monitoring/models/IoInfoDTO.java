@@ -8,8 +8,7 @@ import lombok.ToString;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Builder(toBuilder = true)
@@ -48,6 +47,26 @@ public class IoInfoDTO {
                 this.responsePayload = payload.getBytes(StandardCharsets.UTF_8);
                 this.requestCharset = StandardCharsets.UTF_8;
             }
+            return this;
+        }
+
+        public IoInfoDTOBuilder addHeader(final String key, final String value) {
+            if (headers == null) {
+                headers = new LinkedHashMap<>();
+            }
+
+            if (key != null && value != null) {
+                if (headers.containsKey(key)) {
+                    final Collection<String> values    = headers.get(key);
+                    List<String>             newValues = new ArrayList<>(values);
+                    newValues.add(value);
+                    headers.put(key, newValues);
+                } else {
+                    headers.put(key, List.of(value));
+                }
+
+            }
+
             return this;
         }
     }
