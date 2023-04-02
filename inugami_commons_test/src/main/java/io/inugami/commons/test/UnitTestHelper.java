@@ -47,9 +47,11 @@ public class UnitTestHelper {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final static Pattern UID_PATTERN = Pattern.compile("(?:[^_-]+[_-]){0,1}(?<uid>[0-9]+)");
-    public static final  String  UTF_8       = "UTF-8";
-    public static final String NULL = "null";
+    private final static Pattern UID_PATTERN  = Pattern.compile("(?:[^_-]+[_-]){0,1}(?<uid>[0-9]+)");
+    public static final  String  UTF_8        = "UTF-8";
+    public static final  String  NULL         = "null";
+    private static final String  WINDOWS_LINE = "\r";
+    private static final String  EMPTY        = "";
 
 
     // =========================================================================
@@ -68,12 +70,12 @@ public class UnitTestHelper {
         String result = null;
         try {
             result = FileUtils.readFileToString(file, UTF_8);
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             throwException(e);
         }
-        return result;
+        return cleanWindowsChar(result);
     }
+
 
     // =========================================================================
     // LOAD Object Stub by uid
@@ -129,8 +131,7 @@ public class UnitTestHelper {
             if (matcher.matches()) {
                 result = matcher.group("uid");
             }
-        }
-        else {
+        } else {
             result = argument;
         }
         return result;
@@ -157,7 +158,7 @@ public class UnitTestHelper {
                                                                   .append(".")
                                                                   .append(uidObject)
                                                                   .append(".json");
-            result = UnitTestHelper.loadJson(path.toString(), refObjectType);
+            result = loadJson(path.toString(), refObjectType);
         }
         return result;
     }
@@ -169,8 +170,7 @@ public class UnitTestHelper {
                 final String json = new String(data, UTF_8);
                 result = convertFromJson(json, refObjectType);
 
-            }
-            catch (final Exception error) {
+            } catch (final Exception error) {
                 throw new UncheckedException(error.getMessage(), error);
             }
 
@@ -183,24 +183,24 @@ public class UnitTestHelper {
     // =========================================================================
     public static String convertToJson(final Object value) {
         String result = null;
-        if(value==null){
+        if (value == null) {
             return NULL;
         }
         try {
             result = JsonMarshaller.getInstance()
                                    .getIndentedObjectMapper()
                                    .writeValueAsString(value);
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             throwException(e);
         }
-        return result;
+        return cleanWindowsChar(result);
     }
 
     public static String forceConvertToJson(final Object value) {
-        return new JSONSerializer().prettyPrint(true)
-                                   .exclude("*.class")
-                                   .deepSerialize(value);
+        final String json = new JSONSerializer().prettyPrint(true)
+                                                .exclude("*.class")
+                                                .deepSerialize(value);
+        return cleanWindowsChar(json);
     }
 
     public static String convertToJsonWithoutIndent(final Object value) {
@@ -209,25 +209,23 @@ public class UnitTestHelper {
             result = JsonMarshaller.getInstance()
                                    .getDefaultObjectMapper()
                                    .writeValueAsString(value);
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             throwException(e);
         }
-        return result;
+        return cleanWindowsChar(result);
     }
 
 
     public static <T> T loadJson(final String path, final TypeReference<T> refObjectType) {
-        Asserts.notNull(path, "can't load Json Object from null path");
+        Asserts.assertNotNull(path, "can't load Json Object from null path");
         final String json = loadJsonReference(path);
         return convertFromJson(json, refObjectType);
     }
 
     public static <T> T convertFromJson(final String json, final TypeReference<T> refObjectType) {
         try {
-            return json == null ? null : new ObjectMapper().readValue(json, refObjectType);
-        }
-        catch (final IOException e) {
+            return json == null ? null : JsonMarshaller.getInstance().getDefaultObjectMapper().readValue(json, refObjectType);
+        } catch (final IOException e) {
             throw new UncheckedException(DefaultErrorCode.buildUndefineError(), e, e.getMessage());
         }
     }
@@ -263,20 +261,20 @@ public class UnitTestHelper {
     public static <T> void checkMapper(final String relativePath, final TypeReference<T> refObjectType,
                                        final Function<Object, Object> mapperFunction)
             throws IOException {
-        Asserts.notNull(TestHelpersErrorCodes.MUST_BE_NOT_NULL, refObjectType);
-        Asserts.notNull(TestHelpersErrorCodes.MUST_BE_NOT_NULL, relativePath);
+        Asserts.assertNotNull(TestHelpersErrorCodes.MUST_BE_NOT_NULL, refObjectType);
+        Asserts.assertNotNull(TestHelpersErrorCodes.MUST_BE_NOT_NULL, relativePath);
 
         final String path = buildTestFilePath(relativePath.split("/")).getAbsolutePath()
                                                                       .replaceAll(Pattern.quote("[\\][.][\\]"), "\\");
         final File   jsonFolder     = new File(path);
         final String jsonFolderPath = jsonFolder.getAbsolutePath();
 
-        Asserts.isTrue("File define isn't a folder:" + jsonFolderPath, jsonFolder.isDirectory());
-        Asserts.isTrue("can't read folder:" + jsonFolderPath, jsonFolder.canRead());
+        Asserts.assertTrue("File define isn't a folder:" + jsonFolderPath, jsonFolder.isDirectory());
+        Asserts.assertTrue("can't read folder:" + jsonFolderPath, jsonFolder.canRead());
 
 
         final String[] fileNames = jsonFolder.list();
-        Asserts.notNull(fileNames, "no json found in folder :" + jsonFolderPath);
+        Asserts.assertNotNull(fileNames, "no json found in folder :" + jsonFolderPath);
 
         final List<File> jsonLoaderFiles = Arrays.asList(fileNames)
                                                  .stream()
@@ -292,10 +290,9 @@ public class UnitTestHelper {
             final Object initialResult = new ObjectMapper().readValue(jsonLoader, refObjectType);
             final Object mappedObject  = mapperFunction.apply(initialResult);
             try {
-                Asserts.notNull(TestHelpersErrorCodes.MUST_BE_NOT_NULL, mappedObject);
+                Asserts.assertNotNull(TestHelpersErrorCodes.MUST_BE_NOT_NULL, mappedObject);
                 assertText(mappedObject, refJson);
-            }
-            catch (final Exception error) {
+            } catch (final Exception error) {
                 Loggers.DEBUG.error("\nref:\n---------\n{}current:\n---------\n{}\n---------",
                                     refJson,
                                     mappedObjectJson);
@@ -305,7 +302,7 @@ public class UnitTestHelper {
     }
 
     public static void assertJson(final Object value, final String jsonRef) {
-        assertText(jsonRef,convertToJson(value));
+        assertText(jsonRef, convertToJson(value));
     }
 
     public static void assertJson(final String jsonRef, final String json) {
@@ -314,7 +311,7 @@ public class UnitTestHelper {
 
     public static void assertTextRelatif(final String value, final String path) {
         final String refJson = loadJsonReference(path);
-        assertText(refJson,value);
+        assertText(refJson, value);
     }
 
     public static void assertTextRelatif(final Object value, final String path) {
@@ -324,10 +321,9 @@ public class UnitTestHelper {
 
     public static void assertText(final Object value, final String jsonRef) {
         if (jsonRef == null) {
-            Asserts.isNull("json must be null", value);
-        }
-        else {
-            Asserts.notNull("json mustn't be null", value);
+            Asserts.assertNull("json must be null", value);
+        } else {
+            Asserts.assertNotNull("json mustn't be null", value);
             final String json = convertToJson(value);
             assertText(jsonRef, json);
         }
@@ -336,8 +332,8 @@ public class UnitTestHelper {
     }
 
     public static void assertText(final String jsonRef, final String json) {
-        Asserts.notNull("json ref mustn't be null", jsonRef);
-        Asserts.notNull("json mustn't be null", json);
+        Asserts.assertNotNull("json ref mustn't be null", jsonRef);
+        Asserts.assertNotNull("json mustn't be null", json);
         final String[] jsonValue = json.split("\n");
         final String[] refLines  = jsonRef.split("\n");
 
@@ -345,11 +341,10 @@ public class UnitTestHelper {
             if (jsonValue.length != refLines.length) {
                 Loggers.DEBUG.error(renderDiff(jsonValue, refLines));
             }
-            Asserts.isTrue(
+            Asserts.assertTrue(
                     String.format("reference and json have not same size : %s,%s", jsonValue.length, refLines.length),
                     jsonValue.length == refLines.length);
-        }
-        catch (final Throwable e) {
+        } catch (final Throwable e) {
             throw e;
         }
 
@@ -375,14 +370,13 @@ public class UnitTestHelper {
         try {
             handler.execute();
             throw new UncheckedException("method must throw exception", DefaultErrorCode.buildUndefineError());
-        }
-        catch (final Throwable error) {
-            Asserts.notNull(errorClass, "error class is mandatory");
-            Asserts.isTrue("error class isn't a " + errorClass.getName(), error.getClass()
-                                                                               .isInstance(errorClass));
-            Asserts.isTrue(String.format("current : \"%s\"  ref: \"%s\"", error.getMessage(), errorMessage),
-                           error.getMessage()
-                                .equals(errorMessage));
+        } catch (final Throwable error) {
+            Asserts.assertNotNull(errorClass, "error class is mandatory");
+            Asserts.assertTrue("error class isn't a " + errorClass.getName(), error.getClass()
+                                                                                   .isInstance(errorClass));
+            Asserts.assertTrue(String.format("current : \"%s\"  ref: \"%s\"", error.getMessage(), errorMessage),
+                               error.getMessage()
+                                    .equals(errorMessage));
         }
     }
 
@@ -390,15 +384,14 @@ public class UnitTestHelper {
         try {
             handler.execute();
             throw new UncheckedException(DefaultErrorCode.buildUndefineError(), "method must throw exception");
-        }
-        catch (final Throwable error) {
-            Asserts.isTrue("error class isn't a  ExceptionWithErrorCode", error instanceof ExceptionWithErrorCode);
+        } catch (final Throwable error) {
+            Asserts.assertTrue("error class isn't a  ExceptionWithErrorCode", error instanceof ExceptionWithErrorCode);
 
             final String currentErrorCode = ((ExceptionWithErrorCode) error).getErrorCode()
                                                                             .getErrorCode();
 
-            Asserts.isTrue(String.format("current : \"%s\"  ref: \"%s\"", currentErrorCode, errorCode.getErrorCode()),
-                           currentErrorCode.equals(errorCode.getErrorCode()));
+            Asserts.assertTrue(String.format("current : \"%s\"  ref: \"%s\"", currentErrorCode, errorCode.getErrorCode()),
+                               currentErrorCode.equals(errorCode.getErrorCode()));
         }
     }
 
@@ -430,8 +423,8 @@ public class UnitTestHelper {
         writer.write(ConsoleColors.createLine("=", fullSize)).line();
 
         for (int i = 0; i < nbLines; i++) {
-            final String  currentLine = i >= currentNbLine ? "" : jsonValue[i];
-            final String  refLine     = i >= refNbLines ? "" : refLines[i];
+            final String  currentLine = i >= currentNbLine ? EMPTY : jsonValue[i];
+            final String  refLine     = i >= refNbLines ? EMPTY : refLines[i];
             final boolean diff        = !currentLine.trim().equals(refLine.trim());
             if (diff) {
                 writer.write(ConsoleColors.RED);
@@ -467,8 +460,7 @@ public class UnitTestHelper {
         final StringBuilder result = new StringBuilder();
         if (columnSize < title.length()) {
             result.append(title.substring(0, columnSize));
-        }
-        else {
+        } else {
             final int titleOffset = title.length() / 2;
 
             result.append(ConsoleColors.createLine(" ", titleOffset));
@@ -476,5 +468,9 @@ public class UnitTestHelper {
             result.append(ConsoleColors.createLine(" ", columnSize - (titleOffset + title.length())));
         }
         return result.toString();
+    }
+
+    private static String cleanWindowsChar(final String value) {
+        return value == null ? value : value.replaceAll(WINDOWS_LINE, EMPTY);
     }
 }
