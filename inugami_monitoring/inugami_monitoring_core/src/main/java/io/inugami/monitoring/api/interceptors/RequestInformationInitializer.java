@@ -32,6 +32,8 @@ import io.inugami.api.monitoring.models.Monitoring;
 import io.inugami.api.spi.SpiLoader;
 import io.inugami.monitoring.api.resolvers.DefaultServiceNameResolver;
 import io.inugami.monitoring.api.resolvers.ServiceNameResolver;
+import io.inugami.monitoring.core.context.MonitoringBootstrap;
+import io.inugami.monitoring.core.context.MonitoringContext;
 
 /**
  * RequestInformationInitializer
@@ -43,7 +45,7 @@ public final class RequestInformationInitializer {
     // =========================================================================
     // BUILDER
     // =========================================================================
-    private final static Monitoring CONFIG = RequestContext.loadConfig();
+    private static Monitoring CONFIG = null;
 
 
     private static final ServiceNameResolver SERVICE_NAME_RESOLVER = SpiLoader.getInstance().loadSpiServiceByPriority(
@@ -56,6 +58,9 @@ public final class RequestInformationInitializer {
     // =========================================================================
     public static synchronized RequestInformation buildRequestInformation(final HttpServletRequest request,
                                                                           final Map<String, String> headers) {
+        if (CONFIG == null) {
+            CONFIG = MonitoringBootstrap.getContext().getConfig();
+        }
         final RequestInformation information = buildInformation(request, headers);
         RequestContext.setInstance(information);
         return information;
@@ -74,7 +79,7 @@ public final class RequestInformationInitializer {
 
         builder.correlationId(cleanInput(buildUid(headers.get(CONFIG.getHeaders().getCorrelationId()))));
         builder.requestId(cleanInput(buildUid(headers.get(CONFIG.getHeaders().getRequestId()))));
-        builder.traceId(cleanInput(buildUid(headers.get(CONFIG.getHeaders().getRequestId()))));
+        builder.traceId(cleanInput(buildUid(headers.get(CONFIG.getHeaders().getTraceId()))));
         builder.conversationId(cleanInput(headers.get(CONFIG.getHeaders().getConversationId())));
         builder.sessionId(cleanInput(request.getRequestedSessionId()));
 

@@ -108,6 +108,7 @@ final class MonitoringDataBuilder {
         //@formatter:off
         return new Headers(configHandler.applyProperties(defaultConfig.getCorrelationId()),
                            configHandler.applyProperties(defaultConfig.getRequestId()),
+                           configHandler.applyProperties(defaultConfig.getTraceId()),
                            configHandler.applyProperties(defaultConfig.getConversationId()),
                            configHandler.applyProperties(defaultConfig.getToken()),
                            configHandler.applyProperties(defaultConfig.getDeviceIdentifier()),

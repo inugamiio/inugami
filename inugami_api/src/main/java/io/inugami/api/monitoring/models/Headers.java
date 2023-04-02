@@ -41,6 +41,7 @@ public class Headers {
 
     private String      correlationId;
     private String      requestId;
+    private String      traceId;
     private String      conversationId;
     private String      token;
     private String      deviceIdentifier;
@@ -71,6 +72,7 @@ public class Headers {
     public Headers refreshConfig(final ConfigHandler<String, String> configuration) {
         correlationId = configuration.getOrDefault("inugami.monitoring.headers.correlationId", "x-correlation-id");
         requestId = configuration.getOrDefault("inugami.monitoring.headers.requestId", "x-b3-traceid");
+        traceId = configuration.getOrDefault("inugami.monitoring.headers.traceId", "x-b3-traceid");
         conversationId = configuration.getOrDefault("inugami.monitoring.headers.conversationId", "x-conversation-id");
         token = configuration.getOrDefault("inugami.monitoring.headers.token", "Authorization");
         deviceIdentifier = configuration.getOrDefault("inugami.monitoring.headers.deviceIdentifier", "x-device-identifier");

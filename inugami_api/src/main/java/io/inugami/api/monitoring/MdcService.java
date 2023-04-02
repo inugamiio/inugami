@@ -27,6 +27,7 @@ import java.util.*;
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 
 
+@Getter
 @Slf4j
 public class MdcService implements ApplicationLifecycleSPI {
 
