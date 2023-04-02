@@ -84,11 +84,11 @@ public class RequestInformation implements Serializable {
     
     private final String deviceNetworkType;
     
-    private final double deviceNetworkSpeedDown;
+    private final Double deviceNetworkSpeedDown;
     
-    private final double deviceNetworkSpeedUp;
+    private final Double deviceNetworkSpeedUp;
     
-    private final double deviceNetworkSpeedLatency;
+    private final Double deviceNetworkSpeedLatency;
     
     // IPs
     private final String remoteAddress;
