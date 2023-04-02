@@ -18,7 +18,7 @@ public class FeignPartnerRequestInterceptor implements RequestInterceptor {
     @Override
     public void apply(final RequestTemplate requestTemplate) {
         IoInfoDTO info = FeignCommon.buildInfo(requestTemplate);
-        MdcService.getInstance().ioinfo(info);
+        MdcService.getInstance().ioinfoPartner(info);
 
         Loggers.PARTNERLOG.info(info.toString());
         requestTemplate.header(FeignCommon.X_DATE, String.valueOf(System.currentTimeMillis()));

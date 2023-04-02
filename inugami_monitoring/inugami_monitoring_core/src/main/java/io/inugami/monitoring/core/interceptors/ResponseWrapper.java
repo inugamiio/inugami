@@ -37,10 +37,11 @@ import io.inugami.api.spi.SpiLoader;
  */
 final class ResponseWrapper implements ServletResponse, HttpServletResponse {
 
-    public static final String        HEADER_SEP = ",";
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
+    public static final String        HEADER_SEP = ",";
     private final HttpServletResponse response;
     
     private final OutputWriterWrapper       outputWrapper;

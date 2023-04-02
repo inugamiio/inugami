@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.configuration.services;
+package io.inugami.api.tools;
 
 import io.inugami.api.exceptions.Asserts;
 import org.junit.jupiter.api.Test;

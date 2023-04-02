@@ -12,10 +12,10 @@ import java.nio.charset.StandardCharsets;
 
 public class FileWriter implements AppenderWriterStrategy {
 
-    private static final String LINE = "\n";
-    private Configuration configuration = null;
-    private Encoder<ILoggingEvent> encoder;
-    private java.io.FileWriter     writer;
+    private static final String                 LINE          = "\n";
+    private              Configuration          configuration = null;
+    private              Encoder<ILoggingEvent> encoder;
+    private              java.io.FileWriter     writer;
 
     @Override
     public boolean accept(final Configuration configuration) {
@@ -32,10 +32,27 @@ public class FileWriter implements AppenderWriterStrategy {
         String filePath = configuration.getFile();
 
         try {
-            File file = new File(filePath).getCanonicalFile();
+            File file = createFileIfNotExists(filePath);
             writer = new java.io.FileWriter(file);
         } catch (IOException e) {
             throw new FatalException(e);
+        }
+    }
+
+    protected File createFileIfNotExists(final String filePath) {
+        File file = null;
+        try {
+            file = new File(filePath).getCanonicalFile();
+            if (!file.exists()) {
+                final File parent = file.getParentFile();
+                if (!parent.exists()) {
+                    parent.mkdirs();
+                }
+                file.createNewFile();
+            }
+            return file;
+        } catch (IOException e) {
+            return null;
         }
     }
 

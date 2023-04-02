@@ -77,6 +77,7 @@ public final class JsonMarshaller  {
             objectMapper.registerModule(new ParameterNamesModule())
                         .registerModule(new Jdk8Module())
                         .registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -94,6 +95,7 @@ public final class JsonMarshaller  {
             objectMapper.registerModule(new ParameterNamesModule())
                         .registerModule(new Jdk8Module())
                         .registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 

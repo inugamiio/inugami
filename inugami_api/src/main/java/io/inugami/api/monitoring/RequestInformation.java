@@ -56,6 +56,7 @@ public class RequestInformation implements Serializable {
     private final String correlationId;
     
     private final String requestId;
+    private final String traceId;
     
     private final String conversationId;
     
@@ -83,11 +84,11 @@ public class RequestInformation implements Serializable {
     
     private final String deviceNetworkType;
     
-    private final double deviceNetworkSpeedDown;
+    private final Double deviceNetworkSpeedDown;
     
-    private final double deviceNetworkSpeedUp;
+    private final Double deviceNetworkSpeedUp;
     
-    private final double deviceNetworkSpeedLatency;
+    private final Double deviceNetworkSpeedLatency;
     
     // IPs
     private final String remoteAddress;

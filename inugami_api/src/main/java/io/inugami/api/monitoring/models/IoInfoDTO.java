@@ -8,8 +8,7 @@ import lombok.ToString;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Builder(toBuilder = true)
@@ -50,6 +49,40 @@ public class IoInfoDTO {
             }
             return this;
         }
+
+        public IoInfoDTOBuilder addHeader(final String key, final String value) {
+            if (headers == null) {
+                headers = new LinkedHashMap<>();
+            }
+
+            if (key != null && value != null) {
+                if (headers.containsKey(key)) {
+                    final Collection<String> values    = headers.get(key);
+                    List<String>             newValues = new ArrayList<>(values);
+                    newValues.add(value);
+                    headers.put(key, newValues);
+                } else {
+                    headers.put(key, List.of(value));
+                }
+
+            }
+            return this;
+        }
+
+        public IoInfoDTOBuilder addHeaders(final Iterator<Map.Entry<String, String>> values) {
+            if (headers == null) {
+                headers = new LinkedHashMap<>();
+            }
+
+            if (values != null) {
+                while (values.hasNext()) {
+                    final Map.Entry<String, String> value = values.next();
+                    addHeader(value.getKey(), value.getValue());
+                }
+            }
+
+            return this;
+        }
     }
 
     @Override
@@ -63,8 +96,8 @@ public class IoInfoDTO {
         if (status > 0) {
             result.write("response:").line();
             result.tab().write("status: ").write(status).line();
-            result.tab().write("duration: ").write(status).write("ms").line();
-            result.tab().write("message: ").write(status).line();
+            result.tab().write("duration: ").write(duration).write("ms").line();
+            result.tab().write("message: ").write(message).line();
             result.write(writeHeaders(responseHeaders));
             result.write(writePayload(responsePayload, responseCharset));
         }

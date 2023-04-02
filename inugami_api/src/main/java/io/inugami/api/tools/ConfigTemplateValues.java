@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.configuration.services;
+package io.inugami.api.tools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  * @author patrick_guillerm
  * @since 9 mai 2017
  */
-public class ConfigTemplateValues {
+public class ConfigTemplateValues implements TemplateProviderSPI {
     
     // =========================================================================
     // ATTRIBUTES
@@ -78,7 +78,7 @@ public class ConfigTemplateValues {
         }
     }
     
-    protected List<String> searchKeys(final String value) {
+    public List<String> searchKeys(final String value) {
         final List<String> result = new ArrayList<>();
         final Matcher matcher = PROPERTY_REGEX.matcher(value);
         while (matcher.find()) {

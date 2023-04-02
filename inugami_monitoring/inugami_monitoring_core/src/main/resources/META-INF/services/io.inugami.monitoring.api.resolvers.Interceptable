@@ -1,1 +1,2 @@
 io.inugami.monitoring.core.interceptable.DefaultInterceptableIdentifier
+io.inugami.monitoring.core.interceptors.spi.H2Interceptable

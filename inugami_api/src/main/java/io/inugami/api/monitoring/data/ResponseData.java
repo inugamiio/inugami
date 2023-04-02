@@ -25,6 +25,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * ResponseData
  * 
@@ -36,10 +39,7 @@ import lombok.ToString;
 @ToString(onlyExplicitlyIncluded = true)
 @Getter
 public class ResponseData implements Serializable, ClonableObject<ResponseData> {
-    
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
+
     private static final long serialVersionUID = 2949186095649126700L;
     
     private final long        duration;
@@ -53,19 +53,10 @@ public class ResponseData implements Serializable, ClonableObject<ResponseData> 
     @ToString.Include
     private final String      contentType;
 
-    private Map<String, String> hearder;
+    private       Map<String, String> hearder;
+    private final HttpServletRequest  httpRequest;
+    private final HttpServletResponse httpResponse;
 
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public ResponseData(int code, String content, String contentType, long duration, long datetime) {
-        super();
-        this.duration = duration;
-        this.datetime = datetime;
-        this.code = code;
-        this.content = content;
-        this.contentType = contentType;
-    }
     
     @Override
     public ResponseData cloneObj() {

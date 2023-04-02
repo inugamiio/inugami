@@ -17,6 +17,7 @@
 package io.inugami.api.monitoring.models;
 
 import io.inugami.api.processors.ConfigHandler;
+import io.inugami.api.processors.DefaultConfigHandler;
 import lombok.*;
 
 import java.util.Arrays;
@@ -40,10 +41,13 @@ public class Headers {
 
     private String      correlationId;
     private String      requestId;
+    private String      traceId;
     private String      conversationId;
     private String      token;
     private String      deviceIdentifier;
     private String      deviceType;
+    private String      deviceSystem;
+
     private String      deviceClass;
     private String      deviceVersion;
     private String      deviceOsVersion;
@@ -63,32 +67,40 @@ public class Headers {
         return result;
     }
 
-    public void refreshConfig(final ConfigHandler<String, String> configuration) {
-        correlationId             = configuration.getOrDefault("inugami.monitoring.headers.correlationId","x-correlation-id");
-        requestId                 = configuration.getOrDefault("inugami.monitoring.headers.requestId","x-b3-traceid");
-        conversationId            = configuration.getOrDefault("inugami.monitoring.headers.conversationId","x-conversation-id");
-        token                     = configuration.getOrDefault("inugami.monitoring.headers.token","Authorization");
-        deviceIdentifier          = configuration.getOrDefault("inugami.monitoring.headers.deviceIdentifier","x-device-identifier");
-        deviceType                = configuration.getOrDefault("inugami.monitoring.headers.deviceType","x-device-type");
-        deviceClass               = configuration.getOrDefault("inugami.monitoring.headers.deviceClass","x-device-class");
-        deviceVersion             = configuration.getOrDefault("inugami.monitoring.headers.deviceVersion","x-device-version");
-        deviceOsVersion           = configuration.getOrDefault("inugami.monitoring.headers.deviceOsVersion","x-device-os-version");
-        deviceNetworkType         = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkType","x-device-network-type");
-        deviceNetworkSpeedDown    = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkSpeedDown","x-device-network-speed-down");
-        deviceNetworkSpeedUp      = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkSpeedUp","x-device-network-speed-up");
-        deviceNetworkSpeedLatency = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkSpeedLatency","x-device-network-speed-latency");
-        deviceIp                  = configuration.getOrDefault("inugami.monitoring.headers.deviceIp","clientIp");
-        userAgent                 = configuration.getOrDefault("inugami.monitoring.headers.userAgent","User-Agent");
-        language                  = configuration.getOrDefault("inugami.monitoring.headers.language","Accept-Language");
-        country                   = configuration.getOrDefault("inugami.monitoring.headers.country","country");
+    public Headers refreshConfig() {
+        return refreshConfig(new DefaultConfigHandler());
+    }
+
+    public Headers refreshConfig(final ConfigHandler<String, String> configuration) {
+        correlationId = configuration.getOrDefault("inugami.monitoring.headers.correlationId", "x-correlation-id");
+        requestId = configuration.getOrDefault("inugami.monitoring.headers.requestId", "x-b3-traceid");
+        traceId = configuration.getOrDefault("inugami.monitoring.headers.traceId", "x-b3-traceid");
+        conversationId = configuration.getOrDefault("inugami.monitoring.headers.conversationId", "x-conversation-id");
+        token = configuration.getOrDefault("inugami.monitoring.headers.token", "Authorization");
+        deviceIdentifier = configuration.getOrDefault("inugami.monitoring.headers.deviceIdentifier", "x-device-identifier");
+        deviceType = configuration.getOrDefault("inugami.monitoring.headers.deviceType", "x-device-type");
+        deviceClass = configuration.getOrDefault("inugami.monitoring.headers.deviceClass", "x-device-class");
+        deviceSystem = configuration.getOrDefault("inugami.monitoring.headers.deviceSystem", "x-device-system");
+        deviceVersion = configuration.getOrDefault("inugami.monitoring.headers.deviceVersion", "x-device-version");
+        deviceOsVersion = configuration.getOrDefault("inugami.monitoring.headers.deviceOsVersion", "x-device-os-version");
+        deviceNetworkType = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkType", "x-device-network-type");
+        deviceNetworkSpeedDown = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkSpeedDown", "x-device-network-speed-down");
+        deviceNetworkSpeedUp = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkSpeedUp", "x-device-network-speed-up");
+        deviceNetworkSpeedLatency = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkSpeedLatency", "x-device-network-speed-latency");
+        deviceIp = configuration.getOrDefault("inugami.monitoring.headers.deviceIp", "clientIp");
+        userAgent = configuration.getOrDefault("inugami.monitoring.headers.userAgent", "User-Agent");
+        language = configuration.getOrDefault("inugami.monitoring.headers.language", "Accept-Language");
+        country = configuration.getOrDefault("inugami.monitoring.headers.country", "country");
 
 
         final String specifics = configuration.getOrDefault("inugami.monitoring.headers.specifics", "");
-        if(specifics!=null && !specifics.isEmpty()){
+        if (specifics != null && !specifics.isEmpty()) {
             specificHeaders.addAll(Arrays.asList(specifics.split(","))
                                          .stream()
                                          .map(String::trim)
                                          .collect(Collectors.toList()));
         }
+
+        return this;
     }
 }

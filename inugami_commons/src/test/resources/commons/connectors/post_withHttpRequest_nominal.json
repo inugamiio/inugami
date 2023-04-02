@@ -1,19 +1,18 @@
 {
-  "bodyData" : "WyAiam9lIiwgImZvb2JhciIgXQ==",
+  "bodyData" : "WyJqb2UiLCJmb29iYXIiXQ==",
   "charset" : "UTF-8",
   "contentType" : "application/json",
   "data" : "InRlc3RpbmctbGlicmFyeSI6ICJXaXJlTW9jayI=",
-  "delais" : 6,
+  "delais" : 23,
   "encoding" : "UTF-8",
   "hashCode" : 1241390569,
   "hashHumanReadable" : "[POST]http://localhost:1234?page=1",
   "length" : 29,
   "message" : "OK",
   "requestHeaders" : {
-    "deviceIdentifier" : "912c8721-f7d5-4bea-84ba-f13381a4fcdb",
-    "correlation_id" : "0d9e9d18-f5cf-44ff-8537-276506d884b0",
-    "request_id" : "59cf058fc08b",
-    "X-B3-TraceId" : "bff3187a6760"
+    "x-device-identifier" : "912c8721-f7d5-4bea-84ba-f13381a4fcdb",
+    "x-correlation-id" : "0d9e9d18-f5cf-44ff-8537-276506d884b0",
+    "x-b3-traceid" : "bff3187a6760"
   },
   "responseAt" : 0,
   "responseHeaders" : { },
