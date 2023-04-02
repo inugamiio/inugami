@@ -66,6 +66,9 @@ public class DefaultHeaderInformation implements PostProcessing<ConfigHandler<St
     private String deviceType;
 
     @XStreamAsAttribute
+    private String deviceSystem;
+
+    @XStreamAsAttribute
     private String deviceClass;
 
     @XStreamAsAttribute

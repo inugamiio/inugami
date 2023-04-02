@@ -5,6 +5,7 @@ import io.inugami.api.monitoring.JavaRestMethodResolver;
 import io.inugami.api.monitoring.JavaRestMethodTracker;
 import io.inugami.api.monitoring.MdcService;
 import io.inugami.api.monitoring.exceptions.ErrorResult;
+import io.inugami.api.processors.DefaultConfigHandler;
 import io.inugami.monitoring.api.exceptions.ExceptionResolver;
 import io.inugami.monitoring.api.resolvers.Interceptable;
 import org.junit.jupiter.api.Test;
@@ -58,7 +59,8 @@ public class FilterInterceptorTest {
                 List.of(javaRestMethodTracker),
                 List.of(interceptable),
                 List.of(exceptionResolver),
-                List.of()
+                List.of(),
+                new DefaultConfigHandler()
         );
     }
 

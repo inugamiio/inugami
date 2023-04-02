@@ -113,6 +113,7 @@ final class MonitoringDataBuilder {
                            configHandler.applyProperties(defaultConfig.getToken()),
                            configHandler.applyProperties(defaultConfig.getDeviceIdentifier()),
                            configHandler.applyProperties(defaultConfig.getDeviceType()),
+                           configHandler.applyProperties(defaultConfig.getDeviceSystem()),
                            configHandler.applyProperties(defaultConfig.getDeviceClass()),
                            configHandler.applyProperties(defaultConfig.getDeviceVersion()),
                            configHandler.applyProperties(defaultConfig.getDeviceOsVersion()),

@@ -33,6 +33,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import io.inugami.api.configurtation.ConfigurationSpiFactory;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.listeners.ApplicationLifecycleSPI;
 import io.inugami.api.loggers.Loggers;
@@ -40,10 +41,11 @@ import io.inugami.api.models.tools.Chrono;
 import io.inugami.api.monitoring.*;
 import io.inugami.api.monitoring.data.ResponseData;
 import io.inugami.api.monitoring.data.ResquestData;
-import io.inugami.api.monitoring.data.ResquestDataBuilder;
 import io.inugami.api.monitoring.exceptions.ErrorResult;
 import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.api.monitoring.models.Headers;
+import io.inugami.api.processors.ConfigHandler;
+import io.inugami.api.processors.DefaultConfigHandler;
 import io.inugami.api.spi.SpiLoader;
 import io.inugami.api.tools.CalendarTools;
 import io.inugami.monitoring.api.exceptions.ExceptionResolver;
@@ -79,6 +81,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
     private              List<ExceptionResolver>           exceptionResolver            = null;
     private              List<MonitoringFilterInterceptor> monitoringFilterInterceptors = null;
+    private              ConfigHandler<String, String>     configuration;
     private final static Map<String, Boolean>              INTERCEPTABLE_URI_RESOLVED   = new ConcurrentHashMap<>();
     private final static int                               KILO                         = 1024;
 
@@ -96,10 +99,10 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     public void destroy() {
     }
 
-    @Override
-    public void onContextRefreshed(Object event) {
-        initAttributes();
 
+    @Override
+    public void onConfigurationReady(final ConfigHandler<String, String> configuration) {
+        initAttributes();
     }
 
     public void initAttributes() {
@@ -159,7 +162,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         final JavaRestMethodDTO javaRestMethod = resolveJavaRestMethod(request);
         addTrackingInformation(response, requestInfo, javaRestMethod);
 
-        onBegin(httpRequest, headers, content);
+        onBegin(httpRequest, response, headers, content);
 
         Exception error = null;
 
@@ -249,10 +252,10 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     // =========================================================================
     // LIFECYCLE
     // =========================================================================
-    private void onBegin(final HttpServletRequest httpRequest, final Map<String, String> headers,
+    private void onBegin(final HttpServletRequest httpRequest, final HttpServletResponse response, final Map<String, String> headers,
                          final String content) {
 
-        final ResquestData requestData = convertToRequestData(httpRequest, content);
+        final ResquestData requestData = convertToRequestData(httpRequest, response, content);
         onBeginInitMdcFields(requestData, httpRequest);
 
         for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
@@ -281,8 +284,8 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         RequestContext.getInstance();
         onEndInitMdcFields(error, duration, httpResponse);
 
-        final ResquestData requestData  = convertToRequestData(httpRequest, content);
-        final ResponseData responseData = convertToResponseData(httpResponse, duration);
+        final ResquestData requestData  = convertToRequestData(httpRequest, httpResponse, content);
+        final ResponseData responseData = convertToResponseData(httpRequest, httpResponse, duration);
         for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
             try {
                 interceptor.onDone(requestData, responseData, error);
@@ -341,13 +344,17 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     // CONVERTERS
     // =========================================================================
     private ResquestData convertToRequestData(final HttpServletRequest httpRequest,
+                                              final HttpServletResponse response,
                                               final String content) {
-        final ResquestDataBuilder builder = new ResquestDataBuilder();
+        final ResquestData.ResquestDataBuilder builder = ResquestData.builder()
+                                                                     .httpRequest(httpRequest)
+                                                                     .httpResponse(response)
+                                                                     .method(httpRequest.getMethod())
+                                                                     .uri(httpRequest.getRequestURI().toString())
+                                                                     .contextPath(httpRequest.getContextPath())
+                                                                     .contentType(httpRequest.getContentType())
+                                                                     .content(content == null ? null : content.trim());
 
-        builder.setMethod(httpRequest.getMethod());
-        builder.setUri(httpRequest.getRequestURI().toString());
-        builder.setContextPath(httpRequest.getContextPath());
-        builder.setContentType(httpRequest.getContentType());
 
         final Map<String, String> headers  = new LinkedHashMap<>();
         final Iterator<String>    iterator = httpRequest.getHeaderNames().asIterator();
@@ -355,8 +362,8 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             final String headerName = iterator.next();
             headers.put(headerName, httpRequest.getHeader(headerName));
         }
-        builder.setHearder(headers);
-        builder.setContent(content == null ? null : content.trim());
+        builder.hearder(headers);
+
         return builder.build();
     }
 
@@ -380,7 +387,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         return out.toByteArray();
     }
 
-    private ResponseData convertToResponseData(final ResponseWrapper httpResponse, final long duration) {
+    private ResponseData convertToResponseData(final HttpServletRequest httpRequest, final ResponseWrapper httpResponse, final long duration) {
         final String content = ObfuscatorTools.applyObfuscators(httpResponse.getData());
 
         Map<String, String> hearders = new LinkedHashMap<>();
@@ -390,6 +397,8 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             hearders.put(key, httpResponse.getHeader(key));
         }
         return ResponseData.builder()
+                           .httpRequest(httpRequest)
+                           .httpResponse(httpResponse)
                            .code(httpResponse.getStatus())
                            .content(content)
                            .contentType(httpResponse.getContentType())

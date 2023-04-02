@@ -46,6 +46,8 @@ public class Headers {
     private String      token;
     private String      deviceIdentifier;
     private String      deviceType;
+    private String      deviceSystem;
+
     private String      deviceClass;
     private String      deviceVersion;
     private String      deviceOsVersion;
@@ -78,6 +80,7 @@ public class Headers {
         deviceIdentifier = configuration.getOrDefault("inugami.monitoring.headers.deviceIdentifier", "x-device-identifier");
         deviceType = configuration.getOrDefault("inugami.monitoring.headers.deviceType", "x-device-type");
         deviceClass = configuration.getOrDefault("inugami.monitoring.headers.deviceClass", "x-device-class");
+        deviceSystem = configuration.getOrDefault("inugami.monitoring.headers.deviceSystem", "x-device-system");
         deviceVersion = configuration.getOrDefault("inugami.monitoring.headers.deviceVersion", "x-device-version");
         deviceOsVersion = configuration.getOrDefault("inugami.monitoring.headers.deviceOsVersion", "x-device-os-version");
         deviceNetworkType = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkType", "x-device-network-type");
