@@ -71,7 +71,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     private List<Interceptable>          interceptableResolver   = null;
 
     private              List<ExceptionResolver>           exceptionResolver            = null;
-    private              List<MonitoringFilterInterceptor> monitoringFilterInterceptors = null;
+    private              List<MonitoringFilterInterceptor> monitoringFilterInterceptors = new ArrayList<>();
     private              ConfigHandler<String, String>     configuration;
     private final static Map<String, Boolean>              INTERCEPTABLE_URI_RESOLVED   = new ConcurrentHashMap<>();
     private final static int                               KILO                         = 1024;
@@ -101,7 +101,32 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         javaRestMethodTrackers = SpiLoader.getInstance().loadSpiServicesByPriority(JavaRestMethodTracker.class);
         interceptableResolver = SpiLoader.getInstance().loadSpiServicesByPriority(Interceptable.class);
         exceptionResolver = SpiLoader.getInstance().loadSpiServicesByPriority(ExceptionResolver.class, new FilterInterceptorErrorResolver());
-        monitoringFilterInterceptors = SpiLoader.getInstance().loadSpiServicesByPriority(MonitoringFilterInterceptor.class);
+
+
+        monitoringFilterInterceptors = new ArrayList<>();
+        for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
+            monitoringFilterInterceptors.add(interceptor);
+        }
+
+        final List<MonitoringFilterInterceptor> monitoringFilterInterceptorsSpi = SpiLoader.getInstance().loadSpiServicesByPriority(MonitoringFilterInterceptor.class);
+        for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptorsSpi) {
+            if (isNotContains(interceptor, MonitoringBootstrap.getContext().getInterceptors())) {
+                monitoringFilterInterceptors.add(interceptor);
+            }
+        }
+    }
+
+    private boolean isNotContains(final MonitoringFilterInterceptor interceptor, final List<MonitoringFilterInterceptor> monitoringFilterInterceptors) {
+        final boolean result = true;
+        if (monitoringFilterInterceptors == null) {
+            return result;
+        }
+        for (final MonitoringFilterInterceptor monitoringInterceptor : monitoringFilterInterceptors) {
+            if (interceptor.getClass() == monitoringInterceptor.getClass()) {
+                return false;
+            }
+        }
+        return result;
     }
 
     // =========================================================================
@@ -256,21 +281,11 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         final ResquestData requestData = convertToRequestData(httpRequest, response, content);
         onBeginInitMdcFields(requestData, httpRequest);
 
-        for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
+        for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptors) {
             try {
                 interceptor.onBegin(requestData);
             } catch (final Throwable e) {
                 log.error(e.getMessage(), e);
-            }
-        }
-
-        if (monitoringFilterInterceptors != null) {
-            for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptors) {
-                try {
-                    interceptor.onBegin(requestData);
-                } catch (final Throwable e) {
-                    log.error(e.getMessage(), e);
-                }
             }
         }
     }
@@ -284,20 +299,12 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
         final ResquestData requestData  = convertToRequestData(httpRequest, httpResponse, content);
         final ResponseData responseData = convertToResponseData(httpRequest, httpResponse, duration);
-        for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
+
+        for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptors) {
             try {
                 interceptor.onDone(requestData, responseData, error);
             } catch (final Throwable e) {
                 log.error(e.getMessage(), e);
-            }
-        }
-        if (monitoringFilterInterceptors != null) {
-            for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptors) {
-                try {
-                    interceptor.onDone(requestData, responseData, error);
-                } catch (final Throwable e) {
-                    log.error(e.getMessage(), e);
-                }
             }
         }
     }
