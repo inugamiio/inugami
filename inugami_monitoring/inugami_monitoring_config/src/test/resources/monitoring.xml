@@ -13,14 +13,14 @@
     == PROPERTIES
     ========================================================================= -->
     <properties>
-        <property key="joe" value="foobar" />
-        <property key="joe.url" value="http://foobar" />
-        <property key="userAgent" value="a-user-agent" />
+        <property key="joe" value="foobar"/>
+        <property key="joe.url" value="http://foobar"/>
+        <property key="userAgent" value="a-user-agent"/>
 
-        <property key="defaultInterval" value="2000" />
+        <property key="defaultInterval" value="2000"/>
 
     </properties>
-    
+
 
     <!-- =========================================================================
     == HEADER
@@ -34,6 +34,7 @@
             <deviceIdentifier>a-device-identifier</deviceIdentifier>
             <deviceType>a-device-type</deviceType>
             <deviceClass>a-device-class</deviceClass>
+            <deviceSystem>a-device-system</deviceSystem>
             <deviceVersion>a-device-version</deviceVersion>
             <deviceOsVersion>a-device-os-version</deviceOsVersion>
             <deviceNetworkType>a-device-network-type</deviceNetworkType>
@@ -46,36 +47,35 @@
             <country>a-country</country>
         </defaultHeader>
         <specificHeader>
-            <specific name="distribution-id" />
+            <specific name="distribution-id"/>
         </specificHeader>
     </header>
 
 
-    
     <!-- =========================================================================
     == SENDERS
     ========================================================================= -->
     <senders>
         <sender name="ELS">
             <properties>
-                <property key="url" value="http://my.els:90000" />
-                <property key="bulk" value="{{url}}/_bulk" />
+                <property key="url" value="http://my.els:90000"/>
+                <property key="bulk" value="{{url}}/_bulk"/>
             </properties>
 
         </sender>
     </senders>
-    
-    
+
+
     <!-- =========================================================================
     == SENSORS
     ========================================================================= -->
     <sensors>
-        <sensor name="cpu" interval="2000" />
-        <sensor name="memory" interval="{{defaultInterval}}" />
-        <sensor name="threads" interval="{{defaultInterval}}" />
+        <sensor name="cpu" interval="2000"/>
+        <sensor name="memory" interval="{{defaultInterval}}"/>
+        <sensor name="threads" interval="{{defaultInterval}}"/>
         <sensor name="mbean" query="MBean:{{path}}">
             <properties>
-                <property key="path" value="java.lang.Compilation.TotalCompilationTime" />
+                <property key="path" value="java.lang.Compilation.TotalCompilationTime"/>
             </properties>
         </sensor>
     </sensors>

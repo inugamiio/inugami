@@ -16,15 +16,6 @@
  */
 package io.inugami.monitoring.api.interceptors;
 
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.monitoring.RequestContext;
 import io.inugami.api.monitoring.RequestInformation;
@@ -33,7 +24,10 @@ import io.inugami.api.spi.SpiLoader;
 import io.inugami.monitoring.api.resolvers.DefaultServiceNameResolver;
 import io.inugami.monitoring.api.resolvers.ServiceNameResolver;
 import io.inugami.monitoring.core.context.MonitoringBootstrap;
-import io.inugami.monitoring.core.context.MonitoringContext;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /**
  * RequestInformationInitializer
@@ -84,7 +78,7 @@ public final class RequestInformationInitializer {
         builder.sessionId(cleanInput(request.getRequestedSessionId()));
 
         builder.service(SERVICE_NAME_RESOLVER.resolve(buildUriPath(request)));
-
+        builder.callFrom(cleanInput(headers.get(CONFIG.getHeaders().getCallFrom())));
         builder.deviceIdentifier(cleanInput(headers.get(CONFIG.getHeaders().getDeviceIdentifier())));
         builder.deviceType(cleanInput(headers.get(CONFIG.getHeaders().getDeviceType())));
         builder.deviceClass(cleanInput(headers.get(CONFIG.getHeaders().getDeviceClass())));
@@ -94,12 +88,9 @@ public final class RequestInformationInitializer {
         builder.majorVersion(clientVersion == null ? null : cleanInput(clientVersion.split("[.]")[0]));
         builder.osVersion(cleanInput(headers.get(CONFIG.getHeaders().getDeviceOsVersion())));
         builder.deviceNetworkType(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkType())));
-        builder.deviceNetworkSpeedDown(
-                parseDouble(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkSpeedDown()))));
-        builder.deviceNetworkSpeedUp(
-                parseDouble(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkSpeedUp()))));
-        builder.deviceNetworkSpeedLatency(
-                parseDouble(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkSpeedLatency()))));
+        builder.deviceNetworkSpeedDown(parseDouble(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkSpeedDown()))));
+        builder.deviceNetworkSpeedUp(parseDouble(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkSpeedUp()))));
+        builder.deviceNetworkSpeedLatency(parseDouble(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkSpeedLatency()))));
 
         builder.remoteAddress(request.getRemoteAddr());
         builder.deviceIp(cleanInput(headers.get(CONFIG.getHeaders().getDeviceIp())));

@@ -16,16 +16,15 @@
  */
 package io.inugami.monitoring.config.models;
 
-import static io.inugami.monitoring.config.tools.ApplyStrategy.applyStrategy;
-
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import io.inugami.api.constants.JvmKeyValues;
 import io.inugami.api.exceptions.TechnicalException;
 import io.inugami.api.functionnals.ApplyIfNull;
 import io.inugami.api.functionnals.PostProcessing;
 import io.inugami.api.processors.ConfigHandler;
-
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import lombok.*;
+
+import static io.inugami.monitoring.config.tools.ApplyStrategy.applyStrategy;
 
 /**
  * DefaultHeaderInformation
@@ -101,6 +100,27 @@ public class DefaultHeaderInformation implements PostProcessing<ConfigHandler<St
     @XStreamAsAttribute
     private String country;
 
+    @XStreamAsAttribute
+    private String warning;
+
+    @XStreamAsAttribute
+    private String errorCode;
+
+    @XStreamAsAttribute
+    private String errorException;
+
+    @XStreamAsAttribute
+    private String errorMessage;
+
+    @XStreamAsAttribute
+    private String errorMessageDetail;
+
+    @XStreamAsAttribute
+    private String frontVersion;
+
+    @XStreamAsAttribute
+    private String callFrom;
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -125,6 +145,14 @@ public class DefaultHeaderInformation implements PostProcessing<ConfigHandler<St
         deviceIp = context.applyProperties(applyStrategy(JvmKeyValues.HEADER_KEY_DEVICE_IP, deviceIp, "x-device-ip"));
         userAgent = context.applyProperties(applyStrategy(JvmKeyValues.HEADER_KEY_USER_AGENT, userAgent, "user-agent"));
         language = context.applyProperties(applyStrategy(JvmKeyValues.HEADER_KEY_LANGUAGE, language, "accept-language"));
+
+        warning = context.applyProperties(applyStrategy("inugami.monitoring.headers.warning", warning, "Warning"));
+        errorCode = context.applyProperties(applyStrategy("inugami.monitoring.headers.error.code", errorCode, "errorCode"));
+        errorException = context.applyProperties(applyStrategy("inugami.monitoring.headers.error.exception", errorException, "errorException"));
+        errorMessage = context.applyProperties(applyStrategy("inugami.monitoring.headers.error.message", errorMessage, "errorMessage"));
+        errorMessageDetail = context.applyProperties(applyStrategy("inugami.monitoring.headers.error.message.detail", errorMessageDetail, "errorMessageDetail"));
+        frontVersion = context.applyProperties(applyStrategy("inugami.monitoring.headers.front.version", frontVersion, "x-front-version"));
+        callFrom = context.applyProperties(applyStrategy("inugami.monitoring.headers.front.application", callFrom, "x-application"));
         //@formatter:on
     }
 
