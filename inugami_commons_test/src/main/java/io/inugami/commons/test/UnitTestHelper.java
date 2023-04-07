@@ -16,11 +16,8 @@
  */
 package io.inugami.commons.test;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import flexjson.JSONSerializer;
 import io.inugami.api.exceptions.*;
 import io.inugami.api.loggers.Loggers;
@@ -372,8 +369,7 @@ public class UnitTestHelper {
             throw new UncheckedException("method must throw exception", DefaultErrorCode.buildUndefineError());
         } catch (final Throwable error) {
             Asserts.assertNotNull(errorClass, "error class is mandatory");
-            Asserts.assertTrue("error class isn't a " + errorClass.getName(), error.getClass()
-                                                                                   .isInstance(errorClass));
+            Asserts.assertTrue("error class isn't a " + errorClass.getName(), error.getClass().isAssignableFrom(errorClass));
             Asserts.assertTrue(String.format("current : \"%s\"  ref: \"%s\"", error.getMessage(), errorMessage),
                                error.getMessage()
                                     .equals(errorMessage));
