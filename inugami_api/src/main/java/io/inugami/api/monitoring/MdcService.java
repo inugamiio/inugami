@@ -251,6 +251,9 @@ public class MdcService implements ApplicationLifecycleSPI {
 
     public MdcService setMdc(final MDCKeys key, final Serializable value) {
         if (key == null) {
+            return this;
+        }
+        if (value == null) {
             remove(key);
             return this;
         }
@@ -260,7 +263,7 @@ public class MdcService implements ApplicationLifecycleSPI {
 
 
     public MdcService setMdc(final String key, final Serializable value) {
-        if (key == null) {
+        if (key == null || (value instanceof String && "null".equalsIgnoreCase(String.valueOf(value)))) {
             remove(key);
             return this;
         }
