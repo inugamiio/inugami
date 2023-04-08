@@ -125,26 +125,25 @@ class HttpBasicConnectorDelegateUtils {
                             statusLine -> new ConnectorServiceUnavailablException(statusLine.getStatusCode(),
                                                                                   statusLine.getReasonPhrase())
                     )
-                   );
+            );
 
     // =========================================================================
     // BUILD CLIENT
     // =========================================================================
-    static CloseableHttpClient buildClient(int timeout,
-                                           int socketTimeout) {
+    static CloseableHttpClient buildClient(final int timeout,
+                                           final int socketTimeout) {
         final CloseableHttpClient result;
         try {
             result = buildHttpClient(timeout, socketTimeout);
-        }
-        catch (final KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
+        } catch (final KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
             throw new FatalException(e.getMessage(), e);
         }
         return result;
     }
 
-    static CloseableHttpClient buildHttpClient(int timeout,
-                                               int socketTimeout) throws KeyManagementException, NoSuchAlgorithmException,
-                                                                         KeyStoreException {
+    static CloseableHttpClient buildHttpClient(final int timeout,
+                                               final int socketTimeout) throws KeyManagementException, NoSuchAlgorithmException,
+                                                                               KeyStoreException {
         final CloseableHttpClient result;
         //@formatter:off
         final RequestConfig.Builder requestBuilder = RequestConfig.custom()
@@ -221,8 +220,7 @@ class HttpBasicConnectorDelegateUtils {
         URL result = null;
         try {
             result = new URL(url);
-        }
-        catch (final MalformedURLException e) {
+        } catch (final MalformedURLException e) {
             throw new ConnectorBadUrException(e);
         }
         return result;
@@ -231,7 +229,7 @@ class HttpBasicConnectorDelegateUtils {
 
     static String buildRequest(final String baseUrl,
                                final List<Tuple<String, String>> parameters) throws ConnectorException {
-        Asserts.notNull("Request base url mustn't be null!", baseUrl);
+        Asserts.assertNotNull("Request base url mustn't be null!", baseUrl);
         final StringBuilder result = new StringBuilder();
 
         result.append(baseUrl);
@@ -259,7 +257,7 @@ class HttpBasicConnectorDelegateUtils {
         if (request == null || request.getUrl() == null) {
             return null;
         }
-        StringBuilder url = new StringBuilder(request.getUrl());
+        final StringBuilder url = new StringBuilder(request.getUrl());
 
         if (request.getOptions() != null && !request.getOptions().isEmpty()) {
             if (!request.getUrl().contains(URL_OPITON_SEPARATOR)) {
@@ -285,19 +283,19 @@ class HttpBasicConnectorDelegateUtils {
     }
 
 
-    static void defineHearders(final HttpRequest request, BiConsumer<String, String> consumer) {
+    static void defineHearders(final HttpRequest request, final BiConsumer<String, String> consumer) {
         if (request == null || consumer == null) {
             return;
         }
 
 
         final Map<String, String> tracking = MdcService.getInstance().getTrackingInformation();
-        for (Map.Entry<String, String> trackingEntry : tracking.entrySet()) {
+        for (final Map.Entry<String, String> trackingEntry : tracking.entrySet()) {
             consumer.accept(trackingEntry.getKey(), trackingEntry.getValue());
         }
 
         if (request.getHeaders() != null) {
-            for (Map.Entry<String, String> headerEntry : request.getHeaders().entrySet()) {
+            for (final Map.Entry<String, String> headerEntry : request.getHeaders().entrySet()) {
                 consumer.accept(headerEntry.getKey(), headerEntry.getValue());
             }
         }
@@ -306,8 +304,7 @@ class HttpBasicConnectorDelegateUtils {
         if (request.getCredentialsProvider() != null || request.getToken() != null) {
             if (request.getToken() == null) {
                 consumer.accept(AUTHORIZATION, buildAuthentification(request.getCredentialsProvider()));
-            }
-            else {
+            } else {
                 consumer.accept(AUTHORIZATION, request.getToken());
             }
         }
@@ -331,12 +328,10 @@ class HttpBasicConnectorDelegateUtils {
         if (body != null) {
             if (body instanceof String) {
                 json = (String) body;
-            }
-            else {
+            } else {
                 try {
                     json = JsonMarshaller.getInstance().getDefaultObjectMapper().writeValueAsString(body);
-                }
-                catch (JsonProcessingException e) {
+                } catch (final JsonProcessingException e) {
                     throw new ConnectorMarshallingException(e.getMessage(), e);
                 }
             }
@@ -354,8 +349,7 @@ class HttpBasicConnectorDelegateUtils {
         CloseableHttpResponse response = null;
         try {
             response = httpclient.execute(request);
-        }
-        catch (IOException e) {
+        } catch (final IOException e) {
             final ConnectorUndefinedCallException exception = new ConnectorUndefinedCallException(e.getMessage(), e);
             exception.setResult(result);
             throw exception;
@@ -387,12 +381,11 @@ class HttpBasicConnectorDelegateUtils {
             return null;
         }
 
-        for (Strategy<StatusLine, ConnectorException> strategy : EXCEPTIONS_STRATEGIES) {
+        for (final Strategy<StatusLine, ConnectorException> strategy : EXCEPTIONS_STRATEGIES) {
             if (strategy.accept(statusLine)) {
                 try {
                     return strategy.process(statusLine);
-                }
-                catch (StrategyException e) {
+                } catch (final StrategyException e) {
                     log.error(e.getMessage(), e);
                 }
             }
@@ -437,8 +430,7 @@ class HttpBasicConnectorDelegateUtils {
         byte[]    rawData       = null;
         try {
             rawData = readData(response.getEntity().getContent(), contentLength, url);
-        }
-        catch (IOException e) {
+        } catch (final IOException e) {
             throw new ConnectorNoReadableException(e.getMessage(), e);
         }
         result.data(rawData);
@@ -473,8 +465,7 @@ class HttpBasicConnectorDelegateUtils {
                     log.debug("reading result ... {} - {}", size, url);
                 }
             }
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             throw new ConnectorNoReadableException(e.getMessage(), e);
         }
         result = output.toByteArray();
@@ -489,8 +480,7 @@ class HttpBasicConnectorDelegateUtils {
         if (response != null) {
             try {
                 response.close();
-            }
-            catch (IOException e) {
+            } catch (final IOException e) {
                 log.error(e.getMessage(), e);
             }
         }
@@ -500,8 +490,7 @@ class HttpBasicConnectorDelegateUtils {
         if (client != null) {
             try {
                 client.close();
-            }
-            catch (IOException e) {
+            } catch (final IOException e) {
                 log.error(e.getMessage(), e);
             }
         }
@@ -521,11 +510,11 @@ class HttpBasicConnectorDelegateUtils {
     }
 
     static void assertResponseOk(final HttpResponse response) throws ConnectorException {
-        Asserts.notNull(response);
+        Asserts.assertNotNull(response);
         final int statusCode = response.getStatusLine().getStatusCode();
 
         if (statusCode >= 400) {
-            ConnectorException exception = resolveException(response.getStatusLine());
+            final ConnectorException exception = resolveException(response.getStatusLine());
             if (exception != null) {
                 throw exception;
             }

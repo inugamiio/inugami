@@ -107,10 +107,10 @@ public class HttpBasicConnector {
 
     public HttpBasicConnector(final int timeout, final int timeToLive, final int maxConnections, final int maxPerRoute,
                               final int socketTimeout) {
-        this.timeout    = initIntValue(TIME_OUT_CONFIG, timeout);
+        this.timeout = initIntValue(TIME_OUT_CONFIG, timeout);
         this.timeToLive = initIntValue(TIME_TO_LIVE_CONFIG, timeToLive);
         final int localmaxConnections = initIntValue(MAX_CONNEXIONS, maxConnections);
-        this.maxPerRoute   = initIntValue(MAX_PER_ROUTE, maxPerRoute);
+        this.maxPerRoute = initIntValue(MAX_PER_ROUTE, maxPerRoute);
         this.socketTimeout = initIntValue(SOCKET_TIMEOUT, socketTimeout);
 
 
@@ -133,8 +133,7 @@ public class HttpBasicConnector {
 
         if ((value == null) || !Pattern.compile("[0-9]+").matcher(value).matches()) {
             result = defaultValue;
-        }
-        else {
+        } else {
             result = Integer.parseInt(value);
         }
         return result;
@@ -241,7 +240,7 @@ public class HttpBasicConnector {
     // GET
     // =========================================================================
     public HttpConnectorResult get(final HttpRequest request) throws ConnectorException {
-        Asserts.notNull(REQUEST_REQUIRE, request);
+        Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder().verb(HTTP_GET).body(null).build(), this::processGet);
     }
 
@@ -263,8 +262,8 @@ public class HttpBasicConnector {
 
         invokeListenersOnProcessCalling(context.getRequest().getListener(), context.getRequest(),
                                         resultBuilder.build());
-        CloseableHttpResponse response = HttpBasicConnectorDelegateUtils.execute(request, context.getHttpclient(),
-                                                                                 resultBuilder.build());
+        final CloseableHttpResponse response = HttpBasicConnectorDelegateUtils.execute(request, context.getHttpclient(),
+                                                                                       resultBuilder.build());
 
         resultBuilder.statusCode(response.getStatusLine().getStatusCode());
         resultBuilder.message(response.getStatusLine().getReasonPhrase());
@@ -273,8 +272,7 @@ public class HttpBasicConnector {
         try {
             responsePayload = HttpBasicConnectorDelegateUtils.readResponse(
                     response, context.getRequest().getUrl());
-        }
-        finally {
+        } finally {
             HttpBasicConnectorDelegateUtils.close(response);
         }
 
@@ -290,7 +288,7 @@ public class HttpBasicConnector {
     // POST
     // =========================================================================
     public HttpConnectorResult post(final HttpRequest request) throws ConnectorException {
-        Asserts.notNull(REQUEST_REQUIRE, request);
+        Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder().verb(HTTP_POST).build(), this::processPost);
     }
 
@@ -307,14 +305,14 @@ public class HttpBasicConnector {
                                                            resultBuilder.addRequestHeader(key, value);
                                                        });
 
-        HttpEntity bodyPayload = buildBodyPayload(context.getRequest());
+        final HttpEntity bodyPayload = buildBodyPayload(context.getRequest());
         request.setEntity(bodyPayload);
         resultBuilder.addBodyData(convertToJson(bodyPayload));
 
         invokeListenersOnProcessCalling(context.getRequest().getListener(), context.getRequest(),
                                         resultBuilder.build());
-        CloseableHttpResponse response = HttpBasicConnectorDelegateUtils.execute(request, context.getHttpclient(),
-                                                                                 resultBuilder.build());
+        final CloseableHttpResponse response = HttpBasicConnectorDelegateUtils.execute(request, context.getHttpclient(),
+                                                                                       resultBuilder.build());
 
         resultBuilder.addStatusCode(response.getStatusLine().getStatusCode());
         resultBuilder.addMessage(response.getStatusLine().getReasonPhrase());
@@ -323,8 +321,7 @@ public class HttpBasicConnector {
         try {
             responsePayload = HttpBasicConnectorDelegateUtils.readResponse(
                     response, context.getRequest().getUrl());
-        }
-        finally {
+        } finally {
             HttpBasicConnectorDelegateUtils.close(response);
         }
 
@@ -340,12 +337,10 @@ public class HttpBasicConnector {
     private HttpEntity buildBodyPayload(final HttpRequest request) throws ConnectorNonSerializableBodyException {
         if (request.getHttpBody() != null) {
             return request.getHttpBody();
-        }
-        else if (request.getBody() != null) {
-            String json = serializeBodyToJson(request.getBody(), request.getListener());
+        } else if (request.getBody() != null) {
+            final String json = serializeBodyToJson(request.getBody(), request.getListener());
             return new StringEntity(json, StandardCharsets.UTF_8);
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -358,8 +353,7 @@ public class HttpBasicConnector {
         if (result == null) {
             try {
                 result = JsonMarshaller.getInstance().getDefaultObjectMapper().writeValueAsString(body);
-            }
-            catch (JsonProcessingException e) {
+            } catch (final JsonProcessingException e) {
                 throw new ConnectorNonSerializableBodyException(e.getMessage(), e);
             }
         }
@@ -371,7 +365,7 @@ public class HttpBasicConnector {
     // PUT
     // =========================================================================
     public HttpConnectorResult put(final HttpRequest request) throws ConnectorException {
-        Asserts.notNull(REQUEST_REQUIRE, request);
+        Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder().verb(PUT).build(), this::processPut);
     }
 
@@ -388,14 +382,14 @@ public class HttpBasicConnector {
                                                            resultBuilder.addRequestHeader(key, value);
                                                        });
 
-        HttpEntity bodyPayload = buildBodyPayload(context.getRequest());
+        final HttpEntity bodyPayload = buildBodyPayload(context.getRequest());
         request.setEntity(bodyPayload);
         resultBuilder.addBodyData(convertToJson(bodyPayload));
 
         invokeListenersOnProcessCalling(context.getRequest().getListener(), context.getRequest(),
                                         resultBuilder.build());
-        CloseableHttpResponse response = HttpBasicConnectorDelegateUtils.execute(request, context.getHttpclient(),
-                                                                                 resultBuilder.build());
+        final CloseableHttpResponse response = HttpBasicConnectorDelegateUtils.execute(request, context.getHttpclient(),
+                                                                                       resultBuilder.build());
 
         resultBuilder.addStatusCode(response.getStatusLine().getStatusCode());
         resultBuilder.addMessage(response.getStatusLine().getReasonPhrase());
@@ -404,8 +398,7 @@ public class HttpBasicConnector {
         try {
             responsePayload = HttpBasicConnectorDelegateUtils.readResponse(
                     response, context.getRequest().getUrl());
-        }
-        finally {
+        } finally {
             HttpBasicConnectorDelegateUtils.close(response);
         }
 
@@ -425,12 +418,11 @@ public class HttpBasicConnector {
 
         if (bodyPayload instanceof StringEntity) {
             try {
-                StringWriter      writer  = new StringWriter();
-                final InputStream content = ((StringEntity) bodyPayload).getContent();
+                final StringWriter writer  = new StringWriter();
+                final InputStream  content = ((StringEntity) bodyPayload).getContent();
                 IOUtils.copy(content, writer, StandardCharsets.UTF_8);
                 return writer.toString().getBytes(StandardCharsets.UTF_8);
-            }
-            catch (IOException e) {
+            } catch (final IOException e) {
             }
         }
 
@@ -441,7 +433,7 @@ public class HttpBasicConnector {
     // PATCH
     // =========================================================================
     public HttpConnectorResult patch(final HttpRequest request) throws ConnectorException {
-        Asserts.notNull(REQUEST_REQUIRE, request);
+        Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder().verb(PATCH).build(), this::processPatch);
     }
 
@@ -458,14 +450,14 @@ public class HttpBasicConnector {
                                                            resultBuilder.addRequestHeader(key, value);
                                                        });
 
-        HttpEntity bodyPayload = buildBodyPayload(context.getRequest());
+        final HttpEntity bodyPayload = buildBodyPayload(context.getRequest());
         request.setEntity(bodyPayload);
         resultBuilder.addBodyData(convertToJson(bodyPayload));
 
         invokeListenersOnProcessCalling(context.getRequest().getListener(), context.getRequest(),
                                         resultBuilder.build());
-        CloseableHttpResponse response = HttpBasicConnectorDelegateUtils.execute(request, context.getHttpclient(),
-                                                                                 resultBuilder.build());
+        final CloseableHttpResponse response = HttpBasicConnectorDelegateUtils.execute(request, context.getHttpclient(),
+                                                                                       resultBuilder.build());
 
         resultBuilder.addStatusCode(response.getStatusLine().getStatusCode());
         resultBuilder.addMessage(response.getStatusLine().getReasonPhrase());
@@ -474,8 +466,7 @@ public class HttpBasicConnector {
         try {
             responsePayload = HttpBasicConnectorDelegateUtils.readResponse(
                     response, context.getRequest().getUrl());
-        }
-        finally {
+        } finally {
             HttpBasicConnectorDelegateUtils.close(response);
         }
 
@@ -492,7 +483,7 @@ public class HttpBasicConnector {
     // DELETE
     // =========================================================================
     public HttpConnectorResult delete(final HttpRequest request) throws ConnectorException {
-        Asserts.notNull(REQUEST_REQUIRE, request);
+        Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder().verb(DELETE).build(), this::processDelete);
     }
 
@@ -508,8 +499,8 @@ public class HttpBasicConnector {
 
         invokeListenersOnProcessCalling(context.getRequest().getListener(), context.getRequest(),
                                         resultBuilder.build());
-        CloseableHttpResponse response = HttpBasicConnectorDelegateUtils.execute(request, context.getHttpclient(),
-                                                                                 resultBuilder.build());
+        final CloseableHttpResponse response = HttpBasicConnectorDelegateUtils.execute(request, context.getHttpclient(),
+                                                                                       resultBuilder.build());
 
         resultBuilder.addStatusCode(response.getStatusLine().getStatusCode());
         resultBuilder.addMessage(response.getStatusLine().getReasonPhrase());
@@ -518,8 +509,7 @@ public class HttpBasicConnector {
         try {
             responsePayload = HttpBasicConnectorDelegateUtils.readResponse(
                     response, context.getRequest().getUrl());
-        }
-        finally {
+        } finally {
             HttpBasicConnectorDelegateUtils.close(response);
         }
 
@@ -536,7 +526,7 @@ public class HttpBasicConnector {
     // OPTION
     // =========================================================================
     public HttpConnectorResult option(final HttpRequest request) throws ConnectorException {
-        Asserts.notNull(REQUEST_REQUIRE, request);
+        Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder().verb(OPTION).body(null).build(), this::processOption);
     }
 
@@ -552,8 +542,8 @@ public class HttpBasicConnector {
 
         invokeListenersOnProcessCalling(context.getRequest().getListener(), context.getRequest(),
                                         resultBuilder.build());
-        CloseableHttpResponse response = HttpBasicConnectorDelegateUtils.execute(request, context.getHttpclient(),
-                                                                                 resultBuilder.build());
+        final CloseableHttpResponse response = HttpBasicConnectorDelegateUtils.execute(request, context.getHttpclient(),
+                                                                                       resultBuilder.build());
 
         resultBuilder.statusCode(response.getStatusLine().getStatusCode());
         resultBuilder.message(response.getStatusLine().getReasonPhrase());
@@ -562,8 +552,7 @@ public class HttpBasicConnector {
         try {
             responsePayload = HttpBasicConnectorDelegateUtils.readResponse(
                     response, context.getRequest().getUrl());
-        }
-        finally {
+        } finally {
             HttpBasicConnectorDelegateUtils.close(response);
         }
 
@@ -589,7 +578,7 @@ public class HttpBasicConnector {
                                                       final FunctionWithException<GenericRequestContext, HttpConnectorResult, ConnectorException> function)
             throws ConnectorException {
 
-        Asserts.notNull(REQUEST_REQUIRE, request);
+        Asserts.assertNotNull(REQUEST_REQUIRE, request);
 
         final CloseableHttpClient httpclient = request.getHttpclient() == null ? HttpBasicConnectorDelegateUtils.buildClient(
                 timeout, socketTimeout) : request.getHttpclient();
@@ -610,33 +599,29 @@ public class HttpBasicConnector {
 
         for (int i = retry; i >= 0; i--) {
             try {
-                chrono     = Chrono.startChrono();
+                chrono = Chrono.startChrono();
                 stepResult = function.process(GenericRequestContext.builder()
                                                                    .request(currentRequest)
                                                                    .httpclient(httpclient)
                                                                    .build());
-                exception  = null;
+                exception = null;
                 if (stepResult.getStatusCode() < 400) {
                     callListenerOnDone(request.getListener(), stepResult);
                     break;
-                }
-                else {
+                } else {
                     callListenerOnError(request.getListener(), stepResult);
                 }
 
-            }
-            catch (ConnectorException error) {
+            } catch (final ConnectorException error) {
                 callListenerOnError(request.getListener(), error);
 
                 if (error instanceof ConnectorRetryableException) {
                     exception = error;
-                }
-                else {
+                } else {
                     exception = error;
                     break;
                 }
-            }
-            finally {
+            } finally {
                 chrono.stop();
             }
         }
@@ -655,11 +640,10 @@ public class HttpBasicConnector {
 
             if (request.isThrowable()) {
                 throw exception;
-            }
-            else {
+            } else {
                 resultBuilder.statusCode(exception instanceof ConnectorException
-                                         ? ((ConnectorException) exception).getCode()
-                                         : 500);
+                                                 ? ((ConnectorException) exception).getCode()
+                                                 : 500);
                 resultBuilder.error(exception);
             }
         }
@@ -670,8 +654,7 @@ public class HttpBasicConnector {
     public void close(final CloseableHttpClient httpclient) throws ConnectorException {
         try {
             httpclient.close();
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             throw new ConnectorUndefinedCallException(e);
         }
     }
@@ -694,8 +677,7 @@ public class HttpBasicConnector {
         if (listener != null) {
             try {
                 result = action.process(listener);
-            }
-            catch (Exception e) {
+            } catch (final Exception e) {
                 log.error(e.getMessage(), e);
             }
         }
@@ -707,8 +689,7 @@ public class HttpBasicConnector {
         if (listener != null) {
             try {
                 action.process(listener);
-            }
-            catch (Exception e) {
+            } catch (final Exception e) {
                 log.error(e.getMessage(), e);
             }
         }
@@ -726,14 +707,13 @@ public class HttpBasicConnector {
         }
 
 
-        for (ConnectorListener listenerSpi : CONNECTOR_LISTENERS) {
+        for (final ConnectorListener listenerSpi : CONNECTOR_LISTENERS) {
             try {
                 newRequest = listenerSpi.beforeCalling(result);
                 if (newRequest != null) {
                     result = newRequest;
                 }
-            }
-            catch (Throwable e) {
+            } catch (final Throwable e) {
                 log.error(e.getMessage(), e);
             }
 
@@ -747,14 +727,13 @@ public class HttpBasicConnector {
         String result = invokeListener(listener, l -> l.serializeToJson(body));
 
         if (result == null) {
-            for (ConnectorListener listenerSpi : CONNECTOR_LISTENERS) {
+            for (final ConnectorListener listenerSpi : CONNECTOR_LISTENERS) {
                 try {
                     result = listenerSpi.serializeToJson(body);
                     if (result != null) {
                         break;
                     }
-                }
-                catch (Throwable e) {
+                } catch (final Throwable e) {
                     log.error(e.getMessage(), e);
                 }
             }
@@ -767,7 +746,7 @@ public class HttpBasicConnector {
                                                  final HttpRequest request,
                                                  final HttpConnectorResult result) {
         invokeListener(listener, l -> l.processCalling(request, result));
-        for (ConnectorListener listenerSpi : CONNECTOR_LISTENERS) {
+        for (final ConnectorListener listenerSpi : CONNECTOR_LISTENERS) {
             invokeListener(listenerSpi, l -> l.processCalling(request, result));
         }
     }
@@ -776,21 +755,21 @@ public class HttpBasicConnector {
         if (listener != null) {
             invokeVoidListener(listener, l -> l.onDone(stepResult));
         }
-        for (ConnectorListener listenerSpi : CONNECTOR_LISTENERS) {
+        for (final ConnectorListener listenerSpi : CONNECTOR_LISTENERS) {
             invokeVoidListener(listenerSpi, l -> l.onDone(stepResult));
         }
     }
 
     private void callListenerOnError(final ConnectorListener listener, final HttpConnectorResult stepResult) {
         invokeVoidListener(listener, l -> l.onError(stepResult));
-        for (ConnectorListener listenerSpi : CONNECTOR_LISTENERS) {
+        for (final ConnectorListener listenerSpi : CONNECTOR_LISTENERS) {
             invokeVoidListener(listenerSpi, l -> l.onError(stepResult));
         }
     }
 
     private void callListenerOnError(final ConnectorListener listener, final ConnectorException error) {
         invokeVoidListener(listener, l -> l.onError(error));
-        for (ConnectorListener listenerSpi : CONNECTOR_LISTENERS) {
+        for (final ConnectorListener listenerSpi : CONNECTOR_LISTENERS) {
             invokeVoidListener(listenerSpi, l -> l.onError(error));
         }
     }
@@ -816,8 +795,7 @@ public class HttpBasicConnector {
     public void close() {
         try {
             httpClient.close();
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             Loggers.IO.error(e.getMessage());
         }
     }
@@ -837,8 +815,7 @@ public class HttpBasicConnector {
     public static String buildRequest(final String baseUrl, final Tuple<String, String>[] parameters) {
         try {
             return HttpBasicConnectorDelegateUtils.buildRequest(baseUrl, parameters);
-        }
-        catch (ConnectorException e) {
+        } catch (final ConnectorException e) {
             throw new ConnectorFatalException(new ConnectorBadUrException(e));
         }
     }
@@ -846,8 +823,7 @@ public class HttpBasicConnector {
     public static String buildRequest(final String baseUrl, final List<Tuple<String, String>> parameters) {
         try {
             return HttpBasicConnectorDelegateUtils.buildRequest(baseUrl, parameters);
-        }
-        catch (ConnectorException e) {
+        } catch (final ConnectorException e) {
             throw new ConnectorFatalException(new ConnectorBadUrException(e));
         }
     }

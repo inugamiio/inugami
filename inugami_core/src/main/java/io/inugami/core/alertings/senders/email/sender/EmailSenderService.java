@@ -16,6 +16,25 @@
  */
 package io.inugami.core.alertings.senders.email.sender;
 
+import io.inugami.api.exceptions.Asserts;
+import io.inugami.api.exceptions.FatalException;
+import io.inugami.api.loggers.Loggers;
+import io.inugami.api.models.JsonBuilder;
+import io.inugami.api.processors.ConfigHandler;
+import io.inugami.api.tools.ConfigHandlerTools;
+import io.inugami.core.context.ApplicationContext;
+import io.inugami.core.services.senders.Sender;
+import io.inugami.core.services.senders.SenderException;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.mail.*;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -26,30 +45,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.mail.Address;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.FatalException;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.models.JsonBuilder;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.tools.ConfigHandlerTools;
-import io.inugami.core.context.ApplicationContext;
-import io.inugami.core.services.senders.Sender;
-import io.inugami.core.services.senders.SenderException;
 
 /**
  * EmailSender
@@ -118,8 +113,8 @@ public class EmailSenderService implements Sender<EmailModel>, Serializable {
             return;
         }
 
-        Asserts.notEmpty("email from is mandatory!", email.getFrom());
-        Asserts.notNull("email adresses to send is mandatory!", email.getTo());
+        Asserts.assertNotEmpty("email from is mandatory!", email.getFrom());
+        Asserts.assertNotNull("email adresses to send is mandatory!", email.getTo());
 
         final Message message = buildEmail(email);
         if (message != null) {
@@ -132,8 +127,7 @@ public class EmailSenderService implements Sender<EmailModel>, Serializable {
                 CompletableFuture.supplyAsync(() -> this.processSendEmail(message, login,
                                                                           password)).get(10, TimeUnit.SECONDS);
                 Loggers.PARTNERLOG.info(BASE_MSG, buildSuccessMessage(email));
-            }
-            catch (InterruptedException | ExecutionException | TimeoutException e) {
+            } catch (final InterruptedException | ExecutionException | TimeoutException e) {
                 final Throwable cause      = e.getCause() == null ? e : e.getCause();
                 final String    errMessage = cause.getMessage() == null ? "" : cause.getMessage();
                 Loggers.PARTNERLOG.error("[EmailSender] error on sending email to {} : {} {}", email.getTo(),
@@ -146,8 +140,7 @@ public class EmailSenderService implements Sender<EmailModel>, Serializable {
     private Object processSendEmail(final Message message, final String login, final String password) {
         try {
             Transport.send(message, login, password);
-        }
-        catch (final MessagingException e) {
+        } catch (final MessagingException e) {
             throw new FatalException(e.getMessage(), e);
         }
         return null;
@@ -173,8 +166,7 @@ public class EmailSenderService implements Sender<EmailModel>, Serializable {
             msg.setSubject(email.getSubject(), "UTF-8");
             msg.setText(email.getBody(), "UTF-8");
             msg.setSentDate(new Date());
-        }
-        catch (MessagingException | UnsupportedEncodingException e) {
+        } catch (final MessagingException | UnsupportedEncodingException e) {
             throw new EmailSenderException(e.getMessage(), e);
         }
 

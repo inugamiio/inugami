@@ -61,14 +61,14 @@ public class RestProviderTask implements ProviderTask {
                                                     final HttpConnector httpConnector, final Gav pluginGav,
                                                     final ConfigHandler<String, String> config) {
         super();
-        Asserts.notNull("URL mustn't be null!", url);
-        Asserts.notNull("HTTP verbe mustn't be null!", verbe);
-        this.event         = event;
-        this.url           = url;
-        this.verbe         = verbe;
+        Asserts.assertNotNull("URL mustn't be null!", url);
+        Asserts.assertNotNull("HTTP verbe mustn't be null!", verbe);
+        this.event = event;
+        this.url = url;
+        this.verbe = verbe;
         this.httpConnector = httpConnector;
-        this.pluginGav     = pluginGav;
-        this.config        = config;
+        this.pluginGav = pluginGav;
+        this.config = config;
     }
 
     // =========================================================================
@@ -82,16 +82,14 @@ public class RestProviderTask implements ProviderTask {
         HttpConnectorResult data = null;
         try {
             data = callRestService();
-        }
-        catch (final ConnectorException e) {
+        } catch (final ConnectorException e) {
             result.addException(e);
         }
 
         if (data != null) {
             if ((data.getStatusCode() != 200) && (data.getStatusCode() != 0)) {
                 result.addException(new ConnectorException(data.getMessage()));
-            }
-            else {
+            } else {
                 result.addData(buildData(data));
             }
         }

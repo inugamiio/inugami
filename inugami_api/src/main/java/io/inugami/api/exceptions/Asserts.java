@@ -22,6 +22,7 @@ import io.inugami.api.functionnals.VoidFunctionWithException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
@@ -42,8 +43,6 @@ public final class Asserts {
     // ========================================================================
     private static final String ASSERT_TRUE_DEFAULT_MSG      = "this expression must be true";
     private static final String ASSERT_FALSE_DEFAULT_MSG     = "this expression must be false";
-    private static final String ASSERT_NULL_DEFAULT_MSG      = "objects arguments must be null";
-    private static final String ASSERT_NOT_NULL_DEFAULT_MSG  = "this argument is required; it must not be null";
     private static final String ASSERT_NOT_EMPTY_DEFAULT_MSG = "the value mustn't be empty";
 
     private static final String ASSERT_EMPTY_DEFAULT_MSG = "the value should be empty";
@@ -52,20 +51,11 @@ public final class Asserts {
     // -------------------------------------------------------------------------
     // IS TRUE
     // -------------------------------------------------------------------------
-    @Deprecated
-    public static void isTrue(final boolean expression) {
-        assertTrue(ASSERT_TRUE_DEFAULT_MSG, expression);
-    }
 
     public static void assertTrue(final boolean expression) {
         assertTrue(ASSERT_TRUE_DEFAULT_MSG, expression);
     }
 
-    @Deprecated
-    public static void isTrue(final String message,
-                              final boolean expression) {
-        assertTrue(message, expression);
-    }
 
     public static void assertTrue(final String message,
                                   final boolean expression) {
@@ -74,11 +64,6 @@ public final class Asserts {
         }
     }
 
-    @Deprecated
-    public static void isTrue(final ErrorCode errorCode,
-                              final boolean expression) {
-        assertTrue(errorCode, expression);
-    }
 
     public static void assertTrue(final ErrorCode errorCode,
                                   final boolean expression) {
@@ -87,11 +72,6 @@ public final class Asserts {
         }
     }
 
-    @Deprecated
-    public static void isTrue(final Supplier<String> messageProducer,
-                              final boolean expression) {
-        assertTrue(messageProducer, expression);
-    }
 
     public static void assertTrue(final Supplier<String> messageProducer,
                                   final boolean expression) {
@@ -103,20 +83,11 @@ public final class Asserts {
     // -------------------------------------------------------------------------
     // IS FALSE
     // -------------------------------------------------------------------------
-    @Deprecated
-    public static void isFalse(final boolean expression) {
-        assertFalse(ASSERT_FALSE_DEFAULT_MSG, expression);
-    }
 
     public static void assertFalse(final boolean expression) {
         assertFalse(ASSERT_FALSE_DEFAULT_MSG, expression);
     }
 
-    @Deprecated
-    public static void isFalse(final String message,
-                               final boolean expression) {
-        assertFalse(message, expression);
-    }
 
     public static void assertFalse(final String message,
                                    final boolean expression) {
@@ -125,11 +96,6 @@ public final class Asserts {
         }
     }
 
-    @Deprecated
-    public static void isFalse(final Supplier<String> messageProducer,
-                               final boolean expression) {
-        assertFalse(messageProducer, expression);
-    }
 
     public static void assertFalse(final Supplier<String> messageProducer,
                                    final boolean expression) {
@@ -138,11 +104,6 @@ public final class Asserts {
         }
     }
 
-    @Deprecated
-    public static void isFalse(final ErrorCode errorCode,
-                               final boolean expression) {
-        assertFalse(errorCode, expression);
-    }
 
     public static void assertFalse(final ErrorCode errorCode,
                                    final boolean expression) {
@@ -154,133 +115,53 @@ public final class Asserts {
     // -------------------------------------------------------------------------
     // IS NULL
     // -------------------------------------------------------------------------
-    @Deprecated
-    public static void isNull(final Object... objects) {
-        assertNull(ASSERT_NULL_DEFAULT_MSG, objects);
-    }
-
     public static void assertNull(final Object... objects) {
-        assertNull(ASSERT_NULL_DEFAULT_MSG, objects);
-    }
-
-    @Deprecated
-    public static void isNull(final String message,
-                              final Object... values) {
-        assertNull(message, values);
+        AssertNull.assertNull(objects);
     }
 
     public static void assertNull(final String message,
                                   final Object... values) {
-        if (values == null) {
-            return;
-        }
-        for (final Object item : values) {
-            if (item != null) {
-                throwException(message == null ? ASSERT_NULL_DEFAULT_MSG : message);
-            }
-        }
-    }
-
-    @Deprecated
-    public static void isNull(final Supplier<String> messageProducer,
-                              final Object... values) {
-        assertNull(messageProducer, values);
+        AssertNull.assertNull(message, values);
     }
 
     public static void assertNull(final Supplier<String> messageProducer,
                                   final Object... values) {
-        if (values == null) {
-            return;
-        }
-        for (final Object item : values) {
-            if (item != null) {
-                throwException(messageProducer == null ? ASSERT_NULL_DEFAULT_MSG : messageProducer.get());
-            }
-        }
+        AssertNull.assertNull(messageProducer, values);
     }
 
-    @Deprecated
-    public static void isNull(final ErrorCode errorCode,
-                              final Object... values) {
-        assertNull(errorCode, values);
-    }
 
     public static void assertNull(final ErrorCode errorCode,
                                   final Object... values) {
-        if (values == null) {
-            return;
-        }
-        for (final Object item : values) {
-            if (item != null) {
-                throwException(errorCode);
-            }
-        }
+        AssertNull.assertNull(errorCode, values);
     }
 
     // -------------------------------------------------------------------------
     // NOT NULL
     // -------------------------------------------------------------------------
-    @Deprecated
-    public static void notNull(final Object... objects) {
-        assertNotNull(ASSERT_NOT_NULL_DEFAULT_MSG,
-                      objects);
-    }
+
 
     public static void assertNotNull(final Object... objects) {
-        notNull(ASSERT_NOT_NULL_DEFAULT_MSG,
-                objects);
+        AssertNull.assertNotNull(objects);
     }
 
-    @Deprecated
-    public static void notNull(final String message,
-                               final Object... values) {
-
-    }
 
     public static void assertNotNull(final String message,
                                      final Object... values) {
-        if (checkIfHasNull(values)) {
-            throwException(message == null ? ASSERT_NOT_NULL_DEFAULT_MSG : message);
-        }
+        AssertNull.assertNotNull(message, values);
     }
 
-    @Deprecated
-    public static void notNull(final Supplier<String> messageProducer,
-                               final Object... values) {
-        assertNotNull(messageProducer, values);
-    }
 
     public static void assertNotNull(final Supplier<String> messageProducer,
                                      final Object... values) {
-        if (checkIfHasNull(values)) {
-            throwException(messageProducer == null ? ASSERT_NULL_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertNull.assertNotNull(messageProducer, values);
     }
 
-    @Deprecated
-    public static void notNull(final ErrorCode errorCode,
-                               final Object... values) {
-        assertNotNull(errorCode, values);
-    }
 
     public static void assertNotNull(final ErrorCode errorCode,
                                      final Object... values) {
-        if (checkIfHasNull(values)) {
-            throwException(errorCode);
-        }
+        AssertNull.assertNotNull(errorCode, values);
     }
 
-    private static boolean checkIfHasNull(final Object... values) {
-        if (values == null) {
-            return true;
-        }
-        for (Object value : values) {
-            if (value == null) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     // -------------------------------------------------------------------------
     // NOT EMPTY
@@ -291,11 +172,6 @@ public final class Asserts {
         }
     }
 
-    @Deprecated
-    public static void notEmpty(final String message,
-                                final String value) {
-        assertNotEmpty(message, value);
-    }
 
     public static void assertNotEmpty(final String message,
                                       final String value) {
@@ -312,11 +188,6 @@ public final class Asserts {
         }
     }
 
-    @Deprecated
-    public static void notEmpty(final ErrorCode errorCode,
-                                final String value) {
-        assertNotEmpty(errorCode, value);
-    }
 
     public static void assertNotEmpty(final ErrorCode errorCode,
                                       final String value) {
@@ -349,11 +220,6 @@ public final class Asserts {
         }
     }
 
-    @Deprecated
-    public static void notEmpty(final String message,
-                                final Collection<?> value) {
-        assertNotEmpty(message, value);
-    }
 
     public static void assertNotEmpty(final String message,
                                       final Collection<?> value) {
@@ -362,11 +228,6 @@ public final class Asserts {
         }
     }
 
-    @Deprecated
-    public static void notEmpty(final ErrorCode errorCode,
-                                final Collection<?> value) {
-        assertNotEmpty(errorCode, value);
-    }
 
     public static void assertNotEmpty(final ErrorCode errorCode,
                                       final Collection<?> value) {
@@ -403,23 +264,12 @@ public final class Asserts {
         }
     }
 
-    @Deprecated
-    public static void notEmpty(final Map<?, ?> value) {
-        assertNotEmpty(value);
-    }
-
     public static void assertNotEmpty(final Map<?, ?> value) {
         if (value == null || value.isEmpty()) {
             throwException(ASSERT_NOT_EMPTY_DEFAULT_MSG);
         }
     }
 
-
-    @Deprecated
-    public static void notEmpty(final String message,
-                                final Map<?, ?> value) {
-        assertNotEmpty(message, value);
-    }
 
     public static void assertNotEmpty(final String message,
                                       final Map<?, ?> value) {
@@ -435,11 +285,6 @@ public final class Asserts {
         }
     }
 
-    @Deprecated
-    public static void notEmpty(final ErrorCode errorCode,
-                                final Map<?, ?> value) {
-        assertNotEmpty(errorCode, value);
-    }
 
     public static void assertNotEmpty(final ErrorCode errorCode,
                                       final Map<?, ?> value) {
@@ -565,24 +410,13 @@ public final class Asserts {
     // -------------------------------------------------------------------------
     // EQUALS
     // -------------------------------------------------------------------------
-    @Deprecated
-    public static void equalsObj(final Object ref,
-                                 final Object value) {
-        AssertEquals.assertEquals(ref, value);
-    }
+
 
     public static void assertEquals(final Object ref,
                                     final Object value) {
         AssertEquals.assertEquals(ref, value);
     }
 
-
-    @Deprecated
-    public static void equalsObj(final String message,
-                                 final Object ref,
-                                 final Object value) {
-        AssertEquals.assertEquals(message, ref, value);
-    }
 
     public static void assertEquals(final String message,
                                     final Object ref,
@@ -596,13 +430,6 @@ public final class Asserts {
         AssertEquals.assertEquals(messageProducer, ref, value);
     }
 
-
-    @Deprecated
-    public static void equalsObj(final ErrorCode errorCode,
-                                 final Object ref,
-                                 final Object value) {
-        AssertEquals.assertEquals(errorCode, ref, value);
-    }
 
     public static void assertEquals(final ErrorCode errorCode,
                                     final Object ref,
@@ -1808,20 +1635,20 @@ public final class Asserts {
     }
 
 
-    public static List<ErrorCode> checkModel(VoidFunctionWithException... assertions) {
+    public static List<ErrorCode> checkModel(final VoidFunctionWithException... assertions) {
         if (assertions == null) {
             return new ArrayList<>();
         }
         return checkModel(Arrays.asList(assertions));
     }
 
-    public static List<ErrorCode> checkModel(List<VoidFunctionWithException> assertions) {
-        List<ErrorCode> result = new ArrayList<>();
+    public static List<ErrorCode> checkModel(final List<VoidFunctionWithException> assertions) {
+        final List<ErrorCode> result = new ArrayList<>();
         if (assertions != null) {
-            for (VoidFunctionWithException function : assertions) {
+            for (final VoidFunctionWithException function : assertions) {
                 try {
                     function.process();
-                } catch (Exception e) {
+                } catch (final Exception e) {
 
                     if (e instanceof ExceptionWithErrorCode) {
                         result.add(((ExceptionWithErrorCode) e).getErrorCode());
@@ -1835,14 +1662,14 @@ public final class Asserts {
     }
 
 
-    public static void assertModel(VoidFunctionWithException... assertions) {
+    public static void assertModel(final VoidFunctionWithException... assertions) {
         if (assertions == null) {
             return;
         }
         assertModel(Arrays.asList(assertions));
     }
 
-    public static void assertModel(List<VoidFunctionWithException> assertions) {
+    public static void assertModel(final List<VoidFunctionWithException> assertions) {
         final List<ErrorCode> errors = checkModel(assertions);
         if (!errors.isEmpty()) {
             AssertCommons.throwException(errors);
@@ -1858,10 +1685,76 @@ public final class Asserts {
         try {
             function.process();
             throwException(message);
-        } catch (Exception error) {
+        } catch (final Exception error) {
         }
     }
 
+
+    // -------------------------------------------------------------------------
+    // Assert file
+    // -------------------------------------------------------------------------
+    public static void assertFileExists(final File path) {
+        AssertFile.assertFileExists(path);
+    }
+
+    public static void assertFileExists(final String message, final File path) {
+        AssertFile.assertFileExists(message, path);
+    }
+
+    public static void assertFileExists(final ErrorCode errorCode, final File path) {
+        AssertFile.assertFileExists(errorCode, path);
+    }
+
+    public static void assertFileReadable(final File path) {
+        AssertFile.assertFileReadable(path);
+    }
+
+    public static void assertFileReadable(final String message, final File path) {
+        AssertFile.assertFileReadable(message, path);
+    }
+
+    public static void assertFileReadable(final ErrorCode errorCode, final File path) {
+        AssertFile.assertFileReadable(errorCode, path);
+    }
+
+    public static void assertFileWrite(final File path) {
+        AssertFile.assertFileWrite(path);
+    }
+
+    public static void assertFileWrite(final String message, final File path) {
+        AssertFile.assertFileWrite(message, path);
+    }
+
+    public static void assertFileWrite(final ErrorCode errorCode, final File path) {
+        AssertFile.assertFileWrite(errorCode, path);
+    }
+
+    public static void assertFileExecutable(final File path) {
+        AssertFile.assertFileExecutable(path);
+    }
+
+    public static void assertFileExecutable(final String message, final File path) {
+        AssertFile.assertFileExecutable(message, path);
+    }
+
+    public static void assertFileExecutable(final ErrorCode errorCode, final File path) {
+        AssertFile.assertFileExecutable(errorCode, path);
+    }
+
+    // -------------------------------------------------------------------------
+    // Assert folder
+    // -------------------------------------------------------------------------
+    public static void assertFolderExists(final File path) {
+        AssertFile.assertFolderExists(path);
+    }
+
+    public static void assertFolderExists(final String message, final File path) {
+        AssertFile.assertFolderExists(message, path);
+    }
+
+    public static void assertFolderExists(final ErrorCode errorCode, final File path) {
+        AssertFile.assertFolderExists(errorCode, path);
+    }
 
     // -------------------------------------------------------------------------
     // TOOLS

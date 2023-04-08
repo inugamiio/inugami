@@ -50,21 +50,21 @@ public class ConfigTemplateValuesTest {
         final ConfigTemplateValues conf = new ConfigTemplateValues();
 
         //@formatter:off
-        
+
         assertEquals(null, conf.applyProperties(null, buildMap("bar", "bar")));
         assertEquals("foo.{{bar}}", conf.applyProperties("foo.{{bar}}", null));
 
         assertEquals("foo.bar", conf.applyProperties("foo.{{bar}}", buildMap("bar", "bar")));
-        assertEquals("foo - hello the world",conf.applyProperties("foo - {{bar}}", buildMap("bar", "hello the world")));
+        assertEquals("foo - hello the world", conf.applyProperties("foo - {{bar}}", buildMap("bar", "hello the world")));
 
         assertEquals("foo - hello the world - : foooooTtiti", conf.applyProperties("foo - {{bar}} - {{titi}}",
-                                                buildMap("bar" , "hello the world",
-                                                         "titi", ": foooooTtiti")));
-        
+                                                                                   buildMap("bar", "hello the world",
+                                                                                            "titi", ": foooooTtiti")));
+
         assertEquals("foo - hello the world - @azerty@", conf.applyProperties("foo - {{bar}} - {{joe}}",
-                buildMap("bar" , "hello the world",
-                         "joe" , "@{{titi}}@",
-                         "titi", "azerty")));
+                                                                              buildMap("bar", "hello the world",
+                                                                                       "joe", "@{{titi}}@",
+                                                                                       "titi", "azerty")));
         //@formatter:on
     }
 
@@ -77,7 +77,7 @@ public class ConfigTemplateValuesTest {
 
     private Map<String, String> buildMap(final String... values) {
         final Map<String, String> result = new HashMap<>();
-        Asserts.isTrue("error some parameters are missing!", (values.length % 2) == 0);
+        Asserts.assertTrue("error some parameters are missing!", (values.length % 2) == 0);
 
         final int nbKeys = values.length / 2;
         for (int i = 0; i < nbKeys; i++) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ======================================================================= 
@@ -60,7 +61,7 @@
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <super.jdk>11</super.jdk>
         <super.jdk.arg>-parameters</super.jdk.arg>
-        <maven-gpg-plugin.enabled />
+        <maven-gpg-plugin.enabled/>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.datePattern>yyyy-MM-dd'T'HH:mm:ss.SSSZ</project.build.datePattern>
@@ -81,7 +82,7 @@
         <docArtifactFinalName>${project.build.finalName}</docArtifactFinalName>
         <superSiteSkinVersion>1.2.1</superSiteSkinVersion>
 
-        <site.deploy.url />
+        <site.deploy.url/>
         <plugin.site.disable>true</plugin.site.disable>
         <plugin.site.path>src/site</plugin.site.path>
         <plugin.site.inputEncoding>${project.build.sourceEncoding}</plugin.site.inputEncoding>
@@ -103,18 +104,18 @@
         :: JDK
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <jdk>11</jdk>
-        <jdk.env.java.home />
-        <jdk.env.property.name />
-        <jdk.test.executable />
+        <jdk.env.java.home/>
+        <jdk.env.property.name/>
+        <jdk.test.executable/>
         <jdk.javac.executable>${jdk.env.java.home}/bin/javac</jdk.javac.executable>
 
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: CI
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-        <ci.host />
+        <ci.host/>
         <ci.host.context>/jenkins</ci.host.context>
-        <ci.view />
+        <ci.view/>
 
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -170,7 +171,8 @@
         <!--[ org.springframework ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <org.springframework.version>5.2.20.RELEASE</org.springframework.version>
         <org.springframework.boot.version>2.7.9</org.springframework.boot.version>
-        <org.springframework.spring-cloud-dependencies.version>2021.0.6</org.springframework.spring-cloud-dependencies.version>
+        <org.springframework.spring-cloud-dependencies.version>2021.0.6
+        </org.springframework.spring-cloud-dependencies.version>
 
         <!--[ others ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <plugins.external-atlassian-jgitflow.jgitflow-maven-plugin>1.0-m4.3
@@ -638,6 +640,19 @@
                 <artifactId>jackson-databind</artifactId>
                 <version>${com.jackson-annotations.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-yaml</artifactId>
+                <version>${com.jackson-annotations.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>1.33</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.fasterxml.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-jsr310</artifactId>
@@ -1157,7 +1172,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute />
+                                        <execute/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -1294,6 +1309,42 @@
                     <passphrase>${gpg.passphrase}</passphrase>
                 </configuration>
             </plugin>
+
+
+            <plugin>
+                <groupId>io.inugami.maven.plugin.lifecycle</groupId>
+                <artifactId>inugami-maven-lifecycle</artifactId>
+                <version>2.0.1</version>
+                <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.12.0</version>
+                <executions>
+                    <execution>
+                        <phase>deep-test</phase>
+                        <goals>
+                            <goal>mutationCoverage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <targetClasses>
+                        <param>io.inugami.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>io.inugami.*</param>
+                    </targetTests>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>1.1.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 
@@ -1329,5 +1380,6 @@
 
             </build>
         </profile>
+
     </profiles>
 </project>

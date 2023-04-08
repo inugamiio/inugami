@@ -61,13 +61,13 @@ public class ProviderFull extends AbstractProvider implements Provider {
                         final ProviderRunner providerRunner) {
         super(classBehavior, config, providerRunner);
         test = config.grab("test");
-        Asserts.notNull(test);
-        Asserts.notNull(providerRunner);
+        Asserts.assertNotNull(test);
+        Asserts.assertNotNull(providerRunner);
 
         //@formatter:off
         futureDataRef = new FutureDataBuilder<ProviderFutureResult>()
-                                .addTimeout(2000)
-                                .build();
+                .addTimeout(2000)
+                .build();
         //@formatter:on
 
     }
@@ -115,8 +115,7 @@ public class ProviderFull extends AbstractProvider implements Provider {
                 TASK_LOGGER.info("wainting done");
 
                 resultBuilder.addException(new TechnicalException("YOLO ^_^ New error!"));
-            }
-            else {
+            } else {
                 new ThreadSleep(2000).sleep();
                 resultBuilder.addMessage("Hello the world");
             }

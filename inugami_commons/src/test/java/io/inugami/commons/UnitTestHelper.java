@@ -16,9 +16,10 @@ package io.inugami.commons;/* --------------------------------------------------
  */
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import flexjson.JSONSerializer;
-import io.inugami.api.exceptions.*;
+import io.inugami.api.exceptions.Asserts;
+import io.inugami.api.exceptions.DefaultErrorCode;
+import io.inugami.api.exceptions.UncheckedException;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.models.JsonBuilder;
 import io.inugami.api.tools.ConsoleColors;
@@ -63,8 +64,7 @@ public class UnitTestHelper {
         String result = null;
         try {
             result = FileUtils.readFileToString(file, UTF_8);
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             throwException(e);
         }
         return result;
@@ -124,8 +124,7 @@ public class UnitTestHelper {
             if (matcher.matches()) {
                 result = matcher.group("uid");
             }
-        }
-        else {
+        } else {
             result = argument;
         }
         return result;
@@ -164,8 +163,7 @@ public class UnitTestHelper {
                 final String json = new String(data, UTF_8);
                 result = convertFromJson(json, refObjectType);
 
-            }
-            catch (final Exception error) {
+            } catch (final Exception error) {
                 throw new UncheckedException(error.getMessage(), error);
             }
 
@@ -185,8 +183,7 @@ public class UnitTestHelper {
             result = JsonMarshaller.getInstance()
                                    .getIndentedObjectMapper()
                                    .writeValueAsString(value);
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             throwException(e);
         }
         return result;
@@ -204,8 +201,7 @@ public class UnitTestHelper {
             result = JsonMarshaller.getInstance()
                                    .getDefaultObjectMapper()
                                    .writeValueAsString(value);
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             throwException(e);
         }
         return result;
@@ -213,7 +209,7 @@ public class UnitTestHelper {
 
 
     public static <T> T loadJson(final String path, final TypeReference<T> refObjectType) {
-        Asserts.notNull(path, "can't load Json Object from null path");
+        Asserts.assertNotNull(path, "can't load Json Object from null path");
         final String json = loadJsonReference(path);
         return convertFromJson(json, refObjectType);
     }
@@ -222,8 +218,7 @@ public class UnitTestHelper {
         try {
             return json == null ? null : JsonMarshaller.getInstance().getDefaultObjectMapper()
                                                        .readValue(json, refObjectType);
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             throw new UncheckedException(DefaultErrorCode.buildUndefineError(), e, e.getMessage());
         }
     }
@@ -269,17 +264,16 @@ public class UnitTestHelper {
         assertText(refJson, value);
     }
 
-    public static void assertTextRelatif(final Object value, final String path, int... lineIgnored) {
+    public static void assertTextRelatif(final Object value, final String path, final int... lineIgnored) {
         final String refJson = loadJsonReference(path);
         assertText(value, refJson, lineIgnored);
     }
 
-    public static void assertText(final Object value, final String jsonRef, int... lineIgnored) {
+    public static void assertText(final Object value, final String jsonRef, final int... lineIgnored) {
         if (jsonRef == null) {
-            Asserts.isNull("json must be null", value);
-        }
-        else {
-            Asserts.notNull("json mustn't be null", value);
+            Asserts.assertNull("json must be null", value);
+        } else {
+            Asserts.assertNotNull("json mustn't be null", value);
             final String json = convertToJson(value);
             assertText(jsonRef, json, lineIgnored);
         }
@@ -287,9 +281,9 @@ public class UnitTestHelper {
 
     }
 
-    public static void assertText(final String jsonRef, final String json, int... lineIgnored) {
-        Asserts.notNull("json ref mustn't be null", jsonRef);
-        Asserts.notNull("json mustn't be null", json);
+    public static void assertText(final String jsonRef, final String json, final int... lineIgnored) {
+        Asserts.assertNotNull("json ref mustn't be null", jsonRef);
+        Asserts.assertNotNull("json mustn't be null", json);
         final String[] jsonValue = json.split("\n");
         final String[] refLines  = jsonRef.split("\n");
 
@@ -297,11 +291,10 @@ public class UnitTestHelper {
             if (jsonValue.length != refLines.length) {
                 Loggers.DEBUG.error(renderDiff(jsonValue, refLines));
             }
-            Asserts.isTrue(
+            Asserts.assertTrue(
                     String.format("reference and json have not same size : %s,%s", jsonValue.length, refLines.length),
                     jsonValue.length == refLines.length);
-        }
-        catch (final Throwable e) {
+        } catch (final Throwable e) {
             throw e;
         }
 
@@ -320,8 +313,8 @@ public class UnitTestHelper {
     }
 
     private static boolean isIgnored(final int index, final int[] lineIgnored) {
-        int currentLine = index;
-        for (int line : lineIgnored) {
+        final int currentLine = index;
+        for (final int line : lineIgnored) {
             if (line == currentLine) {
                 return true;
             }
@@ -401,8 +394,7 @@ public class UnitTestHelper {
         final StringBuilder result = new StringBuilder();
         if (columnSize < title.length()) {
             result.append(title.substring(0, columnSize));
-        }
-        else {
+        } else {
             final int titleOffset = title.length() / 2;
 
             result.append(ConsoleColors.createLine(" ", titleOffset));

@@ -28,7 +28,7 @@ import io.inugami.api.spi.SpiLoader;
 import lombok.Getter;
 
 @Getter
-public final class JsonMarshaller  {
+public class JsonMarshaller {
 
     // =========================================================================
     // ATTRIBUTES
@@ -37,30 +37,31 @@ public final class JsonMarshaller  {
     private final ObjectMapper indentedObjectMapper;
 
     private static final JsonMarshaller INSTANCE = new JsonMarshaller();
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    public static JsonMarshaller getInstance(){
+    public static JsonMarshaller getInstance() {
         return INSTANCE;
     }
-    private JsonMarshaller(){
+
+    private JsonMarshaller() {
         final JsonMarshallerSpi defaultBuilder = new DefaultObjectMapperBuilder();
         final JsonMarshallerSpi builder = SpiLoader.getInstance().loadSpiServiceByPriority(JsonMarshallerSpi.class,
-                                                                                defaultBuilder);
+                                                                                           defaultBuilder);
 
         ObjectMapper mapper = builder.buildObjectMapper();
-        if (mapper == null){
+        if (mapper == null) {
             mapper = defaultBuilder.buildObjectMapper();
         }
-        defaultObjectMapper= mapper;
+        defaultObjectMapper = mapper;
 
         ObjectMapper indentedMapper = builder.buildIndentedObjectMapper();
-        if (indentedMapper == null){
+        if (indentedMapper == null) {
             indentedMapper = defaultBuilder.buildIndentedObjectMapper();
         }
-        indentedObjectMapper= indentedMapper;
+        indentedObjectMapper = indentedMapper;
     }
-
 
 
     // =========================================================================
@@ -70,7 +71,7 @@ public final class JsonMarshaller  {
 
         @Override
         public ObjectMapper buildObjectMapper() {
-            ObjectMapper objectMapper = new ObjectMapper();
+            final ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.findAndRegisterModules();
             objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
 
@@ -86,7 +87,7 @@ public final class JsonMarshaller  {
 
         @Override
         public ObjectMapper buildIndentedObjectMapper() {
-            ObjectMapper objectMapper = new ObjectMapper();
+            final ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
             objectMapper.findAndRegisterModules();
             objectMapper.enable(SerializationFeature.INDENT_OUTPUT)
