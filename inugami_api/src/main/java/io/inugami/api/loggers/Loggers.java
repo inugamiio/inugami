@@ -36,66 +36,98 @@ public final class Loggers {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    public static final Logger APPLICATION = LoggerFactory.getLogger("APPLICATION");
+    public static final String APPLICATION_NAME = "APPLICATION";
+    public static final Logger APPLICATION      = LoggerFactory.getLogger(APPLICATION_NAME);
 
-    public static final Logger ALERTING = LoggerFactory.getLogger("ALERTING");
+    public static final String ALERTING_NAME = "ALERTING";
+    public static final Logger ALERTING      = LoggerFactory.getLogger(ALERTING_NAME);
 
-    public static final Logger ALERTS_EVENT = LoggerFactory.getLogger("ALERTS_EVENT");
+    public static final String ALERTS_EVENT_NAME = "ALERTS_EVENT";
+    public static final Logger ALERTS_EVENT      = LoggerFactory.getLogger(ALERTS_EVENT_NAME);
 
-    public static final Logger JAVA_SCRIPT = LoggerFactory.getLogger("JAVA_SCRIPT");
+    public static final String JAVA_SCRIPT_NAME = "JAVA_SCRIPT";
+    public static final Logger JAVA_SCRIPT      = LoggerFactory.getLogger(JAVA_SCRIPT_NAME);
 
-    public static final Logger CACHE = LoggerFactory.getLogger("CACHE");
+    public static final String CACHE_NAME = "CACHE";
+    public static final Logger CACHE      = LoggerFactory.getLogger(CACHE_NAME);
 
-    public static final Logger CONFIG = LoggerFactory.getLogger("CONFIG");
+    public static final String CONFIG_NAME = "CONFIG";
+    public static final Logger CONFIG      = LoggerFactory.getLogger(CONFIG_NAME);
 
-    public static final Logger CHRONOLOG = LoggerFactory.getLogger("CHRONOLOG");
+    public static final String CHRONOLOG_NAME = "CHRONOLOG";
+    public static final Logger CHRONOLOG      = LoggerFactory.getLogger(CHRONOLOG_NAME);
 
-    public static final Logger PLUGINS = LoggerFactory.getLogger("PLUGINS");
+    public static final String PLUGINS_NAME = "PLUGINS";
+    public static final Logger PLUGINS      = LoggerFactory.getLogger(PLUGINS_NAME);
 
-    public static final Logger EVENTSLOG = LoggerFactory.getLogger("EVENTSLOG");
+    public static final String EVENTSLOG_NAME = "EVENTSLOG";
+    public static final Logger EVENTSLOG      = LoggerFactory.getLogger(EVENTSLOG_NAME);
 
-    public static final Logger SSELOG = LoggerFactory.getLogger("SSELOG");
+    public static final String SSELOG_NAME = "SSELOG";
+    public static final Logger SSELOG      = LoggerFactory.getLogger(SSELOG_NAME);
 
-    public static final Logger XLLOG = LoggerFactory.getLogger("XLLOG");
+    public static final String XLLOG_NAME = "XLLOG";
+    public static final Logger XLLOG      = LoggerFactory.getLogger(XLLOG_NAME);
 
-    public static final Logger INIT = LoggerFactory.getLogger("INITIALIZE");
+    public static final String INIT_NAME = "INITIALIZE";
+    public static final Logger INIT      = LoggerFactory.getLogger(INIT_NAME);
 
-    public static final Logger PROCESSOR = LoggerFactory.getLogger("PROCESSOR");
+    public static final String PROCESSOR_NAME = "PROCESSOR";
+    public static final Logger PROCESSOR      = LoggerFactory.getLogger(PROCESSOR_NAME);
 
-    public static final Logger DEBUG = LoggerFactory.getLogger("DEBUGLOG");
+    public static final String DEBUGLOG_NAME = "DEBUGLOG";
+    public static final Logger DEBUG         = LoggerFactory.getLogger(DEBUGLOG_NAME);
 
-    public static final Logger PROVIDER = LoggerFactory.getLogger("PROVIDER");
+    public static final String PROVIDER_NAME = "PROVIDER";
+    public static final Logger PROVIDER      = LoggerFactory.getLogger(PROVIDER_NAME);
 
-    public static final Logger HANDLER = LoggerFactory.getLogger("HANDLER");
+    public static final String HANDLER_NAME = "HANDLER";
+    public static final Logger HANDLER      = LoggerFactory.getLogger(HANDLER_NAME);
 
-    public static final Logger IO = LoggerFactory.getLogger("IO_ACCESS");
+    public static final String IO_NAME = "IO_ACCESS";
+    public static final Logger IO      = LoggerFactory.getLogger(IO_NAME);
 
-    public static final Logger SSE = LoggerFactory.getLogger("SSE");
+    public static final String SSE_NAME = "SSE";
+    public static final Logger SSE      = LoggerFactory.getLogger(SSE_NAME);
 
-    public static final Logger METRICS = LoggerFactory.getLogger("METRICS");
+    public static final String METRICS_NAME = "METRICS";
+    public static final Logger METRICS      = LoggerFactory.getLogger(METRICS_NAME);
 
-    public static final Logger EVENTS = LoggerFactory.getLogger("EVENTS");
+    public static final String EVENTS_NAME = "EVENTS";
+    public static final Logger EVENTS      = LoggerFactory.getLogger(EVENTS_NAME);
 
-    public static final Logger SYSTEM = LoggerFactory.getLogger("SYSTEM");
+    public static final String SYSTEM_NAME = "SYSTEM";
+    public static final Logger SYSTEM      = LoggerFactory.getLogger(SYSTEM_NAME);
 
-    public static final Logger SECURITY = LoggerFactory.getLogger("SECURITY");
+    public static final String SECURITY_NAME = "SECURITY";
+    public static final Logger SECURITY      = LoggerFactory.getLogger(SECURITY_NAME);
 
-    public static final Logger SCRIPTS = LoggerFactory.getLogger("SCRIPTS");
+    public static final String SCRIPTS_NAME = "SCRIPTS";
+    public static final Logger SCRIPTS      = LoggerFactory.getLogger(SCRIPTS_NAME);
 
-    public static final Logger ALERTS_SENDER = LoggerFactory.getLogger("ALERTS_SENDER");
+    public static final String ALERTS_SENDER_NAME = "ALERTS_SENDER";
+    public static final Logger ALERTS_SENDER      = LoggerFactory.getLogger(ALERTS_SENDER_NAME);
 
-    public static final Logger HEALTH = LoggerFactory.getLogger("HEALTH");
+    public static final String HEALTH_NAME = "HEALTH";
+    public static final Logger HEALTH      = LoggerFactory.getLogger(HEALTH_NAME);
 
-    public static final Logger TASK = LoggerFactory.getLogger("TASK");
+    public static final String TASK_NAME = "TASK";
+    public static final Logger TASK      = LoggerFactory.getLogger(TASK_NAME);
 
-    public static final Logger REST = LoggerFactory.getLogger("REST");
+    public static final String REST_NAME = "REST";
+    public static final Logger REST      = LoggerFactory.getLogger(REST_NAME);
 
-    public static final Logger IOLOG = LoggerFactory.getLogger("IOLOG");
+    public static final String IOLOG_NAME = "IOLOG";
+    public static final Logger IOLOG      = LoggerFactory.getLogger(IOLOG_NAME);
 
-    public static final Logger PARTNERLOG = LoggerFactory.getLogger("PARTNERLOG");
+    public static final String PARTNERLOG_NAME = "PARTNERLOG";
+    public static final Logger PARTNERLOG      = LoggerFactory.getLogger(PARTNERLOG_NAME);
 
-    public static final Logger KPI             = LoggerFactory.getLogger("KPI");
-    public static final Logger LOG_INITIALIZER = LoggerFactory.getLogger("LOG_INITIALIZER");
+    public static final String KPI_NAME = "KPI";
+    public static final Logger KPI      = LoggerFactory.getLogger(KPI_NAME);
+
+    public static final String LOG_INITIALIZER_NAME = "LOG_INITIALIZER";
+    public static final Logger LOG_INITIALIZER      = LoggerFactory.getLogger(LOG_INITIALIZER_NAME);
 
 
     // =========================================================================
