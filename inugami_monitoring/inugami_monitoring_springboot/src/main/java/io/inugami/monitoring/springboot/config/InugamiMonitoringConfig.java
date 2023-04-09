@@ -26,12 +26,14 @@ import io.inugami.monitoring.core.context.MonitoringBootstrap;
 import io.inugami.monitoring.core.context.MonitoringContext;
 import io.inugami.monitoring.core.interceptors.spi.IoLogInterceptor;
 import io.inugami.monitoring.core.interceptors.spi.MdcInterceptor;
+import io.inugami.monitoring.springboot.actuator.VersionHealthIndicator;
 import io.inugami.monitoring.springboot.exception.DefaultExceptionHandlerService;
 import io.inugami.monitoring.springboot.exception.SpringDefaultErrorCodeResolver;
 import io.inugami.monitoring.springboot.filter.IoLogFilter;
 import io.inugami.monitoring.springboot.request.SpringRestMethodResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +52,9 @@ public class InugamiMonitoringConfig {
     private MonitoringBootstrap monitoringBootstrap;
 
 
+    // ========================================================================
+    // BEANS
+    // ========================================================================
     @Bean
     public MonitoringBootstrap initMonitoringContext() {
         final Monitoring config = MonitoringBootstrap.CONTEXT.getConfig();
@@ -61,7 +66,7 @@ public class InugamiMonitoringConfig {
         monitoringBootstrap.contextInitialized();
         return monitoringBootstrap;
     }
-    
+
     @Bean
     public MonitoringContext monitoringContext(final MonitoringBootstrap monitoringBootstrap) {
         return MonitoringBootstrap.CONTEXT;
@@ -89,6 +94,26 @@ public class InugamiMonitoringConfig {
                                              .build();
     }
 
+
+    @Bean
+    @ConditionalOnProperty(name = "inugami.monitoring.actuator.version.enabled", havingValue = "true", matchIfMissing = true)
+    public HealthIndicator versionHealthIndicator(@Value("${application.groupId:#{null}}") final String groupId,
+                                                  @Value("${application.artifactId:#{null}}") final String artifactId,
+                                                  @Value("${application.version:#{null}}") final String version,
+                                                  @Value("${application.commitId:#{null}}") final String commitId,
+                                                  @Value("${application.commitDate:#{null}}") final String commitDate) {
+        return VersionHealthIndicator.builder()
+                                     .groupId(groupId)
+                                     .artifactId(artifactId)
+                                     .version(version)
+                                     .commitId(commitId)
+                                     .commitDate(commitDate)
+                                     .build();
+    }
+
+    // ========================================================================
+    // TOOLS
+    // ========================================================================
     private void initializeInterceptors(final MonitoringBootstrap monitoringBootstrap) {
 
         addInterceptorIfNoPresent(MdcInterceptor.class, ctx -> ctx.getInterceptors().add(new MdcInterceptor()));
@@ -97,6 +122,7 @@ public class InugamiMonitoringConfig {
 
 
     }
+
 
     private <T extends MonitoringFilterInterceptor> void addInterceptorIfNoPresent(final Class<T> interceptorClass,
                                                                                    final Consumer<MonitoringContext> appender) {
