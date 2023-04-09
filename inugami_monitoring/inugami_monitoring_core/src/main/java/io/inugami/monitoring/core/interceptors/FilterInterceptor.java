@@ -296,6 +296,8 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         RequestInformationInitializer.appendResponseHeaderInformation(httpResponse);
         RequestContext.getInstance();
         onEndInitMdcFields(error, duration, httpResponse);
+        MdcService.getInstance().duration(duration)
+                  .status(httpResponse.getStatus());
 
         final ResquestData requestData  = convertToRequestData(httpRequest, httpResponse, content);
         final ResponseData responseData = convertToResponseData(httpRequest, httpResponse, duration);

@@ -16,9 +16,6 @@
  */
 package io.inugami.monitoring.core.interceptors.spi;
 
-import java.util.List;
-import java.util.Map;
-
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.models.JsonBuilder;
 import io.inugami.api.monitoring.MdcService;
@@ -32,6 +29,9 @@ import io.inugami.api.monitoring.warn.WarnContext;
 import io.inugami.api.processors.ConfigHandler;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 import org.slf4j.Logger;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * LogInterceptor
@@ -112,7 +112,7 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
                                                final ResponseData httpResponse,
                                                final ErrorResult error) {
         final JsonBuilder msg = buildIologIn(request);
-
+    
         msg.addLine();
         msg.write("response:").line();
         msg.tab().write("status:").write(httpResponse.getCode()).line();
