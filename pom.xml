@@ -254,6 +254,7 @@
         <com.google.guava.version>29.0-jre</com.google.guava.version>
         <org.junit.jupiter>5.7.0-M1</org.junit.jupiter>
         <org.projectlombok.version>1.18.12</org.projectlombok.version>
+        <org.zalando.problem.version>0.27.1</org.zalando.problem.version>
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PLUGINS CONFIGURATION
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -531,6 +532,11 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.inugami.monitoring</groupId>
+                <artifactId>inugami_monitoring_spingboot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             :: IMPORT
@@ -852,6 +858,12 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-beans</artifactId>
                 <version>${org.springframework.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.zalando</groupId>
+                <artifactId>problem</artifactId>
+                <version>${org.zalando.problem.version}</version>
             </dependency>
 
             <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

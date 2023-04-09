@@ -1,0 +1,31 @@
+{
+  "body" : {
+    "cause" : {
+      "localizedMessage" : "some error",
+      "message" : "some error",
+      "parameters" : { },
+      "stackTrace" : [ ],
+      "suppressed" : [ ],
+      "title" : "some error",
+      "type" : "about:blank"
+    },
+    "detail" : "",
+    "localizedMessage" : "some error: ",
+    "message" : "some error: ",
+    "parameters" : {
+      "fields" : [ ],
+      "application" : "inugami",
+      "version" : "2.3.0"
+    },
+    "stackTrace" : [ ],
+    "status" : "INTERNAL_SERVER_ERROR",
+    "suppressed" : [ ],
+    "title" : "some error",
+    "type" : "about:blank"
+  },
+  "headers" : {
+    "Content-Type" : [ "application/json" ]
+  },
+  "statusCode" : "INTERNAL_SERVER_ERROR",
+  "statusCodeValue" : 500
+}

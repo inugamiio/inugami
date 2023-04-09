@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ======================================================================= 
@@ -25,19 +26,17 @@
     <artifactId>inugami_monitoring_distributions</artifactId>
     <packaging>pom</packaging>
     <url>http://inugami.io/inugami/inugami_monitoring_distributions</url>
-    
+
     <!-- ======================================================================= 
     = DEPENDENCIES
     ======================================================================== -->
     <modules>
         <module>inugami_monitoring_distrib_zip</module>
         <module>inugami_monitoring_distrib_nondep</module>
-        <module>inugami_monitoring_spingboot</module>
     </modules>
 
 
-    
-    <!-- ======================================================================= 
+    <!-- =======================================================================
     = DEPENDENCIES
     ======================================================================== -->
     <dependencies>

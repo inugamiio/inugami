@@ -1,0 +1,38 @@
+{
+  "body" : {
+    "cause" : {
+      "localizedMessage" : "",
+      "message" : "",
+      "parameters" : { },
+      "stackTrace" : [ ],
+      "suppressed" : [ ],
+      "type" : "about:blank"
+    },
+    "detail" : "invalid email address",
+    "localizedMessage" : "invalid email address",
+    "message" : "invalid email address",
+    "parameters" : {
+      "errorCode" : "ERR-0._0",
+      "fields" : [ {
+        "errorCategory" : "user",
+        "errorCode" : "ERR-0._0",
+        "errorType" : "technical",
+        "messageDetail" : "invalid email address",
+        "name" : "user.email"
+      } ],
+      "application" : "inugami",
+      "version" : "2.3.0",
+      "errorType" : "technical",
+      "errorCategory" : "user"
+    },
+    "stackTrace" : [ ],
+    "status" : "INTERNAL_SERVER_ERROR",
+    "suppressed" : [ ],
+    "type" : "about:blank"
+  },
+  "headers" : {
+    "Content-Type" : [ "application/json" ]
+  },
+  "statusCode" : "INTERNAL_SERVER_ERROR",
+  "statusCodeValue" : 500
+}

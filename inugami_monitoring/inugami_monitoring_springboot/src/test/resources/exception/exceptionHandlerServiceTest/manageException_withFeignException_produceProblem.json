@@ -1,0 +1,33 @@
+{
+  "body" : {
+    "cause" : {
+      "localizedMessage" : "bad credentials",
+      "message" : "bad credentials",
+      "parameters" : { },
+      "stackTrace" : [ ],
+      "suppressed" : [ ],
+      "title" : "bad credentials",
+      "type" : "about:blank"
+    },
+    "detail" : "",
+    "localizedMessage" : "bad credentials: ",
+    "message" : "bad credentials: ",
+    "parameters" : {
+      "errorCode" : "feign-client-401",
+      "fields" : [ ],
+      "application" : "inugami",
+      "version" : "2.3.0",
+      "errorType" : "technical"
+    },
+    "stackTrace" : [ ],
+    "status" : "UNAUTHORIZED",
+    "suppressed" : [ ],
+    "title" : "bad credentials",
+    "type" : "about:blank"
+  },
+  "headers" : {
+    "Content-Type" : [ "application/json" ]
+  },
+  "statusCode" : "UNAUTHORIZED",
+  "statusCodeValue" : 401
+}

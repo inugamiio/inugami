@@ -1,0 +1,12 @@
+[ {
+  "level" : "ERROR",
+  "loggerName" : "io.inugami.monitoring.springboot.exception.DefaultExceptionHandlerService",
+  "mdc" : {
+    "errorMessage" : "some error",
+    "errorStatus" : "0",
+    "errorRollback" : "false",
+    "errorExploitationError" : "false",
+    "errorRetryable" : "false"
+  },
+  "message" : "some error"
+} ]

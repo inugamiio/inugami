@@ -12,5 +12,8 @@ import lombok.NoArgsConstructor;
 public class FieldError {
     private String name;
     private String errorCode;
-    private String description;
+    private String message;
+    private String messageDetail;
+    private String errorType;
+    private String errorCategory;
 }
