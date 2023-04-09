@@ -26,6 +26,7 @@ import io.inugami.monitoring.core.context.MonitoringBootstrap;
 import io.inugami.monitoring.core.context.MonitoringContext;
 import io.inugami.monitoring.core.interceptors.spi.IoLogInterceptor;
 import io.inugami.monitoring.core.interceptors.spi.MdcInterceptor;
+import io.inugami.monitoring.springboot.actuator.FailSafeStatusAggregator;
 import io.inugami.monitoring.springboot.actuator.VersionHealthIndicator;
 import io.inugami.monitoring.springboot.exception.DefaultExceptionHandlerService;
 import io.inugami.monitoring.springboot.exception.SpringDefaultErrorCodeResolver;
@@ -34,6 +35,7 @@ import io.inugami.monitoring.springboot.request.SpringRestMethodResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.StatusAggregator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -109,6 +111,12 @@ public class InugamiMonitoringConfig {
                                      .commitId(commitId)
                                      .commitDate(commitDate)
                                      .build();
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "inugami.monitoring.actuator.fail.safe.enabled", havingValue = "true", matchIfMissing = true)
+    public StatusAggregator failSafeStatusAggregator() {
+        return new FailSafeStatusAggregator();
     }
 
     // ========================================================================

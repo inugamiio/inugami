@@ -1,9 +1,11 @@
 package io.inugami.monitoring.springboot.config;
 
 import io.inugami.commons.spring.exception.ExceptionHandlerService;
+import io.inugami.monitoring.springboot.actuator.FailSafeStatusAggregator;
 import io.inugami.monitoring.springboot.exception.SpringDefaultErrorCodeResolver;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.actuate.health.StatusAggregator;
 
 import static io.inugami.commons.test.UnitTestHelper.assertTextRelative;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -33,5 +35,14 @@ public class InugamiMonitoringConfigTest {
         assertTextRelative(health.health(), "actuator/versionHealthIndicatorTest/getHealth_nominal.json");
         assertTextRelative(health.getHealth(true), "actuator/versionHealthIndicatorTest/getHealth_nominal.json");
         assertTextRelative(health.getHealth(true), "actuator/versionHealthIndicatorTest/getHealth_nominal.json");
+    }
+
+
+    @Test
+    public void failSafeStatusAggregator_nominal() {
+        final InugamiMonitoringConfig config     = new InugamiMonitoringConfig();
+        final StatusAggregator        aggregator = config.failSafeStatusAggregator();
+        assertThat(aggregator).isNotNull();
+        assertThat(aggregator).isInstanceOf(FailSafeStatusAggregator.class);
     }
 }
