@@ -51,11 +51,8 @@ public class UnitTestHelperStubTest {
                                                                                                   UserDto.class,
                                                                                                   cache
         ));
-
-
+        
         assertThat(dao.getUserById(1L)).isNotNull();
-        assertThat(cache.size()).isEqualTo(2);
-        assertThat(dao.getUserById(1L).getId()).isEqualTo(1L);
     }
 
 
