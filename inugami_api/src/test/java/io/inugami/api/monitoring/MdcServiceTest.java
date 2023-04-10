@@ -15,6 +15,7 @@ import java.util.List;
 
 import static io.inugami.api.exceptions.Asserts.assertEquals;
 import static io.inugami.api.exceptions.Asserts.assertNotNull;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class MdcServiceTest {
 
@@ -33,7 +34,7 @@ public class MdcServiceTest {
     @Test
     public void mdcKeys_shouldHaveGetterAndSetter() {
         final Method[] methods = MdcService.class.getDeclaredMethods();
-        for (MdcService.MDCKeys key : MdcService.MDCKeys.VALUES) {
+        for (final MdcService.MDCKeys key : MdcService.MDCKeys.VALUES) {
             verify(key, methods);
         }
     }
@@ -45,15 +46,15 @@ public class MdcServiceTest {
                 return;
         }
 
-        Method getter = searchGetter(key, methods);
-        Method setter = searchSetter(key, methods);
+        final Method getter = searchGetter(key, methods);
+        final Method setter = searchSetter(key, methods);
 
         assertNotNull("getter not found for " + key.name(), getter);
         assertNotNull("setter not found for " + key.name(), setter);
 
         MdcService.getInstance().clear();
 
-        Object value = createValue(setter);
+        final Object value = createValue(setter);
         assertNotNull("no value for " + key.name(), value);
 
         try {
@@ -63,14 +64,14 @@ public class MdcServiceTest {
                 setter.invoke(MdcService.getInstance(), new Object[]{value});
             }
 
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             throw new UncheckedException("unable to set value for " + key.name());
         }
 
         Object newValue = null;
         try {
             newValue = getter.invoke(MdcService.getInstance(), new Object[]{});
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             throw new UncheckedException("unable to get value for " + key.name());
         }
         assertNotNull("value isn't define for " + key.name(), newValue);
@@ -89,10 +90,10 @@ public class MdcServiceTest {
 
 
     private Method searchGetter(final MdcService.MDCKeys key, final Method[] methods) {
-        Method method     = null;
-        String methodName = buildMethodName(key.name());
+        Method       method     = null;
+        final String methodName = buildMethodName(key.name());
 
-        for (Method currentMethod : methods) {
+        for (final Method currentMethod : methods) {
             if (currentMethod.getName().equals(methodName) && currentMethod.getParameters().length == 0) {
                 method = currentMethod;
                 break;
@@ -103,10 +104,10 @@ public class MdcServiceTest {
 
 
     private Method searchSetter(final MdcService.MDCKeys key, final Method[] methods) {
-        Method method     = null;
-        String methodName = buildMethodName(key.name());
+        Method       method     = null;
+        final String methodName = buildMethodName(key.name());
 
-        for (Method currentMethod : methods) {
+        for (final Method currentMethod : methods) {
             if (currentMethod.getName().equals(methodName) && currentMethod.getParameters().length == 1) {
                 method = currentMethod;
                 break;
@@ -165,4 +166,20 @@ public class MdcServiceTest {
 
         return null;
     }
+
+    // =========================================================================
+    // Set MDC
+    // =========================================================================
+    @Test
+    public void setMdc_withNullValue_shouldRemove() {
+        final MdcService mdc = MdcService.getInstance().clear();
+
+        mdc.callFrom(null);
+        assertThat(mdc.callFrom()).isNull();
+
+        mdc.callFrom("joe");
+        mdc.callFrom("null");
+        assertThat(mdc.callFrom()).isNull();
+    }
+
 }

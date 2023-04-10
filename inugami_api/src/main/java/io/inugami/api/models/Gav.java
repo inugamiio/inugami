@@ -77,39 +77,39 @@ public class Gav implements Serializable {
     }
 
     public Gav(final String hash) {
-        groupId    = null;
+        groupId = null;
         artifactId = null;
-        version    = null;
-        qualifier  = null;
-        this.hash  = hash;
+        version = null;
+        qualifier = null;
+        this.hash = hash;
     }
 
     public Gav(final String... gavParts) {
-        Asserts.notNull(gavParts);
-        Asserts.isTrue(gavParts.length >= 3);
-        groupId    = gavParts[0];
+        Asserts.assertNotNull(gavParts);
+        Asserts.assertTrue(gavParts.length >= 3);
+        groupId = gavParts[0];
         artifactId = gavParts[1];
-        version    = gavParts[2];
-        qualifier  = (gavParts.length > 3) && !"null".equals(gavParts[3]) ? gavParts[3] : null;
-        hash       = buildHash();
+        version = gavParts[2];
+        qualifier = (gavParts.length > 3) && !"null".equals(gavParts[3]) ? gavParts[3] : null;
+        hash = buildHash();
     }
 
     public Gav(final String groupId, final String artifactId) {
         super();
-        this.groupId    = groupId;
+        this.groupId = groupId;
         this.artifactId = artifactId;
-        version         = null;
-        qualifier       = null;
-        hash            = buildHash();
+        version = null;
+        qualifier = null;
+        hash = buildHash();
     }
 
     public Gav(final String groupId, final String artifactId, final String version, final String qualifier) {
         super();
-        this.groupId    = groupId;
+        this.groupId = groupId;
         this.artifactId = artifactId;
-        this.version    = version;
-        this.qualifier  = qualifier;
-        hash            = buildHash();
+        this.version = version;
+        this.qualifier = qualifier;
+        hash = buildHash();
     }
 
     // =========================================================================

@@ -1,0 +1,14 @@
+[ {
+  "level" : "ERROR",
+  "loggerName" : "io.inugami.monitoring.springboot.exception.DefaultExceptionHandlerService",
+  "mdc" : {
+    "errorField" : "user.email",
+    "errorCategory" : "user",
+    "errorType" : "technical",
+    "errorCode" : "ERR-0._0",
+    "errorStatus" : "150",
+    "errorRollback" : "false",
+    "errorExploitationError" : "false",
+    "errorRetryable" : "false"
+  }
+} ]

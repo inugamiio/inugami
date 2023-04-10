@@ -1,36 +1,35 @@
 /* --------------------------------------------------------------------
- *  Inugami  
+ *  Inugami
  * --------------------------------------------------------------------
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.configuration.models.app;
 
-import java.io.Serializable;
-import java.util.List;
-
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import io.inugami.api.constants.JvmKeyValues;
 import io.inugami.api.exceptions.Asserts;
 import io.inugami.api.exceptions.TechnicalException;
 import io.inugami.api.functionnals.PostProcessing;
 import io.inugami.api.processors.ConfigHandler;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * UserConfig
- * 
+ *
  * @author patrickguillerm
  * @since 16 déc. 2017
  */
@@ -43,28 +42,28 @@ public class UserConfig implements Serializable, PostProcessing<ConfigHandler<St
     private static final long serialVersionUID = -1426894131168094022L;
 
     @XStreamAsAttribute
-    private String            login;
+    private String login;
 
     @XStreamAsAttribute
-    private String            password;
+    private String password;
 
     @XStreamAsAttribute
-    private String            token;
+    private String token;
 
     @XStreamAsAttribute
-    private String            firstName;
+    private String firstName;
 
     @XStreamAsAttribute
-    private String            lastName;
+    private String lastName;
 
-    private UserRoles         userRoles;
+    private UserRoles userRoles;
 
     // =========================================================================
     // OVERRIDES
     // =========================================================================
     @Override
-    public void postProcessing(ConfigHandler<String, String> ctx) throws TechnicalException {
-        Asserts.notNull("User login is mandatory!", login);
+    public void postProcessing(final ConfigHandler<String, String> ctx) throws TechnicalException {
+        Asserts.assertNotNull("User login is mandatory!", login);
         // @formatter:off
         login = ctx.applyProperties(login);
         password = ctx.applyProperties(JvmKeyValues.SECURITY_USERS.or(login.concat(".password"), password));
@@ -76,14 +75,14 @@ public class UserConfig implements Serializable, PostProcessing<ConfigHandler<St
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
+        final int prime  = 31;
+        int       result = 1;
         result = prime * result + ((login == null) ? 0 : login.hashCode());
         return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         boolean result = this == obj;
 
         if (!result && obj != null && obj instanceof UserConfig) {
@@ -96,7 +95,7 @@ public class UserConfig implements Serializable, PostProcessing<ConfigHandler<St
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append("UserConfig [login=");
         builder.append(login);
         builder.append(", firstName=");
@@ -114,7 +113,7 @@ public class UserConfig implements Serializable, PostProcessing<ConfigHandler<St
         return login;
     }
 
-    public void setLogin(String login) {
+    public void setLogin(final String login) {
         this.login = login;
     }
 
@@ -122,7 +121,7 @@ public class UserConfig implements Serializable, PostProcessing<ConfigHandler<St
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -130,7 +129,7 @@ public class UserConfig implements Serializable, PostProcessing<ConfigHandler<St
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(final String token) {
         this.token = token;
     }
 
@@ -138,7 +137,7 @@ public class UserConfig implements Serializable, PostProcessing<ConfigHandler<St
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(final String firstName) {
         this.firstName = firstName;
     }
 
@@ -146,16 +145,16 @@ public class UserConfig implements Serializable, PostProcessing<ConfigHandler<St
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(final String lastName) {
         this.lastName = lastName;
     }
 
     public List<String> getUserRoles() {
-        return userRoles==null?null:userRoles.getUserRoles();
+        return userRoles == null ? null : userRoles.getUserRoles();
     }
 
-    public void setUserRoles(List<String> roles) {
-        if(userRoles==null) {
+    public void setUserRoles(final List<String> roles) {
+        if (userRoles == null) {
             userRoles = new UserRoles();
         }
         this.userRoles.setUserRoles(roles);

@@ -61,6 +61,7 @@ public class ConfigurationLoaderTest implements TestUnitResources {
         assertEquals("Authorization", config.getHeaders().getToken());
         assertEquals("a-device-identifier", config.getHeaders().getDeviceIdentifier());
         assertEquals("a-device-type", config.getHeaders().getDeviceType());
+        assertEquals("a-device-system", config.getHeaders().getDeviceSystem());
         assertEquals("a-device-class", config.getHeaders().getDeviceClass());
         assertEquals("a-device-version", config.getHeaders().getDeviceVersion());
         assertEquals("a-device-os-version", config.getHeaders().getDeviceOsVersion());

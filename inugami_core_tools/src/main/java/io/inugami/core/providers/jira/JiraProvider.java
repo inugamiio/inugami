@@ -1,24 +1,20 @@
 /* --------------------------------------------------------------------
- *  Inugami  
+ *  Inugami
  * --------------------------------------------------------------------
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.core.providers.jira;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 import io.inugami.api.exceptions.Asserts;
 import io.inugami.api.exceptions.services.ProviderException;
@@ -41,28 +37,32 @@ import io.inugami.core.providers.jira.models.JiraIssue;
 import io.inugami.core.providers.jira.models.JiraSearch;
 import io.inugami.core.services.connectors.HttpConnector;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 public class JiraProvider extends AbstractProvider implements Provider, ProviderWithHttpConnector {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final String                    TYPE               = "JIRA";
-    
-    private static final String                    CONFIG_JIRA_HOST   = "host.jira";
-    
-    private static final String                    CONFIG_REALM       = "realm";
-    
-    private static final String                    CONFIG_MAX_RESULTS = "maxResults";
-    
+    private static final String TYPE = "JIRA";
+
+    private static final String CONFIG_JIRA_HOST = "host.jira";
+
+    private static final String CONFIG_REALM = "realm";
+
+    private static final String CONFIG_MAX_RESULTS = "maxResults";
+
     private final FutureData<ProviderFutureResult> futureDataRef;
-    
-    private final String                           url;
-    
-    private final int                              timeout;
-    
-    private final ConfigHandler<String, String>    config;
-    
-    private final HttpConnector                    httpConnector;
-    
+
+    private final String url;
+
+    private final int timeout;
+
+    private final ConfigHandler<String, String> config;
+
+    private final HttpConnector httpConnector;
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -70,39 +70,39 @@ public class JiraProvider extends AbstractProvider implements Provider, Provider
                         final ProviderRunner providerRunner) {
         super(classBehavior, config, providerRunner);
         this.config = config;
-        
+
         final StringBuilder builder = new StringBuilder();
         builder.append(config.grab(CONFIG_REALM));
         builder.append("://");
         builder.append(config.grab(CONFIG_JIRA_HOST));
         builder.append("/rest/api/2/search");
         url = builder.toString();
-        
+
         timeout = Integer.parseInt(config.optionnal().grabOrDefault(CONFIG_TIMEOUT, "5000"));
-        
+
         final ContextSPI ctx = SpiLoader.getInstance().loadSpiSingleService(ContextSPI.class);
         httpConnector = ctx.getHttpConnector(classBehavior.getName(), getMaxConnections(config, 5),
                                              getTimeout(config, 6000), getTTL(config, 50), getMaxPerRoute(config, 10),
                                              getSocketTimeout(config, 60000));
-        
+
         futureDataRef = FutureDataBuilder.buildDefaultFuture(timeout);
     }
-    
+
     @Override
     public String getType() {
         return TYPE;
     }
 
     @Override
-    public long getTimeout(){
+    public long getTimeout() {
         return timeout;
     }
 
     @Override
-    public ConfigHandler<String,String> getConfig(){
+    public ConfigHandler<String, String> getConfig() {
         return config;
     }
-    
+
     // =========================================================================
     // CALL EVENT
     // =========================================================================
@@ -111,7 +111,7 @@ public class JiraProvider extends AbstractProvider implements Provider, Provider
         final ProviderTask providerTask = new JiraProviderTask(event, url, getName(), httpConnector, config, pluginGav);
         return runTask(providerTask, event, futureDataRef);
     }
-    
+
     // =========================================================================
     // AGGREGATE
     // =========================================================================
@@ -119,18 +119,18 @@ public class JiraProvider extends AbstractProvider implements Provider, Provider
     public ProviderFutureResult aggregate(final List<ProviderFutureResult> data) throws ProviderException {
         assertDataType(data);
         final List<JiraIssue> issues = new ArrayList<>();
-        
+
         data.stream().filter(this::validResultWithData).map(this::toJiraSearch).map(JiraSearch::getIssues).distinct().forEach(issues::addAll);
-        
+
         final JiraSearch jiraData = new JiraSearch(0, Integer.parseInt(config.grab(CONFIG_MAX_RESULTS)), issues.size(),
                                                    issues);
         return new ProviderFutureResultBuilder().addData(jiraData).build();
     }
-    
+
     private JiraSearch toJiraSearch(final ProviderFutureResult item) {
         return (JiraSearch) item.getData().orElse(null);
     }
-    
+
     private void assertDataType(final List<ProviderFutureResult> datas) throws ProviderException {
         final Optional<ProviderFutureResult> anInvalidResult = datas.stream().filter(this::validResultWithData).filter(this::notJiraSearch).findAny();
         if (anInvalidResult.isPresent()) {
@@ -138,13 +138,13 @@ public class JiraProvider extends AbstractProvider implements Provider, Provider
                                         anInvalidResult.get().getData().getClass().getName());
         }
     }
-    
+
     private boolean validResultWithData(final ProviderFutureResult item) {
         return !item.getException().isPresent() && item.getData().isPresent();
     }
-    
+
     private boolean notJiraSearch(final ProviderFutureResult item) {
-        Asserts.isTrue(item.getData().isPresent());
+        Asserts.assertNotNull(item.getData().isPresent());
         return !(item.getData().get() instanceof JiraSearch);
     }
 }

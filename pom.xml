@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ======================================================================= 
@@ -15,7 +16,7 @@
     ======================================================================== -->
     <groupId>io.inugami</groupId>
     <artifactId>inugami</artifactId>
-    <version>2.2.3-SNAPSHOT</version>
+    <version>2.3.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Specifics maven lifecycle to package and run inugami project</description>
@@ -60,7 +61,7 @@
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <super.jdk>11</super.jdk>
         <super.jdk.arg>-parameters</super.jdk.arg>
-        <maven-gpg-plugin.enabled />
+        <maven-gpg-plugin.enabled/>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.datePattern>yyyy-MM-dd'T'HH:mm:ss.SSSZ</project.build.datePattern>
@@ -81,7 +82,7 @@
         <docArtifactFinalName>${project.build.finalName}</docArtifactFinalName>
         <superSiteSkinVersion>1.2.1</superSiteSkinVersion>
 
-        <site.deploy.url />
+        <site.deploy.url/>
         <plugin.site.disable>true</plugin.site.disable>
         <plugin.site.path>src/site</plugin.site.path>
         <plugin.site.inputEncoding>${project.build.sourceEncoding}</plugin.site.inputEncoding>
@@ -103,18 +104,18 @@
         :: JDK
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <jdk>11</jdk>
-        <jdk.env.java.home />
-        <jdk.env.property.name />
-        <jdk.test.executable />
+        <jdk.env.java.home/>
+        <jdk.env.property.name/>
+        <jdk.test.executable/>
         <jdk.javac.executable>${jdk.env.java.home}/bin/javac</jdk.javac.executable>
 
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: CI
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-        <ci.host />
+        <ci.host/>
         <ci.host.context>/jenkins</ci.host.context>
-        <ci.view />
+        <ci.view/>
 
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -170,7 +171,8 @@
         <!--[ org.springframework ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <org.springframework.version>5.2.20.RELEASE</org.springframework.version>
         <org.springframework.boot.version>2.7.9</org.springframework.boot.version>
-        <org.springframework.spring-cloud-dependencies.version>2021.0.6</org.springframework.spring-cloud-dependencies.version>
+        <org.springframework.spring-cloud-dependencies.version>2021.0.6
+        </org.springframework.spring-cloud-dependencies.version>
 
         <!--[ others ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <plugins.external-atlassian-jgitflow.jgitflow-maven-plugin>1.0-m4.3
@@ -237,8 +239,9 @@
         <!--[ Data base drivers ]++++++++++++++++++++++++++++++++++++++++++++-->
         <com.h2database.h2.version>2.1.210</com.h2database.h2.version>
 
-
+        <com.sun.xml.bind.version>4.0.2</com.sun.xml.bind.version>
         <jaxb.version>2.3.0</jaxb.version>
+        <org.glassfish.jaxb.version>2.3.2</org.glassfish.jaxb.version>
         <javax.activation.version>1.1.1</javax.activation.version>
 
         <!--[ Others ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
@@ -252,6 +255,7 @@
         <com.google.guava.version>29.0-jre</com.google.guava.version>
         <org.junit.jupiter>5.7.0-M1</org.junit.jupiter>
         <org.projectlombok.version>1.18.12</org.projectlombok.version>
+        <org.zalando.problem.version>0.27.1</org.zalando.problem.version>
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PLUGINS CONFIGURATION
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -275,7 +279,7 @@
         <module>inugami_api</module>
         <module>inugami_api_core</module>
         <module>inugami_commons</module>
-        <module>inugami_commmons_spring</module>
+        <module>inugami_commons_spring</module>
         <module>inugami_commons_test</module>
         <module>inugami_monitoring</module>
         <module>inugami_configuration_tools</module>
@@ -358,7 +362,7 @@
 
             <dependency>
                 <groupId>io.inugami</groupId>
-                <artifactId>inugami_commmons_spring</artifactId>
+                <artifactId>inugami_commons_spring</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -529,7 +533,17 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.inugami.monitoring</groupId>
+                <artifactId>inugami_monitoring_spingboot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
+            <dependency>
+                <groupId>io.inugami.monitoring</groupId>
+                <artifactId>inugami_monitoring_springboot_activemq</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             :: IMPORT
             :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -638,6 +652,19 @@
                 <artifactId>jackson-databind</artifactId>
                 <version>${com.jackson-annotations.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-yaml</artifactId>
+                <version>${com.jackson-annotations.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>1.33</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.fasterxml.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-jsr310</artifactId>
@@ -716,8 +743,15 @@
             <dependency>
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
-                <version>${jaxb.version}</version>
+                <version>${com.sun.xml.bind.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>${org.glassfish.jaxb.version}</version>
+            </dependency>
+
+
             <dependency>
                 <groupId>javax.activation</groupId>
                 <artifactId>activation</artifactId>
@@ -834,9 +868,32 @@
             </dependency>
 
             <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-actuator</artifactId>
+                <version>${org.springframework.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-activemq</artifactId>
+                <version>${org.springframework.boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-oxm</artifactId>
+                <version>${org.springframework.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-beans</artifactId>
                 <version>${org.springframework.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.zalando</groupId>
+                <artifactId>problem</artifactId>
+                <version>${org.zalando.problem.version}</version>
             </dependency>
 
             <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -1157,7 +1214,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute />
+                                        <execute/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -1294,6 +1351,42 @@
                     <passphrase>${gpg.passphrase}</passphrase>
                 </configuration>
             </plugin>
+
+
+            <plugin>
+                <groupId>io.inugami.maven.plugin.lifecycle</groupId>
+                <artifactId>inugami-maven-lifecycle</artifactId>
+                <version>2.0.1</version>
+                <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.12.0</version>
+                <executions>
+                    <execution>
+                        <phase>deep-test</phase>
+                        <goals>
+                            <goal>mutationCoverage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <targetClasses>
+                        <param>io.inugami.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>io.inugami.*</param>
+                    </targetTests>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>1.1.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 
@@ -1329,5 +1422,6 @@
 
             </build>
         </profile>
+
     </profiles>
 </project>

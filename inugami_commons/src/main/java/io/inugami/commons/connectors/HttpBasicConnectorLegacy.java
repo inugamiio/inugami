@@ -84,14 +84,12 @@ public final class HttpBasicConnectorLegacy {
         do {
             try {
                 result = processGet(httpClient, realUrl, credentialsProvider, header);
-                error  = null;
+                error = null;
                 break;
-            }
-            catch (final Exception e) {
+            } catch (final Exception e) {
                 error = e;
                 THREAD_SLEEP.sleep();
-            }
-            finally {
+            } finally {
                 nbTry--;
             }
         }
@@ -110,11 +108,9 @@ public final class HttpBasicConnectorLegacy {
             result.toURI();
             return result;
 
-        }
-        catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
             throw new ConnectorBadUrException(e.getMessage(), e);
-        }
-        catch (URISyntaxException e) {
+        } catch (final URISyntaxException e) {
             throw new ConnectorBadUrException(e.getMessage(), e);
         }
     }
@@ -135,12 +131,11 @@ public final class HttpBasicConnectorLegacy {
                                           final Map<String, String> header,
                                           final RequestConfig requestConfig) throws ConnectorException {
         final HttpConnectorResultBuilder result = new HttpConnectorResultBuilder();
-        Asserts.notNull("url is required!", url);
+        Asserts.assertNotNull("url is required!", url);
         // verify url
         try {
             url.toURI();
-        }
-        catch (URISyntaxException e) {
+        } catch (final URISyntaxException e) {
             throw new ConnectorBadUrException(e.getMessage(), e);
         }
 
@@ -196,12 +191,10 @@ public final class HttpBasicConnectorLegacy {
             result.addData(
                     HttpBasicConnectorDelegateUtils.readData(content, httpEntity.getContentLength(), url.toString()));
 
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             handlingError("GET", String.valueOf(url), e);
             throw new ConnectorUndefinedCallException(e.getMessage(), e);
-        }
-        finally {
+        } finally {
             request.releaseConnection();
             chrono.stop();
             Loggers.PARTNERLOG.info("[{}ms][GET] call request:{}", chrono.getDelaisInMillis(), url);
@@ -214,8 +207,7 @@ public final class HttpBasicConnectorLegacy {
     static HttpGet buildHttpGet(final URL url) throws ConnectorException {
         try {
             return new HttpGet(url.toURI());
-        }
-        catch (URISyntaxException e) {
+        } catch (final URISyntaxException e) {
             throw new ConnectorBadUrException(e);
         }
     }
@@ -242,12 +234,10 @@ public final class HttpBasicConnectorLegacy {
 
         try {
             result = processPost(url, jsonData, currentHttpclient, header, credentialsProvider, requestConfig);
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             handlingError("POST", url, e);
             throw new ConnectorUndefinedCallException(e);
-        }
-        finally {
+        } finally {
             chrono.snapshot();
             Loggers.PARTNERLOG.info("[{}ms][POST] call request:{}", chrono.getDelaisInMillis(), url);
         }
@@ -271,8 +261,7 @@ public final class HttpBasicConnectorLegacy {
 
         try {
             result = processPost(url, urlEncodedData, currentHttpclient, header, credentialsProvider, requestConfig);
-        }
-        finally {
+        } finally {
             chrono.snapshot();
             Loggers.PARTNERLOG.info("[{}ms][POST] call request:{}", chrono.getDelaisInMillis(), url);
             HttpBasicConnectorDelegateUtils.close(httpclient);
@@ -321,8 +310,7 @@ public final class HttpBasicConnectorLegacy {
         request.setEntity(json);
         if (Loggers.PARTNERLOG.isDebugEnabled()) {
             Loggers.PARTNERLOG.info("[POST] call request:{} - {}", url, jsonData);
-        }
-        else {
+        } else {
             Loggers.PARTNERLOG.info("POST to url : {}", url);
         }
 
@@ -345,8 +333,7 @@ public final class HttpBasicConnectorLegacy {
         UrlEncodedFormEntity urlEncodedFormEntity = null;
         try {
             urlEncodedFormEntity = new UrlEncodedFormEntity(bodyParams);
-        }
-        catch (final UnsupportedEncodingException e) {
+        } catch (final UnsupportedEncodingException e) {
             Loggers.XLLOG.error("[POST] bodyParams:{}", bodyParams.toString());
         }
 
@@ -410,8 +397,7 @@ public final class HttpBasicConnectorLegacy {
                                                                                 realUrl.toString());
                 resultBuilder.addData(rawData);
             }
-        }
-        catch (final IOException | ConnectorException e) {
+        } catch (final IOException | ConnectorException e) {
             Loggers.DEBUG.error(e.getMessage(), e);
             Loggers.PARTNERLOG.error(e.getMessage() + " : " + url);
         }

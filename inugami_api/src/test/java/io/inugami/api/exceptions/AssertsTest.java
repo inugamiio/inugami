@@ -45,9 +45,9 @@ public class AssertsTest {
 
     @Test
     public void assertTrue__shouldThrow() {
-        List<VoidFunctionWithException> functions = List.of(
+        final List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertTrue(false),
-                () -> Asserts.assertTrue(MESSAGE,false),
+                () -> Asserts.assertTrue(MESSAGE, false),
                 () -> Asserts.assertTrue(MESSAGE_PRODUCER, false),
                 () -> Asserts.assertTrue(ERROR_CODE, false)
 
@@ -71,9 +71,9 @@ public class AssertsTest {
 
     @Test
     public void assertFalse__shouldThrow() {
-        List<VoidFunctionWithException> functions = List.of(
+        final List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertFalse(true),
-                () -> Asserts.assertFalse(MESSAGE,true),
+                () -> Asserts.assertFalse(MESSAGE, true),
                 () -> Asserts.assertFalse(MESSAGE_PRODUCER, true),
                 () -> Asserts.assertFalse(ERROR_CODE, true)
 
@@ -97,9 +97,9 @@ public class AssertsTest {
 
     @Test
     public void assertNull__shouldThrow() {
-        List<VoidFunctionWithException> functions = List.of(
+        final List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertNull(VALUE),
-                () -> Asserts.assertNull(MESSAGE,VALUE),
+                () -> Asserts.assertNull(MESSAGE, VALUE),
                 () -> Asserts.assertNull(MESSAGE_PRODUCER, VALUE),
                 () -> Asserts.assertNull(ERROR_CODE, VALUE)
 
@@ -109,6 +109,7 @@ public class AssertsTest {
             Asserts.assertThrow("assertNotNull__shouldThrow  " + i, () -> functions.get(index).process());
         }
     }
+
     // =========================================================================
     // assertNotNull
     // =========================================================================
@@ -122,7 +123,7 @@ public class AssertsTest {
 
     @Test
     public void assertNotNull__shouldThrow() {
-        List<VoidFunctionWithException> functions = List.of(
+        final List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertNotNull(VALUE, null),
                 () -> Asserts.assertNotNull(MESSAGE, VALUE, null),
                 () -> Asserts.assertNotNull(MESSAGE_PRODUCER, VALUE, null),
@@ -163,7 +164,7 @@ public class AssertsTest {
 
     @Test
     public void assertNotEmpty__shouldThrow() {
-        List<VoidFunctionWithException> functions = List.of(
+        final List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertNotEmpty(EMPTY_VALUE),
                 () -> Asserts.assertNotEmpty(MESSAGE, EMPTY_VALUE),
                 () -> Asserts.assertNotEmpty(MESSAGE_PRODUCER, EMPTY_VALUE),
@@ -229,7 +230,7 @@ public class AssertsTest {
 
     @Test
     public void assertEmpty__shouldThrow() {
-        List<VoidFunctionWithException> functions = List.of(
+        final List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertEmpty(VALUE),
                 () -> Asserts.assertEmpty(MESSAGE, VALUE),
                 () -> Asserts.assertEmpty(MESSAGE_PRODUCER, VALUE),
@@ -261,7 +262,7 @@ public class AssertsTest {
     // =========================================================================
     @Test
     public void assertEquals_shouldPass() {
-        Asserts.equalsObj(VALUE, VALUE);
+        Asserts.assertEquals(VALUE, VALUE);
         Asserts.assertEquals(VALUE, VALUE);
         Asserts.assertEquals(MESSAGE, VALUE, VALUE);
         Asserts.assertEquals(MESSAGE_PRODUCER, VALUE, VALUE);
@@ -290,8 +291,7 @@ public class AssertsTest {
 
     @Test
     public void assertEquals__shouldThrow() {
-        List<VoidFunctionWithException> functions = List.of(
-                () -> Asserts.equalsObj(REF, VALUE),
+        final List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertEquals(REF, VALUE),
                 () -> Asserts.assertEquals(MESSAGE, REF, VALUE),
                 () -> Asserts.assertEquals(MESSAGE_PRODUCER, REF, VALUE),
@@ -353,7 +353,7 @@ public class AssertsTest {
 
     @Test
     public void assertNotEquals__shouldThrow() {
-        List<VoidFunctionWithException> functions = List.of(
+        final List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertNotEquals(VALUE, VALUE),
                 () -> Asserts.assertNotEquals(MESSAGE, VALUE, VALUE),
                 () -> Asserts.assertNotEquals(MESSAGE_PRODUCER, VALUE, VALUE),
@@ -430,7 +430,7 @@ public class AssertsTest {
 
     @Test
     public void assertLower__shouldThrow() {
-        List<VoidFunctionWithException> functions = List.of(
+        final List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertLower(10, 11),
                 () -> Asserts.assertLower(10, 10),
                 () -> Asserts.assertLower(MESSAGE, 10, 11),
@@ -589,7 +589,7 @@ public class AssertsTest {
 
     @Test
     public void assertLowerOrEquals_shouldThrow() {
-        List<VoidFunctionWithException> functions = List.of(
+        final List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertLowerOrEquals(10, 11),
                 () -> Asserts.assertLowerOrEquals(MESSAGE, 10, 11),
                 () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, 10, 11),
@@ -684,7 +684,7 @@ public class AssertsTest {
 
     @Test
     public void assertHigher_shouldThrow() {
-        List<VoidFunctionWithException> functions = List.of(
+        final List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertHigher(10, 9),
                 () -> Asserts.assertHigher(10, 10),
                 () -> Asserts.assertHigher(MESSAGE, 10, 9),
@@ -845,7 +845,7 @@ public class AssertsTest {
 
     @Test
     public void assertHigherOrEquals_shouldThrow() {
-        List<VoidFunctionWithException> functions = List.of(
+        final List<VoidFunctionWithException> functions = List.of(
                 () -> Asserts.assertHigherOrEquals(10, 9),
                 () -> Asserts.assertHigherOrEquals(MESSAGE, 10, 9),
                 () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, 10, 9),
@@ -902,7 +902,7 @@ public class AssertsTest {
             Asserts.assertThrow("should throw", () -> {
             });
             throw new RuntimeException("Asserts.assertThrow should throw if no error occurs");
-        } catch (Exception error) {
+        } catch (final Exception error) {
         }
 
     }

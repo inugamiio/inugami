@@ -1,25 +1,20 @@
 /* --------------------------------------------------------------------
- *  Inugami  
+ *  Inugami
  * --------------------------------------------------------------------
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.core.context.runner;
-
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import io.inugami.api.alertings.AlertingResult;
 import io.inugami.api.exceptions.Asserts;
@@ -35,25 +30,30 @@ import io.inugami.api.providers.task.ProviderFutureResult;
 import io.inugami.configuration.models.plugins.Plugin;
 import io.inugami.core.context.Context;
 
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 /**
  * CallableSimpleEvent
- * 
+ *
  * @author patrick_guillerm
  * @since 9 août 2017
  */
 class CallableSimpleEventProcessor {
-    
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final Context            context;
-    
-    private final Plugin             plugin;
-    
-    private final long               timeout;
-    
+    private final Context context;
+
+    private final Plugin plugin;
+
+    private final long timeout;
+
     private final AlertingsProcessor alertingProcessor;
-    
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -63,7 +63,7 @@ class CallableSimpleEventProcessor {
         this.timeout = timeout;
         this.alertingProcessor = new AlertingsProcessor();
     }
-    
+
     // =========================================================================
     // METHODS
     // =========================================================================
@@ -74,38 +74,36 @@ class CallableSimpleEventProcessor {
         final Provider provider = context.getProvider(localEvent.getProvider().get());
         return callProvider(localEvent, provider);
     }
-    
+
     ProviderFutureResult callProvider(final SimpleEvent localEvent, final Provider provider) {
-        Asserts.notNull(localEvent);
+        Asserts.assertNotNull(localEvent);
         MetricsEvents.onStart(plugin.getGav(), localEvent.getName());
         ProviderFutureResult result = null;
-        
+
         final FutureData<ProviderFutureResult> future = provider.callEvent(localEvent, plugin.getGav());
-        
-        ProviderFutureResult data;
+
+        final ProviderFutureResult data;
         try {
             data = future.getFuture().get(timeout, TimeUnit.MILLISECONDS);
             result = this.callEventDone(data, localEvent);
-        }
-        catch (InterruptedException | ExecutionException | TimeoutException e) {
+        } catch (final InterruptedException | ExecutionException | TimeoutException e) {
             Loggers.PLUGINS.error("{} : {}", localEvent.getName(), e.getMessage());
             Loggers.DEBUG.error(e.getMessage(), e);
-        }
-        finally {
+        } finally {
             MetricsEvents.onStop(plugin.getGav(), localEvent.getName());
         }
-        
+
         JsonObject dataResult = null;
         if ((result != null) && result.getData().isPresent()) {
             dataResult = result.getData().get();
         }
-        
+
         final List<AlertingResult> alerts = alertingProcessor.computeAlerts(plugin.getGav(), localEvent, result);
-        
+
         return new EventCompositeResult(null, null, dataResult, localEvent, localEvent.getScheduler(),
                                         localEvent.getScheduler(), alerts);
     }
-    
+
     // =========================================================================
     // OVERRIDES
     // =========================================================================
@@ -116,5 +114,5 @@ class CallableSimpleEventProcessor {
         }
         return result;
     }
-    
+
 }

@@ -1,0 +1,12 @@
+[ {
+  "level" : "ERROR",
+  "loggerName" : "io.inugami.monitoring.springboot.exception.DefaultExceptionHandlerService",
+  "mdc" : {
+    "errorType" : "technical",
+    "errorCode" : "err-undefine",
+    "errorStatus" : "500",
+    "errorRollback" : "false",
+    "errorExploitationError" : "false",
+    "errorRetryable" : "false"
+  }
+} ]

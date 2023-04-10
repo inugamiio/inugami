@@ -12,7 +12,8 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.inugami.commons.test.UnitTestHelper.loadJsonReference;
+import static io.inugami.commons.test.UnitTestHelper.readFileRelative;
+
 
 @Slf4j
 public class ObfuscatorEncoderTest {
@@ -30,7 +31,7 @@ public class ObfuscatorEncoderTest {
         log.info("password=mySecretPassword");
         MdcService.getInstance().clear();
 
-        UnitTestHelper.assertText(logs, loadJsonReference("encoder/encode_nominal_shouldObfuscate.json"));
+        UnitTestHelper.assertText(logs, readFileRelative("encoder/encode_nominal_shouldObfuscate.json"));
         LogTestAppender.removeListener(listener);
     }
 }

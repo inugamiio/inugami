@@ -39,30 +39,38 @@ import java.util.stream.Collectors;
 @Getter
 public class Headers {
 
-    private String      correlationId;
-    private String      requestId;
-    private String      traceId;
-    private String      conversationId;
-    private String      token;
-    private String      deviceIdentifier;
-    private String      deviceType;
-    private String      deviceSystem;
+    private String correlationId;
+    private String requestId;
+    private String traceId;
+    private String conversationId;
+    private String token;
+    private String deviceIdentifier;
+    private String deviceType;
+    private String deviceSystem;
 
-    private String      deviceClass;
-    private String      deviceVersion;
-    private String      deviceOsVersion;
-    private String      deviceNetworkType;
-    private String      deviceNetworkSpeedDown;
-    private String      deviceNetworkSpeedUp;
-    private String      deviceNetworkSpeedLatency;
-    private String      deviceIp;
-    private String      userAgent;
-    private String      language;
-    private String      country;
+    private String deviceClass;
+    private String deviceVersion;
+    private String deviceOsVersion;
+    private String deviceNetworkType;
+    private String deviceNetworkSpeedDown;
+    private String deviceNetworkSpeedUp;
+    private String deviceNetworkSpeedLatency;
+    private String deviceIp;
+    private String userAgent;
+    private String language;
+    private String country;
+
+    private String      warning;
+    private String      errorCode;
+    private String      errorException;
+    private String      errorMessage;
+    private String      errorMessageDetail;
+    private String      frontVersion;
+    private String      callFrom;
     private Set<String> specificHeaders = new LinkedHashSet<>();
 
     public static Headers buildFromConfig(final ConfigHandler<String, String> configuration) {
-        Headers result = new Headers();
+        final Headers result = new Headers();
         result.refreshConfig(configuration);
         return result;
     }
@@ -71,6 +79,10 @@ public class Headers {
         return refreshConfig(new DefaultConfigHandler());
     }
 
+    /**
+     * @param configuration
+     * @return
+     */
     public Headers refreshConfig(final ConfigHandler<String, String> configuration) {
         correlationId = configuration.getOrDefault("inugami.monitoring.headers.correlationId", "x-correlation-id");
         requestId = configuration.getOrDefault("inugami.monitoring.headers.requestId", "x-b3-traceid");
@@ -91,6 +103,13 @@ public class Headers {
         userAgent = configuration.getOrDefault("inugami.monitoring.headers.userAgent", "User-Agent");
         language = configuration.getOrDefault("inugami.monitoring.headers.language", "Accept-Language");
         country = configuration.getOrDefault("inugami.monitoring.headers.country", "country");
+        warning = configuration.getOrDefault("inugami.monitoring.headers.warning", "Warning");
+        errorCode = configuration.getOrDefault("inugami.monitoring.headers.error.code", "errorCode");
+        errorException = configuration.getOrDefault("inugami.monitoring.headers.error.exception", "errorException");
+        errorMessage = configuration.getOrDefault("inugami.monitoring.headers.error.message", "errorMessage");
+        errorMessageDetail = configuration.getOrDefault("inugami.monitoring.headers.error.message.detail", "errorMessageDetail");
+        frontVersion = configuration.getOrDefault("inugami.monitoring.headers.front.version", "x-front-version");
+        callFrom = configuration.getOrDefault("inugami.monitoring.headers.front.application", "x-application");
 
 
         final String specifics = configuration.getOrDefault("inugami.monitoring.headers.specifics", "");
@@ -104,3 +123,4 @@ public class Headers {
         return this;
     }
 }
+

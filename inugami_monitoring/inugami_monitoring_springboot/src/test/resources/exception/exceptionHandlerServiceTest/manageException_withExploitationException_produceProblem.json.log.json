@@ -1,0 +1,31 @@
+[ {
+  "level" : "ERROR",
+  "loggerName" : "io.inugami.monitoring.springboot.exception.DefaultExceptionHandlerService",
+  "mdc" : {
+    "errorField" : "user.email",
+    "errorMessageDetail" : "invalid email address",
+    "errorCategory" : "user",
+    "errorType" : "technical",
+    "errorCode" : "ERR-0._0",
+    "errorStatus" : "500",
+    "errorRollback" : "false",
+    "errorExploitationError" : "true",
+    "errorRetryable" : "false"
+  }
+}, {
+  "level" : "ERROR",
+  "loggerName" : "XLLOG",
+  "mdc" : {
+    "errorUrl" : "http://inugami.io/wiki/inugami#ERR-0._0",
+    "errorField" : "user.email",
+    "errorMessageDetail" : "invalid email address",
+    "errorCategory" : "user",
+    "errorType" : "technical",
+    "errorCode" : "ERR-0._0",
+    "errorStatus" : "500",
+    "errorRollback" : "false",
+    "errorExploitationError" : "true",
+    "errorRetryable" : "false"
+  },
+  "message" : "null : invalid email address"
+} ]

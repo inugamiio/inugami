@@ -16,12 +16,7 @@
  */
 package io.inugami.core.providers.kibana;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import flexjson.JSONDeserializer;
 import io.inugami.api.exceptions.Asserts;
 import io.inugami.api.exceptions.services.ConnectorException;
 import io.inugami.api.loggers.Loggers;
@@ -35,7 +30,11 @@ import io.inugami.core.services.connectors.HttpConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import flexjson.JSONDeserializer;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * KibanaService
@@ -74,9 +73,9 @@ public class KibanaService {
 
     public KibanaService(final int maxCall, final int maxHitsInCall, final HttpConnector connector) {
         super();
-        this.maxCall       = maxCall == UNDEFINE_INT ? 400 : maxCall;
+        this.maxCall = maxCall == UNDEFINE_INT ? 400 : maxCall;
         this.maxHitsInCall = maxHitsInCall == UNDEFINE_INT ? 5000 : maxHitsInCall;
-        this.connector     = connector;
+        this.connector = connector;
     }
 
     // =========================================================================
@@ -105,7 +104,7 @@ public class KibanaService {
     }
 
     //@formatter:off
-    protected List<Hit> searchFromUrl(final String url, final String json, final Map<String, String> placeholder, final boolean aggregate, final KibanaHandler handler, final Writer writer) throws KibanaExcpetion{
+    protected List<Hit> searchFromUrl(final String url, final String json, final Map<String, String> placeholder, final boolean aggregate, final KibanaHandler handler, final Writer writer) throws KibanaExcpetion {
         //@formatter:on
         final List<Hit>                     result = new ArrayList<>();
         final ConfigHandler<String, String> config = new ConfigHandlerHashMap(placeholder);
@@ -130,8 +129,7 @@ public class KibanaService {
             if ((jsonData == null) || (jsonData.getHits() == null)) {
                 hasResult = false;
                 LOGGER.info("no result found!");
-            }
-            else {
+            } else {
                 writeAllHits(jsonData.getHits(), writer);
                 flushWriter(writer);
 
@@ -161,8 +159,7 @@ public class KibanaService {
         if (writer != null) {
             try {
                 writer.flush();
-            }
-            catch (final IOException e) {
+            } catch (final IOException e) {
                 Loggers.DEBUG.error(e.getMessage(), e);
                 Loggers.PARTNERLOG.error(e.getMessage());
             }
@@ -178,8 +175,7 @@ public class KibanaService {
                         final String jsonData = hit.convertToJson();
                         writer.write(jsonData.toCharArray());
                         writer.write("\n");
-                    }
-                    catch (final IOException e) {
+                    } catch (final IOException e) {
                         Loggers.DEBUG.error(e.getMessage(), e);
                         Loggers.PARTNERLOG.error(e.getMessage());
                     }
@@ -194,16 +190,14 @@ public class KibanaService {
 
         try {
             httpResult = connector.post(urlWithParam, data);
-        }
-        catch (final ConnectorException e) {
+        } catch (final ConnectorException e) {
             Loggers.PARTNERLOG.error(e.getMessage());
             LOGGER.error(e.getMessage(), e);
         }
 
         if ((httpResult != null) && (httpResult.getStatusCode() == 200)) {
             result = new String(httpResult.getData());
-        }
-        else {
+        } else {
             LOGGER.error("Error on calling kibana : response code : {}",
                          httpResult == null ? "null" : String.valueOf(httpResult.getStatusCode()));
         }
@@ -215,7 +209,7 @@ public class KibanaService {
     // APPLY PROPERTIES
     // =========================================================================
     private String addUrlParam(final String url, final int step, final int size) {
-        Asserts.notNull(url);
+        Asserts.assertNotNull(url);
         final StringBuilder result = new StringBuilder(url);
         if (!url.contains("?")) {
             result.append('?');

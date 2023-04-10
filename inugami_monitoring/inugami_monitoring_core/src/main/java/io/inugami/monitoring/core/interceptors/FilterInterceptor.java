@@ -16,24 +16,6 @@
  */
 package io.inugami.monitoring.core.interceptors;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.lang.reflect.Proxy;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import io.inugami.api.configurtation.ConfigurationSpiFactory;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.listeners.ApplicationLifecycleSPI;
 import io.inugami.api.loggers.Loggers;
@@ -45,7 +27,6 @@ import io.inugami.api.monitoring.exceptions.ErrorResult;
 import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.api.monitoring.models.Headers;
 import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.processors.DefaultConfigHandler;
 import io.inugami.api.spi.SpiLoader;
 import io.inugami.api.tools.CalendarTools;
 import io.inugami.monitoring.api.exceptions.ExceptionResolver;
@@ -56,6 +37,16 @@ import io.inugami.monitoring.core.context.MonitoringBootstrap;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Proxy;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 
@@ -80,7 +71,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     private List<Interceptable>          interceptableResolver   = null;
 
     private              List<ExceptionResolver>           exceptionResolver            = null;
-    private              List<MonitoringFilterInterceptor> monitoringFilterInterceptors = null;
+    private              List<MonitoringFilterInterceptor> monitoringFilterInterceptors = new ArrayList<>();
     private              ConfigHandler<String, String>     configuration;
     private final static Map<String, Boolean>              INTERCEPTABLE_URI_RESOLVED   = new ConcurrentHashMap<>();
     private final static int                               KILO                         = 1024;
@@ -110,7 +101,32 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         javaRestMethodTrackers = SpiLoader.getInstance().loadSpiServicesByPriority(JavaRestMethodTracker.class);
         interceptableResolver = SpiLoader.getInstance().loadSpiServicesByPriority(Interceptable.class);
         exceptionResolver = SpiLoader.getInstance().loadSpiServicesByPriority(ExceptionResolver.class, new FilterInterceptorErrorResolver());
-        monitoringFilterInterceptors = SpiLoader.getInstance().loadSpiServicesByPriority(MonitoringFilterInterceptor.class);
+
+
+        monitoringFilterInterceptors = new ArrayList<>();
+        for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
+            monitoringFilterInterceptors.add(interceptor);
+        }
+
+        final List<MonitoringFilterInterceptor> monitoringFilterInterceptorsSpi = SpiLoader.getInstance().loadSpiServicesByPriority(MonitoringFilterInterceptor.class);
+        for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptorsSpi) {
+            if (isNotContains(interceptor, MonitoringBootstrap.getContext().getInterceptors())) {
+                monitoringFilterInterceptors.add(interceptor);
+            }
+        }
+    }
+
+    private boolean isNotContains(final MonitoringFilterInterceptor interceptor, final List<MonitoringFilterInterceptor> monitoringFilterInterceptors) {
+        final boolean result = true;
+        if (monitoringFilterInterceptors == null) {
+            return result;
+        }
+        for (final MonitoringFilterInterceptor monitoringInterceptor : monitoringFilterInterceptors) {
+            if (interceptor.getClass() == monitoringInterceptor.getClass()) {
+                return false;
+            }
+        }
+        return result;
     }
 
     // =========================================================================
@@ -159,6 +175,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         final RequestInformation requestInfo = RequestInformationInitializer.buildRequestInformation(
                 httpRequest, headers);
 
+        initCorrelationIdAndTraceId(requestInfo);
         final JavaRestMethodDTO javaRestMethod = resolveJavaRestMethod(request);
         addTrackingInformation(response, requestInfo, javaRestMethod);
 
@@ -180,16 +197,22 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         }
     }
 
+    private void initCorrelationIdAndTraceId(final RequestInformation requestInfo) {
+        MdcService.getInstance()
+                  .correlationId(requestInfo.getCorrelationId())
+                  .traceId(requestInfo.getTraceId());
+    }
+
     private JavaRestMethodDTO resolveJavaRestMethod(final ServletRequest request) {
-        JavaRestMethodDTO  result      = null;
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        for (JavaRestMethodResolver resolver : javaRestMethodResolvers) {
+        JavaRestMethodDTO        result      = null;
+        final HttpServletRequest httpRequest = (HttpServletRequest) request;
+        for (final JavaRestMethodResolver resolver : javaRestMethodResolvers) {
             try {
                 result = resolver.resolve(httpRequest);
                 if (result != null) {
                     break;
                 }
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
                 log.error(e.getMessage(), e);
             }
         }
@@ -205,13 +228,13 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         applyIfNotNull(requestInfo.getDeviceIdentifier(),
                        value -> response.setHeader(headers.getDeviceIdentifier(), value));
         applyIfNotNull(requestInfo.getCorrelationId(), value -> response.setHeader(headers.getCorrelationId(), value));
-        applyIfNotNull(requestInfo.getConversationId(),
-                       value -> response.setHeader(headers.getConversationId(), value));
-        applyIfNotNull(requestInfo.getRequestId(), value -> response.setHeader(headers.getRequestId(), value));
+
+        response.setHeader(headers.getConversationId(), MdcService.getInstance().correlationId());
+        response.setHeader(headers.getRequestId(), MdcService.getInstance().traceId());
 
 
         if (javaRestMethod != null) {
-            for (JavaRestMethodTracker tracker : javaRestMethodTrackers) {
+            for (final JavaRestMethodTracker tracker : javaRestMethodTrackers) {
                 if (tracker.accept(javaRestMethod)) {
                     tracker.track(javaRestMethod);
                 }
@@ -258,21 +281,11 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         final ResquestData requestData = convertToRequestData(httpRequest, response, content);
         onBeginInitMdcFields(requestData, httpRequest);
 
-        for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
+        for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptors) {
             try {
                 interceptor.onBegin(requestData);
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
                 log.error(e.getMessage(), e);
-            }
-        }
-
-        if (monitoringFilterInterceptors != null) {
-            for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptors) {
-                try {
-                    interceptor.onBegin(requestData);
-                } catch (Throwable e) {
-                    log.error(e.getMessage(), e);
-                }
             }
         }
     }
@@ -283,23 +296,17 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         RequestInformationInitializer.appendResponseHeaderInformation(httpResponse);
         RequestContext.getInstance();
         onEndInitMdcFields(error, duration, httpResponse);
+        MdcService.getInstance().duration(duration)
+                  .status(httpResponse.getStatus());
 
         final ResquestData requestData  = convertToRequestData(httpRequest, httpResponse, content);
         final ResponseData responseData = convertToResponseData(httpRequest, httpResponse, duration);
-        for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
+
+        for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptors) {
             try {
                 interceptor.onDone(requestData, responseData, error);
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
                 log.error(e.getMessage(), e);
-            }
-        }
-        if (monitoringFilterInterceptors != null) {
-            for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptors) {
-                try {
-                    interceptor.onDone(requestData, responseData, error);
-                } catch (Throwable e) {
-                    log.error(e.getMessage(), e);
-                }
             }
         }
     }
@@ -312,7 +319,6 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         try {
             mdc.setMdc(MdcService.MDCKeys.callType, MdcService.CALL_TYPE_REST);
             mdc.setMdc(MdcService.MDCKeys.uri, requestData.getUri());
-
             mdc.setMdc(MdcService.MDCKeys.verb, httpRequest.getMethod());
             mdc.setMdc(MdcService.MDCKeys.sessionId, httpRequest.getRequestedSessionId());
             mdc.setMdc(MdcService.MDCKeys.authProtocol, httpRequest.getAuthType());
@@ -321,7 +327,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
                 mdc.setMdc(MdcService.MDCKeys.principal, httpRequest.getUserPrincipal().getName());
             }
             mdc.setMdc(MdcService.MDCKeys.url, httpRequest.getRequestURL().toString());
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
         }
 
     }
@@ -335,7 +341,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             if (error != null && error.getCurrentErrorCode() != null) {
                 mdc.errorCode(error.getCurrentErrorCode());
             }
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
         }
     }
 
@@ -390,10 +396,10 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     private ResponseData convertToResponseData(final HttpServletRequest httpRequest, final ResponseWrapper httpResponse, final long duration) {
         final String content = ObfuscatorTools.applyObfuscators(httpResponse.getData());
 
-        Map<String, String> hearders = new LinkedHashMap<>();
+        final Map<String, String> hearders = new LinkedHashMap<>();
 
         final Collection<String> headerNames = httpResponse.getHeaderNames();
-        for (String key : headerNames) {
+        for (final String key : headerNames) {
             hearders.put(key, httpResponse.getHeader(key));
         }
         return ResponseData.builder()
@@ -418,7 +424,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             for (final ExceptionResolver resolver : exceptionResolver) {
                 try {
                     result = resolver.resolve(error);
-                } catch (Throwable e) {
+                } catch (final Throwable e) {
                     log.error(e.getMessage(), e);
                 }
 

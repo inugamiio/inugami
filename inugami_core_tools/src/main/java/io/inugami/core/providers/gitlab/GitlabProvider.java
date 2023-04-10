@@ -1,24 +1,20 @@
 /* --------------------------------------------------------------------
- *  Inugami  
+ *  Inugami
  * --------------------------------------------------------------------
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.core.providers.gitlab;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 import io.inugami.api.exceptions.Asserts;
 import io.inugami.api.exceptions.services.ProviderException;
@@ -41,28 +37,32 @@ import io.inugami.core.providers.gitlab.models.GitlabMergeRequest;
 import io.inugami.core.providers.gitlab.models.GitlabMergeRequests;
 import io.inugami.core.services.connectors.HttpConnector;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 public class GitlabProvider extends AbstractProvider implements Provider, ProviderWithHttpConnector {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final String                    TYPE               = "GITLAB";
-    
-    private static final String                    CONFIG_GITLAB_HOST = "host.gitlab";
-    
-    private static final String                    CONFIG_REALM       = "realm";
-    
-    private static final String                    CONFIG_API_VERSION = "apiVersion";
-    
+    private static final String TYPE = "GITLAB";
+
+    private static final String CONFIG_GITLAB_HOST = "host.gitlab";
+
+    private static final String CONFIG_REALM = "realm";
+
+    private static final String CONFIG_API_VERSION = "apiVersion";
+
     private final FutureData<ProviderFutureResult> futureDataRef;
-    
-    private final String                           url;
-    
-    private final int                              timeout;
-    
-    private final ConfigHandler<String, String>    config;
-    
-    private final HttpConnector                    httpConnector;
-    
+
+    private final String url;
+
+    private final int timeout;
+
+    private final ConfigHandler<String, String> config;
+
+    private final HttpConnector httpConnector;
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -70,7 +70,7 @@ public class GitlabProvider extends AbstractProvider implements Provider, Provid
                           final ProviderRunner providerRunner) {
         super(classBehavior, config, providerRunner);
         this.config = config;
-        
+
         final StringBuilder builder = new StringBuilder();
         builder.append(config.grab(CONFIG_REALM));
         builder.append("://");
@@ -79,17 +79,17 @@ public class GitlabProvider extends AbstractProvider implements Provider, Provid
         builder.append(config.grab(CONFIG_API_VERSION));
         builder.append("/projects/");
         url = builder.toString();
-        
+
         timeout = Integer.parseInt(config.optionnal().grabOrDefault(CONFIG_TIMEOUT, "5000"));
-        
+
         final ContextSPI ctx = SpiLoader.getInstance().loadSpiSingleService(ContextSPI.class);
         //@formatter:off
         httpConnector = ctx.getHttpConnector(classBehavior.getName(),
-                                                  getMaxConnections(config,   5),
-                                                  getTimeout(config,          6000),
-                                                  getTTL(config,              50),
-                                                  getMaxPerRoute(config,      10),
-                                                  getSocketTimeout(config,    60000));
+                                             getMaxConnections(config, 5),
+                                             getTimeout(config, 6000),
+                                             getTTL(config, 50),
+                                             getMaxPerRoute(config, 10),
+                                             getSocketTimeout(config, 60000));
         //@formatter:off
         futureDataRef = FutureDataBuilder.buildDefaultFuture(timeout);
     }
@@ -100,12 +100,12 @@ public class GitlabProvider extends AbstractProvider implements Provider, Provid
     }
 
     @Override
-    public long getTimeout(){
+    public long getTimeout() {
         return timeout;
     }
 
     @Override
-    public ConfigHandler<String,String> getConfig(){
+    public ConfigHandler<String, String> getConfig() {
         return config;
     }
 
@@ -115,7 +115,7 @@ public class GitlabProvider extends AbstractProvider implements Provider, Provid
     @Override
     public <T extends SimpleEvent> FutureData<ProviderFutureResult> callEvent(final T event, final Gav pluginGav) {
         final ProviderTask providerTask = new GitlabProviderTask(event, url, getName(), httpConnector,
-                config, pluginGav, timeout);
+                                                                 config, pluginGav, timeout);
         return runTask(providerTask, event, futureDataRef);
     }
 
@@ -128,40 +128,40 @@ public class GitlabProvider extends AbstractProvider implements Provider, Provid
         final List<GitlabMergeRequest> resultData = new ArrayList<>();
         //@formatter:off
         data.stream()
-                .filter(this::validResultWithData)
-                .map(this::toGitlabMergeRequests)
-                .map(GitlabMergeRequests::getMergeRequests)
-                .forEach(resultData::addAll);
+            .filter(this::validResultWithData)
+            .map(this::toGitlabMergeRequests)
+            .map(GitlabMergeRequests::getMergeRequests)
+            .forEach(resultData::addAll);
         //@formatter:on
-        
+
         final GitlabMergeRequests gitlabData = new GitlabMergeRequests(resultData);
         return new ProviderFutureResultBuilder().addData(gitlabData).build();
     }
-    
+
     private GitlabMergeRequests toGitlabMergeRequests(final ProviderFutureResult item) {
         return (GitlabMergeRequests) item.getData().orElse(null);
     }
-    
+
     private void assertDataType(final List<ProviderFutureResult> datas) throws ProviderException {
         //@formatter:off
         final Optional<ProviderFutureResult> anInvalidResult = datas.stream()
-                                                            .filter(this::validResultWithData)
-                                                            .filter(this::notGitlabMergeRequests)
-                                                            .findAny();
+                                                                    .filter(this::validResultWithData)
+                                                                    .filter(this::notGitlabMergeRequests)
+                                                                    .findAny();
         //@formatter:on
-        
+
         if (anInvalidResult.isPresent()) {
             throw new ProviderException("can't aggregate unknow data type : {0}",
                                         anInvalidResult.get().getData().getClass().getName());
         }
     }
-    
+
     private boolean validResultWithData(final ProviderFutureResult item) {
         return !item.getException().isPresent() && item.getData().isPresent();
     }
-    
+
     private boolean notGitlabMergeRequests(final ProviderFutureResult item) {
-        Asserts.isTrue(item.getData().isPresent());
+        Asserts.assertTrue(item.getData().isPresent());
         return !(item.getData().get() instanceof GitlabMergeRequests);
     }
 }

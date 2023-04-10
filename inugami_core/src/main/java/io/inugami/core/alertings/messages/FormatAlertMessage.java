@@ -16,13 +16,13 @@
  */
 package io.inugami.core.alertings.messages;
 
-import java.util.List;
-
 import io.inugami.api.alertings.AlertingResult;
 import io.inugami.api.exceptions.Asserts;
 import io.inugami.api.exceptions.MessagesFormatter;
 import io.inugami.api.spi.SpiLoader;
 import io.inugami.commons.messages.MessagesServices;
+
+import java.util.List;
 
 /**
  * FormatAlertMessage
@@ -65,7 +65,7 @@ public final class FormatAlertMessage {
         final String template = MessagesServices.getMessage(key);
 
         final AlertMessageDataExtractorSPI extractor = resolveExtractor(key, alert);
-        Asserts.notNull(extractor);
+        Asserts.assertNotNull(extractor);
         final List<String> data = extractor.extract(key, alert);
 
         return data == null ? value : MessagesFormatter.format(template, data.toArray());
@@ -74,7 +74,7 @@ public final class FormatAlertMessage {
     private static AlertMessageDataExtractorSPI resolveExtractor(final String key, final AlertingResult alert) {
         AlertMessageDataExtractorSPI result = null;
         final List<AlertMessageDataExtractorSPI> extractors = SpiLoader.getInstance().loadSpiServicesWithDefault(AlertMessageDataExtractorSPI.class,
-                                                                                                    DEFAULT_DATA_EXCTRACTOR);
+                                                                                                                 DEFAULT_DATA_EXCTRACTOR);
 
         for (final AlertMessageDataExtractorSPI extractor : extractors) {
             if (extractor.accept(key, alert)) {

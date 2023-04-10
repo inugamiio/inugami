@@ -44,7 +44,7 @@ public class ProviderWithConfig implements Provider {
     // =========================================================================
     public ProviderWithConfig(final ConfigHandler<String, String> config) {
         test = config.grab("test");
-        Asserts.notNull(test);
+        Asserts.assertNotNull(test);
     }
 
     // =========================================================================

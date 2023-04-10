@@ -16,12 +16,6 @@
  */
 package io.inugami.configuration.services;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import io.inugami.api.exceptions.Asserts;
 import io.inugami.api.listeners.ApplicationLifecycleSPI;
 import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
@@ -35,6 +29,12 @@ import io.inugami.api.tools.ConfigTemplateValues;
 import io.inugami.api.tools.TemplateProviderSPI;
 import io.inugami.configuration.services.functions.FunctionsServices;
 import io.inugami.configuration.services.functions.ProviderAttributFunction;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * ConfigHandlerService
@@ -97,7 +97,8 @@ public class ConfigHandlerHashMap extends HashMap<String, String>
         this(convertToMap(configs));
     }
 
-    public void onContextRefreshed(Object event) {
+    @Override
+    public void onContextRefreshed(final Object event) {
         template = SpiLoader.getInstance().loadSpiServiceByPriority(TemplateProviderSPI.class, new ConfigTemplateValues());
     }
 
@@ -248,7 +249,7 @@ public class ConfigHandlerHashMap extends HashMap<String, String>
     @Override
     public <T> T grabJson(final String key, final Object jsonObj, final JsonUnmarshalling unmarshaller) {
         final T result = optional.grabJson(key, unmarshaller);
-        Asserts.notNull(result);
+        Asserts.assertNotNull(result);
         return result;
     }
 
@@ -279,7 +280,7 @@ public class ConfigHandlerHashMap extends HashMap<String, String>
     }
 
     protected String getValueMandatory(final String message, final String key) {
-        Asserts.notNull("Key mustn't be null! (" + serviceName + ")", key);
+        Asserts.assertNotNull("Key mustn't be null! (" + serviceName + ")", key);
         final String result = get(key);
         assertNotNull(message, key, result);
         return applyProperties(result);

@@ -36,7 +36,7 @@ public class TestFileUtils {
     // METHODS
     // =========================================================================
     public byte[] readFromClassLoader(final String resourceName) throws TechnicalException {
-        Asserts.notNull(resourceName);
+        Asserts.assertNotNull(resourceName);
 
         final InputStream resource = this.getClass().getClassLoader().getResourceAsStream(resourceName);
         if (resource == null) {
@@ -52,8 +52,7 @@ public class TestFileUtils {
             while ((length = resource.read(buffer)) != -1) {
                 result.write(buffer, 0, length);
             }
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             throw new FileUtilsException(e.getMessage(), e);
         }
 

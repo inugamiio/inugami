@@ -1,110 +1,109 @@
 /* --------------------------------------------------------------------
- *  Inugami  
+ *  Inugami
  * --------------------------------------------------------------------
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.configuration.models.app;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import io.inugami.api.constants.JvmKeyValues;
 import io.inugami.api.exceptions.Asserts;
 import io.inugami.api.exceptions.TechnicalException;
 import io.inugami.api.functionnals.PostProcessing;
 import io.inugami.api.processors.ConfigHandler;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * RoleMappeurConfig
- * 
+ *
  * @author patrick_guillerm
  * @since 15 déc. 2017
  */
 @XStreamAlias("role")
 public class RoleMappeurConfig implements Serializable, PostProcessing<ConfigHandler<String, String>> {
-    
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final long   serialVersionUID = 7212233398463837059L;
-    
+    private static final long serialVersionUID = 7212233398463837059L;
+
     @XStreamAsAttribute
-    private String              name;
-    
+    private String name;
+
     @XStreamAsAttribute
-    private int                 level;
-    
+    private int level;
+
     @XStreamImplicit
     private List<MatcherConfig> matchers;
-    
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
     public RoleMappeurConfig() {
         super();
     }
-    
-    public RoleMappeurConfig(String name, int level) {
+
+    public RoleMappeurConfig(final String name, final int level) {
         super();
         this.name = name;
         this.level = level;
     }
-    
+
     // =========================================================================
     // OVERRIDES
     // =========================================================================
     @Override
-    public void postProcessing(ConfigHandler<String, String> ctx) throws TechnicalException {
-        Asserts.notNull("Role name is mandatory!", name);
+    public void postProcessing(final ConfigHandler<String, String> ctx) throws TechnicalException {
+        Asserts.assertNotNull("Role name is mandatory!", name);
         //@formatter:off
-        level    = Integer.parseInt(ctx.applyProperties(JvmKeyValues.SECURITY_ROLES.or(name.concat(".level"), level)));
+        level = Integer.parseInt(ctx.applyProperties(JvmKeyValues.SECURITY_ROLES.or(name.concat(".level"), level)));
         //@formatter:on  
         if (matchers != null) {
-            for (MatcherConfig matcher : matchers) {
+            for (final MatcherConfig matcher : matchers) {
                 matcher.postProcessing(ctx);
             }
         }
     }
-    
+
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
+        final int prime  = 31;
+        int       result = 1;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
-    
+
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         boolean result = this == obj;
-        
+
         if (!result && obj != null && obj instanceof RoleMappeurConfig) {
             final RoleMappeurConfig other = (RoleMappeurConfig) obj;
             result = name == null ? other.getName() == null : name.equals(other.getName());
         }
-        
+
         return result;
     }
-    
+
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append("RoleMappeurConfig [name=");
         builder.append(name);
         builder.append(", level=");
@@ -114,31 +113,31 @@ public class RoleMappeurConfig implements Serializable, PostProcessing<ConfigHan
         builder.append("]");
         return builder.toString();
     }
-    
+
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================
     public String getName() {
         return name;
     }
-    
-    public void setName(String name) {
+
+    public void setName(final String name) {
         this.name = name;
     }
-    
+
     public int getLevel() {
         return level;
     }
-    
-    public void setLevel(int level) {
+
+    public void setLevel(final int level) {
         this.level = level;
     }
-    
+
     public List<MatcherConfig> getMatchers() {
         return matchers;
     }
-    
-    public RoleMappeurConfig addMatcher(MatcherConfig matcher) {
+
+    public RoleMappeurConfig addMatcher(final MatcherConfig matcher) {
         if (matchers == null) {
             matchers = new ArrayList<>();
         }
@@ -147,9 +146,9 @@ public class RoleMappeurConfig implements Serializable, PostProcessing<ConfigHan
         }
         return this;
     }
-    
-    public void setMatchers(List<MatcherConfig> matchers) {
+
+    public void setMatchers(final List<MatcherConfig> matchers) {
         this.matchers = matchers;
     }
-    
+
 }
