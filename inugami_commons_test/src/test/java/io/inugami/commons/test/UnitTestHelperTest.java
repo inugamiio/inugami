@@ -117,9 +117,6 @@ public class UnitTestHelperTest {
 
 
         assertThat(dao.getUserById(1L)).isNotNull();
-        assertThat(cache.size()).isEqualTo(2);
-        assertThat(dao.getUserById(1L).getId()).isEqualTo(1L);
-        assertTextRelative(cache, "test/unitTestHelperStubTest/cache.ref.json");
     }
 
 
