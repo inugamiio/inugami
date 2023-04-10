@@ -9,11 +9,14 @@ import io.inugami.commons.spring.exception.ExceptionHandlerService;
 import io.inugami.monitoring.springboot.api.ProblemAdditionalFieldBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,8 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@Component
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @ControllerAdvice
 public class DefaultExceptionHandlerService implements ExceptionHandlerService {
 
@@ -45,11 +50,15 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
     public static final  String VERSION        = "version";
     private static final String CONTENT_TYPE   = "Content-Type";
 
-    private final String applicationName;
-    private final String applicationVersion;
-    private final String wikiPage;
+    @Value("${application.name:#{null}}")
+    private String applicationName;
+    @Value("${application.version:#{null}}")
+    private String applicationVersion;
+    @Value("${application.wiki:#{null}}")
+    private String wikiPage;
 
-    private final boolean showAllDetail;
+    @Value("${inugami.monitoring.exception.show.detail.enabled:#{true}}")
+    private boolean showAllDetail;
 
     private List<ProblemAdditionalFieldBuilder> problemAdditionalFieldBuilders;
     private List<ErrorCodeResolver>             errorCodeResolvers;

@@ -1,6 +1,5 @@
 package io.inugami.monitoring.springboot.config;
 
-import io.inugami.commons.spring.exception.ExceptionHandlerService;
 import io.inugami.monitoring.springboot.actuator.FailSafeStatusAggregator;
 import io.inugami.monitoring.springboot.exception.SpringDefaultErrorCodeResolver;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ public class InugamiMonitoringConfigTest {
         assertThat(config.springDefaultErrorCodeResolver()).isInstanceOf(SpringDefaultErrorCodeResolver.class);
     }
 
-
+/*
     @Test
     public void exceptionHandlerService_nominal() {
         final InugamiMonitoringConfig config  = new InugamiMonitoringConfig();
@@ -27,6 +26,8 @@ public class InugamiMonitoringConfigTest {
         assertThat(service).isNotNull();
         assertThat(service).isInstanceOf(ExceptionHandlerService.class);
     }
+
+ */
 
     @Test
     public void versionHealthIndicator_nominal() {

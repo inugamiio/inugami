@@ -51,13 +51,19 @@ public class UnitTestHelper {
     // =========================================================================
     // LOAD / READ FILE
     // =========================================================================
-    public static String loadJsonReference(final String relativePath) {
+
+    public static String readRelativeFile(final String relativePath) {
         if (relativePath == null) {
             throw new RuntimeException("can't read file from null relative path!");
         }
 
         final File path = buildTestFilePath(relativePath.split("/"));
         return path.exists() ? readFile(path) : null;
+    }
+
+    @Deprecated
+    public static String loadJsonReference(final String relativePath) {
+        return readRelativeFile(relativePath);
     }
 
     public static String readFile(final File file) {

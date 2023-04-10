@@ -21,14 +21,12 @@ import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.api.monitoring.models.Headers;
 import io.inugami.api.monitoring.models.Monitoring;
 import io.inugami.commons.spring.configuration.ConfigConfiguration;
-import io.inugami.commons.spring.exception.ExceptionHandlerService;
 import io.inugami.monitoring.core.context.MonitoringBootstrap;
 import io.inugami.monitoring.core.context.MonitoringContext;
 import io.inugami.monitoring.core.interceptors.spi.IoLogInterceptor;
 import io.inugami.monitoring.core.interceptors.spi.MdcInterceptor;
 import io.inugami.monitoring.springboot.actuator.FailSafeStatusAggregator;
 import io.inugami.monitoring.springboot.actuator.VersionHealthIndicator;
-import io.inugami.monitoring.springboot.exception.DefaultExceptionHandlerService;
 import io.inugami.monitoring.springboot.exception.SpringDefaultErrorCodeResolver;
 import io.inugami.monitoring.springboot.filter.IoLogFilter;
 import io.inugami.monitoring.springboot.request.SpringRestMethodResolver;
@@ -46,12 +44,14 @@ import java.util.function.Consumer;
 
 @Import({
         IoLogFilter.class,
-        SpringRestMethodResolver.class
+        SpringRestMethodResolver.class,
+        ConfigConfiguration.class
 })
 @Slf4j
 @Configuration
 public class InugamiMonitoringConfig {
-    private MonitoringBootstrap monitoringBootstrap;
+    public static final String              INUGAMI_MONITORING_CONFIG = "io.inugami.monitoring.springboot";
+    private             MonitoringBootstrap monitoringBootstrap;
 
 
     // ========================================================================
@@ -78,22 +78,6 @@ public class InugamiMonitoringConfig {
     @Bean
     public ErrorCodeResolver springDefaultErrorCodeResolver() {
         return new SpringDefaultErrorCodeResolver();
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "inugami.monitoring.exception.enabled", havingValue = "true", matchIfMissing = true)
-    public ExceptionHandlerService exceptionHandlerService(@Value("${application.name:#{null}}") final String applicationName,
-                                                           @Value("${application.version:#{null}}") final String applicationVersion,
-                                                           @Value("${application.wiki:#{null}}") final String applicationWiki,
-                                                           @Value("${inugami.monitoring.exception.show.detail.enabled:#{null}") final String showDetail) {
-
-
-        return DefaultExceptionHandlerService.builder()
-                                             .applicationName(applicationName)
-                                             .applicationVersion(applicationVersion)
-                                             .wikiPage(applicationWiki)
-                                             .showAllDetail(showDetail == null ? true : Boolean.parseBoolean(showDetail))
-                                             .build();
     }
 
 

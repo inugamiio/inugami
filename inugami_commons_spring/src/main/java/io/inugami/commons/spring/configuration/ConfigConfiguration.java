@@ -1,6 +1,8 @@
 package io.inugami.commons.spring.configuration;
 
 import io.inugami.api.processors.ConfigHandler;
+import io.inugami.commons.marshaling.XmlJaxbMarshallerSpi;
+import io.inugami.commons.marshaling.XmlJaxbMarshallerSpiFactory;
 import io.inugami.configuration.services.ConfigHandlerHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +20,7 @@ public class ConfigConfiguration {
         return CONFIGURATION;
     }
 
-    public static void initializeConfig(ConfigurableEnvironment resolver) {
+    public static void initializeConfig(final ConfigurableEnvironment resolver) {
 
         initializeConfig(resolver,
                          SpringConfigBinding.builder()
@@ -84,8 +86,8 @@ public class ConfigConfiguration {
     }
 
     static void initializeConfig(final ConfigurableEnvironment resolver,
-                                 SpringConfigBinding... bindings) {
-        for (SpringConfigBinding binding : bindings) {
+                                 final SpringConfigBinding... bindings) {
+        for (final SpringConfigBinding binding : bindings) {
             final String value = orDefault(binding.getSpringKey(),
                                            binding.getDefaultValue() == null ? "" : binding.getDefaultValue(),
                                            resolver);
@@ -99,11 +101,16 @@ public class ConfigConfiguration {
         String value = null;
         try {
             value = resolver.getProperty(key);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             if (log.isDebugEnabled()) {
                 log.error(e.getMessage(), e);
             }
         }
         return value == null ? defaultValue : value;
+    }
+
+    @Bean
+    public XmlJaxbMarshallerSpi xmlJaxbMarshallerSpi() {
+        return XmlJaxbMarshallerSpiFactory.getInstance();
     }
 }

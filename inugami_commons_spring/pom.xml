@@ -23,8 +23,8 @@
     <!-- =======================================================================
     = PROJECT
     ======================================================================== -->
-    <artifactId>inugami_commmons_spring</artifactId>
-    <url>http://inugami.io/inugami/inugami_commmons_spring</url>
+    <artifactId>inugami_commons_spring</artifactId>
+    <url>http://inugami.io/inugami/inugami_commons_spring</url>
 
     <!-- =======================================================================
     = DEPENDENCIES

@@ -1,0 +1,2 @@
+io.inugami.commons.marshaling.jaxb.LocalDateAdapter
+io.inugami.commons.marshaling.jaxb.LocalDateTimeAdapter

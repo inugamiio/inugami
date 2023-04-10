@@ -22,13 +22,19 @@
     <!-- ======================================================================= 
     = PROJECT
     ======================================================================== -->
-    <artifactId>inugami_monitoring_spingboot</artifactId>
-    <url>http://inugami.io/inugami/inugami_monitoring_spingboot</url>
+    <artifactId>inugami_monitoring_springboot_activemq</artifactId>
+    <url>http://inugami.io/inugami/inugami_monitoring_springboot_activemq</url>
 
     <!-- =======================================================================
     = DEPENDENCIES
     ======================================================================== -->
     <dependencies>
+
+        <dependency>
+            <groupId>io.inugami</groupId>
+            <artifactId>inugami_commons</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>io.inugami</groupId>
             <artifactId>inugami_commons_spring</artifactId>
@@ -40,31 +46,18 @@
         </dependency>
 
         <dependency>
-            <groupId>io.inugami.monitoring.providers</groupId>
-            <artifactId>inugami_monitoring_providers_log</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-jackson</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.zalando</groupId>
-            <artifactId>problem</artifactId>
+            <groupId>io.inugami.monitoring</groupId>
+            <artifactId>inugami_monitoring_spingboot</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <artifactId>spring-boot-starter-activemq</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-oxm</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>io.inugami</groupId>

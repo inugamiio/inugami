@@ -38,6 +38,7 @@
         <module>inugami_monitoring_providers</module>
         <module>inugami_monitoring_core</module>
         <module>inugami_monitoring_springboot</module>
+        <module>inugami_monitoring_springboot_activemq</module>
         <module>inugami_monitoring_distributions</module>
     </modules>
 

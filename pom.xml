@@ -239,8 +239,9 @@
         <!--[ Data base drivers ]++++++++++++++++++++++++++++++++++++++++++++-->
         <com.h2database.h2.version>2.1.210</com.h2database.h2.version>
 
-
+        <com.sun.xml.bind.version>4.0.2</com.sun.xml.bind.version>
         <jaxb.version>2.3.0</jaxb.version>
+        <org.glassfish.jaxb.version>2.3.2</org.glassfish.jaxb.version>
         <javax.activation.version>1.1.1</javax.activation.version>
 
         <!--[ Others ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
@@ -278,7 +279,7 @@
         <module>inugami_api</module>
         <module>inugami_api_core</module>
         <module>inugami_commons</module>
-        <module>inugami_commmons_spring</module>
+        <module>inugami_commons_spring</module>
         <module>inugami_commons_test</module>
         <module>inugami_monitoring</module>
         <module>inugami_configuration_tools</module>
@@ -361,7 +362,7 @@
 
             <dependency>
                 <groupId>io.inugami</groupId>
-                <artifactId>inugami_commmons_spring</artifactId>
+                <artifactId>inugami_commons_spring</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -538,6 +539,11 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.inugami.monitoring</groupId>
+                <artifactId>inugami_monitoring_springboot_activemq</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             :: IMPORT
             :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -737,8 +743,15 @@
             <dependency>
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
-                <version>${jaxb.version}</version>
+                <version>${com.sun.xml.bind.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>${org.glassfish.jaxb.version}</version>
+            </dependency>
+
+
             <dependency>
                 <groupId>javax.activation</groupId>
                 <artifactId>activation</artifactId>
@@ -858,6 +871,17 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-actuator</artifactId>
                 <version>${org.springframework.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-activemq</artifactId>
+                <version>${org.springframework.boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-oxm</artifactId>
+                <version>${org.springframework.version}</version>
             </dependency>
 
             <dependency>
