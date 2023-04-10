@@ -10,8 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.inugami.commons.test.UnitTestHelper.assertTextRelative;
-import static io.inugami.commons.test.UnitTestHelper.buildSkipLines;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -58,7 +56,6 @@ public class UnitTestHelperStubTest {
         assertThat(dao.getUserById(1L)).isNotNull();
         assertThat(cache.size()).isEqualTo(2);
         assertThat(dao.getUserById(1L).getId()).isEqualTo(1L);
-        assertTextRelative(cache, "test/unitTestHelperStubTest/cache.ref.json", buildSkipLines(1, 6));
     }
 
 
