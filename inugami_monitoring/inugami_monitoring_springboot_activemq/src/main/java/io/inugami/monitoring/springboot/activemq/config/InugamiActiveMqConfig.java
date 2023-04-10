@@ -2,16 +2,21 @@ package io.inugami.monitoring.springboot.activemq.config;
 
 import io.inugami.commons.marshaling.jaxb.JaxbAdapterSpi;
 import io.inugami.commons.marshaling.jaxb.JaxbClassRegister;
+import io.inugami.monitoring.springboot.activemq.iolog.MonitoredJmsListenerContainerFactory;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MarshallingMessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
+import org.springframework.jms.support.converter.MessageType;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -21,7 +26,7 @@ import java.util.Set;
 
 @Configuration
 public class InugamiActiveMqConfig {
-
+    public static final String FACTORY = "inugamiFactory";
 
     @ConditionalOnMissingBean
     @Bean
@@ -48,6 +53,15 @@ public class InugamiActiveMqConfig {
         jmsTemplate.setPubSubDomain(true);
         jmsTemplate.setMessageConverter(messageConvertor);
         return jmsTemplate;
+    }
+
+    @Bean
+    public JmsListenerContainerFactory<?> inugamiFactory(final ActiveMQConnectionFactory connectionFactory,
+                                                         final DefaultJmsListenerContainerFactoryConfigurer configurer,
+                                                         final MessageConverter messageConverter) {
+        final DefaultJmsListenerContainerFactory factory = new MonitoredJmsListenerContainerFactory();
+        configurer.configure(factory, connectionFactory);
+        return factory;
     }
 
     @ConditionalOnProperty(name = "inugami.monitoring.activemq.marshalling.jaxb.enabled", havingValue = "true", matchIfMissing = true)
@@ -78,6 +92,8 @@ public class InugamiActiveMqConfig {
             converter.setAdapters(adaptersToRegister.toArray(new XmlAdapter<?, ?>[]{}));
         }
 
-        return new MarshallingMessageConverter(converter);
+        final MarshallingMessageConverter result = new MarshallingMessageConverter(converter);
+        result.setTargetType(MessageType.TEXT);
+        return result;
     }
 }
