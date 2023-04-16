@@ -4,9 +4,21 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
+import static io.inugami.commons.test.UnitTestHelperException.assertThrows;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class UnitTestHelperFileTest {
+
+    @Test
+    public void readFileIntegration() {
+        final String value = UnitTestHelperFile.readFileIntegration("test/UnitTestHelperFile/readFileIntegration.txt");
+        assertThat(value).isEqualTo("hello");
+    }
+
+    @Test
+    public void readFileIntegration_withError() {
+        assertThrows(() -> UnitTestHelperFile.readFileIntegration("test/UnitTestHelperFile/readFileIntegration.notExists.txt"));
+    }
 
     @Test
     public void readFileRelative_nominal() {
@@ -16,9 +28,9 @@ public class UnitTestHelperFileTest {
 
     @Test
     public void readFileRelative_withNullValue_shouldThrow() {
-        UnitTestHelperException.assertThrows(RuntimeException.class,
-                                             "can't read file from null relative path!",
-                                             () -> UnitTestHelperFile.readFileRelative(null));
+        assertThrows(RuntimeException.class,
+                     "can't read file from null relative path!",
+                     () -> UnitTestHelperFile.readFileRelative(null));
     }
 
 

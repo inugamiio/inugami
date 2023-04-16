@@ -1,0 +1,22 @@
+[ {
+  "level" : "INFO",
+  "loggerName" : "io.inugami.commons.test.logs.LogTestAppenderTest",
+  "mdc" : {
+    "appMethod" : "register_nominal"
+  },
+  "message" : "hello the world"
+}, {
+  "level" : "INFO",
+  "loggerName" : "io.inugami.commons.test.logs.LogTestAppenderTest",
+  "mdc" : {
+    "appMethod" : "register_nominal"
+  },
+  "message" : "some value : Hello"
+}, {
+  "level" : "INFO",
+  "loggerName" : "DEBUGLOG",
+  "mdc" : {
+    "appMethod" : "register_nominal"
+  },
+  "message" : "debug information"
+} ]

@@ -1,0 +1,8 @@
+[ {
+  "level" : "INFO",
+  "loggerName" : "DEBUGLOG",
+  "mdc" : {
+    "appMethod" : "register_nominal"
+  },
+  "message" : "debug information"
+} ]

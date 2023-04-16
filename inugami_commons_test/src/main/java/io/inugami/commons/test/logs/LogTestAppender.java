@@ -2,11 +2,7 @@ package io.inugami.commons.test.logs;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.OutputStreamAppender;
-import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import ch.qos.logback.core.encoder.Encoder;
-import ch.qos.logback.core.spi.FilterReply;
-import ch.qos.logback.core.status.ErrorStatus;
-import ch.qos.logback.core.status.WarnStatus;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -36,7 +32,7 @@ public class LogTestAppender extends OutputStreamAppender<ILoggingEvent> {
     }
 
     @Override
-    public void doAppend(ILoggingEvent eventObject) {
+    public void doAppend(final ILoggingEvent eventObject) {
         append(eventObject);
     }
 
@@ -44,7 +40,7 @@ public class LogTestAppender extends OutputStreamAppender<ILoggingEvent> {
     protected void append(final ILoggingEvent iLoggingEvent) {
         final BasicLogEvent event = buildEvent(iLoggingEvent);
 
-        for (Map.Entry<Integer, LogListener> listener : LISTENERS.entrySet()) {
+        for (final Map.Entry<Integer, LogListener> listener : LISTENERS.entrySet()) {
             if (listener.getValue().accept(event.getLoggerName())) {
                 listener.getValue().append(event);
             }
@@ -57,8 +53,7 @@ public class LogTestAppender extends OutputStreamAppender<ILoggingEvent> {
         final Encoder<ILoggingEvent> currentEncoder = getEncoder();
         if (currentEncoder == null) {
             message = event.getFormattedMessage();
-        }
-        else {
+        } else {
             final byte[] rawMessage = currentEncoder.encode(event);
             message = new String(rawMessage, StandardCharsets.UTF_8);
         }
@@ -75,7 +70,7 @@ public class LogTestAppender extends OutputStreamAppender<ILoggingEvent> {
         final Map<String, Serializable> result = new LinkedHashMap<>();
 
         if (mdc != null) {
-            for (Map.Entry<String, String> entry : mdc.entrySet()) {
+            for (final Map.Entry<String, String> entry : mdc.entrySet()) {
                 if (entry.getValue() != null) {
                     result.put(entry.getKey(), entry.getValue());
                 }
@@ -83,7 +78,7 @@ public class LogTestAppender extends OutputStreamAppender<ILoggingEvent> {
         }
 
         if (mdcPropertyMap != null) {
-            for (Map.Entry<String, String> entry : mdcPropertyMap.entrySet()) {
+            for (final Map.Entry<String, String> entry : mdcPropertyMap.entrySet()) {
                 if (entry.getValue() != null) {
                     result.put(entry.getKey(), entry.getValue());
                 }
