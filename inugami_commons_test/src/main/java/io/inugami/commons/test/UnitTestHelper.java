@@ -54,6 +54,10 @@ public class UnitTestHelper {
         return UnitTestHelperFile.readFile(file);
     }
 
+    public static void fileCacheClean() {
+        UnitTestHelperFile.cacheClean();
+    }
+
     // =========================================================================
     // BUILD PATH
     // =========================================================================
