@@ -45,6 +45,8 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     private final boolean rollback;
     private final String  payload;
     private final String  category;
+    private final String  domain;
+    private final String  subDomain;
     private final String  url;
     private final boolean exploitationError;
 
@@ -79,7 +81,10 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
                      .retryable(errorCode.isRetryable())
                      .rollback(errorCode.isRollbackRequire())
                      .category(errorCode.getCategory())
-                     .field(errorCode.getField());
+                     .field(errorCode.getField())
+                     .url(errorCode.getUrl())
+                     .domain(errorCode.getDomain())
+                     .subDomain(errorCode.getSubDomain());
     }
 
     public static DefaultErrorCode.DefaultErrorCodeBuilder newBuilder() {
@@ -113,12 +118,12 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
             return this;
         }
 
-        public DefaultErrorCodeBuilder exploitationError(boolean value) {
+        public DefaultErrorCodeBuilder exploitationError(final boolean value) {
             this.exploitationError = value;
             return this;
         }
 
-        public DefaultErrorCodeBuilder addMessageDetail(String message, Object... values) {
+        public DefaultErrorCodeBuilder addMessageDetail(final String message, final Object... values) {
             if (message != null) {
                 this.messageDetail = MessagesFormatter.format(message, values);
             }
@@ -186,7 +191,7 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
 
     @Override
     public boolean isRollbackRequire() {
-        return retryable;
+        return rollback;
     }
 
     @Override
@@ -203,5 +208,16 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
     public String getUrl() {
         return url;
     }
+
+    @Override
+    public String getDomain() {
+        return domain;
+    }
+
+    @Override
+    public String getSubDomain() {
+        return subDomain;
+    }
+
 
 }
