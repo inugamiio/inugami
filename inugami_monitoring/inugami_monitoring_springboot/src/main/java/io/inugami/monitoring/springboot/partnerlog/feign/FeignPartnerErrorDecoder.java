@@ -5,14 +5,15 @@ import feign.codec.ErrorDecoder;
 import io.inugami.api.exceptions.DefaultErrorCode;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.exceptions.MessagesFormatter;
-import io.inugami.api.exceptions.UncheckedException;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.monitoring.MdcService;
 import io.inugami.api.monitoring.models.IoInfoDTO;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@Getter
 @RequiredArgsConstructor
 public class FeignPartnerErrorDecoder implements ErrorDecoder {
     private final List<FeignPartnerErrorResolver> errorResolvers;
@@ -21,16 +22,16 @@ public class FeignPartnerErrorDecoder implements ErrorDecoder {
 
     @Override
     public Exception decode(final String methodKey, final Response response) {
-        final long now             = System.currentTimeMillis();
-        final long callDate        = FeignCommon.resolveCallDate(response);
-        Response   wrappedResponse = FeignCommon.wrapResponse(response);
-        IoInfoDTO  ioInfo          = FeignCommon.buildInfo(wrappedResponse, now - callDate);
+        final long      now             = System.currentTimeMillis();
+        final long      callDate        = FeignCommon.resolveCallDate(response);
+        final Response  wrappedResponse = FeignCommon.wrapResponse(response);
+        final IoInfoDTO ioInfo          = FeignCommon.buildInfo(wrappedResponse, now - callDate);
 
         final String feignClient = response.request().requestTemplate().feignTarget().name();
         final String urlTemplate = response.request().requestTemplate().methodMetadata().configKey();
 
-        FeignPartnerErrorResolver resolver  = resolveFeignPartnerErrorResolver(wrappedResponse, feignClient, urlTemplate);
-        final ErrorCode           errorCode = resolveErrorCode(resolver, wrappedResponse, feignClient, urlTemplate);
+        final FeignPartnerErrorResolver resolver  = resolveFeignPartnerErrorResolver(wrappedResponse, feignClient, urlTemplate);
+        final ErrorCode                 errorCode = resolveErrorCode(resolver, wrappedResponse, feignClient, urlTemplate);
 
         MdcService.getInstance()
                   .ioinfoPartner(ioInfo)
@@ -46,7 +47,7 @@ public class FeignPartnerErrorDecoder implements ErrorDecoder {
     }
 
     private Exception buildException(final ErrorCode errorCode, final FeignPartnerErrorResolver resolver) {
-        Exception result = resolver.buildException(errorCode);
+        final Exception result = resolver.buildException(errorCode);
         return result == null ? defaultResolver.buildException(errorCode) : result;
     }
 
@@ -54,7 +55,7 @@ public class FeignPartnerErrorDecoder implements ErrorDecoder {
     private FeignPartnerErrorResolver resolveFeignPartnerErrorResolver(final Response wrappedResponse, final String feignClient, final String urlTemplate) {
         FeignPartnerErrorResolver result = null;
         if (errorResolvers != null) {
-            for (FeignPartnerErrorResolver resolver : errorResolvers) {
+            for (final FeignPartnerErrorResolver resolver : errorResolvers) {
                 if (resolver.accept(wrappedResponse, feignClient, urlTemplate)) {
                     result = resolver;
                     break;
