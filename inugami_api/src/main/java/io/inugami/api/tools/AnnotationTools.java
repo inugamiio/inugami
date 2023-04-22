@@ -21,8 +21,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AnnotationTools {
@@ -169,5 +173,103 @@ public final class AnnotationTools {
             }
         }
         return result;
+    }
+
+    public static <T> List<Method> extractGetters(final T instance) {
+        final List<Method>      result      = new ArrayList<>();
+        Field[]                 fields      = null;
+        Class<? extends Object> objectClass = null;
+        if (instance != null) {
+            objectClass = instance.getClass();
+            fields = objectClass.getDeclaredFields();
+        }
+
+        if (fields != null) {
+            final Method[] methods = objectClass.getDeclaredMethods();
+
+            for (final Field field : fields) {
+                final Method method = searchGetterMethod(field, methods);
+                if (method != null) {
+                    result.add(method);
+                }
+            }
+        }
+        return result;
+    }
+
+    private static Method searchGetterMethod(final Field field, final Method[] methods) {
+        String methodName = "";
+        if (field.getType() == boolean.class) {
+            methodName = "is" + field.getName();
+        } else {
+            methodName = "get" + field.getName();
+        }
+
+        for (final Method method : methods) {
+            if (method.getName().equalsIgnoreCase(methodName) && method.getParameterCount() == 0) {
+                return method;
+            }
+        }
+        return null;
+    }
+
+    private static Method searchSetterMethod(final Field field, final Method[] methods) {
+        final String methodName = "set" + field.getName();
+        for (final Method method : methods) {
+            if (method.getName().equalsIgnoreCase(methodName) && method.getParameterCount() == 1) {
+                return method;
+            }
+        }
+        return null;
+    }
+
+    public static <T> List<FieldGetterSetter> extractFieldGetterAndSetter(final T instance) {
+        final List<FieldGetterSetter> result = new ArrayList<>();
+
+        if (instance != null) {
+            final Class<? extends Object> objectClass = instance.getClass();
+            final Field[]                 fields      = objectClass.getDeclaredFields();
+            for (final Field field : fields) {
+                final FieldGetterSetter info = extractFieldInfo(field, objectClass, instance);
+                if (info != null) {
+                    result.add(info);
+                }
+            }
+        }
+        return result;
+    }
+
+    private static <T> FieldGetterSetter extractFieldInfo(final Field field, final Class<?> objectClass, final T instance) {
+        if (isInvalidField(field)) {
+            return null;
+        }
+
+        field.setAccessible(true);
+        Object currentValue = null;
+
+        try {
+            currentValue = field.get(instance);
+        } catch (final Throwable e) {
+        }
+        if (currentValue == null) {
+            return null;
+        }
+        final Method[] methods = objectClass.getDeclaredMethods();
+        final Method   getter  = searchGetterMethod(field, methods);
+        final Method   setter  = searchSetterMethod(field, methods);
+
+        if (getter == null || setter == null) {
+            return null;
+        }
+        return FieldGetterSetter.builder()
+                                .field(field)
+                                .value(currentValue)
+                                .getter(getter)
+                                .setter(setter)
+                                .build();
+    }
+
+    private static boolean isInvalidField(final Field field) {
+        return Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers());
     }
 }

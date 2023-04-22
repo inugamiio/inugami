@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.commons.test.api.LineMatcher;
+import io.inugami.commons.test.dto.AssertDtoContext;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.mockito.invocation.InvocationOnMock;
@@ -256,6 +257,10 @@ public class UnitTestHelper {
 
     public static LineMatcher[] buildSkipLines(final int... skipLines) {
         return UnitTestHelperText.buildSkipLines(skipLines);
+    }
+
+    public static void assertDto(final AssertDtoContext context) {
+        UnitTestHelperDto.assertDto(context);
     }
 
     // =========================================================================
