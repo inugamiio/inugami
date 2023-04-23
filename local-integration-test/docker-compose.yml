@@ -1,0 +1,47 @@
+version: "3"
+services:
+  activeMq:
+    image: rmohr/activemq
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+    expose:
+      - 61616
+      - 8161
+  elasticsearch:
+    image: nshou/elasticsearch-kibana
+    ports:
+      - "9200:9200"
+      - "5601:5601"
+    expose:
+      - 9200
+      - 5601
+    networks:
+      - inugami
+
+
+  logstash:
+    image: logstash:7.8.1
+    ports:
+      - "5044:5044"
+      - "4045:4045"
+      - "9600:9600"
+      - "5054:5054"
+
+    expose:
+      - 5044
+      - 4045
+      - 9600
+      - 5054
+    volumes:
+      - "./logstash:/usr/share/logstash/pipeline"
+    links:
+      - "elasticsearch"
+    networks:
+      - inugami
+
+
+
+networks:
+  inugami:
+    driver: bridge

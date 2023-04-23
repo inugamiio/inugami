@@ -50,6 +50,7 @@ public class HttpRequest {
     private CloseableHttpClient httpclient;
     private RequestConfig       requestConfig;
     private ConnectorListener   listener;
+    private boolean             disableListener;
 
     // =========================================================================
     // BUILDER

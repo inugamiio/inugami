@@ -49,6 +49,8 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
@@ -336,7 +338,7 @@ class HttpBasicConnectorDelegateUtils {
                 }
             }
         }
-        return null;
+        return json == null ? null : new StringEntity(json, ContentType.APPLICATION_JSON);
     }
 
 

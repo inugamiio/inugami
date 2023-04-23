@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="json" class="io.inugami.logs.obfuscator.appender.JsonAppender">
+        <configuration>
+            <encodeAsJson>true</encodeAsJson>
+            <mode>logstash</mode>
+            <host>http://localhost:5054</host>
+            <additionalFields>
+                {
+                "additionalField":"test"
+                }
+            </additionalFields>
+        </configuration>
+    </appender>
+    <appender name="ASYNC_JSON" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="json"/>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{dd/MM HH:mm:ss}]|%logger|%-5level|%thread|%msg\n</pattern>
+        </encoder>
+    </appender>
+    <appender name="ASYNC_STDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="STDOUT"/>
+    </appender>
+
+    <logger name="io.inugami">
+        <level value="INFO"/>
+    </logger>
+    <logger name="org.springframework">
+        <level value="INFO"/>
+    </logger>
+    <logger name="org.apache.activemq">
+        <level value="INFO"/>
+    </logger>
+
+    <logger name="org.apache.http">
+        <level value="OFF"/>
+    </logger>
+
+    <logger name="org.eclipse.jetty">
+        <level value="WARN"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+
+    <root level="DEBUG">
+        <appender-ref ref="ASYNC_STDOUT"/>
+        <appender-ref ref="ASYNC_JSON"/>
+    </root>
+
+</configuration>
