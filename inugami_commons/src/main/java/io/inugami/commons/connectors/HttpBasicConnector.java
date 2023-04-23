@@ -594,7 +594,9 @@ public class HttpBasicConnector {
                                                     request.getBody()))
                                             .build();
 
-        currentRequest = callListenersOnBeforeCalling(currentRequest, request.getListener());
+        if (!request.isDisableListener()) {
+            currentRequest = callListenersOnBeforeCalling(currentRequest, request.getListener());
+        }
 
 
         for (int i = retry; i >= 0; i--) {
@@ -605,15 +607,20 @@ public class HttpBasicConnector {
                                                                    .httpclient(httpclient)
                                                                    .build());
                 exception = null;
-                if (stepResult.getStatusCode() < 400) {
-                    callListenerOnDone(request.getListener(), stepResult);
-                    break;
-                } else {
-                    callListenerOnError(request.getListener(), stepResult);
+                if (!request.isDisableListener()) {
+                    if (stepResult.getStatusCode() < 400) {
+                        callListenerOnDone(request.getListener(), stepResult);
+                        break;
+                    } else {
+                        callListenerOnError(request.getListener(), stepResult);
+                    }
                 }
 
+
             } catch (final ConnectorException error) {
-                callListenerOnError(request.getListener(), error);
+                if (!request.isDisableListener()) {
+                    callListenerOnError(request.getListener(), error);
+                }
 
                 if (error instanceof ConnectorRetryableException) {
                     exception = error;
@@ -745,6 +752,9 @@ public class HttpBasicConnector {
     private void invokeListenersOnProcessCalling(final ConnectorListener listener,
                                                  final HttpRequest request,
                                                  final HttpConnectorResult result) {
+        if (request.isDisableListener()) {
+            return;
+        }
         invokeListener(listener, l -> l.processCalling(request, result));
         for (final ConnectorListener listenerSpi : CONNECTOR_LISTENERS) {
             invokeListener(listenerSpi, l -> l.processCalling(request, result));
@@ -752,6 +762,7 @@ public class HttpBasicConnector {
     }
 
     private void callListenerOnDone(final ConnectorListener listener, final HttpConnectorResult stepResult) {
+
         if (listener != null) {
             invokeVoidListener(listener, l -> l.onDone(stepResult));
         }

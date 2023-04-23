@@ -4,6 +4,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import io.inugami.logs.obfuscator.appender.writer.AppenderWriterStrategy;
 import io.inugami.logs.obfuscator.appender.writer.FileWriter;
+import io.inugami.logs.obfuscator.appender.writer.LogstashWriter;
 import io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder;
 
 import java.io.IOException;
@@ -12,8 +13,9 @@ import java.util.List;
 public class JsonAppender extends ConsoleAppender<ILoggingEvent> {
     private Configuration configuration;
 
-    private List<AppenderWriterStrategy> WRITERS = List.of(
+    private final List<AppenderWriterStrategy> WRITERS = List.of(
             new FileWriter(),
+            new LogstashWriter(),
             (event) -> this.superWriteOut(event)
     );
 
@@ -43,7 +45,7 @@ public class JsonAppender extends ConsoleAppender<ILoggingEvent> {
         if (this.isStarted()) {
             try {
                 writer.write(iLoggingEvent);
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
             }
         }
     }
@@ -51,7 +53,7 @@ public class JsonAppender extends ConsoleAppender<ILoggingEvent> {
 
     private AppenderWriterStrategy resolveWriter(final Configuration configuration) {
         AppenderWriterStrategy result = null;
-        for (AppenderWriterStrategy writer : WRITERS) {
+        for (final AppenderWriterStrategy writer : WRITERS) {
             if (writer.accept(configuration)) {
                 result = writer;
                 break;
@@ -63,7 +65,7 @@ public class JsonAppender extends ConsoleAppender<ILoggingEvent> {
     private void superWriteOut(final ILoggingEvent event) {
         try {
             this.writeOut(event);
-        } catch (IOException e) {
+        } catch (final IOException e) {
         }
     }
 

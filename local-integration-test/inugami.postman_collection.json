@@ -1,0 +1,76 @@
+{
+	"info": {
+		"_postman_id": "2835b758-933c-4a9a-9a6d-a4eb964f82ba",
+		"name": "inugami",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6890148"
+	},
+	"item": [
+		{
+			"name": "elasticsearch",
+			"item": [
+				{
+					"name": "elastic search health",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5054",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5054"
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "logstash",
+			"item": [
+				{
+					"name": "send log to logstash",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "ContentType",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"useCase\":\"test\",\"threadName\":\"ActiveMQ Task-1\",\"loggerName\":\"org.apache.activemq.thread.TaskRunnerFactory\",\"level\":\"DEBUG\",\"levelPriority\":10000,\"timestamp\":1682239759857,\"date\":\"2023-04-23T08:49:19.858125847\",\"message\":\"Initialized TaskRunnerFactory[ActiveMQ Task] using ExecutorService: java.util.concurrent.ThreadPoolExecutor@65bb9f5c[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0]\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5054",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5054"
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -16,10 +16,27 @@
  */
 package io.inugami.api.exceptions;
 
+import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 public interface ErrorCode {
 
+
+    String STATUS_CODE        = "statusCode";
+    String ERROR_CODE         = "errorCode";
+    String MESSAGE            = "message";
+    String MESSAGE_DETAIL     = "messageDetail";
+    String ERROR_TYPE         = "errorType";
+    String PAYLOAD            = "payload";
+    String EXPLOITATION_ERROR = "exploitationError";
+    String ROLLBACK           = "rollback";
+    String RETRYABLE          = "retryable";
+    String FIELD              = "field";
+    String URL                = "url";
+    String DOMAIN             = "domain";
+    String SUB_DOMAIN         = "subDomain";
 
     public ErrorCode getCurrentErrorCode();
 
@@ -51,9 +68,18 @@ public interface ErrorCode {
     }
 
 
+    default String getDomain() {
+        return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getDomain();
+    }
+
+    default String getSubDomain() {
+        return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getSubDomain();
+    }
+
     default String getPayload() {
         return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getPayload();
     }
+
     default String getUrl() {
         return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getUrl();
     }
@@ -71,10 +97,10 @@ public interface ErrorCode {
         return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getErrorHandler();
     }
 
-    default ErrorCode addDetail(final String detail, Object... values) {
+    default ErrorCode addDetail(final String detail, final Object... values) {
         return toBuilder().addMessageDetail(detail, values).build();
     }
-    
+
     default String getCategory() {
         return getCurrentErrorCode() == null ? null : getCurrentErrorCode().getCategory();
     }
@@ -88,11 +114,28 @@ public interface ErrorCode {
         DefaultErrorCode.DefaultErrorCodeBuilder builder = null;
         if (getCurrentErrorCode() == null) {
             builder = DefaultErrorCode.fromErrorCode(DefaultErrorCode.buildUndefineError());
-        }
-        else {
+        } else {
             builder = DefaultErrorCode.fromErrorCode(getCurrentErrorCode());
         }
         return builder;
     }
 
+    default Map<String, Serializable> toMap() {
+        final Map<String, Serializable> result = new LinkedHashMap<>();
+        result.put(STATUS_CODE, getStatusCode());
+        result.put(ERROR_CODE, getErrorCode());
+        result.put(MESSAGE, getMessage());
+        result.put(MESSAGE_DETAIL, getMessageDetail());
+        result.put(ERROR_TYPE, getErrorType());
+        result.put(PAYLOAD, getPayload());
+        result.put(EXPLOITATION_ERROR, isExploitationError());
+        result.put(ROLLBACK, isRollbackRequire());
+        result.put(RETRYABLE, isRetryable());
+        result.put(FIELD, getField());
+        result.put(URL, getUrl());
+        result.put(DOMAIN, getDomain());
+        result.put(SUB_DOMAIN, getSubDomain());
+        return result;
+    }
 }
+

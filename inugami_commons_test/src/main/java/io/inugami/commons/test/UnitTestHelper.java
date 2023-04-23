@@ -17,8 +17,10 @@
 package io.inugami.commons.test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.commons.test.api.LineMatcher;
+import io.inugami.commons.test.dto.AssertDtoContext;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.mockito.invocation.InvocationOnMock;
@@ -52,6 +54,10 @@ public class UnitTestHelper {
 
     public static String readFile(final String file) {
         return UnitTestHelperFile.readFile(file);
+    }
+
+    public static void fileCacheClean() {
+        UnitTestHelperFile.cacheClean();
     }
 
     // =========================================================================
@@ -186,6 +192,43 @@ public class UnitTestHelper {
     }
 
     // =========================================================================
+    // YAML
+    // =========================================================================
+    public static <T> T loadRelativeYaml(final String path, final Class<? extends T> objectType) {
+        return UnitTestHelperYaml.loadRelativeYaml(path, objectType);
+    }
+
+    public static JsonNode loadRelativeYaml(final String path) {
+        return UnitTestHelperYaml.loadRelativeYaml(path);
+    }
+
+
+    public static <T> T loadIntegrationYaml(final String path, final Class<? extends T> objectType) {
+        return UnitTestHelperYaml.loadIntegrationYaml(path, objectType);
+    }
+
+    public static JsonNode loadIntegrationYaml(final String path) {
+        return UnitTestHelperYaml.loadIntegrationYaml(path);
+    }
+
+    public static <T> T loadYaml(final String path, final Class<? extends T> objectType) {
+        return UnitTestHelperYaml.loadYaml(path, objectType);
+    }
+
+    public static JsonNode loadYaml(final String path) {
+        return UnitTestHelperYaml.loadYaml(path);
+    }
+
+    public static <T> T convertFromYaml(final String content, final Class<? extends T> userDtoClass) {
+        return UnitTestHelperYaml.convertFromYaml(content, userDtoClass);
+    }
+
+
+    public static JsonNode convertFromYaml(final String content) {
+        return UnitTestHelperYaml.convertFromYaml(content);
+    }
+
+    // =========================================================================
     // TEXT
     // =========================================================================
     public static void assertTextIntegration(final String value, final String path, final LineMatcher... lineMatchers) {
@@ -214,6 +257,10 @@ public class UnitTestHelper {
 
     public static LineMatcher[] buildSkipLines(final int... skipLines) {
         return UnitTestHelperText.buildSkipLines(skipLines);
+    }
+
+    public static void assertDto(final AssertDtoContext context) {
+        UnitTestHelperDto.assertDto(context);
     }
 
     // =========================================================================

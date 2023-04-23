@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ReflectionUtils {
@@ -42,4 +44,19 @@ public final class ReflectionUtils {
     }
 
 
+    public static <T> List<Method> extractGetters(final T instance) {
+        return AnnotationTools.extractGetters(instance);
+    }
+
+    public static void sortMethods(final List<Method> methods) {
+        if (methods != null) {
+            Collections.sort(methods, (ref, val) -> {
+                return ref.getName().compareTo(val.getName());
+            });
+        }
+    }
+
+    public static <T> List<FieldGetterSetter> extractFieldGetterAndSetter(final T instance) {
+        return AnnotationTools.extractFieldGetterAndSetter(instance);
+    }
 }
