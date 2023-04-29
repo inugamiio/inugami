@@ -288,7 +288,11 @@ public class UnitTestHelper {
     }
 
     public static void assertThrows(final ErrorCode errorCode, final ExecutableFunction handler) {
-        UnitTestHelperException.assertThrows(errorCode, handler);
+        UnitTestHelperException.assertThrows(errorCode, handler, null);
+    }
+
+    public static void assertThrows(final ErrorCode errorCode, final ExecutableFunction handler, final String path) {
+        UnitTestHelperException.assertThrows(errorCode, handler, path);
     }
 
     public static void throwException(final Exception error) {

@@ -75,7 +75,7 @@ public final class UnitTestHelperException {
         }
     }
 
-    static void assertThrows(final ErrorCode errorCode, final ExecutableFunction handler) {
+    static void assertThrows(final ErrorCode errorCode, final ExecutableFunction handler, final String path) {
         try {
             handler.execute();
             throw new AssertThrowsException(DefaultErrorCode.buildUndefineError(), "method must throw exception");
@@ -90,6 +90,9 @@ public final class UnitTestHelperException {
 
             Asserts.assertTrue(String.format("current : \"%s\"  ref: \"%s\"", currentErrorCode, errorCode.getErrorCode()),
                                currentErrorCode.equals(errorCode.getErrorCode()));
+            if (path != null) {
+                UnitTestHelperText.assertTextRelative(((ExceptionWithErrorCode) error).getErrorCode().toMap(), path);
+            }
         }
     }
 
