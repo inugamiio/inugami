@@ -75,6 +75,10 @@ public final class UnitTestHelperException {
         }
     }
 
+    static void assertThrows(final ErrorCode errorCode, final ExecutableFunction handler) {
+        assertThrows(errorCode, handler, null);
+    }
+
     static void assertThrows(final ErrorCode errorCode, final ExecutableFunction handler, final String path) {
         try {
             handler.execute();
