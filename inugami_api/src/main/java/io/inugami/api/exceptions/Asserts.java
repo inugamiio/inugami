@@ -17,6 +17,7 @@
 package io.inugami.api.exceptions;
 
 import io.inugami.api.exceptions.asserts.*;
+import io.inugami.api.functionnals.ActionWithException;
 import io.inugami.api.functionnals.IsEmptyFacet;
 import io.inugami.api.functionnals.VoidFunctionWithException;
 import lombok.AccessLevel;
@@ -1754,6 +1755,40 @@ public final class Asserts {
 
     public static void assertFolderExists(final ErrorCode errorCode, final File path) {
         AssertFile.assertFolderExists(errorCode, path);
+    }
+
+    public static <T> T throwErrorCodeOnError(final ActionWithException action, final ErrorCode errorCode) {
+        return throwErrorCodeOnError(action, errorCode, null);
+    }
+
+    public static <T> T throwErrorCodeOnError(final ActionWithException action, final ErrorCodeResolver resolver) {
+        return throwErrorCodeOnError(action, null, resolver);
+    }
+
+
+    public static <T> T throwErrorCodeOnError(final ActionWithException action, final ErrorCode errorCode, final ErrorCodeResolver resolver) {
+        assertNotNull(action);
+        try {
+            return action.process();
+        } catch (final Throwable e) {
+            final ErrorCode currentErrorCode = resolveErrorCode(e, errorCode, resolver);
+            throw new UncheckedException(errorCode.addDetail(e.getMessage()), e);
+        }
+    }
+
+    private static ErrorCode resolveErrorCode(final Throwable exception, final ErrorCode errorCode, final ErrorCodeResolver resolver) {
+        if (errorCode == null) {
+            if (exception instanceof ExceptionWithErrorCode) {
+                return ((ExceptionWithErrorCode) exception).getErrorCode();
+            } else if (resolver != null) {
+                final ErrorCode error = resolver.resolve(exception);
+                return error == null ? DefaultErrorCode.buildUndefineError() : error;
+            } else {
+                return DefaultErrorCode.buildUndefineError();
+            }
+        } else {
+            return errorCode;
+        }
     }
 
     // -------------------------------------------------------------------------
