@@ -60,7 +60,7 @@ public final class UnitTestHelperDto {
     }
 
     private static <T> void assertSerialization(final AssertDtoContext<T> context) {
-        if (context.getFullArgConstructorRefPath() != null) {
+        if (context.isCheckSerialization() && context.getFullArgConstructorRefPath() != null) {
             log.info("[{}] assertSerialization", context);
             final T instance = UnitTestHelperJson.loadJson(context.getFullArgConstructorRefPath(), context.getObjectClass());
             UnitTestHelperText.assertTextRelative(instance, context.getFullArgConstructorRefPath());
@@ -123,7 +123,7 @@ public final class UnitTestHelperDto {
     }
 
     private static <T> void assertEquals(final AssertDtoContext<T> context) {
-        if (context.getFullArgConstructor() != null) {
+        if (context.isCheckEquals() && context.getFullArgConstructor() != null) {
             log.info("[{}] assertEquals", context);
             final T instance = context.getFullArgConstructor().get();
             processAssertEquals(instance, context);
