@@ -24,7 +24,8 @@ public class AssertDtoContext<T> {
     private Consumer<T>        noEqualsFunction;
     private Consumer<T>        equalsFunction;
     private boolean            checkSetters;
-
+    private boolean            checkSerialization = true;
+    private boolean            checkEquals        = true;
 
     @Override
     public String toString() {

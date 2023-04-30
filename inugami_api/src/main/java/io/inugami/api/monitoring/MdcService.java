@@ -111,6 +111,8 @@ public class MdcService implements ApplicationLifecycleSPI {
         errorType,
         errorUrl,
         exceptionName,
+        errorDomain,
+        errorSubDomain,
         flags,
         from(LocalDateTime.now()),
         fromTimestamp(Long.valueOf(0)),
@@ -716,34 +718,22 @@ public class MdcService implements ApplicationLifecycleSPI {
             errorCodeRemove();
             return this;
         }
-        setMdc(MDCKeys.errorCode, errorCode.getErrorCode());
-        setMdc(MDCKeys.errorCategory, errorCode.getCategory());
-        setMdc(MDCKeys.errorStatus, errorCode.getStatusCode());
-        setMdc(MDCKeys.errorMessage, errorCode.getMessage());
-        setMdc(MDCKeys.errorMessageDetail, errorCode.getMessageDetail());
-        setMdc(MDCKeys.errorType, errorCode.getErrorType());
-        setMdc(MDCKeys.errorRetryable, errorCode.isRetryable());
-        setMdc(MDCKeys.errorRollback, errorCode.isRetryable());
-        setMdc(MDCKeys.errorExploitationError, errorCode.isExploitationError());
-        setMdc(MDCKeys.errorField, errorCode.getField());
-        setMdc(MDCKeys.errorUrl, errorCode.getUrl());
+
+        for (final Map.Entry<String, Serializable> entry : errorCode.toMap().entrySet()) {
+            if (ErrorCode.STATUS_CODE.equals(entry.getKey())) {
+                setMdc(entry.getKey(), entry.getValue() == null ? 500 : entry.getValue());
+            } else {
+                setMdc(entry.getKey(), entry.getValue());
+            }
+
+        }
         return this;
     }
 
     public MdcService errorCodeRemove() {
-        remove(MDCKeys.errorCode,
-               MDCKeys.errorCategory,
-               MDCKeys.errorStatus,
-               MDCKeys.errorMessage,
-               MDCKeys.errorMessageDetail,
-               MDCKeys.errorMessageDetail,
-               MDCKeys.errorType,
-               MDCKeys.errorRetryable,
-               MDCKeys.errorRollback,
-               MDCKeys.errorExploitationError,
-               MDCKeys.errorField,
-               MDCKeys.errorUrl
-        );
+        for (final String key : ErrorCode.KEYS_SET) {
+            remove(key);
+        }
         return this;
     }
 
@@ -764,8 +754,11 @@ public class MdcService implements ApplicationLifecycleSPI {
                                .field(errorField())
                                .rollback(errorRollback())
                                .url(errorUrl())
+                               .domain(errorDomain())
+                               .subDomain(errorSubDomain())
                                .build();
     }
+
 
     public MdcService errorExploitationError(final boolean value) {
         setMdc(MDCKeys.errorExploitationError, value);
@@ -858,6 +851,24 @@ public class MdcService implements ApplicationLifecycleSPI {
     public MdcService exceptionName(final String value) {
         setMdc(MDCKeys.exceptionName, value);
         return this;
+    }
+
+    public MdcService errorDomain(final String value) {
+        setMdc(MDCKeys.errorDomain, value);
+        return this;
+    }
+
+    public String errorDomain() {
+        return getMdc(MDCKeys.errorDomain);
+    }
+
+    public MdcService errorSubDomain(final String value) {
+        setMdc(MDCKeys.errorSubDomain, value);
+        return this;
+    }
+
+    public String errorSubDomain() {
+        return getMdc(MDCKeys.errorSubDomain);
     }
 
     public String exceptionName() {

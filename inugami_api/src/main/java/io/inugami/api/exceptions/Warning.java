@@ -16,7 +16,25 @@
  */
 package io.inugami.api.exceptions;
 
+import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
+
 public interface Warning {
+
+    String WARNING_CODE           = "warningCode";
+    String WARNING_MESSAGE        = "warningMessage";
+    String WARNING_MESSAGE_DETAIL = "warningMessageDetail";
+    String WARNING_TYPE           = "warningType";
+    String WARNING_CATEGORY       = "warningCategory";
+    String WARNING_DOMAIN         = "warningDomain";
+    String WARNING_SUB_DOMAIN     = "warningSubDomain";
+
+    List<String> KEYS_SET = List.of(WARNING_CODE, WARNING_MESSAGE, WARNING_MESSAGE_DETAIL, WARNING_TYPE, WARNING_CATEGORY, WARNING_DOMAIN, WARNING_SUB_DOMAIN);
+
     Warning getCurrentWaring();
 
     default String getWarningCode() {
@@ -35,7 +53,7 @@ public interface Warning {
         return getCurrentWaring() == null ? "functional" : getCurrentWaring().getWarningType();
     }
 
-    default Warning addDetail(final String detail, Object... values) {
+    default Warning addDetail(final String detail, final Object... values) {
         return toBuilder().addMessageDetail(detail, values).build();
     }
 
@@ -43,12 +61,36 @@ public interface Warning {
         return getCurrentWaring() == null ? null : getCurrentWaring().getCategory();
     }
 
+    default String getDomain() {
+        return getCurrentWaring() == null ? null : getCurrentWaring().getDomain();
+    }
+
+    default String getSubDomain() {
+        return getCurrentWaring() == null ? null : getCurrentWaring().getSubDomain();
+    }
+
+    default Map<String, Serializable> toMap() {
+        final Map<String, Serializable> result = new LinkedHashMap<>();
+
+        applyIfNotNull(getWarningCode(), value -> result.put(WARNING_CODE, value));
+        applyIfNotNull(getMessage(), value -> result.put(WARNING_MESSAGE, value));
+        applyIfNotNull(getMessageDetail(), value -> result.put(WARNING_MESSAGE_DETAIL, value));
+        applyIfNotNull(getWarningType(), value -> result.put(WARNING_TYPE, value));
+        applyIfNotNull(getCategory(), value -> result.put(WARNING_CATEGORY, value));
+        applyIfNotNull(getDomain(), value -> result.put(WARNING_DOMAIN, value));
+        applyIfNotNull(getSubDomain(), value -> result.put(WARNING_SUB_DOMAIN, value));
+        return result;
+    }
+
+    default List<String> keysSet() {
+        return KEYS_SET;
+    }
+
     default DefaultWarning.DefaultWarningBuilder toBuilder() {
-        DefaultWarning.DefaultWarningBuilder  builder = null;
-        if ( getCurrentWaring() == null) {
+        DefaultWarning.DefaultWarningBuilder builder = null;
+        if (getCurrentWaring() == null) {
             builder = DefaultWarning.builder();
-        }
-        else {
+        } else {
             builder = DefaultWarning.fromWarningCode(getCurrentWaring());
         }
         return builder;

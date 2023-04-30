@@ -18,13 +18,14 @@ package io.inugami.api.exceptions;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
 public interface ErrorCode {
 
 
-    String STATUS_CODE        = "statusCode";
+    String STATUS_CODE        = "errorStatus";
     String ERROR_CODE         = "errorCode";
     String MESSAGE            = "message";
     String MESSAGE_DETAIL     = "messageDetail";
@@ -35,13 +36,16 @@ public interface ErrorCode {
     String RETRYABLE          = "retryable";
     String FIELD              = "field";
     String URL                = "url";
-    String DOMAIN             = "domain";
-    String SUB_DOMAIN         = "subDomain";
+    String DOMAIN             = "errorDomain";
+    String SUB_DOMAIN         = "errorSubDomain";
+
+    List<String> KEYS_SET = List.of(STATUS_CODE, ERROR_CODE, MESSAGE, MESSAGE_DETAIL, ERROR_TYPE, PAYLOAD, EXPLOITATION_ERROR, ROLLBACK,
+                                    RETRYABLE, FIELD, URL, DOMAIN, SUB_DOMAIN);
 
     public ErrorCode getCurrentErrorCode();
 
     default int getStatusCode() {
-        return getCurrentErrorCode() == null ? 500 : getCurrentErrorCode().getStatusCode();
+        return getCurrentErrorCode() == null ? 500 : getCurrentErrorCode().getStatusCode() < 400 ? 500 : getCurrentErrorCode().getStatusCode();
     }
 
 
@@ -136,6 +140,10 @@ public interface ErrorCode {
         result.put(DOMAIN, getDomain());
         result.put(SUB_DOMAIN, getSubDomain());
         return result;
+    }
+
+    default List<String> keysSet() {
+        return KEYS_SET;
     }
 }
 

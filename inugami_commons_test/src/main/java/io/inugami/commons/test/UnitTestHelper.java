@@ -19,6 +19,7 @@ package io.inugami.commons.test;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.inugami.api.exceptions.ErrorCode;
+import io.inugami.api.exceptions.Warning;
 import io.inugami.commons.test.api.LineMatcher;
 import io.inugami.commons.test.dto.AssertDtoContext;
 import lombok.AccessLevel;
@@ -287,10 +288,34 @@ public class UnitTestHelper {
     }
 
     public static void assertThrows(final ErrorCode errorCode, final ExecutableFunction handler) {
-        UnitTestHelperException.assertThrows(errorCode, handler);
+        UnitTestHelperException.assertThrows(errorCode, handler, null);
+    }
+
+    public static void assertThrows(final ErrorCode errorCode, final ExecutableFunction handler, final String path) {
+        UnitTestHelperException.assertThrows(errorCode, handler, path);
     }
 
     public static void throwException(final Exception error) {
         UnitTestHelperException.throwException(error);
+    }
+
+
+    // =========================================================================
+    // ERROR CODE
+    // =========================================================================
+    public static void assertErrorCode(final String path, final ErrorCode... errorCodes) {
+        UnitTestHelperErrorCode.assertErrorCode(path, errorCodes);
+    }
+
+    public static void assertErrorCodeUnique(final ErrorCode... errorCodes) {
+        UnitTestHelperErrorCode.assertErrorCodeUnique(errorCodes);
+    }
+
+    public static void assertWarningCode(final String path, final Warning... warnings) {
+        UnitTestHelperErrorCode.assertWarningCode(path, warnings);
+    }
+
+    public static void assertWaringCodeUnique(final Warning... warnings) {
+        UnitTestHelperErrorCode.assertWaringCodeUnique(warnings);
     }
 }

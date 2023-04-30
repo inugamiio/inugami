@@ -2,14 +2,20 @@
   "level" : "ERROR",
   "loggerName" : "io.inugami.monitoring.springboot.exception.DefaultExceptionHandlerService",
   "mdc" : {
-    "partner" : "feign-client",
+    "rollback" : "false",
+    "retryable" : "false",
+    "exploitationError" : "false",
+    "errorDomain" : "null",
     "errorType" : "technical",
-    "errorMessage" : "bad credentials",
     "errorCode" : "feign-client-401",
+    "message" : "bad credentials",
+    "url" : "null",
+    "partner" : "feign-client",
+    "field" : "null",
+    "payload" : "null",
     "errorStatus" : "401",
-    "errorRollback" : "false",
-    "errorExploitationError" : "false",
-    "errorRetryable" : "false"
+    "errorSubDomain" : "null",
+    "messageDetail" : "null"
   },
   "message" : "bad credentials"
 } ]

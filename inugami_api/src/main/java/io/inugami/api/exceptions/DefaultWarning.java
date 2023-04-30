@@ -36,27 +36,32 @@ public class DefaultWarning implements Warning {
     private final String messageDetail;
     private final String warningType;
     private final String category;
+    private final String domain;
+    private final String subDomain;
 
     public static DefaultWarningBuilder fromWarningCode(final Warning warning) {
-        DefaultWarningBuilder builder = builder();
-        if(warning != null){
+        final DefaultWarningBuilder builder = builder();
+        if (warning != null) {
             builder.warningCode(warning.getWarningCode());
             builder.message(warning.getMessage());
             builder.messageDetail(warning.getMessageDetail());
             builder.warningType(warning.getWarningType());
             builder.category(warning.getCategory());
+            builder.domain(warning.getDomain());
+            builder.subDomain(warning.getSubDomain());
         }
         return builder;
     }
 
     public static class DefaultWarningBuilder {
-        public DefaultWarning.DefaultWarningBuilder addMessageDetail(String message, Object... values) {
+        public DefaultWarning.DefaultWarningBuilder addMessageDetail(final String message, final Object... values) {
             if (message != null) {
                 this.messageDetail = MessagesFormatter.format(message, values);
             }
             return this;
         }
     }
+
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================
@@ -87,7 +92,17 @@ public class DefaultWarning implements Warning {
     }
 
     @Override
-    public String getCategory(){
+    public String getCategory() {
         return category;
+    }
+
+    @Override
+    public String getDomain() {
+        return domain;
+    }
+
+    @Override
+    public String getSubDomain() {
+        return subDomain;
     }
 }

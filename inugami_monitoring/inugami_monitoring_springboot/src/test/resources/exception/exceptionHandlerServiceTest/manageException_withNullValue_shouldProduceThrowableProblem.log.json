@@ -2,12 +2,19 @@
   "level" : "ERROR",
   "loggerName" : "io.inugami.monitoring.springboot.exception.DefaultExceptionHandlerService",
   "mdc" : {
+    "rollback" : "false",
+    "retryable" : "false",
+    "exploitationError" : "false",
+    "errorDomain" : "null",
     "errorType" : "technical",
     "errorCode" : "err-undefine",
+    "message" : "null",
+    "url" : "null",
+    "field" : "null",
+    "payload" : "null",
     "errorStatus" : "500",
-    "errorRollback" : "false",
-    "errorExploitationError" : "false",
-    "errorRetryable" : "false"
+    "errorSubDomain" : "null",
+    "messageDetail" : "null"
   },
   "message" : "undefined error"
 } ]
