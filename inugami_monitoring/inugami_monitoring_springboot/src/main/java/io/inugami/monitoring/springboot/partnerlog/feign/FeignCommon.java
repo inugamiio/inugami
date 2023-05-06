@@ -30,20 +30,20 @@ public class FeignCommon {
             return response;
         }
 
-        Response.Builder builder = response.toBuilder();
-        byte[]           body    = readResponseBody(response.body());
+        final Response.Builder builder = response.toBuilder();
+        final byte[]           body    = readResponseBody(response.body());
         builder.body(FeignBody.builder().body(body).build());
-        return null;
+        return builder.build();
     }
 
     public static byte[] readResponseBody(final Response.Body body) {
         final ByteArrayOutputStream result = new ByteArrayOutputStream();
         try {
-            byte[] buffer = new byte[1024];
+            final byte[] buffer = new byte[1024];
             for (int lenght; (lenght = body.asInputStream().read(buffer)) != -1; ) {
                 result.write(buffer, 0, lenght);
             }
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
         }
         return new byte[0];
     }
