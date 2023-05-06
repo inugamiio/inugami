@@ -135,6 +135,7 @@ public final class UnitTestHelperDto {
     private static <T> void processAssertEquals(final T instance, final AssertDtoContext<T> context) {
         if (context.getCloneFunction() != null) {
             assertThat(instance).isEqualTo(context.getCloneFunction().apply(instance));
+            assertThat(instance.hashCode()).isEqualTo(context.getCloneFunction().apply(instance).hashCode());
         }
         if (context.getEqualsFunction() != null) {
             context.getEqualsFunction().accept(instance);
