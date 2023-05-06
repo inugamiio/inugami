@@ -175,7 +175,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         final RequestInformation requestInfo = RequestInformationInitializer.buildRequestInformation(
                 httpRequest, headers);
 
-        initCorrelationIdAndTraceId(requestInfo);
+        initCorrelationIdAndTraceId(requestInfo, request);
         final JavaRestMethodDTO javaRestMethod = resolveJavaRestMethod(request);
         addTrackingInformation(response, requestInfo, javaRestMethod);
 
@@ -197,10 +197,24 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         }
     }
 
-    private void initCorrelationIdAndTraceId(final RequestInformation requestInfo) {
+    private void initCorrelationIdAndTraceId(final RequestInformation requestInfo, final ServletRequest request) {
         MdcService.getInstance()
                   .correlationId(requestInfo.getCorrelationId())
                   .traceId(requestInfo.getTraceId());
+
+        HttpServletRequest httpServletRequest = null;
+        if (request instanceof HttpServletRequest) {
+            httpServletRequest = (HttpServletRequest) request;
+        }
+
+        if (httpServletRequest != null) {
+            try {
+                MdcService.getInstance()
+                          .verb(httpServletRequest.getMethod())
+                          .url(httpServletRequest.getRequestURI());
+            } catch (final Throwable e) {
+            }
+        }
     }
 
     private JavaRestMethodDTO resolveJavaRestMethod(final ServletRequest request) {
