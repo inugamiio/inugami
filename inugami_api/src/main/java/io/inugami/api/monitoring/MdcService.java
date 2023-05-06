@@ -94,6 +94,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         deviceNetworkSpeedUp(Double.valueOf(0.0)),
         deviceNetworkType,
         deviceType,
+        domain("xxxx", "appDomain"),
         duration(Long.valueOf(0)),
         env,
         errorCategory,
@@ -160,13 +161,14 @@ public class MdcService implements ApplicationLifecycleSPI {
         traceId,
         until(LocalDateTime.now()),
         untilTimestamp(Long.valueOf(0)),
-        uri,
-        url,
+        uri("xxxx", "appUri"),
+        url("xxxx", "appUrl"),
         urlPattern,
         userAgent,
         userId,
         status,
-        verb,
+        subDomain("xxxx", "appSubDomain"),
+        verb("xxxx", "appVerb"),
         version,
         warning;
 
@@ -174,14 +176,24 @@ public class MdcService implements ApplicationLifecycleSPI {
         private final       Serializable                  defaultValue;
         private final       Class<? extends Serializable> type;
 
+        private final String currentName;
+
         private MDCKeys() {
             this.defaultValue = DEFAULT_STRING_VALUE;
             type = String.class;
+            currentName = this.name();
         }
 
         private MDCKeys(final Serializable defaultValue) {
             this.defaultValue = defaultValue;
             type = defaultValue.getClass();
+            currentName = this.name();
+        }
+
+        private MDCKeys(final Serializable defaultValue, final String name) {
+            this.defaultValue = defaultValue;
+            type = defaultValue.getClass();
+            currentName = name;
         }
     }
 
@@ -260,7 +272,7 @@ public class MdcService implements ApplicationLifecycleSPI {
             return this;
         }
 
-        return setMdc(key.name(), value);
+        return setMdc(key.getCurrentName(), value);
     }
 
 
@@ -311,7 +323,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         if (key == null) {
             return null;
         }
-        return getMdc(key.name());
+        return getMdc(key.getCurrentName());
     }
 
 
@@ -489,6 +501,25 @@ public class MdcService implements ApplicationLifecycleSPI {
     public String appClassShortName() {
         return getMdc(MDCKeys.appClassShortName);
     }
+
+    public MdcService domain(final String value) {
+        setMdc(MDCKeys.domain, value);
+        return this;
+    }
+
+    public String domain() {
+        return getMdc(MDCKeys.domain);
+    }
+
+    public MdcService subDomain(final String value) {
+        setMdc(MDCKeys.subDomain, value);
+        return this;
+    }
+
+    public String subDomain() {
+        return getMdc(MDCKeys.subDomain);
+    }
+
 
     public MdcService appMethod(final String value) {
         setMdc(MDCKeys.appMethod, value);
