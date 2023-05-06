@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class AssertsTest {
 
     // =========================================================================
@@ -905,5 +907,24 @@ public class AssertsTest {
         } catch (final Exception error) {
         }
 
+    }
+
+    // =========================================================================
+    // throwErrorCodeOnError
+    // =========================================================================
+    @Test
+    public void throwErrorCodeOnError_withVoidFunction() {
+        try {
+            Asserts.wrapErrorForVoidFunction(AssertsTest::throwErrorCodeOnErrorWithVoidFunction, ERROR_CODE);
+        } catch (final Exception e) {
+            assertThat(e).isNotNull()
+                         .isInstanceOf(ExceptionWithErrorCode.class)
+                         .hasMessage("some message");
+        }
+
+    }
+
+    private static void throwErrorCodeOnErrorWithVoidFunction() {
+        throw new RuntimeException("some message");
     }
 }

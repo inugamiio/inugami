@@ -166,6 +166,14 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
                 break;
             }
         }
+        if (result == null) {
+            result = DefaultErrorCode.buildUndefineErrorCode()
+                                     .errorCode("ERR-0.0")
+                                     .message(exception.getMessage())
+                                     .errorTypeTechnical()
+                                     .statusCode(500)
+                                     .build();
+        }
         return result;
     }
 

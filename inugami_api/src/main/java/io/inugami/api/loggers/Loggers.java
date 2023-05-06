@@ -21,9 +21,11 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 import java.net.URL;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * LoggerFactory
@@ -133,6 +135,53 @@ public final class Loggers {
     // =========================================================================
     // METHODS
     // =========================================================================
+
+    public static void log(final Logger logger, final Level level, final Supplier<String> message, final Object... values) {
+        if (logger == null || level == null || message == null) {
+            return;
+        }
+        if (loggerEnabled(logger, level)) {
+            switch (level) {
+                case TRACE:
+                    logger.trace(message.get(), values);
+                    break;
+                case DEBUG:
+                    logger.debug(message.get(), values);
+                    break;
+                case INFO:
+                    logger.info(message.get(), values);
+                    break;
+                case WARN:
+                    logger.warn(message.get(), values);
+                    break;
+                case ERROR:
+                    logger.error(message.get(), values);
+                    break;
+            }
+        }
+    }
+
+    private static boolean loggerEnabled(final Logger logger, final Level level) {
+        switch (level) {
+            case TRACE:
+                logger.isTraceEnabled();
+                break;
+            case DEBUG:
+                logger.isDebugEnabled();
+                break;
+            case INFO:
+                logger.isInfoEnabled();
+                break;
+            case WARN:
+                logger.isWarnEnabled();
+                break;
+            case ERROR:
+                logger.isErrorEnabled();
+                break;
+        }
+        return false;
+    }
+
     public static void imageAscii(final URL file) {
         imageAscii(file, APPLICATION, null);
     }

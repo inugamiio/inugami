@@ -19,6 +19,7 @@ package io.inugami.api.exceptions;
 import io.inugami.api.exceptions.asserts.*;
 import io.inugami.api.functionnals.ActionWithException;
 import io.inugami.api.functionnals.IsEmptyFacet;
+import io.inugami.api.functionnals.VoidFunction;
 import io.inugami.api.functionnals.VoidFunctionWithException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -1757,22 +1758,78 @@ public final class Asserts {
         AssertFile.assertFolderExists(errorCode, path);
     }
 
-    public static <T> T throwErrorCodeOnError(final ActionWithException action, final ErrorCode errorCode) {
-        return throwErrorCodeOnError(action, errorCode, null);
+    public static <T> T wrapErrorForSupplierWithException(final ActionWithException action, final ErrorCode errorCode) {
+        return wrapErrorForSupplierWithException(action, errorCode, null);
     }
 
-    public static <T> T throwErrorCodeOnError(final ActionWithException action, final ErrorCodeResolver resolver) {
-        return throwErrorCodeOnError(action, null, resolver);
+    public static <T> T wrapErrorForSupplierWithException(final ActionWithException action, final ErrorCodeResolver resolver) {
+        return wrapErrorForSupplierWithException(action, null, resolver);
     }
 
 
-    public static <T> T throwErrorCodeOnError(final ActionWithException action, final ErrorCode errorCode, final ErrorCodeResolver resolver) {
+    public static <T> T wrapErrorForSupplierWithException(final ActionWithException action, final ErrorCode errorCode, final ErrorCodeResolver resolver) {
         assertNotNull(action);
         try {
             return action.process();
         } catch (final Throwable e) {
-            final ErrorCode currentErrorCode = resolveErrorCode(e, errorCode, resolver);
-            throw new UncheckedException(errorCode.addDetail(e.getMessage()), e);
+            throw handlerException(errorCode, resolver, e);
+        }
+    }
+
+
+    public static <T> T wrapErrorForSupplier(final Supplier<T> action, final ErrorCode errorCode) {
+        return wrapErrorForSupplier(action, errorCode, null);
+    }
+
+    public static <T> T wrapErrorForSupplier(final Supplier<T> action, final ErrorCodeResolver resolver) {
+        return wrapErrorForSupplier(action, null, resolver);
+    }
+
+
+    public static <T> T wrapErrorForSupplier(final Supplier<T> action, final ErrorCode errorCode, final ErrorCodeResolver resolver) {
+        assertNotNull(action);
+        try {
+            return action.get();
+        } catch (final Throwable e) {
+            throw handlerException(errorCode, resolver, e);
+        }
+    }
+
+
+    public static void wrapErrorForVoidFunction(final VoidFunction action, final ErrorCode errorCode) {
+        wrapErrorForVoidFunction(action, errorCode, null);
+    }
+
+    public static void wrapErrorForVoidFunction(final VoidFunction action, final ErrorCodeResolver resolver) {
+        wrapErrorForVoidFunction(action, null, resolver);
+    }
+
+
+    public static void wrapErrorForVoidFunction(final VoidFunction action, final ErrorCode errorCode, final ErrorCodeResolver resolver) {
+        assertNotNull(action);
+        try {
+            action.process();
+        } catch (final Throwable e) {
+            throw handlerException(errorCode, resolver, e);
+        }
+    }
+
+
+    public static void wrapErrorForVoidFunctionWithException(final VoidFunctionWithException action, final ErrorCode errorCode) {
+        wrapErrorForVoidFunctionWithException(action, errorCode, null);
+    }
+
+    public static void wrapErrorForVoidFunctionWithException(final VoidFunctionWithException action, final ErrorCodeResolver resolver) {
+        wrapErrorForVoidFunctionWithException(action, null, resolver);
+    }
+
+
+    public static void wrapErrorForVoidFunctionWithException(final VoidFunctionWithException action, final ErrorCode errorCode, final ErrorCodeResolver resolver) {
+        assertNotNull(action);
+        try {
+            action.process();
+        } catch (final Throwable e) {
+            throw handlerException(errorCode, resolver, e);
         }
     }
 
@@ -1789,6 +1846,14 @@ public final class Asserts {
         } else {
             return errorCode;
         }
+    }
+
+    private static UncheckedException handlerException(final ErrorCode errorCode, final ErrorCodeResolver resolver, final Throwable e) {
+        ErrorCode currentErrorCode = resolveErrorCode(e, errorCode, resolver);
+        if (currentErrorCode.getMessage() == null) {
+            currentErrorCode = DefaultErrorCode.fromErrorCode(currentErrorCode).message(e.getMessage()).build();
+        }
+        return new UncheckedException(currentErrorCode.addDetail(e.getMessage()), e);
     }
 
     // -------------------------------------------------------------------------
