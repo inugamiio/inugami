@@ -18,17 +18,16 @@ package io.inugami.api.monitoring.models;
 
 import flexjson.JSON;
 import io.inugami.api.dao.Identifiable;
-import io.inugami.api.loggers.Loggers;
 import io.inugami.api.mapping.DateTransformer;
 import io.inugami.api.models.data.basic.JsonObject;
 import io.inugami.api.models.data.graphite.number.GraphiteNumber;
 import io.inugami.api.models.data.graphite.number.GraphiteNumberTransformer;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Hex;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 /**
@@ -37,7 +36,9 @@ import java.util.Date;
  * @author patrick_guillerm
  * @since 27 déc. 2018
  */
+@Slf4j
 @Builder(toBuilder = true)
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Setter
@@ -49,48 +50,48 @@ public class GenericMonitoringModel implements JsonObject, Identifiable<String> 
     // =========================================================================
     private static final long serialVersionUID = 4735410638475899702L;
 
-    private final String uid;
+    private String uid;
 
-    private final String asset;
+    private String asset;
 
-    private final String environment;
+    private String environment;
 
-    private final String instanceName;
+    private String instanceName;
 
-    private final String instanceNumber;
+    private String instanceNumber;
 
-    private final String counterType;
+    private String counterType;
 
-    private final String device;
+    private String device;
 
-    private final String callType;
+    private String callType;
 
-    private final String service;
+    private String service;
 
-    private final String subService;
+    private String subService;
 
-    private final String valueType;
+    private String valueType;
 
-    private final String timeUnit;
+    private String timeUnit;
 
     @JSON(transformer = DateTransformer.class)
-    private final Date date;
+    private Date date;
 
-    private final long time;
+    private long time;
 
-    private final String errorCode;
+    private String errorCode;
 
-    private final String errorType;
+    private String errorType;
 
     @JSON(transformer = GraphiteNumberTransformer.class)
-    private final GraphiteNumber value;
+    private GraphiteNumber value;
 
     @EqualsAndHashCode.Include
-    private final String path;
+    private String path;
 
-    private final String data;
+    private String data;
 
-    private final long timestamp;
+    private long timestamp;
 
     // =========================================================================
     // CONSTRUCTORS
@@ -115,8 +116,10 @@ public class GenericMonitoringModel implements JsonObject, Identifiable<String> 
                                                            this.timeUnit)
                                                      .getBytes(StandardCharsets.UTF_8));
                 this.path = Hex.encodeHexString(bytes);
-            } catch (final NoSuchAlgorithmException e) {
-                Loggers.DEBUG.error(e.getMessage(), e);
+            } catch (final Throwable e) {
+                if (log.isTraceEnabled()) {
+                    log.error(e.getMessage(), e);
+                }
             }
         }
 

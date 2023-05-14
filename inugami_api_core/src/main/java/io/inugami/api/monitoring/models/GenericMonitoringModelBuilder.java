@@ -118,7 +118,6 @@ public class GenericMonitoringModelBuilder {
                                      .valueType(valueType)
                                      .timeUnit(timeUnit)
                                      .date(date)
-
                                      .timestamp(timestamp)
                                      .errorCode(errorCode)
                                      .errorType(errorType)
