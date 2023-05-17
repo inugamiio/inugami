@@ -6,12 +6,13 @@ import feign.Response;
 import io.inugami.api.monitoring.models.IoInfoDTO;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeignCommon {
 
@@ -81,15 +82,12 @@ public class FeignCommon {
     }
 
     public static byte[] readResponseBody(final Response.Body body) {
-        final ByteArrayOutputStream result = new ByteArrayOutputStream();
         try {
-            final byte[] buffer = new byte[1024];
-            for (int lenght; (lenght = body.asInputStream().read(buffer)) != -1; ) {
-                result.write(buffer, 0, lenght);
-            }
-        } catch (final Throwable e) {
+            return body.asInputStream().readAllBytes();
+        } catch (final IOException e) {
+            log.error(e.getMessage(), e);
+            return new byte[]{};
         }
-        return new byte[0];
     }
 
 }
