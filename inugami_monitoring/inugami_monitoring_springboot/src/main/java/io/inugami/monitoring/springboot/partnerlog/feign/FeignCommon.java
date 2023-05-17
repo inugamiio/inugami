@@ -27,11 +27,16 @@ public class FeignCommon {
 
     public static IoInfoDTO buildInfo(final Response wrappedResponse, final long duration) {
         final IoInfoDTO.IoInfoDTOBuilder builder = IoInfoDTO.builder()
-                                                            .duration(duration)
-                                                            .status(wrappedResponse.status())
-                                                            .message(wrappedResponse.reason())
-                                                            .headers(wrappedResponse.request().headers())
-                                                            .responseHeaders(wrappedResponse.headers());
+                                                            .duration(duration);
+
+        if (wrappedResponse == null) {
+            return builder.build();
+        }
+
+        builder.status(wrappedResponse.status())
+               .message(wrappedResponse.reason())
+               .headers(wrappedResponse.request().headers())
+               .responseHeaders(wrappedResponse.headers());
         if (wrappedResponse.body() != null) {
             byte[] body = new byte[0];
             try {

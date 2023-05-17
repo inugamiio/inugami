@@ -5,6 +5,9 @@ import feign.Response;
 import feign.Target;
 import io.inugami.api.monitoring.models.IoInfoDTO;
 import org.junit.jupiter.api.Test;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -35,8 +38,16 @@ class FeignCommonTest {
         assertTextRelative(iologInfo.toString(), "partnerlog/feign/feignCommonTest/buildInfo_nominal.txt");
     }
 
+    @Test
+    void buildInfo_withoutValue() {
+        final IoInfoDTO iologInfo = FeignCommon.buildInfo(null, 200L);
+        assertTextRelative(iologInfo.toString(), "partnerlog/feign/feignCommonTest/buildInfo_withoutValue.txt");
+    }
 
-    private static class SimpleFeignClient {
 
+    @FeignClient(value = "partner", url = "http://mock")
+    private static interface SimpleFeignClient {
+        @PostMapping(value = "/say-hello")
+        String sayHello(@RequestBody String value);
     }
 }
