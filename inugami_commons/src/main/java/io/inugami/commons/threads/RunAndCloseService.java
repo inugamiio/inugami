@@ -37,6 +37,7 @@ import java.util.function.BiFunction;
  * @author patrickguillerm
  * @since 24 mars 2018
  */
+@SuppressWarnings({"java:S3014"})
 public class RunAndCloseService<T> implements ThreadFactory {
 
     // =========================================================================

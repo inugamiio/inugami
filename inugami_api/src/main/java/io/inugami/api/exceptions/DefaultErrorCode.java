@@ -22,6 +22,7 @@ import lombok.*;
 import java.io.Serializable;
 import java.util.function.BiConsumer;
 
+@SuppressWarnings({"java:S1845"})
 @ToString
 @Getter
 @AllArgsConstructor

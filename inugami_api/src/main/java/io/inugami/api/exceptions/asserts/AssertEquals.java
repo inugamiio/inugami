@@ -48,7 +48,7 @@ public final class AssertEquals {
             result = ref.equals(value);
         }
 
-        if (checkNotEquals(ref,value)) {
+        if (checkNotEquals(ref, value)) {
             AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
@@ -78,7 +78,7 @@ public final class AssertEquals {
     public static void assertEquals(final String message,
                                     final int ref,
                                     final int value) {
-        if (ref!=value) {
+        if (ref != value) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
             AssertCommons.throwException(message);
         }
@@ -87,7 +87,7 @@ public final class AssertEquals {
     public static void assertEquals(final Supplier<String> messageProducer,
                                     final int ref,
                                     final int value) {
-        if (ref!=value) {
+        if (ref != value) {
             AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
@@ -95,7 +95,7 @@ public final class AssertEquals {
     public static void assertEquals(final ErrorCode errorCode,
                                     final int ref,
                                     final int value) {
-        if (ref!=value) {
+        if (ref != value) {
             AssertCommons.throwException(errorCode);
         }
     }
@@ -110,7 +110,7 @@ public final class AssertEquals {
     public static void assertEquals(final String message,
                                     final long ref,
                                     final long value) {
-        if (ref!=value) {
+        if (ref != value) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
             AssertCommons.throwException(message);
         }
@@ -119,7 +119,7 @@ public final class AssertEquals {
     public static void assertEquals(final Supplier<String> messageProducer,
                                     final long ref,
                                     final long value) {
-        if (ref!=value) {
+        if (ref != value) {
             AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
@@ -127,10 +127,11 @@ public final class AssertEquals {
     public static void assertEquals(final ErrorCode errorCode,
                                     final long ref,
                                     final long value) {
-        if (ref!=value) {
+        if (ref != value) {
             AssertCommons.throwException(errorCode);
         }
     }
+
     public static void assertEquals(final float ref,
                                     final float value) {
         assertEquals(DEFAULT_MESSAGE,
@@ -141,7 +142,7 @@ public final class AssertEquals {
     public static void assertEquals(final String message,
                                     final float ref,
                                     final float value) {
-        if (ref!=value) {
+        if (ref != value) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
             AssertCommons.throwException(message);
         }
@@ -150,7 +151,7 @@ public final class AssertEquals {
     public static void assertEquals(final Supplier<String> messageProducer,
                                     final float ref,
                                     final float value) {
-        if (ref!=value) {
+        if (ref != value) {
             AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
@@ -158,7 +159,7 @@ public final class AssertEquals {
     public static void assertEquals(final ErrorCode errorCode,
                                     final float ref,
                                     final float value) {
-        if (ref!=value) {
+        if (ref != value) {
             AssertCommons.throwException(errorCode);
         }
     }
@@ -173,7 +174,7 @@ public final class AssertEquals {
     public static void assertEquals(final String message,
                                     final double ref,
                                     final double value) {
-        if (ref!=value) {
+        if (ref != value) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
             AssertCommons.throwException(message);
         }
@@ -182,7 +183,7 @@ public final class AssertEquals {
     public static void assertEquals(final Supplier<String> messageProducer,
                                     final double ref,
                                     final double value) {
-        if (ref!=value) {
+        if (ref != value) {
             AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
@@ -190,12 +191,12 @@ public final class AssertEquals {
     public static void assertEquals(final ErrorCode errorCode,
                                     final double ref,
                                     final double value) {
-        if (ref!=value) {
+        if (ref != value) {
             AssertCommons.throwException(errorCode);
         }
     }
 
     private static boolean checkNotEquals(final Object ref, final Object value) {
-        return (ref==null && value!=null) | (ref!=null && value==null) | !ref.equals(value);
+        return (ref == null && value != null) || (ref != null && value == null) || ref != null && !ref.equals(value);
     }
 }

@@ -19,6 +19,8 @@ package io.inugami.commons.data;
 import io.inugami.api.loggers.Loggers;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class BuildResourcesColumns {
 
     @Test
@@ -874,6 +876,7 @@ public class BuildResourcesColumns {
         }
 
         Loggers.DEBUG.info("\n{}", result);
+        assertThat(result).hasSize(42536);
     }
 
 

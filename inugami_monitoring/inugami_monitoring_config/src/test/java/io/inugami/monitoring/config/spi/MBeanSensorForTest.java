@@ -28,6 +28,7 @@ import java.util.List;
  * @author patrickguillerm
  * @since Jan 16, 2019
  */
+@SuppressWarnings({"java:S2187"})
 public class MBeanSensorForTest implements MonitoringSensor {
 
     // =========================================================================
@@ -43,7 +44,7 @@ public class MBeanSensorForTest implements MonitoringSensor {
     @Override
     public MonitoringSensor buildInstance(final long interval, final String query,
                                           final ConfigHandler<String, String> configuration) {
-        this.path  = configuration.grab("path");
+        this.path = configuration.grab("path");
         this.query = query;
         return this;
     }

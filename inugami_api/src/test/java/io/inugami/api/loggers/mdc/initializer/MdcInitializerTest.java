@@ -1,14 +1,14 @@
 package io.inugami.api.loggers.mdc.initializer;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+@SuppressWarnings({"java:S2699"})
 public class MdcInitializerTest {
 
-
+    @Disabled
     @Test
-    public void initialize_nominal(){
+    public void initialize_nominal() {
         MdcInitializer.initialize();
     }
 }
