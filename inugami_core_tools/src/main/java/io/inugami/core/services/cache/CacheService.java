@@ -45,12 +45,13 @@ import java.util.stream.Collectors;
  * @author patrick_guillerm
  * @since 17 janv. 2017
  */
+@SuppressWarnings({"java:S2095"})
 public class CacheService {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final Map<CacheTypes, Cache> caches = new HashMap<CacheTypes, Cache>();
+    private final Map<CacheTypes, Cache> caches = new HashMap<>();
 
     // =========================================================================
     // CONSTRUCTORS
@@ -62,13 +63,19 @@ public class CacheService {
     private CacheService(final URL cacheConfig) {
         final URL           url       = cacheConfig == null ? resolveCacheConfigurationFile() : cacheConfig;
         final Configuration xmlConfig = new XmlConfiguration(url);
-        final CacheManager  manager   = CacheManagerBuilder.newCacheManager(xmlConfig);
-        manager.init();
+        CacheManager        manager   = null;
+        try {
+            manager = CacheManagerBuilder.newCacheManager(xmlConfig);
+            manager.init();
+            for (final CacheTypes type : CacheTypes.values()) {
+                final Cache<String, Serializable> cache = manager.getCache(type.name(), String.class, Serializable.class);
 
-        for (final CacheTypes type : CacheTypes.values()) {
-            final Cache<String, Serializable> cache = manager.getCache(type.name(), String.class, Serializable.class);
-
-            caches.put(type, cache);
+                caches.put(type, cache);
+            }
+        } catch (final Exception e) {
+            if (manager != null) {
+                manager.close();
+            }
         }
 
     }

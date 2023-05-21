@@ -34,6 +34,7 @@ import java.util.Optional;
  * @author patrick_guillerm
  * @since 28 juin 2017
  */
+@SuppressWarnings({"java:S2095"})
 public class MainUberJar {
 
     // =========================================================================

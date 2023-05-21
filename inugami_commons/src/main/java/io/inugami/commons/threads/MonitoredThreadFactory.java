@@ -1,33 +1,34 @@
 package io.inugami.commons.threads;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicLong;
-
 import io.inugami.api.monitoring.MonitoringInitializer;
 import io.inugami.api.monitoring.RequestContext;
 import io.inugami.api.monitoring.RequestInformation;
 import io.inugami.api.spi.SpiLoader;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicLong;
+
+@SuppressWarnings({"java:S3014"})
 public class MonitoredThreadFactory implements ThreadFactory {
-    
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    
+
     private static final List<MonitoringInitializer> monitoringInitializer = initMonitoringInitializers();
-    
-    private final AtomicLong                         threadIndex           = new AtomicLong();
-    
-    private final String                             threadsName;
-    
-    private final boolean                            deamon;
-    
-    private final ThreadGroup                        threadGroup;
-    
-    private final RequestInformation                 requestContext;
-    
+
+    private final AtomicLong threadIndex = new AtomicLong();
+
+    private final String threadsName;
+
+    private final boolean deamon;
+
+    private final ThreadGroup threadGroup;
+
+    private final RequestInformation requestContext;
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -35,7 +36,7 @@ public class MonitoredThreadFactory implements ThreadFactory {
         final List<MonitoringInitializer> spiServices = SpiLoader.getInstance().loadSpiService(MonitoringInitializer.class);
         return spiServices == null ? Collections.emptyList() : spiServices;
     }
-    
+
     public MonitoredThreadFactory(final String threadsName, final boolean deamon) {
         super();
         this.threadsName = threadsName;
@@ -43,7 +44,7 @@ public class MonitoredThreadFactory implements ThreadFactory {
         threadGroup = Thread.currentThread().getThreadGroup();
         this.requestContext = RequestContext.getInstance();
     }
-    
+
     // =========================================================================
     // OVERRIDES
     // =========================================================================
@@ -58,5 +59,5 @@ public class MonitoredThreadFactory implements ThreadFactory {
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================
-    
+
 }

@@ -31,6 +31,7 @@ import java.util.Locale;
  * @author pguillerm
  * @since 21 août 2017
  */
+@SuppressWarnings({"java:S2699"})
 public class GeneratorTest {
 
     // =========================================================================

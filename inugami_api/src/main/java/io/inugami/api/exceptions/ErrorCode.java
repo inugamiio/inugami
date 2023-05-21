@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+@SuppressWarnings({"java:S1845"})
 public interface ErrorCode {
 
 

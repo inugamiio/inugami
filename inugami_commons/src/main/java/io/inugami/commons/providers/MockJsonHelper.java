@@ -43,6 +43,7 @@ import java.util.stream.Collectors;
  * @author patrick_guillerm
  * @since 13 mars 2017
  */
+@SuppressWarnings({"java:S1845"})
 public class MockJsonHelper {
 
     // =========================================================================

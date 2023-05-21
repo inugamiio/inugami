@@ -28,6 +28,7 @@ import java.util.List;
  * @author patrickguillerm
  * @since Jan 16, 2019
  */
+@SuppressWarnings({"java:S2187"})
 public class ThreadsSensorForTest implements MonitoringSensor {
 
     // =========================================================================

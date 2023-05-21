@@ -461,20 +461,18 @@ public class FilesUtils {
     // =========================================================================
     public static <T extends Serializable> T readFromBinary(final File file, final T defaultValue) {
         T result = defaultValue;
-        try {
-            if (file.exists()) {
-                final ObjectInputStream inputData = new ObjectInputStream(new FileInputStream(file));
+        if (file.exists()) {
+            try (final ObjectInputStream inputData = new ObjectInputStream(new FileInputStream(file))) {
                 result = (T) inputData.readObject();
+            } catch (final IOException | ClassNotFoundException e) {
+                Loggers.IO.error(e.getMessage());
             }
-        } catch (final IOException | ClassNotFoundException e) {
-            Loggers.IO.error(e.getMessage());
         }
         return result;
     }
 
     public static void writeToBinary(final File file, final Serializable data) {
-        try {
-            final ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(file));
+        try (final ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(file))) {
             writer.writeObject(data);
         } catch (final IOException e) {
             Loggers.IO.error(e.getMessage());

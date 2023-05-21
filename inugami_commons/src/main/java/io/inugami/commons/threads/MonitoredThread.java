@@ -1,21 +1,22 @@
 package io.inugami.commons.threads;
 
-import java.util.List;
-
 import io.inugami.api.monitoring.MdcService;
 import io.inugami.api.monitoring.MonitoringInitializer;
 import io.inugami.api.monitoring.RequestContext;
 import io.inugami.api.monitoring.RequestInformation;
 
+import java.util.List;
+
+@SuppressWarnings({"java:S3014"})
 public class MonitoredThread extends Thread {
-    
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final RequestInformation          requestContext;
-    
+    private final RequestInformation requestContext;
+
     private final List<MonitoringInitializer> monitoringInitializer;
-    
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -26,7 +27,7 @@ public class MonitoredThread extends Thread {
         this.requestContext = requestContext;
         this.monitoringInitializer = monitoringInitializer;
     }
-    
+
     // =========================================================================
     // RUN
     // =========================================================================
@@ -37,5 +38,5 @@ public class MonitoredThread extends Thread {
         monitoringInitializer.forEach(MonitoringInitializer::initialize);
         super.run();
     }
-    
+
 }

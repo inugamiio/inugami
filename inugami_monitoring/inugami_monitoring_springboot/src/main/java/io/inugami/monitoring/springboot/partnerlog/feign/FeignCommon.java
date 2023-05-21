@@ -1,13 +1,18 @@
 package io.inugami.monitoring.springboot.partnerlog.feign;
 
+import feign.Request;
 import feign.RequestTemplate;
 import feign.Response;
 import io.inugami.api.monitoring.models.IoInfoDTO;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeignCommon {
 
@@ -22,7 +27,47 @@ public class FeignCommon {
     }
 
     public static IoInfoDTO buildInfo(final Response wrappedResponse, final long duration) {
-        return null;
+        final IoInfoDTO.IoInfoDTOBuilder builder = IoInfoDTO.builder()
+                                                            .duration(duration);
+
+        if (wrappedResponse == null) {
+            return builder.build();
+        }
+
+        builder.status(wrappedResponse.status())
+               .message(wrappedResponse.reason())
+               .headers(wrappedResponse.request().headers())
+               .responseHeaders(wrappedResponse.headers());
+        if (wrappedResponse.body() != null) {
+            byte[] body = new byte[0];
+            try {
+                body = wrappedResponse.body().asInputStream().readAllBytes();
+            } catch (final IOException e) {
+            }
+            builder.responsePayload(body);
+        }
+
+        if (wrappedResponse.request() != null) {
+            final Request request = wrappedResponse.request();
+            builder.url(request.url());
+            builder.headers(request.headers());
+
+            if (request.httpMethod() != null) {
+                builder.method(request.httpMethod().name());
+            }
+            if (request.body() != null) {
+                builder.payload(request.body());
+            }
+            if (request.requestTemplate() != null && request.requestTemplate().feignTarget() != null) {
+                builder.partnerName(request.requestTemplate().feignTarget().name());
+            }
+
+        }
+        return builder.build();
+    }
+
+    private static Charset resolveEncoding(final Response wrappedResponse) {
+        return wrappedResponse.charset() == null ? StandardCharsets.UTF_8 : wrappedResponse.charset();
     }
 
     public static Response wrapResponse(final Response response) {
@@ -37,15 +82,12 @@ public class FeignCommon {
     }
 
     public static byte[] readResponseBody(final Response.Body body) {
-        final ByteArrayOutputStream result = new ByteArrayOutputStream();
         try {
-            final byte[] buffer = new byte[1024];
-            for (int lenght; (lenght = body.asInputStream().read(buffer)) != -1; ) {
-                result.write(buffer, 0, lenght);
-            }
-        } catch (final Throwable e) {
+            return body.asInputStream().readAllBytes();
+        } catch (final IOException e) {
+            log.error(e.getMessage(), e);
+            return new byte[]{};
         }
-        return new byte[0];
     }
 
 }
