@@ -16,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FilterInterceptorTest {
@@ -35,7 +34,7 @@ public class FilterInterceptorTest {
 
     @Test
     public void resolveError_withoutError_shouldReturnNull() {
-        FilterInterceptor filter = buildFilter();
+        final FilterInterceptor filter = buildFilter();
         assertThat(filter.resolveError(null)).isNull();
     }
 
@@ -45,8 +44,8 @@ public class FilterInterceptorTest {
                   .clear()
                   .errorCode(DefaultErrorCode.buildUndefineError());
 
-        FilterInterceptor filter = buildFilter();
-        final ErrorResult error  = filter.resolveError(null);
+        final FilterInterceptor filter = buildFilter();
+        final ErrorResult       error  = filter.resolveError(null);
         assertThat(error).isNotNull();
         assertThat(error.getErrorCode()).isEqualTo("err-undefine");
         assertThat(error.getHttpCode()).isEqualTo(500);
@@ -54,14 +53,14 @@ public class FilterInterceptorTest {
     }
 
     private FilterInterceptor buildFilter() {
-        return new FilterInterceptor(
-                List.of(javaRestMethodResolver),
-                List.of(javaRestMethodTracker),
-                List.of(interceptable),
-                List.of(exceptionResolver),
-                List.of(),
-                new DefaultConfigHandler()
-        );
+        return FilterInterceptor.builder()
+                                .javaRestMethodResolvers(List.of(javaRestMethodResolver))
+                                .javaRestMethodTrackers(List.of(javaRestMethodTracker))
+                                .exceptionResolver(List.of(exceptionResolver))
+                                .interceptableResolver(List.of(interceptable))
+                                .configuration(new DefaultConfigHandler())
+                                .purgeCacheStrategy(new DefaultFilterInterceptorCachePurgeStrategy())
+                                .build();
     }
 
 }

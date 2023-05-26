@@ -35,6 +35,7 @@ import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 import io.inugami.monitoring.api.resolvers.Interceptable;
 import io.inugami.monitoring.core.context.MonitoringBootstrap;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,6 +57,7 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
  * @author patrick_guillerm
  * @since 28 déc. 2018
  */
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
@@ -329,7 +331,9 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             try {
                 interceptor.onDone(requestData, responseData, error);
             } catch (final Throwable e) {
-                log.error(e.getMessage(), e);
+                if (log.isDebugEnabled()) {
+                    log.error(e.getMessage(), e);
+                }
             }
         }
     }
