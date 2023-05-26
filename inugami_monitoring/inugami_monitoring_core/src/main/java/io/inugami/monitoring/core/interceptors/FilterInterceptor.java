@@ -66,15 +66,17 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     // ATTRIBUTES
     // =========================================================================
     //@formatter:off
-    private List<JavaRestMethodResolver> javaRestMethodResolvers = null;
-    private List<JavaRestMethodTracker>  javaRestMethodTrackers  = null;
-    private List<Interceptable>          interceptableResolver   = null;
+    private List<JavaRestMethodResolver>        javaRestMethodResolvers = null;
+    private List<JavaRestMethodTracker>         javaRestMethodTrackers  = null;
+    private List<Interceptable>                 interceptableResolver   = null;
+    private FilterInterceptorCachePurgeStrategy purgeCacheStrategy      = null;
 
     private              List<ExceptionResolver>           exceptionResolver            = null;
     private              List<MonitoringFilterInterceptor> monitoringFilterInterceptors = new ArrayList<>();
     private              ConfigHandler<String, String>     configuration;
     private final static Map<String, Boolean>              INTERCEPTABLE_URI_RESOLVED   = new ConcurrentHashMap<>();
     private final static int                               KILO                         = 1024;
+
 
     //@formatter:on
 
@@ -101,7 +103,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         javaRestMethodTrackers = SpiLoader.getInstance().loadSpiServicesByPriority(JavaRestMethodTracker.class);
         interceptableResolver = SpiLoader.getInstance().loadSpiServicesByPriority(Interceptable.class);
         exceptionResolver = SpiLoader.getInstance().loadSpiServicesByPriority(ExceptionResolver.class, new FilterInterceptorErrorResolver());
-
+        purgeCacheStrategy = SpiLoader.getInstance().loadSpiServiceByPriority(FilterInterceptorCachePurgeStrategy.class, new DefaultFilterInterceptorCachePurgeStrategy());
 
         monitoringFilterInterceptors = new ArrayList<>();
         for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
@@ -282,8 +284,15 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             }
             INTERCEPTABLE_URI_RESOLVED.put(currentPath, result);
         }
+        purgeCacheIfRequired();
 
         return result;
+    }
+
+    private void purgeCacheIfRequired() {
+        if (purgeCacheStrategy != null && purgeCacheStrategy.shouldPurge(INTERCEPTABLE_URI_RESOLVED)) {
+            INTERCEPTABLE_URI_RESOLVED.clear();
+        }
     }
 
     // =========================================================================
