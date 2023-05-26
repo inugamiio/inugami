@@ -28,6 +28,17 @@ public class RegexLineMatcher implements LineMatcher {
                                .build();
     }
 
+    public static RegexLineMatcher of(final Pattern pattern, final int... lines) {
+        final List<Integer> linesValues = new ArrayList<>();
+        for (final int line : lines) {
+            linesValues.add(Integer.valueOf(line));
+        }
+        return RegexLineMatcher.builder()
+                               .pattern(pattern)
+                               .lines(linesValues)
+                               .build();
+    }
+
     public static RegexLineMatcher of(final String lineAcceptPattern, final String pattern) {
         final List<Integer> linesValues = new ArrayList<>();
 
