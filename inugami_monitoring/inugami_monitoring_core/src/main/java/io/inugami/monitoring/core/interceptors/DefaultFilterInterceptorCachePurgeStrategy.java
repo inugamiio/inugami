@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class DefaultFilterInterceptorCachePurgeStrategy implements FilterInterceptorCachePurgeStrategy {
 
-    private final static int MAX_ITEMS = 20000;
+    private static final int MAX_ITEMS = 20000;
 
     @Override
     public boolean shouldPurge(final Map<String, Boolean> values) {

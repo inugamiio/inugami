@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@SuppressWarnings({"java:S119", "java:S3011"})
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ReflectionUtils {

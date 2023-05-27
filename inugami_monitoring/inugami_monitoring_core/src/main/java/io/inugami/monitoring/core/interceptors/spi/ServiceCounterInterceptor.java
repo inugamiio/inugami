@@ -38,6 +38,7 @@ import java.util.List;
  * @author patrickguillerm
  * @since Jan 18, 2019
  */
+@SuppressWarnings({"java:S1117"})
 @Slf4j
 public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
     boolean enabled = false;
@@ -49,7 +50,7 @@ public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
     }
 
     public ServiceCounterInterceptor(final ConfigHandler<String, String> configuration) {
-        final boolean enabled = configuration.grabBoolean("inugami.monitoring.interceptor.servicesCounter.enabled", false);
+        enabled = configuration.grabBoolean("inugami.monitoring.interceptor.servicesCounter.enabled", false);
     }
 
 

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@SuppressWarnings({"java:S1124"})
 @Builder(toBuilder = true)
 @AllArgsConstructor
 public class UuidLineMatcher implements LineMatcher {
