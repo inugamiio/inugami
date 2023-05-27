@@ -409,6 +409,120 @@ public final class Asserts {
         }
     }
 
+
+    // -------------------------------------------------------------------------
+    // NULL OR EMPTY
+    // -------------------------------------------------------------------------
+    public static void assertNullOrEmpty(final String value) {
+        if (value != null && !checkIsBlank(value)) {
+            throwException(ASSERT_EMPTY_DEFAULT_MSG);
+        }
+    }
+
+    public static void assertNullOrEmpty(final String message,
+                                         final String value) {
+        if (value != null && !checkIsBlank(value)) {
+            throwException(message == null ? ASSERT_EMPTY_DEFAULT_MSG : message);
+        }
+    }
+
+    public static void assertNullOrEmpty(final Supplier<String> messageProducer,
+                                         final String value) {
+        if (value != null && !checkIsBlank(value)) {
+            throwException(messageProducer == null ? ASSERT_EMPTY_DEFAULT_MSG : messageProducer.get());
+        }
+    }
+
+    public static void assertNullOrEmpty(final ErrorCode errorCode,
+                                         final String value) {
+        if (value != null && !checkIsBlank(value)) {
+            throwException(errorCode);
+        }
+    }
+
+
+    public static void assertNullOrEmpty(final Collection<?> value) {
+        if (value != null && !value.isEmpty()) {
+            throwException(ASSERT_EMPTY_DEFAULT_MSG);
+        }
+    }
+
+    public static void assertNullOrEmpty(final Supplier<String> messageProducer,
+                                         final Collection<?> value) {
+        if (value != null && !value.isEmpty()) {
+            throwException(messageProducer == null ? ASSERT_EMPTY_DEFAULT_MSG : messageProducer.get());
+        }
+    }
+
+    public static void assertNullOrEmpty(final String message,
+                                         final Collection<?> value) {
+        if (value != null && !value.isEmpty()) {
+            throwException(message == null ? ASSERT_EMPTY_DEFAULT_MSG : message);
+        }
+    }
+
+    public static void assertNullOrEmpty(final ErrorCode errorCode,
+                                         final Collection<?> value) {
+        if (value != null && !value.isEmpty()) {
+            throwException(errorCode);
+        }
+    }
+
+    public static void assertNullOrEmpty(final Map<?, ?> value) {
+        if (value != null && !value.isEmpty()) {
+            throwException(ASSERT_EMPTY_DEFAULT_MSG);
+        }
+    }
+
+    public static void assertNullOrEmpty(final String message,
+                                         final Map<?, ?> value) {
+        if (value != null && !value.isEmpty()) {
+            throwException(message == null ? ASSERT_EMPTY_DEFAULT_MSG : message);
+        }
+    }
+
+    public static void assertNullOrEmpty(final Supplier<String> messageProducer,
+                                         final Map<?, ?> value) {
+        if (value != null && !value.isEmpty()) {
+            throwException(messageProducer == null ? ASSERT_EMPTY_DEFAULT_MSG : messageProducer.get());
+        }
+    }
+
+    public static void assertNullOrEmpty(final ErrorCode errorCode,
+                                         final Map<?, ?> value) {
+        if (value != null && !value.isEmpty()) {
+            throwException(errorCode);
+        }
+    }
+
+
+    public static void assertNullOrEmpty(final IsEmptyFacet value) {
+        if (value != null && !value.isEmpty()) {
+            throwException(ASSERT_EMPTY_DEFAULT_MSG);
+        }
+    }
+
+    public static void assertNullOrEmpty(final Supplier<String> messageProducer,
+                                         final IsEmptyFacet value) {
+        if (value != null && !value.isEmpty()) {
+            throwException(messageProducer == null ? ASSERT_EMPTY_DEFAULT_MSG : messageProducer.get());
+        }
+    }
+
+    public static void assertNullOrEmpty(final String message,
+                                         final IsEmptyFacet value) {
+        if (value != null && !value.isEmpty()) {
+            throwException(message == null ? ASSERT_EMPTY_DEFAULT_MSG : message);
+        }
+    }
+
+    public static void assertNullOrEmpty(final ErrorCode errorCode,
+                                         final IsEmptyFacet value) {
+        if (value != null && !value.isEmpty()) {
+            throwException(errorCode);
+        }
+    }
+
     // -------------------------------------------------------------------------
     // EQUALS
     // -------------------------------------------------------------------------
