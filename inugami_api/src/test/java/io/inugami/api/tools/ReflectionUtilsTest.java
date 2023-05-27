@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import static io.inugami.api.tools.ReflectionUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings({"java:S5845"})
 class ReflectionUtilsTest {
 
 
