@@ -6,6 +6,7 @@ import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
 import io.inugami.api.spi.SpiLoader;
 import io.inugami.commons.marshaling.jaxb.JaxbAdapterSpi;
 import io.inugami.commons.marshaling.jaxb.JaxbClassRegister;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -17,6 +18,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 public class DefaultXmlJaxbMarshallerSpi implements XmlJaxbMarshallerSpi, ApplicationLifecycleSPI {
 
 
@@ -25,26 +27,36 @@ public class DefaultXmlJaxbMarshallerSpi implements XmlJaxbMarshallerSpi, Applic
     private JAXBContext             context;
 
     public DefaultXmlJaxbMarshallerSpi() {
-        DefaultApplicationLifecycleSPI.register(this);
+        try {
+            DefaultApplicationLifecycleSPI.register(this);
+        } catch (final Throwable e) {
+            log.error(e.getMessage(), e);
+        }
+
         onContextRefreshed(null);
     }
 
     @Override
     public void onContextRefreshed(final Object event) {
-        adapters = SpiLoader.getInstance().loadSpiServicesByPriority(JaxbAdapterSpi.class);
-        jaxbRegister = SpiLoader.getInstance().loadSpiServicesByPriority(JaxbClassRegister.class);
-
-        final Set<Class<?>> classes = new LinkedHashSet<>();
-        for (final JaxbClassRegister jaxbRegister : jaxbRegister) {
-            final List<Class<?>> currentClasses = jaxbRegister.register();
-            if (currentClasses != null) {
-                classes.addAll(currentClasses);
-            }
-        }
         try {
-            context = JAXBContext.newInstance(classes.toArray(new Class<?>[]{}));
-        } catch (final JAXBException e) {
-            throw new UncheckedException(e.getMessage(), e);
+            adapters = SpiLoader.getInstance().loadSpiServicesByPriority(JaxbAdapterSpi.class);
+            jaxbRegister = SpiLoader.getInstance().loadSpiServicesByPriority(JaxbClassRegister.class);
+
+            final Set<Class<?>> classes = new LinkedHashSet<>();
+            for (final JaxbClassRegister jaxbRegister : jaxbRegister) {
+                final List<Class<?>> currentClasses = jaxbRegister.register();
+                if (currentClasses != null) {
+                    classes.addAll(currentClasses);
+                }
+            }
+            try {
+                context = JAXBContext.newInstance(classes.toArray(new Class<?>[]{}));
+            } catch (final JAXBException e) {
+                throw new UncheckedException(e.getMessage(), e);
+            }
+
+        } catch (final Throwable e) {
+            log.error(e.getMessage(), e);
         }
 
     }

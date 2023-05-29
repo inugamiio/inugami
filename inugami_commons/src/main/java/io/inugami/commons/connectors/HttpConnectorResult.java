@@ -16,6 +16,11 @@
  */
 package io.inugami.commons.connectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.inugami.commons.marshaling.JsonMarshaller;
+import io.inugami.commons.marshaling.YamlMarshaller;
 import lombok.*;
 
 import java.io.Serializable;
@@ -84,8 +89,8 @@ public class HttpConnectorResult implements Serializable {
     // CONSTRUCTORS
     // =========================================================================
     public static class HttpConnectorResultBuilder {
-        private Map<String, String> requestHeaders  = new LinkedHashMap<>();
-        private Map<String, String> responseHeaders = new LinkedHashMap<>();
+        private Map<String, String> requestHeaders;
+        private Map<String, String> responseHeaders;
 
         public HttpConnectorResult build() {
             final StringBuilder hashBuilder = new StringBuilder()
@@ -93,13 +98,13 @@ public class HttpConnectorResult implements Serializable {
                     .append(this.url);
 
             this.encoding = encoding == null ? "UTF-8" : encoding;
-            this.length   = data == null ? 0 : data.length;
+            this.length = data == null ? 0 : data.length;
             if (jsonInputData != null) {
                 hashBuilder.append("?data=").append(jsonInputData.replaceAll("\\n", ""));
             }
 
             this.hashHumanReadable = hashBuilder.toString();
-            hashCode               = this.hashHumanReadable.hashCode();
+            hashCode = this.hashHumanReadable.hashCode();
             return new HttpConnectorResult(
                     verb,
                     url,
@@ -123,6 +128,9 @@ public class HttpConnectorResult implements Serializable {
         }
 
         public HttpConnectorResultBuilder addRequestHeader(final String key, final String value) {
+            if (requestHeaders == null) {
+                requestHeaders = new LinkedHashMap<>();
+            }
             if (key != null) {
                 requestHeaders.put(key, value);
             }
@@ -131,12 +139,55 @@ public class HttpConnectorResult implements Serializable {
         }
 
         public HttpConnectorResultBuilder addResponseHeader(final String key, final String value) {
+            if (responseHeaders == null) {
+                responseHeaders = new LinkedHashMap<>();
+            }
             if (key != null) {
                 responseHeaders.put(key, value);
             }
 
             return this;
         }
+    }
+
+    public <T> T getBodyFromJson(final Class<? extends T> objectClass) throws JsonProcessingException {
+        if (bodyData == null) {
+            return null;
+        }
+        final String       data       = new String(bodyData, charset == null ? StandardCharsets.UTF_8 : charset);
+        final ObjectMapper marshaller = JsonMarshaller.getInstance().getDefaultObjectMapper();
+
+        return marshaller.readValue(data, objectClass);
+    }
+
+    public <T> T getBodyFromJson(final TypeReference<T> refObjectType) throws JsonProcessingException {
+        if (bodyData == null) {
+            return null;
+        }
+        final String       data       = new String(bodyData, charset == null ? StandardCharsets.UTF_8 : charset);
+        final ObjectMapper marshaller = JsonMarshaller.getInstance().getDefaultObjectMapper();
+
+        return marshaller.readValue(data, refObjectType);
+    }
+
+
+    public <T> T getBodyFromYaml(final Class<? extends T> objectClass) throws JsonProcessingException {
+        if (bodyData == null) {
+            return null;
+        }
+        final String       data       = new String(bodyData, charset == null ? StandardCharsets.UTF_8 : charset);
+        final ObjectMapper marshaller = JsonMarshaller.getInstance().getDefaultObjectMapper();
+
+        return YamlMarshaller.getInstance().convertFromYaml(data, objectClass);
+    }
+
+    public <T> T getBodyFromYaml(final TypeReference<T> refObjectType) throws JsonProcessingException {
+        if (bodyData == null) {
+            return null;
+        }
+        final String data = new String(bodyData, charset == null ? StandardCharsets.UTF_8 : charset);
+
+        return YamlMarshaller.getInstance().convertFromYaml(data, refObjectType);
     }
 
     // =========================================================================

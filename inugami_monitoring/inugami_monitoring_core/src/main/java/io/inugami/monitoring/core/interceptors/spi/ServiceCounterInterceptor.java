@@ -38,8 +38,10 @@ import java.util.List;
  * @author patrickguillerm
  * @since Jan 18, 2019
  */
+@SuppressWarnings({"java:S1117"})
 @Slf4j
 public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
+    boolean enabled = false;
 
     // =========================================================================
     // CONSTRUCTORS
@@ -47,9 +49,14 @@ public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
     public ServiceCounterInterceptor() {
     }
 
+    public ServiceCounterInterceptor(final ConfigHandler<String, String> configuration) {
+        enabled = configuration.grabBoolean("inugami.monitoring.interceptor.servicesCounter.enabled", false);
+    }
+
+
     @Override
     public MonitoringFilterInterceptor buildInstance(final ConfigHandler<String, String> configuration) {
-        return new ServiceCounterInterceptor();
+        return new ServiceCounterInterceptor(configuration);
     }
 
     @Override
@@ -62,46 +69,52 @@ public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
 
     @Override
     public List<GenericMonitoringModel> onBegin(final ResquestData request) {
-        final GenericMonitoringModelBuilder builder = GenericMonitoringModelTools.initResultBuilder();
+        if (enabled) {
+            final GenericMonitoringModelBuilder builder = GenericMonitoringModelTools.initResultBuilder();
 
-        builder.setValue(new LongNumber(1));
-        builder.setCounterType(ServiceValueTypes.HITS.getKeywork());
-        builder.setValueType("count");
+            builder.setValue(new LongNumber(1));
+            builder.setCounterType(ServiceValueTypes.HITS.getKeywork());
+            builder.setValueType("count");
 
-        ServicesSensor.addData(GenericMonitoringModelTools.buildSingleResult(builder));
+            ServicesSensor.addData(GenericMonitoringModelTools.buildSingleResult(builder));
+        }
+
         return null;
     }
 
     @Override
     public List<GenericMonitoringModel> onDone(final ResquestData request, final ResponseData response,
                                                final ErrorResult error) {
-        try {
-            final List<GenericMonitoringModel> result = new ArrayList<>();
+        if (enabled) {
+            try {
+                final List<GenericMonitoringModel> result = new ArrayList<>();
 
-            final GenericMonitoringModelBuilder builder  = GenericMonitoringModelTools.initResultBuilder();
-            final ServiceValueTypes             doneType = error == null ? ServiceValueTypes.DONE : ServiceValueTypes.ERROR;
+                final GenericMonitoringModelBuilder builder  = GenericMonitoringModelTools.initResultBuilder();
+                final ServiceValueTypes             doneType = error == null ? ServiceValueTypes.DONE : ServiceValueTypes.ERROR;
 
-            if (doneType == ServiceValueTypes.ERROR) {
-                builder.setErrorCode(error.getErrorCode());
-                builder.setErrorType(error.getErrorType());
-            }
-            builder.setCounterType(doneType.getKeywork());
+                if (doneType == ServiceValueTypes.ERROR) {
+                    builder.setErrorCode(error.getErrorCode());
+                    builder.setErrorType(error.getErrorType());
+                }
+                builder.setCounterType(doneType.getKeywork());
 
-            builder.setValue(new LongNumber(response.getDuration()));
-            builder.setCounterType(ServiceValueTypes.RESPONSE_TIME.getKeywork());
-            result.add(builder.build());
+                builder.setValue(new LongNumber(response.getDuration()));
+                builder.setCounterType(ServiceValueTypes.RESPONSE_TIME.getKeywork());
+                result.add(builder.build());
 
-            builder.setValue(new LongNumber(1));
-            builder.setCounterType(ServiceValueTypes.HITS.getKeywork());
-            builder.setValueType("count");
-            result.add(builder.build());
+                builder.setValue(new LongNumber(1));
+                builder.setCounterType(ServiceValueTypes.HITS.getKeywork());
+                builder.setValueType("count");
+                result.add(builder.build());
 
-            ServicesSensor.addData(result);
-        } catch (final Throwable e) {
-            if (log.isTraceEnabled()) {
-                log.debug(e.getMessage(), e);
+                ServicesSensor.addData(result);
+            } catch (final Throwable e) {
+                if (log.isTraceEnabled()) {
+                    log.debug(e.getMessage(), e);
+                }
             }
         }
+
 
         return null;
     }

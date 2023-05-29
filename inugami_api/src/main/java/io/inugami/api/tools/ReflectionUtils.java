@@ -1,5 +1,6 @@
 package io.inugami.api.tools;
 
+import io.inugami.api.exceptions.UncheckedException;
 import io.inugami.api.functionnals.GenericActionWithException;
 import io.inugami.api.loggers.Loggers;
 import lombok.AccessLevel;
@@ -14,6 +15,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@SuppressWarnings({"java:S119", "java:S3011"})
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ReflectionUtils {
@@ -97,6 +99,18 @@ public final class ReflectionUtils {
         }
     }
 
+
+    public static <A extends Annotation, AE extends AnnotatedElement> A getAnnotation(final AE annotatedElement,
+                                                                                      final Class<A> annotation) {
+        A result = null;
+        if (annotatedElement != null) {
+            result = annotatedElement.getDeclaredAnnotation(annotation);
+            if (result == null) {
+                result = annotatedElement.getAnnotation(annotation);
+            }
+        }
+        return result;
+    }
     // =========================================================================
     // FIELDS
     // =========================================================================
@@ -196,6 +210,19 @@ public final class ReflectionUtils {
             Loggers.DEBUG.error(e.getMessage());
         }
         return field;
+    }
+
+
+    public static <T extends Object> T setFieldValue(final Field field, final Object value, final T instance) {
+        if (field != null && instance != null) {
+            field.setAccessible(true);
+            try {
+                field.set(instance, value);
+            } catch (final IllegalAccessException e) {
+                throw new UncheckedException(e.getMessage(), e);
+            }
+        }
+        return instance;
     }
 
     // =========================================================================

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -23,7 +24,21 @@ public class FeignCommon {
     }
 
     public static long resolveCallDate(final Response response) {
-        return 0;
+        final Collection<String> xDate      = response.request() == null || response.request().headers() == null ? null : response.request().headers().get(FeignCommon.X_DATE);
+        String                   xDateValue = null;
+        if (xDate != null && !xDate.isEmpty()) {
+            xDateValue = xDate.toArray(new String[]{})[0];
+        }
+        if (xDateValue == null) {
+            return 0;
+        } else {
+            try {
+                return Long.parseLong(xDateValue);
+            } catch (final Exception e) {
+                return 0;
+            }
+        }
+
     }
 
     public static IoInfoDTO buildInfo(final Response wrappedResponse, final long duration) {

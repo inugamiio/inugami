@@ -22,10 +22,15 @@ public class FeignPartnerErrorDecoder implements ErrorDecoder {
 
     @Override
     public Exception decode(final String methodKey, final Response response) {
-        final long      now             = System.currentTimeMillis();
-        final long      callDate        = FeignCommon.resolveCallDate(response);
+        final long now      = System.currentTimeMillis();
+        final long callDate = FeignCommon.resolveCallDate(response);
+        long       duration = 0;
+        if (callDate != 0) {
+            duration = now - callDate;
+        }
+
         final Response  wrappedResponse = FeignCommon.wrapResponse(response);
-        final IoInfoDTO ioInfo          = FeignCommon.buildInfo(wrappedResponse, now - callDate);
+        final IoInfoDTO ioInfo          = FeignCommon.buildInfo(wrappedResponse, duration);
 
         final String feignClient = response.request().requestTemplate().feignTarget().name();
         final String urlTemplate = response.request().requestTemplate().methodMetadata().configKey();

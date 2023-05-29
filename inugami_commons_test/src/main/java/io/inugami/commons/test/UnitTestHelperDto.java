@@ -133,9 +133,23 @@ public final class UnitTestHelperDto {
 
 
     private static <T> void processAssertEquals(final T instance, final AssertDtoContext<T> context) {
+        assertThat(instance).isEqualTo(instance);
+
+        if (context.getNoArgConstructor() != null) {
+            assertThat(context.getNoArgConstructor().get()).isEqualTo(context.getNoArgConstructor().get());
+            assertThat(context.getNoArgConstructor().get()).hasSameHashCodeAs(context.getNoArgConstructor().get());
+        }
+
+        if (context.getFullArgConstructor() != null) {
+            assertThat(context.getFullArgConstructor().get()).isEqualTo(context.getFullArgConstructor().get());
+            assertThat(context.getFullArgConstructor().get()).hasSameHashCodeAs(context.getFullArgConstructor().get());
+        }
         if (context.getCloneFunction() != null) {
             assertThat(instance).isEqualTo(context.getCloneFunction().apply(instance));
-            assertThat(instance.hashCode()).isEqualTo(context.getCloneFunction().apply(instance).hashCode());
+            assertThat(context.getCloneFunction().apply(instance)).isEqualTo(instance);
+
+            assertThat(instance).hasSameHashCodeAs(context.getCloneFunction().apply(instance));
+            assertThat(context.getCloneFunction().apply(instance)).hasSameHashCodeAs(instance);
         }
         if (context.getEqualsFunction() != null) {
             context.getEqualsFunction().accept(instance);
@@ -143,6 +157,15 @@ public final class UnitTestHelperDto {
     }
 
     private static <T> void processAssertNotEquals(final T instance, final AssertDtoContext<T> context) {
+        assertThat(instance).isNotEqualTo(null);
+
+        if (context.getNoArgConstructor() != null && context.getFullArgConstructor() != null) {
+            assertThat(context.getNoArgConstructor().get()).isNotEqualTo(context.getFullArgConstructor().get());
+            assertThat(context.getNoArgConstructor().get().hashCode()).isNotEqualTo(context.getFullArgConstructor().get().hashCode());
+
+            assertThat(context.getFullArgConstructor().get()).isNotEqualTo(context.getNoArgConstructor().get());
+            assertThat(context.getFullArgConstructor().get().hashCode()).isNotEqualTo(context.getNoArgConstructor().get().hashCode());
+        }
         if (context.getNoEqualsFunction() != null) {
             log.info("[{}] processAssertNotEquals", context);
             context.getNoEqualsFunction().accept(instance);

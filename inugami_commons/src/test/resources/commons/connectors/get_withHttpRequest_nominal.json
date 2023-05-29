@@ -2,7 +2,7 @@
   "charset" : "UTF-8",
   "contentType" : "application/json",
   "data" : "InRlc3RpbmctbGlicmFyeSI6ICJXaXJlTW9jayI=",
-  "delais" : 38,
+  "delais" : 8,
   "encoding" : "UTF-8",
   "hashCode" : -1849980823,
   "hashHumanReadable" : "[GET]http://localhost:1234?page=1",
@@ -14,7 +14,6 @@
     "x-b3-traceid" : "bff3187a6760"
   },
   "responseAt" : 0,
-  "responseHeaders" : { },
   "statusCode" : 200,
   "url" : "http://localhost:1234?page=1",
   "verb" : "GET"

@@ -62,7 +62,7 @@ import static io.inugami.commons.connectors.exceptions.HttpError.REQUEST_REQUIRE
  * @since 26 oct. 2016
  */
 @Slf4j
-public class HttpBasicConnector {
+public class HttpBasicConnector implements IHttpBasicConnector {
 
     // =========================================================================
     // ATTRIBUTES
@@ -239,6 +239,7 @@ public class HttpBasicConnector {
     // =========================================================================
     // GET
     // =========================================================================
+    @Override
     public HttpConnectorResult get(final HttpRequest request) throws ConnectorException {
         Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder().verb(HTTP_GET).body(null).build(), this::processGet);
@@ -287,6 +288,7 @@ public class HttpBasicConnector {
     // =========================================================================
     // POST
     // =========================================================================
+    @Override
     public HttpConnectorResult post(final HttpRequest request) throws ConnectorException {
         Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder().verb(HTTP_POST).build(), this::processPost);
@@ -364,6 +366,7 @@ public class HttpBasicConnector {
     // =========================================================================
     // PUT
     // =========================================================================
+    @Override
     public HttpConnectorResult put(final HttpRequest request) throws ConnectorException {
         Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder().verb(PUT).build(), this::processPut);
@@ -432,6 +435,7 @@ public class HttpBasicConnector {
     // =========================================================================
     // PATCH
     // =========================================================================
+    @Override
     public HttpConnectorResult patch(final HttpRequest request) throws ConnectorException {
         Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder().verb(PATCH).build(), this::processPatch);
@@ -482,6 +486,7 @@ public class HttpBasicConnector {
     // =========================================================================
     // DELETE
     // =========================================================================
+    @Override
     public HttpConnectorResult delete(final HttpRequest request) throws ConnectorException {
         Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder().verb(DELETE).build(), this::processDelete);
@@ -525,6 +530,7 @@ public class HttpBasicConnector {
     // =========================================================================
     // OPTION
     // =========================================================================
+    @Override
     public HttpConnectorResult option(final HttpRequest request) throws ConnectorException {
         Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder().verb(OPTION).body(null).build(), this::processOption);

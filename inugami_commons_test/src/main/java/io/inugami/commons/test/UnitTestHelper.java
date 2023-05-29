@@ -216,6 +216,10 @@ public class UnitTestHelper {
         return UnitTestHelperYaml.loadYaml(path, objectType);
     }
 
+    public static <T> T convertFromYaml(final String content, final TypeReference<T> userDtoClass) {
+        return UnitTestHelperYaml.convertFromYaml(content, userDtoClass);
+    }
+
     public static JsonNode loadYaml(final String path) {
         return UnitTestHelperYaml.loadYaml(path);
     }

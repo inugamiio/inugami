@@ -35,6 +35,7 @@ import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 import io.inugami.monitoring.api.resolvers.Interceptable;
 import io.inugami.monitoring.core.context.MonitoringBootstrap;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,6 +57,7 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
  * @author patrick_guillerm
  * @since 28 déc. 2018
  */
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
@@ -66,15 +68,17 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     // ATTRIBUTES
     // =========================================================================
     //@formatter:off
-    private List<JavaRestMethodResolver> javaRestMethodResolvers = null;
-    private List<JavaRestMethodTracker>  javaRestMethodTrackers  = null;
-    private List<Interceptable>          interceptableResolver   = null;
+    private List<JavaRestMethodResolver>        javaRestMethodResolvers = null;
+    private List<JavaRestMethodTracker>         javaRestMethodTrackers  = null;
+    private List<Interceptable>                 interceptableResolver   = null;
+    private FilterInterceptorCachePurgeStrategy purgeCacheStrategy      = null;
 
     private              List<ExceptionResolver>           exceptionResolver            = null;
     private              List<MonitoringFilterInterceptor> monitoringFilterInterceptors = new ArrayList<>();
     private              ConfigHandler<String, String>     configuration;
     private final static Map<String, Boolean>              INTERCEPTABLE_URI_RESOLVED   = new ConcurrentHashMap<>();
     private final static int                               KILO                         = 1024;
+
 
     //@formatter:on
 
@@ -101,7 +105,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         javaRestMethodTrackers = SpiLoader.getInstance().loadSpiServicesByPriority(JavaRestMethodTracker.class);
         interceptableResolver = SpiLoader.getInstance().loadSpiServicesByPriority(Interceptable.class);
         exceptionResolver = SpiLoader.getInstance().loadSpiServicesByPriority(ExceptionResolver.class, new FilterInterceptorErrorResolver());
-
+        purgeCacheStrategy = SpiLoader.getInstance().loadSpiServiceByPriority(FilterInterceptorCachePurgeStrategy.class, new DefaultFilterInterceptorCachePurgeStrategy());
 
         monitoringFilterInterceptors = new ArrayList<>();
         for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
@@ -282,8 +286,15 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             }
             INTERCEPTABLE_URI_RESOLVED.put(currentPath, result);
         }
+        purgeCacheIfRequired();
 
         return result;
+    }
+
+    private void purgeCacheIfRequired() {
+        if (purgeCacheStrategy != null && purgeCacheStrategy.shouldPurge(INTERCEPTABLE_URI_RESOLVED)) {
+            INTERCEPTABLE_URI_RESOLVED.clear();
+        }
     }
 
     // =========================================================================
@@ -320,7 +331,9 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             try {
                 interceptor.onDone(requestData, responseData, error);
             } catch (final Throwable e) {
-                log.error(e.getMessage(), e);
+                if (log.isDebugEnabled()) {
+                    log.error(e.getMessage(), e);
+                }
             }
         }
     }

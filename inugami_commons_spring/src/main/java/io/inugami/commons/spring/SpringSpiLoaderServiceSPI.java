@@ -15,13 +15,13 @@ public class SpringSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
     private static final AtomicReference<ConfigurableListableBeanFactory> SPRING_CONTEXT = new AtomicReference<>();
     private final        JavaSpiLoaderServiceSPI                          javaSpiLoader  = new JavaSpiLoaderServiceSPI();
 
-    static synchronized void initSpringContext(ConfigurableListableBeanFactory context) {
+    static synchronized void initSpringContext(final ConfigurableListableBeanFactory context) {
         SPRING_CONTEXT.set(context);
     }
 
     @Override
     public <T> List<T> loadServices(final Class<?> type) {
-        List<T> result = new ArrayList<>();
+        final List<T> result = new ArrayList<>();
         result.addAll(searchSpringBeans(type));
         result.addAll(javaSpiLoader.loadServices(type));
         return result;
@@ -39,12 +39,14 @@ public class SpringSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
 
         try {
             beans = beanFactory.getBeansOfType(type);
-        } catch (Throwable e) {
-            log.error(e.getMessage(), e);
+        } catch (final Throwable e) {
+            if (log.isTraceEnabled()) {
+                log.error(e.getMessage(), e);
+            }
         }
 
         if (beans != null) {
-            for (Map.Entry<String, ?> entry : beans.entrySet()) {
+            for (final Map.Entry<String, ?> entry : beans.entrySet()) {
                 result.add((T) entry.getValue());
             }
         }
