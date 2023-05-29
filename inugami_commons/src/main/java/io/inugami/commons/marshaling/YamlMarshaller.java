@@ -2,6 +2,7 @@ package io.inugami.commons.marshaling;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -46,6 +47,23 @@ public class YamlMarshaller {
     // =========================================================================
 
     public <T> T convertFromYaml(final String content, final Class<? extends T> objectClass) {
+        if (content == null) {
+            return null;
+        }
+        Asserts.assertNotNull(YamlMarshallerError.YAML_CLASS_REQUIRED, objectClass);
+
+
+        try {
+            return objectMapper.readValue(content, objectClass);
+        } catch (final JsonProcessingException e) {
+            throw new UncheckedException(DefaultErrorCode.fromErrorCode(YAML_UNMARSHALLING_ERROR)
+                                                         .message(YAML_UNMARSHALLING_ERROR.getMessage() + " " + e.getMessage())
+                                                         .build(),
+                                         e);
+        }
+    }
+
+    public <T> T convertFromYaml(final String content, final TypeReference<T> objectClass) {
         if (content == null) {
             return null;
         }

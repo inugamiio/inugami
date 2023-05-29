@@ -1,5 +1,6 @@
 package io.inugami.commons.test;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.inugami.api.exceptions.Asserts;
 import io.inugami.commons.marshaling.YamlMarshaller;
@@ -47,6 +48,10 @@ public final class UnitTestHelperYaml {
     }
 
     static <T> T convertFromYaml(final String content, final Class<? extends T> userDtoClass) {
+        return YamlMarshaller.getInstance().convertFromYaml(content, userDtoClass);
+    }
+
+    static <T> T convertFromYaml(final String content, final TypeReference<T> userDtoClass) {
         return YamlMarshaller.getInstance().convertFromYaml(content, userDtoClass);
     }
 
