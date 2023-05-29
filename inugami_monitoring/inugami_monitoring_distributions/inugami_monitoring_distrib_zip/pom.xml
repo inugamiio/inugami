@@ -15,7 +15,7 @@
     <parent>
         <groupId>io.inugami.monitoring.distributions</groupId>
         <artifactId>inugami_monitoring_distributions</artifactId>
-        <version>3.2.2</version>
+        <version>3.2.3-SNAPSHOT</version>
     </parent>
 
 
