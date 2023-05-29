@@ -99,6 +99,16 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
     // =========================================================================
     // RUN AND GRAB
     // =========================================================================
+    public <T> List<T> runAndGrab(final List<Callable<T>> tasks) throws TechnicalException {
+        return runAndGrab(tasks, null, null, timeout);
+    }
+
+    public <T> List<T> runAndGrab(final List<Callable<T>> tasks,
+                                  final BiConsumer<T, Callable<T>> onDone,
+                                  final BiConsumer<Exception, Callable<T>> onError) throws TechnicalException {
+        return runAndGrab(tasks, onDone, onError, timeout);
+    }
+
     public <T> List<T> runAndGrab(final List<Callable<T>> tasks, final long timeout) throws TechnicalException {
         return runAndGrab(tasks, null, null, timeout);
     }
@@ -165,7 +175,7 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
                                                 final BiConsumer<T, Callable<T>> onDone,
                                                 final BiConsumer<Exception, Callable<T>> onError) {
         // @formatter:off
-        final BiConsumer<T, Callable<T>>         functionOnDone  = onDone != null ? onDone : (data, task) -> {
+        final BiConsumer<T, Callable<T>> functionOnDone = onDone != null ? onDone : (data, task) -> {
         };
         final BiConsumer<Exception, Callable<T>> functionOnError = onError != null ? onError : (error, task) -> {
         };

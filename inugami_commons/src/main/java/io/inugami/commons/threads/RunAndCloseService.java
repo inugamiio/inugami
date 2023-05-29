@@ -23,6 +23,7 @@ import io.inugami.api.monitoring.MonitoringInitializer;
 import io.inugami.api.monitoring.RequestContext;
 import io.inugami.api.monitoring.RequestInformation;
 import io.inugami.api.spi.SpiLoader;
+import lombok.Builder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,26 +97,42 @@ public class RunAndCloseService<T> implements ThreadFactory {
 
     public RunAndCloseService(final String threadsName, final long timeout, final int nbThreads,
                               final List<Callable<T>> tasks, final BiFunction<Exception, Callable<T>, T> onError) {
+        this(threadsName, timeout, nbThreads, null, tasks, onError);
+    }
+
+    @Builder
+    public RunAndCloseService(final String threadsName,
+                              final long timeout,
+                              final int nbThreads,
+                              final ExecutorService executor,
+                              final List<Callable<T>> tasks,
+                              final BiFunction<Exception, Callable<T>, T> onError) {
         super();
         Asserts.assertNotNull(tasks);
 
         this.tasks = tasks;
-        int howManyThreads = tasks.size() < nbThreads ? tasks.size() : nbThreads;
-        if (howManyThreads <= 0) {
-            howManyThreads = 1;
+
+        ExecutorService currentExecutor = executor;
+        if (executor == null) {
+            int howManyThreads = tasks.size() < nbThreads ? tasks.size() : nbThreads;
+            if (howManyThreads <= 0) {
+                howManyThreads = 1;
+            }
+
+            currentExecutor = Executors.newFixedThreadPool(howManyThreads, this);
         }
+        this.executor = currentExecutor;
         this.threadsName = threadsName;
         this.timeout = timeout;
         this.onError = onError;
         tasksAndFutures = new HashMap<>();
         threadGroup = Thread.currentThread().getThreadGroup();
-        executor = Executors.newFixedThreadPool(howManyThreads, this);
-        completion = new ExecutorCompletionService<>(executor);
 
-
+        completion = new ExecutorCompletionService<>(currentExecutor);
         this.requestContext = RequestContext.getInstance();
 
     }
+
 
     // =========================================================================
     // METHODS
@@ -151,7 +168,7 @@ public class RunAndCloseService<T> implements ThreadFactory {
     }
 
     private long computeTimeLeft(final long timeLeft, final Chrono chrono) {
-        final long result = timeLeft - chrono.snapshot().getDelaisInMillis();
+        final long result = timeLeft - chrono.snapshot().getDurationInMillis();
         return result < 0 ? 0 : result;
     }
 
