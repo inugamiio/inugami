@@ -21,5 +21,5 @@ import java.lang.annotation.*;
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Documented
-public @interface NonSpringBean {
+public @interface NotSpringBean {
 }
