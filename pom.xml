@@ -173,7 +173,7 @@
 
         <!--[ org.springframework ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <org.springframework.version>5.2.20.RELEASE</org.springframework.version>
-        <org.springframework.boot.version>2.7.9</org.springframework.boot.version>
+        <org.springframework.boot.version>2.5.12</org.springframework.boot.version>
         <org.springframework.spring-cloud-dependencies.version>2021.0.6
         </org.springframework.spring-cloud-dependencies.version>
 
