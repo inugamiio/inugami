@@ -14,8 +14,28 @@ import java.util.List;
 import java.util.Map;
 
 import static io.inugami.commons.test.UnitTestHelper.assertTextRelative;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class FeignCommonTest {
+    @Test
+    void buildInfo_withRequest_nominal() {
+        final IoInfoDTO iologInfo = FeignCommon.buildInfo(RequestTemplateBuilder.builder()
+                                                                                .method(Request.HttpMethod.POST)
+                                                                                .addHeader("someKey", "value")
+                                                                                .body("lorem ipsum")
+                                                                                .uri("/my/service")
+                                                                                .addQuery("page", "12")
+                                                                                .addQuery("pageSize", "20")
+                                                                                .feignTarget(new Target.HardCodedTarget(SimpleFeignClient.class, "http://mock"))
+                                                                                .buildFeignRequestTemplate()
+        );
+        assertTextRelative(iologInfo.toString(), "partnerlog/feign/feignCommonTest/buildInfo_withRequest_nominal.txt");
+    }
+
+    @Test
+    void buildInfo_withRequest_withoutData() {
+        assertThat(FeignCommon.buildInfo(null)).isNotNull();
+    }
 
     @Test
     void buildInfo_nominal() {
