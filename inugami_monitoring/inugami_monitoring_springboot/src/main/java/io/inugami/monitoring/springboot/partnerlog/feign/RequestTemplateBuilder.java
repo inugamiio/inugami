@@ -64,7 +64,7 @@ public class RequestTemplateBuilder {
             result.headers(headers);
             result.target(target);
             result.uri(uri);
-            result.method(method);
+            result.method(method == null ? Request.HttpMethod.GET : method);
 
             if (queries != null) {
                 result.queries(queries);
