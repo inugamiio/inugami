@@ -61,24 +61,29 @@ public class RequestTemplateBuilder {
 
         public RequestTemplate buildFeignRequestTemplate() {
             final RequestTemplate result = new RequestTemplate();
-            result.headers(headers);
-            result.target(target);
-            result.uri(uri);
-
-            if (queries != null) {
-                result.queries(queries);
-            }
-
-            if (body != null) {
-                result.body(body);
-            }
-            if (target != null) {
+            try {
+                result.headers(headers);
                 result.target(target);
+                result.uri(uri);
+                result.method(method == null ? Request.HttpMethod.GET : method);
+
+                if (queries != null) {
+                    result.queries(queries);
+                }
+
+                if (body != null) {
+                    result.body(body);
+                }
+                if (target != null) {
+                    result.target(target);
+                }
+
+                if (feignTarget != null) {
+                    result.feignTarget(feignTarget);
+                }
+            } catch (final Throwable e) {
             }
 
-            if (feignTarget != null) {
-                result.feignTarget(feignTarget);
-            }
             return result;
         }
     }

@@ -1,0 +1,7 @@
+[POST] /my/service?page=12&pageSize=20
+request:
+	headers:
+		Content-Length : 11
+		someKey : value
+	payload:
+lorem ipsum

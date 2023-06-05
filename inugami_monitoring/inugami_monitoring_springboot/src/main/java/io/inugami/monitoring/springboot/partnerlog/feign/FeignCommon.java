@@ -19,8 +19,26 @@ public class FeignCommon {
 
     public static final String X_DATE = "x-date";
 
-    public static IoInfoDTO buildInfo(final RequestTemplate requestTemplate) {
-        return null;
+    public static IoInfoDTO buildInfo(final RequestTemplate request) {
+        final IoInfoDTO.IoInfoDTOBuilder builder = IoInfoDTO.builder();
+        if (request == null) {
+            return builder.build();
+        }
+        try {
+            builder.url(request.url());
+            builder.headers(request.headers());
+            builder.method(request.method());
+
+            if (request.body() != null) {
+                builder.payload(request.body());
+            }
+            if (request.feignTarget() != null) {
+                builder.partnerName(request.feignTarget().name());
+            }
+        } catch (final Throwable e) {
+        }
+
+        return builder.build();
     }
 
     public static long resolveCallDate(final Response response) {

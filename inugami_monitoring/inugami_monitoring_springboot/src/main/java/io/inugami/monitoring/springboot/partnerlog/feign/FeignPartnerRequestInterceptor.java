@@ -19,17 +19,24 @@ public class FeignPartnerRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(final RequestTemplate requestTemplate) {
-        final IoInfoDTO info = FeignCommon.buildInfo(requestTemplate);
-        MdcService.getInstance().ioinfoPartner(info);
+        try {
+            final IoInfoDTO info = FeignCommon.buildInfo(requestTemplate);
+            MdcService.getInstance().ioinfoPartner(info);
 
-        Loggers.PARTNERLOG.info(info.toString());
-        requestTemplate.header(FeignCommon.X_DATE, String.valueOf(System.currentTimeMillis()));
+            Loggers.PARTNERLOG.info(info.toString());
+            requestTemplate.header(FeignCommon.X_DATE, String.valueOf(System.currentTimeMillis()));
+        } catch (final Throwable e) {
+        }
 
-        final Map<String, String> trackingInfo = monitoringContext.getTrackingInformation();
-        if (trackingInfo != null) {
-            for (final Map.Entry<String, String> entry : trackingInfo.entrySet()) {
-                requestTemplate.header(entry.getKey(), entry.getValue());
+
+        try {
+            final Map<String, String> trackingInfo = monitoringContext.getTrackingInformation();
+            if (trackingInfo != null) {
+                for (final Map.Entry<String, String> entry : trackingInfo.entrySet()) {
+                    requestTemplate.header(entry.getKey(), entry.getValue());
+                }
             }
+        } catch (final Throwable e) {
         }
     }
 }
