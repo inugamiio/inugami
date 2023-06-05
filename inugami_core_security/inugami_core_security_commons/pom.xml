@@ -15,7 +15,7 @@
     <parent>
         <artifactId>inugami_core_security</artifactId>
         <groupId>io.inugami.security</groupId>
-        <version>3.2.3-SNAPSHOT</version>
+        <version>3.2.3</version>
     </parent>
 
     <!-- ======================================================================= 
