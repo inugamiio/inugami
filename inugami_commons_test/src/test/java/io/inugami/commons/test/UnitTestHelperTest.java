@@ -19,6 +19,7 @@ import java.util.List;
 import static io.inugami.commons.test.TestUtils.USER_DTO_TYPE;
 import static io.inugami.commons.test.TestUtils.buildRelativePath;
 import static io.inugami.commons.test.UnitTestHelper.assertTextRelative;
+import static io.inugami.commons.test.UnitTestHelper.assertThrows;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -42,9 +43,9 @@ public class UnitTestHelperTest {
 
     @Test
     public void readFileRelative_withNullValue_shouldThrow() {
-        UnitTestHelper.assertThrows(RuntimeException.class,
-                                    "can't read file from null relative path!",
-                                    () -> UnitTestHelper.readFileRelative(null));
+        assertThrows(RuntimeException.class,
+                     "can't read file from null relative path!",
+                     () -> UnitTestHelper.readFileRelative(null));
     }
 
 
@@ -197,11 +198,11 @@ public class UnitTestHelperTest {
     public void AssertTextException_withDiff_shouldThrow() {
         final UserDto ref = UnitTestHelperJson.loadJson("test/dto/user.1.json", USER_DTO_TYPE);
         ref.setLastName("foobar");
-        UnitTestHelper.assertThrows(() -> UnitTestHelper.assertTextRelative(UnitTestHelperJson.forceConvertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
+        assertThrows(() -> UnitTestHelper.assertTextRelative(UnitTestHelperJson.forceConvertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
 
 
-        UnitTestHelper.assertThrows(UnitTestHelperText.AssertTextException.class, "reference and json have not same size : 17,16",
-                                    () -> UnitTestHelper.assertTextRelative(UnitTestHelper.forceConvertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
+        assertThrows(UnitTestHelperText.AssertTextException.class, "reference and json have not same size : 17,16",
+                     () -> UnitTestHelper.assertTextRelative(UnitTestHelper.forceConvertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
     }
 
     // =========================================================================
@@ -210,7 +211,7 @@ public class UnitTestHelperTest {
     @Test
     public void assertThrowsError_withException_shouldMatch() {
 
-        UnitTestHelper.assertThrows(NullPointerException.class, "some error", () -> {
+        assertThrows(NullPointerException.class, "some error", () -> {
             throw new NullPointerException("some error");
         });
     }
@@ -219,13 +220,13 @@ public class UnitTestHelperTest {
     @Test
     public void throwException_default_method() {
         //------------------------------------------
-        UnitTestHelper.assertThrows(() -> {
+        assertThrows(() -> {
             throw new UncheckedException();
         });
         //------------------------------------------
 
         try {
-            UnitTestHelper.assertThrows(() -> log.info("no error"));
+            assertThrows(() -> log.info("no error"));
             throw new Error("should throw");
         } catch (final Throwable e) {
             if (e instanceof Error) {
@@ -242,18 +243,18 @@ public class UnitTestHelperTest {
         //------------------------------------------
 
         final String msg = null;
-        UnitTestHelper.assertThrows(msg, () -> {
+        assertThrows(msg, () -> {
             throw new UncheckedException();
         });
 
-        UnitTestHelper.assertThrows("this method should throws", () -> {
+        assertThrows("this method should throws", () -> {
             throw new UncheckedException("this method should throws");
         });
 
         //------------------------------------------
 
         try {
-            UnitTestHelper.assertThrows("this method should throws", () -> log.info("no error"));
+            assertThrows("this method should throws", () -> log.info("no error"));
             throw new Error("should throw");
         } catch (final Throwable e) {
             if (e instanceof Error) {
@@ -263,7 +264,7 @@ public class UnitTestHelperTest {
         }
 
         try {
-            UnitTestHelper.assertThrows("this method should throws", () -> {
+            assertThrows("this method should throws", () -> {
                 throw new UncheckedException("some error");
             });
             throw new Error("should throw");
@@ -281,13 +282,13 @@ public class UnitTestHelperTest {
         //------------------------------------------
 
         final String msg = null;
-        UnitTestHelper.assertThrows(UncheckedException.class, () -> {
+        assertThrows(UncheckedException.class, () -> {
             throw new UncheckedException();
         });
         //------------------------------------------
 
         try {
-            UnitTestHelper.assertThrows(UncheckedException.class, () -> log.info("no error"));
+            assertThrows(UncheckedException.class, () -> log.info("no error"));
             throw new Error("should throw");
         } catch (final Throwable e) {
             if (e instanceof Error) {
@@ -297,7 +298,7 @@ public class UnitTestHelperTest {
         }
 
         try {
-            UnitTestHelper.assertThrows(UncheckedException.class, () -> {
+            assertThrows(UncheckedException.class, () -> {
                 throw new NullPointerException("some error");
             });
             throw new Error("should throw");
@@ -315,13 +316,13 @@ public class UnitTestHelperTest {
         //------------------------------------------
 
         final String msg = null;
-        UnitTestHelper.assertThrows(UncheckedException.class, "some error", () -> {
+        assertThrows(UncheckedException.class, "some error", () -> {
             throw new UncheckedException("some error");
         });
         //------------------------------------------
 
         try {
-            UnitTestHelper.assertThrows(UncheckedException.class, "some error", () -> log.info("no error"));
+            assertThrows(UncheckedException.class, "some error", () -> log.info("no error"));
             throw new Error("should throw");
         } catch (final Throwable e) {
             if (e instanceof Error) {
@@ -331,7 +332,7 @@ public class UnitTestHelperTest {
         }
 
         try {
-            UnitTestHelper.assertThrows(UncheckedException.class, "some error", () -> {
+            assertThrows(UncheckedException.class, "some error", () -> {
                 throw new NullPointerException("some error");
             });
             throw new Error("should throw");
@@ -343,7 +344,7 @@ public class UnitTestHelperTest {
         }
 
         try {
-            UnitTestHelper.assertThrows(UncheckedException.class, "some error", () -> {
+            assertThrows(UncheckedException.class, "some error", () -> {
                 throw new UncheckedException("sorry");
             });
             throw new Error("should throw");
@@ -361,13 +362,13 @@ public class UnitTestHelperTest {
         //------------------------------------------
         final ErrorCode undefinedError = DefaultErrorCode.buildUndefineError();
         final String    msg            = null;
-        UnitTestHelper.assertThrows(undefinedError, () -> {
+        assertThrows(undefinedError, () -> {
             throw new UncheckedException(undefinedError);
         });
         //------------------------------------------
 
         try {
-            UnitTestHelper.assertThrows(undefinedError, () -> log.info("no error"));
+            assertThrows(undefinedError, () -> log.info("no error"));
             throw new Error("should throw");
         } catch (final Throwable e) {
             if (e instanceof Error) {
@@ -377,7 +378,7 @@ public class UnitTestHelperTest {
         }
 
         try {
-            UnitTestHelper.assertThrows(undefinedError, () -> {
+            assertThrows(undefinedError, () -> {
                 throw new UncheckedException(DefaultErrorCode.buildUndefineErrorCode().errorCode("ERR").build());
             });
             throw new Error("should throw");
@@ -392,9 +393,24 @@ public class UnitTestHelperTest {
 
     @Test
     public void throwException_nominal() {
-        UnitTestHelper.assertThrows(NullPointerException.class, "sorry", () -> {
+        assertThrows(NullPointerException.class, "sorry", () -> {
             UnitTestHelper.throwException(new NullPointerException("sorry"));
         });
     }
 
+
+    @Test
+    void assertUtilityClassLombok_nominal() {
+        UnitTestHelper.assertUtilityClassLombok(UnitTestHelperUtilityClassTest.SimpleUtilityClass.class);
+    }
+
+    @Test
+    void assertUtilityClassLombok_withMethodNonStatic() {
+        assertThrows("hello isn't static method!", () -> UnitTestHelper.assertUtilityClassLombok(UnitTestHelperUtilityClassTest.BadUtilityClass.class));
+    }
+
+    @Test
+    void assertUtilityClassLombok_withoutConstructorPrivate() {
+        assertThrows(UncheckedException.class, () -> UnitTestHelper.assertUtilityClassLombok(UnitTestHelperUtilityClassTest.WithoutConstructorUtilityClass.class));
+    }
 }

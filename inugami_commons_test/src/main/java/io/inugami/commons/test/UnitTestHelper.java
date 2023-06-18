@@ -322,4 +322,16 @@ public class UnitTestHelper {
     public static void assertWaringCodeUnique(final Warning... warnings) {
         UnitTestHelperErrorCode.assertWaringCodeUnique(warnings);
     }
+
+
+    // =========================================================================
+    // Utility class
+    // =========================================================================
+    public static void assertUtilityClass(final Class<?> utilityClass) {
+        UnitTestHelperUtilityClass.assertUtilityClass(utilityClass);
+    }
+
+    public static void assertUtilityClassLombok(final Class<?> utilityClass) {
+        UnitTestHelperUtilityClass.assertUtilityClassLombok(utilityClass);
+    }
 }
