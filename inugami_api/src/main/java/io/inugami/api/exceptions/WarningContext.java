@@ -16,17 +16,13 @@
  */
 package io.inugami.api.exceptions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
+@SuppressWarnings({"java:S5164"})
 public class WarningContext {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static ThreadLocal<CurrentWarningContext> INSTANCE = new ThreadLocal<>();
+    private static final ThreadLocal<CurrentWarningContext> INSTANCE = new ThreadLocal<>();
 
     // =========================================================================
     // CONSTRUCTORS

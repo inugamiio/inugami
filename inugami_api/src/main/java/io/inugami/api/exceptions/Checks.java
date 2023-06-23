@@ -428,7 +428,7 @@ public final class Checks {
                                                                     final String message,
                                                                     final BiFunction<ErrorCode, String, E> exceptionBuilder) throws E {
 
-        throw exceptionBuilder.apply(errorCode, message);
+        throw exceptionBuilder.apply(errorCode == null ? DefaultErrorCode.buildUndefineError() : errorCode, message);
     }
 
 }

@@ -3,13 +3,20 @@ package io.inugami.commons.spring.configuration;
 import io.inugami.api.processors.ConfigHandler;
 import io.inugami.commons.marshaling.XmlJaxbMarshallerSpi;
 import io.inugami.commons.marshaling.XmlJaxbMarshallerSpiFactory;
+import io.inugami.commons.spring.feature.FeatureConfiguration;
 import io.inugami.configuration.services.ConfigHandlerHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 @Slf4j
+@EnableAspectJAutoProxy
+@Import({
+        FeatureConfiguration.class
+})
 @Configuration
 public class ConfigConfiguration {
 

@@ -83,7 +83,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-@SuppressWarnings({"java:S1845"})
+@SuppressWarnings({"java:S1845", "java:S5527"})
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HttpBasicConnectorDelegateUtils {

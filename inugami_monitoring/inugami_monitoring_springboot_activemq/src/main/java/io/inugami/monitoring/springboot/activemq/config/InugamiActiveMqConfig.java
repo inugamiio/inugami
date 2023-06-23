@@ -24,6 +24,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings({"java:S5301"})
 @Configuration
 public class InugamiActiveMqConfig {
     public static final String FACTORY = "inugamiFactory";

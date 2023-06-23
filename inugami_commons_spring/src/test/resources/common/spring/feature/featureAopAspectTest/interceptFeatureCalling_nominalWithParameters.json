@@ -1,0 +1,10 @@
+{
+  "args" : [ ],
+  "bean" : "io.inugami.commons.spring.feature.FeatureAopAspectTest$SimpleService",
+  "enabledByDefault" : true,
+  "fallback" : "this.fallback",
+  "featureName" : "withParams",
+  "method" : "java.lang.String io.inugami.commons.spring.feature.FeatureAopAspectTest$SimpleServicenominalWithParameters()",
+  "monitored" : true,
+  "propertyPerfix" : "io.inugami"
+}

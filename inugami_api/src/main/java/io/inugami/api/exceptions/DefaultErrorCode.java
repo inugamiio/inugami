@@ -72,20 +72,20 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
         final ErrorCode               currentErrorCode = errorCode == null ? buildUndefineError() : errorCode;
 
 
-        return result.errorCode(errorCode.getErrorCode())
-                     .statusCode(errorCode.getStatusCode())
-                     .message(errorCode.getMessage())
-                     .errorType(errorCode.getErrorType())
-                     .payload(errorCode.getPayload())
-                     .errorHandler(errorCode.getErrorHandler())
-                     .exploitationError(errorCode.isExploitationError())
-                     .retryable(errorCode.isRetryable())
-                     .rollback(errorCode.isRollbackRequire())
-                     .category(errorCode.getCategory())
-                     .field(errorCode.getField())
-                     .url(errorCode.getUrl())
-                     .domain(errorCode.getDomain())
-                     .subDomain(errorCode.getSubDomain());
+        return result.errorCode(currentErrorCode.getErrorCode())
+                     .statusCode(currentErrorCode.getStatusCode())
+                     .message(currentErrorCode.getMessage())
+                     .errorType(currentErrorCode.getErrorType())
+                     .payload(currentErrorCode.getPayload())
+                     .errorHandler(currentErrorCode.getErrorHandler())
+                     .exploitationError(currentErrorCode.isExploitationError())
+                     .retryable(currentErrorCode.isRetryable())
+                     .rollback(currentErrorCode.isRollbackRequire())
+                     .category(currentErrorCode.getCategory())
+                     .field(currentErrorCode.getField())
+                     .url(currentErrorCode.getUrl())
+                     .domain(currentErrorCode.getDomain())
+                     .subDomain(currentErrorCode.getSubDomain());
     }
 
     public static DefaultErrorCode.DefaultErrorCodeBuilder newBuilder() {

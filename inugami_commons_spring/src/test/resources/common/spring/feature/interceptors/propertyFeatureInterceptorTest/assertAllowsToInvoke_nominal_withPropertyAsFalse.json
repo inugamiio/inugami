@@ -1,0 +1,10 @@
+{
+  "errorStatus" : 501,
+  "errorCode" : "FEATURE-0_1",
+  "message" : "feature is disabled",
+  "messageDetail" : "feature nominal is disabled in property nominal.enabled",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}
