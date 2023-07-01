@@ -23,6 +23,7 @@ import lombok.ToString;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -52,4 +53,15 @@ public class ResquestData {
     private final HttpServletRequest  httpRequest;
     private final HttpServletResponse httpResponse;
 
+    public static class ResquestDataBuilder {
+        public ResquestDataBuilder addHeader(final String key, final String value) {
+            if (hearder == null) {
+                hearder = new LinkedHashMap<>();
+            }
+            if (key != null && value != null) {
+                hearder.put(key, value);
+            }
+            return this;
+        }
+    }
 }

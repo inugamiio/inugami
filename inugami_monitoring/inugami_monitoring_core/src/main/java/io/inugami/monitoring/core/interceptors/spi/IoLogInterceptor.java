@@ -48,7 +48,8 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
 
     private static final String EMPTY_CONTENT = "empty";
 
-    private static final String EMPTY = "";
+    private static final String EMPTY         = "";
+    public static final  String URL_SEPARATOR = "/";
 
     private final String inputDecorator;
 
@@ -93,12 +94,13 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         return null;
     }
 
-    private JsonBuilder buildIologIn(final ResquestData request) {
-        final JsonBuilder result = new JsonBuilder();
+    protected JsonBuilder buildIologIn(final ResquestData request) {
+        final JsonBuilder result   = new JsonBuilder();
+        final String      fullPath = resolveFullPath(request);
         result.openList().write(request.getMethod()).closeList();
-        result.writeSpace().write(request.getContextPath()).write(request.getUri()).line();
+        result.writeSpace().write(fullPath).line();
         result.write("headers :").line();
-        for (Map.Entry<String, String> entry : request.getHearder().entrySet()) {
+        for (final Map.Entry<String, String> entry : request.getHearder().entrySet()) {
             result.tab().write(entry.getKey()).write(":").writeSpace().write(entry.getValue()).line();
         }
 
@@ -107,12 +109,24 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         return result;
     }
 
+    protected String resolveFullPath(final ResquestData request) {
+        final StringBuilder result = new StringBuilder();
+        if (request.getContextPath() != null && !request.getUri().startsWith(request.getContextPath())) {
+            result.append(request.getContextPath());
+            if (!request.getUri().startsWith(URL_SEPARATOR)) {
+                result.append(URL_SEPARATOR);
+            }
+        }
+        result.append(request.getUri());
+        return result.toString();
+    }
+
     @Override
     public List<GenericMonitoringModel> onDone(final ResquestData request,
                                                final ResponseData httpResponse,
                                                final ErrorResult error) {
         final JsonBuilder msg = buildIologIn(request);
-    
+
         msg.addLine();
         msg.write("response:").line();
         msg.tab().write("status:").write(httpResponse.getCode()).line();
@@ -120,7 +134,7 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         msg.tab().write("duration:").write(httpResponse.getDuration()).line();
         msg.tab().write("contentType:").write(httpResponse.getContentType()).line();
         msg.tab().write("headers:").line();
-        for (Map.Entry<String, String> entry : httpResponse.getHearder().entrySet()) {
+        for (final Map.Entry<String, String> entry : httpResponse.getHearder().entrySet()) {
             msg.tab().tab().write(entry.getKey()).write(":").writeSpace().write(entry.getValue()).line();
         }
 
@@ -128,9 +142,9 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         final Map<String, List<WarnCode>> warns = WarnContext.getInstance().getWarns();
         if (!warns.isEmpty()) {
             msg.tab().write("warning:").line();
-            for (Map.Entry<String, List<WarnCode>> entry : warns.entrySet()) {
+            for (final Map.Entry<String, List<WarnCode>> entry : warns.entrySet()) {
                 msg.tab().tab().write(entry.getKey()).write(":").line();
-                for (WarnCode warn : entry.getValue()) {
+                for (final WarnCode warn : entry.getValue()) {
                     msg.tab().tab().tab().write(warn.getMessage());
                     if (warn.getMessageDetail() != null) {
                         msg.write(":").write(warn.getMessageDetail());

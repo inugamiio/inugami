@@ -1,0 +1,8 @@
+[ {
+  "level" : "INFO",
+  "loggerName" : "IOLOG",
+  "mdc" : {
+    "lifecycle" : "in"
+  },
+  "message" : "[IN] [POST] /application/my/service\nheaders :\n\tapp: myApplication\npayload :\n{\"name\":\"John Smith\"}"
+} ]
