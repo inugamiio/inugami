@@ -28,6 +28,8 @@ import java.util.regex.Pattern;
  * @author patrick_guillerm
  * @since 22 juil. 2016
  */
+
+@SuppressWarnings({"java:S2479", "java:S5361"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MessagesFormatter {
 

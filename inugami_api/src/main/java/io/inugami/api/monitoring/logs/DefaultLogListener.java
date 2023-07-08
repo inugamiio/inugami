@@ -1,4 +1,4 @@
-package io.inugami.commons.test.logs;
+package io.inugami.api.monitoring.logs;
 
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
@@ -26,11 +26,11 @@ public class DefaultLogListener implements LogListener {
 
     @Override
     public boolean accept(final String loggerName) {
-        if(consumer  == null){
+        if (consumer == null) {
             return false;
         }
 
-        return this.logClass==null?matchPattern(loggerName): matchClass(loggerName);
+        return this.logClass == null ? matchPattern(loggerName) : matchClass(loggerName);
     }
 
     private boolean matchPattern(final String loggerName) {

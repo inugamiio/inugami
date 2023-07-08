@@ -20,6 +20,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.util.function.Consumer;
+import java.util.function.DoubleConsumer;
+import java.util.function.LongConsumer;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FunctionalUtils {
@@ -74,7 +76,7 @@ public final class FunctionalUtils {
         return false;
     }
 
-    public static boolean applyIfChange(final long ref, final long newValue, final Consumer<Long> consumer) {
+    public static boolean applyIfChange(final long ref, final long newValue, final LongConsumer consumer) {
         if (ref != newValue) {
             consumer.accept(newValue);
             return true;
@@ -82,7 +84,7 @@ public final class FunctionalUtils {
         return false;
     }
 
-    public static boolean applyIfChange(final double ref, final double newValue, final Consumer<Double> consumer) {
+    public static boolean applyIfChange(final double ref, final double newValue, final DoubleConsumer consumer) {
         if (ref != newValue) {
             consumer.accept(newValue);
             return true;
@@ -109,9 +111,7 @@ public final class FunctionalUtils {
     private static <T extends Object> boolean hasChange(final T ref, final T newValue) {
         if (ref == null && newValue == null) {
             return false;
-        } else if (ref == null && newValue != null) {
-            return true;
-        } else if (ref != null && newValue == null) {
+        } else if (ref == null || newValue == null) {
             return true;
         }
         return !ref.equals(newValue);

@@ -1,4 +1,4 @@
-package io.inugami.commons.test.logs;
+package io.inugami.api.monitoring.logs;
 
 import lombok.*;
 
@@ -13,6 +13,6 @@ import java.util.Map;
 public class BasicLogEvent {
     private final String                    loggerName;
     private final String                    message;
-    private final String level;
+    private final String                    level;
     private final Map<String, Serializable> mdc;
 }

@@ -20,6 +20,7 @@ public final class AssertRegex {
 
     private static final String FIND = "current value {0} doesn't find any result with {1}";
     private static final String NOT_FIND = "current value {0} should have any result with {1}";
+    public static final String REGEX_IS_REQUIRED = "regex is required";
 
 
     // ========================================================================
@@ -33,7 +34,7 @@ public final class AssertRegex {
     public static void assertRegexMatch(final String message,
                                         final Pattern regex,
                                         final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || !regex.matcher(value).matches()) {
             AssertCommons.throwException(message == null ? MessagesFormatter.format(NOT_MATCH, value, regex) : message);
         }
@@ -42,7 +43,7 @@ public final class AssertRegex {
     public static void assertRegexMatch(final Supplier<String> messageProducer,
                                         final Pattern regex,
                                         final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || !regex.matcher(value).matches()) {
             AssertCommons.throwException(messageProducer.get());
         }
@@ -51,7 +52,7 @@ public final class AssertRegex {
     public static void assertRegexMatch(final ErrorCode errorCode,
                                         final Pattern regex,
                                         final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || !regex.matcher(value).matches()) {
             AssertCommons.throwException(errorCode);
         }
@@ -66,7 +67,7 @@ public final class AssertRegex {
     public static void assertRegexMatch(final String message,
                                         final String regex,
                                         final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || !match(regex, value)) {
             AssertCommons.throwException(message == null ? MessagesFormatter.format(NOT_MATCH, value, regex) : message);
         }
@@ -76,7 +77,7 @@ public final class AssertRegex {
     public static void assertRegexMatch(final Supplier<String> messageProducer,
                                         final String regex,
                                         final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || !match(regex, value)) {
             AssertCommons.throwException(messageProducer.get());
         }
@@ -85,7 +86,7 @@ public final class AssertRegex {
     public static void assertRegexMatch(final ErrorCode errorCode,
                                         final String regex,
                                         final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || !match(regex, value)) {
             AssertCommons.throwException(errorCode);
         }
@@ -103,7 +104,7 @@ public final class AssertRegex {
     public static void assertRegexNotMatch(final String message,
                                            final Pattern regex,
                                            final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || regex.matcher(value).matches()) {
             AssertCommons.throwException(message == null ? MessagesFormatter.format(MATCH, value, regex) : message);
         }
@@ -112,7 +113,7 @@ public final class AssertRegex {
     public static void assertRegexNotMatch(final Supplier<String> messageProducer,
                                            final Pattern regex,
                                            final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || regex.matcher(value).matches()) {
             AssertCommons.throwException(messageProducer.get());
         }
@@ -121,7 +122,7 @@ public final class AssertRegex {
     public static void assertRegexNotMatch(final ErrorCode errorCode,
                                            final Pattern regex,
                                            final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || regex.matcher(value).matches()) {
             AssertCommons.throwException(errorCode);
         }
@@ -136,7 +137,7 @@ public final class AssertRegex {
     public static void assertRegexNotMatch(final String message,
                                            final String regex,
                                            final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || match(regex, value)) {
             AssertCommons.throwException(message == null ? MessagesFormatter.format(MATCH, value, regex) : message);
         }
@@ -146,7 +147,7 @@ public final class AssertRegex {
     public static void assertRegexNotMatch(final Supplier<String> messageProducer,
                                            final String regex,
                                            final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || match(regex, value)) {
             AssertCommons.throwException(messageProducer.get());
         }
@@ -155,7 +156,7 @@ public final class AssertRegex {
     public static void assertRegexNotMatch(final ErrorCode errorCode,
                                            final String regex,
                                            final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || match(regex, value)) {
             AssertCommons.throwException(errorCode);
         }
@@ -173,7 +174,7 @@ public final class AssertRegex {
     public static void assertRegexFind(final String message,
                                         final Pattern regex,
                                         final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || !regex.matcher(value).find()) {
             AssertCommons.throwException(message == null ? MessagesFormatter.format(FIND, value, regex) : message);
         }
@@ -182,7 +183,7 @@ public final class AssertRegex {
     public static void assertRegexFind(final Supplier<String> messageProducer,
                                         final Pattern regex,
                                         final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || !regex.matcher(value).find()) {
             AssertCommons.throwException(messageProducer.get());
         }
@@ -191,7 +192,7 @@ public final class AssertRegex {
     public static void assertRegexFind(final ErrorCode errorCode,
                                         final Pattern regex,
                                         final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || !regex.matcher(value).find()) {
             AssertCommons.throwException(errorCode);
         }
@@ -206,7 +207,7 @@ public final class AssertRegex {
     public static void assertRegexFind(final String message,
                                         final String regex,
                                         final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || !find(regex, value)) {
             AssertCommons.throwException(message == null ? MessagesFormatter.format(FIND, value, regex) : message);
         }
@@ -216,7 +217,7 @@ public final class AssertRegex {
     public static void assertRegexFind(final Supplier<String> messageProducer,
                                         final String regex,
                                         final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || !find(regex, value)) {
             AssertCommons.throwException(messageProducer.get());
         }
@@ -225,7 +226,7 @@ public final class AssertRegex {
     public static void assertRegexFind(final ErrorCode errorCode,
                                         final String regex,
                                         final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || !find(regex, value)) {
             AssertCommons.throwException(errorCode);
         }
@@ -243,7 +244,7 @@ public final class AssertRegex {
     public static void assertRegexNotFind(final String message,
                                        final Pattern regex,
                                        final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || regex.matcher(value).find()) {
             AssertCommons.throwException(message == null ? MessagesFormatter.format(NOT_FIND, value, regex) : message);
         }
@@ -252,7 +253,7 @@ public final class AssertRegex {
     public static void assertRegexNotFind(final Supplier<String> messageProducer,
                                        final Pattern regex,
                                        final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || regex.matcher(value).find()) {
             AssertCommons.throwException(messageProducer.get());
         }
@@ -261,7 +262,7 @@ public final class AssertRegex {
     public static void assertRegexNotFind(final ErrorCode errorCode,
                                        final Pattern regex,
                                        final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || regex.matcher(value).find()) {
             AssertCommons.throwException(errorCode);
         }
@@ -276,7 +277,7 @@ public final class AssertRegex {
     public static void assertRegexNotFind(final String message,
                                        final String regex,
                                        final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || find(regex, value)) {
             AssertCommons.throwException(message == null ? MessagesFormatter.format(NOT_FIND, value, regex) : message);
         }
@@ -286,7 +287,7 @@ public final class AssertRegex {
     public static void assertRegexNotFind(final Supplier<String> messageProducer,
                                        final String regex,
                                        final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || find(regex, value)) {
             AssertCommons.throwException(messageProducer.get());
         }
@@ -295,7 +296,7 @@ public final class AssertRegex {
     public static void assertRegexNotFind(final ErrorCode errorCode,
                                        final String regex,
                                        final String value) {
-        Objects.requireNonNull(regex, "regex is required");
+        Objects.requireNonNull(regex, REGEX_IS_REQUIRED);
         if (value == null || find(regex, value)) {
             AssertCommons.throwException(errorCode);
         }

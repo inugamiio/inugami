@@ -35,13 +35,14 @@ public final class Checks {
     // ATTRIBUTES
     // =========================================================================
     private static final BiFunction<ErrorCode, String, CheckedException> EXCEPTION_BUILDER = CheckedException::new;
+    public static final String THIS_EXPRESSION_MUST_BE_TRUE = "this expression must be true";
 
 
     // -------------------------------------------------------------------------
     // IS TRUE
     // -------------------------------------------------------------------------
     public static void isTrue(final boolean expression) throws CheckedException {
-        isTrue("this expression must be true",
+        isTrue(THIS_EXPRESSION_MUST_BE_TRUE,
                expression);
     }
 
@@ -63,7 +64,7 @@ public final class Checks {
 
     public static <E extends CheckedException> void isTrue(final boolean expression,
                                                            final BiFunction<ErrorCode, String, E> errorBuilder) throws E {
-        isTrue("this expression must be true",
+        isTrue(THIS_EXPRESSION_MUST_BE_TRUE,
                expression,
                errorBuilder);
     }
@@ -89,7 +90,7 @@ public final class Checks {
     // IS FALSE
     // -------------------------------------------------------------------------
     public static void isFalse(final boolean expression) throws CheckedException {
-        isFalse("this expression must be true",
+        isFalse(THIS_EXPRESSION_MUST_BE_TRUE,
                 expression);
     }
 
@@ -110,7 +111,7 @@ public final class Checks {
 
     public static <E extends CheckedException> void isFalse(final boolean expression,
                                                             final BiFunction<ErrorCode, String, E> errorBuilder) throws E {
-        isFalse("this expression must be true",
+        isFalse(THIS_EXPRESSION_MUST_BE_TRUE,
                 expression,
                 errorBuilder);
     }

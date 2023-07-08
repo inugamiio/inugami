@@ -18,15 +18,15 @@ package io.inugami.commons.test.dto;
 
 import io.inugami.api.functionnals.VoidFunctionWithException;
 import io.inugami.commons.test.api.LineMatcher;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @Builder(toBuilder = true)
-@NoArgsConstructor
 @AllArgsConstructor
 public class AssertLogContext {
 

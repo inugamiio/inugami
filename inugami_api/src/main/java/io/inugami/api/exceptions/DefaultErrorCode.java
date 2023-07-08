@@ -53,7 +53,7 @@ public class DefaultErrorCode implements Serializable, ErrorCode {
 
     private final String field;
 
-    private final BiConsumer<String, Exception> errorHandler;
+    private final transient BiConsumer<String, Exception> errorHandler;
 
     public static ErrorCode buildUndefineError() {
         return DefaultErrorCode.builder()

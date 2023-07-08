@@ -368,6 +368,12 @@
 
             <dependency>
                 <groupId>io.inugami</groupId>
+                <artifactId>inugami_logs_obfuscator</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami</groupId>
                 <artifactId>inugami_commons_spring</artifactId>
                 <version>${project.version}</version>
             </dependency>

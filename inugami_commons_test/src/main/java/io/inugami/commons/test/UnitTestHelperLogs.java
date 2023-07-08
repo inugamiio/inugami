@@ -19,11 +19,11 @@ package io.inugami.commons.test;
 import io.inugami.api.exceptions.UncheckedException;
 import io.inugami.api.functionnals.VoidFunctionWithException;
 import io.inugami.api.monitoring.MdcService;
+import io.inugami.api.monitoring.logs.BasicLogEvent;
+import io.inugami.api.monitoring.logs.DefaultLogListener;
+import io.inugami.api.monitoring.logs.LogListener;
 import io.inugami.commons.test.api.LineMatcher;
 import io.inugami.commons.test.dto.AssertLogContext;
-import io.inugami.commons.test.logs.BasicLogEvent;
-import io.inugami.commons.test.logs.DefaultLogListener;
-import io.inugami.commons.test.logs.LogListener;
 import io.inugami.commons.test.logs.LogTestAppender;
 import lombok.experimental.UtilityClass;
 
