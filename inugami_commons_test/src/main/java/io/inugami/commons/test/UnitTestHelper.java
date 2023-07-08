@@ -20,8 +20,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.exceptions.Warning;
+import io.inugami.api.functionnals.VoidFunctionWithException;
 import io.inugami.commons.test.api.LineMatcher;
 import io.inugami.commons.test.dto.AssertDtoContext;
+import io.inugami.commons.test.dto.AssertLogContext;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.mockito.invocation.InvocationOnMock;
@@ -266,6 +268,185 @@ public class UnitTestHelper {
 
     public static void assertDto(final AssertDtoContext context) {
         UnitTestHelperDto.assertDto(context);
+    }
+
+
+    // =========================================================================
+    // assertLogs
+    // =========================================================================
+
+    /**
+     * required to add logback.xml in context
+     * <pre>
+     * {@code
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <configuration>
+     *
+     *     <appender name="logTest" class="io.inugami.commons.test.logs.LogTestAppender">
+     *     </appender>
+     *
+     *     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+     *         <encoder>
+     *             <pattern>[%d{dd/MM HH:mm:ss}]|%logger|%-5level|%thread|%msg\n</pattern>
+     *         </encoder>
+     *     </appender>
+     *
+     *
+     *     <root level="DEBUG">
+     *         <appender-ref ref="STDOUT"/>
+     *         <appender-ref ref="logTest"/>
+     *     </root>
+     *
+     * </configuration>
+     * }
+     * </pre>
+     *
+     * @param process  function to call
+     * @param objClass log class to intercept
+     * @param logs     logs content
+     * @param matchers line matches
+     */
+    public static void assertLogs(final VoidFunctionWithException process, final Class<?> objClass, final String logs, final LineMatcher... matchers) {
+        UnitTestHelperLogs.assertLogs(process, objClass, logs, matchers);
+    }
+
+    /**
+     * required to add logback.xml in context
+     * <pre>
+     * {@code
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <configuration>
+     *
+     *     <appender name="logTest" class="io.inugami.commons.test.logs.LogTestAppender">
+     *     </appender>
+     *
+     *     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+     *         <encoder>
+     *             <pattern>[%d{dd/MM HH:mm:ss}]|%logger|%-5level|%thread|%msg\n</pattern>
+     *         </encoder>
+     *     </appender>
+     *
+     *
+     *     <root level="DEBUG">
+     *         <appender-ref ref="STDOUT"/>
+     *         <appender-ref ref="logTest"/>
+     *     </root>
+     *
+     * </configuration>
+     * }
+     * </pre>
+     *
+     * @param process  function to call
+     * @param objClass log class to intercept
+     * @param logs     logs content
+     * @param matchers line matches
+     */
+    public static void assertLogsIntegration(final VoidFunctionWithException process, final Class<?> objClass, final String logs, final LineMatcher... matchers) {
+        UnitTestHelperLogs.assertLogsIntegration(process, objClass, logs, matchers);
+    }
+
+
+    /**
+     * required to add logback.xml in context
+     * <pre>
+     * {@code
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <configuration>
+     *
+     *     <appender name="logTest" class="io.inugami.commons.test.logs.LogTestAppender">
+     *     </appender>
+     *
+     *     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+     *         <encoder>
+     *             <pattern>[%d{dd/MM HH:mm:ss}]|%logger|%-5level|%thread|%msg\n</pattern>
+     *         </encoder>
+     *     </appender>
+     *
+     *
+     *     <root level="DEBUG">
+     *         <appender-ref ref="STDOUT"/>
+     *         <appender-ref ref="logTest"/>
+     *     </root>
+     *
+     * </configuration>
+     * }
+     * </pre>
+     *
+     * @param process  function to call
+     * @param pattern  log pattern to intercept
+     * @param logs     logs content
+     * @param matchers line matches
+     */
+    public static void assertLogs(final VoidFunctionWithException process, final String pattern, final String logs, final LineMatcher... matchers) {
+        UnitTestHelperLogs.assertLogs(process, pattern, logs, matchers);
+    }
+
+    /**
+     * required to add logback.xml in context
+     * <pre>
+     * {@code
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <configuration>
+     *
+     *     <appender name="logTest" class="io.inugami.commons.test.logs.LogTestAppender">
+     *     </appender>
+     *
+     *     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+     *         <encoder>
+     *             <pattern>[%d{dd/MM HH:mm:ss}]|%logger|%-5level|%thread|%msg\n</pattern>
+     *         </encoder>
+     *     </appender>
+     *
+     *
+     *     <root level="DEBUG">
+     *         <appender-ref ref="STDOUT"/>
+     *         <appender-ref ref="logTest"/>
+     *     </root>
+     *
+     * </configuration>
+     * }
+     * </pre>
+     *
+     * @param process  function to call
+     * @param pattern  log pattern to intercept
+     * @param logs     logs content
+     * @param matchers line matches
+     */
+    public static void assertLogsIntegration(final VoidFunctionWithException process, final String pattern, final String logs, final LineMatcher... matchers) {
+        UnitTestHelperLogs.assertLogsIntegration(process, pattern, logs, matchers);
+    }
+
+
+    /**
+     * required to add logback.xml in context
+     * <pre>
+     * {@code
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <configuration>
+     *
+     *     <appender name="logTest" class="io.inugami.commons.test.logs.LogTestAppender">
+     *     </appender>
+     *
+     *     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+     *         <encoder>
+     *             <pattern>[%d{dd/MM HH:mm:ss}]|%logger|%-5level|%thread|%msg\n</pattern>
+     *         </encoder>
+     *     </appender>
+     *
+     *
+     *     <root level="DEBUG">
+     *         <appender-ref ref="STDOUT"/>
+     *         <appender-ref ref="logTest"/>
+     *     </root>
+     *
+     * </configuration>
+     * }
+     * </pre>
+     *
+     * @param context
+     */
+    public static void assertLogs(final AssertLogContext context) {
+        UnitTestHelperLogs.assertLogs(context);
     }
 
     // =========================================================================
