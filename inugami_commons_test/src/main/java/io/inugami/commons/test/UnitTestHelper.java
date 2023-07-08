@@ -334,4 +334,47 @@ public class UnitTestHelper {
     public static void assertUtilityClassLombok(final Class<?> utilityClass) {
         UnitTestHelperUtilityClass.assertUtilityClassLombok(utilityClass);
     }
+
+    // =========================================================================
+    // DATA
+    // =========================================================================
+    public static String getRandomUid() {
+        return UnitTestData.getRandomUid();
+    }
+
+    public static String getRandomWord() {
+        return UnitTestData.getRandomWord();
+    }
+
+    public static String getRandomCategory() {
+        return UnitTestData.getRandomCategory();
+    }
+
+    public static String getRandomLabel() {
+        return UnitTestData.getRandomLabel();
+    }
+
+    public static String getRandomPhrase() {
+        return UnitTestData.getRandomPhrase();
+    }
+
+    public static String getRandomPhrase(final int nbWordMin, final int nbWordMax, final boolean isLabel) {
+        return UnitTestData.getRandomPhrase(nbWordMin, nbWordMax, isLabel);
+    }
+
+    public static String getRandomSection() {
+        return UnitTestData.getRandomSection();
+    }
+
+    public static String getRandomSection(final int nbLine, final int nbWordMin, final int nbWordMax) {
+        return UnitTestData.getRandomSection(nbLine, nbWordMin, nbWordMax);
+    }
+
+    public static double getRandomDouble(final double min, final double max) {
+        return UnitTestData.getRandomDouble(min, max);
+    }
+
+    public static int getRandomBetween(final int start, final int end) {
+        return UnitTestData.getRandomBetween(start, end);
+    }
 }

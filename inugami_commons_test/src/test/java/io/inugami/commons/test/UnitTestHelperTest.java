@@ -5,6 +5,7 @@ import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.exceptions.UncheckedException;
 import io.inugami.commons.test.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -412,5 +413,67 @@ public class UnitTestHelperTest {
     @Test
     void assertUtilityClassLombok_withoutConstructorPrivate() {
         assertThrows(UncheckedException.class, () -> UnitTestHelper.assertUtilityClassLombok(UnitTestHelperUtilityClassTest.WithoutConstructorUtilityClass.class));
+    }
+
+
+    // =========================================================================
+    // DATA
+    // =========================================================================
+
+    @Test
+    void getRandomUid_nominal() {
+        Assertions.assertThat(UnitTestHelper.getRandomUid()).isNotEqualTo(UnitTestHelper.getRandomUid());
+        for (int i = 10; i >= 0; i--) {
+            log.info("{}", UnitTestHelper.getRandomUid());
+        }
+    }
+
+    @Test
+    void getRandomWord_nominal() {
+        Assertions.assertThat(UnitTestHelper.getRandomWord()).isNotNull();
+    }
+
+    @Test
+    void getRandomCategory_nominal() {
+        Assertions.assertThat(UnitTestHelper.getRandomCategory()).isNotNull();
+    }
+
+    @Test
+    void getRandomLabel_nominal() {
+        Assertions.assertThat(UnitTestHelper.getRandomLabel()).isNotNull();
+    }
+
+    @Test
+    void getRandomPhrase_nominal() {
+        Assertions.assertThat(UnitTestHelper.getRandomPhrase()).isNotNull();
+    }
+
+    @Test
+    void getRandomPhrase_withMinMax() {
+        final String[] value = UnitTestHelper.getRandomPhrase(2, 5, true).split(" ");
+        Assertions.assertThat(value).isNotNull();
+        Assertions.assertThat(value.length).isGreaterThanOrEqualTo(2).isLessThanOrEqualTo(5);
+    }
+
+    @Test
+    void getRandomSection_nominal() {
+        Assertions.assertThat(UnitTestHelper.getRandomSection()).isNotNull();
+    }
+
+    @Test
+    void getRandomSection_withMinMax() {
+        Assertions.assertThat(UnitTestHelper.getRandomSection(2, 5, 5)).isNotNull();
+    }
+
+    @Test
+    void getRandomDouble_nominal() {
+        final double value = UnitTestHelper.getRandomDouble(2, 5);
+        Assertions.assertThat(value).isGreaterThanOrEqualTo(2).isLessThanOrEqualTo(5);
+    }
+
+    @Test
+    void getRandomBetween_nominal() {
+        final double value = UnitTestHelper.getRandomBetween(2, 5);
+        Assertions.assertThat(value).isGreaterThanOrEqualTo(2).isLessThanOrEqualTo(5);
     }
 }
