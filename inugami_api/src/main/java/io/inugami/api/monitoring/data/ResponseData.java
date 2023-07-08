@@ -53,9 +53,9 @@ public class ResponseData implements Serializable, ClonableObject<ResponseData> 
     @ToString.Include
     private final String contentType;
 
-    private       Map<String, String> hearder;
-    private final HttpServletRequest  httpRequest;
-    private final HttpServletResponse httpResponse;
+    private                 Map<String, String> hearder;
+    private final transient HttpServletRequest  httpRequest;
+    private final transient HttpServletResponse httpResponse;
 
 
     @Override

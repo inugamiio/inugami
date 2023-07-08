@@ -38,15 +38,15 @@ public class ErrorResult implements Serializable {
 
     /* package */ static final String DEFAULT_ERROR_TYPE = "technical";
 
-    private final int       httpCode;
+    private final           int       httpCode;
     @EqualsAndHashCode.Include
-    private final String    errorCode;
-    private final String    errorType;
-    private final String    message;
-    private final String    stack;
-    private final String    cause;
-    private final String    fallBack;
-    private final boolean   exploitationError;
-    private final ErrorCode currentErrorCode;
-    private final Throwable exception;
+    private final           String    errorCode;
+    private final           String    errorType;
+    private final           String    message;
+    private final           String    stack;
+    private final           String    cause;
+    private final           String    fallBack;
+    private final           boolean   exploitationError;
+    private final transient ErrorCode currentErrorCode;
+    private final transient Throwable exception;
 }
