@@ -20,7 +20,6 @@ import io.inugami.api.models.JsonBuilder;
 import io.inugami.api.models.data.basic.JsonObject;
 import io.inugami.api.models.data.basic.JsonSerializerSpi;
 import io.inugami.api.spi.SpiLoader;
-import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +30,6 @@ import java.util.List;
  * @author patrick_guillerm
  * @since 21 déc. 2017
  */
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Setter
-@Getter
-@Builder(toBuilder = true)
-@NoArgsConstructor
-@AllArgsConstructor
 public class AlertingResult implements JsonObject {
 
     // =========================================================================
@@ -44,30 +37,65 @@ public class AlertingResult implements JsonObject {
     // =========================================================================
     private static final long serialVersionUID = 7298930435253118179L;
 
-    private           String       alerteName;
-    private           String       level;
-    private           String       url;
-    private transient AlerteLevels levelType   = AlerteLevels.UNDEFINE;
-    private           int          levelNumber = AlerteLevels.UNDEFINE.getLevel();
-    private           String       message;
-    private           String       subLabel;
-    private           long         created     = System.currentTimeMillis();
-    private           long         duration    = 60;
-    private transient Object       data;
-    private           String       channel     = "@all";
-    private           boolean      multiAlerts;
-    private           List<String> providers;
+    private String alerteName;
 
+    private String level;
+
+    private String url;
+
+    private transient AlerteLevels levelType = AlerteLevels.UNDEFINE;
+
+    private int levelNumber = AlerteLevels.UNDEFINE.getLevel();
+
+    private String message;
+
+    private String subLabel;
+
+    private long created = System.currentTimeMillis();
+
+    private long duration = 60;
+
+    private Object data;
+
+    private String channel = "@all";
+
+    private boolean multiAlerts;
+
+    private List<String> providers;
+
+    // =========================================================================
+    // CONSTRUCTORS
+    // =========================================================================
+    public AlertingResult() {
+    }
 
     public AlertingResult(final String alerteName) {
         super();
         this.alerteName = alerteName;
     }
 
+    private AlertingResult(final String alerteName, final String level, final String url, final AlerteLevels levelType,
+                           final int levelNumber, final String message, final String subLabel, final long created,
+                           final long duration, final Object data, final String channel, final boolean multiAlerts) {
+        super();
+        this.alerteName = alerteName;
+        this.level = level;
+        this.url = url;
+        this.levelType = levelType;
+        this.levelNumber = levelNumber;
+        this.message = message;
+        this.subLabel = subLabel;
+        this.created = created;
+        this.duration = duration;
+        this.data = data;
+        this.channel = channel;
+        this.multiAlerts = multiAlerts;
+    }
 
     @Override
     public JsonObject cloneObj() {
-        return this.toBuilder().build();
+        return new AlertingResult(alerteName, level, url, levelType, levelNumber, message, subLabel, created, duration,
+                                  data, channel, multiAlerts);
     }
 
     // =========================================================================
@@ -115,6 +143,106 @@ public class AlertingResult implements JsonObject {
         return convertToJson();
     }
 
+    // =========================================================================
+    // GETTERS & SETTERS
+    // =========================================================================
+    public String getAlerteName() {
+        return alerteName;
+    }
+
+    public void setAlerteName(final String alerteName) {
+        this.alerteName = alerteName;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(final String level) {
+        this.level = level;
+        levelType = AlerteLevels.getAlerteLevel(level);
+        levelNumber = levelType.getLevel();
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(final String message) {
+        this.message = message;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(final Object data) {
+        this.data = data;
+    }
+
+    public int getLevelNumber() {
+        return levelNumber;
+    }
+
+    public AlerteLevels getLevelType() {
+        return levelType;
+    }
+
+    public String getSubLabel() {
+        return subLabel;
+    }
+
+    public void setSubLabel(final String subLabel) {
+        this.subLabel = subLabel;
+    }
+
+    public long getCreated() {
+        return created;
+    }
+
+    public void setCreated(final long created) {
+        this.created = created;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(final long duration) {
+        this.duration = duration;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(final String channel) {
+        this.channel = channel;
+    }
+
+    public boolean isMultiAlerts() {
+        return multiAlerts;
+    }
+
+    public void setMultiAlerts(final boolean multiAlerts) {
+        this.multiAlerts = multiAlerts;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(final String url) {
+        this.url = url;
+    }
+
+    public List<String> getProviders() {
+        return providers;
+    }
+
+    public void setProviders(final List<String> providers) {
+        this.providers = providers;
+    }
 
     public AlertingResult addProvider(final String provider) {
         if (providers == null) {
