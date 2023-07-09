@@ -83,7 +83,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-@SuppressWarnings({"java:S1845"})
+@SuppressWarnings({"java:S1845", "java:S5527"})
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class HttpBasicConnectorDelegateUtils {
@@ -177,14 +177,17 @@ class HttpBasicConnectorDelegateUtils {
         final SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new X509HostnameVerifier() {
             @Override
             public void verify(final String host, final SSLSocket ssl) throws IOException {
+                // nothing to do
             }
 
             @Override
             public void verify(final String host, final X509Certificate cert) throws SSLException {
+                // nothing to do
             }
 
             @Override
             public void verify(final String host, final String[] cns, final String[] subjectAlts) throws SSLException {
+                // nothing to do
             }
 
             @Override

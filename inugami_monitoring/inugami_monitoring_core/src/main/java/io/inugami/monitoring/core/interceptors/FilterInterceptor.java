@@ -347,7 +347,6 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             mdc.setMdc(MdcService.MDCKeys.callType, MdcService.CALL_TYPE_REST);
             mdc.setMdc(MdcService.MDCKeys.uri, requestData.getUri());
             mdc.setMdc(MdcService.MDCKeys.verb, httpRequest.getMethod());
-            mdc.setMdc(MdcService.MDCKeys.sessionId, httpRequest.getRequestedSessionId());
             mdc.setMdc(MdcService.MDCKeys.authProtocol, httpRequest.getAuthType());
 
             if (httpRequest.getUserPrincipal() != null) {

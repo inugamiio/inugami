@@ -80,7 +80,7 @@ public class HttpConnectorResult implements Serializable {
 
     private final Exception error;
 
-    private final Charset charset;
+    private final transient Charset charset;
 
     private Map<String, String> requestHeaders;
     private Map<String, String> responseHeaders;

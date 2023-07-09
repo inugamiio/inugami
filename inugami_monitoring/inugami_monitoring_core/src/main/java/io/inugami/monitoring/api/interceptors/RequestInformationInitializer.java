@@ -75,7 +75,6 @@ public final class RequestInformationInitializer {
         builder.requestId(cleanInput(buildUid(headers.get(CONFIG.getHeaders().getRequestId()))));
         builder.traceId(cleanInput(buildUid(headers.get(CONFIG.getHeaders().getTraceId()))));
         builder.conversationId(cleanInput(headers.get(CONFIG.getHeaders().getConversationId())));
-        builder.sessionId(cleanInput(request.getRequestedSessionId()));
 
         builder.service(SERVICE_NAME_RESOLVER.resolve(buildUriPath(request)));
         builder.callFrom(cleanInput(headers.get(CONFIG.getHeaders().getCallFrom())));

@@ -137,6 +137,8 @@ public final class ConsoleColors {
                 result.append(message == null ? "" : message);
                 result.append(ConsoleColors.RESET);
                 break;
+            default:
+                break;
         }
 
         return result.toString();

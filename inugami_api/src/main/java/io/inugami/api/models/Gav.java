@@ -19,6 +19,7 @@ package io.inugami.api.models;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import io.inugami.api.exceptions.Asserts;
+import lombok.Getter;
 
 import java.io.Serializable;
 
@@ -36,6 +37,7 @@ import java.io.Serializable;
  * @author patrick_guillerm
  * @since 22 déc. 2016
  */
+@Getter
 @XStreamAlias("gav")
 public class Gav implements Serializable {
 
@@ -169,21 +171,4 @@ public class Gav implements Serializable {
         }
         return hash;
     }
-
-    public String getGroupId() {
-        return groupId;
-    }
-
-    public String getArtifactId() {
-        return artifactId;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public String getQualifier() {
-        return qualifier;
-    }
-
 }

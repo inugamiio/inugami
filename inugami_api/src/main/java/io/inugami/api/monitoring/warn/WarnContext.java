@@ -30,15 +30,15 @@ public class WarnContext {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final Map<String, List<WarnCode>> WARNS = new ConcurrentHashMap<>();
-    private static final ThreadLocal<WarnContext> INSTANCE = new ThreadLocal<>();
+    private final        Map<String, List<WarnCode>> WARNS    = new ConcurrentHashMap<>();
+    private static final ThreadLocal<WarnContext>    INSTANCE = new ThreadLocal<>();
 
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    public synchronized static WarnContext getInstance(){
-         WarnContext result = INSTANCE.get();
-        if(result==null){
+    public synchronized static WarnContext getInstance() {
+        WarnContext result = INSTANCE.get();
+        if (result == null) {
             result = new WarnContext();
             INSTANCE.set(result);
         }
@@ -46,25 +46,30 @@ public class WarnContext {
         return result;
     }
 
+
     // =========================================================================
     // API
     // =========================================================================
-    public WarnContext addWarn(final WarnCode warnCode){
-        if(warnCode != null){
-             List<WarnCode> saved = WARNS.get(warnCode.getWarnCode());
-             if(saved == null){
-                 saved = new ArrayList<>();
-                 WARNS.put(warnCode.getWarnCode(),saved);
-             }
+    public void clean() {
+        WARNS.clear();
+    }
+
+    public WarnContext addWarn(final WarnCode warnCode) {
+        if (warnCode != null) {
+            List<WarnCode> saved = WARNS.get(warnCode.getWarnCode());
+            if (saved == null) {
+                saved = new ArrayList<>();
+                WARNS.put(warnCode.getWarnCode(), saved);
+            }
             saved.add(warnCode);
         }
         return this;
     }
 
-    public Map<String, List<WarnCode>> getWarns(){
-        Map<String, List<WarnCode>> result = new LinkedHashMap<>();
+    public Map<String, List<WarnCode>> getWarns() {
+        final Map<String, List<WarnCode>> result = new LinkedHashMap<>();
 
-        for(Map.Entry<String,List<WarnCode>> entry : WARNS.entrySet()){
+        for (final Map.Entry<String, List<WarnCode>> entry : WARNS.entrySet()) {
             result.put(entry.getKey(), new ArrayList<>(entry.getValue()));
         }
 

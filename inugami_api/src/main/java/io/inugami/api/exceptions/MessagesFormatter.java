@@ -28,6 +28,8 @@ import java.util.regex.Pattern;
  * @author patrick_guillerm
  * @since 22 juil. 2016
  */
+
+@SuppressWarnings({"java:S2479", "java:S5361"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MessagesFormatter {
 
@@ -48,12 +50,20 @@ public final class MessagesFormatter {
                 result = format;
             } else if (REGEX.matcher(format).find()) {
                 final MessageFormat formater = new MessageFormat(format.replaceAll("'", "''"));
-                result = formater.format(values);
+                result = formater.format(convertToStringArray(values));
             } else {
                 result = format;
             }
         }
 
         return result == null ? null : result.replaceAll(NBSP, " ");
+    }
+
+    private static String[] convertToStringArray(final Object[] values) {
+        final String[] result = new String[values.length];
+        for (int i = 0; i < values.length; i++) {
+            result[i] = String.valueOf(values[i]);
+        }
+        return result;
     }
 }

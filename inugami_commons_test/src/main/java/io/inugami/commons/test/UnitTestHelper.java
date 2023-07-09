@@ -20,8 +20,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.exceptions.Warning;
+import io.inugami.api.functionnals.VoidFunctionWithException;
 import io.inugami.commons.test.api.LineMatcher;
 import io.inugami.commons.test.dto.AssertDtoContext;
+import io.inugami.commons.test.dto.AssertLogContext;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.mockito.invocation.InvocationOnMock;
@@ -268,6 +270,198 @@ public class UnitTestHelper {
         UnitTestHelperDto.assertDto(context);
     }
 
+
+    // =========================================================================
+    // assertLogs
+    // =========================================================================
+
+    /**
+     * required to add logback.xml in context
+     * <pre>
+     * {@code
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <configuration>
+     *
+     *     <appender name="logTest" class="io.inugami.commons.test.logs.LogTestAppender">
+     *     </appender>
+     *
+     *     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+     *         <encoder>
+     *             <pattern>[%d{dd/MM HH:mm:ss}]|%logger|%-5level|%thread|%msg\n</pattern>
+     *         </encoder>
+     *     </appender>
+     *
+     *
+     *     <root level="DEBUG">
+     *         <appender-ref ref="STDOUT"/>
+     *         <appender-ref ref="logTest"/>
+     *     </root>
+     *
+     * </configuration>
+     * }
+     * </pre>
+     *
+     * @param process  function to call
+     * @param objClass log class to intercept
+     * @param logs     logs content
+     * @param matchers line matches
+     */
+    public static void assertLogs(final VoidFunctionWithException process, final Class<?> objClass, final String logs, final LineMatcher... matchers) {
+        UnitTestHelperLogs.assertLogs(process, objClass, logs, matchers);
+    }
+
+    /**
+     * required to add logback.xml in context
+     * <pre>
+     * {@code
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <configuration>
+     *
+     *     <appender name="logTest" class="io.inugami.commons.test.logs.LogTestAppender">
+     *     </appender>
+     *
+     *     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+     *         <encoder>
+     *             <pattern>[%d{dd/MM HH:mm:ss}]|%logger|%-5level|%thread|%msg\n</pattern>
+     *         </encoder>
+     *     </appender>
+     *
+     *
+     *     <root level="DEBUG">
+     *         <appender-ref ref="STDOUT"/>
+     *         <appender-ref ref="logTest"/>
+     *     </root>
+     *
+     * </configuration>
+     * }
+     * </pre>
+     *
+     * @param process  function to call
+     * @param objClass log class to intercept
+     * @param logs     logs content
+     * @param matchers line matches
+     */
+    public static void assertLogsIntegration(final VoidFunctionWithException process, final Class<?> objClass, final String logs, final LineMatcher... matchers) {
+        UnitTestHelperLogs.assertLogsIntegration(process, objClass, logs, matchers);
+    }
+
+
+    /**
+     * required to add logback.xml in context
+     * <pre>
+     * {@code
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <configuration>
+     *
+     *     <appender name="logTest" class="io.inugami.commons.test.logs.LogTestAppender">
+     *     </appender>
+     *
+     *     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+     *         <encoder>
+     *             <pattern>[%d{dd/MM HH:mm:ss}]|%logger|%-5level|%thread|%msg\n</pattern>
+     *         </encoder>
+     *     </appender>
+     *
+     *
+     *     <root level="DEBUG">
+     *         <appender-ref ref="STDOUT"/>
+     *         <appender-ref ref="logTest"/>
+     *     </root>
+     *
+     * </configuration>
+     * }
+     * </pre>
+     *
+     * @param process  function to call
+     * @param pattern  log pattern to intercept
+     * @param logs     logs content
+     * @param matchers line matches
+     */
+    public static void assertLogs(final VoidFunctionWithException process, final String pattern, final String logs, final LineMatcher... matchers) {
+        UnitTestHelperLogs.assertLogs(process, pattern, logs, matchers);
+    }
+
+    /**
+     * required to add logback.xml in context
+     * <pre>
+     * {@code
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <configuration>
+     *
+     *     <appender name="logTest" class="io.inugami.commons.test.logs.LogTestAppender">
+     *     </appender>
+     *
+     *     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+     *         <encoder>
+     *             <pattern>[%d{dd/MM HH:mm:ss}]|%logger|%-5level|%thread|%msg\n</pattern>
+     *         </encoder>
+     *     </appender>
+     *
+     *
+     *     <root level="DEBUG">
+     *         <appender-ref ref="STDOUT"/>
+     *         <appender-ref ref="logTest"/>
+     *     </root>
+     *
+     * </configuration>
+     * }
+     * </pre>
+     *
+     * @param process  function to call
+     * @param pattern  log pattern to intercept
+     * @param logs     logs content
+     * @param matchers line matches
+     */
+    public static void assertLogsIntegration(final VoidFunctionWithException process, final String pattern, final String logs, final LineMatcher... matchers) {
+        UnitTestHelperLogs.assertLogsIntegration(process, pattern, logs, matchers);
+    }
+
+
+    /**
+     * required to add logback.xml in context
+     * <pre>
+     * {@code
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <configuration>
+     *
+     *     <appender name="logTest" class="io.inugami.commons.test.logs.LogTestAppender">
+     *     </appender>
+     *
+     *     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+     *         <encoder>
+     *             <pattern>[%d{dd/MM HH:mm:ss}]|%logger|%-5level|%thread|%msg\n</pattern>
+     *         </encoder>
+     *     </appender>
+     *
+     *
+     *     <root level="DEBUG">
+     *         <appender-ref ref="STDOUT"/>
+     *         <appender-ref ref="logTest"/>
+     *     </root>
+     *
+     * </configuration>
+     * }
+     * </pre>
+     *
+     * @param context
+     */
+    public static void assertLogs(final AssertLogContext context) {
+        UnitTestHelperLogs.assertLogs(context);
+    }
+
+
+    // =========================================================================
+    // ASSERT ENUM
+    // =========================================================================
+    public static void assertEnum(final Class<? extends Enum<?>> enumClass, final String reference, final LineMatcher... matchers) {
+        UnitTestHelperEnum.assertEnum(enumClass, reference, matchers);
+    }
+
+    public static void assertEnumRelative(final Class<? extends Enum<?>> enumClass, final String path, final LineMatcher... matchers) {
+        UnitTestHelperEnum.assertEnumRelative(enumClass, path, matchers);
+    }
+
+
     // =========================================================================
     // EXCEPTIONS
     // =========================================================================
@@ -321,5 +515,60 @@ public class UnitTestHelper {
 
     public static void assertWaringCodeUnique(final Warning... warnings) {
         UnitTestHelperErrorCode.assertWaringCodeUnique(warnings);
+    }
+
+
+    // =========================================================================
+    // Utility class
+    // =========================================================================
+    public static void assertUtilityClass(final Class<?> utilityClass) {
+        UnitTestHelperUtilityClass.assertUtilityClass(utilityClass);
+    }
+
+    public static void assertUtilityClassLombok(final Class<?> utilityClass) {
+        UnitTestHelperUtilityClass.assertUtilityClassLombok(utilityClass);
+    }
+
+    // =========================================================================
+    // DATA
+    // =========================================================================
+    public static String getRandomUid() {
+        return UnitTestData.getRandomUid();
+    }
+
+    public static String getRandomWord() {
+        return UnitTestData.getRandomWord();
+    }
+
+    public static String getRandomCategory() {
+        return UnitTestData.getRandomCategory();
+    }
+
+    public static String getRandomLabel() {
+        return UnitTestData.getRandomLabel();
+    }
+
+    public static String getRandomPhrase() {
+        return UnitTestData.getRandomPhrase();
+    }
+
+    public static String getRandomPhrase(final int nbWordMin, final int nbWordMax, final boolean isLabel) {
+        return UnitTestData.getRandomPhrase(nbWordMin, nbWordMax, isLabel);
+    }
+
+    public static String getRandomSection() {
+        return UnitTestData.getRandomSection();
+    }
+
+    public static String getRandomSection(final int nbLine, final int nbWordMin, final int nbWordMax) {
+        return UnitTestData.getRandomSection(nbLine, nbWordMin, nbWordMax);
+    }
+
+    public static double getRandomDouble(final double min, final double max) {
+        return UnitTestData.getRandomDouble(min, max);
+    }
+
+    public static int getRandomBetween(final int start, final int end) {
+        return UnitTestData.getRandomBetween(start, end);
     }
 }

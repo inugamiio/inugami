@@ -1,0 +1,6 @@
+[ {
+  "level" : "INFO",
+  "loggerName" : "io.inugami.commons.test.UnitTestHelperLogsTest$Service",
+  "mdc" : { },
+  "message" : "hello"
+} ]

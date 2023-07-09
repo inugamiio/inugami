@@ -26,7 +26,7 @@ import java.util.*;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 
-@SuppressWarnings({"java:S1845"})
+@SuppressWarnings({"java:S1845", "java:S115"})
 @Getter
 @Slf4j
 public class MdcService implements ApplicationLifecycleSPI {

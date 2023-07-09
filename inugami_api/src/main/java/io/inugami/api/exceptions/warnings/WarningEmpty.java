@@ -17,7 +17,7 @@ class WarningEmpty {
     }
 
     static void warningNotEmpty(final Warning warning, final String value, final String messageDetail, final Object... msgArgs) {
-        if (value != null || !value.isEmpty()) {
+        if (value != null && !value.isEmpty()) {
             WarningCommons.addWarningInContext(warning, messageDetail, msgArgs);
         }
     }
@@ -30,7 +30,7 @@ class WarningEmpty {
     }
 
     static <T> void warningNotEmpty(final Warning warning, final T[] values, final String messageDetail, final Object... msgArgs) {
-        if (values != null || values.length == 0) {
+        if (values != null && values.length == 0) {
             WarningCommons.addWarningInContext(warning, messageDetail, msgArgs);
         }
     }
@@ -43,7 +43,7 @@ class WarningEmpty {
     }
 
     static void warningNotEmpty(final Warning warning, final Collection<?> values, final String messageDetail, final Object... msgArgs) {
-        if (values != null || !values.isEmpty()) {
+        if (values != null && !values.isEmpty()) {
             WarningCommons.addWarningInContext(warning, messageDetail, values);
         }
     }
@@ -55,7 +55,7 @@ class WarningEmpty {
     }
 
     static void warningNotEmpty(final Warning warning, final Map<?, ?> values, final String messageDetail, final Object... msgArgs) {
-        if (values != null || !values.isEmpty()) {
+        if (values != null && !values.isEmpty()) {
             WarningCommons.addWarningInContext(warning, messageDetail, values);
         }
     }

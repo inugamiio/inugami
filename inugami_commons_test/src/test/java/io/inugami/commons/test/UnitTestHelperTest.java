@@ -3,8 +3,11 @@ package io.inugami.commons.test;
 import io.inugami.api.exceptions.DefaultErrorCode;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.exceptions.UncheckedException;
+import io.inugami.commons.test.api.SkipLineMatcher;
 import io.inugami.commons.test.dto.UserDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -18,7 +21,7 @@ import java.util.List;
 
 import static io.inugami.commons.test.TestUtils.USER_DTO_TYPE;
 import static io.inugami.commons.test.TestUtils.buildRelativePath;
-import static io.inugami.commons.test.UnitTestHelper.assertTextRelative;
+import static io.inugami.commons.test.UnitTestHelper.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -42,9 +45,9 @@ public class UnitTestHelperTest {
 
     @Test
     public void readFileRelative_withNullValue_shouldThrow() {
-        UnitTestHelper.assertThrows(RuntimeException.class,
-                                    "can't read file from null relative path!",
-                                    () -> UnitTestHelper.readFileRelative(null));
+        assertThrows(RuntimeException.class,
+                     "can't read file from null relative path!",
+                     () -> UnitTestHelper.readFileRelative(null));
     }
 
 
@@ -197,11 +200,11 @@ public class UnitTestHelperTest {
     public void AssertTextException_withDiff_shouldThrow() {
         final UserDto ref = UnitTestHelperJson.loadJson("test/dto/user.1.json", USER_DTO_TYPE);
         ref.setLastName("foobar");
-        UnitTestHelper.assertThrows(() -> UnitTestHelper.assertTextRelative(UnitTestHelperJson.forceConvertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
+        assertThrows(() -> UnitTestHelper.assertTextRelative(UnitTestHelperJson.forceConvertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
 
 
-        UnitTestHelper.assertThrows(UnitTestHelperText.AssertTextException.class, "reference and json have not same size : 17,16",
-                                    () -> UnitTestHelper.assertTextRelative(UnitTestHelper.forceConvertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
+        assertThrows(UnitTestHelperText.AssertTextException.class, "reference and json have not same size : 17,16",
+                     () -> UnitTestHelper.assertTextRelative(UnitTestHelper.forceConvertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
     }
 
     // =========================================================================
@@ -210,7 +213,7 @@ public class UnitTestHelperTest {
     @Test
     public void assertThrowsError_withException_shouldMatch() {
 
-        UnitTestHelper.assertThrows(NullPointerException.class, "some error", () -> {
+        assertThrows(NullPointerException.class, "some error", () -> {
             throw new NullPointerException("some error");
         });
     }
@@ -219,13 +222,13 @@ public class UnitTestHelperTest {
     @Test
     public void throwException_default_method() {
         //------------------------------------------
-        UnitTestHelper.assertThrows(() -> {
+        assertThrows(() -> {
             throw new UncheckedException();
         });
         //------------------------------------------
 
         try {
-            UnitTestHelper.assertThrows(() -> log.info("no error"));
+            assertThrows(() -> log.info("no error"));
             throw new Error("should throw");
         } catch (final Throwable e) {
             if (e instanceof Error) {
@@ -242,18 +245,18 @@ public class UnitTestHelperTest {
         //------------------------------------------
 
         final String msg = null;
-        UnitTestHelper.assertThrows(msg, () -> {
+        assertThrows(msg, () -> {
             throw new UncheckedException();
         });
 
-        UnitTestHelper.assertThrows("this method should throws", () -> {
+        assertThrows("this method should throws", () -> {
             throw new UncheckedException("this method should throws");
         });
 
         //------------------------------------------
 
         try {
-            UnitTestHelper.assertThrows("this method should throws", () -> log.info("no error"));
+            assertThrows("this method should throws", () -> log.info("no error"));
             throw new Error("should throw");
         } catch (final Throwable e) {
             if (e instanceof Error) {
@@ -263,7 +266,7 @@ public class UnitTestHelperTest {
         }
 
         try {
-            UnitTestHelper.assertThrows("this method should throws", () -> {
+            assertThrows("this method should throws", () -> {
                 throw new UncheckedException("some error");
             });
             throw new Error("should throw");
@@ -281,13 +284,13 @@ public class UnitTestHelperTest {
         //------------------------------------------
 
         final String msg = null;
-        UnitTestHelper.assertThrows(UncheckedException.class, () -> {
+        assertThrows(UncheckedException.class, () -> {
             throw new UncheckedException();
         });
         //------------------------------------------
 
         try {
-            UnitTestHelper.assertThrows(UncheckedException.class, () -> log.info("no error"));
+            assertThrows(UncheckedException.class, () -> log.info("no error"));
             throw new Error("should throw");
         } catch (final Throwable e) {
             if (e instanceof Error) {
@@ -297,7 +300,7 @@ public class UnitTestHelperTest {
         }
 
         try {
-            UnitTestHelper.assertThrows(UncheckedException.class, () -> {
+            assertThrows(UncheckedException.class, () -> {
                 throw new NullPointerException("some error");
             });
             throw new Error("should throw");
@@ -315,13 +318,13 @@ public class UnitTestHelperTest {
         //------------------------------------------
 
         final String msg = null;
-        UnitTestHelper.assertThrows(UncheckedException.class, "some error", () -> {
+        assertThrows(UncheckedException.class, "some error", () -> {
             throw new UncheckedException("some error");
         });
         //------------------------------------------
 
         try {
-            UnitTestHelper.assertThrows(UncheckedException.class, "some error", () -> log.info("no error"));
+            assertThrows(UncheckedException.class, "some error", () -> log.info("no error"));
             throw new Error("should throw");
         } catch (final Throwable e) {
             if (e instanceof Error) {
@@ -331,7 +334,7 @@ public class UnitTestHelperTest {
         }
 
         try {
-            UnitTestHelper.assertThrows(UncheckedException.class, "some error", () -> {
+            assertThrows(UncheckedException.class, "some error", () -> {
                 throw new NullPointerException("some error");
             });
             throw new Error("should throw");
@@ -343,7 +346,7 @@ public class UnitTestHelperTest {
         }
 
         try {
-            UnitTestHelper.assertThrows(UncheckedException.class, "some error", () -> {
+            assertThrows(UncheckedException.class, "some error", () -> {
                 throw new UncheckedException("sorry");
             });
             throw new Error("should throw");
@@ -361,13 +364,13 @@ public class UnitTestHelperTest {
         //------------------------------------------
         final ErrorCode undefinedError = DefaultErrorCode.buildUndefineError();
         final String    msg            = null;
-        UnitTestHelper.assertThrows(undefinedError, () -> {
+        assertThrows(undefinedError, () -> {
             throw new UncheckedException(undefinedError);
         });
         //------------------------------------------
 
         try {
-            UnitTestHelper.assertThrows(undefinedError, () -> log.info("no error"));
+            assertThrows(undefinedError, () -> log.info("no error"));
             throw new Error("should throw");
         } catch (final Throwable e) {
             if (e instanceof Error) {
@@ -377,7 +380,7 @@ public class UnitTestHelperTest {
         }
 
         try {
-            UnitTestHelper.assertThrows(undefinedError, () -> {
+            assertThrows(undefinedError, () -> {
                 throw new UncheckedException(DefaultErrorCode.buildUndefineErrorCode().errorCode("ERR").build());
             });
             throw new Error("should throw");
@@ -392,9 +395,119 @@ public class UnitTestHelperTest {
 
     @Test
     public void throwException_nominal() {
-        UnitTestHelper.assertThrows(NullPointerException.class, "sorry", () -> {
+        assertThrows(NullPointerException.class, "sorry", () -> {
             UnitTestHelper.throwException(new NullPointerException("sorry"));
         });
     }
 
+
+    @Test
+    void assertUtilityClassLombok_nominal() {
+        UnitTestHelper.assertUtilityClassLombok(UnitTestHelperUtilityClassTest.SimpleUtilityClass.class);
+    }
+
+    @Test
+    void assertUtilityClassLombok_withMethodNonStatic() {
+        assertThrows("hello isn't static method!", () -> UnitTestHelper.assertUtilityClassLombok(UnitTestHelperUtilityClassTest.BadUtilityClass.class));
+    }
+
+    @Test
+    void assertUtilityClassLombok_withoutConstructorPrivate() {
+        assertThrows(UncheckedException.class, () -> UnitTestHelper.assertUtilityClassLombok(UnitTestHelperUtilityClassTest.WithoutConstructorUtilityClass.class));
+    }
+
+
+    // =========================================================================
+    // DATA
+    // =========================================================================
+
+    @Test
+    void getRandomUid_nominal() {
+        Assertions.assertThat(UnitTestHelper.getRandomUid()).isNotEqualTo(UnitTestHelper.getRandomUid());
+        for (int i = 10; i >= 0; i--) {
+            log.info("{}", UnitTestHelper.getRandomUid());
+        }
+    }
+
+    @Test
+    void getRandomWord_nominal() {
+        Assertions.assertThat(UnitTestHelper.getRandomWord()).isNotNull();
+    }
+
+    @Test
+    void getRandomCategory_nominal() {
+        Assertions.assertThat(UnitTestHelper.getRandomCategory()).isNotNull();
+    }
+
+    @Test
+    void getRandomLabel_nominal() {
+        Assertions.assertThat(UnitTestHelper.getRandomLabel()).isNotNull();
+    }
+
+    @Test
+    void getRandomPhrase_nominal() {
+        Assertions.assertThat(UnitTestHelper.getRandomPhrase()).isNotNull();
+    }
+
+    @Test
+    void getRandomPhrase_withMinMax() {
+        final String[] value = UnitTestHelper.getRandomPhrase(2, 5, true).split(" ");
+        Assertions.assertThat(value).isNotNull();
+        Assertions.assertThat(value.length).isGreaterThanOrEqualTo(2).isLessThanOrEqualTo(5);
+    }
+
+    @Test
+    void getRandomSection_nominal() {
+        Assertions.assertThat(UnitTestHelper.getRandomSection()).isNotNull();
+    }
+
+    @Test
+    void getRandomSection_withMinMax() {
+        Assertions.assertThat(UnitTestHelper.getRandomSection(2, 5, 5)).isNotNull();
+    }
+
+    @Test
+    void getRandomDouble_nominal() {
+        final double value = UnitTestHelper.getRandomDouble(2, 5);
+        Assertions.assertThat(value).isGreaterThanOrEqualTo(2).isLessThanOrEqualTo(5);
+    }
+
+    @Test
+    void getRandomBetween_nominal() {
+        final double value = UnitTestHelper.getRandomBetween(2, 5);
+        Assertions.assertThat(value).isGreaterThanOrEqualTo(2).isLessThanOrEqualTo(5);
+    }
+
+
+    // =========================================================================
+    // ASSERTS ENUM
+    // =========================================================================
+    @Test
+    void assertEnum_nominal() {
+        assertEnum(Levels.class, "{\n" +
+                           "  \"ADMIN\" : {\n" +
+                           "    \"label\" : \"admin\",\n" +
+                           "    \"level\" : 10\n" +
+                           "  },\n" +
+                           "  \"GUEST\" : {\n" +
+                           "    \"label\" : \"guest\",\n" +
+                           "    \"level\" : 0\n" +
+                           "  }\n" +
+                           "}",
+                   SkipLineMatcher.of(7));
+    }
+
+    @Test
+    void assertEnumRelative_nominal() {
+        assertEnumRelative(Levels.class, "test/UnitTestHelperTest/assertEnumRelative_nominal.json", SkipLineMatcher.of(7));
+    }
+
+    @RequiredArgsConstructor
+    public enum Levels {
+        ADMIN("admin", 10),
+        GUEST("guest", 0);
+
+        private final String label;
+        private final int    level;
+    }
 }

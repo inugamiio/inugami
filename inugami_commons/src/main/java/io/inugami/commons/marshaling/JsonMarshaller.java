@@ -21,11 +21,15 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import io.inugami.api.spi.SpiLoader;
 import lombok.Getter;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 @Getter
 public class JsonMarshaller {
@@ -33,14 +37,25 @@ public class JsonMarshaller {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
+    private static final SimpleModule INUGAMI_MODULE = initInugamiModule();
+    
     private final ObjectMapper defaultObjectMapper;
     private final ObjectMapper indentedObjectMapper;
 
     private static final JsonMarshaller INSTANCE = new JsonMarshaller();
 
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
+    private static SimpleModule initInugamiModule() {
+        final SimpleModule module = new SimpleModule();
+        module.addSerializer(Method.class, new MethodSerializer(Method.class));
+        module.addSerializer(Class.class, new ClassSerializer(Class.class));
+        module.addSerializer(Field.class, new FieldSerializer(Field.class));
+        return module;
+    }
+
     public static JsonMarshaller getInstance() {
         return INSTANCE;
     }
@@ -81,6 +96,7 @@ public class JsonMarshaller {
             objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            objectMapper.registerModule(INUGAMI_MODULE);
 
             return objectMapper;
         }
@@ -99,8 +115,10 @@ public class JsonMarshaller {
             objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            objectMapper.registerModule(INUGAMI_MODULE);
 
             return objectMapper;
         }
     }
 }
+

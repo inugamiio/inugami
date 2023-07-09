@@ -1,0 +1,9 @@
+[ {
+  "level" : "INFO",
+  "loggerName" : "IOLOG",
+  "mdc" : {
+    "lifecycle" : "out",
+    "globalStatus" : "success"
+  },
+  "message" : "[OUT] [POST] /application/my/service\nheaders :\n\tapp: myApplication\npayload :\n{\"name\":\"John Smith\"}\nresponse:\n\tstatus:200\n\tdatetime:1688223240\n\tduration:42\n\tcontentType:UTF-8\n\theaders:\n\t\tx-correlation-id: fd508efe-9b7e-403f-b0bc-44e379d0171d\n\twarning:\n\t\tWARN-1:\n\t\t\taccount need to be confirmed :some detail\n\tpayload:{\"id\":1,\"name\":\"John Smith\"}"
+} ]
