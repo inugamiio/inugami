@@ -3,7 +3,9 @@ package io.inugami.commons.test;
 import io.inugami.api.exceptions.DefaultErrorCode;
 import io.inugami.api.exceptions.ErrorCode;
 import io.inugami.api.exceptions.UncheckedException;
+import io.inugami.commons.test.api.SkipLineMatcher;
 import io.inugami.commons.test.dto.UserDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,8 +21,7 @@ import java.util.List;
 
 import static io.inugami.commons.test.TestUtils.USER_DTO_TYPE;
 import static io.inugami.commons.test.TestUtils.buildRelativePath;
-import static io.inugami.commons.test.UnitTestHelper.assertTextRelative;
-import static io.inugami.commons.test.UnitTestHelper.assertThrows;
+import static io.inugami.commons.test.UnitTestHelper.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -475,5 +476,38 @@ public class UnitTestHelperTest {
     void getRandomBetween_nominal() {
         final double value = UnitTestHelper.getRandomBetween(2, 5);
         Assertions.assertThat(value).isGreaterThanOrEqualTo(2).isLessThanOrEqualTo(5);
+    }
+
+
+    // =========================================================================
+    // ASSERTS ENUM
+    // =========================================================================
+    @Test
+    void assertEnum_nominal() {
+        assertEnum(Levels.class, "{\n" +
+                           "  \"ADMIN\" : {\n" +
+                           "    \"label\" : \"admin\",\n" +
+                           "    \"level\" : 10\n" +
+                           "  },\n" +
+                           "  \"GUEST\" : {\n" +
+                           "    \"label\" : \"guest\",\n" +
+                           "    \"level\" : 0\n" +
+                           "  }\n" +
+                           "}",
+                   SkipLineMatcher.of(7));
+    }
+
+    @Test
+    void assertEnumRelative_nominal() {
+        assertEnumRelative(Levels.class, "test/UnitTestHelperTest/assertEnumRelative_nominal.json", SkipLineMatcher.of(7));
+    }
+
+    @RequiredArgsConstructor
+    public enum Levels {
+        ADMIN("admin", 10),
+        GUEST("guest", 0);
+
+        private final String label;
+        private final int    level;
     }
 }

@@ -177,14 +177,17 @@ class HttpBasicConnectorDelegateUtils {
         final SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new X509HostnameVerifier() {
             @Override
             public void verify(final String host, final SSLSocket ssl) throws IOException {
+                // nothing to do
             }
 
             @Override
             public void verify(final String host, final X509Certificate cert) throws SSLException {
+                // nothing to do
             }
 
             @Override
             public void verify(final String host, final String[] cns, final String[] subjectAlts) throws SSLException {
+                // nothing to do
             }
 
             @Override

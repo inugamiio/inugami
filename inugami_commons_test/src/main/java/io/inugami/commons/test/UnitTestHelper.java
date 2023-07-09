@@ -449,6 +449,19 @@ public class UnitTestHelper {
         UnitTestHelperLogs.assertLogs(context);
     }
 
+
+    // =========================================================================
+    // ASSERT ENUM
+    // =========================================================================
+    public static void assertEnum(final Class<? extends Enum<?>> enumClass, final String reference, final LineMatcher... matchers) {
+        UnitTestHelperEnum.assertEnum(enumClass, reference, matchers);
+    }
+
+    public static void assertEnumRelative(final Class<? extends Enum<?>> enumClass, final String path, final LineMatcher... matchers) {
+        UnitTestHelperEnum.assertEnumRelative(enumClass, path, matchers);
+    }
+
+
     // =========================================================================
     // EXCEPTIONS
     // =========================================================================

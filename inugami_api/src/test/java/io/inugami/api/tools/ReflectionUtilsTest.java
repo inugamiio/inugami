@@ -2,6 +2,7 @@ package io.inugami.api.tools;
 
 import io.inugami.api.spi.SpiPriority;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
@@ -33,6 +34,29 @@ class ReflectionUtilsTest {
         assertThat(result).isEqualTo("hello");
     }
 
+
+    // =========================================================================
+    // ASSERTS ENUM
+    // =========================================================================
+    @Test
+    void assertEnum_nominal() {
+        assertThat(convertEnumToMap(Levels.class)).hasToString("{ADMIN={label=admin, level=10}, GUEST={label=guest, level=0}}");
+    }
+
+    @Test
+    void assertEnum_nullValue() {
+        assertThat(convertEnumToMap(null)).isNull();
+    }
+
+
+    @RequiredArgsConstructor
+    public enum Levels {
+        ADMIN("admin", 10),
+        GUEST("guest", 0);
+
+        private final String label;
+        private final int    level;
+    }
 
     // =================================================================================================================
     // TOOLS

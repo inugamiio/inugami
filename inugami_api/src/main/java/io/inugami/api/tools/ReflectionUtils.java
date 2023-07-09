@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@SuppressWarnings({"java:S119", "java:S3011"})
+@SuppressWarnings({"java:S119", "java:S3011", "java:S1452"})
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ReflectionUtils {
@@ -441,4 +441,40 @@ public final class ReflectionUtils {
 
         }
     }
+
+    public static Map<String, Map<String, Object>> convertEnumToMap(final Class<? extends Enum<?>> enumClass) {
+        if (enumClass == null) {
+            return null;
+        }
+
+        final Map<String, Map<String, Object>> result = new LinkedHashMap<>();
+        final Enum<?>[]                        values = enumClass.getEnumConstants();
+
+        try {
+            for (final Enum<?> enumItem : values) {
+                final Map<String, Object> enumFields;
+                enumFields = extractEnumFields(enumItem);
+                result.put(enumItem.name(), enumFields);
+            }
+        } catch (final IllegalAccessException e) {
+            log.error(e.getMessage(), e);
+        }
+
+
+        return result;
+    }
+
+    private static Map<String, Object> extractEnumFields(final Enum<?> enumItem) throws IllegalAccessException {
+        final Map<String, Object> result = new LinkedHashMap<>();
+
+        final Field[] fields = enumItem.getDeclaringClass().getDeclaredFields();
+        for (final Field field : fields) {
+            if (!Modifier.isStatic(field.getModifiers())) {
+                field.setAccessible(true);
+                result.put(field.getName(), field.get(enumItem));
+            }
+        }
+        return result;
+    }
+
 }

@@ -17,6 +17,9 @@
 package io.inugami.api.models;
 
 import io.inugami.api.tools.Hex;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -27,6 +30,9 @@ import java.io.Serializable;
  * @author patrick_guillerm
  * @since 12 avr. 2018
  */
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
+@Getter
 public class Rgb implements Serializable {
 
     // =========================================================================
@@ -40,10 +46,12 @@ public class Rgb implements Serializable {
 
     private final byte blue;
 
+    @EqualsAndHashCode.Include
     private final int color;
 
     private final byte avg;
 
+    @ToString.Include
     private final String hexa;
 
     // =========================================================================
@@ -51,75 +59,13 @@ public class Rgb implements Serializable {
     // =========================================================================
     public Rgb(final int color) {
         this.color = color;
-        red        = (byte) (color >> 16);
-        green      = (byte) ((color & 0x00FF00) >> 8);
-        blue       = (byte) (color & 0x0000FF);
+        red = (byte) (color >> 16);
+        green = (byte) ((color & 0x00FF00) >> 8);
+        blue = (byte) (color & 0x0000FF);
 
-        avg  = (byte) ((red + green + blue) / 3);
+        avg = (byte) ((red + green + blue) / 3);
         hexa = Hex.encodeHexString(new byte[]{red, green, blue});
     }
 
-    // =========================================================================
-    // OVERRIDE
-    // =========================================================================
-
-    @Override
-    public String toString() {
-        //@formatter:off
-        return new StringBuilder(this.getClass().getSimpleName())
-                        .append('@')
-                        .append(System.identityHashCode(this))
-                        .append("[hexa=").append(hexa)
-                        .append(']')
-                        .toString();
-      //@formatter:on
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime  = 31;
-        int       result = 1;
-        result = (prime * result) + color;
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        boolean result = this == obj;
-
-        if (!result && (obj != null) && (obj instanceof Rgb)) {
-            final Rgb other = (Rgb) obj;
-            result = color == other.getColor();
-        }
-
-        return result;
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public int getRed() {
-        return red;
-    }
-
-    public int getGreen() {
-        return green;
-    }
-
-    public int getBlue() {
-        return blue;
-    }
-
-    public int getColor() {
-        return color;
-    }
-
-    public byte getAvg() {
-        return avg;
-    }
-
-    public String getHexa() {
-        return hexa;
-    }
 
 }

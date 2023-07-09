@@ -32,6 +32,7 @@ import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -51,7 +52,7 @@ public class FilesUtils {
     // =========================================================================
     private static final Logger LOGGER = LoggerFactory.getLogger(FilesUtils.class.getSimpleName());
 
-    private static final Charset UTF_8 = Charset.forName("UTF-8");
+    private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
     private static final Charset ISO_8859_1 = Charset.forName("ISO-8859-1");
 
