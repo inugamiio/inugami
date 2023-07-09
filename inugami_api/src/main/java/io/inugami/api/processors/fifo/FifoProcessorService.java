@@ -104,7 +104,7 @@ public class FifoProcessorService<Q, I> implements LifecycleBootstrap {
         if (!executor.isShutdown()) {
             try {
                 executor.awaitTermination(0, TimeUnit.MILLISECONDS);
-            } catch (final InterruptedException e) {
+            } catch (final Throwable e) {
                 Loggers.DEBUG.error(e.getMessage(), e);
             }
         }
