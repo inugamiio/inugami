@@ -110,6 +110,10 @@ public final class AnnotationTools {
                 clazz = extractCdiBeanClass(object);
             }
 
+            if (clazz == null) {
+                return null;
+            }
+
             final Annotation annotation = clazz == null ? null : searchAnnotation(clazz.getAnnotations(), JAVAX_NAMED);
             Method           getValue   = null;
             if (annotation != null) {

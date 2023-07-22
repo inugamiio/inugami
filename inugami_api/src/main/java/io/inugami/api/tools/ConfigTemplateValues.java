@@ -72,7 +72,7 @@ public class ConfigTemplateValues implements TemplateProviderSPI {
 
     private String replacePropertyValue(final String result, final String key, final String propValue) {
         final String realKey  = new StringBuilder("[{]{2}").append(key).append("[}]{2}").toString();
-        final String property = propValue == null ? EMPTY : (propValue == null ? EMPTY : propValue);
+        final String property = propValue == null ? EMPTY : propValue;
         if (property.contains("\\")) {
             return result.replaceAll(realKey, propValue.replaceAll("\\\\", "\\\\\\\\"));
         } else {
