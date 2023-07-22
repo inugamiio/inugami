@@ -48,6 +48,7 @@ public class UnitTestData {
     public static final String        EMAIL             = "john.smith@mock.org";
     public static final String        FIRSTNAME         = "John";
     public static final String        LASTNAME          = "Smith";
+    public static final String        LASTNAME2         = "Lalonde";
     public static final String        LOREM_IPSUM       = "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
     public static final String        LOREM_IPSUM_2     = "Suspendisse in quam in felis mollis ullamcorper ac in lectus";
     public static final String        LOREM_IPSUM_3     = "Nulla non leo vitae nunc aliquam mollis";
@@ -58,47 +59,55 @@ public class UnitTestData {
     public static final String        PHONE_NUMBER_1    = "0615031522";
     public static final String        PHONE_NUMBER_2    = "0225993475";
     public static final String        PHONE_NUMBER_3    = "0624455065";
+
+    public static final String      STREET_NAME   = "du Château";
+    public static final String      STREET_TYPE   = "Chem.";
+    public static final String      CITY          = "Cheseaux-sur-Lausanne";
+    public static final String      ZIP_CODE      = "1033";
+    public static final String      STREET_NUMBER = "10";
+    public static final String      CANTON        = "VD";
+    public static final String      NATIONALITY   = "CH";
     // =========================================================================
     // USERS
     // =========================================================================
-    public static final UserDataDTO   USER_1            = UserDataDTO.builder()
-                                                                     .id(1L)
-                                                                     .sex(UserDataDTO.Sex.FEMALE)
-                                                                     .firstName("Émilie")
-                                                                     .lastName("Lalonde")
-                                                                     .email("emilie.lalonde@mock.org")
-                                                                     .phoneNumber(PHONE_NUMBER_1)
-                                                                     .old(35)
-                                                                     .birthday(LocalDate.of(1988, 4, 12))
-                                                                     .socialId(NAVS13_1)
-                                                                     .nationality("CH")
-                                                                     .canton("VD")
-                                                                     .streetName("du Château")
-                                                                     .streetNumber("10")
-                                                                     .streetType("Chem.")
-                                                                     .zipCode("1033")
-                                                                     .city("Cheseaux-sur-Lausanne")
-                                                                     .deviceIdentifier("401f0498-c43f-43ad-a3f4-2888838332ad")
-                                                                     .build();
+    public static final UserDataDTO USER_1        = UserDataDTO.builder()
+                                                               .id(1L)
+                                                               .sex(UserDataDTO.Sex.FEMALE)
+                                                               .firstName("Émilie")
+                                                               .lastName(LASTNAME2)
+                                                               .email("emilie.lalonde@mock.org")
+                                                               .phoneNumber(PHONE_NUMBER_1)
+                                                               .old(35)
+                                                               .birthday(LocalDate.of(1988, 4, 12))
+                                                               .socialId(NAVS13_1)
+                                                               .nationality(NATIONALITY)
+                                                               .canton(CANTON)
+                                                               .streetName(STREET_NAME)
+                                                               .streetNumber(STREET_NUMBER)
+                                                               .streetType(STREET_TYPE)
+                                                               .zipCode(ZIP_CODE)
+                                                               .city(CITY)
+                                                               .deviceIdentifier("401f0498-c43f-43ad-a3f4-2888838332ad")
+                                                               .build();
 
 
     public static final UserDataDTO USER_2 = UserDataDTO.builder()
                                                         .id(2L)
                                                         .sex(UserDataDTO.Sex.FEMALE)
                                                         .firstName("Jessamine")
-                                                        .lastName("Lalonde")
+                                                        .lastName(LASTNAME2)
                                                         .email("jessamine.lalonde@mock.org")
                                                         .phoneNumber(PHONE_NUMBER_2)
                                                         .old(10)
                                                         .birthday(LocalDate.of(2013, 6, 21))
                                                         .socialId(NAVS13_2)
-                                                        .nationality("CH")
-                                                        .canton("VD")
-                                                        .streetName("du Château")
-                                                        .streetNumber("10")
-                                                        .streetType("Chem.")
-                                                        .zipCode("1033")
-                                                        .city("Cheseaux-sur-Lausanne")
+                                                        .nationality(NATIONALITY)
+                                                        .canton(CANTON)
+                                                        .streetName(STREET_NAME)
+                                                        .streetNumber(STREET_NUMBER)
+                                                        .streetType(STREET_TYPE)
+                                                        .zipCode(ZIP_CODE)
+                                                        .city(CITY)
                                                         .deviceIdentifier("46bfaa1a-0adf-4660-994a-e56f4b059c8f")
                                                         .build();
 
@@ -107,19 +116,19 @@ public class UnitTestData {
                                                         .id(3L)
                                                         .sex(UserDataDTO.Sex.MALE)
                                                         .firstName("Théodore")
-                                                        .lastName("Lalonde")
+                                                        .lastName(LASTNAME2)
                                                         .email("theodore.lalonde@mock.org")
                                                         .phoneNumber(PHONE_NUMBER_3)
                                                         .old(38)
                                                         .birthday(LocalDate.of(1985, 7, 10))
                                                         .socialId(NAVS13_3)
-                                                        .nationality("CH")
-                                                        .canton("VD")
-                                                        .streetName("du Château")
-                                                        .streetNumber("10")
-                                                        .streetType("Chem.")
-                                                        .zipCode("1033")
-                                                        .city("Cheseaux-sur-Lausanne")
+                                                        .nationality(NATIONALITY)
+                                                        .canton(CANTON)
+                                                        .streetName(STREET_NAME)
+                                                        .streetNumber(STREET_NUMBER)
+                                                        .streetType(STREET_TYPE)
+                                                        .zipCode(ZIP_CODE)
+                                                        .city(CITY)
                                                         .deviceIdentifier("45fa3dd1-714e-4887-b27d-9792b327ad56")
                                                         .build();
 

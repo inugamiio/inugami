@@ -27,6 +27,7 @@ import java.util.concurrent.*;
  * @author patrick_guillerm
  * @since 26 sept. 2017
  */
+@SuppressWarnings({"java:S2142"})
 public class FifoProcessorService<Q, I> implements LifecycleBootstrap {
 
     // =========================================================================

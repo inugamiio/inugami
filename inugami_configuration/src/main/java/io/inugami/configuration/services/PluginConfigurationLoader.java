@@ -52,6 +52,7 @@ import io.inugami.configuration.services.resolver.ConfigurationResolverException
 import io.inugami.configuration.services.validators.ApplicationConfigValidator;
 import io.inugami.configuration.services.validators.PluginConfigurationValidator;
 import io.inugami.configuration.services.validators.PluginEventsConfigValidator;
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,6 +70,7 @@ import java.util.function.Supplier;
  * @author patrick_guillerm
  * @since 26 déc. 2016
  */
+@NoArgsConstructor
 public class PluginConfigurationLoader {
 
     // =========================================================================
@@ -171,11 +173,6 @@ public class PluginConfigurationLoader {
 
     private final static XStream XSTREAM_COMPONENTS = initXStream(CLASSES_COMPONENTS);
 
-    // =========================================================================
-    // CONSTRUCTOR
-    // =========================================================================
-    public PluginConfigurationLoader() {
-    }
 
     // =========================================================================
     // INIT

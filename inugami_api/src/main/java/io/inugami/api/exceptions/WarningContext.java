@@ -36,4 +36,7 @@ public class WarningContext {
         return instance;
     }
 
+    public static synchronized void clean() {
+        INSTANCE.remove();
+    }
 }

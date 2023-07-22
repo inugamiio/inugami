@@ -29,12 +29,14 @@ import java.util.regex.Pattern;
  * @author patrick_guillerm
  * @since 9 mai 2017
  */
+@SuppressWarnings({"java:S5361"})
 public class ConfigTemplateValues implements TemplateProviderSPI {
 
+    public static final String  EMPTY          = "";
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final Pattern PROPERTY_REGEX = Pattern.compile("(?:[{]{2})([^}]+)(?:[}]{2})");
+    private final       Pattern PROPERTY_REGEX = Pattern.compile("(?:[{]{2})([^}]+)(?:[}]{2})");
 
     // =========================================================================
     // METHODS
@@ -70,7 +72,7 @@ public class ConfigTemplateValues implements TemplateProviderSPI {
 
     private String replacePropertyValue(final String result, final String key, final String propValue) {
         final String realKey  = new StringBuilder("[{]{2}").append(key).append("[}]{2}").toString();
-        final String property = propValue == null ? "" : propValue;
+        final String property = propValue == null ? EMPTY : (propValue == null ? EMPTY : propValue);
         if (property.contains("\\")) {
             return result.replaceAll(realKey, propValue.replaceAll("\\\\", "\\\\\\\\"));
         } else {

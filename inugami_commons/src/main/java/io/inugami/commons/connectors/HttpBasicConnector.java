@@ -61,6 +61,7 @@ import static io.inugami.commons.connectors.exceptions.HttpError.REQUEST_REQUIRE
  * @author patrick_guillerm
  * @since 26 oct. 2016
  */
+@SuppressWarnings({"java:S3776"})
 @Slf4j
 public class HttpBasicConnector implements IHttpBasicConnector {
 
@@ -606,8 +607,8 @@ public class HttpBasicConnector implements IHttpBasicConnector {
 
 
         for (int i = retry; i >= 0; i--) {
+            chrono = Chrono.startChrono();
             try {
-                chrono = Chrono.startChrono();
                 stepResult = function.process(GenericRequestContext.builder()
                                                                    .request(currentRequest)
                                                                    .httpclient(httpclient)
@@ -642,7 +643,7 @@ public class HttpBasicConnector implements IHttpBasicConnector {
         HttpConnectorResult.HttpConnectorResultBuilder resultBuilder = HttpConnectorResult.builder();
         if (stepResult != null) {
             resultBuilder = stepResult.toBuilder();
-            resultBuilder.delais(chrono.getDelaisInMillis());
+            resultBuilder.delais(chrono.getDurationInMillis());
         }
 
 
@@ -652,7 +653,7 @@ public class HttpBasicConnector implements IHttpBasicConnector {
             }
 
             if (request.isThrowable()) {
-                throw exception;
+                throw exception == null ? new ConnectorException(500, "undefined error occurs") : exception;
             } else {
                 resultBuilder.statusCode(exception instanceof ConnectorException
                                                  ? ((ConnectorException) exception).getCode()

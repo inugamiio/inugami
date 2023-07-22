@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@SuppressWarnings({"java:S5361"})
+@SuppressWarnings({"java:S5361", "java:S3776"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StringTools {
     // =========================================================================

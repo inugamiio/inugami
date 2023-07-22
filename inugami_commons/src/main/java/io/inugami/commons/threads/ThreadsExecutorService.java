@@ -36,6 +36,7 @@ import java.util.function.BiConsumer;
  * @author patrick_guillerm
  * @since 13 janv. 2017
  */
+@SuppressWarnings({"java:S1186"})
 public class ThreadsExecutorService implements LifecycleBootstrap {
 
     // =========================================================================

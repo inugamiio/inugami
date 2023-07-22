@@ -25,7 +25,7 @@ import java.util.Random;
  * @author patrick_guillerm
  * @since 26 janv. 2018
  */
-@SuppressWarnings({"java:S1192"})
+@SuppressWarnings({"java:S1192", "java:S2245"})
 public final class DataGeneratorUtils {
 
     // =========================================================================

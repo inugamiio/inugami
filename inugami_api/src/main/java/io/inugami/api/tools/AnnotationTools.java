@@ -28,6 +28,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"java:S1872"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AnnotationTools {
     // =========================================================================
@@ -95,34 +96,35 @@ public final class AnnotationTools {
     }
 
     public static String resolveNamed(final Object object) {
+
+        if (object == null) {
+            return null;
+        }
+
         String result = null;
-        if (object != null) {
-
-            if (object instanceof NamedComponent) {
-                result = ((NamedComponent) object).getName();
-            } else {
-                Class<?> clazz = object.getClass();
-                if ("org.jboss.weld.proxy.WeldClientProxy".equals(clazz.getName())) {
-                    clazz = extractCdiBeanClass(object);
-                }
-
-                final Annotation annotation = searchAnnotation(clazz.getAnnotations(), JAVAX_NAMED);
-
-                if (annotation != null) {
-                    final Method getValue = searchMethod(annotation, "value");
-                    if (getValue != null) {
-                        result = invoke(getValue, annotation);
-                    }
-                }
-
-                if ((result == null) || result.trim().isEmpty()) {
-                    //@formatter:off
-                    result = clazz.getSimpleName().substring(0, 1).toLowerCase() + clazz.getSimpleName().substring(1);
-                    //@formatter:on
-                }
+        if (object instanceof NamedComponent) {
+            result = ((NamedComponent) object).getName();
+        } else {
+            Class<?> clazz = object.getClass();
+            if ("org.jboss.weld.proxy.WeldClientProxy".equals(clazz.getName())) {
+                clazz = extractCdiBeanClass(object);
             }
 
+            final Annotation annotation = clazz == null ? null : searchAnnotation(clazz.getAnnotations(), JAVAX_NAMED);
+            Method           getValue   = null;
+            if (annotation != null) {
+                getValue = searchMethod(annotation, "value");
+            }
+            if (getValue != null) {
+                result = invoke(getValue, annotation);
+            }
+            if ((result == null) || result.trim().isEmpty()) {
+                //@formatter:off
+                result = clazz.getSimpleName().substring(0, 1).toLowerCase() + clazz.getSimpleName().substring(1);
+                //@formatter:on
+            }
         }
+
 
         return result;
     }

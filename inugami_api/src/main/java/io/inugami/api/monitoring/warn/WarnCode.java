@@ -17,8 +17,20 @@
 package io.inugami.api.monitoring.warn;
 
 
-public interface WarnCode {
+import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
+
+@Deprecated
+public interface WarnCode {
+    String WARNING_CODE           = "warningCode";
+    String WARNING_MESSAGE        = "warningMessage";
+    String WARNING_MESSAGE_DETAIL = "warningMessageDetail";
+    String WARNING_TYPE           = "warningType";
+
+    
     WarnCode getCurrentWarnCode();
 
     default String getWarnCode() {
@@ -37,4 +49,13 @@ public interface WarnCode {
         return getWarnCode() == null ? "technical" : getCurrentWarnCode().getWarnType();
     }
 
+
+    default Map<String, Serializable> toMap() {
+        final Map<String, Serializable> result = new LinkedHashMap<>();
+        applyIfNotNull(getWarnCode(), value -> result.put(WARNING_CODE, value));
+        applyIfNotNull(getMessage(), value -> result.put(WARNING_MESSAGE, value));
+        applyIfNotNull(getMessageDetail(), value -> result.put(WARNING_MESSAGE_DETAIL, value));
+        applyIfNotNull(getWarnType(), value -> result.put(WARNING_TYPE, value));
+        return result;
+    }
 }

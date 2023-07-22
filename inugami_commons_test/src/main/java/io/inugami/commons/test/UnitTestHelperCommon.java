@@ -3,6 +3,7 @@ package io.inugami.commons.test;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+@SuppressWarnings({"java:S5361"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UnitTestHelperCommon {
     public static final  String UTF_8        = "UTF-8";

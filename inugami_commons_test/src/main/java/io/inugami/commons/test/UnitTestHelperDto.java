@@ -19,6 +19,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UnitTestHelperDto {
 
+    public static final String OBJECT_SHOULDN_T_BE_NULL = "object shouldn't be null";
+
     // =========================================================================
     // assertDto
     // =========================================================================
@@ -39,7 +41,7 @@ public final class UnitTestHelperDto {
     private static <T> void assertNoArgsConstructor(final AssertDtoContext<T> context) {
         if (context.getNoArgConstructor() != null) {
             log.info("[{}] assertNoArgsConstructor", context);
-            assertNotNull("object shouldn't be null", context.getNoArgConstructor().get());
+            assertNotNull(OBJECT_SHOULDN_T_BE_NULL, context.getNoArgConstructor().get());
         }
     }
 
@@ -48,12 +50,12 @@ public final class UnitTestHelperDto {
         if (context.getFullArgConstructor() != null) {
             log.info("[{}] assertFullArgsConstructor", context);
             instance = context.getFullArgConstructor().get();
-            assertNotNull("object shouldn't be null", instance);
+            assertNotNull(OBJECT_SHOULDN_T_BE_NULL, instance);
             UnitTestHelperText.assertTextRelative(instance, context.getFullArgConstructorRefPath());
         }
 
         if (context.getCloneFunction() != null) {
-            assertNotNull("object shouldn't be null", instance);
+            assertNotNull(OBJECT_SHOULDN_T_BE_NULL, instance);
             final T newInstance = context.getCloneFunction().apply(instance);
             UnitTestHelperText.assertTextRelative(newInstance, context.getFullArgConstructorRefPath());
         }
@@ -71,7 +73,7 @@ public final class UnitTestHelperDto {
         if (context.getGetterRefPath() != null) {
             log.info("[{}] assertGetters", context);
             final T instance = UnitTestHelperJson.loadJson(context.getFullArgConstructorRefPath(), context.getObjectClass());
-            assertNotNull("object shouldn't be null", instance);
+            assertNotNull(OBJECT_SHOULDN_T_BE_NULL, instance);
             final Map<String, Object> gettersValues = extractGettersValues(instance);
             UnitTestHelperText.assertTextRelative(gettersValues, context.getGetterRefPath());
         }
@@ -99,7 +101,7 @@ public final class UnitTestHelperDto {
             final T instance      = UnitTestHelperJson.loadJson(context.getFullArgConstructorRefPath(), context.getObjectClass());
             final T emptyInstance = context.getNoArgConstructor().get();
 
-            assertNotNull("object shouldn't be null", instance);
+            assertNotNull(OBJECT_SHOULDN_T_BE_NULL, instance);
             final List<FieldGetterSetter> fieldGettersAndSetters = ReflectionUtils.extractFieldGetterAndSetter(instance);
 
 

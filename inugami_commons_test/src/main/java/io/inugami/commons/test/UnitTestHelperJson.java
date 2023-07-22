@@ -15,29 +15,31 @@ import java.nio.charset.StandardCharsets;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UnitTestHelperJson {
 
+    public static final String CAN_T_LOAD_JSON_OBJECT_FROM_NULL_PATH = "can't load Json Object from null path";
+
     // =========================================================================
     // LOAD
     // =========================================================================
     static <T> T loadIntegrationJson(final String path, final TypeReference<T> refObjectType) {
-        Asserts.assertNotNull(path, "can't load Json Object from null path");
+        Asserts.assertNotNull(path, CAN_T_LOAD_JSON_OBJECT_FROM_NULL_PATH);
         final String json = UnitTestHelperFile.readFileIntegration(path);
         return convertFromJson(json, refObjectType);
     }
 
     static <T> T loadIntegrationJson(final String path, final Class<? extends T> objectType) {
-        Asserts.assertNotNull(path, "can't load Json Object from null path");
+        Asserts.assertNotNull(path, CAN_T_LOAD_JSON_OBJECT_FROM_NULL_PATH);
         final String json = UnitTestHelperFile.readFileIntegration(path);
         return convertFromJson(json, objectType);
     }
 
     static <T> T loadJson(final String path, final TypeReference<T> refObjectType) {
-        Asserts.assertNotNull(path, "can't load Json Object from null path");
+        Asserts.assertNotNull(path, CAN_T_LOAD_JSON_OBJECT_FROM_NULL_PATH);
         final String json = UnitTestHelperFile.readFileRelative(path);
         return convertFromJson(json, refObjectType);
     }
 
     static <T> T loadJson(final String path, final Class<? extends T> objectType) {
-        Asserts.assertNotNull(path, "can't load Json Object from null path");
+        Asserts.assertNotNull(path, CAN_T_LOAD_JSON_OBJECT_FROM_NULL_PATH);
         final String json = UnitTestHelperFile.readFileRelative(path);
         return convertFromJson(json, objectType);
     }

@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings({"java:S1186"})
 public class LogTestAppender extends OutputStreamAppender<ILoggingEvent> {
 
     public static final Map<Integer, LogListener> LISTENERS = new ConcurrentHashMap<>();
