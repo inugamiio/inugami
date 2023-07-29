@@ -16,8 +16,7 @@
  */
 package io.inugami.logs.obfuscator.tools;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,23 +25,33 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static io.inugami.logs.obfuscator.api.Constants.MASK;
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class ObfuscatorUtils {
+    // =========================================================================
+    // ATTRIBUTES
+    // =========================================================================
+    public static final String PASSWORD  = "password";
+    public static final String MASK      = "xxxxx";
+    public static final String MASK_JSON = ObfuscatorUtils.MASK + ObfuscatorUtils.QUOT;
+    public static final String EMPTY     = "EMPTY";
+    public static final String EMAIL     = "@";
+    public static final String INVALID   = "INVALID";
+    public static final String QUOT      = "\"";
+    public static final String OPEN_TAG  = "<";
+    public static final String CLOSE_TAG = ">";
 
 
     // =========================================================================
     // CONTAINS
     // =========================================================================
-    public static boolean contains(final String content, String... values) {
+    public static boolean contains(final String content, final String... values) {
         if (content == null || values == null) {
             return false;
         }
 
         boolean result = false;
 
-        for (String value : values) {
+        for (final String value : values) {
             result = content.contains(value);
             if (result) {
                 break;
@@ -52,14 +61,14 @@ public class ObfuscatorUtils {
         return result;
     }
 
-    public static boolean containsAll(final String content, String... values) {
+    public static boolean containsAll(final String content, final String... values) {
         if (content == null || values == null) {
             return false;
         }
 
         boolean result = false;
 
-        for (String value : values) {
+        for (final String value : values) {
             result = content.contains(value);
             if (!result) {
                 break;
@@ -99,6 +108,7 @@ public class ObfuscatorUtils {
         regex.append(")([^>]*)[>])([^<]*)([<][^>]+[>])");
         return Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
     }
+
     // =========================================================================
     // REPLACE ALL
     // =========================================================================
@@ -125,25 +135,32 @@ public class ObfuscatorUtils {
 
         if (cursor == 0) {
             return message;
-        }
-        else if (cursor > 0 && cursor < message.length() - 1) {
+        } else if (cursor > 0 && cursor < message.length() - 1) {
             buffer.append(message.substring(cursor));
         }
 
         return buffer.toString();
     }
 
-    public static String keepLastChars(final String value, final int nbChars){
+    public static String keepLastChars(final String value, final int nbChars) {
         String result = "";
-        if(value!=null && value.length()> nbChars){
-            result = value.substring(value.length()-(nbChars+1));
+        if (value != null && value.length() > nbChars) {
+            result = value.substring(value.length() - (nbChars + 1));
         }
         return MASK + result;
     }
 
+    public static String keepFirstChars(final String value, final int nbChars) {
+        String result = "";
+        if (value != null && value.length() > nbChars) {
+            result = value.substring(0, nbChars);
+        }
+        return result + MASK;
+    }
+
     public static String replaceAllWithGroup(final String message,
-                                    final Pattern pattern,
-                                    final Function<List<String>, String> obfuscateFunction) {
+                                             final Pattern pattern,
+                                             final Function<List<String>, String> obfuscateFunction) {
         if (message == null || pattern == null || obfuscateFunction == null) {
             return message;
         }
@@ -153,9 +170,9 @@ public class ObfuscatorUtils {
         final Matcher       matcher = pattern.matcher(message);
         final StringBuilder buffer  = new StringBuilder();
         while (matcher.find(cursor)) {
-            final MatchResult matchResult = matcher.toMatchResult();
-            List<String> groups = new ArrayList<>();
-            for(int i = 0; i< matchResult.groupCount(); i++){
+            final MatchResult  matchResult = matcher.toMatchResult();
+            final List<String> groups      = new ArrayList<>();
+            for (int i = 0; i < matchResult.groupCount(); i++) {
                 groups.add(matchResult.group(i));
             }
             buffer.append(obfuscateFunction.apply(groups));
@@ -165,8 +182,7 @@ public class ObfuscatorUtils {
 
         if (cursor == 0) {
             return message;
-        }
-        else if (cursor > 0 && cursor < message.length() - 1) {
+        } else if (cursor > 0 && cursor < message.length() - 1) {
             buffer.append(message.substring(cursor));
         }
 

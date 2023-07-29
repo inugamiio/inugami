@@ -16,17 +16,18 @@
  */
 package io.inugami.logs.obfuscator.api;
 
+import io.inugami.logs.obfuscator.tools.ObfuscatorUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+@Deprecated
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Constants {
-    public static final String PASSWORD = "password";
-    public static final String MASK     = "xxxxx";
-    public static final String MASK_JSON     = "xxxxx\"";
-
-    public static final String QUOT = "\"";
-    public static final String OPEN_TAG = "<";
-    public static final String CLOSE_TAG = ">";
+    public static final String PASSWORD  = ObfuscatorUtils.PASSWORD;
+    public static final String MASK      = ObfuscatorUtils.MASK;
+    public static final String MASK_JSON = ObfuscatorUtils.MASK_JSON;
+    public static final String QUOT      = ObfuscatorUtils.QUOT;
+    public static final String OPEN_TAG  = ObfuscatorUtils.OPEN_TAG;
+    public static final String CLOSE_TAG = ObfuscatorUtils.CLOSE_TAG;
 
 }
