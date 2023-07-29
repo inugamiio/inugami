@@ -114,7 +114,7 @@ public final class AnnotationTools {
                 return null;
             }
 
-            final Annotation annotation = clazz == null ? null : searchAnnotation(clazz.getAnnotations(), JAVAX_NAMED);
+            final Annotation annotation = searchAnnotation(clazz.getAnnotations(), JAVAX_NAMED);
             Method           getValue   = null;
             if (annotation != null) {
                 getValue = searchMethod(annotation, "value");
@@ -124,7 +124,7 @@ public final class AnnotationTools {
             }
             if ((result == null) || result.trim().isEmpty()) {
                 //@formatter:off
-                result = clazz.getSimpleName().substring(0, 1).toLowerCase() + clazz.getSimpleName().substring(1);
+                result = clazz == null ? null : clazz.getSimpleName().substring(0, 1).toLowerCase() + clazz.getSimpleName().substring(1);
                 //@formatter:on
             }
         }
@@ -134,7 +134,7 @@ public final class AnnotationTools {
     }
 
     static Class<?> extractCdiBeanClass(final Object bean) {
-        return invokeMethods(bean, "getMetadata", "getBean", "getBeanClass");
+        return bean == null ? null : invokeMethods(bean, "getMetadata", "getBean", "getBeanClass");
 
     }
 

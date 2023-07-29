@@ -19,9 +19,9 @@ package io.inugami.api.functionnals;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.util.function.Consumer;
-import java.util.function.DoubleConsumer;
-import java.util.function.LongConsumer;
+import java.util.Collection;
+import java.util.Map;
+import java.util.function.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FunctionalUtils {
@@ -39,6 +39,45 @@ public final class FunctionalUtils {
 
     public static <T> boolean applyIfNotNull(final T data, final T defaultValue, final Consumer<T> consumer) {
         return applyIfNotNull(data == null ? defaultValue : data, consumer);
+    }
+
+
+    // =================================================================================================================
+    // APPLY IF NULL
+    // =================================================================================================================
+    public static <T> T applyIfNull(final T data, final Supplier<T> supplier) {
+        return data == null ? supplier.get() : data;
+    }
+
+
+    // =================================================================================================================
+    // APPLY IF EMPTY
+    // =================================================================================================================
+    public static <T extends Collection<?>> T applyIfEmpty(final T data, final Supplier<T> supplier) {
+        return data == null || data.isEmpty() ? supplier.get() : data;
+    }
+
+    public static <T extends Map<?, ?>> T applyIfEmpty(final T data, final Supplier<T> supplier) {
+        return data == null || data.isEmpty() ? supplier.get() : data;
+    }
+
+    public static String applyIfEmpty(final String data, final Supplier<String> supplier) {
+        return data == null || data.trim().isEmpty() ? supplier.get() : data;
+    }
+
+    // =================================================================================================================
+    // APPLY IF NOT EMPTY
+    // =================================================================================================================
+    public static <T extends Collection<?>> T applyIfNotEmpty(final T data, final Supplier<T> supplier) {
+        return data != null && !data.isEmpty() ? supplier.get() : data;
+    }
+
+    public static <T extends Map<?, ?>> T applyIfNotEmpty(final T data, final Supplier<T> supplier) {
+        return data != null && !data.isEmpty() ? supplier.get() : data;
+    }
+
+    public static String applyIfNotEmpty(final String data, final Supplier<String> supplier) {
+        return data != null && !data.trim().isEmpty() ? supplier.get() : data;
     }
 
     // =================================================================================================================
@@ -60,7 +99,7 @@ public final class FunctionalUtils {
         return false;
     }
 
-    public static boolean applyIfChange(final int ref, final int newValue, final Consumer<Integer> consumer) {
+    public static boolean applyIfChange(final int ref, final int newValue, final IntConsumer consumer) {
         if (ref != newValue) {
             consumer.accept(newValue);
             return true;
@@ -108,7 +147,7 @@ public final class FunctionalUtils {
         return false;
     }
 
-    private static <T extends Object> boolean hasChange(final T ref, final T newValue) {
+    protected static <T extends Object> boolean hasChange(final T ref, final T newValue) {
         if (ref == null && newValue == null) {
             return false;
         } else if (ref == null || newValue == null) {
