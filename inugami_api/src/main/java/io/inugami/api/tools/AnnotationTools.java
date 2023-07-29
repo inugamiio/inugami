@@ -123,9 +123,7 @@ public final class AnnotationTools {
                 result = invoke(getValue, annotation);
             }
             if ((result == null) || result.trim().isEmpty()) {
-                //@formatter:off
-                result = clazz == null ? null : clazz.getSimpleName().substring(0, 1).toLowerCase() + clazz.getSimpleName().substring(1);
-                //@formatter:on
+                result =  clazz.getSimpleName().substring(0, 1).toLowerCase() + clazz.getSimpleName().substring(1);
             }
         }
 

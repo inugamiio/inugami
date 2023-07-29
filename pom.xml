@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ======================================================================= 
@@ -59,8 +60,9 @@
         :: PROJECT
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <super.jdk>11</super.jdk>
+        <java.version>${super.jdk}</java.version>
         <super.jdk.arg>-parameters</super.jdk.arg>
-        <maven-gpg-plugin.enabled />
+        <maven-gpg-plugin.enabled/>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.datePattern>yyyy-MM-dd'T'HH:mm:ss.SSSZ</project.build.datePattern>
@@ -81,7 +83,7 @@
         <docArtifactFinalName>${project.build.finalName}</docArtifactFinalName>
         <superSiteSkinVersion>1.2.1</superSiteSkinVersion>
 
-        <site.deploy.url />
+        <site.deploy.url/>
         <plugin.site.disable>true</plugin.site.disable>
         <plugin.site.path>src/site</plugin.site.path>
         <plugin.site.inputEncoding>${project.build.sourceEncoding}</plugin.site.inputEncoding>
@@ -103,18 +105,18 @@
         :: JDK
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <jdk>11</jdk>
-        <jdk.env.java.home />
-        <jdk.env.property.name />
-        <jdk.test.executable />
+        <jdk.env.java.home/>
+        <jdk.env.property.name/>
+        <jdk.test.executable/>
         <jdk.javac.executable>${jdk.env.java.home}/bin/javac</jdk.javac.executable>
 
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: CI
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-        <ci.host />
+        <ci.host/>
         <ci.host.context>/jenkins</ci.host.context>
-        <ci.view />
+        <ci.view/>
 
         <jacoco.version>0.8.6</jacoco.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -137,8 +139,7 @@
         :: PLUGINS VERSIONS
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <!--[ org.maven ]++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <plugins.org-apache-maven-plugins.maven-compiler-plugin>3.1
-        </plugins.org-apache-maven-plugins.maven-compiler-plugin>
+        <org.apache.maven.plugins.compiler.version>3.11.0</org.apache.maven.plugins.compiler.version>
         <plugins.org-apache-maven-plugins.maven-javadoc-plugin>2.10.1
         </plugins.org-apache-maven-plugins.maven-javadoc-plugin>
         <plugins.org-apache-maven-plugins.maven-jar-plugin>2.6</plugins.org-apache-maven-plugins.maven-jar-plugin>
@@ -161,7 +162,7 @@
         <plugins.org-apache-maven-plugins.maven-failsafe-plugin>2.19.1
         </plugins.org-apache-maven-plugins.maven-failsafe-plugin>
         <plugins.org-codehaus-mojo.cobertura-maven-plugin>2.7</plugins.org-codehaus-mojo.cobertura-maven-plugin>
-
+        <org.codehaus.mojo.version>3.3.0</org.codehaus.mojo.version>
 
         <!--[ org.codehaus ]+++++++++++++++++++++++++++++++++++++++++++++++++-->
         <plugins.org-codehaus-mojo.wagon-maven-plugin>1.0-beta-5</plugins.org-codehaus-mojo.wagon-maven-plugin>
@@ -172,8 +173,8 @@
         <plugins.org-eclipse-m2e.lifecycle-mapping>1.0.0</plugins.org-eclipse-m2e.lifecycle-mapping>
 
         <!--[ org.springframework ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <org.springframework.version>5.2.20.RELEASE</org.springframework.version>
-        <org.springframework.boot.version>2.7.9</org.springframework.boot.version>
+        <org.springframework.version>5.3.29</org.springframework.version>
+        <org.springframework.boot.version>2.7.14</org.springframework.boot.version>
         <org.springframework.spring-cloud-dependencies.version>2021.0.6
         </org.springframework.spring-cloud-dependencies.version>
 
@@ -230,7 +231,7 @@
         <net.sf.flexjson.version>3.3</net.sf.flexjson.version>
         <org.jsoup.version>1.15.3</org.jsoup.version>
         <org.yaml.version>2.0</org.yaml.version>
-
+        <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
         <!--[ Front ]++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <org.tuckey.urlrewritefilter.version>4.0.4</org.tuckey.urlrewritefilter.version>
         <com.yahoo.yuicompressor.version>2.4.8</com.yahoo.yuicompressor.version>
@@ -260,6 +261,7 @@
         <com.google.guava.version>29.0-jre</com.google.guava.version>
         <org.junit.jupiter>5.7.0-M1</org.junit.jupiter>
         <org.projectlombok.version>1.18.12</org.projectlombok.version>
+        <org.projectlombok.lombok-mapstruct-binding.version>0.2.0</org.projectlombok.lombok-mapstruct-binding.version>
         <org.zalando.problem.version>0.27.1</org.zalando.problem.version>
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PLUGINS CONFIGURATION
@@ -896,6 +898,11 @@
                 <artifactId>spring-boot-starter-activemq</artifactId>
                 <version>${org.springframework.boot.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${org.springframework.boot.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -906,6 +913,12 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-beans</artifactId>
+                <version>${org.springframework.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
                 <version>${org.springframework.version}</version>
             </dependency>
 
@@ -1069,6 +1082,11 @@
                 <artifactId>lombok</artifactId>
                 <version>${org.projectlombok.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1076,6 +1094,10 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -1112,34 +1134,23 @@
             </resource>
         </resources>
 
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+            <testResource>
+                <directory>src/test_it/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PLUGIN MANAGEMENT
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${plugins.org-apache-maven-plugins.maven-compiler-plugin}</version>
-                    <configuration>
-                        <source>${jdk}</source>
-                        <target>${jdk}</target>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                        <optimize>true</optimize>
-                        <showWarnings>true</showWarnings>
-                        <showDeprecation>true</showDeprecation>
-                        <compilerArgs>
-                            <arg>-verbose</arg>
-                            <arg>${super.jdk.arg}</arg>
-                        </compilerArgs>
-                        <annotationProcessorPaths>
-                            <path>
-                                <groupId>org.projectlombok</groupId>
-                                <artifactId>lombok</artifactId>
-                                <version>${org.projectlombok.version}</version>
-                            </path>
-                        </annotationProcessorPaths>
-                    </configuration>
-                </plugin>
+
                 <plugin>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>${plugins.org-apache-maven-plugins.maven-javadoc-plugin}</version>
@@ -1239,7 +1250,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute />
+                                        <execute/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -1270,6 +1281,61 @@
         :: PLUGINS - BUILD
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${org.codehaus.mojo.version}</version>
+
+                <executions>
+                    <execution>
+                        <id>add-integration-test-source</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/test_it/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${org.apache.maven.plugins.compiler.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <optimize>true</optimize>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
+                    <compilerArgs>
+                        <arg>-verbose</arg>
+                        <arg>${super.jdk.arg}</arg>
+                    </compilerArgs>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${org.mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${org.projectlombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${org.projectlombok.lombok-mapstruct-binding.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1314,7 +1380,7 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <phase>package</phase>
+                        <phase>verify</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -1365,7 +1431,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>

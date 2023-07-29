@@ -1,0 +1,7 @@
+io:
+  inugami:
+    spring:
+      mapstruct:
+        scanner:
+          enabled: true
+          basePackage: io.inugami.commons.spring
