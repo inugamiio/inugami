@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ======================================================================= 
@@ -16,7 +15,7 @@
     ======================================================================== -->
     <groupId>io.inugami</groupId>
     <artifactId>inugami</artifactId>
-    <version>3.2.5-SNAPSHOT</version>
+    <version>3.2.5</version>
     <packaging>pom</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Specifics maven lifecycle to package and run inugami project</description>
@@ -62,7 +61,7 @@
         <super.jdk>11</super.jdk>
         <java.version>${super.jdk}</java.version>
         <super.jdk.arg>-parameters</super.jdk.arg>
-        <maven-gpg-plugin.enabled/>
+        <maven-gpg-plugin.enabled />
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.datePattern>yyyy-MM-dd'T'HH:mm:ss.SSSZ</project.build.datePattern>
@@ -83,7 +82,7 @@
         <docArtifactFinalName>${project.build.finalName}</docArtifactFinalName>
         <superSiteSkinVersion>1.2.1</superSiteSkinVersion>
 
-        <site.deploy.url/>
+        <site.deploy.url />
         <plugin.site.disable>true</plugin.site.disable>
         <plugin.site.path>src/site</plugin.site.path>
         <plugin.site.inputEncoding>${project.build.sourceEncoding}</plugin.site.inputEncoding>
@@ -105,18 +104,18 @@
         :: JDK
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <jdk>11</jdk>
-        <jdk.env.java.home/>
-        <jdk.env.property.name/>
-        <jdk.test.executable/>
+        <jdk.env.java.home />
+        <jdk.env.property.name />
+        <jdk.test.executable />
         <jdk.javac.executable>${jdk.env.java.home}/bin/javac</jdk.javac.executable>
 
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: CI
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-        <ci.host/>
+        <ci.host />
         <ci.host.context>/jenkins</ci.host.context>
-        <ci.view/>
+        <ci.view />
 
         <jacoco.version>0.8.6</jacoco.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -311,7 +310,7 @@
         <url>https://github.com/inugamiio/inugami-maven-plugin</url>
         <connection>scm:git:git@github.com:inugamiio/inugami.git</connection>
         <developerConnection>scm:git:git@github.com:inugamiio/inugami.git</developerConnection>
-        <tag>inugami-2.2.0</tag>
+        <tag>inugami-3.2.5</tag>
     </scm>
 
     <distributionManagement>
@@ -1250,7 +1249,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute/>
+                                        <execute />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
