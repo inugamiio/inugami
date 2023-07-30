@@ -3,7 +3,9 @@ package io.inugami.api.functionnals;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.inugami.api.functionnals.FunctionalUtils.*;
@@ -11,8 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FunctionalUtilsTest {
 
-    public static final String HELLO     = "hello";
-    public static final String THE_WORLD = "the world";
+    public static final String HELLO      = "hello";
+    public static final String THE_WORLD  = "the world";
+    public static final String LIST_HELLO = "[hello]";
+    public static final String MAP_HELLO  = "{key=hello}";
 
     // =================================================================================================================
     // APPLY IF NOT NULL
@@ -37,6 +41,83 @@ class FunctionalUtilsTest {
         final String       value  = null;
         assertThat(applyIfNotNull(value, null, values::add)).isFalse();
         assertThat(values).isEmpty();
+    }
+
+
+    // =================================================================================================================
+    // APPLY IF NULL
+    // =================================================================================================================
+    @Test
+    void applyIfNull_nominal() {
+        final String nullStr = null;
+        assertThat(applyIfNull(nullStr, () -> HELLO)).isEqualTo(HELLO);
+        assertThat(applyIfNull(THE_WORLD, () -> HELLO)).isEqualTo(THE_WORLD);
+    }
+
+
+    // =================================================================================================================
+    // APPLY IF NULL
+    // =================================================================================================================
+    @Test
+    void applyIfEmpty_list() {
+        final List<String> value = null;
+        assertThat(applyIfEmpty(value, () -> List.of(HELLO))).hasToString(LIST_HELLO);
+        assertThat(applyIfEmpty(List.of(), () -> List.of(HELLO))).hasToString(LIST_HELLO);
+        assertThat(applyIfEmpty(List.of(HELLO), () -> List.of())).hasToString(LIST_HELLO);
+    }
+
+    @Test
+    void applyIfEmpty_map() {
+        final Map<String, String> value      = null;
+        final Map<String, String> valueEmpty = new HashMap<>();
+        final Map<String, String> ref        = Map.of("key", HELLO);
+
+        assertThat(applyIfEmpty(value, () -> ref)).hasToString(MAP_HELLO);
+        assertThat(applyIfEmpty(valueEmpty, () -> ref)).hasToString(MAP_HELLO);
+        assertThat(applyIfEmpty(ref, () -> valueEmpty)).hasToString(MAP_HELLO);
+    }
+
+
+    @Test
+    void applyIfEmpty_string() {
+        final String value = null;
+        assertThat(applyIfEmpty("   ", () -> HELLO)).hasToString(HELLO);
+        assertThat(applyIfEmpty(value, () -> HELLO)).hasToString(HELLO);
+        assertThat(applyIfEmpty(HELLO, () -> null)).hasToString(HELLO);
+    }
+
+    // =================================================================================================================
+    // APPLY IF NOT EMPTY
+    // =================================================================================================================
+    @Test
+    void applyIfNotEmpty_list() {
+        final List<String> value = null;
+
+        assertThat(applyIfNotEmpty(value, () -> List.of(HELLO))).isNull();
+        assertThat(applyIfNotEmpty(List.of(), () -> List.of(HELLO))).isEmpty();
+        assertThat(applyIfNotEmpty(List.of(THE_WORLD), () -> List.of(HELLO))).hasToString(LIST_HELLO);
+    }
+
+    @Test
+    void applyIfNotEmpty_map() {
+        final Map<String, String> value      = null;
+        final Map<String, String> valueEmpty = new HashMap<>();
+        final Map<String, String> ref        = Map.of("key", HELLO);
+        final Map<String, String> valueMap   = Map.of("value", HELLO);
+
+        assertThat(applyIfNotEmpty(value, () -> ref)).isNull();
+        assertThat(applyIfNotEmpty(valueEmpty, () -> ref)).isEmpty();
+        assertThat(applyIfNotEmpty(valueMap, () -> ref)).hasToString(MAP_HELLO);
+    }
+
+
+    @Test
+    void applyIfNotEmpty_string() {
+        final String value = null;
+
+        assertThat(applyIfNotEmpty("   ", () -> HELLO)).isBlank();
+        assertThat(applyIfNotEmpty(value, () -> HELLO)).isNull();
+        assertThat(applyIfNotEmpty(THE_WORLD, () -> HELLO)).hasToString(HELLO);
     }
 
     // =================================================================================================================
@@ -144,5 +225,10 @@ class FunctionalUtilsTest {
         assertThat(applyIfChange(2.0, 1.0, ref::set)).isTrue();
         assertThat(ref.get()).isEqualTo(1.0);
         assertThat(applyIfChange(2.0, 2.0, ref::set)).isFalse();
+    }
+
+    @Test
+    void hasChange_withNullValue() {
+        assertThat(hasChange(null, null)).isFalse();
     }
 }

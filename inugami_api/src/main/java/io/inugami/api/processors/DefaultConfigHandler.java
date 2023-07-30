@@ -3,7 +3,6 @@ package io.inugami.api.processors;
 import io.inugami.api.exceptions.Asserts;
 import io.inugami.api.listeners.ApplicationLifecycleSPI;
 import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
-import io.inugami.api.loggers.mdc.mapper.LoggerMdcMappingSPI;
 import io.inugami.api.mapping.JsonUnmarshalling;
 import io.inugami.api.spi.SpiLoader;
 import io.inugami.api.tools.ConfigTemplateValues;
@@ -17,8 +16,8 @@ public class DefaultConfigHandler implements ConfigHandler<String, String>, Appl
     // =========================================================================
     // CONSTRUCTOR
     // =========================================================================
-    private static Map<String, String> PROPERTIES = new LinkedHashMap<>();
-    private        TemplateProviderSPI template;
+    private static final Map<String, String> PROPERTIES = new LinkedHashMap<>();
+    private              TemplateProviderSPI template;
 
     // =========================================================================
     // CONSTRUCTOR
@@ -28,7 +27,7 @@ public class DefaultConfigHandler implements ConfigHandler<String, String>, Appl
         DefaultApplicationLifecycleSPI.register(this);
         final Map<String, String> env = System.getenv();
         if (env != null) {
-            for (Map.Entry<String, String> entry : env.entrySet()) {
+            for (final Map.Entry<String, String> entry : env.entrySet()) {
                 PROPERTIES.put(entry.getKey(), entry.getValue());
             }
         }
@@ -39,7 +38,8 @@ public class DefaultConfigHandler implements ConfigHandler<String, String>, Appl
         });
     }
 
-    public void onContextRefreshed(Object event) {
+    @Override
+    public void onContextRefreshed(final Object event) {
         template = SpiLoader.getInstance().loadSpiServiceByPriority(TemplateProviderSPI.class, new ConfigTemplateValues());
     }
 
@@ -75,7 +75,7 @@ public class DefaultConfigHandler implements ConfigHandler<String, String>, Appl
         if (value != null) {
             try {
                 result = Integer.parseInt(value);
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
             }
         }
         return result;
@@ -88,7 +88,7 @@ public class DefaultConfigHandler implements ConfigHandler<String, String>, Appl
         if (value != null) {
             try {
                 result = Integer.parseInt(value);
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
             }
         }
         return result;
@@ -101,7 +101,7 @@ public class DefaultConfigHandler implements ConfigHandler<String, String>, Appl
         if (value != null) {
             try {
                 result = Integer.parseInt(value);
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
             }
         }
         return result;
@@ -114,7 +114,7 @@ public class DefaultConfigHandler implements ConfigHandler<String, String>, Appl
         if (value != null) {
             try {
                 result = Long.parseLong(value);
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
             }
         }
         return result;
@@ -122,12 +122,12 @@ public class DefaultConfigHandler implements ConfigHandler<String, String>, Appl
 
     @Override
     public boolean grabBoolean(final String key) {
-        final String value  =grab(key);
+        final String value  = grab(key);
         boolean      result = false;
         if (value != null) {
             try {
                 result = Boolean.parseBoolean(value);
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
             }
         }
         return result;
@@ -140,7 +140,7 @@ public class DefaultConfigHandler implements ConfigHandler<String, String>, Appl
         if (value != null) {
             try {
                 result = Boolean.parseBoolean(value);
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
             }
         }
         return result;
@@ -153,7 +153,7 @@ public class DefaultConfigHandler implements ConfigHandler<String, String>, Appl
         if (value != null) {
             try {
                 result = Double.parseDouble(value);
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
             }
         }
         return result;
@@ -166,7 +166,7 @@ public class DefaultConfigHandler implements ConfigHandler<String, String>, Appl
         if (value != null) {
             try {
                 result = Double.parseDouble(value);
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
             }
         }
         return result;
@@ -177,8 +177,6 @@ public class DefaultConfigHandler implements ConfigHandler<String, String>, Appl
         final String value  = grab(key);
         T            result = null;
         if (value != null) {
-            result = unmarshaller.process(value);
-        } else {
             result = unmarshaller.process(value);
         }
         return result;
@@ -199,8 +197,6 @@ public class DefaultConfigHandler implements ConfigHandler<String, String>, Appl
         final String value  = grab(key);
         T            result = null;
         if (value != null) {
-            result = unmarshaller.process(value);
-        } else {
             result = unmarshaller.process(value);
         }
         return result;

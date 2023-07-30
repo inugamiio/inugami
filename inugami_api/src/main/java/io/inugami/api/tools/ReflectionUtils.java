@@ -3,25 +3,32 @@ package io.inugami.api.tools;
 import io.inugami.api.exceptions.UncheckedException;
 import io.inugami.api.functionnals.GenericActionWithException;
 import io.inugami.api.loggers.Loggers;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
+import java.net.URL;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @SuppressWarnings({"java:S119", "java:S3011", "java:S1452"})
 @Slf4j
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class ReflectionUtils {
-    private static final ClassLoader CLASS_LOADER = null;
-    public static final  String      GET          = "get";
-    public static final  String      IS           = "is";
+    // =========================================================================
+    // ATTRIBUTES
+    // =========================================================================
+    private static final ClassLoader CLASS_LOADER         = null;
+    public static final  String      GET                  = "get";
+    public static final  String      IS                   = "is";
+    private static final int         CLASS_EXTENSION_SIZE = ".class".length();
 
     private static final List<Class<?>> PRIMITIVE_TYPES = List.of(
             boolean.class,
@@ -44,9 +51,105 @@ public final class ReflectionUtils {
     }
 
     // =========================================================================
+    // CLASS
+    // =========================================================================
+    @SafeVarargs
+    public static Set<Class<?>> scan(final String basePackage, final Predicate<Class<?>>... filters) {
+        try {
+            return processScan(basePackage, filters);
+        } catch (final IOException e) {
+            return Set.of();
+        }
+    }
+
+    private static Set<Class<?>> processScan(final String basePackage, final Predicate<Class<?>>... filters) throws IOException {
+        final Set<Class<?>> result      = new LinkedHashSet<>();
+        final ClassLoader   classloader = getClassloader();
+
+        final List<String>     bases    = new ArrayList<>();
+        final Enumeration<URL> allBases = classloader.getResources("");
+        while (allBases.hasMoreElements()) {
+            bases.add(allBases.nextElement().getFile());
+        }
+
+        final Enumeration<URL> urls = classloader.getResources(basePackage == null ? "." : basePackage.replace('.', '/'));
+
+        final List<String> classes = new ArrayList<>();
+        while (urls.hasMoreElements()) {
+            final URL  url         = urls.nextElement();
+            final File currentFile = new File(url.getFile());
+            classes.addAll(scanAllFiles(currentFile, bases));
+        }
+
+        for (final String className : classes) {
+            Class<?> currentClass = null;
+            try {
+                currentClass = classloader.loadClass(className);
+            } catch (final ClassNotFoundException e) {
+            }
+
+            if (currentClass != null && classFiltersMatch(currentClass, filters)) {
+                result.add(currentClass);
+            }
+        }
+
+        final List<Class<?>> buffer = new ArrayList<>(result);
+        Collections.sort(buffer, (r, v) -> r.getName().compareTo(v.getName()));
+        return new LinkedHashSet<>(buffer);
+    }
+
+    private static boolean classFiltersMatch(final Class<?> currentClass, final Predicate<Class<?>>[] filters) {
+        if (filters == null || filters.length == 0) {
+            return true;
+        }
+        boolean result = true;
+        for (final Predicate<Class<?>> filter : filters) {
+            result = filter.test(currentClass);
+            if (!result) {
+                break;
+            }
+        }
+        return result;
+    }
+
+    private static String extractBasePath(final ClassLoader classloader) {
+        final URL result = classloader.getResource("");
+        return result == null ? "" : result.getFile();
+    }
+
+    private static List<String> scanAllFiles(final File currentFile, final List<String> bases) {
+        final List<String> result = new ArrayList<>();
+
+        if (!currentFile.exists()) {
+            return result;
+        }
+        if (currentFile.isDirectory()) {
+            for (final File childFile : currentFile.listFiles()) {
+                result.addAll(scanAllFiles(childFile, bases));
+            }
+        } else if (currentFile.isFile()) {
+            final String base     = chooseBase(currentFile.getAbsolutePath(), bases);
+            final String filePath = currentFile.getAbsolutePath().replace(base, "");
+            if (filePath.endsWith(".class")) {
+                result.add(filePath.substring(0, filePath.length() - CLASS_EXTENSION_SIZE).replace('/', '.'));
+            }
+        }
+        return result;
+    }
+
+    private static String chooseBase(final String absolutePath, final List<String> bases) {
+        for (final String base : bases) {
+            if (absolutePath.startsWith(base)) {
+                return base;
+            }
+        }
+        return "";
+    }
+
+
+    // =========================================================================
     // ANNOTATION
     // =========================================================================
-
     public static Annotation searchAnnotation(final Annotation[] annotations, final String... names) {
         return AnnotationTools.searchAnnotation(annotations, names);
     }
@@ -248,8 +351,6 @@ public final class ReflectionUtils {
     // =========================================================================
     // METHODS
     // =========================================================================
-
-
     public static List<Method> loadAllMethods(final Class<?> clazz) {
         final List<Method> result = new ArrayList<>();
 

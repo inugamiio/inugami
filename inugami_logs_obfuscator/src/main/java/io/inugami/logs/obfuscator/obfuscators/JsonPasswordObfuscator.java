@@ -21,7 +21,6 @@ import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
 
 import java.util.regex.Pattern;
 
-import static io.inugami.logs.obfuscator.api.Constants.*;
 import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.*;
 
 public class JsonPasswordObfuscator implements ObfuscatorSpi {
@@ -31,7 +30,7 @@ public class JsonPasswordObfuscator implements ObfuscatorSpi {
     // ATTRIBUTES
     // =========================================================================
     private static final Pattern REGEX = buildJsonRegex(PASSWORD);
-    public static final String QUOT = "\"";
+    public static final  String  QUOT  = "\"";
 
     private final boolean enabled = enabled();
 
@@ -48,7 +47,7 @@ public class JsonPasswordObfuscator implements ObfuscatorSpi {
     // =========================================================================
     @Override
     public boolean accept(final LogEventDto event) {
-         return contains(event.getMessage(), PASSWORD, PASSWORD.toUpperCase(), PASSWORD.toLowerCase());
+        return contains(event.getMessage(), PASSWORD, PASSWORD.toUpperCase(), PASSWORD.toLowerCase());
     }
 
     @Override

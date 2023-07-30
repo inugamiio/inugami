@@ -21,7 +21,6 @@ import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
 
 import java.util.regex.Pattern;
 
-import static io.inugami.logs.obfuscator.api.Constants.*;
 import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.*;
 
 public class XMLPasswordObfuscator implements ObfuscatorSpi {
@@ -54,7 +53,7 @@ public class XMLPasswordObfuscator implements ObfuscatorSpi {
     public String obfuscate(final LogEventDto event) {
         return replaceAllWithGroup(event.getMessage(), REGEX, (values) -> {
             String args = "";
-            if(!values.get(2).isEmpty()){
+            if (!values.get(2).isEmpty()) {
                 args = values.get(2);
             }
 

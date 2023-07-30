@@ -161,25 +161,26 @@ public final class Loggers {
         }
     }
 
-    private static boolean loggerEnabled(final Logger logger, final Level level) {
+    public static boolean loggerEnabled(final Logger logger, final Level level) {
+        boolean result = false;
         switch (level) {
             case TRACE:
-                logger.isTraceEnabled();
+                result = logger.isTraceEnabled();
                 break;
             case DEBUG:
-                logger.isDebugEnabled();
+                result = logger.isDebugEnabled();
                 break;
             case INFO:
-                logger.isInfoEnabled();
+                result = logger.isInfoEnabled();
                 break;
             case WARN:
-                logger.isWarnEnabled();
+                result = logger.isWarnEnabled();
                 break;
             case ERROR:
-                logger.isErrorEnabled();
+                result = logger.isErrorEnabled();
                 break;
         }
-        return false;
+        return result;
     }
 
     public static void imageAscii(final URL file) {

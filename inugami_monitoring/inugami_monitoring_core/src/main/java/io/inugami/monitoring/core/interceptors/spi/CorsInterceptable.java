@@ -16,6 +16,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings({"java:S5122"})
 @NoArgsConstructor
 public class CorsInterceptable implements MonitoringFilterInterceptor {
     private static final String                        SEP = ", ";
@@ -43,13 +44,13 @@ public class CorsInterceptable implements MonitoringFilterInterceptor {
     // =========================================================================
     @Override
     public List<GenericMonitoringModel> onBegin(final ResquestData request) {
-        if(enabled==null){
+        if (enabled == null) {
             corsHeaders = SpiLoader.getInstance().loadSpiServicesByPriority(CorsHeadersSpi.class);
             headers = MonitoringBootstrap.getContext().getConfig().getHeaders();
             enabled = ConfigurationSpiFactory.INSTANCE.getBooleanProperty("inugami.monitoring.cors.enabled", true);
         }
 
-        if(enabled){
+        if (enabled) {
             final List<String> headers   = resolveHeaders(request);
             final String       headerStr = String.join(SEP, headers);
 
@@ -63,10 +64,10 @@ public class CorsInterceptable implements MonitoringFilterInterceptor {
     }
 
     private List<String> resolveHeaders(final ResquestData request) {
-        Set<String> result = new LinkedHashSet<>();
+        final Set<String> result = new LinkedHashSet<>();
 
         if (corsHeaders != null && headers != null) {
-            for (CorsHeadersSpi resolver : corsHeaders) {
+            for (final CorsHeadersSpi resolver : corsHeaders) {
                 final List<String> resultSet = resolver.buildCorsHeaders(request, headers, configuration);
                 if (resultSet != null) {
                     result.addAll(resultSet);

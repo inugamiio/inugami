@@ -17,8 +17,9 @@ import java.util.regex.Pattern;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UnitTestHelperStub {
 
-    private static final Map<String, List<?>> CACHE             = new ConcurrentHashMap<>();
-    private static final String               STUB_FILE_PATTERN = "[.-_][0-9]+[.](json|yaml)";
+    private static final Map<String, List<?>> CACHE                   = new ConcurrentHashMap<>();
+    private static final String               STUB_FILE_PATTERN       = "[.-_][0-9]+[.](json|yaml)";
+    public static final  String               STUB_FOLDER_IS_REQUIRED = "stub folder is required";
 
     // ========================================================================
     // API
@@ -27,7 +28,7 @@ public final class UnitTestHelperStub {
                                              final String folder,
                                              final Function<T, ID> getId,
                                              final Class<? extends T> userDtoClass) {
-        Asserts.assertNotNull("stub folder is required", folder);
+        Asserts.assertNotNull(STUB_FOLDER_IS_REQUIRED, folder);
         return loadStub(answer, UnitTestHelperPath.buildIntegrationTestFilePath(folder), getId, null, userDtoClass, null);
     }
 
@@ -36,7 +37,7 @@ public final class UnitTestHelperStub {
                                              final Function<T, ID> getId,
                                              final Function<Object[], ID> idResolver,
                                              final Class<? extends T> userDtoClass) {
-        Asserts.assertNotNull("stub folder is required", folder);
+        Asserts.assertNotNull(STUB_FOLDER_IS_REQUIRED, folder);
         return loadStub(answer, UnitTestHelperPath.buildIntegrationTestFilePath(folder), getId, idResolver, userDtoClass, null);
     }
 
@@ -45,7 +46,7 @@ public final class UnitTestHelperStub {
                                              final Function<T, ID> getId,
                                              final Class<? extends T> userDtoClass,
                                              final List<T> cache) {
-        Asserts.assertNotNull("stub folder is required", folder);
+        Asserts.assertNotNull(STUB_FOLDER_IS_REQUIRED, folder);
         return loadStub(answer, UnitTestHelperPath.buildIntegrationTestFilePath(folder), getId, null, userDtoClass, cache);
     }
 
@@ -55,7 +56,7 @@ public final class UnitTestHelperStub {
                                              final Function<Object[], ID> idResolver,
                                              final Class<? extends T> userDtoClass,
                                              final List<T> cache) {
-        Asserts.assertNotNull("stub folder is required", folder);
+        Asserts.assertNotNull(STUB_FOLDER_IS_REQUIRED, folder);
         return loadStub(answer, UnitTestHelperPath.buildIntegrationTestFilePath(folder), getId, idResolver, userDtoClass, cache);
     }
 
@@ -64,7 +65,7 @@ public final class UnitTestHelperStub {
                                       final String folder,
                                       final Function<T, ID> getId,
                                       final Class<? extends T> userDtoClass) {
-        Asserts.assertNotNull("stub folder is required", folder);
+        Asserts.assertNotNull(STUB_FOLDER_IS_REQUIRED, folder);
         return loadStub(answer, UnitTestHelperPath.buildTestFilePath(folder), getId, null, userDtoClass, null);
     }
 
@@ -73,7 +74,7 @@ public final class UnitTestHelperStub {
                                       final Function<T, ID> getId,
                                       final Function<Object[], ID> idResolver,
                                       final Class<? extends T> userDtoClass) {
-        Asserts.assertNotNull("stub folder is required", folder);
+        Asserts.assertNotNull(STUB_FOLDER_IS_REQUIRED, folder);
         return loadStub(answer, UnitTestHelperPath.buildTestFilePath(folder), getId, idResolver, userDtoClass, null);
     }
 
@@ -82,7 +83,7 @@ public final class UnitTestHelperStub {
                                       final Function<T, ID> getId,
                                       final Class<? extends T> userDtoClass,
                                       final List<T> cache) {
-        Asserts.assertNotNull("stub folder is required", folder);
+        Asserts.assertNotNull(STUB_FOLDER_IS_REQUIRED, folder);
         return loadStub(answer, UnitTestHelperPath.buildTestFilePath(folder), getId, null, userDtoClass, cache);
     }
 
@@ -92,7 +93,7 @@ public final class UnitTestHelperStub {
                                       final Function<Object[], ID> idResolver,
                                       final Class<? extends T> userDtoClass,
                                       final List<T> cache) {
-        Asserts.assertNotNull("stub folder is required", folder);
+        Asserts.assertNotNull(STUB_FOLDER_IS_REQUIRED, folder);
         return loadStub(answer, UnitTestHelperPath.buildTestFilePath(folder), getId, idResolver, userDtoClass, cache);
     }
 
@@ -106,7 +107,7 @@ public final class UnitTestHelperStub {
                                       final Class<? extends T> objectClass,
                                       final List<T> cache) {
 
-        Asserts.assertNotNull("stub folder is required", folder);
+        Asserts.assertNotNull(STUB_FOLDER_IS_REQUIRED, folder);
         Asserts.assertNotNull("id extractor is required", getId);
         Asserts.assertNotNull("object class is required", objectClass);
 

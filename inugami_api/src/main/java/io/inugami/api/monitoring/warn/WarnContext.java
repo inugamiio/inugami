@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Deprecated
 @NoArgsConstructor
 public class WarnContext {
 
@@ -50,8 +51,9 @@ public class WarnContext {
     // =========================================================================
     // API
     // =========================================================================
-    public void clean() {
+    public synchronized void clean() {
         WARNS.clear();
+        INSTANCE.remove();
     }
 
     public WarnContext addWarn(final WarnCode warnCode) {

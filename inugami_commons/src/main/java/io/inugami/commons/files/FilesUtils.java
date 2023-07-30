@@ -45,6 +45,7 @@ import java.util.stream.Collectors;
  * @author patrick_guillerm
  * @since 12 janv. 2017
  */
+@SuppressWarnings({"java:S2093", "java:S2479", "java:S5361"})
 public class FilesUtils {
 
     // =========================================================================
@@ -66,13 +67,15 @@ public class FilesUtils {
 
     private static final String UTF8 = "UTF-8";
 
-    private final static Unzip UNZIP = new Unzip();
+    private final static Unzip  UNZIP                = new Unzip();
+    public static final  String FILE_MUSTN_T_BE_NULL = "file mustn't be null!";
+    public static final  String ERR_MSG              = "can't read file %s";
 
     // =========================================================================
     // ASSERTS
     // =========================================================================
     public static void assertFileExists(final File file) {
-        Asserts.assertNotNull("file mustn't be null!", file);
+        Asserts.assertNotNull(FILE_MUSTN_T_BE_NULL, file);
         Asserts.assertTrue(String.format("file %s dosen't exists", getCanonicalPath(file)), file.exists());
     }
 
@@ -90,22 +93,22 @@ public class FilesUtils {
     }
 
     public static void assertCanRead(final File file) {
-        Asserts.assertNotNull("file mustn't be null!", file);
-        Asserts.assertTrue(String.format("can't read file %s", getCanonicalPath(file)), file.canRead());
+        Asserts.assertNotNull(FILE_MUSTN_T_BE_NULL, file);
+        Asserts.assertTrue(String.format(ERR_MSG, getCanonicalPath(file)), file.canRead());
     }
 
     public static void assertCanWrite(final File file) {
-        Asserts.assertNotNull("file mustn't be null!", file);
+        Asserts.assertNotNull(FILE_MUSTN_T_BE_NULL, file);
         Asserts.assertTrue(String.format("can't write file %s", getCanonicalPath(file)), file.canWrite());
     }
 
     public static void assertIsFolder(final File file) {
-        Asserts.assertNotNull("file mustn't be null!", file);
+        Asserts.assertNotNull(FILE_MUSTN_T_BE_NULL, file);
         Asserts.assertTrue(String.format("file %s isn't folder", getCanonicalPath(file)), file.isDirectory());
     }
 
     public static void assertIsFile(final File file) {
-        Asserts.assertNotNull("file mustn't be null!", file);
+        Asserts.assertNotNull(FILE_MUSTN_T_BE_NULL, file);
         Asserts.assertTrue(String.format("file %s isn't file", getCanonicalPath(file)), file.isFile());
     }
 
@@ -127,7 +130,7 @@ public class FilesUtils {
     // FILE INFO
     // =========================================================================
     public static String getCanonicalPath(final File file) {
-        Asserts.assertNotNull("file mustn't be null!", file);
+        Asserts.assertNotNull(FILE_MUSTN_T_BE_NULL, file);
         try {
             return file.getCanonicalPath();
         } catch (final IOException e) {
@@ -156,7 +159,6 @@ public class FilesUtils {
     public static long getContentLength(final File resource) {
         long result = 0L;
         if (resource != null) {
-
             try {
                 final URLConnection stream = resource.toURI().toURL().openConnection();
                 result = stream.getContentLengthLong();
@@ -371,7 +373,7 @@ public class FilesUtils {
     }
 
     public static void write(final String content, final File file) throws FilesUtilsException {
-        write(content, file, "UTF-8");
+        write(content, file, UTF8);
 
     }
 
@@ -432,6 +434,7 @@ public class FilesUtils {
         return scanFilesystem(path, filter, (file) -> true);
     }
 
+    @SuppressWarnings({"java:S3776"})
     public static List<File> scanFilesystem(final File path, final FilenameFilter filter,
                                             final Predicate<File> directoryFilter) {
         final List<File> result = new ArrayList<>();

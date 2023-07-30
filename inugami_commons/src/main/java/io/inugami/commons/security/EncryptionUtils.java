@@ -47,6 +47,7 @@ import java.util.Map.Entry;
  * @author patrick_guillerm
  * @since 27 oct. 2016
  */
+@SuppressWarnings({"java:S2245"})
 public class EncryptionUtils {
 
     // =========================================================================

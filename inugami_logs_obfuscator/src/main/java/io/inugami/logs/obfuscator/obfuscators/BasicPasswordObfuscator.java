@@ -21,11 +21,9 @@ import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
 
 import java.util.regex.Pattern;
 
-import static io.inugami.logs.obfuscator.api.Constants.MASK;
-import static io.inugami.logs.obfuscator.api.Constants.PASSWORD;
-import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.buildRegex;
-import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.replaceAll;
+import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.*;
 
+@SuppressWarnings({"java:S2068"})
 public class BasicPasswordObfuscator implements ObfuscatorSpi {
 
 

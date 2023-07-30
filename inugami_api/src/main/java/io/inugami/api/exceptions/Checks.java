@@ -34,8 +34,8 @@ public final class Checks {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final BiFunction<ErrorCode, String, CheckedException> EXCEPTION_BUILDER = CheckedException::new;
-    public static final String THIS_EXPRESSION_MUST_BE_TRUE = "this expression must be true";
+    private static final BiFunction<ErrorCode, String, CheckedException> EXCEPTION_BUILDER            = CheckedException::new;
+    public static final  String                                          THIS_EXPRESSION_MUST_BE_TRUE = "this expression must be true";
 
 
     // -------------------------------------------------------------------------
@@ -428,8 +428,12 @@ public final class Checks {
     private static <E extends CheckedException> void throwException(final ErrorCode errorCode,
                                                                     final String message,
                                                                     final BiFunction<ErrorCode, String, E> exceptionBuilder) throws E {
+        if (exceptionBuilder == null) {
+            throw new UncheckedException(errorCode == null ? DefaultErrorCode.buildUndefineError() : errorCode, message);
+        } else {
+            throw exceptionBuilder.apply(errorCode == null ? DefaultErrorCode.buildUndefineError() : errorCode, message);
+        }
 
-        throw exceptionBuilder.apply(errorCode == null ? DefaultErrorCode.buildUndefineError() : errorCode, message);
     }
 
 }

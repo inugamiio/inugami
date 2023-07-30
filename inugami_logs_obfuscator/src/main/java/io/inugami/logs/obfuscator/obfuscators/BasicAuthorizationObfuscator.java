@@ -21,10 +21,7 @@ import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
 
 import java.util.regex.Pattern;
 
-import static io.inugami.logs.obfuscator.api.Constants.MASK;
-import static io.inugami.logs.obfuscator.api.Constants.PASSWORD;
 import static io.inugami.logs.obfuscator.obfuscators.JsonAuthorizationObfuscator.AUTHORIZATION;
-import static io.inugami.logs.obfuscator.obfuscators.JsonPasswordObfuscator.QUOT;
 import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.*;
 
 public class BasicAuthorizationObfuscator implements ObfuscatorSpi {

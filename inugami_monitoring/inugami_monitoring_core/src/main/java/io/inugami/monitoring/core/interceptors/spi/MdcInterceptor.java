@@ -23,7 +23,6 @@ import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.api.monitoring.models.GenericMonitoringModel;
 import io.inugami.api.processors.ConfigHandler;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MdcInterceptor implements MonitoringFilterInterceptor {
@@ -39,7 +38,7 @@ public class MdcInterceptor implements MonitoringFilterInterceptor {
     @Override
     public List<GenericMonitoringModel> onBegin(final ResquestData request) {
         MdcService.getInstance().initialize();
-        WarningContext.getInstance().setWarnings(new ArrayList<>());
+        WarningContext.clean();
         return null;
     }
 

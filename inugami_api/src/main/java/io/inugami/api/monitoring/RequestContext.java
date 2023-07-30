@@ -29,6 +29,7 @@ import java.util.UUID;
  * @author patrick_guillerm
  * @since 28 déc. 2018
  */
+
 public final class RequestContext {
 
     // =========================================================================
@@ -42,6 +43,10 @@ public final class RequestContext {
     // =========================================================================
     // METHODS
     // =========================================================================
+    public synchronized static void clean() {
+        INSTANCE.remove();
+    }
+
     public synchronized static Monitoring loadConfig() {
         if (config == null) {
             final List<MonitoringLoaderSpi>          services       = new ArrayList<>();
@@ -56,7 +61,7 @@ public final class RequestContext {
         return config;
     }
 
-    public static RequestInformation getInstance() {
+    public synchronized static RequestInformation getInstance() {
         RequestInformation result = INSTANCE.get();
         if (result == null) {
             result = initializeTechnicalRequest();
@@ -71,7 +76,7 @@ public final class RequestContext {
     // =========================================================================
     // INIT
     // =========================================================================
-    private static RequestInformation initializeTechnicalRequest() {
+    public static RequestInformation initializeTechnicalRequest() {
         final RequestInformation.RequestInformationBuilder builder = RequestInformation.builder();
 
 

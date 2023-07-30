@@ -52,6 +52,7 @@ import java.util.List;
  * @author patrick_guillerm
  * @since 13 déc. 2017
  */
+@SuppressWarnings({"java:S4434"})
 @Priority(100)
 public class LdapLoginPasswordAuthentificator implements LoginPasswordAuthentificator {
 
@@ -77,8 +78,8 @@ public class LdapLoginPasswordAuthentificator implements LoginPasswordAuthentifi
     // =========================================================================
     @PostConstruct
     private void init() {
-        mapper         = ldapConfiguration.getMapper();
-        connectorData  = ldapConfiguration.getConnectorData();
+        mapper = ldapConfiguration.getMapper();
+        connectorData = ldapConfiguration.getConnectorData();
         securityConfig = ldapConfiguration.getSecurityConfig();
     }
 
@@ -91,12 +92,10 @@ public class LdapLoginPasswordAuthentificator implements LoginPasswordAuthentifi
         DirContext  context = null;
         try {
             context = connect(login, password);
-            result  = loadUser(login, password, context);
-        }
-        catch (final SecurityException e) {
+            result = loadUser(login, password, context);
+        } catch (final SecurityException e) {
             Loggers.SECURITY.error(e.getMessage());
-        }
-        finally {
+        } finally {
             close(context);
         }
         return result;
@@ -142,8 +141,7 @@ public class LdapLoginPasswordAuthentificator implements LoginPasswordAuthentifi
                 final SearchResult sr = answer.next();
                 result.add(sr.getNameInNamespace());
             }
-        }
-        catch (final NamingException e) {
+        } catch (final NamingException e) {
             throw new SecurityException(e.getMessage(), e);
         }
 
@@ -180,8 +178,7 @@ public class LdapLoginPasswordAuthentificator implements LoginPasswordAuthentifi
         if (context != null) {
             try {
                 context.close();
-            }
-            catch (final NamingException e) {
+            } catch (final NamingException e) {
                 Loggers.DEBUG.error(e.getMessage(), e);
             }
         }
@@ -198,8 +195,7 @@ public class LdapLoginPasswordAuthentificator implements LoginPasswordAuthentifi
                 final SearchResult itemResult = (SearchResult) searchResult.nextElement();
                 result.add(itemResult);
             }
-        }
-        catch (final NamingException e) {
+        } catch (final NamingException e) {
             throw new SecurityException(e.getMessage(), e);
         }
         closeEnumeration(searchResult);
@@ -223,8 +219,7 @@ public class LdapLoginPasswordAuthentificator implements LoginPasswordAuthentifi
             if (ne != null) {
                 ne.close();
             }
-        }
-        catch (final NamingException e) {
+        } catch (final NamingException e) {
             if (Loggers.SECURITY.isDebugEnabled()) {
                 Loggers.SECURITY.error("Failed to close enumeration.", e);
             }
@@ -238,8 +233,7 @@ public class LdapLoginPasswordAuthentificator implements LoginPasswordAuthentifi
         Name         result    = null;
         try {
             result = new LdapName(namespace);
-        }
-        catch (final InvalidNameException e) {
+        } catch (final InvalidNameException e) {
             if (Loggers.SECURITY.isDebugEnabled()) {
                 Loggers.SECURITY.error(e.getMessage(), e);
             }
@@ -254,8 +248,7 @@ public class LdapLoginPasswordAuthentificator implements LoginPasswordAuthentifi
         if (object != null) {
             try {
                 method = object.getClass().getDeclaredMethod(methodName);
-            }
-            catch (final NoSuchMethodException e) {
+            } catch (final NoSuchMethodException e) {
                 Loggers.DEBUG.error(e.getMessage(), e);
             }
         }
@@ -264,8 +257,7 @@ public class LdapLoginPasswordAuthentificator implements LoginPasswordAuthentifi
             try {
                 method.setAccessible(true);
                 rawResult = method.invoke(object);
-            }
-            catch (final Exception e) {
+            } catch (final Exception e) {
                 Loggers.DEBUG.error(e.getMessage(), e);
             }
         }

@@ -17,11 +17,15 @@
 package io.inugami.api.loggers;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
@@ -42,6 +46,34 @@ public class LoggersTest {
         assertNotNull(ascii);
 
         Loggers.APPLICATION.info("\n {}", ascii);
+    }
+
+    @Test
+    void loggerEnabled_nominal() {
+        final Logger testDebug = LoggerFactory.getLogger("LOGGERS_TEST_DEBUG");
+        final Logger testInfo  = LoggerFactory.getLogger("LOGGERS_TEST_INFO");
+        final Logger testWarn  = LoggerFactory.getLogger("LOGGERS_TEST_WARN");
+        final Logger testError = LoggerFactory.getLogger("LOGGERS_TEST_ERROR");
+
+        assertThat(Loggers.loggerEnabled(testDebug, Level.DEBUG)).isTrue();
+        assertThat(Loggers.loggerEnabled(testDebug, Level.INFO)).isTrue();
+        assertThat(Loggers.loggerEnabled(testDebug, Level.WARN)).isTrue();
+        assertThat(Loggers.loggerEnabled(testDebug, Level.ERROR)).isTrue();
+        //
+        assertThat(Loggers.loggerEnabled(testInfo, Level.DEBUG)).isFalse();
+        assertThat(Loggers.loggerEnabled(testInfo, Level.INFO)).isTrue();
+        assertThat(Loggers.loggerEnabled(testInfo, Level.WARN)).isTrue();
+        assertThat(Loggers.loggerEnabled(testInfo, Level.ERROR)).isTrue();
+        //
+        assertThat(Loggers.loggerEnabled(testWarn, Level.DEBUG)).isFalse();
+        assertThat(Loggers.loggerEnabled(testWarn, Level.INFO)).isFalse();
+        assertThat(Loggers.loggerEnabled(testWarn, Level.WARN)).isTrue();
+        assertThat(Loggers.loggerEnabled(testWarn, Level.ERROR)).isTrue();
+        //
+        assertThat(Loggers.loggerEnabled(testError, Level.DEBUG)).isFalse();
+        assertThat(Loggers.loggerEnabled(testError, Level.INFO)).isFalse();
+        assertThat(Loggers.loggerEnabled(testError, Level.WARN)).isFalse();
+        assertThat(Loggers.loggerEnabled(testError, Level.ERROR)).isTrue();
     }
 
     // =========================================================================

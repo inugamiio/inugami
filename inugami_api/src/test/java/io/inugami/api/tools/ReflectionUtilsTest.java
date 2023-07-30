@@ -1,6 +1,7 @@
 package io.inugami.api.tools;
 
 import io.inugami.api.spi.SpiPriority;
+import io.inugami.api.tools.unit.test.UnitTestHelper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,19 @@ class ReflectionUtilsTest {
     void getAnnotation_nominal() {
         final SpiPriority result = getAnnotation(SomeService.class, SpiPriority.class);
         assertThat(result).isNotNull().isNotEqualTo(SpiPriority.class);
+    }
+
+    // =================================================================================================================
+    // CLASS
+    // =================================================================================================================
+    @Test
+    void scan_nominal() {
+        UnitTestHelper.assertTextRelative(scan("io.inugami.api.tools", objClass -> objClass.getSimpleName().endsWith("Test")),
+                                          "api/tools/reflectionUtilsTest/scan_nominal.json");
+
+        UnitTestHelper.assertTextRelative(scan("io.inugami.api.tools"),
+                                          "api/tools/reflectionUtilsTest/scan_withoutFilter.json");
+
     }
 
     // =================================================================================================================

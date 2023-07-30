@@ -10,39 +10,41 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UnitTestHelperYaml {
 
+    public static final String CAN_T_LOAD_YAML_OBJECT_FROM_NULL_PATH = "can't load Yaml Object from null path";
+
     static <T> T loadRelativeYaml(final String path, final Class<? extends T> objectType) {
-        Asserts.assertNotNull(path, "can't load Yaml Object from null path");
+        Asserts.assertNotNull(path, CAN_T_LOAD_YAML_OBJECT_FROM_NULL_PATH);
         final String yaml = UnitTestHelperFile.readFileRelative(path);
         return convertFromYaml(yaml, objectType);
     }
 
     static JsonNode loadRelativeYaml(final String path) {
-        Asserts.assertNotNull(path, "can't load Yaml Object from null path");
+        Asserts.assertNotNull(path, CAN_T_LOAD_YAML_OBJECT_FROM_NULL_PATH);
         final String yaml = UnitTestHelperFile.readFileRelative(path);
         return convertFromYaml(yaml);
     }
 
 
     static <T> T loadIntegrationYaml(final String path, final Class<? extends T> objectType) {
-        Asserts.assertNotNull(path, "can't load Yaml Object from null path");
+        Asserts.assertNotNull(path, CAN_T_LOAD_YAML_OBJECT_FROM_NULL_PATH);
         final String yaml = UnitTestHelperFile.readFileIntegration(path);
         return convertFromYaml(yaml, objectType);
     }
 
     static JsonNode loadIntegrationYaml(final String path) {
-        Asserts.assertNotNull(path, "can't load Yaml Object from null path");
+        Asserts.assertNotNull(path, CAN_T_LOAD_YAML_OBJECT_FROM_NULL_PATH);
         final String yaml = UnitTestHelperFile.readFileIntegration(path);
         return convertFromYaml(yaml);
     }
 
     static <T> T loadYaml(final String path, final Class<? extends T> objectType) {
-        Asserts.assertNotNull(path, "can't load Yaml Object from null path");
+        Asserts.assertNotNull(path, CAN_T_LOAD_YAML_OBJECT_FROM_NULL_PATH);
         final String yaml = UnitTestHelperFile.readFile(path);
         return convertFromYaml(yaml, objectType);
     }
 
     static JsonNode loadYaml(final String path) {
-        Asserts.assertNotNull(path, "can't load Yaml Object from null path");
+        Asserts.assertNotNull(path, CAN_T_LOAD_YAML_OBJECT_FROM_NULL_PATH);
         final String yaml = UnitTestHelperFile.readFile(path);
         return convertFromYaml(yaml);
     }
