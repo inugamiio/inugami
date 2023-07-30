@@ -15,7 +15,7 @@
     <parent>
         <groupId>io.inugami.plugins</groupId>
         <artifactId>inugami_plugins</artifactId>
-        <version>3.2.5</version>
+        <version>3.2.6-SNAPSHOT</version>
     </parent>
 
     <!-- ======================================================================= 
