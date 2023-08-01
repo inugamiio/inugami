@@ -16,83 +16,76 @@
  */
 package io.inugami.commons.spring.mapstruct;
 
-import io.inugami.api.listeners.ApplicationLifecycleSPI;
 import io.inugami.api.mapping.MapStructMapper;
 import io.inugami.api.tools.ReflectionUtils;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
-import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.function.Function;
 
 @SuppressWarnings({"java:S3740"})
-@Setter(AccessLevel.PACKAGE)
+
+
 @Slf4j
-public class MapStructScanner implements ApplicationLifecycleSPI {
+@Builder
+@AllArgsConstructor
+public class MapStructScanner {
 
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
-    public static final  String                                                                        PROPERTY              = "io.inugami.spring.mapstruct.scanner.enabled";
-    public static final  String                                                                        PROPERTY_BASE_PACKAGE = "io.inugami.spring.mapstruct.scanner.basePackage";
-    private static final Set<Class<?>>                                                                 MAPPERS               = new LinkedHashSet<>();
-    private              Function<ApplicationContextInitializedEvent, ConfigurableListableBeanFactory> beanFactoryExtractor;
+    public static final  String                          PROPERTY              = "io.inugami.spring.mapstruct.scanner.enabled";
+    public static final  String                          PROPERTY_BASE_PACKAGE = "io.inugami.spring.mapstruct.scanner.basePackage";
+    private static final Set<Class<?>>                   MAPPERS               = new LinkedHashSet<>();
+    private final        ConfigurableListableBeanFactory beanFactory;
+    private final        ClassLoader                     classLoader;
+    private final        ConfigurableEnvironment         environment;
 
-
-    public static Set<Class<?>> getMappers(){
+    public static Set<Class<?>> getMappers() {
         return MAPPERS;
     }
-    public static void clearMappers(){
+
+    public static void clearMappers() {
         MAPPERS.clear();
     }
+
 
     // =================================================================================================================
     // SCAN
     // =================================================================================================================
-    @Override
-    public void onEnvironmentPrepared(final Object event) {
-        if (event instanceof ApplicationEnvironmentPreparedEvent) {
-            processScan((ApplicationEnvironmentPreparedEvent) event);
-        }
-    }
 
-    private void processScan(final ApplicationEnvironmentPreparedEvent event) {
-        final String property = event.getEnvironment().getProperty(PROPERTY);
-        if (!Boolean.parseBoolean(property)) {
+
+    public MapStructScanner processScan() {
+
+        final String enabled     = environment.getProperty(PROPERTY);
+        final String basePackage = environment.getProperty(PROPERTY_BASE_PACKAGE);
+
+        if (enabled == null || !Boolean.parseBoolean(enabled)) {
             log.info("Mapstruct scan disabled (to enable please define {} as true)", PROPERTY);
-            return;
+            return this;
         }
-        final String basePackage = event.getEnvironment().getProperty(PROPERTY_BASE_PACKAGE);
-        final Set<Class<?>> mapperClasses = ReflectionUtils.scan(basePackage == null ? "" : basePackage,
+
+        final String currentBasePackage = basePackage == null ? "" : basePackage;
+        final Set<Class<?>> mapperClasses = ReflectionUtils.scan(currentBasePackage, classLoader,
                                                                  Class::isInterface,
                                                                  c -> c.getAnnotation(MapStructMapper.class) != null);
         MAPPERS.addAll(mapperClasses);
+        return this;
     }
 
     // =================================================================================================================
     // REGISTER
     // =================================================================================================================
-    @Override
-    public void onApplicationContextInitialized(final Object event) {
-        if (event instanceof ApplicationContextInitializedEvent) {
-            registerMapper((ApplicationContextInitializedEvent) event);
-        }
-    }
 
-    private void registerMapper(final ApplicationContextInitializedEvent event) {
+    public void registerMapper() {
         if (MAPPERS.isEmpty()) {
             return;
         }
-        final ConfigurableListableBeanFactory beanFactory = beanFactoryExtractor == null
-                ? event.getApplicationContext().getBeanFactory()
-                : beanFactoryExtractor.apply(event);
 
         for (final Class mapperClass : MAPPERS) {
             Object existingBean = null;
@@ -112,7 +105,6 @@ public class MapStructScanner implements ApplicationLifecycleSPI {
                     log.error(e.getMessage(), e);
                 }
             }
-
         }
     }
 }

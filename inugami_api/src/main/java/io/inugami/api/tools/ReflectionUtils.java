@@ -7,85 +7,83 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
-@SuppressWarnings({"java:S119", "java:S3011", "java:S1452"})
+import static io.inugami.api.tools.PathUtils.toUnixPath;
+
+@SuppressWarnings({"java:S119", "java:S3011", "java:S1452", "java:S1181", "java:S1123", "java:S2326", "java:S1133", "java:S5042", "java:S5361"})
 @Slf4j
 @UtilityClass
 public final class ReflectionUtils {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final ClassLoader CLASS_LOADER         = null;
-    public static final  String      GET                  = "get";
-    public static final  String      IS                   = "is";
-    private static final int         CLASS_EXTENSION_SIZE = ".class".length();
+    public static final  String                    GET                  = "get";
+    public static final  String                    IS                   = "is";
+    private final        long                      MAX_SIZE             = 2000000000;
+    public static final  String                    CLASS_FILE           = ".class";
+    private static final int                       CLASS_EXTENSION_SIZE = CLASS_FILE.length();
+    private static final Map<String, List<String>> JAR_SCAN_CACHE       = new ConcurrentHashMap<>();
+    private static final List<Class<?>>            PRIMITIVE_TYPES      = List.of(boolean.class, byte.class, char.class, short.class, int.class, long.class, float.class, double.class, long.class);
+    public static final  String                    NAME                 = "name";
+    private static final String                    JAR_URL              = "jar:";
+    private static final int                       JAR_URL_SIZE         = JAR_URL.length();
+    public static final  String                    JAR_FILE             = ".jar";
+    public static final  String                    PACKAGE_SEPARATOR    = ".";
+    public static final  String                    EMPTY                = "";
+    public static final  String                    BOOT_INF_CLASSES     = "BOOT-INF/classes/";
 
-    private static final List<Class<?>> PRIMITIVE_TYPES = List.of(
-            boolean.class,
-            byte.class,
-            char.class,
-            short.class,
-            int.class,
-            long.class,
-            float.class,
-            double.class,
-            long.class);
-    public static final  String         NAME            = "name";
 
     // =========================================================================
     // ENUM
     // =========================================================================
     public static List<Object> getEnumValues(final Class<?> enumClass) {
-        final Object[] values = runSafe(() -> enumClass.getEnumConstants());
-        return values == null ? new ArrayList<Object>() : Arrays.asList(values);
+        if (enumClass == null) {
+            return List.of();
+        }
+        final Object[] values = runSafe(enumClass::getEnumConstants);
+        return values == null ? new ArrayList<>() : Arrays.asList(values);
     }
 
     // =========================================================================
     // CLASS
     // =========================================================================
     @SafeVarargs
-    public static Set<Class<?>> scan(final String basePackage, final Predicate<Class<?>>... filters) {
+    public static Set<Class<?>> scan(final String basePackage, ClassLoader classloader, final Predicate<Class<?>>... filters) {
         try {
-            return processScan(basePackage, filters);
-        } catch (final IOException e) {
+            return processScan(basePackage, classloader, filters);
+        } catch (final Throwable e) {
             return Set.of();
         }
     }
 
-    private static Set<Class<?>> processScan(final String basePackage, final Predicate<Class<?>>... filters) throws IOException {
-        final Set<Class<?>> result      = new LinkedHashSet<>();
-        final ClassLoader   classloader = getClassloader();
+    private static Set<Class<?>> processScan(final String basePackage, ClassLoader classloader, final Predicate<Class<?>>... filters) throws IOException, URISyntaxException {
 
-        final List<String>     bases    = new ArrayList<>();
-        final Enumeration<URL> allBases = classloader.getResources("");
-        while (allBases.hasMoreElements()) {
-            bases.add(allBases.nextElement().getFile());
-        }
+        final Set<Class<?>> result = new LinkedHashSet<>();
 
-        final Enumeration<URL> urls = classloader.getResources(basePackage == null ? "." : basePackage.replace('.', '/'));
 
-        final List<String> classes = new ArrayList<>();
-        while (urls.hasMoreElements()) {
-            final URL  url         = urls.nextElement();
-            final File currentFile = new File(url.getFile());
-            classes.addAll(scanAllFiles(currentFile, bases));
-        }
+        final List<String> classes = scanAllClasses(basePackage, classloader);
 
         for (final String className : classes) {
             Class<?> currentClass = null;
             try {
                 currentClass = classloader.loadClass(className);
-            } catch (final ClassNotFoundException e) {
+            } catch (final Throwable e) {
+                log.trace(e.getMessage(), e);
             }
 
             if (currentClass != null && classFiltersMatch(currentClass, filters)) {
@@ -98,8 +96,173 @@ public final class ReflectionUtils {
         return new LinkedHashSet<>(buffer);
     }
 
+    private static List<String> scanAllClasses(final String basePackage, final ClassLoader classloader) throws IOException, URISyntaxException {
+        final List<String>     bases    = new ArrayList<>();
+        final Enumeration<URL> allBases = classloader.getResources(EMPTY);
+        while (allBases.hasMoreElements()) {
+            bases.add(toUnixPath(allBases.nextElement().getFile()));
+        }
+
+        final Enumeration<URL> urls = classloader.getResources(basePackage == null ? PACKAGE_SEPARATOR : basePackage.replace('.', '/'));
+
+        final List<String> classes = new ArrayList<>();
+        while (urls.hasMoreElements()) {
+            final URL url = urls.nextElement();
+
+            if (url.toString().startsWith(JAR_URL)) {
+                classes.addAll(scanJar(url));
+            } else {
+                final File currentFile = new File(url.getFile());
+                classes.addAll(scanAllFiles(currentFile, bases));
+            }
+        }
+        return classes.stream().filter(className -> className.startsWith(basePackage)).collect(Collectors.toList());
+    }
+
+    protected static List<String> scanJar(final URL url) throws URISyntaxException, IOException {
+        final String jarFile     = resolveJarPath(url);
+        final String jarFileName = jarFile.substring(toUnixPath(jarFile).lastIndexOf("/"));
+        List<String> result      = JAR_SCAN_CACHE.get(jarFileName);
+        if (result == null) {
+            result = readJar(jarFile);
+            if (!result.isEmpty()) {
+                JAR_SCAN_CACHE.put(jarFileName, result);
+            }
+        }
+        return result;
+    }
+
+    private static String resolveJarPath(final URL url) throws URISyntaxException {
+        String result = url.toURI().toString();
+        return result.contains("!") ? result.substring(0, url.toURI().toString().indexOf("!")) : result;
+    }
+
+    @SuppressWarnings({"java:S2093"})
+    private List<String> readJar(final String jarFile) throws IOException {
+        File file = null;
+        if (jarFile.startsWith(JAR_URL)) {
+            file = new File(new URL(jarFile.substring(JAR_URL_SIZE)).getFile());
+        } else {
+            file = new File(new URL(jarFile).getFile());
+        }
+        return readMainJar(file);
+    }
+
+    @SuppressWarnings({"java:S2583"})
+    private static List<String> readMainJar(final File file) {
+        List<String> result = null;
+
+        try (FileInputStream fileZipStream = openFileInputStream(file)) {
+            final String absolutPath = toUnixPath(file.getAbsolutePath());
+            final String jarFileName = absolutPath.substring(absolutPath.lastIndexOf("/"));
+            result = processReadJar(fileZipStream, jarFileName);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return result == null ? new ArrayList<>() : result;
+    }
+
+    private static List<String> readInnerJar(final ZipInputStream zip, final String entryName) {
+        List<String> result = null;
+        try (InputStream fileZipStream = new ByteArrayInputStream(readInnerJarContent(zip))) {
+            final String absolutPath = toUnixPath(entryName);
+            final String jarFileName = absolutPath.substring(absolutPath.lastIndexOf("/"));
+            result = processReadJar(fileZipStream, jarFileName);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return result == null ? new ArrayList<>() : result;
+    }
+
+
+    private static List<String> processReadJar(InputStream fileZipStream, final String jarFileName) {
+        List<String> result = JAR_SCAN_CACHE.get(jarFileName);
+        if (result != null) {
+            return result;
+        }
+        result = new ArrayList<>();
+        long size = 0;
+        try (ZipInputStream zip = new ZipInputStream(fileZipStream)) {
+
+            ZipEntry entry;
+            do {
+                entry = zip.getNextEntry();
+                if (entry == null) {
+                    continue;
+                }
+                size += entry.getSize();
+                assertMaxSize(size);
+
+                if (entry.getName().endsWith(CLASS_FILE)) {
+                    final String className = entry.getName()
+                                                  .replaceAll(BOOT_INF_CLASSES, EMPTY)
+                                                  .replaceAll(CLASS_FILE, EMPTY)
+                                                  .replace('/', '.');
+                    result.add(className);
+                } else if (entry.getName().endsWith(JAR_FILE)) {
+                    result.addAll(readInnerJar(zip, entry.getName()));
+                }
+
+            } while (entry != null);
+
+        } catch (final IOException e) {
+            log.error(e.getMessage());
+        }
+
+        if (!result.isEmpty()) {
+            JAR_SCAN_CACHE.put(jarFileName, result);
+        }
+        return result;
+    }
+
+    private static void assertMaxSize(final long size) {
+        if (size > MAX_SIZE) {
+            throw new UncheckedException("zip file is too big to be unzipped");
+        }
+    }
+
+
+    private static byte[] readInnerJarContent(final ZipInputStream zip) throws IOException {
+        final byte[] buffer = new byte[1024];
+
+        try (ByteArrayOutputStream fos = new ByteArrayOutputStream()) {
+            int len;
+            while ((len = zip.read(buffer)) > 0) {
+                fos.write(buffer, 0, len);
+            }
+            return fos.toByteArray();
+        } finally {
+            zip.closeEntry();
+        }
+    }
+
+
+    private FileInputStream openFileInputStream(final File file) {
+        FileInputStream result = null;
+        try {
+            result = new FileInputStream(file);
+        } catch (final FileNotFoundException e) {
+            close(result);
+        }
+        return result;
+    }
+
+    private static List<String> scanJarPath(final Path path) {
+        List<String> result = new ArrayList<>();
+        if (path.endsWith(CLASS_FILE)) {
+            result.add(path.toString());
+        }
+        while (path.iterator().hasNext()) {
+            final Path child = path.iterator().next();
+            result.addAll(scanJarPath(child));
+        }
+        return result;
+    }
+
     private static boolean classFiltersMatch(final Class<?> currentClass, final Predicate<Class<?>>[] filters) {
-        if (filters == null || filters.length == 0) {
+        if (filters.length == 0) {
             return true;
         }
         boolean result = true;
@@ -112,12 +275,7 @@ public final class ReflectionUtils {
         return result;
     }
 
-    private static String extractBasePath(final ClassLoader classloader) {
-        final URL result = classloader.getResource("");
-        return result == null ? "" : result.getFile();
-    }
-
-    private static List<String> scanAllFiles(final File currentFile, final List<String> bases) {
+    protected static List<String> scanAllFiles(final File currentFile, final List<String> bases) {
         final List<String> result = new ArrayList<>();
 
         if (!currentFile.exists()) {
@@ -128,22 +286,23 @@ public final class ReflectionUtils {
                 result.addAll(scanAllFiles(childFile, bases));
             }
         } else if (currentFile.isFile()) {
-            final String base     = chooseBase(currentFile.getAbsolutePath(), bases);
-            final String filePath = currentFile.getAbsolutePath().replace(base, "");
-            if (filePath.endsWith(".class")) {
+            final String absolutPath = toUnixPath(currentFile.getAbsolutePath());
+            final String base        = chooseBase(absolutPath, bases);
+            final String filePath    = absolutPath.replace(base, EMPTY);
+            if (filePath.endsWith(CLASS_FILE) && !filePath.contains("module-info") && !filePath.contains("package-info")) {
                 result.add(filePath.substring(0, filePath.length() - CLASS_EXTENSION_SIZE).replace('/', '.'));
             }
         }
         return result;
     }
 
-    private static String chooseBase(final String absolutePath, final List<String> bases) {
+    protected static String chooseBase(final String absolutePath, final List<String> bases) {
         for (final String base : bases) {
             if (absolutePath.startsWith(base)) {
                 return base;
             }
         }
-        return "";
+        return EMPTY;
     }
 
 
@@ -154,8 +313,7 @@ public final class ReflectionUtils {
         return AnnotationTools.searchAnnotation(annotations, names);
     }
 
-    public static <AE extends AnnotatedElement> boolean hasAnnotation(final AE annotatedElement,
-                                                                      final Class<? extends Annotation>... annotations) {
+    public static <AE extends AnnotatedElement> boolean hasAnnotation(final AE annotatedElement, final Class<? extends Annotation>... annotations) {
         boolean result = false;
         if (annotatedElement != null && annotations != null) {
             for (final Class<? extends Annotation> annotation : annotations) {
@@ -169,17 +327,12 @@ public final class ReflectionUtils {
     }
 
 
-    public static <T, A extends Annotation, AE extends AnnotatedElement> T ifHasAnnotation(final AE annotatedElement,
-                                                                                           final Class<A> annotation,
-                                                                                           final Function<A, T> handler) {
+    public static <T, A extends Annotation, AE extends AnnotatedElement> T ifHasAnnotation(final AE annotatedElement, final Class<A> annotation, final Function<A, T> handler) {
         return ifHasAnnotation(annotatedElement, annotation, handler, null);
     }
 
 
-    public static <T, A extends Annotation, AE extends AnnotatedElement> T ifHasAnnotation(final AE annotatedElement,
-                                                                                           final Class<A> annotation,
-                                                                                           final Function<A, T> handler,
-                                                                                           final Supplier<T> defaultValue) {
+    public static <T, A extends Annotation, AE extends AnnotatedElement> T ifHasAnnotation(final AE annotatedElement, final Class<A> annotation, final Function<A, T> handler, final Supplier<T> defaultValue) {
         T result = null;
         if (hasAnnotation(annotatedElement, annotation)) {
             result = handler == null ? null : handler.apply(annotatedElement.getDeclaredAnnotation(annotation));
@@ -192,19 +345,18 @@ public final class ReflectionUtils {
     }
 
 
-    public static <T, A extends Annotation, AE extends AnnotatedElement> void processOnAnnotation(
-            final AE annotatedElement,
-            final Class<A> annotationClass,
-            final Consumer<A> handler) {
-        final A annotation = annotatedElement == null ? null : annotatedElement.getDeclaredAnnotation(annotationClass);
-        if (annotation != null && handler != null) {
+    public static <T, A extends Annotation, AE extends AnnotatedElement> void processOnAnnotation(final AE annotatedElement, final Class<A> annotationClass, final Consumer<A> handler) {
+        if (annotatedElement == null || annotationClass == null || handler == null) {
+            return;
+        }
+        final A annotation = annotatedElement.getDeclaredAnnotation(annotationClass);
+        if (annotation != null) {
             handler.accept(annotation);
         }
     }
 
 
-    public static <A extends Annotation, AE extends AnnotatedElement> A getAnnotation(final AE annotatedElement,
-                                                                                      final Class<A> annotation) {
+    public static <A extends Annotation, AE extends AnnotatedElement> A getAnnotation(final AE annotatedElement, final Class<A> annotation) {
         A result = null;
         if (annotatedElement != null) {
             result = annotatedElement.getDeclaredAnnotation(annotation);
@@ -219,12 +371,18 @@ public final class ReflectionUtils {
     // =========================================================================
 
     public static Object getStaticFieldValue(final String fieldName, final Class<?> clazz) {
+        if (fieldName == null || clazz == null) {
+            return null;
+        }
         final Field currentField = getField(fieldName, clazz);
         currentField.setAccessible(true);
         return runSafe(() -> currentField.get(null));
     }
 
     public static Object getFieldValue(final String fieldName, final Object instance) {
+        if (fieldName == null || instance == null) {
+            return null;
+        }
         final Field currentField = getField(fieldName, instance);
         setAccessible(currentField);
         return runSafe(() -> currentField.get(instance));
@@ -254,14 +412,14 @@ public final class ReflectionUtils {
         return currentField;
     }
 
-    public static List<Field> getAllFields(final Class<?> instanceClasss) {
+    public static List<Field> getAllFields(final Class<?> instanceClass) {
         final List<Field> result = new ArrayList<>();
-        if (instanceClasss == null || instanceClasss == Object.class) {
+        if (instanceClass == null || instanceClass == Object.class) {
             return result;
         }
-        result.addAll(Arrays.asList(instanceClasss.getDeclaredFields()));
-        if (instanceClasss.getSuperclass() != null) {
-            result.addAll(getAllFields(instanceClasss.getSuperclass()));
+        result.addAll(Arrays.asList(instanceClass.getDeclaredFields()));
+        if (instanceClass.getSuperclass() != null) {
+            result.addAll(getAllFields(instanceClass.getSuperclass()));
         }
 
         return result;
@@ -286,9 +444,7 @@ public final class ReflectionUtils {
 
     public static Set<Field> loadAllStaticFields(final Class<?> clazz) {
         final Set<Field> result = new LinkedHashSet<>();
-        loadAllFields(clazz).stream()
-                            .filter(field -> Modifier.isStatic(field.getModifiers()))
-                            .forEach(result::add);
+        loadAllFields(clazz).stream().filter(field -> Modifier.isStatic(field.getModifiers())).forEach(result::add);
         return result;
     }
 
@@ -333,8 +489,11 @@ public final class ReflectionUtils {
     // =========================================================================
     public static Set<Constructor<?>> loadAllConstructors(final Class<?> clazz) {
         final Set<Constructor<?>> result = new LinkedHashSet<>();
+        if (clazz == null) {
+            return result;
+        }
         try {
-            if (clazz != null && clazz != Object.class) {
+            if (clazz != Object.class) {
                 result.addAll(Arrays.asList(clazz.getDeclaredConstructors()));
                 if (clazz.getSuperclass() != null) {
                     result.addAll(loadAllConstructors(clazz.getSuperclass()));
@@ -353,9 +512,11 @@ public final class ReflectionUtils {
     // =========================================================================
     public static List<Method> loadAllMethods(final Class<?> clazz) {
         final List<Method> result = new ArrayList<>();
-
+        if (clazz == null) {
+            return result;
+        }
         try {
-            if (clazz != null && clazz != Object.class) {
+            if (clazz != Object.class) {
                 result.addAll(Arrays.asList(clazz.getDeclaredMethods()));
                 if (clazz.getSuperclass() != null) {
                     result.addAll(loadAllMethods(clazz.getSuperclass()));
@@ -369,12 +530,24 @@ public final class ReflectionUtils {
         return result;
     }
 
+
     public static Method searchMethod(final Annotation annotation, final String method) {
         return AnnotationTools.searchMethod(annotation, method);
     }
 
+    @Deprecated(since = "3.2.5")
     public static Method searchMethod(final Class<?> objectClass, final String method) {
         return AnnotationTools.searchMethod(objectClass, method);
+    }
+
+    public static Method searchMethodByName(final Class<?> objectClass, final String method) {
+        Method result = null;
+
+        if (objectClass != null) {
+            return loadAllMethods(objectClass).stream().filter(m -> m.getName().equalsIgnoreCase(method)).findFirst().orElse(null);
+        }
+
+        return result;
     }
 
     public static <T> List<FieldGetterSetter> extractFieldGetterAndSetter(final T instance) {
@@ -398,11 +571,7 @@ public final class ReflectionUtils {
             return null;
         }
         final List<Method> methods = loadAllMethods(instance.getClass());
-        final Method getter = methods.stream()
-                                     .filter(m -> m.getName().equalsIgnoreCase(GET + field)
-                                             || m.getName().equalsIgnoreCase(IS + field))
-                                     .findFirst()
-                                     .orElse(null);
+        final Method       getter  = methods.stream().filter(m -> m.getName().equalsIgnoreCase(GET + field) || m.getName().equalsIgnoreCase(IS + field)).findFirst().orElse(null);
         setAccessible(getter);
         return runSafe(() -> getter.invoke(instance));
     }
@@ -459,9 +628,9 @@ public final class ReflectionUtils {
     // =========================================================================
     // GENERIC TYPE
     // =========================================================================
+    @SuppressWarnings({"java:S1125"})
     public static boolean isBasicType(final Class<?> currentClass) {
-        return currentClass == null ? true :
-                PRIMITIVE_TYPES.contains(currentClass) || currentClass.getName().startsWith("java.lang", 0);
+        return currentClass == null ? true : PRIMITIVE_TYPES.contains(currentClass) || currentClass.getName().startsWith("java.lang", 0);
     }
 
     public static Class<?> getGenericType(final Type type) {
@@ -484,8 +653,7 @@ public final class ReflectionUtils {
         Class<?> result = null;
         if (genericType != null) {
             if (genericType instanceof ParameterizedType) {
-                final String className = ((ParameterizedType) genericType).getActualTypeArguments()[typeIndex]
-                        .getTypeName();
+                final String className = ((ParameterizedType) genericType).getActualTypeArguments()[typeIndex].getTypeName();
                 try {
                     result = getClassloader().loadClass(className);
                 } catch (final ClassNotFoundException e) {
@@ -500,7 +668,7 @@ public final class ReflectionUtils {
     }
 
     private static ClassLoader getClassloader() {
-        return CLASS_LOADER == null ? Thread.currentThread().getContextClassLoader() : CLASS_LOADER;
+        return Thread.currentThread().getContextClassLoader();
     }
 
     // =========================================================================
@@ -545,7 +713,7 @@ public final class ReflectionUtils {
 
     public static Map<String, Map<String, Object>> convertEnumToMap(final Class<? extends Enum<?>> enumClass) {
         if (enumClass == null) {
-            return null;
+            return Map.of();
         }
 
         final Map<String, Map<String, Object>> result = new LinkedHashMap<>();
@@ -578,4 +746,15 @@ public final class ReflectionUtils {
         return result;
     }
 
+    public static void close(final Closeable... closeables) {
+        for (Closeable closeable : closeables) {
+            if (closeable != null) {
+                try {
+                    closeable.close();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
+    }
 }

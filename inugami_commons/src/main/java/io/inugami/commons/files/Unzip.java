@@ -78,7 +78,9 @@ public class Unzip {
         }
     }
 
-    private void unzipFile(final File server, final ZipInputStream zip, final ZipEntry entry,
+    private void unzipFile(final File server,
+                           final ZipInputStream zip,
+                           final ZipEntry entry,
                            final boolean verbose) throws IOException {
         final byte[] buffer   = new byte[1024];
         final String fileName = entry.getName();

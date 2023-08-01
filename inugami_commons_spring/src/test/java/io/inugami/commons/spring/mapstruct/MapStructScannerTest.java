@@ -8,7 +8,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.core.env.ConfigurableEnvironment;
 
@@ -28,8 +27,6 @@ class MapStructScannerTest {
     @Mock
     private ApplicationEnvironmentPreparedEvent applicationEnvironmentPreparedEvent;
 
-    @Mock
-    private ApplicationContextInitializedEvent applicationContextInitializedEvent;
 
     @Mock
     private DefaultListableBeanFactory beanFactory;
@@ -51,8 +48,9 @@ class MapStructScannerTest {
     // =================================================================================================================
     // SCAN
     // =================================================================================================================
+
     @Test
-    void onEnvironmentPrepared_nominal() {
+    void processScan_nominal() {
         final MapStructScanner scanner = scanner();
         final Map<String, String> config = Map.ofEntries(
                 Map.entry(MapStructScanner.PROPERTY, "true"),
@@ -62,14 +60,14 @@ class MapStructScannerTest {
         when(configurableEnvironment.getProperty(any())).thenAnswer(answer -> config.get(answer.getArgument(0)));
 
 
-        scanner.onEnvironmentPrepared(applicationEnvironmentPreparedEvent);
+        scanner.processScan();
         assertTextRelative(scanner.getMappers(),
                            "common/spring/mapstruct/mapStructScanner/onEnvironmentPrepared_nominal.json");
     }
 
 
     @Test
-    void onEnvironmentPrepared_withoutBasePackage() {
+    void processScan_withoutBasePackage() {
         final MapStructScanner scanner = scanner();
         final Map<String, String> config = Map.ofEntries(
                 Map.entry(MapStructScanner.PROPERTY, "true")
@@ -77,49 +75,32 @@ class MapStructScannerTest {
 
         when(configurableEnvironment.getProperty(any())).thenAnswer(answer -> config.get(answer.getArgument(0)));
 
-
-        scanner.onEnvironmentPrepared(applicationEnvironmentPreparedEvent);
+        scanner.processScan();
         assertTextRelative(scanner.getMappers(),
                            "common/spring/mapstruct/mapStructScanner/onEnvironmentPrepared_nominal.json");
     }
 
     @Test
-    void onEnvironmentPrepared_withoutProperty() {
+    void processScan_withoutProperty() {
         final MapStructScanner scanner = scanner();
-        scanner.onEnvironmentPrepared(applicationEnvironmentPreparedEvent);
+        scanner.processScan();
         assertThat(scanner.getMappers()).isEmpty();
     }
 
     @Test
-    void onEnvironmentPrepared_disabled() {
+    void processScan_disabled() {
         final MapStructScanner scanner = scanner();
         when(configurableEnvironment.getProperty(MapStructScanner.PROPERTY)).thenReturn("false");
 
-        scanner.onEnvironmentPrepared(applicationEnvironmentPreparedEvent);
+        scanner.processScan();
         assertThat(scanner.getMappers()).isEmpty();
-    }
-
-    @Test
-    void onEnvironmentPrepared_withoutEvent() {
-        final MapStructScanner scanner = scanner();
-        scanner.onEnvironmentPrepared(null);
-        assertThat(scanner.getMappers()).isEmpty();
-        verify(configurableEnvironment, never()).getProperty(any());
-    }
-
-    @Test
-    void onEnvironmentPrepared_eventOtherType() {
-        final MapStructScanner scanner = scanner();
-        scanner.onEnvironmentPrepared("event");
-        assertThat(scanner.getMappers()).isEmpty();
-        verify(configurableEnvironment, never()).getProperty(any());
     }
 
     // =================================================================================================================
     // REGISTER
     // =================================================================================================================
     @Test
-    void onApplicationContextInitialized_nominal() {
+    void registerMapper_nominal() {
         final MapStructScanner scanner = scanner();
         final Map<String, String> config = Map.ofEntries(
                 Map.entry(MapStructScanner.PROPERTY, "true"),
@@ -129,8 +110,8 @@ class MapStructScannerTest {
         when(configurableEnvironment.getProperty(any())).thenAnswer(answer -> config.get(answer.getArgument(0)));
 
 
-        scanner.onEnvironmentPrepared(applicationEnvironmentPreparedEvent);
-        scanner.onApplicationContextInitialized(applicationContextInitializedEvent);
+        scanner.processScan();
+        scanner.registerMapper();
 
         verify(beanFactory).registerSingleton(classNameCaptor.capture(), instanceCaptor.capture());
 
@@ -140,17 +121,22 @@ class MapStructScannerTest {
 
 
     @Test
-    void onApplicationContextInitialized_withoutMapper() {
+    void registerMapper_withoutMapper() {
         final MapStructScanner scanner = scanner();
-        scanner.onApplicationContextInitialized(applicationContextInitializedEvent);
+        scanner.registerMapper();
         verify(beanFactory, never()).registerSingleton(classNameCaptor.capture(), instanceCaptor.capture());
     }
+
+
     // =================================================================================================================
     // TOOLS
     // =================================================================================================================
     MapStructScanner scanner() {
-        final MapStructScanner result = new MapStructScanner();
-        result.setBeanFactoryExtractor(event -> beanFactory);
-        return result;
+        return MapStructScanner.builder()
+                               .environment(configurableEnvironment)
+                               .beanFactory(beanFactory)
+                               .classLoader(this.getClass().getClassLoader())
+                               .build();
     }
+
 }

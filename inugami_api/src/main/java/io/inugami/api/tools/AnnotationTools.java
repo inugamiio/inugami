@@ -56,28 +56,34 @@ public final class AnnotationTools {
     }
 
     public static Method searchMethod(final Annotation annotation, final String method) {
+        if (annotation == null || method == null) {
+            return null;
+        }
         Method           result      = null;
         final Class<?>[] paramsTypes = {};
-        if (annotation != null) {
-            try {
-                result = annotation.annotationType().getDeclaredMethod(method, paramsTypes);
-            } catch (final NoSuchMethodException | SecurityException e) {
-                Loggers.DEBUG.debug(e.getMessage(), e);
-            }
+
+        try {
+            result = annotation.annotationType().getDeclaredMethod(method, paramsTypes);
+        } catch (final NoSuchMethodException | SecurityException e) {
+            Loggers.DEBUG.debug(e.getMessage(), e);
         }
+
         return result;
     }
 
     public static Method searchMethod(final Class<?> objectClass, final String method) {
+        if (objectClass == null || method == null) {
+            return null;
+        }
         Method           result      = null;
         final Class<?>[] paramsTypes = {};
-        if (objectClass != null) {
-            try {
-                result = objectClass.getDeclaredMethod(method, paramsTypes);
-            } catch (final NoSuchMethodException | SecurityException e) {
-                Loggers.DEBUG.debug(e.getMessage(), e);
-            }
+
+        try {
+            result = objectClass.getDeclaredMethod(method, paramsTypes);
+        } catch (final NoSuchMethodException | SecurityException e) {
+            Loggers.DEBUG.debug(e.getMessage(), e);
         }
+
         return result;
     }
 
@@ -123,7 +129,7 @@ public final class AnnotationTools {
                 result = invoke(getValue, annotation);
             }
             if ((result == null) || result.trim().isEmpty()) {
-                result =  clazz.getSimpleName().substring(0, 1).toLowerCase() + clazz.getSimpleName().substring(1);
+                result = clazz.getSimpleName().substring(0, 1).toLowerCase() + clazz.getSimpleName().substring(1);
             }
         }
 
@@ -258,7 +264,7 @@ public final class AnnotationTools {
         if (currentValue == null) {
             return null;
         }
-        final Method[] methods = objectClass.getDeclaredMethods();
+        final Method[] methods = objectClass.getMethods();
         final Method   getter  = searchGetterMethod(field, methods);
         final Method   setter  = searchSetterMethod(field, methods);
 
