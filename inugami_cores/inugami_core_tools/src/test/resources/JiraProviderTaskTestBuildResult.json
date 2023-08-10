@@ -1,0 +1,90 @@
+{
+  "expand": "schema,names",
+  "startAt": 0,
+  "maxResults": 1000,
+  "total": 2,
+  "issues": [
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "56135",
+      "self": "https://jira.host.fr/rest/api/2/issue/56135",
+      "key": "FOOBAR-4422",
+      "fields": {
+        "summary": "Title 1",
+        "versions": [
+          {
+            "self": "https://jira.host.fr/rest/api/2/version/123456",
+            "id": "123456",
+            "description": "Phasellus placerat et mi et elementum",
+            "name": "JOE (v1.2.3.4)",
+            "archived": false,
+            "released": false
+          },
+          {
+            "self": "https://jira.host.fr/rest/api/2/version/7890123",
+            "id": "7890123",
+            "name": "JOE (v1.2.3.4)",
+            "archived": false,
+            "released": false
+          }
+        ],
+        "status": {
+          "self": "https://jira.host.fr/rest/api/2/status/141145",
+          "description": "",
+          "iconUrl": "https://jira.host.fr/images/icons/status_generic.gif",
+          "name": "To Groom",
+          "id": "141145",
+          "statusCategory": {
+            "self": "https://jira.host.fr/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        },
+        "customfield_17030": "2018-04-04"
+      }
+    },
+    {
+      "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+      "id": "398528",
+      "self": "https://jira.host.fr/rest/api/2/issue/398528",
+      "key": "FOOBAR-1982",
+      "fields": {
+        "summary": "Title 2",
+        "versions": [
+          {
+            "self": "https://jira.host.fr/rest/api/2/version/123456",
+            "id": "123456",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+            "name": "Bar (v1.2.3)",
+            "archived": false,
+            "released": false
+          },
+          {
+            "self": "https://jira.host.fr/rest/api/2/version/7890123",
+            "id": "7890123",
+            "name": "JOE (v1.2.3.4)",
+            "archived": false,
+            "released": false
+          }
+        ],
+        "status": {
+          "self": "https://jira.host.fr/rest/api/2/status/100848",
+          "description": "The issue is in code review",
+          "iconUrl": "https://jira.host.fr/images/icons/statuses/visible.png",
+          "name": "Reviewing",
+          "id": "100848",
+          "statusCategory": {
+            "self": "https://jira.host.fr/rest/api/2/statuscategory/4",
+            "id": 4,
+            "key": "indeterminate",
+            "colorName": "yellow",
+            "name": "In Progress"
+          }
+        },
+        "customfield_17030": "2018-04-04"
+      }
+    }
+  ]
+}

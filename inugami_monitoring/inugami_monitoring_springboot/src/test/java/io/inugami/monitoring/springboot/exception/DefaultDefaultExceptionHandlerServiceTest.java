@@ -30,13 +30,12 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
-public class DefaultDefaultExceptionHandlerServiceTest {
+class DefaultDefaultExceptionHandlerServiceTest {
 
     // ========================================================================
     // INIT
@@ -64,7 +63,7 @@ public class DefaultDefaultExceptionHandlerServiceTest {
     // TEST
     // ========================================================================
     @Test
-    public void manageException_withNullValue_shouldProduceThrowableProblem() {
+    void manageException_withNullValue_shouldProduceThrowableProblem() {
         processTest(
                 buildService(),
                 null,
@@ -73,7 +72,7 @@ public class DefaultDefaultExceptionHandlerServiceTest {
     }
 
     @Test
-    public void manageException_withStandardException_shouldProduceThrowableProblem() {
+    void manageException_withStandardException_shouldProduceThrowableProblem() {
         processTest(
                 buildService(),
                 new IllegalArgumentException("some error"),
@@ -82,7 +81,7 @@ public class DefaultDefaultExceptionHandlerServiceTest {
     }
 
     @Test
-    public void manageException_withInugamiException_produceProblem() {
+    void manageException_withInugamiException_produceProblem() {
         processTest(
                 buildService(),
                 new UncheckedException(
@@ -94,7 +93,7 @@ public class DefaultDefaultExceptionHandlerServiceTest {
 
 
     @Test
-    public void manageException_withFieldException_produceProblem() {
+    void manageException_withFieldException_produceProblem() {
         processTest(
                 buildService(),
                 new UncheckedException(
@@ -111,7 +110,7 @@ public class DefaultDefaultExceptionHandlerServiceTest {
 
 
     @Test
-    public void manageException_withExploitationException_produceProblem() {
+    void manageException_withExploitationException_produceProblem() {
         processTest(
                 buildService(),
                 new UncheckedException(
@@ -128,7 +127,7 @@ public class DefaultDefaultExceptionHandlerServiceTest {
     }
 
     @Test
-    public void manageException_withoutDetail_produceProblem() {
+    void manageException_withoutDetail_produceProblem() {
         processTest(
                 buildService(false),
                 new UncheckedException(
@@ -145,7 +144,7 @@ public class DefaultDefaultExceptionHandlerServiceTest {
     }
 
     @Test
-    public void manageException_withoutMessageDetail_produceProblem() {
+    void manageException_withoutMessageDetail_produceProblem() {
         processTest(
                 buildService(),
                 new UncheckedException(
@@ -161,7 +160,7 @@ public class DefaultDefaultExceptionHandlerServiceTest {
     }
 
     @Test
-    public void manageException_withStatusLessThan200_produceProblem() {
+    void manageException_withStatusLessThan200_produceProblem() {
         processTest(
                 buildService(),
                 new UncheckedException(
@@ -177,7 +176,7 @@ public class DefaultDefaultExceptionHandlerServiceTest {
     }
 
     @Test
-    public void manageException_withStatusHigherThan511_produceProblem() {
+    void manageException_withStatusHigherThan511_produceProblem() {
         processTest(
                 buildService(),
                 new UncheckedException(
@@ -193,7 +192,7 @@ public class DefaultDefaultExceptionHandlerServiceTest {
     }
 
     @Test
-    public void manageException_withFeignException_produceProblem() {
+    void manageException_withFeignException_produceProblem() {
         MdcService.getInstance().partner("feign-client");
         final Request request = FeignRequestBuilder.builder()
                                                    .buildFeignRequest();
@@ -208,7 +207,7 @@ public class DefaultDefaultExceptionHandlerServiceTest {
     //-------------------------------------------------------------------------
 
     @Test
-    public void manageException_withResponse_shouldProduceError() throws IOException {
+    void manageException_withResponse_shouldProduceError() throws IOException {
         final List<BasicLogEvent> logs     = new ArrayList<>();
         final LogListener         listener = new DefaultLogListener(".*", logs::add);
         LogTestAppender.register(listener);
@@ -228,8 +227,8 @@ public class DefaultDefaultExceptionHandlerServiceTest {
 
         LogTestAppender.removeListener(listener);
 
-        verify(response).setStatus(eq(400));
-        verify(response).setContentType(eq(MediaType.APPLICATION_JSON_VALUE));
+        verify(response).setStatus(400);
+        verify(response).setContentType(MediaType.APPLICATION_JSON_VALUE);
         verify(writer).write(writerCaptor.capture());
 
         UnitTestHelper.assertTextRelative(writerCaptor.getValue(), "exception/exceptionHandlerServiceTest/manageException_withResponse_shouldProduceError.json");
@@ -239,7 +238,10 @@ public class DefaultDefaultExceptionHandlerServiceTest {
     // ========================================================================
     // TOOLS
     // ========================================================================
-    private void processTest(final DefaultExceptionHandlerService service, final Throwable exception, final String bodyPath, final String logPath) {
+    private void processTest(final DefaultExceptionHandlerService service,
+                             final Throwable exception,
+                             final String bodyPath,
+                             final String logPath) {
         final List<BasicLogEvent> logs     = new ArrayList<>();
         final LogListener         listener = new DefaultLogListener(".*", logs::add);
         LogTestAppender.register(listener);

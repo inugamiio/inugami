@@ -1,0 +1,24 @@
+{
+  "charset" : "UTF-8",
+  "contentType" : "application/json",
+  "data" : "InRlc3RpbmctbGlicmFyeSI6ICJXaXJlTW9jayI=",
+  "delay" : 243,
+  "encoding" : "UTF-8",
+  "hashHumanReadable" : "[GET]http://localhost:1234?page=1",
+  "length" : 29,
+  "message" : "OK",
+  "requestHeaders" : {
+    "application-name" : "inugami",
+    "application-host" : ""
+  },
+  "responseAt" : 1691572450693,
+  "responseHeaders" : {
+    "Content-Type" : "application/json",
+    "Matched-Stub-Id" : "78809b03-289a-440f-8164-4d7bebc5dada",
+    "Vary" : "Accept-Encoding, User-Agent",
+    "Transfer-Encoding" : "chunked"
+  },
+  "statusCode" : 200,
+  "url" : "http://localhost:1234?page=1",
+  "verb" : "GET"
+}

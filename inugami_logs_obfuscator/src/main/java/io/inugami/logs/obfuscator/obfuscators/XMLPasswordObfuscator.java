@@ -51,7 +51,7 @@ public class XMLPasswordObfuscator implements ObfuscatorSpi {
 
     @Override
     public String obfuscate(final LogEventDto event) {
-        return replaceAllWithGroup(event.getMessage(), REGEX, (values) -> {
+        return replaceAllWithGroup(event.getMessage(), REGEX, values -> {
             String args = "";
             if (!values.get(2).isEmpty()) {
                 args = values.get(2);

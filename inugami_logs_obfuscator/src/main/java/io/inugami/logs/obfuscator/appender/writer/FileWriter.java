@@ -17,10 +17,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@SuppressWarnings({"java:S5852"})
+@SuppressWarnings({"java:S5852", "java:S899", "java:S6395", "java:S108"})
 public class FileWriter implements AppenderWriterStrategy {
 
-    private static final String                    LINE             = "\n";
     private              Configuration             configuration    = null;
     private              Encoder<ILoggingEvent>    encoder;
     private              java.io.FileWriter        writer;

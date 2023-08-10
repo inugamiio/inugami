@@ -27,13 +27,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author patrickguillerm
  * @since Jan 8, 2019
  */
-public class DefaultInterceptableIdentifierTest {
+class DefaultInterceptableIdentifierTest {
 
     // =========================================================================
     // METHODS
     // =========================================================================
     @Test
-    public void testIsResource() throws Exception {
+    void testIsResource() throws Exception {
         final DefaultInterceptableIdentifier resolver = new DefaultInterceptableIdentifier();
         assertTrue(resolver.isResource("http://foobar.org/js/myApp.js?v=1.2.3"));
         assertTrue(resolver.isResource("http://foobar.org/style/application.css"));

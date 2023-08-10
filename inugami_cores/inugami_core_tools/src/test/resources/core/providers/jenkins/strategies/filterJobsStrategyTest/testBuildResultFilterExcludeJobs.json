@@ -1,0 +1,18 @@
+{
+  "jobs" : [ {
+    "classAtt" : "org.jenkinsci.plugins.workflow.job.WorkflowJob",
+    "color" : "blue",
+    "name" : "_TESLA_installNewUSN",
+    "url" : "http://host.jenkins/jenkins/job/_TESLA_installNewUSN/"
+  }, {
+    "classAtt" : "org.jenkinsci.plugins.workflow.job.WorkflowJob",
+    "color" : "blue",
+    "name" : "RTESLA_installService",
+    "url" : "http://host.jenkins/jenkins/job/_TESLA_installService/"
+  }, {
+    "classAtt" : "hudson.model.FreeStyleProject",
+    "color" : "disabled",
+    "name" : "AutomatorUpdate_release",
+    "url" : "http://host.jenkins/jenkins/job/AutomatorUpdate_release/"
+  } ]
+}

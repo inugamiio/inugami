@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
+@SuppressWarnings({"java:S1181", "java:S108"})
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeignCommon {
@@ -42,8 +41,11 @@ public class FeignCommon {
     }
 
     public static long resolveCallDate(final Response response) {
-        final Collection<String> xDate      = response.request() == null || response.request().headers() == null ? null : response.request().headers().get(FeignCommon.X_DATE);
-        String                   xDateValue = null;
+        final Collection<String> xDate =
+                response.request() == null || response.request().headers() == null ? null : response.request()
+                                                                                                    .headers()
+                                                                                                    .get(FeignCommon.X_DATE);
+        String xDateValue = null;
         if (xDate != null && !xDate.isEmpty()) {
             xDateValue = xDate.toArray(new String[]{})[0];
         }
@@ -97,10 +99,6 @@ public class FeignCommon {
 
         }
         return builder.build();
-    }
-
-    private static Charset resolveEncoding(final Response wrappedResponse) {
-        return wrappedResponse.charset() == null ? StandardCharsets.UTF_8 : wrappedResponse.charset();
     }
 
     public static Response wrapResponse(final Response response) {

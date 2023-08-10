@@ -24,6 +24,7 @@ import io.inugami.api.spi.SpiLoader;
 import io.inugami.monitoring.api.resolvers.DefaultServiceNameResolver;
 import io.inugami.monitoring.api.resolvers.ServiceNameResolver;
 import io.inugami.monitoring.core.context.MonitoringBootstrap;
+import lombok.experimental.UtilityClass;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,11 +36,12 @@ import java.util.*;
  * @author patrick_guillerm
  * @since 28 déc. 2018
  */
+@UtilityClass
 public final class RequestInformationInitializer {
     // =========================================================================
     // BUILDER
     // =========================================================================
-    private static Monitoring CONFIG = null;
+    private static Monitoring config = null;
 
 
     private static final ServiceNameResolver SERVICE_NAME_RESOLVER = SpiLoader.getInstance().loadSpiServiceByPriority(
@@ -52,8 +54,8 @@ public final class RequestInformationInitializer {
     // =========================================================================
     public static synchronized RequestInformation buildRequestInformation(final HttpServletRequest request,
                                                                           final Map<String, String> headers) {
-        if (CONFIG == null) {
-            CONFIG = MonitoringBootstrap.getContext().getConfig();
+        if (config == null) {
+            config = MonitoringBootstrap.getContext().getConfig();
         }
         final RequestInformation information = buildInformation(request, headers);
         RequestContext.setInstance(information);
@@ -64,43 +66,46 @@ public final class RequestInformationInitializer {
                                                        final Map<String, String> headers) {
 
         final RequestInformation.RequestInformationBuilder builder = RequestInformation.builder();
-        builder.env(CONFIG.getEnv());
-        builder.asset(CONFIG.getAsset());
-        builder.hostname(CONFIG.getHostname());
-        builder.instanceName(CONFIG.getInstanceName());
-        builder.instanceNumber(CONFIG.getInstanceNumber());
-        builder.applicationVersion(CONFIG.getApplicationVersion());
+        builder.env(config.getEnv());
+        builder.asset(config.getAsset());
+        builder.hostname(config.getHostname());
+        builder.instanceName(config.getInstanceName());
+        builder.instanceNumber(config.getInstanceNumber());
+        builder.applicationVersion(config.getApplicationVersion());
 
-        builder.correlationId(cleanInput(buildUid(headers.get(CONFIG.getHeaders().getCorrelationId()))));
-        builder.requestId(cleanInput(buildUid(headers.get(CONFIG.getHeaders().getRequestId()))));
-        builder.traceId(cleanInput(buildUid(headers.get(CONFIG.getHeaders().getTraceId()))));
-        builder.conversationId(cleanInput(headers.get(CONFIG.getHeaders().getConversationId())));
+        builder.correlationId(cleanInput(buildUid(headers.get(config.getHeaders().getCorrelationId()))));
+        builder.requestId(cleanInput(buildUid(headers.get(config.getHeaders().getRequestId()))));
+        builder.traceId(cleanInput(buildUid(headers.get(config.getHeaders().getTraceId()))));
+        builder.conversationId(cleanInput(headers.get(config.getHeaders().getConversationId())));
 
         builder.service(SERVICE_NAME_RESOLVER.resolve(buildUriPath(request)));
-        builder.callFrom(cleanInput(headers.get(CONFIG.getHeaders().getCallFrom())));
-        builder.deviceIdentifier(cleanInput(headers.get(CONFIG.getHeaders().getDeviceIdentifier())));
-        builder.deviceType(cleanInput(headers.get(CONFIG.getHeaders().getDeviceType())));
-        builder.deviceClass(cleanInput(headers.get(CONFIG.getHeaders().getDeviceClass())));
+        builder.callFrom(cleanInput(headers.get(config.getHeaders().getCallFrom())));
+        builder.deviceIdentifier(cleanInput(headers.get(config.getHeaders().getDeviceIdentifier())));
+        builder.deviceType(cleanInput(headers.get(config.getHeaders().getDeviceType())));
+        builder.deviceClass(cleanInput(headers.get(config.getHeaders().getDeviceClass())));
 
-        final String clientVersion = headers.get(CONFIG.getHeaders().getDeviceVersion());
+        final String clientVersion = headers.get(config.getHeaders().getDeviceVersion());
         builder.version(cleanInput(clientVersion));
         builder.majorVersion(clientVersion == null ? null : cleanInput(clientVersion.split("[.]")[0]));
-        builder.osVersion(cleanInput(headers.get(CONFIG.getHeaders().getDeviceOsVersion())));
-        builder.deviceNetworkType(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkType())));
-        builder.deviceNetworkSpeedDown(parseDouble(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkSpeedDown()))));
-        builder.deviceNetworkSpeedUp(parseDouble(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkSpeedUp()))));
-        builder.deviceNetworkSpeedLatency(parseDouble(cleanInput(headers.get(CONFIG.getHeaders().getDeviceNetworkSpeedLatency()))));
+        builder.osVersion(cleanInput(headers.get(config.getHeaders().getDeviceOsVersion())));
+        builder.deviceNetworkType(cleanInput(headers.get(config.getHeaders().getDeviceNetworkType())));
+        builder.deviceNetworkSpeedDown(parseDouble(cleanInput(headers.get(config.getHeaders()
+                                                                                .getDeviceNetworkSpeedDown()))));
+        builder.deviceNetworkSpeedUp(parseDouble(cleanInput(headers.get(config.getHeaders()
+                                                                              .getDeviceNetworkSpeedUp()))));
+        builder.deviceNetworkSpeedLatency(parseDouble(cleanInput(headers.get(config.getHeaders()
+                                                                                   .getDeviceNetworkSpeedLatency()))));
 
         builder.remoteAddress(request.getRemoteAddr());
-        builder.deviceIp(cleanInput(headers.get(CONFIG.getHeaders().getDeviceIp())));
-        builder.userAgent(cleanInput(headers.get(CONFIG.getHeaders().getUserAgent())));
+        builder.deviceIp(cleanInput(headers.get(config.getHeaders().getDeviceIp())));
+        builder.userAgent(cleanInput(headers.get(config.getHeaders().getUserAgent())));
 
-        builder.language(cleanInput(headers.get(CONFIG.getHeaders().getLanguage())));
-        builder.country(cleanInput(headers.get(CONFIG.getHeaders().getCountry())));
+        builder.language(cleanInput(headers.get(config.getHeaders().getLanguage())));
+        builder.country(cleanInput(headers.get(config.getHeaders().getCountry())));
 
         final Map<String, String> specific = new HashMap<>();
-        if ((CONFIG.getHeaders().getSpecificHeaders() != null) && !CONFIG.getHeaders().getSpecificHeaders().isEmpty()) {
-            for (final String key : CONFIG.getHeaders().getSpecificHeaders()) {
+        if ((config.getHeaders().getSpecificHeaders() != null) && !config.getHeaders().getSpecificHeaders().isEmpty()) {
+            for (final String key : config.getHeaders().getSpecificHeaders()) {
                 final String value = cleanInput(headers.get(key));
                 if (value != null) {
                     specific.put(key, value);
@@ -115,7 +120,7 @@ public final class RequestInformationInitializer {
 
     private static String buildUriPath(final HttpServletRequest request) {
         final String contextPath = request.getContextPath();
-        final String path        = request.getRequestURI().toString();
+        final String path        = request.getRequestURI();
         return path.length() >= contextPath.length() ? path.substring(contextPath.length()) : path;
     }
 
@@ -140,7 +145,7 @@ public final class RequestInformationInitializer {
             final String key = names.next();
             header.put(key.toLowerCase(), response.getHeader(key));
         }
-        header.put(CONFIG.getHeaders().getCorrelationId(), RequestContext.getInstance().getCorrelationId());
+        header.put(config.getHeaders().getCorrelationId(), RequestContext.getInstance().getCorrelationId());
         return header;
     }
 
@@ -161,8 +166,8 @@ public final class RequestInformationInitializer {
 
     public static void appendResponseHeaderInformation(final HttpServletResponse httpResponse) {
         final RequestInformation requestContext = RequestContext.getInstance();
-        httpResponse.setHeader(CONFIG.getHeaders().getCorrelationId(), requestContext.getCorrelationId());
-        httpResponse.setHeader(CONFIG.getHeaders().getRequestId(), requestContext.getRequestId());
+        httpResponse.setHeader(config.getHeaders().getCorrelationId(), requestContext.getCorrelationId());
+        httpResponse.setHeader(config.getHeaders().getRequestId(), requestContext.getRequestId());
     }
 
     private static Double parseDouble(final String value) {

@@ -10,13 +10,14 @@ import io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder;
 import java.io.IOException;
 import java.util.List;
 
+@SuppressWarnings({"java:S108", "java:S1117", "java:S108", "java:S1181"})
 public class JsonAppender extends ConsoleAppender<ILoggingEvent> {
     private Configuration configuration;
 
-    private final List<AppenderWriterStrategy> WRITERS = List.of(
+    private final List<AppenderWriterStrategy> writers = List.of(
             new FileWriter(),
             new LogstashWriter(),
-            (event) -> this.superWriteOut(event)
+            this::superWriteOut
     );
 
 
@@ -29,13 +30,18 @@ public class JsonAppender extends ConsoleAppender<ILoggingEvent> {
         }
 
         writer = resolveWriter(configuration);
-        writer.start(encoder);
-        super.start();
+        if (writer != null) {
+            writer.start(encoder);
+            super.start();
+        }
+
     }
 
     @Override
     public void stop() {
-        writer.stop();
+        if (writer != null) {
+            writer.stop();
+        }
     }
 
 
@@ -53,7 +59,7 @@ public class JsonAppender extends ConsoleAppender<ILoggingEvent> {
 
     private AppenderWriterStrategy resolveWriter(final Configuration configuration) {
         AppenderWriterStrategy result = null;
-        for (final AppenderWriterStrategy writer : WRITERS) {
+        for (final AppenderWriterStrategy writer : writers) {
             if (writer.accept(configuration)) {
                 result = writer;
                 break;

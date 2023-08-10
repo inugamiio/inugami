@@ -32,7 +32,7 @@ public class DefaultInterceptableIdentifier implements Interceptable {
     // ATTRIBUTES
     // =========================================================================
     //@formatter:off
-    private final static String[] RESOURCES_EXT = {".js", ".ts",
+    private static final  String[] RESOURCES_EXT = {".js", ".ts",
             ".jpg", ".png", ".gif", ".svg", ".ico",
             ".ttf", ".otf", ".eot", ".woff", ".woff2",
             ".css", ".map",

@@ -46,7 +46,7 @@ public class FeignErrorCodeResolver implements ErrorCodeResolver, ApplicationLif
         final int    status  = exception.status();
 
         final DefaultErrorCode.DefaultErrorCodeBuilder error        = DefaultErrorCode.buildUndefineErrorCode();
-        final FeignErrorCodeBuilderSpi                 errorBuilder = resolveErrorBuilder(partner, exception);
+        final FeignErrorCodeBuilderSpi                 errorBuilder = resolveErrorBuilder(partner);
 
         final Throwable cause = ExceptionUtils.searchCause(4, exception);
         error.errorCode(errorBuilder.buildErrorCode(partner, exception))
@@ -57,7 +57,7 @@ public class FeignErrorCodeResolver implements ErrorCodeResolver, ApplicationLif
         return error.build();
     }
 
-    private FeignErrorCodeBuilderSpi resolveErrorBuilder(final String partner, final FeignException exception) {
+    private FeignErrorCodeBuilderSpi resolveErrorBuilder(final String partner) {
         for (final FeignErrorCodeBuilderSpi instance : feignErrorCodeBuilderSpi) {
             if (instance.accept(partner)) {
                 return instance;

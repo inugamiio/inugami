@@ -6,10 +6,10 @@ import org.springframework.boot.actuate.health.StatusAggregator;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class FailSafeStatusAggregatorTest {
+class FailSafeStatusAggregatorTest {
 
     @Test
-    public void getAggregateStatus_nominal() {
+    void getAggregateStatus_nominal() {
         final StatusAggregator aggregator = new FailSafeStatusAggregator();
 
         assertThat(aggregator.getAggregateStatus(Status.UP, Status.UP, Status.UP)).isEqualTo(Status.UP);

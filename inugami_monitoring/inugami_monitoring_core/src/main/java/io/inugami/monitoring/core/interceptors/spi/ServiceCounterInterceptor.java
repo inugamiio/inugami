@@ -22,7 +22,7 @@ import io.inugami.api.monitoring.data.ResquestData;
 import io.inugami.api.monitoring.exceptions.ErrorResult;
 import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.models.GenericMonitoringModelBuilder;
+import io.inugami.api.monitoring.models.GenericMonitoringModelDTO;
 import io.inugami.api.processors.ConfigHandler;
 import io.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 import io.inugami.monitoring.core.sensors.services.ServiceValueTypes;
@@ -38,7 +38,7 @@ import java.util.List;
  * @author patrickguillerm
  * @since Jan 18, 2019
  */
-@SuppressWarnings({"java:S1117"})
+@SuppressWarnings({"java:S1117", "java:S1168", "java:S1181"})
 @Slf4j
 public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
     boolean enabled = false;
@@ -70,13 +70,14 @@ public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
     @Override
     public List<GenericMonitoringModel> onBegin(final ResquestData request) {
         if (enabled) {
-            final GenericMonitoringModelBuilder builder = GenericMonitoringModelTools.initResultBuilder();
+            final GenericMonitoringModelDTO.GenericMonitoringModelDTOBuilder builder = GenericMonitoringModelTools.initResultBuilder();
 
-            builder.setValue(new LongNumber(1));
-            builder.setCounterType(ServiceValueTypes.HITS.getKeywork());
-            builder.setValueType("count");
-
-            ServicesSensor.addData(GenericMonitoringModelTools.buildSingleResult(builder));
+            ServicesSensor.addData(List.of(
+                    builder.value(LongNumber.of(1L))
+                           .counterType(ServiceValueTypes.HITS.getKeywork())
+                           .valueType("count")
+                           .build()
+            ));
         }
 
         return null;
@@ -87,24 +88,25 @@ public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
                                                final ErrorResult error) {
         if (enabled) {
             try {
-                final List<GenericMonitoringModel> result = new ArrayList<>();
+                final List<GenericMonitoringModelDTO> result = new ArrayList<>();
 
-                final GenericMonitoringModelBuilder builder  = GenericMonitoringModelTools.initResultBuilder();
-                final ServiceValueTypes             doneType = error == null ? ServiceValueTypes.DONE : ServiceValueTypes.ERROR;
+                final GenericMonitoringModelDTO.GenericMonitoringModelDTOBuilder builder = GenericMonitoringModelTools.initResultBuilder();
+                final ServiceValueTypes doneType =
+                        error == null ? ServiceValueTypes.DONE : ServiceValueTypes.ERROR;
 
-                if (doneType == ServiceValueTypes.ERROR) {
-                    builder.setErrorCode(error.getErrorCode());
-                    builder.setErrorType(error.getErrorType());
+                if (error != null) {
+                    builder.errorCode(error.getErrorCode());
+                    builder.errorType(error.getErrorType());
                 }
-                builder.setCounterType(doneType.getKeywork());
 
-                builder.setValue(new LongNumber(response.getDuration()));
-                builder.setCounterType(ServiceValueTypes.RESPONSE_TIME.getKeywork());
+                builder.counterType(doneType.getKeywork());
+                builder.addValue(response.getDuration());
+                builder.counterType(ServiceValueTypes.RESPONSE_TIME.getKeywork());
                 result.add(builder.build());
 
-                builder.setValue(new LongNumber(1));
-                builder.setCounterType(ServiceValueTypes.HITS.getKeywork());
-                builder.setValueType("count");
+                builder.addValue(1);
+                builder.counterType(ServiceValueTypes.HITS.getKeywork());
+                builder.valueType("count");
                 result.add(builder.build());
 
                 ServicesSensor.addData(result);

@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static io.inugami.commons.test.UnitTestHelper.assertTextRelative;
 
-public class VersionHealthIndicatorTest {
+class VersionHealthIndicatorTest {
 
     @Test
-    public void getHealth_nominal() {
+    void getHealth_nominal() {
         final VersionHealthIndicator health = VersionHealthIndicator.builder()
                                                                     .groupId("io.inugami")
                                                                     .artifactId("my-application")

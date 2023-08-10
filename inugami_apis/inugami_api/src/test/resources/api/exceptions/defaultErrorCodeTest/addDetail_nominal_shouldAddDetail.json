@@ -1,0 +1,9 @@
+[ {
+  "errorStatus" : 500,
+  "errorCode" : "HTTP-1",
+  "message" : "request is require",
+  "messageDetail" : "simple message hello",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+} ]

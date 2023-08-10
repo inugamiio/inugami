@@ -1,27 +1,22 @@
 /* --------------------------------------------------------------------
- *  Inugami  
+ *  Inugami
  * --------------------------------------------------------------------
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.monitoring.config.loader;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.thoughtworks.xstream.XStream;
 import io.inugami.api.constants.JvmKeyValues;
 import io.inugami.api.exceptions.FatalException;
 import io.inugami.api.exceptions.TechnicalException;
@@ -31,42 +26,37 @@ import io.inugami.api.monitoring.models.Monitoring;
 import io.inugami.api.processors.ConfigHandler;
 import io.inugami.commons.files.FilesUtils;
 import io.inugami.configuration.services.ConfigHandlerHashMap;
-import io.inugami.monitoring.config.models.DefaultHeaderInformation;
-import io.inugami.monitoring.config.models.HeaderInformationsConfig;
-import io.inugami.monitoring.config.models.InterceptorConfig;
-import io.inugami.monitoring.config.models.InterceptorsConfig;
-import io.inugami.monitoring.config.models.MonitoringConfig;
-import io.inugami.monitoring.config.models.MonitoringSenderConfig;
-import io.inugami.monitoring.config.models.MonitoringSensorConfig;
-import io.inugami.monitoring.config.models.PropertiesConfig;
-import io.inugami.monitoring.config.models.PropertyConfigModel;
-import io.inugami.monitoring.config.models.SpecificHeader;
-import io.inugami.monitoring.config.models.SpecificHeaders;
+import io.inugami.monitoring.config.models.*;
 
-import com.thoughtworks.xstream.XStream;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * ConfigurationLoader
- * 
+ *
  * @author patrickguillerm
  * @since Jan 15, 2019
  */
+@SuppressWarnings({"java:S1874"})
 public final class ConfigurationLoader implements MonitoringLoaderSpi {
-    
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final static XStream XSTREAM_MAIN = initXStream();
-    
-    public final Monitoring      configuration;
-    
+    private static final XStream XSTREAM_MAIN = initXStream();
+
+    public final Monitoring configuration;
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
     public ConfigurationLoader() {
         configuration = initializeConfiguration();
     }
-    
+
     private static XStream initXStream() {
         //@formatter:off
         final Class<?>[] types = {
@@ -84,7 +74,7 @@ public final class ConfigurationLoader implements MonitoringLoaderSpi {
             InterceptorConfig.class
         };
         //@formatter:on
-        
+
         final XStream result = new XStream();
         result.autodetectAnnotations(true);
         result.processAnnotations(types);
@@ -93,7 +83,7 @@ public final class ConfigurationLoader implements MonitoringLoaderSpi {
         result.allowTypes(types);
         return result;
     }
-    
+
     // =========================================================================
     // METHODS
     // =========================================================================
@@ -101,33 +91,31 @@ public final class ConfigurationLoader implements MonitoringLoaderSpi {
     public Monitoring load() {
         return configuration;
     }
-    
+
     private Monitoring initializeConfiguration() {
-        final File configFile = resolveConfigFilePath();
-        MonitoringConfig result = null;
-        
+        final File       configFile = resolveConfigFilePath();
+        MonitoringConfig result     = null;
+
         if (configFile == null) {
             result = new MonitoringConfig();
-        }
-        else {
+        } else {
             result = loadConfiguration(configFile);
         }
-        
+
         if (result == null) {
             return null;
         }
-        
+
         final ConfigHandler<String, String> configHandler = buildConfigHandler(result);
         try {
             result.postProcessing(configHandler);
-        }
-        catch (final TechnicalException e) {
+        } catch (final TechnicalException e) {
             throw new FatalException(e.getMessage(), e);
         }
-        
+
         return MonitoringDataBuilder.build(result, configHandler);
     }
-    
+
     protected static MonitoringConfig loadConfiguration(final File configFile) {
         MonitoringConfig result = null;
         if ((configFile != null) && configFile.exists() && configFile.canRead()) {
@@ -135,31 +123,29 @@ public final class ConfigurationLoader implements MonitoringLoaderSpi {
         }
         return result;
     }
-    
+
     // =========================================================================
     // RESOLVE CONFIG FILE
     // =========================================================================
     private static File resolveConfigFilePath() {
-        File result = null;
+        File         result       = null;
         final String specificFile = JvmKeyValues.MONITORING_FILE.get();
         if (specificFile != null) {
             result = new File(specificFile);
-        }
-        else if ((specificFile == null) && (JvmKeyValues.JVM_HOME_PATH.get() != null)) {
+        } else if (JvmKeyValues.JVM_HOME_PATH.get() != null) {
             result = FilesUtils.buildFile(new File(JvmKeyValues.JVM_HOME_PATH.get()), "monitoring.xml");
-        }
-        else {
+        } else {
             Loggers.INIT.info("no monitoring configuration file define");
         }
         return result;
     }
-    
+
     // =========================================================================
     // BUILDER
     // =========================================================================
     private static ConfigHandler<String, String> buildConfigHandler(final MonitoringConfig config) {
         final Map<String, String> result = new HashMap<>();
-        
+
         //@formatter:off
         final PropertiesConfig properties = config.getProperties()==null?new PropertiesConfig():config.getProperties();
         properties.getProperties()
@@ -168,10 +154,10 @@ public final class ConfigurationLoader implements MonitoringLoaderSpi {
                   .filter(item -> item.getValue() !=null)
                   .forEach(item-> result.put(item.getKey(), item.getValue()));
         //@formatter:on
-        
+
         System.getProperties().forEach((key, value) -> result.put(String.valueOf(key), String.valueOf(value)));
-        
+
         return new ConfigHandlerHashMap(result);
     }
-    
+
 }

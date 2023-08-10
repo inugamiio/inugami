@@ -16,7 +16,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-@SuppressWarnings({"java:S5122"})
+@SuppressWarnings({"java:S5122", "java:S1168"})
 @NoArgsConstructor
 public class CorsInterceptable implements MonitoringFilterInterceptor {
     private static final String                        SEP = ", ";
@@ -51,11 +51,12 @@ public class CorsInterceptable implements MonitoringFilterInterceptor {
         }
 
         if (enabled) {
-            final List<String> headers   = resolveHeaders(request);
-            final String       headerStr = String.join(SEP, headers);
+            final List<String> currentHeaders = resolveHeaders(request);
+            final String       headerStr      = String.join(SEP, currentHeaders);
 
             request.getHttpResponse().setHeader("Access-Control-Allow-Origin", "*");
-            request.getHttpResponse().setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+            request.getHttpResponse()
+                   .setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
             request.getHttpResponse().setHeader("Access-Control-Allow-Headers", headerStr);
             request.getHttpResponse().setHeader("Access-Control-Expose-Headers", headerStr);
             request.getHttpResponse().setHeader("Access-Control-Allow-Credentials", "true");

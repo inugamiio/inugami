@@ -61,7 +61,7 @@ final class MonitoringDataBuilder {
         final Headers header = buildHeaders(config.getHeader(), configHandler);
 
         return Monitoring.builder()
-                         .enable(config.getEnable() == null ? true : config.getEnable().booleanValue())
+                         .enable(config.getEnable() == null || config.getEnable().booleanValue())
                          .env(configHandler.applyProperties(config.getEnv()))
                          .asset(configHandler.applyProperties(config.getAsset()))
                          .hostname(configHandler.applyProperties(config.getHostname()))
@@ -132,13 +132,14 @@ final class MonitoringDataBuilder {
                                                                        final ConfigHandler<String, String> configHandler,
                                                                        final SpiLoader spiloader) {
         final InterceptorsConfig interceptorsConfig = interceptors == null ? new InterceptorsConfig() : interceptors;
-        //@formatter:off
-        return interceptorsConfig.getInterceptors()
-                                 .stream()
-                                 .map(item -> buildInterceptor(item, configHandler, spiloader))
-                                 .filter(Objects::nonNull)
-                                 .collect(Collectors.toList());
-        //@formatter:on
+
+        return Optional.ofNullable(interceptorsConfig.getInterceptors())
+                       .orElse(List.of())
+                       .stream()
+                       .map(item -> buildInterceptor(item, configHandler, spiloader))
+                       .filter(Objects::nonNull)
+                       .collect(Collectors.toList());
+
     }
 
     private static MonitoringFilterInterceptor buildInterceptor(final InterceptorConfig config,

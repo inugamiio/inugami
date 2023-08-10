@@ -16,8 +16,8 @@ class FileWriterTest {
         final File       file   = new File("target/tmp/logs/fileWriterTest.log");
         writer.createFileIfNotExists("target/tmp/logs/fileWriterTest.log");
 
-        assertThat(file.exists()).isTrue();
-        assertThat(file.isFile()).isTrue();
+        assertThat(file).exists();
+        assertThat(file).isFile();
     }
 
 

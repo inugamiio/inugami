@@ -53,6 +53,6 @@ public class JsonAuthorizationObfuscator implements ObfuscatorSpi {
 
     @Override
     public String obfuscate(final LogEventDto event) {
-        return replaceAll(event.getMessage(), REGEX, (value) -> keepLastChars(value, 3)+ QUOT);
+        return replaceAll(event.getMessage(), REGEX, value -> keepLastChars(value, 3) + QUOT);
     }
 }

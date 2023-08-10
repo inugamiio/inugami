@@ -1,0 +1,41 @@
+{
+  "FATAL" : {
+    "level" : 1000000,
+    "regex" : ".*fatal.*",
+    "color" : "#980101"
+  },
+  "ERROR" : {
+    "level" : 100000,
+    "regex" : ".*error.*",
+    "color" : "#d40000"
+  },
+  "WARN" : {
+    "level" : 10000,
+    "regex" : ".*warn.*",
+    "color" : "#fb8b00"
+  },
+  "INFO" : {
+    "level" : 1000,
+    "regex" : ".*info.*",
+    "color" : "#339900"
+  },
+  "DEBUG" : {
+    "level" : 100,
+    "regex" : ".*debug.*",
+    "color" : "#013397"
+  },
+  "TRACE" : {
+    "level" : 10,
+    "regex" : ".*trace.*",
+    "color" : "#666666"
+  },
+  "OFF" : {
+    "level" : 0,
+    "regex" : "^OFF$",
+    "color" : "#cccccf"
+  },
+  "UNDEFINE" : {
+    "level" : 1,
+    "color" : "#333333"
+  }
+}

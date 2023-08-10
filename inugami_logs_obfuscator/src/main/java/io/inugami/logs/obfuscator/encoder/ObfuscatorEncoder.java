@@ -29,9 +29,9 @@ import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.loggers.mdc.mapper.LoggerMdcMappingSPI;
 import io.inugami.api.loggers.mdc.mapper.MdcDynamicFieldSPI;
+import io.inugami.api.marshalling.JsonMarshaller;
 import io.inugami.api.models.JsonBuilder;
 import io.inugami.api.spi.SpiLoader;
-import io.inugami.commons.marshaling.JsonMarshaller;
 import io.inugami.logs.obfuscator.api.LogEventDto;
 import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
 import io.inugami.logs.obfuscator.appender.Configuration;
@@ -46,6 +46,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
+
+@SuppressWarnings({"java:S1181", "java:S108", "java:S1185", "java:S1185", "java:S1874"})
 public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> implements ContextAware, ApplicationLifecycleSPI {
 
 
@@ -58,7 +61,8 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     private              List<ObfuscatorSpi>       obfuscators;
     private              List<LoggerMdcMappingSPI> mdcMappers;
     private              List<MdcDynamicFieldSPI>  mdcDynamicFields;
-    private final static byte[]                    EMPTY          = "".getBytes(StandardCharsets.UTF_8);
+    public static final  String                    EMPTY_STR      = "";
+    private static final byte[]                    EMPTY          = EMPTY_STR.getBytes(StandardCharsets.UTF_8);
     private static final String                    THREAD_NAME    = "threadName";
     private static final String                    LOGGER_NAME    = "loggerName";
     private static final String                    LEVEL          = "level";
@@ -100,7 +104,10 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     @Override
     public byte[] encode(final ILoggingEvent event) {
         final LogEventDto currentEvent = buildEvent(event);
-        final String      message      = encodeMessage(currentEvent);
+        String            message      = encodeMessage(currentEvent);
+        if (message == null) {
+            message = EMPTY_STR;
+        }
 
         byte[] result = null;
 
@@ -181,8 +188,8 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     // RENDER AS JSON
     // =========================================================================
     private byte[] renderAsJson(final String message, final ILoggingEvent event) {
-        final String json = renderJson(message, event) + ObfuscatorEncoder.LINE;
-        return json == null ? EMPTY : json.getBytes(StandardCharsets.UTF_8);
+        final String json = EMPTY_STR + renderJson(message, event) + ObfuscatorEncoder.LINE;
+        return json.getBytes(StandardCharsets.UTF_8);
     }
 
     private String renderJson(final String message, final ILoggingEvent event) {
@@ -204,7 +211,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
         try {
             return JsonMarshaller.getInstance().getDefaultObjectMapper().writeValueAsString(result);
         } catch (final JsonProcessingException e) {
-            return null;
+            return EMPTY_STR;
         }
     }
 
@@ -240,38 +247,50 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
 
         if (additionalFieldsData != null) {
             result.putAll(additionalFieldsData);
-        } else if (additionalFieldsData == null && this.configuration.getAdditionalFields() != null) {
+        } else if (this.configuration.getAdditionalFields() != null) {
             initAdditonnalFieldDate();
             result.putAll(additionalFieldsData);
         }
 
-        if (mdcDynamicFields != null) {
-            for (final MdcDynamicFieldSPI mdcDynamicField : mdcDynamicFields) {
-                try {
-                    final Map<String, Serializable> data = mdcDynamicField.generate();
-                    if (data != null) {
-                        result.putAll(data);
-                    }
-                } catch (final Throwable e) {
-                }
-            }
-        }
-
-
-        if (mdc != null) {
-            for (final Map.Entry<String, String> entry : mdc.entrySet()) {
-                if (entry.getKey() != null && entry.getValue() != null) {
-                    final Serializable mdcValue = convertMdcValue(entry.getKey(), entry.getValue());
-                    if (mdcValue != null) {
-                        result.put(entry.getKey(), mdcValue);
-                    }
-                }
-            }
-        }
-
+        result.putAll(extractMdcDynamicFieldsSpiData());
+        result.putAll(extractMdcData(mdc));
 
         return result;
     }
+
+
+    private Map<String, Serializable> extractMdcDynamicFieldsSpiData() {
+        final Map<String, Serializable> result = new LinkedHashMap<>();
+        if (mdcDynamicFields == null) {
+            return result;
+        }
+        for (final MdcDynamicFieldSPI mdcDynamicField : mdcDynamicFields) {
+            try {
+                final Map<String, Serializable> data = mdcDynamicField.generate();
+                applyIfNotNull(data, result::putAll);
+            } catch (final Throwable e) {
+            }
+        }
+        return result;
+    }
+
+    private Map<String, Serializable> extractMdcData(final Map<String, String> mdc) {
+        final Map<String, Serializable> result = new LinkedHashMap<>();
+        if (mdc == null) {
+            return result;
+        }
+
+        for (final Map.Entry<String, String> entry : mdc.entrySet()) {
+            if (entry.getKey() == null || entry.getValue() == null) {
+                continue;
+            }
+            final Serializable mdcValue = convertMdcValue(entry.getKey(), entry.getValue());
+            applyIfNotNull(mdcValue, value -> result.put(entry.getKey(), value));
+        }
+
+        return result;
+    }
+
 
     private Serializable convertMdcValue(final String key, final String value) {
         LoggerMdcMappingSPI strategy = null;
@@ -283,7 +302,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
             }
         }
 
-        return strategy.convert(value);
+        return strategy == null ? null : strategy.convert(value);
     }
 
     private synchronized void initAdditonnalFieldDate() {

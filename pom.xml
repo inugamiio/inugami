@@ -223,7 +223,7 @@
         <org.apache.httpcomponents.version>4.5.13</org.apache.httpcomponents.version>
         <org.apache.commons.io.version>2.7</org.apache.commons.io.version>
         <org.apache.commons.cli.version>1.4</org.apache.commons.cli.version>
-        <org.apache.commons.codec.version>1.9</org.apache.commons.codec.version>
+        <org.apache.commons.codec.version>1.16.0</org.apache.commons.codec.version>
         <!--[ Mapping ]++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <com.thoughtworks.xstream.version>1.4.20</com.thoughtworks.xstream.version>
 
@@ -273,6 +273,8 @@
             **/webapp/fonts/*,
             **/webapp/mock/**/*,
             **/webapp/js/app/core/*.js
+            **org/jboss/resteasy/logging/*,
+            **/engine/js/*
         </sonar.exclusions>
     </properties>
 
@@ -282,21 +284,11 @@
     ======================================================================== -->
     <modules>
         <module>inugami_logs_obfuscator</module>
-        <module>inugami_api</module>
-        <module>inugami_api_core</module>
-        <module>inugami_commons</module>
-        <module>inugami_commons_spring</module>
-        <module>inugami_commons_test</module>
+        <module>inugami_apis</module>
+        <module>inugami_common</module>
+        <module>inugami_configurations</module>
         <module>inugami_monitoring</module>
-        <module>inugami_configuration_tools</module>
-        <module>inugami_configuration_test</module>
-        <module>inugami_configuration</module>
-        <module>inugami_core_tools</module>
-        <module>inugami_core_cdi</module>
-        <module>inugami_core</module>
-        <module>inugami_core_test</module>
-        <module>inugami_core_security</module>
-        <module>inugami_core_alerting_test</module>
+        <module>inugami_cores</module>
         <module>inugami_data</module>
         <module>inugami_plugins</module>
         <module>inugami_webapp</module>
@@ -1027,6 +1019,7 @@
             <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             :: OTHERS
             :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>
                 <artifactId>quartz</artifactId>
@@ -1361,6 +1354,8 @@
                     <excludes>
                         <exclude>**/*DTOBuilder*</exclude>
                         <exclude>**/*EntityBuilder*</exclude>
+                        <exclude>**org/jboss/resteasy/logging/*</exclude>
+                        <exclude>**/engine/js/*</exclude>
                     </excludes>
                     <formats>
                         <format>XML</format>

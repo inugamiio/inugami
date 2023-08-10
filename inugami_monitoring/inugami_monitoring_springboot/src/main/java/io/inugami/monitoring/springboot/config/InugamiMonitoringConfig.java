@@ -42,6 +42,7 @@ import org.springframework.context.annotation.Import;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+@SuppressWarnings({"java:S1450"})
 @Import({
         IoLogFilter.class,
         SpringRestMethodResolver.class,
@@ -64,7 +65,7 @@ public class InugamiMonitoringConfig {
         config.setHeaders(Headers.buildFromConfig(ConfigConfiguration.CONFIGURATION));
         monitoringBootstrap = new MonitoringBootstrap();
 
-        initializeInterceptors(monitoringBootstrap);
+        initializeInterceptors();
         monitoringBootstrap.contextInitialized();
         return monitoringBootstrap;
     }
@@ -106,11 +107,12 @@ public class InugamiMonitoringConfig {
     // ========================================================================
     // TOOLS
     // ========================================================================
-    private void initializeInterceptors(final MonitoringBootstrap monitoringBootstrap) {
+    private void initializeInterceptors() {
 
         addInterceptorIfNoPresent(MdcInterceptor.class, ctx -> ctx.getInterceptors().add(new MdcInterceptor()));
         addInterceptorIfNoPresent(IoLogInterceptor.class,
-                                  ctx -> ctx.getInterceptors().add(new IoLogInterceptor(ConfigConfiguration.CONFIGURATION)));
+                                  ctx -> ctx.getInterceptors()
+                                            .add(new IoLogInterceptor(ConfigConfiguration.CONFIGURATION)));
 
 
     }

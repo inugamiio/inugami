@@ -25,17 +25,22 @@ public class SpringDefaultRequestPath implements RequestPath {
     private SpringDefaultRequestPath(RequestPath requestPath, String contextPath) {
         this.fullPath = requestPath;
         this.contextPath = initContextPath(this.fullPath, contextPath);
-        this.pathWithinApplication = extractPathWithinApplication(this.fullPath, this.contextPath);
+        this.pathWithinApplication = this.contextPath == null ? null : extractPathWithinApplication(this.fullPath,
+                                                                                                    this.contextPath);
     }
 
     private static PathContainer initContextPath(PathContainer path, @Nullable String contextPath) {
-        if (!StringUtils.hasText(contextPath) || "/".equals(path)) {
+        if (path == null) {
+            return null;
+        }
+
+        if (!StringUtils.hasText(contextPath) || "/".equals(path.value())) {
             return PathContainer.parsePath("");
         }
 
         validateContextPath(path.value(), contextPath);
 
-        int length = contextPath.length();
+        int length  = contextPath.length();
         int counter = 0;
 
         for (int i = 0; i < path.elements().size(); i++) {
@@ -47,23 +52,24 @@ public class SpringDefaultRequestPath implements RequestPath {
         }
 
         // Should not happen..
-        throw new IllegalStateException("Failed to initialize contextPath '" + contextPath + "'" +
-                                                " for requestPath '" + path.value() + "'");
+        throw new IllegalStateException(
+                "Failed to initialize contextPath '" + contextPath + "'" + " for requestPath '" + path.value() + "'");
     }
 
     private static void validateContextPath(String fullPath, String contextPath) {
         int length = contextPath.length();
         if (contextPath.charAt(0) != '/' || contextPath.charAt(length - 1) == '/') {
-            throw new IllegalArgumentException("Invalid contextPath: '" + contextPath + "': " +
-                                                       "must start with '/' and not end with '/'");
+            throw new IllegalArgumentException(
+                    "Invalid contextPath: '" + contextPath + "': " + "must start with '/' and not end with '/'");
         }
         if (!fullPath.startsWith(contextPath)) {
-            throw new IllegalArgumentException("Invalid contextPath '" + contextPath + "': " +
-                                                       "must match the start of requestPath: '" + fullPath + "'");
+            throw new IllegalArgumentException(
+                    "Invalid contextPath '" + contextPath + "': " + "must match the start of requestPath: '" +
+                    fullPath + "'");
         }
         if (fullPath.length() > length && fullPath.charAt(length) != '/') {
             throw new IllegalArgumentException("Invalid contextPath '" + contextPath + "': " +
-                                                       "must match to full path segments for requestPath: '" + fullPath + "'");
+                                               "must match to full path segments for requestPath: '" + fullPath + "'");
         }
     }
 
@@ -111,9 +117,8 @@ public class SpringDefaultRequestPath implements RequestPath {
         if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        SpringDefaultRequestPath otherPath= (SpringDefaultRequestPath) other;
-        return (this.fullPath.equals(otherPath.fullPath) &&
-                this.contextPath.equals(otherPath.contextPath) &&
+        SpringDefaultRequestPath otherPath = (SpringDefaultRequestPath) other;
+        return (this.fullPath.equals(otherPath.fullPath) && this.contextPath.equals(otherPath.contextPath) &&
                 this.pathWithinApplication.equals(otherPath.pathWithinApplication));
     }
 

@@ -1,60 +1,50 @@
 /* --------------------------------------------------------------------
- *  Inugami  
+ *  Inugami
  * --------------------------------------------------------------------
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.webapp.rest;
 
-import javax.inject.Inject;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-
-import org.apache.commons.lang3.StringUtils;
 import io.inugami.core.security.commons.services.SecurityTokenService;
 import io.inugami.core.services.sse.SseService;
-import org.picketlink.idm.model.Account;
+import org.apache.commons.lang3.StringUtils;
 import org.picketlink.idm.model.basic.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 
 /**
  * SseRest
- * 
+ *
  * @author patrick_guillerm
  * @since 22 sept. 2016
  */
 @Path("sse")
 public class SseRest {
-    
+
     // =========================================================================
     // METHODS
     // =========================================================================
-    private static final Logger  LOGGER = LoggerFactory.getLogger(SseRest.class);
-    
+
     @Inject
-    private HttpServletRequest   request;
-    
+    private HttpServletRequest request;
+
     @Inject
     private SecurityTokenService securityTokenService;
-    
+
     // =========================================================================
     // METHODS
     // =========================================================================
@@ -71,16 +61,14 @@ public class SseRest {
             ip = request.getRemoteAddr();
         }
         String agent = request.getHeader("User-Agent");
-        
-        User user = isEmpty(token) ? null : (User) securityTokenService.getUser(token);
-        SseService.registerSocket(user == null ? null : user.getLoginName(), ip, agent,uuid);
-    }
-    
 
-    
-    
+        User user = isEmpty(token) ? null : (User) securityTokenService.getUser(token);
+        SseService.registerSocket(user == null ? null : user.getLoginName(), ip, agent, uuid);
+    }
+
+
     private boolean isEmpty(String token) {
         return StringUtils.isEmpty(token);
     }
-    
+
 }

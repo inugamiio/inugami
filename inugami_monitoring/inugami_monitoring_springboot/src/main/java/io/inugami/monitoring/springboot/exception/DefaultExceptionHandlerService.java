@@ -2,9 +2,9 @@ package io.inugami.monitoring.springboot.exception;
 
 import io.inugami.api.exceptions.*;
 import io.inugami.api.loggers.Loggers;
+import io.inugami.api.marshalling.JsonMarshaller;
 import io.inugami.api.monitoring.MdcService;
 import io.inugami.api.spi.SpiLoader;
-import io.inugami.commons.marshaling.JsonMarshaller;
 import io.inugami.commons.spring.exception.ExceptionHandlerService;
 import io.inugami.monitoring.springboot.api.ProblemAdditionalFieldBuilder;
 import lombok.AllArgsConstructor;
@@ -25,10 +25,10 @@ import org.zalando.problem.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"java:S1181", "java:S108"})
 @Slf4j
 @Component
 @Builder
@@ -65,7 +65,8 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
 
     @PostConstruct
     public DefaultExceptionHandlerService init() {
-        problemAdditionalFieldBuilders = SpiLoader.getInstance().loadSpiServicesByPriority(ProblemAdditionalFieldBuilder.class);
+        problemAdditionalFieldBuilders = SpiLoader.getInstance()
+                                                  .loadSpiServicesByPriority(ProblemAdditionalFieldBuilder.class);
         errorCodeResolvers = SpiLoader.getInstance().loadSpiServicesByPriority(ErrorCodeResolver.class);
         return this;
     }
@@ -82,7 +83,10 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         try {
             final PrintWriter writer = response.getWriter();
-            final String      json   = JsonMarshaller.getInstance().getDefaultObjectMapper().writer().writeValueAsString(result.getBody());
+            final String json = JsonMarshaller.getInstance()
+                                              .getDefaultObjectMapper()
+                                              .writer()
+                                              .writeValueAsString(result.getBody());
             writer.write(json);
         } catch (final Throwable e) {
             log.error(e.getMessage(), e);
@@ -105,8 +109,7 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
                                                      .withStatus(currentStatus);
 
         if (showAllDetail) {
-            problemBuilder.withType(buildUri(errorCode))
-                          .withTitle(errorCode.getMessage())
+            problemBuilder.withTitle(errorCode.getMessage())
                           .withDetail(errorCode.getMessageDetail() == null ? EMPTY : errorCode.getMessageDetail())
                           .with(APPLICATION, applicationName)
                           .with(VERSION, applicationVersion)
@@ -139,7 +142,7 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
                 Loggers.XLLOG.error("{} : {}", errorCode.getMessage(), errorCode.getMessageDetail());
             }
         }
-        final MultiValueMap headers = new HttpHeaders();
+        final MultiValueMap<String, String> headers = new HttpHeaders();
         headers.add(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
         return new ResponseEntity<>(problem, headers, HttpStatus.valueOf(currentStatus.getStatusCode()));
@@ -192,10 +195,6 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
         return result;
     }
 
-
-    private URI buildUri(final ErrorCode errorCode) {
-        return null;
-    }
 
     List<FieldError> resolveField(final ErrorCode errorCode, final Throwable exception) {
         final List<FieldError> result = new ArrayList<>();

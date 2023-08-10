@@ -25,9 +25,8 @@ import io.inugami.api.models.JsonBuilder;
 import io.inugami.commons.security.SecurityTools;
 import io.inugami.core.cdi.services.dao.transactions.TransactionRunner;
 import io.inugami.data.commons.exceptions.DaoValidatorException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -50,8 +49,9 @@ import java.util.stream.Collectors;
  * @author patrick_guillerm
  * @since 11 janv. 2018
  */
-@SuppressWarnings({"java:S2077"})
+@SuppressWarnings({"java:S2077", "java:S119", "java:S1130"})
 @Named
+@Slf4j
 public class DaoSql implements Dao {
 
     // =========================================================================
@@ -59,13 +59,11 @@ public class DaoSql implements Dao {
     // =========================================================================
     private static final long serialVersionUID = -79030053099256219L;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Dao.class);
-
     protected static final String SQL_COUNT_BEGIN = "SELECT COUNT(e.id) ";
 
     protected static final String SQL_COUNT = SQL_COUNT_BEGIN + " FROM %s e";
 
-    private final int limiteMaxResult = 5000;
+    private static final int LIMIT_MAX_RESULT = 5000;
 
     @Inject
     private transient EntityManager entityManager;
@@ -91,12 +89,9 @@ public class DaoSql implements Dao {
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
     E getByUid(final Class<? extends E> type, final PK uid) throws DaoException {
-        //@formatter:on
-        LOGGER.debug("getByUid");
         final E entity = getEntityInstance(type);
         entity.setUid(uid);
         return get(entity);
@@ -105,11 +100,10 @@ public class DaoSql implements Dao {
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
     List<E> getByUids(final Class<? extends E> type, final List<PK> uids) throws DaoException {
-        //@formatter:on
+
         final E entity = getEntityInstance(type);
 
         final CriteriaBuilder            criteria = entityManager.getCriteriaBuilder();
@@ -152,12 +146,9 @@ public class DaoSql implements Dao {
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
     E get(final E entity) throws DaoException {
-        //@formatter:on
-        LOGGER.debug("get entity");
         E result = null;
 
         Serializable id = null;
@@ -181,12 +172,9 @@ public class DaoSql implements Dao {
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
     void refresh(final E entity) throws DaoException {
-        //@formatter:on
-        LOGGER.debug("refresh");
         if (entityManager.contains(entity)) {
             transactionRunner.process(() -> entityManager.refresh(entity));
         }
@@ -199,12 +187,10 @@ public class DaoSql implements Dao {
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
+
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
     void save(final E entity, final Class<? extends E> type) throws DaoException {
-        //@formatter:on
-        LOGGER.debug("save entity");
         checkIfObjectNull(entity);
         onBeforeSave(entity);
         validateEntity(entity);
@@ -215,12 +201,9 @@ public class DaoSql implements Dao {
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
     void save(final List<E> listEntity, final Class<? extends E> type) throws DaoException {
-        //@formatter:on
-        LOGGER.debug("save list entities");
         checkIfObjectNull(listEntity);
         for (final E entity : listEntity) {
             this.onBeforeSave(entity);
@@ -252,12 +235,9 @@ public class DaoSql implements Dao {
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
     E merge(final E entity, final Class<? extends E> type) throws DaoException {
-        //@formatter:on
-        LOGGER.debug("merge entity");
         checkIfObjectNull(entity);
         onBeforeMerge(entity);
         validateEntity(entity);
@@ -270,12 +250,10 @@ public class DaoSql implements Dao {
     /**
      * {@inheritDoc}
      */
-    //@formatter:off    
+
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
     void merge(final List<E> listEntity, final Class<? extends E> type) throws DaoException {
-        //@formatter:on
-        LOGGER.debug("merge list entities");
         checkIfObjectNull(listEntity);
         for (final E entity : listEntity) {
             this.onBeforeMerge(entity);
@@ -343,19 +321,17 @@ public class DaoSql implements Dao {
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
+
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
     List<E> findAll(final Class<? extends E> type) throws DaoException {
-        //@formatter:on
-        LOGGER.debug("find all");
 
         final Query query = entityManager.createQuery("from " + StringEscapeUtils.escapeSql(type.getName()));
 
         List<E> result = null;
         if (query != null) {
             result = query.getResultList();
-            query.setMaxResults(limiteMaxResult);
+            query.setMaxResults(LIMIT_MAX_RESULT);
         }
         return result;
     }
@@ -363,14 +339,14 @@ public class DaoSql implements Dao {
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
-    List<E> find(final Class<? extends E> type, final int first, final int pageSize, final String field, final String sortOrder, final Map<String, String> filters) throws DaoException {
-        //@formatter:on
-        final Object[] params = {type, first, pageSize, field, sortOrder, filters};
-        LOGGER.debug("find (type:{}|first:{}|pageSize:{}|field:{}|sortOrder:{}|filters:{})", params);
-
+    List<E> find(final Class<? extends E> type,
+                 final int first,
+                 final int pageSize,
+                 final String field,
+                 final String sortOrder,
+                 final Map<String, String> filters) throws DaoException {
         final String sortField = getSortField(field);
         final Query  query     = entityManager.createQuery(queryFind(sortField, sortOrder, filters, type));
         query.setFirstResult(first);
@@ -386,24 +362,18 @@ public class DaoSql implements Dao {
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
     int count(final Class<? extends E> type) throws DaoException {
-        //@formatter:on
-        LOGGER.debug("count");
         return count(null, type);
     }
 
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
     int count(final Map<String, String> filters, final Class<? extends E> type) throws DaoException {
-        //@formatter:on
-        LOGGER.debug("count(filters:{})", filters);
         int result = 0;
 
         Query query = null;
@@ -429,16 +399,11 @@ public class DaoSql implements Dao {
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
     void delete(final E entity, final Class<? extends E> type) throws DaoEntityNotFoundException, DaoException {
-        //@formatter:on
-        LOGGER.debug("delete");
         if (entityManager.contains(entity)) {
-            transactionRunner.process(() -> {
-                entityManager.remove(entity);
-            });
+            transactionRunner.process(() -> entityManager.remove(entity));
 
         } else {
             // could be a delete on a transient instance
@@ -448,7 +413,7 @@ public class DaoSql implements Dao {
                 transactionRunner.process(() -> entityManager.remove(entityRef));
 
             } else {
-                LOGGER.warn("Attempt to delete an instance that is not present in the database: {}", entity);
+                log.warn("Attempt to delete an instance that is not present in the database: {}", entity);
             }
         }
         flush();
@@ -457,12 +422,9 @@ public class DaoSql implements Dao {
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
     void delete(final PK uid, final Class<? extends E> type) throws DaoEntityNotFoundException, DaoException {
-        //@formatter:on
-        LOGGER.debug("delete(uid:{}", uid);
         final E entity = getByUid(type, uid);
         if (entity != null) {
             delete(entity, type);
@@ -472,26 +434,21 @@ public class DaoSql implements Dao {
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
     void delete(final List<E> entities, final Class<? extends E> type) throws DaoEntityNotFoundException, DaoException {
-        //@formatter:on     
         checkIfObjectNull(entities);
 
-        transactionRunner.process(() -> {
-            entities.forEach(entityManager::remove);
-        });
+        transactionRunner.process(() -> entities.forEach(entityManager::remove));
     }
 
     /**
      * {@inheritDoc}
      */
-    //@formatter:off
     @Override
     public <E extends Identifiable<PK>, PK extends Serializable>
-    void deleteByIds(final List<PK> uids, final Class<? extends E> type) throws DaoEntityNotFoundException, DaoException {
-        //@formatter:on
+    void deleteByIds(final List<PK> uids,
+                     final Class<? extends E> type) throws DaoEntityNotFoundException, DaoException {
         checkIfObjectNull(uids);
 
         final List<E> entities = new ArrayList<>();
@@ -550,17 +507,17 @@ public class DaoSql implements Dao {
      * @return instance of entity
      * @throws DaoException if clazz parameter isn't same than type E
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "java:S1874"})
     protected <E extends Identifiable<?>> E getEntityInstance(final Class<?> clazz) throws DaoException {
         E result = null;
 
         try {
             result = (E) clazz.newInstance();
         } catch (final InstantiationException | IllegalAccessException e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.error(e.getMessage(), e);
+            if (log.isDebugEnabled()) {
+                log.error(e.getMessage(), e);
             } else {
-                LOGGER.error(e.getMessage());
+                log.error(e.getMessage());
 
             }
             throw new DaoException(e.getMessage(), e);

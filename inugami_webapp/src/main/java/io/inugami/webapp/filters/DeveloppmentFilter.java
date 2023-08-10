@@ -1,41 +1,20 @@
 /* --------------------------------------------------------------------
- *  Inugami  
+ *  Inugami
  * --------------------------------------------------------------------
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.webapp.filters;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import io.inugami.api.constants.JvmKeyValues;
 import io.inugami.commons.files.FilesUtils;
@@ -44,39 +23,52 @@ import io.inugami.core.context.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
+
 /**
  * DeveloppmentFilter
- * 
+ *
  * @author patrick_guillerm
  * @since 27 nov. 2017
  */
-@WebFilter(asyncSupported = true, value = { "*" })
+@SuppressWarnings({"java:S3655", "java:S108"})
+@WebFilter(asyncSupported = true, value = {"*"})
 public class DeveloppmentFilter implements Filter {
-    
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final Logger            LOGGER               = LoggerFactory.getLogger(DeveloppmentFilter.class.getSimpleName());
-    
-    private static final Map<String, File> RESOURCES_CACHES     = new ConcurrentHashMap<>();
-    
-    private static final File              NOT_PLUGIN_RESOURCES = new File(".notPluginResource");
-    
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeveloppmentFilter.class.getSimpleName());
+
+    private static final Map<String, File> RESOURCES_CACHES = new ConcurrentHashMap<>();
+
+    private static final File NOT_PLUGIN_RESOURCES = new File(".notPluginResource");
+
     //@formatter:off
     private static final  String[] EXCLUDE_PATHS = { "/rest/"};
     //@formatter:on
-    
+
     private final List<Plugin> plugins = new ArrayList<>();
-    
-    private boolean            enable  = false;
-    
-    private Pattern            banUriPattern;
-    
-    private String             urlRegex;
-    
+
+    private boolean enable = false;
+
+    private Pattern banUriPattern;
+
+    private String urlRegex;
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
+
     /**
      * read resource on development server mode. For enable this method, plugin
      * must be compile on development mode, with specific MANIFEST. Workspace
@@ -99,7 +91,7 @@ public class DeveloppmentFilter implements Filter {
                .filter(plugin->workspaceExists(plugin.getManifest().getWorkspace()))
                .forEach(plugins::add);
         //@formatter:on
-        
+
         if (!plugins.isEmpty()) {
             final StringBuilder regex = new StringBuilder();
             regex.append('(');
@@ -121,12 +113,12 @@ public class DeveloppmentFilter implements Filter {
             regex.append(')');
             regex.append("|");
             regex.append("(.*[.].*)");
-            
+
             urlRegex = regex.toString();
         }
-        
+
     }
-    
+
     // =========================================================================
     // METHODS
     // =========================================================================
@@ -136,19 +128,17 @@ public class DeveloppmentFilter implements Filter {
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
         if (enable && isInterceptableResource(httpRequest.getRequestURI())) {
             final String uriResource = buildUriResource(httpRequest.getRequestURI(), httpRequest.getContextPath());
-            final File resource = searchResources(uriResource);
+            final File   resource    = searchResources(uriResource);
             if (resource == null) {
                 chain.doFilter(request, response);
-            }
-            else {
+            } else {
                 intercept(resource, (HttpServletResponse) response);
             }
-        }
-        else {
+        } else {
             chain.doFilter(request, response);
         }
     }
-    
+
     // =========================================================================
     // PRIVATE
     // =========================================================================
@@ -159,15 +149,15 @@ public class DeveloppmentFilter implements Filter {
         }
         return result;
     }
-    
+
     private boolean isBanUri(final String requestURI) {
         return banUriPattern.matcher(requestURI).matches();
     }
-    
+
     private boolean matchUriWithPluginResources(final String requestURI) {
         return notInExcluseUri(requestURI) && Pattern.compile(urlRegex).matcher(requestURI).matches();
     }
-    
+
     private boolean notInExcluseUri(final String requestURI) {
         boolean result = false;
         for (final String excludePath : EXCLUDE_PATHS) {
@@ -178,7 +168,7 @@ public class DeveloppmentFilter implements Filter {
         }
         return !result;
     }
-    
+
     // =========================================================================
     // SEARCH RESOURCES
     // =========================================================================
@@ -189,10 +179,10 @@ public class DeveloppmentFilter implements Filter {
         }
         return NOT_PLUGIN_RESOURCES == resource ? null : resource;
     }
-    
+
     private File processSearchInPlugins(final String resourceUri) {
         File result = NOT_PLUGIN_RESOURCES;
-        
+
         for (final Plugin plugin : plugins) {
             final File currentPath = FilesUtils.buildFile(plugin.getWorkspace(),
                                                           "src/main/resources/META-INF/resources", resourceUri);
@@ -203,10 +193,11 @@ public class DeveloppmentFilter implements Filter {
         }
         return result;
     }
-    
+
     // =========================================================================
     // INTERCEPT RESOURCES
     // =========================================================================
+
     /**
      * read resource on development server mode. For enable this method, plugin
      * must be compile on development mode, with specific MANIFEST. Workspace
@@ -218,52 +209,33 @@ public class DeveloppmentFilter implements Filter {
         response.setContentType(FilesUtils.getContentType(resource));
         response.addIntHeader("Expires", 0);
         response.addHeader("Cache-Control", "no-store, must-revalidate");
-        
-        try {
-            final OutputStream out = response.getOutputStream();
-            
-            InputStream ios = null;
-            try {
+
+        try (OutputStream out = response.getOutputStream()) {
+            try (InputStream ios = new FileInputStream(resource)) {
                 final byte[] buffer = new byte[4096];
-                ios = new FileInputStream(resource);
+
                 int read = 0;
                 while ((read = ios.read(buffer)) != -1) {
                     out.write(buffer, 0, read);
                 }
             }
-            finally {
-                try {
-                    if (out != null)
-                        out.close();
-                }
-                catch (final IOException e) {
-                }
-                
-                try {
-                    if (ios != null)
-                        ios.close();
-                }
-                catch (final IOException e) {
-                }
-            }
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
-        
+
     }
-    
+
     // =========================================================================
     // TOOLS
     // =========================================================================
     private String buildUriResource(final String requestURI, final String contextPath) {
         return requestURI.length() < contextPath.length() ? null : requestURI.substring(contextPath.length());
     }
-    
+
     private boolean workspaceExists(final File workspace) {
         return workspace.exists() && workspace.canRead();
     }
-    
+
     // =========================================================================
     // DESTROY
     // =========================================================================

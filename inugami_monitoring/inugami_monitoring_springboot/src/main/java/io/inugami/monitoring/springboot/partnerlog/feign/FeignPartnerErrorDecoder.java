@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@SuppressWarnings({"java:S2629"})
 @Getter
 @RequiredArgsConstructor
 public class FeignPartnerErrorDecoder implements ErrorDecoder {
@@ -57,7 +58,9 @@ public class FeignPartnerErrorDecoder implements ErrorDecoder {
     }
 
 
-    private FeignPartnerErrorResolver resolveFeignPartnerErrorResolver(final Response wrappedResponse, final String feignClient, final String urlTemplate) {
+    private FeignPartnerErrorResolver resolveFeignPartnerErrorResolver(final Response wrappedResponse,
+                                                                       final String feignClient,
+                                                                       final String urlTemplate) {
         FeignPartnerErrorResolver result = null;
         if (errorResolvers != null) {
             for (final FeignPartnerErrorResolver resolver : errorResolvers) {
@@ -74,7 +77,10 @@ public class FeignPartnerErrorDecoder implements ErrorDecoder {
         return result;
     }
 
-    private ErrorCode resolveErrorCode(final FeignPartnerErrorResolver resolver, final Response wrappedResponse, final String feignClient, final String urlTemplate) {
+    private ErrorCode resolveErrorCode(final FeignPartnerErrorResolver resolver,
+                                       final Response wrappedResponse,
+                                       final String feignClient,
+                                       final String urlTemplate) {
         final ErrorCode result = resolver.resolve(wrappedResponse, feignClient, urlTemplate);
         return result != null ? result : defaultResolver.resolve(wrappedResponse, feignClient, urlTemplate);
     }
