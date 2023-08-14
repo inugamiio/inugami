@@ -1,0 +1,7 @@
+warningCode:	WARN-1
+warningMessage:	token will expired
+warningMessageDetail:	token : bb895294-efe7-484b-b670-14d004eaf461
+warningType:	security
+warningCategory:	GET
+warningDomain:	user
+warningSubDomain:	search

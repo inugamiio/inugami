@@ -34,7 +34,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @Getter
-public class Chrono implements Serializable {
+public final class Chrono implements Serializable {
 
     // =========================================================================
     // ATTRIBUTES

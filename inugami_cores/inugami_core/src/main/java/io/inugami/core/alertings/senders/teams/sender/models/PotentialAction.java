@@ -28,6 +28,7 @@ import java.io.Serializable;
  * @since 21 août 2018
  */
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 @Builder(toBuilder = true)
 @Setter
 @Getter
@@ -42,8 +43,5 @@ public class PotentialAction implements Serializable {
 
     @EqualsAndHashCode.Include
     private String name;
-
-    public String toString() {
-        return "PotentialAction(type=" + this.getType() + ", name=" + this.getName() + ")";
-    }
+    
 }

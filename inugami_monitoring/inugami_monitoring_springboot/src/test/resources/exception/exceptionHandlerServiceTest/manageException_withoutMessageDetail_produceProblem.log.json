@@ -14,14 +14,17 @@
     "payload" : "null",
     "errorStatus" : "500",
     "errorSubDomain" : "null",
+    "category" : "user",
     "messageDetail" : "null"
-  }
+  },
+  "message" : ""
 }, {
   "level" : "ERROR",
   "loggerName" : "XLLOG",
   "mdc" : {
     "rollback" : "false",
     "retryable" : "false",
+    "traceId" : "b69e2878-2e17-4877-932a-6f7ef7966c2b",
     "exploitationError" : "true",
     "errorDomain" : "null",
     "errorType" : "technical",
@@ -32,7 +35,10 @@
     "field" : "user.email",
     "payload" : "null",
     "errorStatus" : "500",
+    "correlation_id" : "c7067f7e-364c-4a73-a198-92f56cddb2ad",
     "errorSubDomain" : "null",
+    "category" : "user",
     "messageDetail" : "null"
-  }
+  },
+  "message" : ""
 } ]

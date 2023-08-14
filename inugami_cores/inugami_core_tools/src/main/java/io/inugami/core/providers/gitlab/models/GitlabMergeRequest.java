@@ -28,10 +28,10 @@ import java.io.Serializable;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class GitlabMergeRequest implements Serializable {
+public final class GitlabMergeRequest implements Serializable {
 
     private static final long serialVersionUID = -3023531764346308334L;
-    
+
     @JSON(name = "created_at")
     private String      creationDate;
     @JSON(name = "project_id")

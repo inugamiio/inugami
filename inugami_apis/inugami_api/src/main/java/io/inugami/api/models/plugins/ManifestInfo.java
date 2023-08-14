@@ -35,7 +35,7 @@ import java.net.URL;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ManifestInfo implements Serializable {
+public final class ManifestInfo implements Serializable {
 
     // =========================================================================
     // ATTRIBUTES
@@ -59,6 +59,6 @@ public class ManifestInfo implements Serializable {
         workspace = manifest.getWorkspace();
         this.manifestUrl = manifestUrl;
     }
-    
+
 
 }

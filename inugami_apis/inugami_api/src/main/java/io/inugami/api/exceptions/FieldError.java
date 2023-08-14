@@ -1,16 +1,19 @@
 package io.inugami.api.exceptions;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder(toBuilder = true)
-@Data
-public class FieldError {
+@Setter
+@Getter
+
+public final class FieldError {
+    @EqualsAndHashCode.Include
     private String name;
+    @EqualsAndHashCode.Include
     private String errorCode;
     private String message;
     private String messageDetail;

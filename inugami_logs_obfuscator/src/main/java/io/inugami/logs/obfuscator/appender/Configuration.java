@@ -1,34 +1,36 @@
 package io.inugami.logs.obfuscator.appender;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.inugami.api.marshalling.JsonMarshaller;
 import lombok.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @ToString(onlyExplicitlyIncluded = true)
 @Setter
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class Configuration {
     @ToString.Include
-    private String  mode;
+    private String              mode;
     @ToString.Include
-    private boolean encodeAsJson;
+    private boolean             encodeAsJson;
     @ToString.Include
-    private String  additionalFields;
-
+    private String              additionalFields;
     @ToString.Include
     private String              file;
     @ToString.Include
     private String              host;
-    private Map<String, String> headers;
-
-    private Integer timeout;
-    private Integer timeToLive;
-    private Integer maxConnections;
-    private Integer maxPerRoute;
-    private Integer socketTimeout;
+    private String              headers;
+    private Map<String, String> headersMap;
+    private Integer             timeout;
+    private Integer             timeToLive;
+    private Integer             maxConnections;
+    private Integer             maxPerRoute;
+    private Integer             socketTimeout;
 
 
     public Configuration(final String encodeAsJson, final String additionalFields) {
@@ -41,4 +43,13 @@ public class Configuration {
         this.additionalFields = additionalFields;
     }
 
+    public void init() {
+        if (headers != null) {
+            try {
+                headersMap = JsonMarshaller.getInstance().getDefaultObjectMapper().readValue(headers, Map.class);
+            } catch (JsonProcessingException e) {
+                headersMap = new HashMap<>();
+            }
+        }
+    }
 }

@@ -14,6 +14,8 @@
     "payload" : "null",
     "errorStatus" : "150",
     "errorSubDomain" : "null",
+    "category" : "user",
     "messageDetail" : "null"
-  }
+  },
+  "message" : ""
 } ]

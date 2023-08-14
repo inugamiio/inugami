@@ -75,8 +75,10 @@ public class PropertyFeatureInterceptor implements FeatureInterceptor, Applicati
     @Override
     public void assertAllowsToInvoke(final FeatureContext featureContext) {
         Boolean      enabled     = null;
-        final String prefix      = featureContext.getPropertyPerfix() == null ? "" : featureContext.getPropertyPerfix() + ".";
-        final String featureName = featureContext.getFeatureName() == null ? featureContext.getMethod().getName() : featureContext.getFeatureName();
+        final String prefix      =
+                featureContext.getPropertyPrefix() == null ? "" : featureContext.getPropertyPrefix() + ".";
+        final String featureName = featureContext.getFeatureName() == null ? featureContext.getMethod()
+                                                                                           .getName() : featureContext.getFeatureName();
         final String propertyKey = prefix + featureName + ".enabled";
 
         enabled = CACHE.get(propertyKey);

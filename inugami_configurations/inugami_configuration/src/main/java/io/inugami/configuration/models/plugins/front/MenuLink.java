@@ -33,8 +33,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Setter
 @Getter
-public class MenuLink implements Serializable {
-    
+public final class MenuLink implements Serializable {
+
     private static final long serialVersionUID = 8016174687361342718L;
 
     @EqualsAndHashCode.Include

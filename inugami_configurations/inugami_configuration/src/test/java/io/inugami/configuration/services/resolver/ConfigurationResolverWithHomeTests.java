@@ -67,7 +67,7 @@ class ConfigurationResolverWithHomeTests {
         assertFalse(configs.isEmpty(), "no one plugin configuration in result set!");
 
         assertEquals(3, configs.size());
-        configs.sort((r, v) -> r.getGav().buildHash().compareTo(v.getGav().buildHash()));
+        configs.sort((r, v) -> r.getGav().getHash().compareTo(v.getGav().getHash()));
         //@formatter:off
         final String[] gavs = { 
             "io.inugami:inugami_configuration:x.y.z",

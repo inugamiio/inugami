@@ -12,7 +12,7 @@ import static io.inugami.api.exceptions.Asserts.assertNotNull;
 import static io.inugami.api.exceptions.Asserts.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SuppressWarnings({"java:S3011"})
+@SuppressWarnings({"java:S3011", "java:S1181"})
 @Slf4j
 @UtilityClass
 public final class UnitTestHelperUtilityClass {

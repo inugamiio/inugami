@@ -41,7 +41,7 @@ import java.util.Map;
 @Setter
 @Getter
 @Builder(toBuilder = true)
-public class HttpConnectorResult implements Serializable {
+public final class HttpConnectorResult implements Serializable {
 
     // =========================================================================
     // ATTRIBUTES

@@ -12,21 +12,22 @@ public final class AssertEquals {
     // ========================================================================
     // ATTRIBUTES
     // ========================================================================
-    private static final String DEFAULT_MESSAGE = "object must be equals";
+    private static final String       DEFAULT_MESSAGE = "object must be equals";
+    public static final  AssertEquals INSTANCE        = new AssertEquals();
 
     // ========================================================================
     // API
     // ========================================================================
-    public static void assertEquals(final Object ref,
-                                    final Object value) {
+    public void assertEquals(final Object ref,
+                             final Object value) {
         assertEquals(DEFAULT_MESSAGE,
                      ref,
                      value);
     }
 
-    public static void assertEquals(final String message,
-                                    final Object ref,
-                                    final Object value) {
+    public void assertEquals(final String message,
+                             final Object ref,
+                             final Object value) {
         boolean result = ref == value;
 
         if (!result && (ref != null)) {
@@ -35,13 +36,13 @@ public final class AssertEquals {
 
         if (!result) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
-            AssertCommons.throwException(msg);
+            AssertCommons.INSTANCE.throwException(msg);
         }
     }
 
-    public static void assertEquals(final Supplier<String> messageProducer,
-                                    final Object ref,
-                                    final Object value) {
+    public void assertEquals(final Supplier<String> messageProducer,
+                             final Object ref,
+                             final Object value) {
         boolean result = ref == value;
 
         if (!result && (ref != null)) {
@@ -49,13 +50,13 @@ public final class AssertEquals {
         }
 
         if (!result) {
-            AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
+            AssertCommons.INSTANCE.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
 
-    public static void assertEquals(final ErrorCode errorCode,
-                                    final Object ref,
-                                    final Object value) {
+    public void assertEquals(final ErrorCode errorCode,
+                             final Object ref,
+                             final Object value) {
         boolean result = ref == value;
 
         if (!result && (ref != null)) {
@@ -63,136 +64,136 @@ public final class AssertEquals {
         }
 
         if (!result) {
-            AssertCommons.throwException(errorCode);
+            AssertCommons.INSTANCE.throwException(errorCode);
         }
     }
 
 
-    public static void assertEquals(final int ref,
-                                    final int value) {
+    public void assertEquals(final int ref,
+                             final int value) {
         assertEquals(DEFAULT_MESSAGE,
                      ref,
                      value);
     }
 
-    public static void assertEquals(final String message,
-                                    final int ref,
-                                    final int value) {
+    public void assertEquals(final String message,
+                             final int ref,
+                             final int value) {
         if (ref != value) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
-            AssertCommons.throwException(msg);
+            AssertCommons.INSTANCE.throwException(msg);
         }
     }
 
-    public static void assertEquals(final Supplier<String> messageProducer,
-                                    final int ref,
-                                    final int value) {
+    public void assertEquals(final Supplier<String> messageProducer,
+                             final int ref,
+                             final int value) {
         if (ref != value) {
-            AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
+            AssertCommons.INSTANCE.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
 
-    public static void assertEquals(final ErrorCode errorCode,
-                                    final int ref,
-                                    final int value) {
+    public void assertEquals(final ErrorCode errorCode,
+                             final int ref,
+                             final int value) {
         if (ref != value) {
-            AssertCommons.throwException(errorCode);
+            AssertCommons.INSTANCE.throwException(errorCode);
         }
     }
 
-    public static void assertEquals(final long ref,
-                                    final long value) {
+    public void assertEquals(final long ref,
+                             final long value) {
         assertEquals(DEFAULT_MESSAGE,
                      ref,
                      value);
     }
 
-    public static void assertEquals(final String message,
-                                    final long ref,
-                                    final long value) {
+    public void assertEquals(final String message,
+                             final long ref,
+                             final long value) {
         if (ref != value) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
-            AssertCommons.throwException(msg);
+            AssertCommons.INSTANCE.throwException(msg);
         }
     }
 
-    public static void assertEquals(final Supplier<String> messageProducer,
-                                    final long ref,
-                                    final long value) {
+    public void assertEquals(final Supplier<String> messageProducer,
+                             final long ref,
+                             final long value) {
         if (ref != value) {
-            AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
+            AssertCommons.INSTANCE.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
 
-    public static void assertEquals(final ErrorCode errorCode,
-                                    final long ref,
-                                    final long value) {
+    public void assertEquals(final ErrorCode errorCode,
+                             final long ref,
+                             final long value) {
         if (ref != value) {
-            AssertCommons.throwException(errorCode);
+            AssertCommons.INSTANCE.throwException(errorCode);
         }
     }
 
-    public static void assertEquals(final float ref,
-                                    final float value) {
+    public void assertEquals(final float ref,
+                             final float value) {
         assertEquals(DEFAULT_MESSAGE,
                      ref,
                      value);
     }
 
-    public static void assertEquals(final String message,
-                                    final float ref,
-                                    final float value) {
+    public void assertEquals(final String message,
+                             final float ref,
+                             final float value) {
         if (ref != value) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
-            AssertCommons.throwException(msg);
+            AssertCommons.INSTANCE.throwException(msg);
         }
     }
 
-    public static void assertEquals(final Supplier<String> messageProducer,
-                                    final float ref,
-                                    final float value) {
+    public void assertEquals(final Supplier<String> messageProducer,
+                             final float ref,
+                             final float value) {
         if (ref != value) {
-            AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
+            AssertCommons.INSTANCE.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
 
-    public static void assertEquals(final ErrorCode errorCode,
-                                    final float ref,
-                                    final float value) {
+    public void assertEquals(final ErrorCode errorCode,
+                             final float ref,
+                             final float value) {
         if (ref != value) {
-            AssertCommons.throwException(errorCode);
+            AssertCommons.INSTANCE.throwException(errorCode);
         }
     }
 
-    public static void assertEquals(final double ref,
-                                    final double value) {
+    public void assertEquals(final double ref,
+                             final double value) {
         assertEquals(DEFAULT_MESSAGE,
                      ref,
                      value);
     }
 
-    public static void assertEquals(final String message,
-                                    final double ref,
-                                    final double value) {
+    public void assertEquals(final String message,
+                             final double ref,
+                             final double value) {
         if (ref != value) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
-            AssertCommons.throwException(msg);
+            AssertCommons.INSTANCE.throwException(msg);
         }
     }
 
-    public static void assertEquals(final Supplier<String> messageProducer,
-                                    final double ref,
-                                    final double value) {
+    public void assertEquals(final Supplier<String> messageProducer,
+                             final double ref,
+                             final double value) {
         if (ref != value) {
-            AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
+            AssertCommons.INSTANCE.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
 
-    public static void assertEquals(final ErrorCode errorCode,
-                                    final double ref,
-                                    final double value) {
+    public void assertEquals(final ErrorCode errorCode,
+                             final double ref,
+                             final double value) {
         if (ref != value) {
-            AssertCommons.throwException(errorCode);
+            AssertCommons.INSTANCE.throwException(errorCode);
         }
     }
 }

@@ -14,6 +14,8 @@
     "payload" : "null",
     "errorStatus" : "500",
     "errorSubDomain" : "null",
+    "category" : "null",
     "messageDetail" : "null"
-  }
+  },
+  "message" : ""
 } ]

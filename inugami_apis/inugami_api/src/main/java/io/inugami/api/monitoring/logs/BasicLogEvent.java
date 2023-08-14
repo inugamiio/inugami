@@ -10,7 +10,7 @@ import java.util.Map;
 @ToString
 @Builder(toBuilder = true)
 @AllArgsConstructor
-public class BasicLogEvent {
+public final class BasicLogEvent {
     private final String                    loggerName;
     private final String                    message;
     private final String                    level;

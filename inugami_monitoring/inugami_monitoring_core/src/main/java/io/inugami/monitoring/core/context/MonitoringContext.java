@@ -55,18 +55,14 @@ public class MonitoringContext implements BootstrapContext<Void> {
                 managersTasks.putAll(buildSensorsTasks(CONFIG.getSensors()));
             }
 
-            managersTasks.entrySet()
-                         .stream()
-                         .map(Map.Entry::getValue)
-                         .forEach(task -> task.bootrap(this));
+            managersTasks.entrySet().stream().map(Map.Entry::getValue).forEach(task -> task.bootrap(this));
         }
     }
 
 
     private static Monitoring loadConfiguration() {
-        final MonitoringLoaderSpi loader = SpiLoader.getInstance()
-                                                    .loadSpiSingleServicesByPriority(MonitoringLoaderSpi.class);
-        return loader == null ? null : loader.load();
+        return ((MonitoringLoaderSpi) SpiLoader.getInstance()
+                                               .loadSpiSingleServicesByPriority(MonitoringLoaderSpi.class)).load();
     }
 
     // =========================================================================
@@ -100,8 +96,7 @@ public class MonitoringContext implements BootstrapContext<Void> {
             SensorsIntervalManagerTask task = result.get(sensor.getInterval());
             if (task == null) {
                 if (sensor.getInterval() > 100) {
-                    task = new SensorsIntervalManagerTask(CONFIG.getMaxSensorsTasksThreads(), sensor.getInterval(),
-                                                          CONFIG.getSenders());
+                    task = new SensorsIntervalManagerTask(CONFIG.getMaxSensorsTasksThreads(), sensor.getInterval(), CONFIG.getSenders());
                     result.put(sensor.getInterval(), task);
                 } else {
                     Loggers.CONFIG.error("sensor interval must be higher or equals than 100ms!({})", sensor.getName());

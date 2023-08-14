@@ -35,7 +35,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientSendData {
+public final class ClientSendData {
 
     // =========================================================================
     // ATTRIBUTES

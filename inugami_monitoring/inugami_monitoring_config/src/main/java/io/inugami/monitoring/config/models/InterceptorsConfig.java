@@ -52,6 +52,5 @@ public class InterceptorsConfig implements PostProcessing<ConfigHandler<String, 
             }
         }
     }
-    
 
 }

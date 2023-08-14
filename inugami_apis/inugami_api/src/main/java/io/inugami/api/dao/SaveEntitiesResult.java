@@ -18,6 +18,7 @@ package io.inugami.api.dao;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.List;
  * @author patrick_guillerm
  * @since 15 mars 2018
  */
+@ToString
 @Getter
 @NoArgsConstructor
 public class SaveEntitiesResult<E> {
@@ -39,22 +41,6 @@ public class SaveEntitiesResult<E> {
 
     private final List<E> mergeEntities = new ArrayList<>();
 
-
-    // =========================================================================
-    // OVERRIDE
-    // =========================================================================
-    @Override
-    public String toString() {
-        //@formatter:off
-        return new StringBuilder(this.getClass().getSimpleName())
-                .append('@')
-                .append(System.identityHashCode(this))
-                .append("[newEntities=").append(newEntities)
-                .append(", mergeEntities=").append(mergeEntities)
-                .append(']')
-                .toString();
-        //@formatter:on
-    }
 
     // =========================================================================
     // GETTERS & SETTERS

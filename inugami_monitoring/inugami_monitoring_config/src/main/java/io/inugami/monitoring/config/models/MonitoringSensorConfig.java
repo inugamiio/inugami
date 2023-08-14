@@ -40,7 +40,7 @@ import java.io.Serializable;
 @Setter
 @Getter
 @XStreamAlias("sensor")
-public class MonitoringSensorConfig implements PostProcessing<ConfigHandler<String, String>>, ApplyIfNull, Serializable {
+public final class MonitoringSensorConfig implements PostProcessing<ConfigHandler<String, String>>, ApplyIfNull, Serializable {
 
     private static final long serialVersionUID = -774495566963928169L;
 

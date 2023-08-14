@@ -40,7 +40,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @XStreamAlias("field")
-public class HttpHeaderField implements Serializable, PostProcessing<ConfigHandler<String, String>> {
+public final class HttpHeaderField implements Serializable, PostProcessing<ConfigHandler<String, String>> {
 
     // =========================================================================
     // ATTRIBUTES

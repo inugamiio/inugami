@@ -9,6 +9,8 @@ import io.inugami.api.monitoring.logs.BasicLogEvent;
 import io.inugami.api.monitoring.logs.DefaultLogListener;
 import io.inugami.api.monitoring.logs.LogListener;
 import io.inugami.commons.test.UnitTestHelper;
+import io.inugami.commons.test.api.LineMatcher;
+import io.inugami.commons.test.api.UuidLineMatcher;
 import io.inugami.commons.test.logs.LogTestAppender;
 import io.inugami.monitoring.springboot.partnerlog.feign.FeignRequestBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -123,7 +125,8 @@ class DefaultDefaultExceptionHandlerServiceTest {
                                         .build()
                 ),
                 "exception/exceptionHandlerServiceTest/manageException_withExploitationException_produceProblem.json",
-                "exception/exceptionHandlerServiceTest/manageException_withExploitationException_produceProblem.json.log.json");
+                "exception/exceptionHandlerServiceTest/manageException_withExploitationException_produceProblem.json.log.json",
+                UuidLineMatcher.of(26, 37));
     }
 
     @Test
@@ -140,7 +143,8 @@ class DefaultDefaultExceptionHandlerServiceTest {
                                         .build()
                 ),
                 "exception/exceptionHandlerServiceTest/manageException_withoutDetail_produceProblem.json",
-                "exception/exceptionHandlerServiceTest/manageException_withoutDetail_produceProblem.json.log.json");
+                "exception/exceptionHandlerServiceTest/manageException_withoutDetail_produceProblem.json.log.json",
+                UuidLineMatcher.of(26, 37));
     }
 
     @Test
@@ -156,7 +160,8 @@ class DefaultDefaultExceptionHandlerServiceTest {
                                         .build()
                 ),
                 "exception/exceptionHandlerServiceTest/manageException_withoutMessageDetail_produceProblem.json",
-                "exception/exceptionHandlerServiceTest/manageException_withoutMessageDetail_produceProblem.log.json");
+                "exception/exceptionHandlerServiceTest/manageException_withoutMessageDetail_produceProblem.log.json",
+                UuidLineMatcher.of(26, 37));
     }
 
     @Test
@@ -241,7 +246,8 @@ class DefaultDefaultExceptionHandlerServiceTest {
     private void processTest(final DefaultExceptionHandlerService service,
                              final Throwable exception,
                              final String bodyPath,
-                             final String logPath) {
+                             final String logPath,
+                             final LineMatcher... lineMatchers) {
         final List<BasicLogEvent> logs     = new ArrayList<>();
         final LogListener         listener = new DefaultLogListener(".*", logs::add);
         LogTestAppender.register(listener);
@@ -250,7 +256,7 @@ class DefaultDefaultExceptionHandlerServiceTest {
 
         LogTestAppender.removeListener(listener);
         UnitTestHelper.assertTextRelative(result, bodyPath);
-        UnitTestHelper.assertTextRelative(logs, logPath);
+        UnitTestHelper.assertTextRelative(logs, logPath, lineMatchers);
     }
 
     private DefaultExceptionHandlerService buildService() {

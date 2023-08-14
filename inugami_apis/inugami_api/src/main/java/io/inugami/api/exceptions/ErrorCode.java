@@ -42,22 +42,24 @@ import java.util.function.BiConsumer;
 public interface ErrorCode {
 
 
-    String STATUS_CODE        = "errorStatus";
-    String ERROR_CODE         = "errorCode";
-    String MESSAGE            = "message";
-    String MESSAGE_DETAIL     = "messageDetail";
-    String ERROR_TYPE         = "errorType";
-    String PAYLOAD            = "payload";
-    String EXPLOITATION_ERROR = "exploitationError";
-    String ROLLBACK           = "rollback";
-    String RETRYABLE          = "retryable";
-    String FIELD              = "field";
-    String URL                = "url";
-    String DOMAIN             = "errorDomain";
-    String SUB_DOMAIN         = "errorSubDomain";
+    String       STATUS_CODE        = "errorStatus";
+    String       ERROR_CODE         = "errorCode";
+    String       MESSAGE            = "message";
+    String       MESSAGE_DETAIL     = "messageDetail";
+    String       ERROR_TYPE         = "errorType";
+    String       PAYLOAD            = "payload";
+    String       EXPLOITATION_ERROR = "exploitationError";
+    String       ROLLBACK           = "rollback";
+    String       RETRYABLE          = "retryable";
+    String       FIELD              = "field";
+    String       URL                = "url";
+    String       CATEGORY           = "category";
+    String       DOMAIN             = "errorDomain";
+    String       SUB_DOMAIN         = "errorSubDomain";
+    String       ERROR_HANDLER      = "errorHandler";
+    List<String> KEYS_SET           = List.of(STATUS_CODE, ERROR_CODE, MESSAGE, MESSAGE_DETAIL, ERROR_TYPE, PAYLOAD, EXPLOITATION_ERROR, ROLLBACK,
+                                              RETRYABLE, FIELD, URL, CATEGORY, DOMAIN, SUB_DOMAIN);
 
-    List<String> KEYS_SET = List.of(STATUS_CODE, ERROR_CODE, MESSAGE, MESSAGE_DETAIL, ERROR_TYPE, PAYLOAD, EXPLOITATION_ERROR, ROLLBACK,
-                                    RETRYABLE, FIELD, URL, DOMAIN, SUB_DOMAIN);
 
     public ErrorCode getCurrentErrorCode();
 
@@ -155,6 +157,7 @@ public interface ErrorCode {
         result.put(RETRYABLE, isRetryable());
         result.put(FIELD, getField());
         result.put(URL, getUrl());
+        result.put(CATEGORY, getCategory());
         result.put(DOMAIN, getDomain());
         result.put(SUB_DOMAIN, getSubDomain());
         return result;

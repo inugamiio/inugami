@@ -1,0 +1,7 @@
+{
+  "artifactId" : "inugami_api",
+  "groupId" : "io.inugami",
+  "hash" : "io.inugami:inugami_api:3.3.0:jar",
+  "qualifier" : "jar",
+  "version" : "3.3.0"
+}

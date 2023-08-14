@@ -21,25 +21,31 @@ import lombok.*;
 
 import java.lang.reflect.Method;
 
-@EqualsAndHashCode
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder(toBuilder = true)
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 @JsonIgnoreProperties(value = {"instance"})
-public class FeatureContext {
-
+public final class FeatureContext {
+    @ToString.Include
+    @EqualsAndHashCode.Include
     private String  featureName;
     private boolean enabledByDefault = true;
-    private String  propertyPerfix;
+    private String  propertyPrefix;
     private String  fallback;
     private boolean monitored        = true;
+    private Status  status;
 
-
+    @ToString.Include
     private Class<?> bean;
     private Method   method;
     private Object[] args;
     private Object   instance;
+
+    public enum Status {
+        UNKNOWN, UP, RESTRICTED, ERROR, OUT_OF_SERVICE
+    }
 }

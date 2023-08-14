@@ -18,8 +18,8 @@ package io.inugami.api.models;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import io.inugami.api.exceptions.Asserts;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -37,7 +37,13 @@ import java.io.Serializable;
  * @author patrick_guillerm
  * @since 22 déc. 2016
  */
+@ToString
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
 @Getter
+@EqualsAndHashCode
 @XStreamAlias("gav")
 public class Gav implements Serializable {
 
@@ -47,92 +53,25 @@ public class Gav implements Serializable {
     /**
      * The Constant serialVersionUID.
      */
-    private static final long serialVersionUID = -6931854882445061439L;
+    private static final long   serialVersionUID = -6931854882445061439L;
+    public static final  String SEPARATOR        = ":";
 
     @XStreamAsAttribute
-    private final String groupId;
+    private String groupId;
 
     @XStreamAsAttribute
-    private final String artifactId;
+    private String artifactId;
 
     @XStreamAsAttribute
-    private final String version;
+    private String version;
 
     @XStreamAsAttribute
-    private final String qualifier;
+    private String qualifier;
 
-    private String hash;
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-
-    /**
-     * Only for unit test
-     */
-    public Gav() {
-        this(null, null, null, null);
-    }
-
-    public Gav(final Gav gav, final String qualifier) {
-        this(gav.getGroupId(), gav.getArtifactId(), gav.getVersion(), qualifier);
-    }
-
-    public Gav(final String hash) {
-        groupId = null;
-        artifactId = null;
-        version = null;
-        qualifier = null;
-        this.hash = hash;
-    }
-
-    public Gav(final String... gavParts) {
-        Asserts.assertNotNull(gavParts);
-        Asserts.assertTrue(gavParts.length >= 3);
-        groupId = gavParts[0];
-        artifactId = gavParts[1];
-        version = gavParts[2];
-        qualifier = (gavParts.length > 3) && !"null".equals(gavParts[3]) ? gavParts[3] : null;
-        hash = buildHash();
-    }
-
-    public Gav(final String groupId, final String artifactId) {
-        super();
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        version = null;
-        qualifier = null;
-        hash = buildHash();
-    }
-
-    public Gav(final String groupId, final String artifactId, final String version, final String qualifier) {
-        super();
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.version = version;
-        this.qualifier = qualifier;
-        hash = buildHash();
-    }
 
     // =========================================================================
     // OVERRIDES
     // =========================================================================
-    @Override
-    public int hashCode() {
-        return getHash().hashCode();
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        boolean result = this == obj;
-
-        if (!result && (obj != null) && (obj instanceof Gav)) {
-            final Gav other = (Gav) obj;
-            result = getHash().equals(other.getHash());
-        }
-        return result;
-    }
-
     public boolean equalsWithoutVersion(final Object obj) {
         boolean result = this == obj;
 
@@ -143,32 +82,40 @@ public class Gav implements Serializable {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return new StringBuilder().append("Gav [").append(getHash()).append("]").toString();
-    }
 
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================
-    public final String buildHash() {
+    public String getHash() {
         final StringBuilder sb = new StringBuilder();
         sb.append(groupId);
-        sb.append(':');
+        sb.append(SEPARATOR);
         sb.append(artifactId);
-        sb.append(':');
+        sb.append(SEPARATOR);
         sb.append(version);
         if (qualifier != null) {
-            sb.append(':');
+            sb.append(SEPARATOR);
             sb.append(qualifier);
         }
         return sb.toString();
     }
 
-    public String getHash() {
-        if (hash == null) {
-            hash = buildHash();
+    public static class GavBuilder {
+        public GavBuilder addHash(final String value) {
+            if (value != null) {
+                final String[] parts = value.split(SEPARATOR);
+                groupId(parts[0]);
+                if (parts.length > 1) {
+                    artifactId(parts[1]);
+                }
+                if (parts.length > 2) {
+                    version(parts[2]);
+                }
+                if (parts.length > 3) {
+                    qualifier(parts[3]);
+                }
+            }
+            return this;
         }
-        return hash;
     }
 }

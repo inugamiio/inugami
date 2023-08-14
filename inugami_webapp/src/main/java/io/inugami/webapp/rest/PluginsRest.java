@@ -131,7 +131,11 @@ public class PluginsRest {
         if (gav != null) {
             final String[] parts = gav.split(":");
             if (parts.length >= 3) {
-                result = new Gav(parts);
+                result = Gav.builder()
+                            .groupId(parts[0])
+                            .artifactId(parts[1])
+                            .version(parts[2])
+                            .build();
             }
         }
         return result;

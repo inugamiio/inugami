@@ -54,7 +54,7 @@ public class LogstashWriter implements AppenderWriterStrategy, ConnectorListener
 
         baseUrl = configuration.getHost() == null ? DEFAULT_HOST : configuration.getHost();
         connector = new HttpBasicConnector(timeout, timeToLive, maxConnections, maxPerRoute, socketTimeout);
-        headers = configuration.getHeaders() == null ? new HashMap<>() : headers;
+        headers = configuration.getHeadersMap() == null ? new HashMap<>() : configuration.getHeadersMap();
 
         request = HttpRequest.builder()
                              .verb(ConnectorConstants.HTTP_POST)

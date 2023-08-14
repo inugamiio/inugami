@@ -28,7 +28,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @SuppressWarnings({"java:S5361"})
-public class JmxBeanSensorQuery implements JsonObject {
+public final class JmxBeanSensorQuery implements JsonObject {
 
     // =========================================================================
     // ATTRIBUTES

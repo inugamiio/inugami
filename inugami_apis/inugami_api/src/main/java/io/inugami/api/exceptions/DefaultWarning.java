@@ -25,7 +25,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder(toBuilder = true)
-public class DefaultWarning implements Warning {
+public final class DefaultWarning implements Warning {
 
     // =========================================================================
     // ATTRIBUTES

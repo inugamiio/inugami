@@ -29,7 +29,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class UserDataDTO implements Serializable {
+public final class UserDataDTO implements Serializable {
     @ToString.Include
     private long      id;
     @ToString.Include

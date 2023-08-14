@@ -1,0 +1,140 @@
+{
+  "level" : "INFO",
+  "loggerName" : "IOLOG",
+  "mdc" : {
+    "traceId" : "0bc5c2df-64fc-418d-a5f4-89531ab0906f",
+    "applicationVersion" : "1.0.0",
+    "instanceName" : "",
+    "appUrl" : "http://localhost:36951/user",
+    "instanceNumber" : "",
+    "env" : "dev",
+    "appVerb" : "POST",
+    "callType" : "REST",
+    "appUri" : "/user",
+    "lifecycle" : "in",
+    "hostname" : "",
+    "correlation_id" : "634f403c-4817-4671-918d-c828d2a0b22e",
+    "asset" : "inugami",
+    "request_id" : "9ff25703-fbbf-4c14-aa6c-5b685d8899fa",
+    "remoteAddress" : "127.0.0.1"
+  },
+  "message" : "[POST] /user
+headers :
+	accept: */*
+	content-type: application/json; charset=UTF-8
+	content-length: 480
+	host: localhost:36951
+	connection: Keep-Alive
+	user-agent: Apache-HttpClient/4.5.13 (Java/11.0.2)
+	accept-encoding: gzip,deflate
+payload :
+{
+  "birthday" : "1988-04-12",
+  "canton" : "VD",
+  "city" : "Cheseaux-sur-Lausanne",
+  "deviceIdentifier" : "401f0498-c43f-43ad-a3f4-2888838332ad",
+  "email" : "emilie.lalonde@mock.org",
+  "firstName" : "Émilie",
+  "id" : 1,
+  "lastName" : "Lalonde",
+  "nationality" : "CH",
+  "old" : 35,
+  "phoneNumber" : "0615031522",
+  "sex" : "FEMALE",
+  "socialId" : "7564971247732",
+  "streetName" : "du Château",
+  "streetNumber" : "10",
+  "streetType" : "Chem.",
+  "zipCode" : "1033"
+}
+}
+{
+  "level" : "INFO",
+  "loggerName" : "IOLOG",
+  "mdc" : {
+    "traceId" : "0bc5c2df-64fc-418d-a5f4-89531ab0906f",
+    "applicationVersion" : "1.0.0",
+    "instanceName" : "",
+    "appUrl" : "http://localhost:36951/user",
+    "instanceNumber" : "",
+    "env" : "dev",
+    "appVerb" : "POST",
+    "callType" : "REST",
+    "appUri" : "/user",
+    "duration" : "180033009",
+    "lifecycle" : "out",
+    "globalStatus" : "success",
+    "hostname" : "",
+    "httpStatus" : "200",
+    "correlation_id" : "634f403c-4817-4671-918d-c828d2a0b22e",
+    "warning" : "",
+    "asset" : "inugami",
+    "request_id" : "9ff25703-fbbf-4c14-aa6c-5b685d8899fa",
+    "remoteAddress" : "127.0.0.1",
+    "status" : "200"
+  },
+  "message" : "[POST] /user
+headers :
+	accept: */*
+	content-type: application/json; charset=UTF-8
+	content-length: 480
+	host: localhost:36951
+	connection: Keep-Alive
+	user-agent: Apache-HttpClient/4.5.13 (Java/11.0.2)
+	accept-encoding: gzip,deflate
+payload :
+{
+  "birthday" : "1988-04-12",
+  "canton" : "VD",
+  "city" : "Cheseaux-sur-Lausanne",
+  "deviceIdentifier" : "401f0498-c43f-43ad-a3f4-2888838332ad",
+  "email" : "emilie.lalonde@mock.org",
+  "firstName" : "Émilie",
+  "id" : 1,
+  "lastName" : "Lalonde",
+  "nationality" : "CH",
+  "old" : 35,
+  "phoneNumber" : "0615031522",
+  "sex" : "FEMALE",
+  "socialId" : "7564971247732",
+  "streetName" : "du Château",
+  "streetNumber" : "10",
+  "streetType" : "Chem.",
+  "zipCode" : "1033"
+}
+response:
+	status:200
+	datetime:1693056548121
+	duration:180033009
+	contentType:application/json
+	headers:
+		x-correlation-id: 634f403c-4817-4671-918d-c828d2a0b22e
+		x-conversation-id: 634f403c-4817-4671-918d-c828d2a0b22e
+		x-b3-traceid: 9ff25703-fbbf-4c14-aa6c-5b685d8899fa
+		Access-Control-Allow-Origin: *
+		Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS
+		Access-Control-Allow-Headers: x-device-identifier, x-correlation-id, x-b3-traceid, x-conversation-id, Authorization, x-device-type, x-device-system, x-device-class, x-device-version, x-device-os-version, x-device-network-type, x-device-network-speed-down, x-device-network-speed-up, x-device-network-speed-latency, clientIp, User-Agent, Accept-Language, country, Warning, errorCode, errorException, errorMessage, errorMessageDetail, x-front-version, x-application, Forwarded, X-Forwarded-For, X-Forwarded-Host, X-Forwarded-Proto, Via, Location, Refresh, From, Host, Referer, Referrer-Policy, Allow, Server, Last-Event-ID, NEL, Ping-From, Ping-To, Report-To, Transfer-Encoding, TE, Trailer, Sec-WebSocket-Key, Sec-WebSocket-Extensions, Sec-WebSocket-Accept, Sec-WebSocket-Protocol, Sec-WebSocket-Version, Date, Early-Data, Link, Retry-After, SourceMap, Upgrade, content-type, authorization
+		Access-Control-Expose-Headers: x-device-identifier, x-correlation-id, x-b3-traceid, x-conversation-id, Authorization, x-device-type, x-device-system, x-device-class, x-device-version, x-device-os-version, x-device-network-type, x-device-network-speed-down, x-device-network-speed-up, x-device-network-speed-latency, clientIp, User-Agent, Accept-Language, country, Warning, errorCode, errorException, errorMessage, errorMessageDetail, x-front-version, x-application, Forwarded, X-Forwarded-For, X-Forwarded-Host, X-Forwarded-Proto, Via, Location, Refresh, From, Host, Referer, Referrer-Policy, Allow, Server, Last-Event-ID, NEL, Ping-From, Ping-To, Report-To, Transfer-Encoding, TE, Trailer, Sec-WebSocket-Key, Sec-WebSocket-Extensions, Sec-WebSocket-Accept, Sec-WebSocket-Protocol, Sec-WebSocket-Version, Date, Early-Data, Link, Retry-After, SourceMap, Upgrade, content-type, authorization
+		Access-Control-Allow-Credentials: true
+		x-warnings:
+		Content-Type: application/json
+	payload:{
+  "birthday" : "1988-04-12",
+  "canton" : "VD",
+  "city" : "Cheseaux-sur-Lausanne",
+  "deviceIdentifier" : "401f0498-c43f-43ad-a3f4-2888838332ad",
+  "email" : "emilie.lalonde@mock.org",
+  "firstName" : "Émilie",
+  "id" : 1,
+  "lastName" : "Lalonde",
+  "nationality" : "CH",
+  "old" : 35,
+  "phoneNumber" : "0615031522",
+  "sex" : "FEMALE",
+  "socialId" : "7564971247732",
+  "streetName" : "du Château",
+  "streetNumber" : "10",
+  "streetType" : "Chem.",
+  "zipCode" : "1033"
+}
+}

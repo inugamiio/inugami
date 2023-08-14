@@ -25,6 +25,7 @@ public class JsonAppender extends ConsoleAppender<ILoggingEvent> {
 
     @Override
     public void start() {
+        configuration.init();
         if (this.encoder == null) {
             this.encoder = new ObfuscatorEncoder(configuration);
         }

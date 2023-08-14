@@ -27,7 +27,7 @@ import java.io.Serializable;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class JiraIssue implements Serializable {
+public final class JiraIssue implements Serializable {
 
     private static final long serialVersionUID = 8684453288062371511L;
 

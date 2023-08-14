@@ -114,7 +114,7 @@ public class GenericEvent implements Serializable, ClonableObject<GenericEvent> 
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================
-    
+
 
     public Optional<String> getFrom() {
         return Optional.ofNullable(from);

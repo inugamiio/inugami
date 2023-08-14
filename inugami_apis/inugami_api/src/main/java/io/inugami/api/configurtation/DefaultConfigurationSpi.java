@@ -27,31 +27,26 @@ public class DefaultConfigurationSpi implements ConfigurationSpi {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final Map<String, String> CONFIGURATION = loadConfiguration();
+    private static final Map<String, String> CONFIGURATION = new LinkedHashMap<>();
 
+    public DefaultConfigurationSpi() {
+        loadConfiguration();
+    }
 
     // =========================================================================
     // INIT
     // =========================================================================
-    private static Map<String, String> loadConfiguration() {
-        Map<String, String> result = new LinkedHashMap<>();
+    static Map<String, String> loadConfiguration() {
 
         for (Map.Entry<String, String> entry : System.getenv().entrySet()) {
-            if (entry.getValue() != null) {
-                result.put(entry.getKey(), entry.getValue());
-            }
+            CONFIGURATION.put(entry.getKey(), entry.getValue());
         }
 
         final Properties properties = System.getProperties();
-        if (properties != null) {
-            for (Map.Entry<Object, Object> entry : properties.entrySet()) {
-                if (entry.getValue() != null) {
-                    result.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
-                }
-            }
+        for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+            CONFIGURATION.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
         }
-
-        return result;
+        return CONFIGURATION;
     }
 
     // =========================================================================
@@ -90,7 +85,7 @@ public class DefaultConfigurationSpi implements ConfigurationSpi {
             final String value = getProperty(key);
             return value == null ? defaultValue : Integer.parseInt(value);
         } catch (Throwable e) {
-            return 0;
+            return defaultValue;
         }
     }
 
@@ -105,7 +100,7 @@ public class DefaultConfigurationSpi implements ConfigurationSpi {
             final String value = getProperty(key);
             return value == null ? defaultValue : Integer.parseInt(value);
         } catch (Throwable e) {
-            return 0;
+            return defaultValue;
         }
     }
 
@@ -120,7 +115,7 @@ public class DefaultConfigurationSpi implements ConfigurationSpi {
             final String value = getProperty(key);
             return value == null ? defaultValue : Integer.parseInt(value);
         } catch (Throwable e) {
-            return 0;
+            return defaultValue;
         }
     }
 }

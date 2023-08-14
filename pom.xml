@@ -127,7 +127,7 @@
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <org.jboss.arquillian.junit>1.4.0.Final</org.jboss.arquillian.junit>
         <org.jboss.shrinkwrap.resolver>3.1.3</org.jboss.shrinkwrap.resolver>
-        <org.apache.tomcat.embed.version>8.5.61</org.apache.tomcat.embed.version>
+        <org.apache.tomcat.embed.version>9.0.76</org.apache.tomcat.embed.version>
         <org.apache.tomcat.embed.tomcat-embed-logging-juli.version>8.0.53
         </org.apache.tomcat.embed.tomcat-embed-logging-juli.version>
         <org.eclipse.jdt.core.compiler.version>4.6.1</org.eclipse.jdt.core.compiler.version>
@@ -158,7 +158,7 @@
         <plugins.org-apache-maven-plugins.maven-site-plugin>3.3</plugins.org-apache-maven-plugins.maven-site-plugin>
         <plugins.org-apache-maven-plugins.maven-surefire-plugin>2.19.1
         </plugins.org-apache-maven-plugins.maven-surefire-plugin>
-        <plugins.org-apache-maven-plugins.maven-failsafe-plugin>2.19.1
+        <plugins.org-apache-maven-plugins.maven-failsafe-plugin>3.1.2
         </plugins.org-apache-maven-plugins.maven-failsafe-plugin>
         <plugins.org-codehaus-mojo.cobertura-maven-plugin>2.7</plugins.org-codehaus-mojo.cobertura-maven-plugin>
         <org.codehaus.mojo.version>3.3.0</org.codehaus.mojo.version>
@@ -173,7 +173,7 @@
 
         <!--[ org.springframework ]+++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <org.springframework.version>5.3.29</org.springframework.version>
-        <org.springframework.boot.version>2.7.14</org.springframework.boot.version>
+        <org.springframework.boot.version>2.7.13</org.springframework.boot.version>
         <org.springframework.spring-cloud-dependencies.version>2021.0.6
         </org.springframework.spring-cloud-dependencies.version>
 
@@ -276,6 +276,14 @@
             **org/jboss/resteasy/logging/*,
             **/engine/js/*
         </sonar.exclusions>
+        <sonar.coverage.exclusions>
+            **/test/*,
+            **/test_it/*,
+            **/js/vendors.js,
+            **/generated-sources/**/*,
+            **/generated-test-sources/**/*,
+            **/FeatureInterceptor
+        </sonar.coverage.exclusions>
     </properties>
 
 
@@ -558,6 +566,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
 
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -893,6 +902,26 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
                 <version>${org.springframework.boot.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>junit</groupId>
+                        <artifactId>junit</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.mockito</groupId>
+                        <artifactId>mockito-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.junit.vintage</groupId>
+                        <artifactId>junit-vintage-engine</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-tomcat</artifactId>
+                <version>${org.springframework.boot.version}</version>
             </dependency>
 
             <dependency>
@@ -925,6 +954,11 @@
                 <version>${io.github.openfeign.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.github.tomakehurst</groupId>
+                <artifactId>wiremock-jre8</artifactId>
+                <version>2.35.0</version>
+            </dependency>
             <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
             :: TEST
             :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -1334,6 +1368,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${plugins.org-apache-maven-plugins.maven-surefire-plugin}</version>
                 <configuration>
+                    <argLine>-Xmx1024M ${argLine}</argLine>
                     <excludes>
                         <exclude>**/*IT.java</exclude>
                     </excludes>
@@ -1356,6 +1391,7 @@
                         <exclude>**/*EntityBuilder*</exclude>
                         <exclude>**org/jboss/resteasy/logging/*</exclude>
                         <exclude>**/engine/js/*</exclude>
+                        <exclude>**/FeatureInterceptor</exclude>
                     </excludes>
                     <formats>
                         <format>XML</format>
@@ -1367,7 +1403,7 @@
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
-                        <phase>test-compile</phase>
+                        <phase>compile</phase>
                     </execution>
                     <execution>
                         <id>report</id>
@@ -1388,6 +1424,12 @@
                         <phase>integration-test</phase>
                         <goals>
                             <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                       <id>verify</id>
+                        <goals>
+                            <goal>verify</goal>
                         </goals>
                     </execution>
                 </executions>

@@ -42,7 +42,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @XStreamAlias("httpDefaultConfig")
-public class HttpDefaultConfig implements Serializable, PostProcessing<ConfigHandler<String, String>> {
+public final class HttpDefaultConfig implements Serializable, PostProcessing<ConfigHandler<String, String>> {
 
     // =========================================================================
     // ATTRIBUTES
@@ -83,6 +83,6 @@ public class HttpDefaultConfig implements Serializable, PostProcessing<ConfigHan
             field.postProcessing(ctx);
         }
     }
-  
+
 
 }

@@ -13,10 +13,10 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class JenkinsJob implements Serializable {
+public final class JenkinsJob implements Serializable {
 
     private static final long serialVersionUID = -262058079809073888L;
-    
+
     @JSON(name = "_class")
     private String classAtt;
 

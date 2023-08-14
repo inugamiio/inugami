@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Table(name = "CORE_ALERT_DATA_TRANSFORMER")
 public class AlertDataTransfomer implements Identifiable<Long>, ClonableObject<AlertDataTransfomer> {
 
-    
+
     private static final long serialVersionUID = 8658816619910512607L;
 
     @Id

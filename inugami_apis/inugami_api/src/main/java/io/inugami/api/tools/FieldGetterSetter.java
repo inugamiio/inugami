@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 @Getter
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class FieldGetterSetter implements Comparable<FieldGetterSetter> {
+public final class FieldGetterSetter implements Comparable<FieldGetterSetter> {
     @EqualsAndHashCode.Include
     private Field  field;
     private Object value;

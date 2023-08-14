@@ -339,9 +339,10 @@ public class JsonBuilder {
     }
 
 
-    public void clear() {
+    public <E extends JsonBuilder> E clear() {
         buffer.setLength(0);
         buffer.trimToSize();
+        return returnInstance();
     }
 
 

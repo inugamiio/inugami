@@ -33,7 +33,7 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TargetAction implements Serializable {
+public final class TargetAction implements Serializable {
 
     private static final long serialVersionUID = 6772668872317033263L;
 

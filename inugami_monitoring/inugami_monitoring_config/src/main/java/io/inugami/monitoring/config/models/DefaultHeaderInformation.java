@@ -102,6 +102,7 @@ public class DefaultHeaderInformation implements PostProcessing<ConfigHandler<St
     @Override
     public void postProcessing(final ConfigHandler<String, String> context) throws TechnicalException {
 
+
         //@formatter:off
         correlationId = context.applyProperties(applyStrategy(JvmKeyValues.HEADER_KEY_CORRELATION_ID, correlationId, "x-correlation-id"));
         requestId = context.applyProperties(applyStrategy(JvmKeyValues.HEADER_KEY_REQUEST_ID, requestId, "x-request-id"));

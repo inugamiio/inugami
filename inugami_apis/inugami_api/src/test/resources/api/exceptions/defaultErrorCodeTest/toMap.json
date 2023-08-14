@@ -10,6 +10,7 @@
   "retryable" : true,
   "field" : "user.id",
   "url" : "http://localhost",
+  "category" : "user",
   "errorDomain" : "creation",
   "errorSubDomain" : "address"
 }

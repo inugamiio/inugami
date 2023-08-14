@@ -24,6 +24,7 @@ import io.inugami.api.loggers.Loggers;
 import io.inugami.api.monitoring.MonitoringLoaderSpi;
 import io.inugami.api.monitoring.models.Monitoring;
 import io.inugami.api.processors.ConfigHandler;
+import io.inugami.api.processors.DefaultConfigHandler;
 import io.inugami.commons.files.FilesUtils;
 import io.inugami.configuration.services.ConfigHandlerHashMap;
 import io.inugami.monitoring.config.models.*;
@@ -40,7 +41,7 @@ import java.util.Map;
  * @author patrickguillerm
  * @since Jan 15, 2019
  */
-@SuppressWarnings({"java:S1874"})
+@SuppressWarnings({"java:S1874", "java:S1181"})
 public final class ConfigurationLoader implements MonitoringLoaderSpi {
 
     // =========================================================================
@@ -54,7 +55,11 @@ public final class ConfigurationLoader implements MonitoringLoaderSpi {
     // CONSTRUCTORS
     // =========================================================================
     public ConfigurationLoader() {
-        configuration = initializeConfiguration();
+        configuration = initializeConfiguration(null);
+    }
+
+    public ConfigurationLoader(final ConfigHandler<String, String> springConfig) {
+        configuration = initializeConfiguration(springConfig);
     }
 
     private static XStream initXStream() {
@@ -92,21 +97,18 @@ public final class ConfigurationLoader implements MonitoringLoaderSpi {
         return configuration;
     }
 
-    private Monitoring initializeConfiguration() {
-        final File       configFile = resolveConfigFilePath();
-        MonitoringConfig result     = null;
+    private Monitoring initializeConfiguration(final ConfigHandler<String, String> springConfig) {
+        final File                    configFile    = resolveConfigFilePath();
+        ConfigHandler<String, String> configHandler = springConfig == null ? new DefaultConfigHandler() : springConfig;
+        MonitoringConfig              result        = null;
 
         if (configFile == null) {
             result = new MonitoringConfig();
         } else {
             result = loadConfiguration(configFile);
+            configHandler = buildConfigHandler(result, springConfig);
         }
 
-        if (result == null) {
-            return null;
-        }
-
-        final ConfigHandler<String, String> configHandler = buildConfigHandler(result);
         try {
             result.postProcessing(configHandler);
         } catch (final TechnicalException e) {
@@ -117,11 +119,15 @@ public final class ConfigurationLoader implements MonitoringLoaderSpi {
     }
 
     protected static MonitoringConfig loadConfiguration(final File configFile) {
-        MonitoringConfig result = null;
-        if ((configFile != null) && configFile.exists() && configFile.canRead()) {
-            result = (MonitoringConfig) XSTREAM_MAIN.fromXML(configFile);
+        try {
+            if ((configFile != null) && configFile.exists() && configFile.canRead()) {
+                return (MonitoringConfig) XSTREAM_MAIN.fromXML(configFile);
+            }
+        } catch (Throwable e) {
+            Loggers.CONFIG.error(e.getMessage(), e);
         }
-        return result;
+
+        return new MonitoringConfig();
     }
 
     // =========================================================================
@@ -143,8 +149,9 @@ public final class ConfigurationLoader implements MonitoringLoaderSpi {
     // =========================================================================
     // BUILDER
     // =========================================================================
-    private static ConfigHandler<String, String> buildConfigHandler(final MonitoringConfig config) {
-        final Map<String, String> result = new HashMap<>();
+    private static ConfigHandler<String, String> buildConfigHandler(final MonitoringConfig config,
+                                                                    final ConfigHandler<String, String> springConfig) {
+        final Map<String, String> buffer = new HashMap<>();
 
         //@formatter:off
         final PropertiesConfig properties = config.getProperties()==null?new PropertiesConfig():config.getProperties();
@@ -152,12 +159,16 @@ public final class ConfigurationLoader implements MonitoringLoaderSpi {
                   .stream()
                   .filter(item -> item.getKey() !=null)
                   .filter(item -> item.getValue() !=null)
-                  .forEach(item-> result.put(item.getKey(), item.getValue()));
+                  .forEach(item-> buffer.put(item.getKey(), item.getValue()));
         //@formatter:on
 
-        System.getProperties().forEach((key, value) -> result.put(String.valueOf(key), String.valueOf(value)));
+        System.getProperties().forEach((key, value) -> buffer.put(String.valueOf(key), String.valueOf(value)));
 
-        return new ConfigHandlerHashMap(result);
+        final ConfigHandlerHashMap result = new ConfigHandlerHashMap(buffer);
+        if (springConfig != null) {
+            result.putAll(springConfig);
+        }
+        return result;
     }
 
 }

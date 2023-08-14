@@ -36,7 +36,7 @@ import java.io.Serializable;
 @Setter
 @Getter
 @XStreamAlias("sender")
-public class MonitoringSenderConfig implements Serializable {
+public final class MonitoringSenderConfig implements Serializable {
 
 
     private static final long serialVersionUID = -3140915351172636117L;

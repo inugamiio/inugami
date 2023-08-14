@@ -37,7 +37,7 @@ import java.util.Optional;
 @Setter
 @Getter
 @XStreamAlias("alerting")
-public class AlertingModel implements Serializable {
+public final class AlertingModel implements Serializable {
 
     // =========================================================================
     // ATTRIBUTES

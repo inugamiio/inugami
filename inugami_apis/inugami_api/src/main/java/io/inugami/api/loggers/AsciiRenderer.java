@@ -86,7 +86,9 @@ final class AsciiRenderer {
         final StringBuilder buffer = new StringBuilder();
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
-                buffer.append(mapper.apply(new Rgb(image.getRGB(x, y))));
+                buffer.append(mapper.apply(Rgb.builder()
+                                              .addColor(image.getRGB(x, y))
+                                              .build()));
             }
             buffer.append('\n');
         }

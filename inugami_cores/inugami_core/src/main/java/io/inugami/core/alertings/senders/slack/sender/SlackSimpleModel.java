@@ -31,7 +31,7 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 @Getter
-public class SlackSimpleModel implements ISlackModel<SlackSimpleModel> {
+public final class SlackSimpleModel implements ISlackModel<SlackSimpleModel> {
 
     private static final long serialVersionUID = -6674003700307725197L;
 

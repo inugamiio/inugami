@@ -38,7 +38,7 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Getter
-public class SensorsConfig implements PostProcessing<ConfigHandler<String, String>>, Serializable {
+public final class SensorsConfig implements PostProcessing<ConfigHandler<String, String>>, Serializable {
 
 
     private static final long serialVersionUID = -7619627153181833149L;

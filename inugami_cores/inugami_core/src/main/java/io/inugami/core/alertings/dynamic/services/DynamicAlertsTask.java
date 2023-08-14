@@ -26,13 +26,12 @@ import java.util.stream.Collectors;
 @SuppressWarnings({"java:S1172"})
 @Builder
 @AllArgsConstructor
-public class
-DynamicAlertsTask implements Callable<Void> {
+public class DynamicAlertsTask implements Callable<Void> {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final Gav GAV = new Gav("io.inugami", "inugami_core");
+    private static final Gav GAV = Gav.builder().groupId("io.inugami").artifactId("inugami_core").build();
 
     private final DynamicAlertEntity entity;
 
@@ -67,8 +66,8 @@ DynamicAlertsTask implements Callable<Void> {
                 event = buildEvent();
                 data = loadDataFromProvider(event);
             } catch (final TimeoutException timeoutErr) {
-                Loggers.ALERTING.error("timeout on load data for dynamic alert {} (provider {})",
-                                       entity.getAlerteName(), entity.getSource().getProvider());
+                Loggers.ALERTING.error("timeout on load data for dynamic alert {} (provider {})", entity.getAlerteName(), entity.getSource()
+                                                                                                                                .getProvider());
             }
 
         }
@@ -82,13 +81,12 @@ DynamicAlertsTask implements Callable<Void> {
         }
     }
 
-    private ProviderFutureResult loadDataFromProvider(final SimpleEvent event) throws InterruptedException,
-                                                                                      ExecutionException, TimeoutException {
+    private ProviderFutureResult loadDataFromProvider(final SimpleEvent event) throws InterruptedException, ExecutionException, TimeoutException {
         final Provider       provider = context.getProvider(entity.getSource().getProvider());
         ProviderFutureResult result   = null;
         if (provider == null) {
-            Loggers.ALERTING.error("provider {} define in dynamic alert {}  dosn't exists",
-                                   entity.getSource().getProvider(), entity.getAlerteName());
+            Loggers.ALERTING.error("provider {} define in dynamic alert {}  dosn't exists", entity.getSource()
+                                                                                                  .getProvider(), entity.getAlerteName());
         } else {
             final FutureData<ProviderFutureResult> futur = provider.callEvent(event, GAV);
             result = futur.getFuture().get(context.getApplicationConfiguration().getTimeout(), TimeUnit.MILLISECONDS);
@@ -149,8 +147,7 @@ DynamicAlertsTask implements Callable<Void> {
         } else {
             final List<DynamicAlertingLevel> levels = buildLevels(entity.getLevels());
             if (!levels.isEmpty()) {
-                provider.processDynamicAlert(GAV, event, data, levels, entity.getLabel(), entity.getSubLabel(),
-                                             buildTag(entity.getTags()), entity.getProviders());
+                provider.processDynamicAlert(GAV, event, data, levels, entity.getLabel(), entity.getSubLabel(), buildTag(entity.getTags()), entity.getProviders());
             }
         }
     }

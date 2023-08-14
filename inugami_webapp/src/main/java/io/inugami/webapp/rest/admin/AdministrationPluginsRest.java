@@ -63,7 +63,9 @@ public class AdministrationPluginsRest {
     @Path("disable")
     @Admin
     public void disablePlugin(@QueryParam("gav") final String gav) {
-        Context.getInstance().disablePlugin(new Gav(gav));
+        Context.getInstance().disablePlugin(Gav.builder()
+                                               .addHash(gav)
+                                               .build());
     }
 
     /**
@@ -76,7 +78,9 @@ public class AdministrationPluginsRest {
     @Path("enable")
     @Admin
     public void enablePlugin(@QueryParam("gav") final String gav) {
-        Context.getInstance().enablePlugin(new Gav(gav));
+        Context.getInstance().enablePlugin(Gav.builder()
+                                              .addHash(gav)
+                                              .build());
     }
 
 }

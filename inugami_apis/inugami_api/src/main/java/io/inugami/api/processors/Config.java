@@ -36,8 +36,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @XStreamAlias("config")
-public class Config implements Serializable {
-    
+public final class Config implements Serializable {
+
     /**
      * The Constant serialVersionUID.
      */

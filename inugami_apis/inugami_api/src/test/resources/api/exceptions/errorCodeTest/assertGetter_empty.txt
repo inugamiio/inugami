@@ -1,0 +1,15 @@
+errorStatus:	500
+errorCode:	undefine
+message:	error
+messageDetail:	null
+exploitationError:	false
+errorType:	technical
+errorDomain:	null
+errorSubDomain:	null
+payload:	null
+url:	null
+rollback:	false
+retryable:	false
+errorHandler:	false
+category:	null
+field:	null

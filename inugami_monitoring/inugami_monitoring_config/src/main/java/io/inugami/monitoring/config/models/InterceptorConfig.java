@@ -39,7 +39,7 @@ import java.io.Serializable;
 @Setter
 @Getter
 @XStreamAlias("interceptor")
-public class InterceptorConfig implements PostProcessing<ConfigHandler<String, String>>, Serializable {
+public final class InterceptorConfig implements PostProcessing<ConfigHandler<String, String>>, Serializable {
 
     private static final long serialVersionUID = 1827622555337135611L;
 

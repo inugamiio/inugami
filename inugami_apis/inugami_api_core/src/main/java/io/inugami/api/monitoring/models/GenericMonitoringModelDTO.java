@@ -46,7 +46,7 @@ import java.util.Date;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Setter
 @Getter
-public class GenericMonitoringModelDTO implements GenericMonitoringModel, JsonObject, Identifiable<String> {
+public final class GenericMonitoringModelDTO implements GenericMonitoringModel, JsonObject, Identifiable<String> {
 
     // =========================================================================
     // ATTRIBUTES

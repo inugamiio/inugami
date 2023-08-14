@@ -3,18 +3,25 @@ package io.inugami.commons.test.api;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder(toBuilder = true)
 @AllArgsConstructor
 public class SkipLineMatcher implements LineMatcher {
-    private final int line;
+    private final List<Integer> lines;
 
-    public static SkipLineMatcher of(final int line) {
-        return SkipLineMatcher.builder().line(line).build();
+    public static SkipLineMatcher of(final int... lines) {
+        List<Integer> values = new ArrayList<>();
+        for (int i : lines) {
+            values.add(i);
+        }
+        return SkipLineMatcher.builder().lines(values).build();
     }
 
     @Override
     public boolean accept(final int index, final String value, final String reference) {
-        return index == line;
+        return lines.contains(index);
     }
 
     @Override

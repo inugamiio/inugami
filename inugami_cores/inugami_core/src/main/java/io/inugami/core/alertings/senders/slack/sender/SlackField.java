@@ -34,7 +34,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Setter
 @Getter
-public class SlackField implements Serializable {
+public final class SlackField implements Serializable {
 
     private static final long serialVersionUID = -1879457855085068572L;
 

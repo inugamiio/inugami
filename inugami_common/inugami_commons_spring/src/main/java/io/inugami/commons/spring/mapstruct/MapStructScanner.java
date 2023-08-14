@@ -39,8 +39,8 @@ public class MapStructScanner {
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
-    public static final  String                          PROPERTY              = "io.inugami.spring.mapstruct.scanner.enabled";
-    public static final  String                          PROPERTY_BASE_PACKAGE = "io.inugami.spring.mapstruct.scanner.basePackage";
+    public static final  String                          PROPERTY              = "inugami.spring.mapstruct.scanner.enabled";
+    public static final  String                          PROPERTY_BASE_PACKAGE = "inugami.spring.mapstruct.scanner.basePackage";
     private static final Set<Class<?>>                   MAPPERS               = new LinkedHashSet<>();
     private final        ConfigurableListableBeanFactory beanFactory;
     private final        ClassLoader                     classLoader;

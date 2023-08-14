@@ -16,9 +16,11 @@
  */
 package io.inugami.api.models;
 
+import io.inugami.api.tools.unit.test.dto.AssertDtoContext;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static io.inugami.api.tools.unit.test.UnitTestHelper.assertDto;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * RgbTest
@@ -28,23 +30,37 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 class RgbTest {
 
-    // =========================================================================
-    // METHODS
-    // =========================================================================
+    public static final int VALUE = (int) 0x262626;
+
     @Test
-    void test() throws Exception {
+    void rgb() {
+        assertDto(new AssertDtoContext<Rgb>().toBuilder()
+                                             .objectClass(Rgb.class)
+                                             .fullArgConstructorRefPath("api/models/rgb/model.json")
+                                             .getterRefPath("api/models/rgb/getter.json")
+                                             .toStringRefPath("api/models/rgb/toString.txt")
+                                             .cloneFunction(instance -> instance.toBuilder().build())
+                                             .noArgConstructor(Rgb::new)
+                                             .fullArgConstructor(this::buildDataSet)
+                                             .noEqualsFunction(this::notEquals)
+                                             .checkSetters(false)
+                                             .checkSerialization(false)
+                                             .build());
+    }
 
-        Rgb rgbColor = new Rgb(0x102534);
-        assertEquals(0x10, rgbColor.getRed());
-        assertEquals(0x25, rgbColor.getGreen());
-        assertEquals(0x34, rgbColor.getBlue());
+    void notEquals(final Rgb instance) {
+        assertThat(instance).isNotEqualTo(instance.toBuilder());
+        assertThat(instance.hashCode()).isNotEqualTo(instance.toBuilder().hashCode());
 
-        assertEquals(0x23, rgbColor.getAvg());
+        //
+        assertThat(instance).isNotEqualTo(instance.toBuilder().color(VALUE).build());
+        assertThat(instance.toBuilder().color(VALUE).build()).isNotEqualTo(instance);
+        assertThat(instance.toBuilder().color(VALUE).build().hashCode()).isNotEqualTo(instance.hashCode());
+    }
 
-        rgbColor = new Rgb(0xf2a1b2);
-        assertEquals((byte) 0xf2, rgbColor.getRed());
-        assertEquals((byte) 0xa1, rgbColor.getGreen());
-        assertEquals((byte) 0xb2, rgbColor.getBlue());
-
+    private Rgb buildDataSet() {
+        return Rgb.builder()
+                  .addColor((int) 0xadf2be)
+                  .build();
     }
 }

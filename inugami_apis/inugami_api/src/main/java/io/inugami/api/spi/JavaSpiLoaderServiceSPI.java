@@ -15,7 +15,9 @@ public class JavaSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
             final ServiceLoader<T> servicesLoaders = (ServiceLoader<T>) ServiceLoader.load(type);
             servicesLoaders.forEach(result::add);
         } catch (Throwable e) {
-            Loggers.DEBUG.error(e.getMessage(), e);
+            if (Loggers.DEBUG.isDebugEnabled()) {
+                Loggers.DEBUG.error(e.getMessage(), e);
+            }
         }
         return result;
     }

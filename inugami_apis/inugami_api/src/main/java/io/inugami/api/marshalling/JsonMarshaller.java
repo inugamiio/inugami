@@ -17,10 +17,8 @@
 package io.inugami.api.marshalling;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -30,6 +28,9 @@ import lombok.Getter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @SuppressWarnings({"java:S1874"})
 @Getter
@@ -38,7 +39,17 @@ public class JsonMarshaller {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final SimpleModule INUGAMI_MODULE = initInugamiModule();
+    private static final SimpleModule INUGAMI_MODULE   = initInugamiModule();
+    private static final List<Module> EXTERNAL_MODULES = loadExternalModules();
+
+    private static List<Module> loadExternalModules() {
+        final List<ModuleRegisterSpi> moduleLoaders = SpiLoader.getInstance().loadSpiService(ModuleRegisterSpi.class);
+        return moduleLoaders.stream()
+                            .map(ModuleRegisterSpi::extractModules)
+                            .filter(Objects::nonNull)
+                            .flatMap(List::stream)
+                            .collect(Collectors.toList());
+    }
 
     private final ObjectMapper defaultObjectMapper;
     private final ObjectMapper indentedObjectMapper;
@@ -94,6 +105,11 @@ public class JsonMarshaller {
             objectMapper.registerModule(new ParameterNamesModule())
                         .registerModule(new Jdk8Module())
                         .registerModule(new JavaTimeModule());
+
+            for (Module module : EXTERNAL_MODULES) {
+                objectMapper.registerModule(module);
+            }
+
             objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -113,6 +129,11 @@ public class JsonMarshaller {
             objectMapper.registerModule(new ParameterNamesModule())
                         .registerModule(new Jdk8Module())
                         .registerModule(new JavaTimeModule());
+
+            for (Module module : EXTERNAL_MODULES) {
+                objectMapper.registerModule(module);
+            }
+
             objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

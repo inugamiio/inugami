@@ -80,7 +80,7 @@ public final class ConnectorConstants {
 
     public static final String CURRENT_APPLICATION_NAME     = initValue(APPLICATION_NAME,
                                                                         JvmKeyValues.APPLICATION_NAME.or(
-                                                                                JvmKeyValues.DEFAUKLT_APPLICATION_NAME));
+                                                                                JvmKeyValues.DEFAULT_APPLICATION_NAME));
     public static final String HEADER_APPLICATION_NAME      = initValue(APPLICATION_NAME_HEADER, "application-name");
     public static final String CURRENT_APPLICATION_HOSTNAME = initValue(APPLICATION_HOSTNAME, "");
     public static final String APPLICATION_HOSTNAME_HEADER  = initValue(APPLICATION_HOSTNAME_HEADER_KEY,

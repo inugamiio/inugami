@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class DynamicAlertingLevel {
+public final class DynamicAlertingLevel {
     private String       name;
     @EqualsAndHashCode.Include
     private AlerteLevels level;

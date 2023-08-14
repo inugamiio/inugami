@@ -82,12 +82,12 @@ public class ConfigurationResolver {
         if (jvmValueDefine == null) {
             final String userHome = System.getProperty("user.home");
             Asserts.assertNotNull("Can't get user home information!", userHome);
-            result = new File(userHome + File.separator + "." + JvmKeyValues.DEFAUKLT_APPLICATION_NAME);
+            result = new File(userHome + File.separator + "." + JvmKeyValues.DEFAULT_APPLICATION_NAME);
         } else {
             result = new File(System.getProperty(JvmKeyValues.JVM_HOME_PATH.getKey()));
         }
 
-        Asserts.assertNotNull(JvmKeyValues.DEFAUKLT_APPLICATION_NAME + " HOME isn't define!", result);
+        Asserts.assertNotNull(JvmKeyValues.DEFAULT_APPLICATION_NAME + " HOME isn't define!", result);
         if (!result.exists()) {
             result.mkdirs();
         }

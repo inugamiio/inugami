@@ -16,6 +16,9 @@
  */
 package io.inugami.api.constants;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * JvmKeyValues
  *
@@ -23,6 +26,8 @@ package io.inugami.api.constants;
  * @since 27 déc. 2016
  */
 @SuppressWarnings({"java:S3066"})
+@Getter
+@RequiredArgsConstructor
 public enum JvmKeyValues {
     // =========================================================================
     // ENUM
@@ -138,24 +143,13 @@ public enum JvmKeyValues {
 
     CACHE_CONFIG_PATH("cache.configuration.path");
 
-    public static final String DEFAUKLT_APPLICATION_NAME = "inugami";
+    public static final String DEFAULT_APPLICATION_NAME = "inugami";
 
     // =========================================================================
     // ENUM COMPOSITE
     // =========================================================================
-    private String key;
+    private final String key;
 
-    private JvmKeyValues(final String key) {
-        this.key = key;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(final String key) {
-        this.key = key;
-    }
 
     public String or(final Object defaultValue) {
         return getValue(this, defaultValue == null ? null : String.valueOf(defaultValue));

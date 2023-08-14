@@ -16,8 +16,10 @@
  */
 package io.inugami.commons.test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.inugami.api.exceptions.UncheckedException;
 import io.inugami.api.functionnals.VoidFunctionWithException;
+import io.inugami.api.marshalling.JsonMarshaller;
 import io.inugami.api.monitoring.MdcService;
 import io.inugami.api.monitoring.logs.BasicLogEvent;
 import io.inugami.api.monitoring.logs.DefaultLogListener;
@@ -35,7 +37,8 @@ import java.util.function.Consumer;
 
 import static io.inugami.commons.test.UnitTestHelperText.assertText;
 
-@SuppressWarnings({"java:S112"})
+
+@SuppressWarnings({"java:S112", "java:S5361"})
 @UtilityClass
 public class UnitTestHelperLogs {
 
@@ -158,7 +161,30 @@ public class UnitTestHelperLogs {
         final LineMatcher[] matchers = Optional.ofNullable(context.getLineMatchers())
                                                .orElse(new ArrayList<>())
                                                .toArray(new LineMatcher[]{});
-        assertText(logs, logsContent, matchers);
+        List<String> currentLogs = new ArrayList<>();
+        for (BasicLogEvent event : logs) {
+            String json = convertToJson(event).replaceAll("\\n", "\n")
+                                              .replaceAll("\\\\n", "\n")
+                                              .replaceAll("\\t", "\t")
+                                              .replaceAll("\\\\t", "\t")
+                                              .replaceAll("\\\"", "\"")
+                                              .replaceAll("\\\\\"", "\"")
+                                              .replaceAll("}\\\"", "}");
+
+
+            currentLogs.add(json);
+        }
+
+
+        assertText(String.join("\n", currentLogs), logsContent, matchers);
+    }
+
+    private static String convertToJson(final BasicLogEvent event) {
+        try {
+            return JsonMarshaller.getInstance().getIndentedObjectMapper().writeValueAsString(event);
+        } catch (JsonProcessingException e) {
+            return "";
+        }
     }
 
 }

@@ -16,11 +16,9 @@
  */
 package io.inugami.commons.spring.feature;
 
-import io.inugami.api.feature.Feature;
 import io.inugami.api.feature.FeatureContext;
 import io.inugami.api.feature.FeatureInterceptor;
 import io.inugami.api.models.tools.Chrono;
-import io.inugami.api.tools.ReflectionUtils;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +31,8 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.List;
+
+import static io.inugami.commons.spring.feature.FeatureUtils.buildFeatureContext;
 
 @SuppressWarnings({"java:S3358", "java:S112", "java:S1172"})
 @Slf4j
@@ -111,21 +111,7 @@ public class FeatureAopAspect {
         final Object[]        args            = jointPoint.getArgs();
         final Object          instance        = jointPoint.getTarget();
 
-        final Feature feature = ReflectionUtils.getAnnotation(method, Feature.class);
-        return feature == null
-                ? null
-                : FeatureContext.builder()
-                                .featureName(feature.value().isEmpty() ? method.getName() : feature.value())
-                                .enabledByDefault(feature.enabledByDefault())
-                                .propertyPerfix(feature.propertyPrefix()
-                                                       .isEmpty() ? bean.getName() : feature.propertyPrefix())
-                                .fallback(feature.fallback())
-                                .monitored(feature.monitored())
-                                .bean(bean)
-                                .method(method)
-                                .args(args)
-                                .instance(instance)
-                                .build();
+        return buildFeatureContext(method, bean, args, instance);
     }
 
     // ========================================================================

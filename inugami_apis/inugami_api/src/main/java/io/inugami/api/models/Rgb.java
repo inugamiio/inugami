@@ -17,9 +17,8 @@
 package io.inugami.api.models;
 
 import io.inugami.api.tools.Hex;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Builder;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -30,42 +29,38 @@ import java.io.Serializable;
  * @author patrick_guillerm
  * @since 12 avr. 2018
  */
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
 @Getter
-public class Rgb implements Serializable {
+public final class Rgb implements Serializable {
 
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
     private static final long serialVersionUID = -3447074324241155009L;
 
-    private final byte red;
-
-    private final byte green;
-
-    private final byte blue;
-
+    private byte   red;
+    private byte   green;
+    private byte   blue;
     @EqualsAndHashCode.Include
-    private final int color;
-
-    private final byte avg;
-
+    private int    color;
+    private byte   avg;
     @ToString.Include
-    private final String hexa;
+    private String hexa;
 
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public Rgb(final int color) {
-        this.color = color;
-        red = (byte) (color >> 16);
-        green = (byte) ((color & 0x00FF00) >> 8);
-        blue = (byte) (color & 0x0000FF);
 
-        avg = (byte) ((red + green + blue) / 3);
-        hexa = Hex.encodeHexString(new byte[]{red, green, blue});
+    public static class RgbBuilder {
+        public RgbBuilder addColor(final int color) {
+            this.color = color;
+            red = (byte) (color >> 16);
+            green = (byte) ((color & 0x00FF00) >> 8);
+            blue = (byte) (color & 0x0000FF);
+
+            avg = (byte) ((red + green + blue) / 3);
+            hexa = Hex.encodeHexString(new byte[]{red, green, blue});
+            return this;
+        }
     }
-
 
 }

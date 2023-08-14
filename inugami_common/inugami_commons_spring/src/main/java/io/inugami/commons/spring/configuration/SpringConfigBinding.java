@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 @Builder(toBuilder = true)
 @Getter
-public class SpringConfigBinding {
+public final class SpringConfigBinding {
     private final String springKey;
     private final String inugamiKey;
     private final String defaultValue;

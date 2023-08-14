@@ -36,10 +36,10 @@ import java.io.Serializable;
 @Getter
 @Setter
 @XStreamAlias("specific")
-public class SpecificHeader implements Serializable {
+public final class SpecificHeader implements Serializable {
 
     private static final long serialVersionUID = -6329175872517017427L;
-    
+
     @XStreamAsAttribute
     private String name;
 

@@ -21,13 +21,14 @@ import io.inugami.api.functionnals.ActionWithException;
 import io.inugami.api.functionnals.IsEmptyFacet;
 import io.inugami.api.functionnals.VoidFunction;
 import io.inugami.api.functionnals.VoidFunctionWithException;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
@@ -37,17 +38,12 @@ import java.util.regex.Pattern;
  * @author patrick_guillerm
  * @since 22 juil. 2016
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class Asserts {
+@UtilityClass
+public class Asserts {
 
     // ========================================================================
     // ATTRIBUTES
     // ========================================================================
-    private static final String ASSERT_TRUE_DEFAULT_MSG      = "this expression must be true";
-    private static final String ASSERT_FALSE_DEFAULT_MSG     = "this expression must be false";
-    private static final String ASSERT_NOT_EMPTY_DEFAULT_MSG = "the value mustn't be empty";
-
-    private static final String ASSERT_EMPTY_DEFAULT_MSG = "the value should be empty";
 
 
     // -------------------------------------------------------------------------
@@ -55,31 +51,25 @@ public final class Asserts {
     // -------------------------------------------------------------------------
 
     public static void assertTrue(final boolean expression) {
-        assertTrue(ASSERT_TRUE_DEFAULT_MSG, expression);
+        AssertBoolean.INSTANCE.assertTrue(expression);
     }
 
 
     public static void assertTrue(final String message,
                                   final boolean expression) {
-        if (!expression) {
-            throwException(message == null ? ASSERT_TRUE_DEFAULT_MSG : message);
-        }
+        AssertBoolean.INSTANCE.assertTrue(message, expression);
     }
 
 
     public static void assertTrue(final ErrorCode errorCode,
                                   final boolean expression) {
-        if (!expression) {
-            throwException(errorCode);
-        }
+        AssertBoolean.INSTANCE.assertTrue(errorCode, expression);
     }
 
 
     public static void assertTrue(final Supplier<String> messageProducer,
                                   final boolean expression) {
-        if (!expression) {
-            throwException(messageProducer == null ? ASSERT_TRUE_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertBoolean.INSTANCE.assertTrue(messageProducer, expression);
     }
 
     // -------------------------------------------------------------------------
@@ -87,54 +77,44 @@ public final class Asserts {
     // -------------------------------------------------------------------------
 
     public static void assertFalse(final boolean expression) {
-        assertFalse(ASSERT_FALSE_DEFAULT_MSG, expression);
+        AssertBoolean.INSTANCE.assertFalse(expression);
     }
 
 
     public static void assertFalse(final String message,
                                    final boolean expression) {
-        if (expression) {
-            throwException(message == null ? ASSERT_FALSE_DEFAULT_MSG : message);
-        }
+        AssertBoolean.INSTANCE.assertFalse(message, expression);
     }
 
 
     public static void assertFalse(final Supplier<String> messageProducer,
                                    final boolean expression) {
-        if (expression) {
-            throwException(messageProducer == null ? ASSERT_FALSE_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertBoolean.INSTANCE.assertFalse(messageProducer, expression);
     }
 
 
     public static void assertFalse(final ErrorCode errorCode,
                                    final boolean expression) {
-        if (expression) {
-            throwException(errorCode);
-        }
+        AssertBoolean.INSTANCE.assertFalse(errorCode, expression);
     }
 
     // -------------------------------------------------------------------------
     // IS NULL
     // -------------------------------------------------------------------------
-    public static void assertNull(final Object... objects) {
-        AssertNull.assertNull(objects);
-    }
-
     public static void assertNull(final String message,
                                   final Object... values) {
-        AssertNull.assertNull(message, values);
+        AssertNull.INSTANCE.assertNull(message, values);
     }
 
     public static void assertNull(final Supplier<String> messageProducer,
                                   final Object... values) {
-        AssertNull.assertNull(messageProducer, values);
+        AssertNull.INSTANCE.assertNull(messageProducer, values);
     }
 
 
     public static void assertNull(final ErrorCode errorCode,
                                   final Object... values) {
-        AssertNull.assertNull(errorCode, values);
+        AssertNull.INSTANCE.assertNull(errorCode, values);
     }
 
     // -------------------------------------------------------------------------
@@ -143,25 +123,25 @@ public final class Asserts {
 
 
     public static void assertNotNull(final Object... objects) {
-        AssertNull.assertNotNull(objects);
+        AssertNull.INSTANCE.assertNotNull(objects);
     }
 
 
     public static void assertNotNull(final String message,
                                      final Object... values) {
-        AssertNull.assertNotNull(message, values);
+        AssertNull.INSTANCE.assertNotNull(message, values);
     }
 
 
     public static void assertNotNull(final Supplier<String> messageProducer,
                                      final Object... values) {
-        AssertNull.assertNotNull(messageProducer, values);
+        AssertNull.INSTANCE.assertNotNull(messageProducer, values);
     }
 
 
     public static void assertNotNull(final ErrorCode errorCode,
                                      final Object... values) {
-        AssertNull.assertNotNull(errorCode, values);
+        AssertNull.INSTANCE.assertNotNull(errorCode, values);
     }
 
 
@@ -169,130 +149,91 @@ public final class Asserts {
     // NOT EMPTY
     // -------------------------------------------------------------------------
     public static void assertNotEmpty(final String value) {
-        if (checkIsBlank(value)) {
-            throwException(ASSERT_NOT_EMPTY_DEFAULT_MSG);
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(value);
     }
 
 
     public static void assertNotEmpty(final String message,
                                       final String value) {
-        if (checkIsBlank(value)) {
-            throwException(message == null ? ASSERT_NOT_EMPTY_DEFAULT_MSG : message);
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(message, value);
     }
 
 
     public static void assertNotEmpty(final Supplier<String> messageProducer,
                                       final String value) {
-        if (checkIsBlank(value)) {
-            throwException(messageProducer == null ? ASSERT_NOT_EMPTY_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(messageProducer, value);
     }
 
 
     public static void assertNotEmpty(final ErrorCode errorCode,
                                       final String value) {
-        if (checkIsBlank(value)) {
-            throwException(errorCode);
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(errorCode, value);
     }
 
     public static boolean checkIsBlank(final String value) {
-
-        boolean result = (value == null) || (value.length() == 0) || value.isEmpty();
-
-        if (!result) {
-            result = value.isBlank();
-        }
-
-        return result;
+        return AssertEmpty.INSTANCE.checkIsBlank(value);
     }
 
     public static void assertNotEmpty(final Collection<?> value) {
-        if (value == null || value.isEmpty()) {
-            throwException(ASSERT_NOT_EMPTY_DEFAULT_MSG);
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(value);
     }
 
     public static void assertNotEmpty(final Supplier<String> messageProducer,
                                       final Collection<?> value) {
-        if (value == null || value.isEmpty()) {
-            throwException(messageProducer == null ? ASSERT_NOT_EMPTY_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(messageProducer, value);
     }
 
 
     public static void assertNotEmpty(final String message,
                                       final Collection<?> value) {
-        if (value == null || value.isEmpty()) {
-            throwException(message == null ? ASSERT_NOT_EMPTY_DEFAULT_MSG : message);
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(message, value);
     }
 
 
     public static void assertNotEmpty(final ErrorCode errorCode,
                                       final Collection<?> value) {
-        if (value == null || value.isEmpty()) {
-            throwException(errorCode);
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(errorCode, value);
     }
 
 
     public static void assertNotEmpty(final IsEmptyFacet value) {
-        if (value == null || value.isEmpty()) {
-            throwException(ASSERT_NOT_EMPTY_DEFAULT_MSG);
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(value);
     }
 
     public static void assertNotEmpty(final String message,
                                       final IsEmptyFacet value) {
-        if (value == null || value.isEmpty()) {
-            throwException(message == null ? ASSERT_NOT_EMPTY_DEFAULT_MSG : message);
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(message, value);
     }
 
     public static void assertNotEmpty(final Supplier<String> messageProducer,
                                       final IsEmptyFacet value) {
-        if (value == null || value.isEmpty()) {
-            throwException(messageProducer == null ? ASSERT_NOT_EMPTY_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(messageProducer, value);
     }
 
     public static void assertNotEmpty(final ErrorCode errorCode,
                                       final IsEmptyFacet value) {
-        if (value == null || value.isEmpty()) {
-            throwException(errorCode);
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(errorCode, value);
     }
 
     public static void assertNotEmpty(final Map<?, ?> value) {
-        if (value == null || value.isEmpty()) {
-            throwException(ASSERT_NOT_EMPTY_DEFAULT_MSG);
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(value);
     }
 
 
     public static void assertNotEmpty(final String message,
                                       final Map<?, ?> value) {
-        if (value == null || value.isEmpty()) {
-            throwException(message == null ? ASSERT_NOT_EMPTY_DEFAULT_MSG : message);
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(message, value);
     }
 
     public static void assertNotEmpty(final Supplier<String> messageProducer,
                                       final Map<?, ?> value) {
-        if (value == null || value.isEmpty()) {
-            throwException(messageProducer == null ? ASSERT_NOT_EMPTY_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(messageProducer, value);
     }
 
 
     public static void assertNotEmpty(final ErrorCode errorCode,
                                       final Map<?, ?> value) {
-        if (value == null || value.isEmpty()) {
-            throwException(errorCode);
-        }
+        AssertEmpty.INSTANCE.assertNotEmpty(errorCode, value);
     }
 
 
@@ -300,113 +241,81 @@ public final class Asserts {
     // EMPTY
     // -------------------------------------------------------------------------
     public static void assertEmpty(final String value) {
-        if (!checkIsBlank(value)) {
-            throwException(ASSERT_EMPTY_DEFAULT_MSG);
-        }
+        AssertEmpty.INSTANCE.assertEmpty(value);
     }
 
     public static void assertEmpty(final String message,
                                    final String value) {
-        if (!checkIsBlank(value)) {
-            throwException(message == null ? ASSERT_EMPTY_DEFAULT_MSG : message);
-        }
+        AssertEmpty.INSTANCE.assertEmpty(message, value);
     }
 
     public static void assertEmpty(final Supplier<String> messageProducer,
                                    final String value) {
-        if (!checkIsBlank(value)) {
-            throwException(messageProducer == null ? ASSERT_EMPTY_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertEmpty.INSTANCE.assertEmpty(messageProducer, value);
     }
 
     public static void assertEmpty(final ErrorCode errorCode,
                                    final String value) {
-        if (!checkIsBlank(value)) {
-            throwException(errorCode);
-        }
+        AssertEmpty.INSTANCE.assertEmpty(errorCode, value);
     }
 
 
     public static void assertEmpty(final Collection<?> value) {
-        if (value == null || !value.isEmpty()) {
-            throwException(ASSERT_EMPTY_DEFAULT_MSG);
-        }
+        AssertEmpty.INSTANCE.assertEmpty(value);
     }
 
     public static void assertEmpty(final Supplier<String> messageProducer,
                                    final Collection<?> value) {
-        if (value == null || !value.isEmpty()) {
-            throwException(messageProducer == null ? ASSERT_EMPTY_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertEmpty.INSTANCE.assertEmpty(messageProducer, value);
     }
 
     public static void assertEmpty(final String message,
                                    final Collection<?> value) {
-        if (value == null || !value.isEmpty()) {
-            throwException(message == null ? ASSERT_EMPTY_DEFAULT_MSG : message);
-        }
+        AssertEmpty.INSTANCE.assertEmpty(message, value);
     }
 
     public static void assertEmpty(final ErrorCode errorCode,
                                    final Collection<?> value) {
-        if (value == null || !value.isEmpty()) {
-            throwException(errorCode);
-        }
+        AssertEmpty.INSTANCE.assertEmpty(errorCode, value);
     }
 
     public static void assertEmpty(final Map<?, ?> value) {
-        if (value == null || !value.isEmpty()) {
-            throwException(ASSERT_EMPTY_DEFAULT_MSG);
-        }
+        AssertEmpty.INSTANCE.assertEmpty(value);
     }
 
     public static void assertEmpty(final String message,
                                    final Map<?, ?> value) {
-        if (value == null || !value.isEmpty()) {
-            throwException(message == null ? ASSERT_EMPTY_DEFAULT_MSG : message);
-        }
+        AssertEmpty.INSTANCE.assertEmpty(message, value);
     }
 
     public static void assertEmpty(final Supplier<String> messageProducer,
                                    final Map<?, ?> value) {
-        if (value == null || !value.isEmpty()) {
-            throwException(messageProducer == null ? ASSERT_EMPTY_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertEmpty.INSTANCE.assertEmpty(messageProducer, value);
     }
 
     public static void assertEmpty(final ErrorCode errorCode,
                                    final Map<?, ?> value) {
-        if (value == null || !value.isEmpty()) {
-            throwException(errorCode);
-        }
+        AssertEmpty.INSTANCE.assertEmpty(errorCode, value);
     }
 
 
     public static void assertEmpty(final IsEmptyFacet value) {
-        if (value == null || !value.isEmpty()) {
-            throwException(ASSERT_EMPTY_DEFAULT_MSG);
-        }
+        AssertEmpty.INSTANCE.assertEmpty(value);
     }
 
     public static void assertEmpty(final Supplier<String> messageProducer,
                                    final IsEmptyFacet value) {
-        if (value == null || !value.isEmpty()) {
-            throwException(messageProducer == null ? ASSERT_EMPTY_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertEmpty.INSTANCE.assertEmpty(messageProducer, value);
     }
 
     public static void assertEmpty(final String message,
                                    final IsEmptyFacet value) {
-        if (value == null || !value.isEmpty()) {
-            throwException(message == null ? ASSERT_EMPTY_DEFAULT_MSG : message);
-        }
+        AssertEmpty.INSTANCE.assertEmpty(message, value);
     }
 
     public static void assertEmpty(final ErrorCode errorCode,
                                    final IsEmptyFacet value) {
-        if (value == null || !value.isEmpty()) {
-            throwException(errorCode);
-        }
+        AssertEmpty.INSTANCE.assertEmpty(errorCode, value);
     }
 
 
@@ -414,113 +323,81 @@ public final class Asserts {
     // NULL OR EMPTY
     // -------------------------------------------------------------------------
     public static void assertNullOrEmpty(final String value) {
-        if (value != null && !checkIsBlank(value)) {
-            throwException(ASSERT_EMPTY_DEFAULT_MSG);
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(value);
     }
 
     public static void assertNullOrEmpty(final String message,
                                          final String value) {
-        if (value != null && !checkIsBlank(value)) {
-            throwException(message == null ? ASSERT_EMPTY_DEFAULT_MSG : message);
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(message, value);
     }
 
     public static void assertNullOrEmpty(final Supplier<String> messageProducer,
                                          final String value) {
-        if (value != null && !checkIsBlank(value)) {
-            throwException(messageProducer == null ? ASSERT_EMPTY_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(messageProducer, value);
     }
 
     public static void assertNullOrEmpty(final ErrorCode errorCode,
                                          final String value) {
-        if (value != null && !checkIsBlank(value)) {
-            throwException(errorCode);
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(errorCode, value);
     }
 
 
     public static void assertNullOrEmpty(final Collection<?> value) {
-        if (value != null && !value.isEmpty()) {
-            throwException(ASSERT_EMPTY_DEFAULT_MSG);
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(value);
     }
 
     public static void assertNullOrEmpty(final Supplier<String> messageProducer,
                                          final Collection<?> value) {
-        if (value != null && !value.isEmpty()) {
-            throwException(messageProducer == null ? ASSERT_EMPTY_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(messageProducer, value);
     }
 
     public static void assertNullOrEmpty(final String message,
                                          final Collection<?> value) {
-        if (value != null && !value.isEmpty()) {
-            throwException(message == null ? ASSERT_EMPTY_DEFAULT_MSG : message);
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(message, value);
     }
 
     public static void assertNullOrEmpty(final ErrorCode errorCode,
                                          final Collection<?> value) {
-        if (value != null && !value.isEmpty()) {
-            throwException(errorCode);
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(errorCode, value);
     }
 
     public static void assertNullOrEmpty(final Map<?, ?> value) {
-        if (value != null && !value.isEmpty()) {
-            throwException(ASSERT_EMPTY_DEFAULT_MSG);
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(value);
     }
 
     public static void assertNullOrEmpty(final String message,
                                          final Map<?, ?> value) {
-        if (value != null && !value.isEmpty()) {
-            throwException(message == null ? ASSERT_EMPTY_DEFAULT_MSG : message);
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(message, value);
     }
 
     public static void assertNullOrEmpty(final Supplier<String> messageProducer,
                                          final Map<?, ?> value) {
-        if (value != null && !value.isEmpty()) {
-            throwException(messageProducer == null ? ASSERT_EMPTY_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(messageProducer, value);
     }
 
     public static void assertNullOrEmpty(final ErrorCode errorCode,
                                          final Map<?, ?> value) {
-        if (value != null && !value.isEmpty()) {
-            throwException(errorCode);
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(errorCode, value);
     }
 
 
     public static void assertNullOrEmpty(final IsEmptyFacet value) {
-        if (value != null && !value.isEmpty()) {
-            throwException(ASSERT_EMPTY_DEFAULT_MSG);
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(value);
     }
 
     public static void assertNullOrEmpty(final Supplier<String> messageProducer,
                                          final IsEmptyFacet value) {
-        if (value != null && !value.isEmpty()) {
-            throwException(messageProducer == null ? ASSERT_EMPTY_DEFAULT_MSG : messageProducer.get());
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(messageProducer, value);
     }
 
     public static void assertNullOrEmpty(final String message,
                                          final IsEmptyFacet value) {
-        if (value != null && !value.isEmpty()) {
-            throwException(message == null ? ASSERT_EMPTY_DEFAULT_MSG : message);
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(message, value);
     }
 
     public static void assertNullOrEmpty(final ErrorCode errorCode,
                                          final IsEmptyFacet value) {
-        if (value != null && !value.isEmpty()) {
-            throwException(errorCode);
-        }
+        AssertEmpty.INSTANCE.assertNullOrEmpty(errorCode, value);
     }
 
     // -------------------------------------------------------------------------
@@ -530,120 +407,120 @@ public final class Asserts {
 
     public static void assertEquals(final Object ref,
                                     final Object value) {
-        AssertEquals.assertEquals(ref, value);
+        AssertEquals.INSTANCE.assertEquals(ref, value);
     }
 
 
     public static void assertEquals(final String message,
                                     final Object ref,
                                     final Object value) {
-        AssertEquals.assertEquals(message, ref, value);
+        AssertEquals.INSTANCE.assertEquals(message, ref, value);
     }
 
     public static void assertEquals(final Supplier<String> messageProducer,
                                     final Object ref,
                                     final Object value) {
-        AssertEquals.assertEquals(messageProducer, ref, value);
+        AssertEquals.INSTANCE.assertEquals(messageProducer, ref, value);
     }
 
 
     public static void assertEquals(final ErrorCode errorCode,
                                     final Object ref,
                                     final Object value) {
-        AssertEquals.assertEquals(errorCode, ref, value);
+        AssertEquals.INSTANCE.assertEquals(errorCode, ref, value);
     }
 
 
     public static void assertEquals(final int ref,
                                     final int value) {
-        AssertEquals.assertEquals(ref, value);
+        AssertEquals.INSTANCE.assertEquals(ref, value);
     }
 
     public static void assertEquals(final String message,
                                     final int ref,
                                     final int value) {
-        AssertEquals.assertEquals(message, ref, value);
+        AssertEquals.INSTANCE.assertEquals(message, ref, value);
     }
 
     public static void assertEquals(final Supplier<String> messageProducer,
                                     final int ref,
                                     final int value) {
-        AssertEquals.assertEquals(messageProducer, ref, value);
+        AssertEquals.INSTANCE.assertEquals(messageProducer, ref, value);
     }
 
     public static void assertEquals(final ErrorCode errorCode,
                                     final int ref,
                                     final int value) {
-        AssertEquals.assertEquals(errorCode, ref, value);
+        AssertEquals.INSTANCE.assertEquals(errorCode, ref, value);
     }
 
     public static void assertEquals(final long ref,
                                     final long value) {
-        AssertEquals.assertEquals(ref, value);
+        AssertEquals.INSTANCE.assertEquals(ref, value);
     }
 
     public static void assertEquals(final String message,
                                     final long ref,
                                     final long value) {
-        AssertEquals.assertEquals(message, ref, value);
+        AssertEquals.INSTANCE.assertEquals(message, ref, value);
     }
 
     public static void assertEquals(final Supplier<String> messageProducer,
                                     final long ref,
                                     final long value) {
-        AssertEquals.assertEquals(messageProducer, ref, value);
+        AssertEquals.INSTANCE.assertEquals(messageProducer, ref, value);
     }
 
     public static void assertEquals(final ErrorCode errorCode,
                                     final long ref,
                                     final long value) {
-        AssertEquals.assertEquals(errorCode, ref, value);
+        AssertEquals.INSTANCE.assertEquals(errorCode, ref, value);
     }
 
     public static void assertEquals(final float ref,
                                     final float value) {
-        AssertEquals.assertEquals(ref, value);
+        AssertEquals.INSTANCE.assertEquals(ref, value);
     }
 
     public static void assertEquals(final String message,
                                     final float ref,
                                     final float value) {
-        AssertEquals.assertEquals(message, ref, value);
+        AssertEquals.INSTANCE.assertEquals(message, ref, value);
     }
 
     public static void assertEquals(final Supplier<String> messageProducer,
                                     final float ref,
                                     final float value) {
-        AssertEquals.assertEquals(messageProducer, ref, value);
+        AssertEquals.INSTANCE.assertEquals(messageProducer, ref, value);
     }
 
     public static void assertEquals(final ErrorCode errorCode,
                                     final float ref,
                                     final float value) {
-        AssertEquals.assertEquals(errorCode, ref, value);
+        AssertEquals.INSTANCE.assertEquals(errorCode, ref, value);
     }
 
     public static void assertEquals(final double ref,
                                     final double value) {
-        AssertEquals.assertEquals(ref, value);
+        AssertEquals.INSTANCE.assertEquals(ref, value);
     }
 
     public static void assertEquals(final String message,
                                     final double ref,
                                     final double value) {
-        AssertEquals.assertEquals(message, ref, value);
+        AssertEquals.INSTANCE.assertEquals(message, ref, value);
     }
 
     public static void assertEquals(final Supplier<String> messageProducer,
                                     final double ref,
                                     final double value) {
-        AssertEquals.assertEquals(messageProducer, ref, value);
+        AssertEquals.INSTANCE.assertEquals(messageProducer, ref, value);
     }
 
     public static void assertEquals(final ErrorCode errorCode,
                                     final double ref,
                                     final double value) {
-        AssertEquals.assertEquals(errorCode, ref, value);
+        AssertEquals.INSTANCE.assertEquals(errorCode, ref, value);
     }
 
 
@@ -652,125 +529,125 @@ public final class Asserts {
     // -------------------------------------------------------------------------
     public static void assertNotEquals(final Object ref,
                                        final Object value) {
-        AssertNotEquals.assertNotEquals(ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(ref, value);
     }
 
     public static void assertNotEquals(final String message,
                                        final Object ref,
                                        final Object value) {
-        AssertNotEquals.assertNotEquals(message, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(message, ref, value);
     }
 
     public static void assertNotEquals(final Supplier<String> messageProducer,
                                        final Object ref,
                                        final Object value) {
-        AssertNotEquals.assertNotEquals(messageProducer, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(messageProducer, ref, value);
     }
 
     public static void assertNotEquals(final ErrorCode errorCode,
                                        final Object ref,
                                        final Object value) {
-        AssertNotEquals.assertNotEquals(errorCode, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(errorCode, ref, value);
     }
 
     public static void assertNotEquals(final int ref,
                                        final int value) {
-        AssertNotEquals.assertNotEquals(ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(ref, value);
     }
 
     public static void assertNotEquals(final String message,
                                        final int ref,
                                        final int value) {
-        AssertNotEquals.assertNotEquals(message, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(message, ref, value);
     }
 
 
     public static void assertNotEquals(final Supplier<String> messageProducer,
                                        final int ref,
                                        final int value) {
-        AssertNotEquals.assertNotEquals(messageProducer, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(messageProducer, ref, value);
     }
 
 
     public static void assertNotEquals(final ErrorCode errorCode,
                                        final int ref,
                                        final int value) {
-        AssertNotEquals.assertNotEquals(errorCode, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(errorCode, ref, value);
     }
 
     public static void assertNotEquals(final long ref,
                                        final long value) {
-        AssertNotEquals.assertNotEquals(ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(ref, value);
     }
 
     public static void assertNotEquals(final String message,
                                        final long ref,
                                        final long value) {
-        AssertNotEquals.assertNotEquals(message, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(message, ref, value);
     }
 
 
     public static void assertNotEquals(final Supplier<String> messageProducer,
                                        final long ref,
                                        final long value) {
-        AssertNotEquals.assertNotEquals(messageProducer, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(messageProducer, ref, value);
     }
 
 
     public static void assertNotEquals(final ErrorCode errorCode,
                                        final long ref,
                                        final long value) {
-        AssertNotEquals.assertNotEquals(errorCode, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(errorCode, ref, value);
     }
 
     public static void assertNotEquals(final float ref,
                                        final float value) {
-        AssertNotEquals.assertNotEquals(ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(ref, value);
     }
 
     public static void assertNotEquals(final String message,
                                        final float ref,
                                        final float value) {
-        AssertNotEquals.assertNotEquals(message, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(message, ref, value);
     }
 
 
     public static void assertNotEquals(final Supplier<String> messageProducer,
                                        final float ref,
                                        final float value) {
-        AssertNotEquals.assertNotEquals(messageProducer, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(messageProducer, ref, value);
     }
 
 
     public static void assertNotEquals(final ErrorCode errorCode,
                                        final float ref,
                                        final float value) {
-        AssertNotEquals.assertNotEquals(errorCode, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(errorCode, ref, value);
     }
 
     public static void assertNotEquals(final double ref,
                                        final double value) {
-        AssertNotEquals.assertNotEquals(ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(ref, value);
     }
 
     public static void assertNotEquals(final String message,
                                        final double ref,
                                        final double value) {
-        AssertNotEquals.assertNotEquals(message, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(message, ref, value);
     }
 
 
     public static void assertNotEquals(final Supplier<String> messageProducer,
                                        final double ref,
                                        final double value) {
-        AssertNotEquals.assertNotEquals(messageProducer, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(messageProducer, ref, value);
     }
 
 
     public static void assertNotEquals(final ErrorCode errorCode,
                                        final double ref,
                                        final double value) {
-        AssertNotEquals.assertNotEquals(errorCode, ref, value);
+        AssertNotEquals.INSTANCE.assertNotEquals(errorCode, ref, value);
     }
 
 
@@ -779,194 +656,194 @@ public final class Asserts {
     // -------------------------------------------------------------------------
     public static void assertLower(final int ref,
                                    final int value) {
-        AssertLower.assertLower(ref, value);
+        AssertLower.INSTANCE.assertLower(ref, value);
     }
 
     public static void assertLower(final String message,
                                    final int ref,
                                    final int value) {
-        AssertLower.assertLower(message, ref, value);
+        AssertLower.INSTANCE.assertLower(message, ref, value);
     }
 
     public static void assertLower(final Supplier<String> messageProducer,
                                    final int ref,
                                    final int value) {
-        AssertLower.assertLower(messageProducer, ref, value);
+        AssertLower.INSTANCE.assertLower(messageProducer, ref, value);
     }
 
     public static void assertLower(final ErrorCode errorCode,
                                    final int ref,
                                    final int value) {
-        AssertLower.assertLower(errorCode, ref, value);
+        AssertLower.INSTANCE.assertLower(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertLower(final long ref,
                                    final long value) {
-        AssertLower.assertLower(ref, value);
+        AssertLower.INSTANCE.assertLower(ref, value);
     }
 
     public static void assertLower(final String message,
                                    final long ref,
                                    final long value) {
-        AssertLower.assertLower(message, ref, value);
+        AssertLower.INSTANCE.assertLower(message, ref, value);
     }
 
     public static void assertLower(final Supplier<String> messageProducer,
                                    final long ref,
                                    final long value) {
-        AssertLower.assertLower(messageProducer, ref, value);
+        AssertLower.INSTANCE.assertLower(messageProducer, ref, value);
     }
 
     public static void assertLower(final ErrorCode errorCode,
                                    final long ref,
                                    final long value) {
-        AssertLower.assertLower(errorCode, ref, value);
+        AssertLower.INSTANCE.assertLower(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertLower(final float ref,
                                    final float value) {
-        AssertLower.assertLower(ref, value);
+        AssertLower.INSTANCE.assertLower(ref, value);
     }
 
     public static void assertLower(final String message,
                                    final float ref,
                                    final float value) {
-        AssertLower.assertLower(message, ref, value);
+        AssertLower.INSTANCE.assertLower(message, ref, value);
     }
 
     public static void assertLower(final Supplier<String> messageProducer,
                                    final float ref,
                                    final float value) {
-        AssertLower.assertLower(messageProducer, ref, value);
+        AssertLower.INSTANCE.assertLower(messageProducer, ref, value);
     }
 
     public static void assertLower(final ErrorCode errorCode,
                                    final float ref,
                                    final float value) {
-        AssertLower.assertLower(errorCode, ref, value);
+        AssertLower.INSTANCE.assertLower(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertLower(final double ref,
                                    final double value) {
-        AssertLower.assertLower(ref, value);
+        AssertLower.INSTANCE.assertLower(ref, value);
     }
 
     public static void assertLower(final String message,
                                    final double ref,
                                    final double value) {
-        AssertLower.assertLower(message, ref, value);
+        AssertLower.INSTANCE.assertLower(message, ref, value);
     }
 
     public static void assertLower(final Supplier<String> messageProducer,
                                    final double ref,
                                    final double value) {
-        AssertLower.assertLower(messageProducer, ref, value);
+        AssertLower.INSTANCE.assertLower(messageProducer, ref, value);
     }
 
     public static void assertLower(final ErrorCode errorCode,
                                    final double ref,
                                    final double value) {
-        AssertLower.assertLower(errorCode, ref, value);
+        AssertLower.INSTANCE.assertLower(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertLower(final Integer ref,
                                    final Integer value) {
-        AssertLower.assertLower(ref, value);
+        AssertLower.INSTANCE.assertLower(ref, value);
     }
 
     public static void assertLower(final String message,
                                    final Integer ref,
                                    final Integer value) {
 
-        AssertLower.assertLower(message, ref, value);
+        AssertLower.INSTANCE.assertLower(message, ref, value);
     }
 
     public static void assertLower(final Supplier<String> messageProducer,
                                    final Integer ref,
                                    final Integer value) {
-        AssertLower.assertLower(messageProducer, ref, value);
+        AssertLower.INSTANCE.assertLower(messageProducer, ref, value);
     }
 
     public static void assertLower(final ErrorCode errorCode,
                                    final Integer ref,
                                    final Integer value) {
-        AssertLower.assertLower(errorCode, ref, value);
+        AssertLower.INSTANCE.assertLower(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertLower(final Long ref,
                                    final Long value) {
-        AssertLower.assertLower(ref, value);
+        AssertLower.INSTANCE.assertLower(ref, value);
     }
 
     public static void assertLower(final String message,
                                    final Long ref,
                                    final Long value) {
-        AssertLower.assertLower(message, ref, value);
+        AssertLower.INSTANCE.assertLower(message, ref, value);
     }
 
     public static void assertLower(final Supplier<String> messageProducer,
                                    final Long ref,
                                    final Long value) {
-        AssertLower.assertLower(messageProducer, ref, value);
+        AssertLower.INSTANCE.assertLower(messageProducer, ref, value);
     }
 
     public static void assertLower(final ErrorCode errorCode,
                                    final Long ref,
                                    final Long value) {
-        AssertLower.assertLower(errorCode, ref, value);
+        AssertLower.INSTANCE.assertLower(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertLower(final Double ref,
                                    final Double value) {
-        AssertLower.assertLower(ref, value);
+        AssertLower.INSTANCE.assertLower(ref, value);
     }
 
     public static void assertLower(final String message,
                                    final Double ref,
                                    final Double value) {
-        AssertLower.assertLower(message, ref, value);
+        AssertLower.INSTANCE.assertLower(message, ref, value);
     }
 
     public static void assertLower(final Supplier<String> messageProducer,
                                    final Double ref,
                                    final Double value) {
-        AssertLower.assertLower(messageProducer, ref, value);
+        AssertLower.INSTANCE.assertLower(messageProducer, ref, value);
     }
 
     public static void assertLower(final ErrorCode errorCode,
                                    final Double ref,
                                    final Double value) {
-        AssertLower.assertLower(errorCode, ref, value);
+        AssertLower.INSTANCE.assertLower(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertLower(final BigDecimal ref,
                                    final BigDecimal value) {
-        AssertLower.assertLower(ref, value);
+        AssertLower.INSTANCE.assertLower(ref, value);
     }
 
     public static void assertLower(final String message,
                                    final BigDecimal ref,
                                    final BigDecimal value) {
-        AssertLower.assertLower(message, ref, value);
+        AssertLower.INSTANCE.assertLower(message, ref, value);
     }
 
     public static void assertLower(final Supplier<String> messageProducer,
                                    final BigDecimal ref,
                                    final BigDecimal value) {
-        AssertLower.assertLower(messageProducer, ref, value);
+        AssertLower.INSTANCE.assertLower(messageProducer, ref, value);
     }
 
     public static void assertLower(final ErrorCode errorCode,
                                    final BigDecimal ref,
                                    final BigDecimal value) {
-        AssertLower.assertLower(errorCode, ref, value);
+        AssertLower.INSTANCE.assertLower(errorCode, ref, value);
     }
 
 
@@ -975,193 +852,193 @@ public final class Asserts {
     // -------------------------------------------------------------------------
     public static void assertLowerOrEquals(final int ref,
                                            final int value) {
-        AssertLowerOrEquals.assertLowerOrEquals(ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(ref, value);
     }
 
     public static void assertLowerOrEquals(final String message,
                                            final int ref,
                                            final int value) {
-        AssertLowerOrEquals.assertLowerOrEquals(message, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(message, ref, value);
     }
 
     public static void assertLowerOrEquals(final Supplier<String> messageProducer,
                                            final int ref,
                                            final int value) {
-        AssertLowerOrEquals.assertLowerOrEquals(messageProducer, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(messageProducer, ref, value);
     }
 
     public static void assertLowerOrEquals(final ErrorCode errorCode,
                                            final int ref,
                                            final int value) {
-        AssertLowerOrEquals.assertLowerOrEquals(errorCode, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertLowerOrEquals(final long ref,
                                            final long value) {
-        AssertLowerOrEquals.assertLowerOrEquals(ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(ref, value);
     }
 
     public static void assertLowerOrEquals(final String message,
                                            final long ref,
                                            final long value) {
-        AssertLowerOrEquals.assertLowerOrEquals(message, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(message, ref, value);
     }
 
     public static void assertLowerOrEquals(final Supplier<String> messageProducer,
                                            final long ref,
                                            final long value) {
-        AssertLowerOrEquals.assertLowerOrEquals(messageProducer, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(messageProducer, ref, value);
     }
 
     public static void assertLowerOrEquals(final ErrorCode errorCode,
                                            final long ref,
                                            final long value) {
-        AssertLowerOrEquals.assertLowerOrEquals(errorCode, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertLowerOrEquals(final float ref,
                                            final float value) {
-        AssertLowerOrEquals.assertLowerOrEquals(ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(ref, value);
     }
 
     public static void assertLowerOrEquals(final String message,
                                            final float ref,
                                            final float value) {
-        AssertLowerOrEquals.assertLowerOrEquals(message, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(message, ref, value);
     }
 
     public static void assertLowerOrEquals(final Supplier<String> messageProducer,
                                            final float ref,
                                            final float value) {
-        AssertLowerOrEquals.assertLowerOrEquals(messageProducer, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(messageProducer, ref, value);
     }
 
     public static void assertLowerOrEquals(final ErrorCode errorCode,
                                            final float ref,
                                            final float value) {
-        AssertLowerOrEquals.assertLowerOrEquals(errorCode, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertLowerOrEquals(final double ref,
                                            final double value) {
-        AssertLowerOrEquals.assertLowerOrEquals(ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(ref, value);
     }
 
     public static void assertLowerOrEquals(final String message,
                                            final double ref,
                                            final double value) {
-        AssertLowerOrEquals.assertLowerOrEquals(message, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(message, ref, value);
     }
 
     public static void assertLowerOrEquals(final Supplier<String> messageProducer,
                                            final double ref,
                                            final double value) {
-        AssertLowerOrEquals.assertLowerOrEquals(messageProducer, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(messageProducer, ref, value);
     }
 
     public static void assertLowerOrEquals(final ErrorCode errorCode,
                                            final double ref,
                                            final double value) {
-        AssertLowerOrEquals.assertLowerOrEquals(errorCode, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertLowerOrEquals(final Integer ref,
                                            final Integer value) {
-        AssertLowerOrEquals.assertLowerOrEquals(ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(ref, value);
     }
 
     public static void assertLowerOrEquals(final String message,
                                            final Integer ref,
                                            final Integer value) {
-        AssertLowerOrEquals.assertLowerOrEquals(message, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(message, ref, value);
     }
 
     public static void assertLowerOrEquals(final Supplier<String> messageProducer,
                                            final Integer ref,
                                            final Integer value) {
-        AssertLowerOrEquals.assertLowerOrEquals(messageProducer, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(messageProducer, ref, value);
     }
 
     public static void assertLowerOrEquals(final ErrorCode errorCode,
                                            final Integer ref,
                                            final Integer value) {
-        AssertLowerOrEquals.assertLowerOrEquals(errorCode, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertLowerOrEquals(final Long ref,
                                            final Long value) {
-        AssertLowerOrEquals.assertLowerOrEquals(ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(ref, value);
     }
 
     public static void assertLowerOrEquals(final String message,
                                            final Long ref,
                                            final Long value) {
-        AssertLowerOrEquals.assertLowerOrEquals(message, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(message, ref, value);
     }
 
     public static void assertLowerOrEquals(final Supplier<String> messageProducer,
                                            final Long ref,
                                            final Long value) {
-        AssertLowerOrEquals.assertLowerOrEquals(messageProducer, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(messageProducer, ref, value);
     }
 
     public static void assertLowerOrEquals(final ErrorCode errorCode,
                                            final Long ref,
                                            final Long value) {
-        AssertLowerOrEquals.assertLowerOrEquals(errorCode, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertLowerOrEquals(final Double ref,
                                            final Double value) {
-        AssertLowerOrEquals.assertLowerOrEquals(ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(ref, value);
     }
 
     public static void assertLowerOrEquals(final String message,
                                            final Double ref,
                                            final Double value) {
-        AssertLowerOrEquals.assertLowerOrEquals(message, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(message, ref, value);
     }
 
     public static void assertLowerOrEquals(final Supplier<String> messageProducer,
                                            final Double ref,
                                            final Double value) {
-        AssertLowerOrEquals.assertLowerOrEquals(messageProducer, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(messageProducer, ref, value);
     }
 
     public static void assertLowerOrEquals(final ErrorCode errorCode,
                                            final Double ref,
                                            final Double value) {
-        AssertLowerOrEquals.assertLowerOrEquals(errorCode, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertLowerOrEquals(final BigDecimal ref,
                                            final BigDecimal value) {
-        AssertLowerOrEquals.assertLowerOrEquals(ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(ref, value);
     }
 
     public static void assertLowerOrEquals(final String message,
                                            final BigDecimal ref,
                                            final BigDecimal value) {
-        AssertLowerOrEquals.assertLowerOrEquals(message, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(message, ref, value);
     }
 
     public static void assertLowerOrEquals(final Supplier<String> messageProducer,
                                            final BigDecimal ref,
                                            final BigDecimal value) {
-        AssertLowerOrEquals.assertLowerOrEquals(messageProducer, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(messageProducer, ref, value);
     }
 
     public static void assertLowerOrEquals(final ErrorCode errorCode,
                                            final BigDecimal ref,
                                            final BigDecimal value) {
-        AssertLowerOrEquals.assertLowerOrEquals(errorCode, ref, value);
+        AssertLowerOrEquals.INSTANCE.assertLowerOrEquals(errorCode, ref, value);
     }
 
     // -------------------------------------------------------------------------
@@ -1169,193 +1046,193 @@ public final class Asserts {
     // -------------------------------------------------------------------------
     public static void assertHigher(final int ref,
                                     final int value) {
-        AssertHigher.assertHigher(ref, value);
+        AssertHigher.INSTANCE.assertHigher(ref, value);
     }
 
     public static void assertHigher(final String message,
                                     final int ref,
                                     final int value) {
-        AssertHigher.assertHigher(message, ref, value);
+        AssertHigher.INSTANCE.assertHigher(message, ref, value);
     }
 
     public static void assertHigher(final Supplier<String> messageProducer,
                                     final int ref,
                                     final int value) {
-        AssertHigher.assertHigher(messageProducer, ref, value);
+        AssertHigher.INSTANCE.assertHigher(messageProducer, ref, value);
     }
 
     public static void assertHigher(final ErrorCode errorCode,
                                     final int ref,
                                     final int value) {
-        AssertHigher.assertHigher(errorCode, ref, value);
+        AssertHigher.INSTANCE.assertHigher(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertHigher(final long ref,
                                     final long value) {
-        AssertHigher.assertHigher(ref, value);
+        AssertHigher.INSTANCE.assertHigher(ref, value);
     }
 
     public static void assertHigher(final String message,
                                     final long ref,
                                     final long value) {
-        AssertHigher.assertHigher(message, ref, value);
+        AssertHigher.INSTANCE.assertHigher(message, ref, value);
     }
 
     public static void assertHigher(final Supplier<String> messageProducer,
                                     final long ref,
                                     final long value) {
-        AssertHigher.assertHigher(messageProducer, ref, value);
+        AssertHigher.INSTANCE.assertHigher(messageProducer, ref, value);
     }
 
     public static void assertHigher(final ErrorCode errorCode,
                                     final long ref,
                                     final long value) {
-        AssertHigher.assertHigher(errorCode, ref, value);
+        AssertHigher.INSTANCE.assertHigher(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertHigher(final float ref,
                                     final float value) {
-        AssertHigher.assertHigher(ref, value);
+        AssertHigher.INSTANCE.assertHigher(ref, value);
     }
 
     public static void assertHigher(final String message,
                                     final float ref,
                                     final float value) {
-        AssertHigher.assertHigher(message, ref, value);
+        AssertHigher.INSTANCE.assertHigher(message, ref, value);
     }
 
     public static void assertHigher(final Supplier<String> messageProducer,
                                     final float ref,
                                     final float value) {
-        AssertHigher.assertHigher(messageProducer, ref, value);
+        AssertHigher.INSTANCE.assertHigher(messageProducer, ref, value);
     }
 
     public static void assertHigher(final ErrorCode errorCode,
                                     final float ref,
                                     final float value) {
-        AssertHigher.assertHigher(errorCode, ref, value);
+        AssertHigher.INSTANCE.assertHigher(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertHigher(final double ref,
                                     final double value) {
-        AssertHigher.assertHigher(ref, value);
+        AssertHigher.INSTANCE.assertHigher(ref, value);
     }
 
     public static void assertHigher(final String message,
                                     final double ref,
                                     final double value) {
-        AssertHigher.assertHigher(message, ref, value);
+        AssertHigher.INSTANCE.assertHigher(message, ref, value);
     }
 
     public static void assertHigher(final Supplier<String> messageProducer,
                                     final double ref,
                                     final double value) {
-        AssertHigher.assertHigher(messageProducer, ref, value);
+        AssertHigher.INSTANCE.assertHigher(messageProducer, ref, value);
     }
 
     public static void assertHigher(final ErrorCode errorCode,
                                     final double ref,
                                     final double value) {
-        AssertHigher.assertHigher(errorCode, ref, value);
+        AssertHigher.INSTANCE.assertHigher(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertHigher(final Integer ref,
                                     final Integer value) {
-        AssertHigher.assertHigher(ref, value);
+        AssertHigher.INSTANCE.assertHigher(ref, value);
     }
 
     public static void assertHigher(final String message,
                                     final Integer ref,
                                     final Integer value) {
-        AssertHigher.assertHigher(message, ref, value);
+        AssertHigher.INSTANCE.assertHigher(message, ref, value);
     }
 
     public static void assertHigher(final Supplier<String> messageProducer,
                                     final Integer ref,
                                     final Integer value) {
-        AssertHigher.assertHigher(messageProducer, ref, value);
+        AssertHigher.INSTANCE.assertHigher(messageProducer, ref, value);
     }
 
     public static void assertHigher(final ErrorCode errorCode,
                                     final Integer ref,
                                     final Integer value) {
-        AssertHigher.assertHigher(errorCode, ref, value);
+        AssertHigher.INSTANCE.assertHigher(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertHigher(final Long ref,
                                     final Long value) {
-        AssertHigher.assertHigher(ref, value);
+        AssertHigher.INSTANCE.assertHigher(ref, value);
     }
 
     public static void assertHigher(final String message,
                                     final Long ref,
                                     final Long value) {
-        AssertHigher.assertHigher(message, ref, value);
+        AssertHigher.INSTANCE.assertHigher(message, ref, value);
     }
 
     public static void assertHigher(final Supplier<String> messageProducer,
                                     final Long ref,
                                     final Long value) {
-        AssertHigher.assertHigher(messageProducer, ref, value);
+        AssertHigher.INSTANCE.assertHigher(messageProducer, ref, value);
     }
 
     public static void assertHigher(final ErrorCode errorCode,
                                     final Long ref,
                                     final Long value) {
-        AssertHigher.assertHigher(errorCode, ref, value);
+        AssertHigher.INSTANCE.assertHigher(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertHigher(final Double ref,
                                     final Double value) {
-        AssertHigher.assertHigher(ref, value);
+        AssertHigher.INSTANCE.assertHigher(ref, value);
     }
 
     public static void assertHigher(final String message,
                                     final Double ref,
                                     final Double value) {
-        AssertHigher.assertHigher(message, ref, value);
+        AssertHigher.INSTANCE.assertHigher(message, ref, value);
     }
 
     public static void assertHigher(final Supplier<String> messageProducer,
                                     final Double ref,
                                     final Double value) {
-        AssertHigher.assertHigher(messageProducer, ref, value);
+        AssertHigher.INSTANCE.assertHigher(messageProducer, ref, value);
     }
 
     public static void assertHigher(final ErrorCode errorCode,
                                     final Double ref,
                                     final Double value) {
-        AssertHigher.assertHigher(errorCode, ref, value);
+        AssertHigher.INSTANCE.assertHigher(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertHigher(final BigDecimal ref,
                                     final BigDecimal value) {
-        AssertHigher.assertHigher(ref, value);
+        AssertHigher.INSTANCE.assertHigher(ref, value);
     }
 
     public static void assertHigher(final String message,
                                     final BigDecimal ref,
                                     final BigDecimal value) {
-        AssertHigher.assertHigher(message, ref, value);
+        AssertHigher.INSTANCE.assertHigher(message, ref, value);
     }
 
     public static void assertHigher(final Supplier<String> messageProducer,
                                     final BigDecimal ref,
                                     final BigDecimal value) {
-        AssertHigher.assertHigher(messageProducer, ref, value);
+        AssertHigher.INSTANCE.assertHigher(messageProducer, ref, value);
     }
 
     public static void assertHigher(final ErrorCode errorCode,
                                     final BigDecimal ref,
                                     final BigDecimal value) {
-        AssertHigher.assertHigher(errorCode, ref, value);
+        AssertHigher.INSTANCE.assertHigher(errorCode, ref, value);
     }
 
 
@@ -1364,193 +1241,193 @@ public final class Asserts {
     // -------------------------------------------------------------------------
     public static void assertHigherOrEquals(final int ref,
                                             final int value) {
-        AssertHigherOrEquals.assertHigherOrEquals(ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(ref, value);
     }
 
     public static void assertHigherOrEquals(final String message,
                                             final int ref,
                                             final int value) {
-        AssertHigherOrEquals.assertHigherOrEquals(message, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(message, ref, value);
     }
 
     public static void assertHigherOrEquals(final Supplier<String> messageProducer,
                                             final int ref,
                                             final int value) {
-        AssertHigherOrEquals.assertHigherOrEquals(messageProducer, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(messageProducer, ref, value);
     }
 
     public static void assertHigherOrEquals(final ErrorCode errorCode,
                                             final int ref,
                                             final int value) {
-        AssertHigherOrEquals.assertHigherOrEquals(errorCode, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertHigherOrEquals(final long ref,
                                             final long value) {
-        AssertHigherOrEquals.assertHigherOrEquals(ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(ref, value);
     }
 
     public static void assertHigherOrEquals(final String message,
                                             final long ref,
                                             final long value) {
-        AssertHigherOrEquals.assertHigherOrEquals(message, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(message, ref, value);
     }
 
     public static void assertHigherOrEquals(final Supplier<String> messageProducer,
                                             final long ref,
                                             final long value) {
-        AssertHigherOrEquals.assertHigherOrEquals(messageProducer, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(messageProducer, ref, value);
     }
 
     public static void assertHigherOrEquals(final ErrorCode errorCode,
                                             final long ref,
                                             final long value) {
-        AssertHigherOrEquals.assertHigherOrEquals(errorCode, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertHigherOrEquals(final float ref,
                                             final float value) {
-        AssertHigherOrEquals.assertHigherOrEquals(ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(ref, value);
     }
 
     public static void assertHigherOrEquals(final String message,
                                             final float ref,
                                             final float value) {
-        AssertHigherOrEquals.assertHigherOrEquals(message, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(message, ref, value);
     }
 
     public static void assertHigherOrEquals(final Supplier<String> messageProducer,
                                             final float ref,
                                             final float value) {
-        AssertHigherOrEquals.assertHigherOrEquals(messageProducer, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(messageProducer, ref, value);
     }
 
     public static void assertHigherOrEquals(final ErrorCode errorCode,
                                             final float ref,
                                             final float value) {
-        AssertHigherOrEquals.assertHigherOrEquals(errorCode, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertHigherOrEquals(final double ref,
                                             final double value) {
-        AssertHigherOrEquals.assertHigherOrEquals(ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(ref, value);
     }
 
     public static void assertHigherOrEquals(final String message,
                                             final double ref,
                                             final double value) {
-        AssertHigherOrEquals.assertHigherOrEquals(message, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(message, ref, value);
     }
 
     public static void assertHigherOrEquals(final Supplier<String> messageProducer,
                                             final double ref,
                                             final double value) {
-        AssertHigherOrEquals.assertHigherOrEquals(messageProducer, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(messageProducer, ref, value);
     }
 
     public static void assertHigherOrEquals(final ErrorCode errorCode,
                                             final double ref,
                                             final double value) {
-        AssertHigherOrEquals.assertHigherOrEquals(errorCode, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertHigherOrEquals(final Integer ref,
                                             final Integer value) {
-        AssertHigherOrEquals.assertHigherOrEquals(ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(ref, value);
     }
 
     public static void assertHigherOrEquals(final Supplier<String> messageProducer,
                                             final Integer ref,
                                             final Integer value) {
-        AssertHigherOrEquals.assertHigherOrEquals(messageProducer, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(messageProducer, ref, value);
     }
 
     public static void assertHigherOrEquals(final String message,
                                             final Integer ref,
                                             final Integer value) {
-        AssertHigherOrEquals.assertHigherOrEquals(message, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(message, ref, value);
     }
 
     public static void assertHigherOrEquals(final ErrorCode errorCode,
                                             final Integer ref,
                                             final Integer value) {
-        AssertHigherOrEquals.assertHigherOrEquals(errorCode, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertHigherOrEquals(final Long ref,
                                             final Long value) {
-        AssertHigherOrEquals.assertHigherOrEquals(ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(ref, value);
     }
 
     public static void assertHigherOrEquals(final String message,
                                             final Long ref,
                                             final Long value) {
-        AssertHigherOrEquals.assertHigherOrEquals(message, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(message, ref, value);
     }
 
     public static void assertHigherOrEquals(final Supplier<String> messageProducer,
                                             final Long ref,
                                             final Long value) {
-        AssertHigherOrEquals.assertHigherOrEquals(messageProducer, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(messageProducer, ref, value);
     }
 
     public static void assertHigherOrEquals(final ErrorCode errorCode,
                                             final Long ref,
                                             final Long value) {
-        AssertHigherOrEquals.assertHigherOrEquals(errorCode, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertHigherOrEquals(final Double ref,
                                             final Double value) {
-        AssertHigherOrEquals.assertHigherOrEquals(ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(ref, value);
     }
 
     public static void assertHigherOrEquals(final String message,
                                             final Double ref,
                                             final Double value) {
-        AssertHigherOrEquals.assertHigherOrEquals(message, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(message, ref, value);
     }
 
     public static void assertHigherOrEquals(final Supplier<String> messageProducer,
                                             final Double ref,
                                             final Double value) {
-        AssertHigherOrEquals.assertHigherOrEquals(messageProducer, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(messageProducer, ref, value);
     }
 
     public static void assertHigherOrEquals(final ErrorCode errorCode,
                                             final Double ref,
                                             final Double value) {
-        AssertHigherOrEquals.assertHigherOrEquals(errorCode, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(errorCode, ref, value);
     }
 
     // ------------------------------------------------------------------------
     public static void assertHigherOrEquals(final BigDecimal ref,
                                             final BigDecimal value) {
-        AssertHigherOrEquals.assertHigherOrEquals(ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(ref, value);
     }
 
     public static void assertHigherOrEquals(final String message,
                                             final BigDecimal ref,
                                             final BigDecimal value) {
-        AssertHigherOrEquals.assertHigherOrEquals(message, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(message, ref, value);
     }
 
     public static void assertHigherOrEquals(final Supplier<String> messageProducer,
                                             final BigDecimal ref,
                                             final BigDecimal value) {
-        AssertHigherOrEquals.assertHigherOrEquals(messageProducer, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(messageProducer, ref, value);
     }
 
     public static void assertHigherOrEquals(final ErrorCode errorCode,
                                             final BigDecimal ref,
                                             final BigDecimal value) {
-        AssertHigherOrEquals.assertHigherOrEquals(errorCode, ref, value);
+        AssertHigherOrEquals.INSTANCE.assertHigherOrEquals(errorCode, ref, value);
     }
 
 
@@ -1559,239 +1436,213 @@ public final class Asserts {
     // -------------------------------------------------------------------------
     public static void assertRegexMatch(final Pattern regex,
                                         final String value) {
-        AssertRegex.assertRegexMatch(regex, value);
+        AssertRegex.INSTANCE.assertRegexMatch(regex, value);
     }
 
     public static void assertRegexMatch(final String message,
                                         final Pattern regex,
                                         final String value) {
-        AssertRegex.assertRegexMatch(message, regex, value);
+        AssertRegex.INSTANCE.assertRegexMatch(message, regex, value);
     }
 
     public static void assertRegexMatch(final Supplier<String> messageProducer,
                                         final Pattern regex,
                                         final String value) {
-        AssertRegex.assertRegexMatch(messageProducer, regex, value);
+        AssertRegex.INSTANCE.assertRegexMatch(messageProducer, regex, value);
     }
 
     public static void assertRegexMatch(final ErrorCode errorCode,
                                         final Pattern regex,
                                         final String value) {
-        AssertRegex.assertRegexMatch(errorCode, regex, value);
+        AssertRegex.INSTANCE.assertRegexMatch(errorCode, regex, value);
     }
 
 
     public static void assertRegexMatch(final String regex,
                                         final String value) {
-        AssertRegex.assertRegexMatch(regex, value);
+        AssertRegex.INSTANCE.assertRegexMatch(regex, value);
     }
 
     public static void assertRegexMatch(final String message,
                                         final String regex,
                                         final String value) {
-        AssertRegex.assertRegexMatch(message, regex, value);
+        AssertRegex.INSTANCE.assertRegexMatch(message, regex, value);
     }
 
 
     public static void assertRegexMatch(final Supplier<String> messageProducer,
                                         final String regex,
                                         final String value) {
-        AssertRegex.assertRegexMatch(messageProducer, regex, value);
+        AssertRegex.INSTANCE.assertRegexMatch(messageProducer, regex, value);
     }
 
     public static void assertRegexMatch(final ErrorCode errorCode,
                                         final String regex,
                                         final String value) {
-        AssertRegex.assertRegexMatch(errorCode, regex, value);
+        AssertRegex.INSTANCE.assertRegexMatch(errorCode, regex, value);
     }
 
 
     public static void assertRegexNotMatch(final Pattern regex,
                                            final String value) {
-        AssertRegex.assertRegexNotMatch(regex, value);
+        AssertRegex.INSTANCE.assertRegexNotMatch(regex, value);
     }
 
     public static void assertRegexNotMatch(final String message,
                                            final Pattern regex,
                                            final String value) {
-        AssertRegex.assertRegexNotMatch(message, regex, value);
+        AssertRegex.INSTANCE.assertRegexNotMatch(message, regex, value);
     }
 
     public static void assertRegexNotMatch(final Supplier<String> messageProducer,
                                            final Pattern regex,
                                            final String value) {
-        AssertRegex.assertRegexNotMatch(messageProducer, regex, value);
+        AssertRegex.INSTANCE.assertRegexNotMatch(messageProducer, regex, value);
     }
 
     public static void assertRegexNotMatch(final ErrorCode errorCode,
                                            final Pattern regex,
                                            final String value) {
-        AssertRegex.assertRegexNotMatch(errorCode, regex, value);
+        AssertRegex.INSTANCE.assertRegexNotMatch(errorCode, regex, value);
     }
 
 
     public static void assertRegexNotMatch(final String regex,
                                            final String value) {
-        AssertRegex.assertRegexNotMatch(regex, value);
+        AssertRegex.INSTANCE.assertRegexNotMatch(regex, value);
     }
 
     public static void assertRegexNotMatch(final String message,
                                            final String regex,
                                            final String value) {
-        AssertRegex.assertRegexNotMatch(message, regex, value);
+        AssertRegex.INSTANCE.assertRegexNotMatch(message, regex, value);
     }
 
 
     public static void assertRegexNotMatch(final Supplier<String> messageProducer,
                                            final String regex,
                                            final String value) {
-        AssertRegex.assertRegexNotMatch(messageProducer, regex, value);
+        AssertRegex.INSTANCE.assertRegexNotMatch(messageProducer, regex, value);
     }
 
     public static void assertRegexNotMatch(final ErrorCode errorCode,
                                            final String regex,
                                            final String value) {
-        AssertRegex.assertRegexNotMatch(errorCode, regex, value);
+        AssertRegex.INSTANCE.assertRegexNotMatch(errorCode, regex, value);
     }
 
     public static void assertRegexFind(final Pattern regex,
                                        final String value) {
-        AssertRegex.assertRegexFind(regex, value);
+        AssertRegex.INSTANCE.assertRegexFind(regex, value);
     }
 
     public static void assertRegexFind(final String message,
                                        final Pattern regex,
                                        final String value) {
-        AssertRegex.assertRegexFind(message, regex, value);
+        AssertRegex.INSTANCE.assertRegexFind(message, regex, value);
     }
 
     public static void assertRegexFind(final Supplier<String> messageProducer,
                                        final Pattern regex,
                                        final String value) {
-        AssertRegex.assertRegexFind(messageProducer, regex, value);
+        AssertRegex.INSTANCE.assertRegexFind(messageProducer, regex, value);
     }
 
     public static void assertRegexFind(final ErrorCode errorCode,
                                        final Pattern regex,
                                        final String value) {
-        AssertRegex.assertRegexFind(errorCode, regex, value);
+        AssertRegex.INSTANCE.assertRegexFind(errorCode, regex, value);
     }
 
 
     public static void assertRegexFind(final String regex,
                                        final String value) {
-        AssertRegex.assertRegexFind(regex, value);
+        AssertRegex.INSTANCE.assertRegexFind(regex, value);
     }
 
     public static void assertRegexFind(final String message,
                                        final String regex,
                                        final String value) {
-        AssertRegex.assertRegexFind(message, regex, value);
+        AssertRegex.INSTANCE.assertRegexFind(message, regex, value);
     }
 
 
     public static void assertRegexFind(final Supplier<String> messageProducer,
                                        final String regex,
                                        final String value) {
-        AssertRegex.assertRegexFind(messageProducer, regex, value);
+        AssertRegex.INSTANCE.assertRegexFind(messageProducer, regex, value);
     }
 
     public static void assertRegexFind(final ErrorCode errorCode,
                                        final String regex,
                                        final String value) {
-        AssertRegex.assertRegexFind(errorCode, regex, value);
+        AssertRegex.INSTANCE.assertRegexFind(errorCode, regex, value);
     }
 
     public static void assertRegexNotFind(final Pattern regex,
                                           final String value) {
-        AssertRegex.assertRegexNotFind(regex, value);
+        AssertRegex.INSTANCE.assertRegexNotFind(regex, value);
     }
 
     public static void assertRegexNotFind(final String message,
                                           final Pattern regex,
                                           final String value) {
-        AssertRegex.assertRegexNotFind(message, regex, value);
+        AssertRegex.INSTANCE.assertRegexNotFind(message, regex, value);
     }
 
     public static void assertRegexNotFind(final Supplier<String> messageProducer,
                                           final Pattern regex,
                                           final String value) {
-        AssertRegex.assertRegexNotFind(messageProducer, regex, value);
+        AssertRegex.INSTANCE.assertRegexNotFind(messageProducer, regex, value);
     }
 
     public static void assertRegexNotFind(final ErrorCode errorCode,
                                           final Pattern regex,
                                           final String value) {
-        AssertRegex.assertRegexNotFind(errorCode, regex, value);
+        AssertRegex.INSTANCE.assertRegexNotFind(errorCode, regex, value);
     }
 
 
     public static void assertRegexNotFind(final String regex,
                                           final String value) {
-        AssertRegex.assertRegexNotFind(regex, value);
+        AssertRegex.INSTANCE.assertRegexNotFind(regex, value);
     }
 
     public static void assertRegexNotFind(final String message,
                                           final String regex,
                                           final String value) {
-        AssertRegex.assertRegexNotFind(message, regex, value);
+        AssertRegex.INSTANCE.assertRegexNotFind(message, regex, value);
     }
 
 
     public static void assertRegexNotFind(final Supplier<String> messageProducer,
                                           final String regex,
                                           final String value) {
-        AssertRegex.assertRegexNotFind(messageProducer, regex, value);
+        AssertRegex.INSTANCE.assertRegexNotFind(messageProducer, regex, value);
     }
 
     public static void assertRegexNotFind(final ErrorCode errorCode,
                                           final String regex,
                                           final String value) {
-        AssertRegex.assertRegexNotFind(errorCode, regex, value);
+        AssertRegex.INSTANCE.assertRegexNotFind(errorCode, regex, value);
     }
 
 
     public static List<ErrorCode> checkModel(final VoidFunctionWithException... assertions) {
-        if (assertions == null) {
-            return new ArrayList<>();
-        }
-        return checkModel(Arrays.asList(assertions));
+        return AssertModel.INSTANCE.checkModel(assertions);
     }
 
     public static List<ErrorCode> checkModel(final List<VoidFunctionWithException> assertions) {
-        final List<ErrorCode> result = new ArrayList<>();
-        if (assertions != null) {
-            for (final VoidFunctionWithException function : assertions) {
-                try {
-                    function.process();
-                } catch (final Exception e) {
-
-                    if (e instanceof ExceptionWithErrorCode) {
-                        result.add(((ExceptionWithErrorCode) e).getErrorCode());
-                    } else {
-                        result.add(DefaultErrorCode.fromErrorCode(DefaultErrorCode.buildUndefineError())
-                                                   .message(e.getMessage())
-                                                   .build());
-                    }
-                }
-            }
-        }
-        return result;
+        return AssertModel.INSTANCE.checkModel(assertions);
     }
 
 
     public static void assertModel(final VoidFunctionWithException... assertions) {
-        if (assertions == null) {
-            return;
-        }
-        assertModel(Arrays.asList(assertions));
+        AssertModel.INSTANCE.assertModel(assertions);
     }
 
     public static void assertModel(final List<VoidFunctionWithException> assertions) {
-        final List<ErrorCode> errors = checkModel(assertions);
-        if (!errors.isEmpty()) {
-            AssertCommons.throwException(errors);
-        }
+        AssertModel.INSTANCE.assertModel(assertions);
     }
 
 
@@ -1813,68 +1664,71 @@ public final class Asserts {
     // Assert file
     // -------------------------------------------------------------------------
     public static void assertFileExists(final File path) {
-        AssertFile.assertFileExists(path);
+        AssertFile.INSTANCE.assertFileExists(path);
     }
 
     public static void assertFileExists(final String message, final File path) {
-        AssertFile.assertFileExists(message, path);
+        AssertFile.INSTANCE.assertFileExists(message, path);
     }
 
     public static void assertFileExists(final ErrorCode errorCode, final File path) {
-        AssertFile.assertFileExists(errorCode, path);
+        AssertFile.INSTANCE.assertFileExists(errorCode, path);
     }
 
     public static void assertFileReadable(final File path) {
-        AssertFile.assertFileReadable(path);
+        AssertFile.INSTANCE.assertFileReadable(path);
     }
 
     public static void assertFileReadable(final String message, final File path) {
-        AssertFile.assertFileReadable(message, path);
+        AssertFile.INSTANCE.assertFileReadable(message, path);
     }
 
     public static void assertFileReadable(final ErrorCode errorCode, final File path) {
-        AssertFile.assertFileReadable(errorCode, path);
+        AssertFile.INSTANCE.assertFileReadable(errorCode, path);
     }
 
     public static void assertFileWrite(final File path) {
-        AssertFile.assertFileWrite(path);
+        AssertFile.INSTANCE.assertFileWrite(path);
     }
 
     public static void assertFileWrite(final String message, final File path) {
-        AssertFile.assertFileWrite(message, path);
+        AssertFile.INSTANCE.assertFileWrite(message, path);
     }
 
     public static void assertFileWrite(final ErrorCode errorCode, final File path) {
-        AssertFile.assertFileWrite(errorCode, path);
+        AssertFile.INSTANCE.assertFileWrite(errorCode, path);
     }
 
     public static void assertFileExecutable(final File path) {
-        AssertFile.assertFileExecutable(path);
+        AssertFile.INSTANCE.assertFileExecutable(path);
     }
 
     public static void assertFileExecutable(final String message, final File path) {
-        AssertFile.assertFileExecutable(message, path);
+        AssertFile.INSTANCE.assertFileExecutable(message, path);
     }
 
     public static void assertFileExecutable(final ErrorCode errorCode, final File path) {
-        AssertFile.assertFileExecutable(errorCode, path);
+        AssertFile.INSTANCE.assertFileExecutable(errorCode, path);
     }
 
     // -------------------------------------------------------------------------
     // Assert folder
     // -------------------------------------------------------------------------
     public static void assertFolderExists(final File path) {
-        AssertFile.assertFolderExists(path);
+        AssertFile.INSTANCE.assertFolderExists(path);
     }
 
     public static void assertFolderExists(final String message, final File path) {
-        AssertFile.assertFolderExists(message, path);
+        AssertFile.INSTANCE.assertFolderExists(message, path);
     }
 
     public static void assertFolderExists(final ErrorCode errorCode, final File path) {
-        AssertFile.assertFolderExists(errorCode, path);
+        AssertFile.INSTANCE.assertFolderExists(errorCode, path);
     }
 
+    // -------------------------------------------------------------------------
+    // WRAP ERROR
+    // -------------------------------------------------------------------------
     public static <T> T wrapErrorForSupplierWithException(final ActionWithException action, final ErrorCode errorCode) {
         return wrapErrorForSupplierWithException(action, errorCode, null);
     }
@@ -1992,17 +1846,17 @@ public final class Asserts {
     // TOOLS
     // -------------------------------------------------------------------------
     public static void throwException(final String message) {
-        AssertCommons.throwException(null, message);
+        AssertCommons.INSTANCE.throwException(null, message);
     }
 
     public static void throwException(final ErrorCode errorCode) {
-        AssertCommons.throwException(errorCode);
+        AssertCommons.INSTANCE.throwException(errorCode);
     }
 
     public static void throwException(final ErrorCode errorCode,
                                       final String message,
                                       final Serializable... args) {
-        AssertCommons.throwException(errorCode, MessagesFormatter.format(message, args));
+        AssertCommons.INSTANCE.throwException(errorCode, MessagesFormatter.format(message, args));
     }
 
 

@@ -35,7 +35,7 @@ import java.util.List;
 @Setter
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class AlertingResult implements JsonObject {
+public final class AlertingResult implements JsonObject {
 
     // =========================================================================
     // ATTRIBUTES

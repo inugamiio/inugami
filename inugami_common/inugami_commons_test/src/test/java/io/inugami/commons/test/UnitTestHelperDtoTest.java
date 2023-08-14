@@ -53,7 +53,7 @@ class UnitTestHelperDtoTest {
     @Setter
     @EqualsAndHashCode
     @ToString
-    private static class SimpleDto {
+    private final static class SimpleDto {
         private Long   id;
         private String name;
         private String email;

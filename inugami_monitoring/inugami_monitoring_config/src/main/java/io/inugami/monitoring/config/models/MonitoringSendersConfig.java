@@ -20,7 +20,9 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * SendersConfig
@@ -41,4 +43,11 @@ public class MonitoringSendersConfig implements Serializable {
 
     @XStreamImplicit
     private List<MonitoringSenderConfig> senders;
+
+
+    public static class MonitoringSendersConfigBuilder {
+        public MonitoringSendersConfig build() {
+            return new MonitoringSendersConfig(Optional.ofNullable(senders).orElse(new ArrayList<>()));
+        }
+    }
 }

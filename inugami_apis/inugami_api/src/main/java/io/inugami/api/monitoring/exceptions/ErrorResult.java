@@ -32,7 +32,7 @@ import java.io.Serializable;
 @ToString
 @Builder(toBuilder = true)
 @Getter
-public class ErrorResult implements Serializable {
+public final class ErrorResult implements Serializable {
 
     private static final long serialVersionUID = 6750655178043958203L;
 

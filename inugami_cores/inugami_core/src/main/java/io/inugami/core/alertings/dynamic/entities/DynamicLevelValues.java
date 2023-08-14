@@ -35,7 +35,7 @@ public class DynamicLevelValues implements Identifiable<Long>, ClonableObject<Dy
     @NotNull
     @EqualsAndHashCode.Include
     private Double level;
-    
+
 
     @Override
     public DynamicLevelValues cloneObject() {

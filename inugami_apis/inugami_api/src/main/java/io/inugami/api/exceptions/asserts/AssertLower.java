@@ -13,276 +13,277 @@ public final class AssertLower {
     // ========================================================================
     // ATTRIBUTES
     // ========================================================================
-    private static final String DEFAULT_MESSAGE = "value must be lower";
+    private static final String      DEFAULT_MESSAGE = "value must be lower";
+    public static final  AssertLower INSTANCE        = new AssertLower();
 
     // ========================================================================
     // API
     // ========================================================================
     // ------------------------------------------------------------------------
-    public static void assertLower(final int ref,
-                                   final int value) {
+    public void assertLower(final int ref,
+                            final int value) {
         assertLower(DEFAULT_MESSAGE,
                     ref,
                     value);
     }
 
-    public static void assertLower(final String message,
-                                   final int ref,
-                                   final int value) {
-        if (ref < value) {
+    public void assertLower(final String message,
+                            final int ref,
+                            final int value) {
+        if (ref <= value) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
-            AssertCommons.throwException(msg);
+            AssertCommons.INSTANCE.throwException(msg);
         }
     }
 
-    public static void assertLower(final Supplier<String> messageProducer,
-                                   final int ref,
-                                   final int value) {
+    public void assertLower(final Supplier<String> messageProducer,
+                            final int ref,
+                            final int value) {
         if (ref <= value) {
-            AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
+            AssertCommons.INSTANCE.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
 
-    public static void assertLower(final ErrorCode errorCode,
-                                   final int ref,
-                                   final int value) {
+    public void assertLower(final ErrorCode errorCode,
+                            final int ref,
+                            final int value) {
         if (ref <= value) {
-            AssertCommons.throwException(errorCode);
+            AssertCommons.INSTANCE.throwException(errorCode);
         }
     }
 
     // ------------------------------------------------------------------------
-    public static void assertLower(final long ref,
-                                   final long value) {
+    public void assertLower(final long ref,
+                            final long value) {
         assertLower(DEFAULT_MESSAGE,
                     ref,
                     value);
     }
 
-    public static void assertLower(final String message,
-                                   final long ref,
-                                   final long value) {
+    public void assertLower(final String message,
+                            final long ref,
+                            final long value) {
         if (ref <= value) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
-            AssertCommons.throwException(msg);
+            AssertCommons.INSTANCE.throwException(msg);
         }
     }
 
-    public static void assertLower(final Supplier<String> messageProducer,
-                                   final long ref,
-                                   final long value) {
+    public void assertLower(final Supplier<String> messageProducer,
+                            final long ref,
+                            final long value) {
         if (ref <= value) {
-            AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
+            AssertCommons.INSTANCE.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
 
-    public static void assertLower(final ErrorCode errorCode,
-                                   final long ref,
-                                   final long value) {
+    public void assertLower(final ErrorCode errorCode,
+                            final long ref,
+                            final long value) {
         if (ref <= value) {
-            AssertCommons.throwException(errorCode);
+            AssertCommons.INSTANCE.throwException(errorCode);
         }
     }
 
     // ------------------------------------------------------------------------
-    public static void assertLower(final float ref,
-                                   final float value) {
+    public void assertLower(final float ref,
+                            final float value) {
         assertLower(DEFAULT_MESSAGE,
                     ref,
                     value);
     }
 
-    public static void assertLower(final String message,
-                                   final float ref,
-                                   final float value) {
+    public void assertLower(final String message,
+                            final float ref,
+                            final float value) {
         if (ref <= value) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
-            AssertCommons.throwException(msg);
+            AssertCommons.INSTANCE.throwException(msg);
         }
     }
 
-    public static void assertLower(final Supplier<String> messageProducer,
-                                   final float ref,
-                                   final float value) {
+    public void assertLower(final Supplier<String> messageProducer,
+                            final float ref,
+                            final float value) {
         if (ref <= value) {
-            AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
+            AssertCommons.INSTANCE.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
 
-    public static void assertLower(final ErrorCode errorCode,
-                                   final float ref,
-                                   final float value) {
+    public void assertLower(final ErrorCode errorCode,
+                            final float ref,
+                            final float value) {
         if (ref <= value) {
-            AssertCommons.throwException(errorCode);
+            AssertCommons.INSTANCE.throwException(errorCode);
         }
     }
 
     // ------------------------------------------------------------------------
-    public static void assertLower(final double ref,
-                                   final double value) {
+    public void assertLower(final double ref,
+                            final double value) {
         assertLower(DEFAULT_MESSAGE,
                     ref,
                     value);
     }
 
-    public static void assertLower(final String message,
-                                   final double ref,
-                                   final double value) {
+    public void assertLower(final String message,
+                            final double ref,
+                            final double value) {
         if (ref <= value) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
-            AssertCommons.throwException(msg);
+            AssertCommons.INSTANCE.throwException(msg);
         }
     }
 
-    public static void assertLower(final Supplier<String> messageProducer,
-                                   final double ref,
-                                   final double value) {
+    public void assertLower(final Supplier<String> messageProducer,
+                            final double ref,
+                            final double value) {
         if (ref <= value) {
-            AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
+            AssertCommons.INSTANCE.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
 
-    public static void assertLower(final ErrorCode errorCode,
-                                   final double ref,
-                                   final double value) {
+    public void assertLower(final ErrorCode errorCode,
+                            final double ref,
+                            final double value) {
         if (ref <= value) {
-            AssertCommons.throwException(errorCode);
+            AssertCommons.INSTANCE.throwException(errorCode);
         }
     }
 
     // ------------------------------------------------------------------------
-    public static void assertLower(final Integer ref,
-                                   final Integer value) {
+    public void assertLower(final Integer ref,
+                            final Integer value) {
         assertLower(DEFAULT_MESSAGE,
                     ref,
                     value);
     }
 
-    public static void assertLower(final String message,
-                                   final Integer ref,
-                                   final Integer value) {
+    public void assertLower(final String message,
+                            final Integer ref,
+                            final Integer value) {
 
         if (checkHigher(ref, value)) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
-            AssertCommons.throwException(msg);
+            AssertCommons.INSTANCE.throwException(msg);
         }
     }
 
-    public static void assertLower(final Supplier<String> messageProducer,
-                                   final Integer ref,
-                                   final Integer value) {
+    public void assertLower(final Supplier<String> messageProducer,
+                            final Integer ref,
+                            final Integer value) {
         if (checkHigher(ref, value)) {
-            AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
+            AssertCommons.INSTANCE.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
 
-    public static void assertLower(final ErrorCode errorCode,
-                                   final Integer ref,
-                                   final Integer value) {
+    public void assertLower(final ErrorCode errorCode,
+                            final Integer ref,
+                            final Integer value) {
         if (checkHigher(ref, value)) {
-            AssertCommons.throwException(errorCode);
+            AssertCommons.INSTANCE.throwException(errorCode);
         }
     }
 
     // ------------------------------------------------------------------------
-    public static void assertLower(final Long ref,
-                                   final Long value) {
+    public void assertLower(final Long ref,
+                            final Long value) {
         assertLower(DEFAULT_MESSAGE,
                     ref,
                     value);
     }
 
-    public static void assertLower(final String message,
-                                   final Long ref,
-                                   final Long value) {
+    public void assertLower(final String message,
+                            final Long ref,
+                            final Long value) {
 
         if (checkHigher(ref, value)) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
-            AssertCommons.throwException(msg);
+            AssertCommons.INSTANCE.throwException(msg);
         }
     }
 
-    public static void assertLower(final Supplier<String> messageProducer,
-                                   final Long ref,
-                                   final Long value) {
+    public void assertLower(final Supplier<String> messageProducer,
+                            final Long ref,
+                            final Long value) {
         if (checkHigher(ref, value)) {
-            AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
+            AssertCommons.INSTANCE.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
 
-    public static void assertLower(final ErrorCode errorCode,
-                                   final Long ref,
-                                   final Long value) {
+    public void assertLower(final ErrorCode errorCode,
+                            final Long ref,
+                            final Long value) {
         if (checkHigher(ref, value)) {
-            AssertCommons.throwException(errorCode);
+            AssertCommons.INSTANCE.throwException(errorCode);
         }
     }
 
     // ------------------------------------------------------------------------
-    public static void assertLower(final Double ref,
-                                   final Double value) {
+    public void assertLower(final Double ref,
+                            final Double value) {
         assertLower(DEFAULT_MESSAGE,
                     ref,
                     value);
     }
 
-    public static void assertLower(final String message,
-                                   final Double ref,
-                                   final Double value) {
+    public void assertLower(final String message,
+                            final Double ref,
+                            final Double value) {
 
         if (checkHigher(ref, value)) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
-            AssertCommons.throwException(msg);
+            AssertCommons.INSTANCE.throwException(msg);
         }
     }
 
-    public static void assertLower(final Supplier<String> messageProducer,
-                                   final Double ref,
-                                   final Double value) {
+    public void assertLower(final Supplier<String> messageProducer,
+                            final Double ref,
+                            final Double value) {
         if (checkHigher(ref, value)) {
-            AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
+            AssertCommons.INSTANCE.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
 
-    public static void assertLower(final ErrorCode errorCode,
-                                   final Double ref,
-                                   final Double value) {
+    public void assertLower(final ErrorCode errorCode,
+                            final Double ref,
+                            final Double value) {
         if (checkHigher(ref, value)) {
-            AssertCommons.throwException(errorCode);
+            AssertCommons.INSTANCE.throwException(errorCode);
         }
     }
 
     // ------------------------------------------------------------------------
-    public static void assertLower(final BigDecimal ref,
-                                   final BigDecimal value) {
+    public void assertLower(final BigDecimal ref,
+                            final BigDecimal value) {
         assertLower(DEFAULT_MESSAGE,
                     ref,
                     value);
     }
 
-    public static void assertLower(final String message,
-                                   final BigDecimal ref,
-                                   final BigDecimal value) {
+    public void assertLower(final String message,
+                            final BigDecimal ref,
+                            final BigDecimal value) {
 
         if (checkHigher(ref, value)) {
             final String msg = message == null ? DEFAULT_MESSAGE : message;
-            AssertCommons.throwException(msg);
+            AssertCommons.INSTANCE.throwException(msg);
         }
     }
 
-    public static void assertLower(final Supplier<String> messageProducer,
-                                   final BigDecimal ref,
-                                   final BigDecimal value) {
+    public void assertLower(final Supplier<String> messageProducer,
+                            final BigDecimal ref,
+                            final BigDecimal value) {
         if (checkHigher(ref, value)) {
-            AssertCommons.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
+            AssertCommons.INSTANCE.throwException(messageProducer == null ? DEFAULT_MESSAGE : messageProducer.get());
         }
     }
 
-    public static void assertLower(final ErrorCode errorCode,
-                                   final BigDecimal ref,
-                                   final BigDecimal value) {
+    public void assertLower(final ErrorCode errorCode,
+                            final BigDecimal ref,
+                            final BigDecimal value) {
         if (checkHigher(ref, value)) {
-            AssertCommons.throwException(errorCode);
+            AssertCommons.INSTANCE.throwException(errorCode);
         }
     }
 

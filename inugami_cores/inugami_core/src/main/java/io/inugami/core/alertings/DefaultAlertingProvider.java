@@ -434,7 +434,7 @@ public class DefaultAlertingProvider implements AlertingProvider {
 
     protected String buildFunctionName(final Gav gav, final AlertingModel alert) {
         //@formatter:off
-        return String.join("_", gav.buildHash(),alert.getName()).replaceAll(":", "_").replaceAll("-", "_").replaceAll("[.]", "_");
+        return String.join("_", gav.getHash(),alert.getName()).replaceAll(":", "_").replaceAll("-", "_").replaceAll("[.]", "_");
         //@formatter:on
 
     }

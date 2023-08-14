@@ -32,7 +32,7 @@ import lombok.*;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class RawJsonObject implements JsonObject {
+public final class RawJsonObject implements JsonObject {
 
     // =========================================================================
     // ATTRIBUTES

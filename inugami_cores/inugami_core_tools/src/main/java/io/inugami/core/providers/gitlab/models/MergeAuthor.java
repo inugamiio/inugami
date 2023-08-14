@@ -27,7 +27,7 @@ import java.io.Serializable;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class MergeAuthor implements Serializable {
+public final class MergeAuthor implements Serializable {
 
     private static final long serialVersionUID = 8110580439587270640L;
 

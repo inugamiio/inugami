@@ -28,7 +28,7 @@ import java.util.function.BiConsumer;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder(toBuilder = true)
-public class DefaultErrorCode implements Serializable, ErrorCode {
+public final class DefaultErrorCode implements Serializable, ErrorCode {
 
     // =========================================================================
     // ATTRIBUTES

@@ -46,7 +46,7 @@ public class ContextApplicationConfigIT {
 
             setProperty(JvmKeyValues.HTTP_CONNECTION_MAX_PER_ROUTE, 50);
             setProperty(JvmKeyValues.HTTP_CONNECTION_HEADER_FIELD, ".APPLICATION-NAME",
-                        JvmKeyValues.DEFAUKLT_APPLICATION_NAME);
+                        JvmKeyValues.DEFAULT_APPLICATION_NAME);
 
             setProperty(JvmKeyValues.HTTP_CONNECTION_HEADER_FIELD, ".APPLICATION-HOSTNAME", "{{instanceName}}");
 
@@ -58,15 +58,14 @@ public class ContextApplicationConfigIT {
             assertEquals(100, config.getMaxPluginRunningStandalone());
             assertEquals(75000, config.getTimeout());
             assertEquals(50, config.getHttpDefaultConfig().getMaxPerRoute());
-            assertEquals(JvmKeyValues.DEFAUKLT_APPLICATION_NAME,
+            assertEquals(JvmKeyValues.DEFAULT_APPLICATION_NAME,
                          config.getHttpDefaultConfig().getHeaderFields().get(0).getValue());
             assertEquals("myInstanceName", config.getHttpDefaultConfig().getHeaderFields().get(1).getValue());
 
             Loggers.DEBUG.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             Loggers.DEBUG.info(">> OK");
             Loggers.DEBUG.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        }
-        catch (final Throwable e) {
+        } catch (final Throwable e) {
             Loggers.DEBUG.error(e.getMessage(), e);
             System.exit(1);
         }

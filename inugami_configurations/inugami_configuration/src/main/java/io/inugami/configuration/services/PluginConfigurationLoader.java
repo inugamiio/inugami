@@ -312,7 +312,9 @@ public class PluginConfigurationLoader {
         }
 
         final EventConfig eventConfig = (EventConfig) xmlLoaded;
-        final Gav         eventGav    = new Gav(gav, fileName);
+        final Gav eventGav = gav.toBuilder()
+                                .qualifier(fileName)
+                                .build();
         //@formatter:off
         final EventConfig eventConfigResult = new EventConfig(eventConfig, file, fileName, eventGav);
         //@formatter:on

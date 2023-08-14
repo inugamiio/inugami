@@ -1,14 +1,14 @@
 package io.inugami.api.exceptions;
 
-import io.inugami.api.functionnals.IsEmptyFacet;
 import io.inugami.api.functionnals.VoidFunctionWithException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
+import static io.inugami.api.tools.unit.test.UnitTestHelper.assertThrows;
+import static io.inugami.api.tools.unit.test.UnitTestHelper.assertUtilityClassLombok;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings({"java:S5961"})
@@ -20,30 +20,34 @@ class AssertsTest {
     private static final String           MESSAGE          = "some error";
     private static final Supplier<String> MESSAGE_PRODUCER = () -> MESSAGE;
 
-    private static final ErrorCode ERROR_CODE  = DefaultErrorCode.buildUndefineError();
-    private static final String    EMPTY_VALUE = "";
-    private static final String    BLANK_VALUE = "   ";
-    private static final String    VALUE       = "VALUE";
-    private static final String    REF         = "REF";
+    private static final ErrorCode ERROR_CODE = DefaultErrorCode.buildUndefineError();
+    private static final String    VALUE      = "VALUE";
+    private static final String    REF        = "REF";
 
-    private static final List<String> EMPTY_LIST = List.of();
-    private static final List<String> LIST       = List.of(VALUE);
 
-    private static final Map<String, String> EMPTY_MAP = Map.of();
-    private static final Map<String, String> MAP       = Map.of("key", VALUE);
-
-    private static final IsEmptyFacet IS_EMPTY     = () -> true;
-    private static final IsEmptyFacet IS_NOT_EMPTY = () -> false;
+    private static final String NULL_MSG = null;
 
     // =========================================================================
     // assertTrue
     // =========================================================================
     @Test
+    void asserts() {
+        assertUtilityClassLombok(Asserts.class);
+    }
+
+    @Test
     void assertTrue_shouldPass() {
+        Asserts.assertTrue(true);
         Asserts.assertTrue(VALUE, true);
         Asserts.assertTrue(MESSAGE, true);
         Asserts.assertTrue(MESSAGE_PRODUCER, true);
         Asserts.assertTrue(ERROR_CODE, true);
+
+        assertThrows("this expression must be true", () -> Asserts.assertTrue(NULL_MSG, false));
+        assertThrows("this expression must be true", () -> Asserts.assertTrue(false));
+        assertThrows(MESSAGE, () -> Asserts.assertTrue(MESSAGE, false));
+        assertThrows(MESSAGE, () -> Asserts.assertTrue(MESSAGE_PRODUCER, false));
+        assertThrows(ERROR_CODE, () -> Asserts.assertTrue(ERROR_CODE, false));
     }
 
     @Test
@@ -61,57 +65,55 @@ class AssertsTest {
         }
     }
 
+    @Test
+    void assertTrue_withErrorCode() {
+        Asserts.assertTrue(ERROR_CODE, true);
+        try {
+            Asserts.assertTrue(ERROR_CODE, false);
+        } catch (UncheckedException e) {
+        }
+
+    }
+
     // =========================================================================
     // assertFalse
     // =========================================================================
     @Test
     void assertFalse_shouldPass() {
+        assertThrows("this expression must be false", () -> Asserts.assertFalse(true));
+        assertThrows(MESSAGE, () -> Asserts.assertFalse(MESSAGE, true));
+        assertThrows(MESSAGE_PRODUCER.get(), () -> Asserts.assertFalse(MESSAGE_PRODUCER, true));
+        assertThrows(ERROR_CODE, () -> Asserts.assertFalse(ERROR_CODE, true));
+
+        Asserts.assertFalse(false);
         Asserts.assertFalse(VALUE, false);
         Asserts.assertFalse(MESSAGE, false);
         Asserts.assertFalse(MESSAGE_PRODUCER, false);
         Asserts.assertFalse(ERROR_CODE, false);
+
+        assertThrows("this expression must be false", () -> Asserts.assertFalse(true));
+        assertThrows(MESSAGE, () -> Asserts.assertFalse(MESSAGE, true));
+        assertThrows(MESSAGE, () -> Asserts.assertFalse(MESSAGE_PRODUCER, true));
+        assertThrows(ERROR_CODE, () -> Asserts.assertFalse(ERROR_CODE, true));
+
+
     }
 
-    @Test
-    void assertFalse__shouldThrow() {
-        final List<VoidFunctionWithException> functions = List.of(
-                () -> Asserts.assertFalse(true),
-                () -> Asserts.assertFalse(MESSAGE, true),
-                () -> Asserts.assertFalse(MESSAGE_PRODUCER, true),
-                () -> Asserts.assertFalse(ERROR_CODE, true)
-
-        );
-        for (int i = 0; i < functions.size(); i++) {
-            final int index = i;
-            Asserts.assertThrow("assertFalse__shouldThrow  " + i, () -> functions.get(index).process());
-        }
-    }
 
     // =========================================================================
     // assertNull
     // =========================================================================
     @Test
     void assertNull_shouldPass() {
-        Asserts.assertNull(null);
         Asserts.assertNull(MESSAGE, null);
         Asserts.assertNull(MESSAGE_PRODUCER, null);
         Asserts.assertNull(ERROR_CODE, null);
+
+        assertThrows(MESSAGE, () -> Asserts.assertNull(MESSAGE, VALUE));
+        assertThrows(MESSAGE_PRODUCER.get(), () -> Asserts.assertNull(MESSAGE_PRODUCER, VALUE));
+        assertThrows(ERROR_CODE, () -> Asserts.assertNull(ERROR_CODE, VALUE));
     }
 
-    @Test
-    void assertNull__shouldThrow() {
-        final List<VoidFunctionWithException> functions = List.of(
-                () -> Asserts.assertNull(VALUE),
-                () -> Asserts.assertNull(MESSAGE, VALUE),
-                () -> Asserts.assertNull(MESSAGE_PRODUCER, VALUE),
-                () -> Asserts.assertNull(ERROR_CODE, VALUE)
-
-        );
-        for (int i = 0; i < functions.size(); i++) {
-            final int index = i;
-            Asserts.assertThrow("assertNotNull__shouldThrow  " + i, () -> functions.get(index).process());
-        }
-    }
 
     // =========================================================================
     // assertNotNull
@@ -122,143 +124,14 @@ class AssertsTest {
         Asserts.assertNotNull(MESSAGE, VALUE, VALUE);
         Asserts.assertNotNull(MESSAGE_PRODUCER, VALUE, VALUE);
         Asserts.assertNotNull(ERROR_CODE, VALUE, VALUE);
+
+        assertThrows(UncheckedException.class, () -> Asserts.assertNotNull(null));
+        assertThrows(UncheckedException.class, () -> Asserts.assertNotNull(VALUE, null));
+        assertThrows(MESSAGE, () -> Asserts.assertNotNull(MESSAGE, VALUE, null));
+        assertThrows(MESSAGE_PRODUCER.get(), () -> Asserts.assertNotNull(MESSAGE_PRODUCER, VALUE, null));
+        assertThrows(ERROR_CODE, () -> Asserts.assertNotNull(ERROR_CODE, VALUE, null));
     }
 
-    @Test
-    void assertNotNull__shouldThrow() {
-        final List<VoidFunctionWithException> functions = List.of(
-                () -> Asserts.assertNotNull(VALUE, null),
-                () -> Asserts.assertNotNull(MESSAGE, VALUE, null),
-                () -> Asserts.assertNotNull(MESSAGE_PRODUCER, VALUE, null),
-                () -> Asserts.assertNotNull(ERROR_CODE, VALUE, null)
-
-        );
-        for (int i = 0; i < functions.size(); i++) {
-            final int index = i;
-            Asserts.assertThrow("assertNotNull__shouldThrow  " + i, () -> functions.get(index).process());
-        }
-    }
-
-    // =========================================================================
-    // assertNotEmpty
-    // =========================================================================
-    @Test
-    void assertNotEmpty_shouldPass() {
-        Asserts.assertNotEmpty(VALUE);
-        Asserts.assertNotEmpty(MESSAGE, VALUE);
-        Asserts.assertNotEmpty(MESSAGE_PRODUCER, VALUE);
-        Asserts.assertNotEmpty(ERROR_CODE, VALUE);
-
-        Asserts.assertNotEmpty(LIST);
-        Asserts.assertNotEmpty(MESSAGE, LIST);
-        Asserts.assertNotEmpty(MESSAGE_PRODUCER, LIST);
-        Asserts.assertNotEmpty(ERROR_CODE, LIST);
-
-        Asserts.assertNotEmpty(MAP);
-        Asserts.assertNotEmpty(MESSAGE, MAP);
-        Asserts.assertNotEmpty(MESSAGE_PRODUCER, MAP);
-        Asserts.assertNotEmpty(ERROR_CODE, MAP);
-
-        Asserts.assertNotEmpty(IS_NOT_EMPTY);
-        Asserts.assertNotEmpty(MESSAGE, IS_NOT_EMPTY);
-        Asserts.assertNotEmpty(MESSAGE_PRODUCER, IS_NOT_EMPTY);
-        Asserts.assertNotEmpty(ERROR_CODE, IS_NOT_EMPTY);
-    }
-
-    @Test
-    void assertNotEmpty__shouldThrow() {
-        final List<VoidFunctionWithException> functions = List.of(
-                () -> Asserts.assertNotEmpty(EMPTY_VALUE),
-                () -> Asserts.assertNotEmpty(MESSAGE, EMPTY_VALUE),
-                () -> Asserts.assertNotEmpty(MESSAGE_PRODUCER, EMPTY_VALUE),
-                () -> Asserts.assertNotEmpty(ERROR_CODE, EMPTY_VALUE),
-
-                () -> Asserts.assertNotEmpty(BLANK_VALUE),
-                () -> Asserts.assertNotEmpty(MESSAGE, BLANK_VALUE),
-                () -> Asserts.assertNotEmpty(MESSAGE_PRODUCER, BLANK_VALUE),
-                () -> Asserts.assertNotEmpty(ERROR_CODE, BLANK_VALUE),
-
-
-                () -> Asserts.assertNotEmpty(EMPTY_LIST),
-                () -> Asserts.assertNotEmpty(MESSAGE, EMPTY_LIST),
-                () -> Asserts.assertNotEmpty(MESSAGE_PRODUCER, EMPTY_LIST),
-                () -> Asserts.assertNotEmpty(ERROR_CODE, EMPTY_LIST),
-
-                () -> Asserts.assertNotEmpty(EMPTY_MAP),
-                () -> Asserts.assertNotEmpty(MESSAGE, EMPTY_MAP),
-                () -> Asserts.assertNotEmpty(MESSAGE_PRODUCER, EMPTY_MAP),
-                () -> Asserts.assertNotEmpty(ERROR_CODE, EMPTY_MAP),
-
-                () -> Asserts.assertNotEmpty(IS_EMPTY),
-                () -> Asserts.assertNotEmpty(MESSAGE, IS_EMPTY),
-                () -> Asserts.assertNotEmpty(MESSAGE_PRODUCER, IS_EMPTY),
-                () -> Asserts.assertNotEmpty(ERROR_CODE, IS_EMPTY)
-
-        );
-        for (int i = 0; i < functions.size(); i++) {
-            final int index = i;
-            Asserts.assertThrow("assertNotEmpty__shouldThrow  " + i, () -> functions.get(index).process());
-        }
-    }
-
-    // =========================================================================
-    // assertEmpty
-    // =========================================================================
-    @Test
-    void assertEmpty_shouldPass() {
-        Asserts.assertEmpty("");
-        Asserts.assertEmpty(MESSAGE, "");
-        Asserts.assertEmpty(MESSAGE_PRODUCER, "");
-        Asserts.assertEmpty(ERROR_CODE, "");
-        Asserts.assertEmpty("    ");
-        Asserts.assertEmpty(MESSAGE, "    ");
-        Asserts.assertEmpty(MESSAGE_PRODUCER, "    ");
-        Asserts.assertEmpty(ERROR_CODE, "    ");
-
-        Asserts.assertEmpty(EMPTY_LIST);
-        Asserts.assertEmpty(MESSAGE, EMPTY_LIST);
-        Asserts.assertEmpty(MESSAGE_PRODUCER, EMPTY_LIST);
-        Asserts.assertEmpty(ERROR_CODE, EMPTY_LIST);
-
-        Asserts.assertEmpty(EMPTY_MAP);
-        Asserts.assertEmpty(MESSAGE, EMPTY_MAP);
-        Asserts.assertEmpty(MESSAGE_PRODUCER, EMPTY_MAP);
-        Asserts.assertEmpty(ERROR_CODE, EMPTY_MAP);
-
-        Asserts.assertEmpty(IS_EMPTY);
-        Asserts.assertEmpty(MESSAGE, IS_EMPTY);
-        Asserts.assertEmpty(MESSAGE_PRODUCER, IS_EMPTY);
-        Asserts.assertEmpty(ERROR_CODE, IS_EMPTY);
-    }
-
-    @Test
-    void assertEmpty__shouldThrow() {
-        final List<VoidFunctionWithException> functions = List.of(
-                () -> Asserts.assertEmpty(VALUE),
-                () -> Asserts.assertEmpty(MESSAGE, VALUE),
-                () -> Asserts.assertEmpty(MESSAGE_PRODUCER, VALUE),
-                () -> Asserts.assertEmpty(ERROR_CODE, VALUE),
-
-                () -> Asserts.assertEmpty(LIST),
-                () -> Asserts.assertEmpty(MESSAGE, LIST),
-                () -> Asserts.assertEmpty(MESSAGE_PRODUCER, LIST),
-                () -> Asserts.assertEmpty(ERROR_CODE, LIST),
-
-                () -> Asserts.assertEmpty(MAP),
-                () -> Asserts.assertEmpty(MESSAGE, MAP),
-                () -> Asserts.assertEmpty(MESSAGE_PRODUCER, MAP),
-                () -> Asserts.assertEmpty(ERROR_CODE, MAP),
-
-                () -> Asserts.assertEmpty(IS_NOT_EMPTY),
-                () -> Asserts.assertEmpty(MESSAGE, IS_NOT_EMPTY),
-                () -> Asserts.assertEmpty(MESSAGE_PRODUCER, IS_NOT_EMPTY),
-                () -> Asserts.assertEmpty(ERROR_CODE, IS_NOT_EMPTY)
-        );
-        for (int i = 0; i < functions.size(); i++) {
-            final int index = i;
-            Asserts.assertThrow("assertEmpty__shouldThrow  " + i, () -> functions.get(index).process());
-        }
-    }
 
     // =========================================================================
     // assertEquals
@@ -907,7 +780,9 @@ class AssertsTest {
             throw new RuntimeException("Asserts.assertThrow should throw if no error occurs");
         } catch (final Exception error) {
         }
-
+        Asserts.assertThrow("should throw", () -> {
+            throw new UncheckedException("error");
+        });
     }
 
     // =========================================================================

@@ -26,7 +26,7 @@ import io.inugami.api.processors.Processor;
 import io.inugami.api.providers.Provider;
 import io.inugami.configuration.models.EventConfig;
 import io.inugami.configuration.models.plugins.front.PluginFrontConfig;
-import lombok.Getter;
+import lombok.*;
 
 import java.io.File;
 import java.io.Serializable;
@@ -41,9 +41,15 @@ import java.util.Optional;
  * @author patrick_guillerm
  * @since 27 déc. 2016
  */
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
 @Getter
 @SuppressWarnings({"java:S3655", "java:S107"})
-public class Plugin implements Serializable {
+public final class Plugin implements Serializable {
 
     // =========================================================================
     // ATTRIBUTES
@@ -53,18 +59,20 @@ public class Plugin implements Serializable {
      */
     private static final long serialVersionUID = 1620535173987042446L;
 
-    private                 boolean                          enabled = true;
-    private final           PluginConfiguration              config;
-    private final           List<EventConfig>                events;
-    private final           boolean                          eventConfigPresent;
-    private final           ManifestInfo                     manifest;
-    private final           Map<String, Map<String, String>> properties;
-    private final transient List<EngineListener>             listeners;
-    private final transient List<Processor>                  processors;
-    private final transient List<Provider>                   providers;
-    private final transient List<Handler>                    handlers;
-    private final transient List<AlertingProvider>           alertingProviders;
-    private final           Gav                              gav;
+    private           boolean                          enabled = true;
+    private           PluginConfiguration              config;
+    private           List<EventConfig>                events;
+    private           boolean                          eventConfigPresent;
+    private           ManifestInfo                     manifest;
+    private           Map<String, Map<String, String>> properties;
+    private transient List<EngineListener>             listeners;
+    private transient List<Processor>                  processors;
+    private transient List<Provider>                   providers;
+    private transient List<Handler>                    handlers;
+    private transient List<AlertingProvider>           alertingProviders;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private           Gav                              gav;
 
     // =========================================================================
     // CONSTRUCTORS
@@ -102,7 +110,10 @@ public class Plugin implements Serializable {
     }
 
     public Plugin(final String groupId, final String artifactId) {
-        gav = new Gav(groupId, artifactId);
+        gav = Gav.builder()
+                 .groupId(groupId)
+                 .artifactId(artifactId)
+                 .build();
         config = null;
         events = null;
         eventConfigPresent = false;
@@ -114,33 +125,6 @@ public class Plugin implements Serializable {
         handlers = null;
         alertingProviders = null;
 
-    }
-
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    @Override
-    public int hashCode() {
-        return config.getGav().hashCode();
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        boolean result = this == obj;
-
-        if (!result && (obj != null) && (obj instanceof Plugin)) {
-            result = getGav().equals(((Plugin) obj).getGav());
-        }
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("Plugin[");
-        builder.append(getGav().getHash());
-        builder.append(']');
-        return builder.toString();
     }
 
     // =========================================================================

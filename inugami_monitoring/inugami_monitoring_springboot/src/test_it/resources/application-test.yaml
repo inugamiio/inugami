@@ -1,0 +1,34 @@
+application:
+  groupId: io.inugami
+  artifactId: app
+  version: 1.0.0
+  commitId: 5940bba4-4755-4482-8682-4cdb813df92b
+  commitDate: 2023-08-26T14:55:00
+
+
+
+
+inugami:
+  spring:
+    mapstruct:
+      scanner:
+        enabled: true
+        base-package: io.inugami.monitoring.springboot.app
+  monitoring:
+    enabled: true
+    exception:
+      show:
+        detail:
+          enabled: true
+      enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+  security:
+    enabled: false

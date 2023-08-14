@@ -26,8 +26,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Setter
 @Getter
-public class Property implements Serializable {
-    
+public final class Property implements Serializable {
+
     @EqualsAndHashCode.Include
     private String name;
 
