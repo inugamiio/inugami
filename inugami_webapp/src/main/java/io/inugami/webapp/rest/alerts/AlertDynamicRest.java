@@ -1,42 +1,36 @@
 package io.inugami.webapp.rest.alerts;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.Path;
-
 import io.inugami.api.dao.DaoException;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.commons.security.ItemProcessor;
 import io.inugami.commons.security.SecurityTools;
-import io.inugami.core.alertings.dynamic.entities.ActivationTime;
-import io.inugami.core.alertings.dynamic.entities.AlertDataTransfomer;
-import io.inugami.core.alertings.dynamic.entities.DynamicAlertEntity;
-import io.inugami.core.alertings.dynamic.entities.DynamicLevel;
-import io.inugami.core.alertings.dynamic.entities.ProviderSource;
-import io.inugami.core.alertings.dynamic.entities.Tag;
-import io.inugami.core.alertings.dynamic.entities.TimeSlot;
+import io.inugami.core.alertings.dynamic.entities.*;
 import io.inugami.core.cdi.services.dao.AbstractCrudRest;
 import io.inugami.core.cdi.services.dao.PostCrudHandler;
 
+import javax.ws.rs.Path;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@SuppressWarnings({"java:S1612"})
 @Path("alert/dynamic")
 public class AlertDynamicRest extends AbstractCrudRest<DynamicAlertEntity, String>
         implements PostCrudHandler<DynamicAlertEntity> {
-    
+
     // =========================================================================
     // OVERRIDES
     // =========================================================================
-    
+
     @Override
     protected Class<? extends DynamicAlertEntity> initType() {
         return DynamicAlertEntity.class;
     }
-    
+
     @Override
     protected String parseUid(final String uid) throws DaoException {
         return uid;
     }
-    
+
     @Override
     protected DynamicAlertEntity secureXssEntity(final DynamicAlertEntity entity) {
         //@formatter:off
@@ -82,7 +76,7 @@ public class AlertDynamicRest extends AbstractCrudRest<DynamicAlertEntity, Strin
         //@formatter:on
         return entity;
     }
-    
+
     // =========================================================================
     // HANDLER
     // =========================================================================
@@ -90,20 +84,20 @@ public class AlertDynamicRest extends AbstractCrudRest<DynamicAlertEntity, Strin
     protected PostCrudHandler<DynamicAlertEntity> initHandler() {
         return this;
     }
-    
+
     @Override
     public void onFindAll(final List<DynamicAlertEntity> result) {
         Loggers.REST.info("find {} entities", result == null ? 0 : result.size());
     }
-    
+
     @Override
     public void onFind(final List<DynamicAlertEntity> result) {
         Loggers.REST.info("find {} entities", result == null ? 0 : result.size());
     }
-    
+
     @Override
     public void onSave(final List<DynamicAlertEntity> listEntity) {
         Loggers.REST.info("save {} entities", listEntity == null ? 0 : listEntity.size());
     }
-    
+
 }

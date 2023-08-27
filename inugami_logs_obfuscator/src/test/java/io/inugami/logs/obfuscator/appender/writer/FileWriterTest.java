@@ -1,6 +1,6 @@
 package io.inugami.logs.obfuscator.appender.writer;
 
-import io.inugami.logs.obfuscator.appender.Configuration;
+import io.inugami.logs.obfuscator.appender.AppenderConfiguration;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -16,20 +16,19 @@ class FileWriterTest {
         final File       file   = new File("target/tmp/logs/fileWriterTest.log");
         writer.createFileIfNotExists("target/tmp/logs/fileWriterTest.log");
 
-        assertThat(file.exists()).isTrue();
-        assertThat(file.isFile()).isTrue();
+        assertThat(file).exists();
+        assertThat(file).isFile();
     }
 
 
     @Test
     void resolveFilePath_withPattern() {
         definePath();
-        final FileWriter    writer = new FileWriter();
-        final Configuration config = new Configuration();
-
-        writer.accept(Configuration.builder()
-                                   .file("{{FileWriterTest.resolveFilePath_withPattern}}/some.file-%d{yyyy-MM-dd}.json")
-                                   .build());
+        final FileWriter writer = new FileWriter();
+        
+        writer.accept(AppenderConfiguration.builder()
+                                           .file("{{FileWriterTest.resolveFilePath_withPattern}}/some.file-%d{yyyy-MM-dd}.json")
+                                           .build());
 
         final String path = writer.resolveFilePath();
         assertThat(path).isNotNull();

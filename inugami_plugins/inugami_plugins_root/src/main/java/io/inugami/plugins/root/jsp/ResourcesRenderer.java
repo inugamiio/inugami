@@ -27,6 +27,7 @@ import io.inugami.configuration.models.plugins.ResourceCss;
 import io.inugami.configuration.models.plugins.ResourceJavaScript;
 import io.inugami.configuration.models.plugins.front.PluginFrontConfig;
 import io.inugami.core.context.Context;
+import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +41,8 @@ import java.util.function.Consumer;
  * @author patrick_guillerm
  * @since 18 janv. 2017
  */
+@SuppressWarnings({"java:S3655", "java:S6355", "java:S1123", "java:S1133"})
+@UtilityClass
 public class ResourcesRenderer {
     // =========================================================================
     // ATTRIBUTES
@@ -78,15 +81,11 @@ public class ResourcesRenderer {
     public static String renderPluginsCss(final String contextPath) {
         final StringBuilder result = new StringBuilder();
 
-        processOnPlugins(plugin -> {
-            //@formatter:off
-            plugin.getResources()
-                  .stream()
-                  .filter(item -> isCssResource(item))
-                  .map(css -> renderCssLink(contextPath, css.getFullPath()))
-                  .forEach(result::append);
-            //@formatter:on
-        });
+        processOnPlugins(plugin -> plugin.getResources()
+                                         .stream()
+                                         .filter(item -> isCssResource(item))
+                                         .map(css -> renderCssLink(contextPath, css.getFullPath()))
+                                         .forEach(result::append));
 
         processOnFrontPlugins(plugin -> {
             final String commonsCss = plugin.getFrontConfig().get().getCommonsCss();
@@ -113,14 +112,11 @@ public class ResourcesRenderer {
     public static String renderPluginsJavaScript(final String contextPath) {
         final StringBuilder result = new StringBuilder();
         //@formatter:off
-        processOnPlugins(plugin -> {
-            plugin.getResources()
+        processOnPlugins(plugin -> plugin.getResources()
                   .stream()
                   .filter(item -> isJavaScriptResource(item))
                   .map(js -> renderJavaScriptLink(js, contextPath))
-                  .forEach(jsLink -> result.append("\n").append(jsLink));
-        });
-        //@formatter:on
+                  .forEach(jsLink -> result.append("\n").append(jsLink)));
         return result.toString();
     }
 
@@ -237,13 +233,11 @@ public class ResourcesRenderer {
     // =========================================================================
     public static String renderPluginsGavs() {
         final List<Plugin> pluginsWithFront = new ArrayList<>();
-        //@formatter:off
-        Context.getInstance().getPlugins().ifPresent(plugins -> {
-            plugins.stream()
-                   .filter(plugin -> plugin.getFrontConfig().isPresent())
-                   .forEach(pluginsWithFront::add);
-        });
-        //@formatter:off
+
+        Context.getInstance().getPlugins().ifPresent(plugins -> plugins.stream()
+                                                                       .filter(plugin -> plugin.getFrontConfig()
+                                                                                               .isPresent())
+                                                                       .forEach(pluginsWithFront::add));
 
         final JsonBuilder js = new JsonBuilder();
         js.openObject();
@@ -372,28 +366,14 @@ public class ResourcesRenderer {
         return result.toString();
     }
 
-    @Deprecated
-    private static String routerPath(final String path, final String componentClassName) {
-        final StringBuilder result = new StringBuilder();
-        result.append('{');
-        result.append("path:").append('\'').append(path).append('\'');
-        result.append("component:").append(componentClassName);
-        result.append('}');
-        result.append(',');
-        result.append('\n');
-        return result.toString();
-    }
 
-    //@formatter:off
     private static void processOnFrontPlugins(final Consumer<Plugin> function) {
         Context.getInstance()
                .getPlugins()
                .orElseGet(Collections::emptyList)
                .stream()
                .filter(plugin -> plugin.getFrontConfig().isPresent())
-               .forEach(plugin -> {
-                   function.accept(plugin);
-               });
+               .forEach(function::accept);
     }
 
     private static void processOnPlugins(final Consumer<Plugin> function) {
@@ -404,7 +384,6 @@ public class ResourcesRenderer {
                .forEach(function);
     }
 
-    //@formatter:on
     public static String renderApplicationVersion() {
         return APPLICATION_VERSION;
     }

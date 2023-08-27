@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
+@SuppressWarnings({"java:S2629"})
 @RequiredArgsConstructor
 public class FeignPartnerResponseDecoder implements Decoder {
     private final Decoder decoder;

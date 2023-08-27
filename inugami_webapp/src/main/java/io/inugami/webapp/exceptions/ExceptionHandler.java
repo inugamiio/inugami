@@ -75,7 +75,7 @@ public class ExceptionHandler implements ExceptionMapper<Exception> {
         final Map<Matcher, ErrorCode> errors = new LinkedHashMap<>();
 
         //@formatter:off
-        final BiConsumer<String, Exception> technicalConsumer = (msg,error) -> Loggers.DEBUG.error(msg,error);
+        final BiConsumer<String, Exception> technicalConsumer =  Loggers.DEBUG::error;
         final BiConsumer<String, Exception> xllogConsumer     = (msg,error) -> Loggers.XLLOG.error("{} : {}",msg,error.getMessage());
         //@formatter:on
 

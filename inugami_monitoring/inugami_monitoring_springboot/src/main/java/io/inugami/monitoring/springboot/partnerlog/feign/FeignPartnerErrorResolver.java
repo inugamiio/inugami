@@ -19,6 +19,7 @@ public interface FeignPartnerErrorResolver {
         return new UncheckedException(errorCode);
     }
 
+    @SuppressWarnings({"java:S1066"})
     default boolean isXlError(final Response wrappedResponse) {
         boolean result = false;
 

@@ -1,1 +1,0 @@
-org.springframework.context.ApplicationListener=io.inugami.commons.spring.InugamiSpringApplicationListener

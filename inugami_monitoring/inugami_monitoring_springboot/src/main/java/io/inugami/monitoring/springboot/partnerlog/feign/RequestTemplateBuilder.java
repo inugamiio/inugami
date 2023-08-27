@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.util.*;
 
-
+@SuppressWarnings({"java:S1181", "java:S108", "java:S1874"})
 @ToString
 @Setter
 @Getter

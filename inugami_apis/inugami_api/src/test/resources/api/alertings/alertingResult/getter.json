@@ -1,0 +1,12 @@
+{
+  "getAlerteName" : "alertName",
+  "getChannel" : "plugin",
+  "getCreated" : 1520605752814,
+  "getDuration" : 60,
+  "getLevel" : "error ios",
+  "getLevelType" : "ERROR",
+  "getMessage" : "foobar message",
+  "getProviders" : [ "elkProvider", "kafkaProvider" ],
+  "getSubLabel" : "sub message",
+  "isMultiAlerts" : false
+}

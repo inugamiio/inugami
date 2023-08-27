@@ -14,14 +14,17 @@
     "payload" : "null",
     "errorStatus" : "500",
     "errorSubDomain" : "null",
+    "category" : "user",
     "messageDetail" : "invalid email address"
-  }
+  },
+  "message" : ""
 }, {
   "level" : "ERROR",
   "loggerName" : "XLLOG",
   "mdc" : {
     "rollback" : "false",
     "retryable" : "false",
+    "traceId" : "4dc99ef4-72dc-44cf-954f-7d3b92ac591a",
     "exploitationError" : "true",
     "errorDomain" : "null",
     "errorType" : "technical",
@@ -32,7 +35,9 @@
     "field" : "user.email",
     "payload" : "null",
     "errorStatus" : "500",
+    "correlation_id" : "71021211-9618-477d-9dcf-a3c77151f0a3",
     "errorSubDomain" : "null",
+    "category" : "user",
     "messageDetail" : "invalid email address"
   },
   "message" : "null : invalid email address"

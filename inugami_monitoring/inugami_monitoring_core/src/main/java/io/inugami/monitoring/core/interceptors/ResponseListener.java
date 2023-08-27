@@ -20,8 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface ResponseListener {
 
-    default void beforeWriting(final HttpServletResponse response){
-    };
-    default void onFlush(final HttpServletResponse response){
-    };
+    default void beforeWriting(final HttpServletResponse response) {
+    }
+
+    default void onFlush(final HttpServletResponse response) {
+    }
 }

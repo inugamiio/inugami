@@ -14,6 +14,8 @@
     "payload" : "null",
     "errorStatus" : "500",
     "errorSubDomain" : "null",
+    "category" : "user",
     "messageDetail" : "invalid email address"
-  }
+  },
+  "message" : ""
 } ]

@@ -1,0 +1,7 @@
+warningCode:	warn
+warningMessage:	null
+warningMessageDetail:	null
+warningType:	functional
+warningCategory:	null
+warningDomain:	null
+warningSubDomain:	null

@@ -35,6 +35,7 @@ import javax.servlet.DispatcherType;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+@SuppressWarnings({"java:S1172"})
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -84,28 +85,31 @@ public class SpringRestMethodResolver implements JavaRestMethodResolver {
         }
     }
 
-
+    @SuppressWarnings({"java:S3776"})
     private HttpServletRequest checkMultipart(final HttpServletRequest request) {
-        if (this.multipartResolver != null && this.multipartResolver.isMultipart(request)) {
-            if (WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class) != null) {
-                if (DispatcherType.REQUEST.equals(request.getDispatcherType())) {
-                    log.trace("Request already resolved to MultipartHttpServletRequest, e.g. by MultipartFilter");
-                }
-            } else if (hasMultipartException(request)) {
-                log.debug("Multipart resolution previously failed for current request - " +
-                                  "skipping re-resolution for undisturbed error rendering");
-            } else {
-                try {
-                    return this.multipartResolver.resolveMultipart(request);
-                } catch (MultipartException ex) {
-                    if (request.getAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE) != null) {
-                        log.debug("Multipart resolution failed for error dispatch", ex);
-                    } else {
-                        throw ex;
-                    }
+        if (this.multipartResolver == null || !this.multipartResolver.isMultipart(request)) {
+            return request;
+        }
+
+        if (WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class) != null) {
+            if (DispatcherType.REQUEST.equals(request.getDispatcherType())) {
+                log.trace("Request already resolved to MultipartHttpServletRequest, e.g. by MultipartFilter");
+            }
+        } else if (hasMultipartException(request)) {
+            log.debug("Multipart resolution previously failed for current request - " +
+                      "skipping re-resolution for undisturbed error rendering");
+        } else {
+            try {
+                return this.multipartResolver.resolveMultipart(request);
+            } catch (MultipartException ex) {
+                if (request.getAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE) != null) {
+                    log.debug("Multipart resolution failed for error dispatch", ex);
+                } else {
+                    throw ex;
                 }
             }
         }
+
         return request;
     }
 

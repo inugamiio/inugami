@@ -61,8 +61,9 @@ public class FilterInterceptorErrorResolver implements ExceptionResolver {
     // CONSTRUCTORS
     // =========================================================================
     private static Map<Pattern, ErrorCode> initErrorsType() {
-        final Map<Pattern, ErrorCode>      errors  = new LinkedHashMap<>();
-        final List<ExceptionHandlerMapper> mappers = SpiLoader.getInstance().loadSpiServicesByPriority(ExceptionHandlerMapper.class);
+        final Map<Pattern, ErrorCode> errors = new LinkedHashMap<>();
+        final List<ExceptionHandlerMapper> mappers = SpiLoader.getInstance()
+                                                              .loadSpiServicesByPriority(ExceptionHandlerMapper.class);
         mappers.stream().map(ExceptionHandlerMapper::produceMapping).forEach(errors::putAll);
         return errors;
     }
@@ -76,19 +77,20 @@ public class FilterInterceptorErrorResolver implements ExceptionResolver {
         for (final Pattern pattern : KEYS_SET) {
             final Matcher matcher = pattern.matcher(error.getClass().getName());
             if (matcher.matches()) {
-                errorType = ERRORS_TYPES.get(matcher);
+                errorType = ERRORS_TYPES.get(pattern);
                 break;
             }
         }
 
-        final ErrorResult.ErrorResultBuilder errorBuilder = ErrorResult.builder();
-        errorBuilder.errorType(errorType.getErrorType());
-        errorBuilder.errorCode(errorType.getErrorCode());
-        errorBuilder.cause(buildCause(error));
-        errorBuilder.httpCode(errorType.getStatusCode());
-        errorBuilder.currentErrorCode(errorType);
-        errorBuilder.exploitationError(errorType.isExploitationError());
-        return errorBuilder.build();
+        return ErrorResult.builder()
+                          .errorType(errorType.getErrorType())
+                          .errorCode(errorType.getErrorCode())
+                          .cause(buildCause(error))
+                          .httpCode(errorType.getStatusCode())
+                          .currentErrorCode(errorType)
+                          .exploitationError(errorType.isExploitationError())
+                          .build();
+
     }
 
     private String buildCause(final Exception error) {

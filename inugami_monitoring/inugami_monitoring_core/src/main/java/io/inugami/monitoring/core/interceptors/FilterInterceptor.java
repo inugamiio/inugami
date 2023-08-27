@@ -57,6 +57,7 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
  * @author patrick_guillerm
  * @since 28 déc. 2018
  */
+@SuppressWarnings({"java:S112", "java:S1181", "java:S108"})
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -72,12 +73,11 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     private List<JavaRestMethodTracker>         javaRestMethodTrackers  = null;
     private List<Interceptable>                 interceptableResolver   = null;
     private FilterInterceptorCachePurgeStrategy purgeCacheStrategy      = null;
-
     private              List<ExceptionResolver>           exceptionResolver            = null;
     private              List<MonitoringFilterInterceptor> monitoringFilterInterceptors = new ArrayList<>();
     private              ConfigHandler<String, String>     configuration;
-    private final static Map<String, Boolean>              INTERCEPTABLE_URI_RESOLVED   = new ConcurrentHashMap<>();
-    private final static int                               KILO                         = 1024;
+    private static final  Map<String, Boolean>              INTERCEPTABLE_URI_RESOLVED   = new ConcurrentHashMap<>();
+    private static final  int                               KILO                         = 1024;
 
 
     //@formatter:on
@@ -92,6 +92,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
     @Override
     public void destroy() {
+        // nothing to do
     }
 
 
@@ -104,15 +105,18 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         javaRestMethodResolvers = SpiLoader.getInstance().loadSpiServicesByPriority(JavaRestMethodResolver.class);
         javaRestMethodTrackers = SpiLoader.getInstance().loadSpiServicesByPriority(JavaRestMethodTracker.class);
         interceptableResolver = SpiLoader.getInstance().loadSpiServicesByPriority(Interceptable.class);
-        exceptionResolver = SpiLoader.getInstance().loadSpiServicesByPriority(ExceptionResolver.class, new FilterInterceptorErrorResolver());
-        purgeCacheStrategy = SpiLoader.getInstance().loadSpiServiceByPriority(FilterInterceptorCachePurgeStrategy.class, new DefaultFilterInterceptorCachePurgeStrategy());
+        exceptionResolver = SpiLoader.getInstance()
+                                     .loadSpiServicesByPriority(ExceptionResolver.class, new FilterInterceptorErrorResolver());
+        purgeCacheStrategy = SpiLoader.getInstance()
+                                      .loadSpiServiceByPriority(FilterInterceptorCachePurgeStrategy.class, new DefaultFilterInterceptorCachePurgeStrategy());
 
         monitoringFilterInterceptors = new ArrayList<>();
         for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrap.getContext().getInterceptors()) {
             monitoringFilterInterceptors.add(interceptor);
         }
 
-        final List<MonitoringFilterInterceptor> monitoringFilterInterceptorsSpi = SpiLoader.getInstance().loadSpiServicesByPriority(MonitoringFilterInterceptor.class);
+        final List<MonitoringFilterInterceptor> monitoringFilterInterceptorsSpi = SpiLoader.getInstance()
+                                                                                           .loadSpiServicesByPriority(MonitoringFilterInterceptor.class);
         for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptorsSpi) {
             if (isNotContains(interceptor, MonitoringBootstrap.getContext().getInterceptors())) {
                 monitoringFilterInterceptors.add(interceptor);
@@ -120,7 +124,8 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         }
     }
 
-    private boolean isNotContains(final MonitoringFilterInterceptor interceptor, final List<MonitoringFilterInterceptor> monitoringFilterInterceptors) {
+    private boolean isNotContains(final MonitoringFilterInterceptor interceptor,
+                                  final List<MonitoringFilterInterceptor> monitoringFilterInterceptors) {
         final boolean result = true;
         if (monitoringFilterInterceptors == null) {
             return result;
@@ -160,7 +165,8 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     }
 
     private boolean isAttributesNotInitialized() {
-        return javaRestMethodResolvers == null || javaRestMethodTrackers == null || interceptableResolver == null || exceptionResolver == null;
+        return javaRestMethodResolvers == null || javaRestMethodTrackers == null || interceptableResolver == null ||
+               exceptionResolver == null;
     }
 
     private void processIntercepting(final ServletRequest request, final HttpServletResponse response,
@@ -183,7 +189,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         final JavaRestMethodDTO javaRestMethod = resolveJavaRestMethod(request);
         addTrackingInformation(response, requestInfo, javaRestMethod);
 
-        onBegin(httpRequest, response, headers, content);
+        onBegin(httpRequest, response, content);
 
         Exception error = null;
 
@@ -197,7 +203,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         } finally {
             chrono.stop();
             final ErrorResult errorResult = resolveError(error);
-            onEnd(httpRequest, responseWrapper, errorResult, chrono.getDelaisInMillis(), content);
+            onEnd(httpRequest, responseWrapper, errorResult, chrono.getDuration(), content);
         }
     }
 
@@ -262,13 +268,9 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
     private ServletRequest buildRequestProxy(final ServletRequest request, final byte[] content) {
         final Class<?>[] types = {ServletRequest.class, HttpServletRequest.class};
-        //@formatter:off
-        final ServletRequest proxy = (ServletRequest) Proxy.newProxyInstance(this.getClass().getClassLoader(),
-                                                                             types,
-                                                                             new RequestCallBackInterceptor(request, content));
-        //@formatter:on
-
-        return proxy;
+        return (ServletRequest) Proxy.newProxyInstance(this.getClass().getClassLoader(),
+                                                       types,
+                                                       new RequestCallBackInterceptor(request, content));
     }
 
     private String buildCurrentPath(final HttpServletRequest httpRequest) {
@@ -300,10 +302,12 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     // =========================================================================
     // LIFECYCLE
     // =========================================================================
-    private void onBegin(final HttpServletRequest httpRequest, final HttpServletResponse response, final Map<String, String> headers,
+    private void onBegin(final HttpServletRequest httpRequest,
+                         final HttpServletResponse response,
                          final String content) {
 
         final ResquestData requestData = convertToRequestData(httpRequest, response, content);
+
         onBeginInitMdcFields(requestData, httpRequest);
 
         for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptors) {
@@ -382,7 +386,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
                                                                      .httpRequest(httpRequest)
                                                                      .httpResponse(response)
                                                                      .method(httpRequest.getMethod())
-                                                                     .uri(httpRequest.getRequestURI().toString())
+                                                                     .uri(httpRequest.getRequestURI())
                                                                      .contextPath(httpRequest.getContextPath())
                                                                      .contentType(httpRequest.getContentType())
                                                                      .content(content == null ? null : content.trim());
@@ -400,9 +404,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     }
 
     private byte[] readInput(final ServletInputStream inputStream) {
-
-        final StringBuilder         result = new StringBuilder();
-        final ByteArrayOutputStream out    = new ByteArrayOutputStream(64 * KILO);
+        final ByteArrayOutputStream out = new ByteArrayOutputStream(64 * KILO);
 
         final int    bufferSize = 16 * KILO;
         final byte[] buffer     = new byte[bufferSize];
@@ -419,7 +421,9 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         return out.toByteArray();
     }
 
-    private ResponseData convertToResponseData(final HttpServletRequest httpRequest, final ResponseWrapper httpResponse, final long duration) {
+    private ResponseData convertToResponseData(final HttpServletRequest httpRequest,
+                                               final ResponseWrapper httpResponse,
+                                               final long duration) {
         final String content = ObfuscatorTools.applyObfuscators(httpResponse.getData());
 
         final Map<String, String> hearders = new LinkedHashMap<>();

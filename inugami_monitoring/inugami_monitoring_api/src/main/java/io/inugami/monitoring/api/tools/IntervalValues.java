@@ -36,12 +36,13 @@ import java.util.function.Supplier;
  * @author patrickguillerm
  * @since Jan 17, 2019
  */
+@SuppressWarnings({"java:S2142", "java:S1181"})
 public class IntervalValues<T> implements BootstrapContext<Void> {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final Queue<T> values = new LinkedBlockingQueue<T>();
+    private final Queue<T> values = new LinkedBlockingQueue<>();
 
     private final ScheduledExecutorService executor;
 
@@ -78,7 +79,7 @@ public class IntervalValues<T> implements BootstrapContext<Void> {
         if (!executor.isShutdown()) {
             try {
                 executor.awaitTermination(0, TimeUnit.MILLISECONDS);
-            } catch (final InterruptedException e) {
+            } catch (final Throwable e) {
                 Loggers.DEBUG.error(e.getMessage(), e);
             }
         }

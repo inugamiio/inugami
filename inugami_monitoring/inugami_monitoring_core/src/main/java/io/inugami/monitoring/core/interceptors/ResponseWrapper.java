@@ -1,73 +1,74 @@
 /* --------------------------------------------------------------------
- *  Inugami  
+ *  Inugami
  * --------------------------------------------------------------------
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.monitoring.core.interceptors;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import io.inugami.api.exceptions.FatalException;
+import io.inugami.api.spi.SpiLoader;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-
-import io.inugami.api.exceptions.FatalException;
-import io.inugami.api.spi.SpiLoader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * ResponseWrapper
- * 
+ *
  * @author patrickguillerm
  * @since Jan 8, 2019
  */
+@SuppressWarnings({"java:S6355", "java:S1123", "java:S3824", "java:S1133", "java:S1133"})
 final class ResponseWrapper implements ServletResponse, HttpServletResponse {
 
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    public static final String        HEADER_SEP = ",";
-    private final HttpServletResponse response;
-    
+    public static final String              HEADER_SEP = ",";
+    private final       HttpServletResponse response;
+
     private final OutputWriterWrapper       outputWrapper;
-    private final Map<String, List<String>> localHeaders = new ConcurrentHashMap<>();
-    private final List<ResponseListener> responseListeners = SpiLoader.getInstance().loadSpiService(ResponseListener.class);
+    private final Map<String, List<String>> localHeaders      = new ConcurrentHashMap<>();
+    private final List<ResponseListener>    responseListeners = SpiLoader.getInstance()
+                                                                         .loadSpiService(ResponseListener.class);
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
     ResponseWrapper(final ServletResponse response) {
         this.response = (HttpServletResponse) response;
-        
+
         try {
             this.outputWrapper = new OutputWriterWrapper(response.getOutputStream());
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             throw new FatalException(e.getMessage(), e);
         }
     }
-    
+
     // =========================================================================
     // METHODES
     // =========================================================================
     String getData() {
         return outputWrapper.getData();
     }
-    
+
     // =========================================================================
     // OVERRIDES
     // =========================================================================
@@ -75,211 +76,211 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     public String getCharacterEncoding() {
         return response.getCharacterEncoding();
     }
-    
+
     @Override
     public String getContentType() {
         return response.getContentType();
     }
-    
+
     @Override
     public ServletOutputStream getOutputStream() throws IOException {
-        responseListeners.forEach(listener-> listener.beforeWriting(response));
+        responseListeners.forEach(listener -> listener.beforeWriting(response));
         return outputWrapper;
     }
-    
+
     @Override
     public PrintWriter getWriter() throws IOException {
         return response.getWriter();
     }
-    
+
     @Override
     public void setCharacterEncoding(final String charset) {
         response.setCharacterEncoding(charset);
     }
-    
+
     @Override
     public void setContentLength(final int len) {
         response.setContentLength(len);
     }
-    
+
     @Override
     public void setContentLengthLong(final long len) {
         response.setContentLengthLong(len);
     }
-    
+
     @Override
     public void setContentType(final String type) {
         response.setContentType(type);
     }
-    
+
     @Override
     public void setBufferSize(final int size) {
         response.setBufferSize(size);
     }
-    
+
     @Override
     public int getBufferSize() {
         return response.getBufferSize();
     }
-    
+
     @Override
     public void flushBuffer() throws IOException {
-        responseListeners.forEach(listener-> listener.onFlush(response));
+        responseListeners.forEach(listener -> listener.onFlush(response));
         response.flushBuffer();
     }
-    
+
     @Override
     public void resetBuffer() {
         response.resetBuffer();
     }
-    
+
     @Override
     public boolean isCommitted() {
         return response.isCommitted();
     }
-    
+
     @Override
     public void reset() {
         response.reset();
     }
-    
+
     @Override
     public void setLocale(final Locale loc) {
         response.setLocale(loc);
     }
-    
+
     @Override
     public Locale getLocale() {
         return response.getLocale();
     }
-    
+
     @Override
     public void addCookie(final Cookie cookie) {
         response.addCookie(cookie);
     }
-    
+
     @Override
     public boolean containsHeader(final String name) {
         return response.containsHeader(name);
     }
-    
+
     @Override
     public String encodeURL(final String url) {
         return response.encodeURL(url);
     }
-    
+
     @Override
     public String encodeRedirectURL(final String url) {
         return response.encodeRedirectURL(url);
     }
-    
+
     @Deprecated
     @Override
     public String encodeUrl(final String url) {
         return response.encodeUrl(url);
     }
-    
+
     @Deprecated
     @Override
     public String encodeRedirectUrl(final String url) {
         return response.encodeRedirectUrl(url);
     }
-    
+
     @Override
     public void sendError(final int sc, final String msg) throws IOException {
         response.sendError(sc, msg);
     }
-    
+
     @Override
     public void sendError(final int sc) throws IOException {
         response.sendError(sc);
     }
-    
+
     @Override
     public void sendRedirect(final String location) throws IOException {
         response.sendRedirect(location);
     }
-    
+
     @Override
     public void setDateHeader(final String name, final long date) {
         response.setDateHeader(name, date);
-        
+
     }
-    
+
     @Override
     public void addDateHeader(final String name, final long date) {
         response.addDateHeader(name, date);
-        
+
     }
-    
+
     @Override
     public void setHeader(final String name, final String value) {
-        if(name == null || value == null){
+        if (name == null || value == null) {
             return;
         }
 
         response.setHeader(name, value);
         List<String> currentHeader = localHeaders.get(name);
-        if(currentHeader ==null){
-            currentHeader= new ArrayList<>();
+        if (currentHeader == null) {
+            currentHeader = new ArrayList<>();
             localHeaders.put(name, currentHeader);
         }
         currentHeader.add(value);
     }
-    
+
     @Override
     public void addHeader(final String name, final String value) {
-        setHeader(name,value);
+        setHeader(name, value);
     }
-    
+
     @Override
     public void setIntHeader(final String name, final int value) {
-        setHeader(name,String.valueOf(value));
+        setHeader(name, String.valueOf(value));
     }
-    
+
     @Override
     public void addIntHeader(final String name, final int value) {
-        setHeader(name,String.valueOf(value));
-        
+        setHeader(name, String.valueOf(value));
+
     }
-    
+
     @Override
     public void setStatus(final int sc) {
         response.setStatus(sc);
     }
-    
+
     @Deprecated
     @Override
     public void setStatus(final int sc, final String sm) {
         response.setStatus(sc, sm);
     }
-    
+
     @Override
     public int getStatus() {
         return response.getStatus();
     }
-    
+
     @Override
     public String getHeader(final String name) {
         String value = response.getHeader(name);
-        if(value == null){
+        if (value == null) {
             final List<String> values = localHeaders.get(name);
-            if(values != null){
+            if (values != null) {
                 value = String.join(HEADER_SEP, values);
             }
         }
         return value;
     }
-    
+
     @Override
     public Collection<String> getHeaders(final String name) {
         Collection<String> result = response.getHeaders(name);
-        if(result==null){
-            result= localHeaders.get(name);
+        if (result == null) {
+            result = localHeaders.get(name);
         }
         return result;
     }
-    
+
     @Override
     public Collection<String> getHeaderNames() {
         List<String> result = new ArrayList<>();
@@ -288,5 +289,5 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
 
         return result;
     }
-    
+
 }

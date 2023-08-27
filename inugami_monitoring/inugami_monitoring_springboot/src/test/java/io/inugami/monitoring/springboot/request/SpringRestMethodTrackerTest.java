@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class SpringRestMethodTrackerTest {
+class SpringRestMethodTrackerTest {
 
     @BeforeEach
     public void init() {
@@ -28,7 +28,7 @@ public class SpringRestMethodTrackerTest {
     // ACCEPT
     // ========================================================================
     @Test
-    public void accept_nullValue_shouldReturnFalse() {
+    void accept_nullValue_shouldReturnFalse() {
         final SpringRestMethodTracker service = new SpringRestMethodTracker();
         assertThat(service.accept(null)).isFalse();
         assertThat(service.accept(JavaRestMethodDTO.builder().build())).isFalse();
@@ -39,7 +39,7 @@ public class SpringRestMethodTrackerTest {
     // TRACK
     // ========================================================================
     @Test
-    public void track_withRoot() {
+    void track_withRoot() {
         processTest(EndpointWithRootPath.class, "requestMapping", "/root/request/{someParameter}");
         processTest(EndpointWithRootPath.class, "deleteMapping", "/root/delete/{someParameter}");
         processTest(EndpointWithRootPath.class, "getMapping", "/root/get/{someParameter}");
@@ -50,7 +50,7 @@ public class SpringRestMethodTrackerTest {
 
 
     @Test
-    public void track_withoutRoot() {
+    void track_withoutRoot() {
         processTest(EndpointWithoutRootPath.class, "requestMapping", "/request/{someParameter}");
         processTest(EndpointWithoutRootPath.class, "deleteMapping", "/delete/{someParameter}");
         processTest(EndpointWithoutRootPath.class, "getMapping", "/get/{someParameter}");

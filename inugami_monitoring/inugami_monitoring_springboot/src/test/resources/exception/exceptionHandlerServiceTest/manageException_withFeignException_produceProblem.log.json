@@ -15,6 +15,7 @@
     "payload" : "null",
     "errorStatus" : "401",
     "errorSubDomain" : "null",
+    "category" : "null",
     "messageDetail" : "null"
   },
   "message" : "bad credentials"

@@ -1,17 +1,17 @@
 /* --------------------------------------------------------------------
- *  Inugami  
+ *  Inugami
  * --------------------------------------------------------------------
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.monitoring.core.context;
@@ -32,19 +32,19 @@ import java.util.Map;
 
 /**
  * MonitoringContext
- * 
+ *
  * @author patrick_guillerm
  * @since 27 déc. 2018
  */
 public class MonitoringContext implements BootstrapContext<Void> {
-    
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final static Monitoring                     CONFIG        = loadConfiguration();
-    
+    private static final Monitoring CONFIG = loadConfiguration();
+
     private final Map<Long, SensorsIntervalManagerTask> managersTasks = new HashMap<>();
-    
+
     // =========================================================================
     // BOOSTRAP
     // =========================================================================
@@ -54,21 +54,17 @@ public class MonitoringContext implements BootstrapContext<Void> {
             if (CONFIG.isEnable()) {
                 managersTasks.putAll(buildSensorsTasks(CONFIG.getSensors()));
             }
-            
-            //@formatter:off
-            managersTasks.entrySet()
-                         .stream()
-                         .map(Map.Entry::getValue)
-                         .forEach(task -> task.bootrap(this));
-            //@formatter:on
+
+            managersTasks.entrySet().stream().map(Map.Entry::getValue).forEach(task -> task.bootrap(this));
         }
-    };
-    
-    private static Monitoring loadConfiguration() {
-        final MonitoringLoaderSpi loader = SpiLoader.getInstance().loadSpiSingleServicesByPriority(MonitoringLoaderSpi.class);
-        return loader == null ? null : loader.load();
     }
-    
+
+
+    private static Monitoring loadConfiguration() {
+        return ((MonitoringLoaderSpi) SpiLoader.getInstance()
+                                               .loadSpiSingleServicesByPriority(MonitoringLoaderSpi.class)).load();
+    }
+
     // =========================================================================
     // SHUTDOWN
     // =========================================================================
@@ -84,8 +80,9 @@ public class MonitoringContext implements BootstrapContext<Void> {
             CONFIG.getSenders().forEach(MonitoringSender::shutdown);
         }
         //@formatter:on
-    };
-    
+    }
+
+
     // =========================================================================
     // BUILDER
     // =========================================================================
@@ -94,49 +91,47 @@ public class MonitoringContext implements BootstrapContext<Void> {
         if (sensors == null) {
             return result;
         }
-        
+
         for (final MonitoringSensor sensor : sensors) {
             SensorsIntervalManagerTask task = result.get(sensor.getInterval());
             if (task == null) {
                 if (sensor.getInterval() > 100) {
-                    task = new SensorsIntervalManagerTask(CONFIG.getMaxSensorsTasksThreads(), sensor.getInterval(),
-                                                          CONFIG.getSenders());
+                    task = new SensorsIntervalManagerTask(CONFIG.getMaxSensorsTasksThreads(), sensor.getInterval(), CONFIG.getSenders());
                     result.put(sensor.getInterval(), task);
-                }
-                else {
+                } else {
                     Loggers.CONFIG.error("sensor interval must be higher or equals than 100ms!({})", sensor.getName());
                 }
-                
+
             }
             if (task != null) {
                 task.add(sensor);
             }
-            
+
         }
         return result;
     }
-    
+
     // =========================================================================
     // BUILDER
     // =========================================================================
     public Monitoring getConfig() {
         return CONFIG;
     }
-    
+
     public List<MonitoringSender> getSenders() {
         return CONFIG.getSenders();
     }
-    
+
     public List<MonitoringSensor> getSensors() {
         return CONFIG.getSensors();
     }
-    
+
     public List<MonitoringFilterInterceptor> getInterceptors() {
         return CONFIG.getInterceptors();
     }
 
-    public MonitoringContext addInterceptor(MonitoringFilterInterceptor interceptor){
-        if(interceptor!=null){
+    public MonitoringContext addInterceptor(MonitoringFilterInterceptor interceptor) {
+        if (interceptor != null) {
             CONFIG.getInterceptors().add(interceptor);
         }
         return this;
@@ -145,7 +140,7 @@ public class MonitoringContext implements BootstrapContext<Void> {
     // =========================================================================
     // UTILS
     // =========================================================================
-    public Map<String,String> getTrackingInformation(){
+    public Map<String, String> getTrackingInformation() {
         return MonitoringContextUtils.getTrackingInformation(CONFIG);
     }
 }

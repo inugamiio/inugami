@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 
+@SuppressWarnings({"java:S1181", "java:S108", "java:S2629"})
 @Getter
 @RequiredArgsConstructor
 public class FeignPartnerRequestInterceptor implements RequestInterceptor {

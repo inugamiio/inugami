@@ -25,6 +25,7 @@ import io.inugami.api.processors.ConfigHandler;
 
 import java.util.List;
 
+@SuppressWarnings({"java:S1168"})
 public class MdcInterceptor implements MonitoringFilterInterceptor {
 
     // =========================================================================

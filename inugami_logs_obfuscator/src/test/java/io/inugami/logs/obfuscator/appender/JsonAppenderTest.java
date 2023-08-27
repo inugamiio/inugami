@@ -7,11 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings({"java:S2699"})
-public class JsonAppenderTest {
+class JsonAppenderTest {
     private final static Logger LOGGER = LoggerFactory.getLogger(JsonAppenderTest.class);
 
     @Test
-    public void test_appender() {
+    void test_appender() {
 
         LOGGER.debug("debug information");
         LOGGER.info("hello");

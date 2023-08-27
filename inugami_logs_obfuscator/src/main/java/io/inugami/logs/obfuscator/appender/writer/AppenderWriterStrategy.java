@@ -2,7 +2,7 @@ package io.inugami.logs.obfuscator.appender.writer;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.encoder.Encoder;
-import io.inugami.logs.obfuscator.appender.Configuration;
+import io.inugami.logs.obfuscator.appender.AppenderConfiguration;
 
 @FunctionalInterface
 public interface AppenderWriterStrategy {
@@ -10,9 +10,10 @@ public interface AppenderWriterStrategy {
 
     void write(final ILoggingEvent iLoggingEvent);
 
-    default boolean accept(final Configuration configuration) {
+    default boolean accept(final AppenderConfiguration configuration) {
         return true;
     }
+
     default void start(final Encoder<ILoggingEvent> encoder) {
     }
 

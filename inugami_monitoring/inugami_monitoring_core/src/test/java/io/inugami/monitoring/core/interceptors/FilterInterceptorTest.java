@@ -18,7 +18,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class FilterInterceptorTest {
+class FilterInterceptorTest {
     @Mock
     private JavaRestMethodResolver javaRestMethodResolver;
 
@@ -33,13 +33,13 @@ public class FilterInterceptorTest {
 
 
     @Test
-    public void resolveError_withoutError_shouldReturnNull() {
+    void resolveError_withoutError_shouldReturnNull() {
         final FilterInterceptor filter = buildFilter();
         assertThat(filter.resolveError(null)).isNull();
     }
 
     @Test
-    public void resolveError_witErrorCodeInMdc_shouldResolveError() {
+    void resolveError_witErrorCodeInMdc_shouldResolveError() {
         MdcService.getInstance()
                   .clear()
                   .errorCode(DefaultErrorCode.buildUndefineError());

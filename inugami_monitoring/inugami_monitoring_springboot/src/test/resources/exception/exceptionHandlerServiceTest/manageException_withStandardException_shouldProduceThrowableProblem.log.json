@@ -6,14 +6,15 @@
     "retryable" : "false",
     "exploitationError" : "false",
     "errorDomain" : "null",
-    "errorType" : "null",
-    "errorCode" : "null",
+    "errorType" : "technical",
+    "errorCode" : "ERR-0000",
     "message" : "some error",
     "url" : "null",
     "field" : "null",
     "payload" : "null",
     "errorStatus" : "0",
     "errorSubDomain" : "null",
+    "category" : "other",
     "messageDetail" : "null"
   },
   "message" : "some error"

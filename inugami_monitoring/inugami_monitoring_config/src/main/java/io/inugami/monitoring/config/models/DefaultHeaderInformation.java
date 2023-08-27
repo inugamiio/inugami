@@ -24,6 +24,8 @@ import io.inugami.api.functionnals.PostProcessing;
 import io.inugami.api.processors.ConfigHandler;
 import lombok.*;
 
+import java.io.Serializable;
+
 import static io.inugami.monitoring.config.tools.ApplyStrategy.applyStrategy;
 
 /**
@@ -38,86 +40,59 @@ import static io.inugami.monitoring.config.tools.ApplyStrategy.applyStrategy;
 @Builder(toBuilder = true)
 @Setter
 @Getter
-public class DefaultHeaderInformation implements PostProcessing<ConfigHandler<String, String>>, ApplyIfNull {
+public class DefaultHeaderInformation implements PostProcessing<ConfigHandler<String, String>>, ApplyIfNull, Serializable {
+    private static final long serialVersionUID = -6659187410328161928L;
 
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
     @XStreamAsAttribute
     private String correlationId;
-
     @XStreamAsAttribute
     private String requestId;
-
     @XStreamAsAttribute
     private String traceId;
-
     @XStreamAsAttribute
     private String conversationId;
-
     @XStreamAsAttribute
     private String token;
-
     @XStreamAsAttribute
     private String deviceIdentifier;
-
     @XStreamAsAttribute
     private String deviceType;
-
     @XStreamAsAttribute
     private String deviceSystem;
-
     @XStreamAsAttribute
     private String deviceClass;
-
     @XStreamAsAttribute
     private String deviceVersion;
-
     @XStreamAsAttribute
     private String deviceOsVersion;
-
     @XStreamAsAttribute
     private String deviceNetworkType;
-
     @XStreamAsAttribute
     private String deviceNetworkSpeedDown;
-
     @XStreamAsAttribute
     private String deviceNetworkSpeedUp;
-
     @XStreamAsAttribute
     private String deviceNetworkSpeedLatency;
-
     @XStreamAsAttribute
     private String deviceIp;
-
     @XStreamAsAttribute
     private String userAgent;
-
     @XStreamAsAttribute
     private String language;
-
     @XStreamAsAttribute
     private String country;
-
     @XStreamAsAttribute
     private String warning;
-
     @XStreamAsAttribute
     private String errorCode;
-
     @XStreamAsAttribute
     private String errorException;
-
     @XStreamAsAttribute
     private String errorMessage;
-
     @XStreamAsAttribute
     private String errorMessageDetail;
-
     @XStreamAsAttribute
     private String frontVersion;
-
     @XStreamAsAttribute
     private String callFrom;
 
@@ -126,6 +101,7 @@ public class DefaultHeaderInformation implements PostProcessing<ConfigHandler<St
     // =========================================================================
     @Override
     public void postProcessing(final ConfigHandler<String, String> context) throws TechnicalException {
+
 
         //@formatter:off
         correlationId = context.applyProperties(applyStrategy(JvmKeyValues.HEADER_KEY_CORRELATION_ID, correlationId, "x-correlation-id"));

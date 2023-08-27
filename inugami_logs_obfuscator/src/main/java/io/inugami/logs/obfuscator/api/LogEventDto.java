@@ -16,7 +16,6 @@
  */
 package io.inugami.logs.obfuscator.api;
 
-import ch.qos.logback.classic.Level;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

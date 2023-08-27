@@ -20,6 +20,7 @@ import io.inugami.logs.obfuscator.tools.ObfuscatorUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+@SuppressWarnings({"java:S6355", "java:S1123", "java:S1133"})
 @Deprecated
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Constants {

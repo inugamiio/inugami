@@ -18,6 +18,7 @@ import java.util.*;
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 import static io.inugami.monitoring.springboot.activemq.config.InugamiActiveMqConstants.*;
 
+@SuppressWarnings({"java:S1181", "java:S108"})
 @Slf4j
 public class JmsIologListener extends DefaultMessageListenerContainer {
 
@@ -37,19 +38,20 @@ public class JmsIologListener extends DefaultMessageListenerContainer {
         MdcService.getInstance().clear();
         if (!isAcceptMessagesWhileStopping() && !isRunning()) {
             if (log.isWarnEnabled()) {
-                log.warn("Rejecting received message because of listener container having been stopped in the meantime:" + message);
+                log.warn(
+                        "Rejecting received message because of listener container having been stopped in the meantime:" +
+                        message);
             }
             rollbackIfNecessary(session);
             throw new MessageRejectedWhileStoppingException();
         }
 
-        IoInfoDTO ioInfo    = null;
-        Chrono    chrono    = null;
+
+        Chrono    chrono    = Chrono.startChrono();
         Throwable exception = null;
+        IoInfoDTO ioInfo    = traceIologIn(message);
 
         try {
-            ioInfo = traceIologIn(message);
-            chrono = Chrono.startChrono();
             invokeListener(session, message);
         } catch (final JMSException | RuntimeException | Error ex) {
             rollbackIfNecessary(session);
@@ -57,7 +59,7 @@ public class JmsIologListener extends DefaultMessageListenerContainer {
             throw ex;
         } finally {
             chrono.stop();
-            traceIologOut(ioInfo, chrono.getDurationInMillis(), exception);
+            traceIologOut(ioInfo, chrono.getDuration(), exception);
             MdcService.getInstance().clear();
         }
         commitIfNecessary(session, message);
@@ -81,11 +83,11 @@ public class JmsIologListener extends DefaultMessageListenerContainer {
                                          .ioinfoIoLog(result)
                                          .callType(JMS);
 
-        applyIfNotNull(extractProperty(APPLICATION, message), value -> mdc.callFrom(value));
-        applyIfNotNull(extractProperty(MdcService.MDCKeys.messageId, message), value -> mdc.messageId(value));
-        applyIfNotNull(extractProperty(DEVICE_IDENTIFIER, message), value -> mdc.deviceIdentifier(value));
-        applyIfNotNull(extractProperty(CORRELATION_ID, message), value -> mdc.correlationId(value));
-        applyIfNotNull(extractProperty(CONVERSATION_ID, message), value -> mdc.conversationId(value));
+        applyIfNotNull(extractProperty(APPLICATION, message), mdc::callFrom);
+        applyIfNotNull(extractProperty(MdcService.MDCKeys.messageId, message), mdc::messageId);
+        applyIfNotNull(extractProperty(DEVICE_IDENTIFIER, message), mdc::deviceIdentifier);
+        applyIfNotNull(extractProperty(CORRELATION_ID, message), mdc::correlationId);
+        applyIfNotNull(extractProperty(CONVERSATION_ID, message), mdc::conversationId);
         applyIfNotNull(extractProperty(TRACE_ID, message), value -> {
             mdc.traceId(value);
             mdc.requestId(value);
@@ -153,7 +155,7 @@ public class JmsIologListener extends DefaultMessageListenerContainer {
     private Map<String, Collection<String>> resolveHeaders(final Message message) {
         final Map<String, Collection<String>> result = new LinkedHashMap<>();
 
-        final Enumeration properties;
+        final Enumeration<String> properties;
         try {
             properties = message.getPropertyNames();
             while (properties.hasMoreElements()) {
@@ -175,10 +177,14 @@ public class JmsIologListener extends DefaultMessageListenerContainer {
     }
 
     private String extractProperty(final String key, final Message message) {
+        if (message == null) {
+            return null;
+        }
+
         try {
             return message.getStringProperty(key);
         } catch (final JMSException e) {
-            throw null;
+            return null;
         }
     }
 

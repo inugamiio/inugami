@@ -10,11 +10,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class MonitoringContextUtils {
-    private static final List<TrackingInformationSPI> TRACKERS = SpiLoader.getInstance().loadSpiServicesByPriority(TrackingInformationSPI.class);
+    private static final List<TrackingInformationSPI> TRACKERS = SpiLoader.getInstance()
+                                                                          .loadSpiServicesByPriority(TrackingInformationSPI.class);
 
     public static Map<String, String> getTrackingInformation(final Monitoring config) {
         Map<String, String> result = new LinkedHashMap<>();

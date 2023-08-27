@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+
+    <simple-event name="service" provider="graphite.bigdata" until="-20w">
+        <query>averageSeries(transformNull(org.foo.bar.service.any.1hour.p90,0))
+        </query>
+    </simple-event>
+
+
+
+    <event name="system" provider="graphite.bigdata" until="-20w">
+        <target name="cpu">
+            <query>sumSeries(transformNull(org.foo.bar.cpu,0))
+            </query>
+        </target>
+        <target name="memory" until="-20w">
+            <query>sumSeries(transformNull(org.foo.bar.memory,0))
+            </query>
+        </target>
+    </event>
+
+
+</configuration>

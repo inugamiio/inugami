@@ -1,0 +1,1 @@
+NumberValue(last=1.0, current=5.0)

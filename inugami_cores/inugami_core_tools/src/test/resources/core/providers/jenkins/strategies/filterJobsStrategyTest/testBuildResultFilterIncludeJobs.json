@@ -1,0 +1,13 @@
+{
+  "jobs" : [ {
+    "classAtt" : "com.cloudbees.hudson.plugins.folder.Folder",
+    "color" : "blue",
+    "name" : "CD-USN4",
+    "url" : "http://host.jenkins/jenkins/job/USN4/"
+  }, {
+    "classAtt" : "com.cloudbees.hudson.plugins.folder.Folder",
+    "color" : "blue",
+    "name" : "CI-VMA",
+    "url" : "http://host.jenkins/jenkins/job/CI-VMA/"
+  } ]
+}

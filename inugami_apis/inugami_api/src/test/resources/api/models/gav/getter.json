@@ -1,0 +1,6 @@
+{
+  "getArtifactId" : "inugami_api",
+  "getGroupId" : "io.inugami",
+  "getQualifier" : "jar",
+  "getVersion" : "3.3.0"
+}

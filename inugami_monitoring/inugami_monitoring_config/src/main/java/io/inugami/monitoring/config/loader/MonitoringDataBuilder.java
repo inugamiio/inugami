@@ -52,16 +52,13 @@ final class MonitoringDataBuilder {
         Asserts.assertNotNull("configuration handler is mandatory", configHandler);
         final SpiLoader spiloader = SpiLoader.getInstance();
 
-        final List<MonitoringFilterInterceptor> interceptors = buildInterceptors(config.getInterceptors(),
-                                                                                 configHandler, spiloader);
-        final List<MonitoringSender> senders = buildSenders(config.getSenders(), configHandler,
-                                                            spiloader);
-        final List<MonitoringSensor> sensors = buildSensors(config.getSensors(), configHandler,
-                                                            spiloader);
-        final Headers header = buildHeaders(config.getHeader(), configHandler);
+        final List<MonitoringFilterInterceptor> interceptors = buildInterceptors(config.getInterceptors(), configHandler, spiloader);
+        final List<MonitoringSender>            senders      = buildSenders(config.getSenders(), configHandler, spiloader);
+        final List<MonitoringSensor>            sensors      = buildSensors(config.getSensors(), configHandler, spiloader);
+        final Headers                           header       = buildHeaders(config.getHeader(), configHandler);
 
         return Monitoring.builder()
-                         .enable(config.getEnable() == null ? true : config.getEnable().booleanValue())
+                         .enable(config.getEnable() == null || config.getEnable().booleanValue())
                          .env(configHandler.applyProperties(config.getEnv()))
                          .asset(configHandler.applyProperties(config.getAsset()))
                          .hostname(configHandler.applyProperties(config.getHostname()))
@@ -132,20 +129,20 @@ final class MonitoringDataBuilder {
                                                                        final ConfigHandler<String, String> configHandler,
                                                                        final SpiLoader spiloader) {
         final InterceptorsConfig interceptorsConfig = interceptors == null ? new InterceptorsConfig() : interceptors;
-        //@formatter:off
-        return interceptorsConfig.getInterceptors()
-                                 .stream()
-                                 .map(item -> buildInterceptor(item, configHandler, spiloader))
-                                 .filter(Objects::nonNull)
-                                 .collect(Collectors.toList());
-        //@formatter:on
+
+        return Optional.ofNullable(interceptorsConfig.getInterceptors())
+                       .orElse(List.of())
+                       .stream()
+                       .map(item -> buildInterceptor(item, configHandler, spiloader))
+                       .filter(Objects::nonNull)
+                       .collect(Collectors.toList());
+
     }
 
     private static MonitoringFilterInterceptor buildInterceptor(final InterceptorConfig config,
                                                                 final ConfigHandler<String, String> configHandler,
                                                                 final SpiLoader spiloader) {
-        final MonitoringFilterInterceptor spiInstance = loadSpiInstance(config.getName(),
-                                                                        MonitoringFilterInterceptor.class, spiloader);
+        final MonitoringFilterInterceptor spiInstance = loadSpiInstance(config.getName(), MonitoringFilterInterceptor.class, spiloader);
         //@formatter:off
         return spiInstance == null ? null
                 : spiInstance.buildInstance(buildCongifHandler(config.getProperties(), configHandler));
@@ -159,10 +156,11 @@ final class MonitoringDataBuilder {
                                                       final ConfigHandler<String, String> configHandler,
                                                       final SpiLoader spiloader) {
 
-        final MonitoringSendersConfig sendersConfig = monitoringSendersConfig == null ? new MonitoringSendersConfig()
-                : monitoringSendersConfig;
+        final MonitoringSendersConfig sendersConfig =
+                monitoringSendersConfig == null ? new MonitoringSendersConfig() : monitoringSendersConfig;
         //@formatter:off
-        return sendersConfig.getSenders()
+        return Optional.ofNullable(sendersConfig.getSenders())
+                .orElse(new ArrayList<>())
                             .stream()
                             .map(item -> buildSender(item, configHandler, spiloader))
                             .filter(Objects::nonNull)
@@ -188,13 +186,13 @@ final class MonitoringDataBuilder {
                                                       final SpiLoader spiloader) {
 
         final SensorsConfig sensors = sensorsConfig == null ? new SensorsConfig() : sensorsConfig;
-        //@formatter:off
-        return sensors.getSensors()
-                      .stream()
-                      .map(item -> buildSensor(item, configHandler, spiloader))
-                      .filter(Objects::nonNull)
-                      .collect(Collectors.toList());
-        //@formatter:on
+
+        return Optional.ofNullable(sensors.getSensors())
+                       .orElse(new ArrayList<>())
+                       .stream()
+                       .map(item -> buildSensor(item, configHandler, spiloader))
+                       .filter(Objects::nonNull)
+                       .collect(Collectors.toList());
     }
 
     public static MonitoringSensor buildSensor(final MonitoringSensorConfig sensorConfig,
@@ -220,7 +218,8 @@ final class MonitoringDataBuilder {
     // =========================================================================
     // TOOLS
     // =========================================================================
-    private static <T> T loadSpiInstance(final String name, final Class<? extends T> spiClass,
+    private static <T> T loadSpiInstance(final String name,
+                                         final Class<? extends T> spiClass,
                                          final SpiLoader spiloader) {
         return name == null ? null : spiloader.loadSpiService(name, spiClass, false);
     }

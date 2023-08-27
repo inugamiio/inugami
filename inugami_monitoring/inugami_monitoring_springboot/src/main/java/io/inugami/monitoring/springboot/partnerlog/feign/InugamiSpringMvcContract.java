@@ -11,7 +11,7 @@ public class InugamiSpringMvcContract extends SpringMvcContract {
 
     @Override
     protected void processAnnotationOnClass(final MethodMetadata data, final Class<?> clz) {
-        final CollectionFormat collectionFormat = (CollectionFormat) AnnotatedElementUtils.findMergedAnnotation(clz, CollectionFormat.class);
+        final CollectionFormat collectionFormat = AnnotatedElementUtils.findMergedAnnotation(clz, CollectionFormat.class);
         if (collectionFormat != null) {
             data.template().collectionFormat(collectionFormat.value());
         }

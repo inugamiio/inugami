@@ -1,5 +1,7 @@
 package io.inugami.monitoring.core.interceptors.spi;
 
+import io.inugami.api.exceptions.DefaultWarning;
+import io.inugami.api.exceptions.WarningContext;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.monitoring.MdcService;
 import io.inugami.api.monitoring.data.ResponseData;
@@ -8,8 +10,6 @@ import io.inugami.api.monitoring.exceptions.ErrorResult;
 import io.inugami.api.monitoring.logs.BasicLogEvent;
 import io.inugami.api.monitoring.logs.DefaultLogListener;
 import io.inugami.api.monitoring.logs.LogListener;
-import io.inugami.api.monitoring.warn.DefaultWarn;
-import io.inugami.api.monitoring.warn.WarnContext;
 import io.inugami.commons.test.logs.LogTestAppender;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ class IoLogInterceptorTest {
     @BeforeEach
     public void init() {
         MdcService.getInstance().clear();
-        WarnContext.getInstance().clean();
+        WarningContext.clean();
     }
 
     // =================================================================================================================
@@ -98,12 +98,12 @@ class IoLogInterceptorTest {
                                                       .content("{\"id\":1,\"name\":\"John Smith\"}")
                                                       .addHeader("x-correlation-id", UID)
                                                       .build();
-        WarnContext.getInstance().addWarn(DefaultWarn.builder()
-                                                     .warnType("functional")
-                                                     .warnCode("WARN-1")
-                                                     .message("account need to be confirmed ")
-                                                     .messageDetail("some detail")
-                                                     .build());
+        WarningContext.getInstance().addWarnings(DefaultWarning.builder()
+                                                               .warningType("functional")
+                                                               .warningCode("WARN-1")
+                                                               .message("account need to be confirmed ")
+                                                               .messageDetail("some detail")
+                                                               .build());
         assertTextRelative(processOnDone(request, responseData, null),
                            "monitoring/core/interceptors/spi/ioLogInterceptor/onDone_nominal.json");
     }
@@ -153,7 +153,9 @@ class IoLogInterceptorTest {
         return logs;
     }
 
-    private List<BasicLogEvent> processOnDone(final ResquestData request, final ResponseData responseData, final ErrorResult error) {
+    private List<BasicLogEvent> processOnDone(final ResquestData request,
+                                              final ResponseData responseData,
+                                              final ErrorResult error) {
         final List<BasicLogEvent> logs     = new ArrayList<>();
         final LogListener         listener = new DefaultLogListener(Loggers.IOLOG_NAME, logs::add);
         LogTestAppender.register(listener);

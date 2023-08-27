@@ -17,9 +17,11 @@
 package io.inugami.monitoring.springboot.config;
 
 import io.inugami.api.exceptions.ErrorCodeResolver;
+import io.inugami.api.feature.IFeatureService;
 import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.api.monitoring.models.Headers;
 import io.inugami.api.monitoring.models.Monitoring;
+import io.inugami.api.processors.ConfigHandler;
 import io.inugami.commons.spring.configuration.ConfigConfiguration;
 import io.inugami.monitoring.core.context.MonitoringBootstrap;
 import io.inugami.monitoring.core.context.MonitoringContext;
@@ -27,6 +29,7 @@ import io.inugami.monitoring.core.interceptors.spi.IoLogInterceptor;
 import io.inugami.monitoring.core.interceptors.spi.MdcInterceptor;
 import io.inugami.monitoring.springboot.actuator.FailSafeStatusAggregator;
 import io.inugami.monitoring.springboot.actuator.VersionHealthIndicator;
+import io.inugami.monitoring.springboot.actuator.feature.FeatureIndicator;
 import io.inugami.monitoring.springboot.exception.SpringDefaultErrorCodeResolver;
 import io.inugami.monitoring.springboot.filter.IoLogFilter;
 import io.inugami.monitoring.springboot.request.SpringRestMethodResolver;
@@ -42,6 +45,9 @@ import org.springframework.context.annotation.Import;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
+
+@SuppressWarnings({"java:S1450"})
 @Import({
         IoLogFilter.class,
         SpringRestMethodResolver.class,
@@ -50,21 +56,25 @@ import java.util.function.Consumer;
 @Slf4j
 @Configuration
 public class InugamiMonitoringConfig {
-    public static final String              INUGAMI_MONITORING_CONFIG = "io.inugami.monitoring.springboot";
-    private             MonitoringBootstrap monitoringBootstrap;
+    public static final String INUGAMI_MONITORING_CONFIG = "io.inugami.monitoring.springboot";
+
+    private MonitoringBootstrap monitoringBootstrap;
 
 
     // ========================================================================
     // BEANS
     // ========================================================================
     @Bean
-    public MonitoringBootstrap initMonitoringContext() {
-        final Monitoring config = MonitoringBootstrap.CONTEXT.getConfig();
-        config.refreshConfig(ConfigConfiguration.CONFIGURATION);
-        config.setHeaders(Headers.buildFromConfig(ConfigConfiguration.CONFIGURATION));
+    public MonitoringBootstrap initMonitoringContext(final ConfigHandler<String, String> springConfig) {
+        Monitoring config = MonitoringBootstrap.CONTEXT.getConfig();
+
+        final ConfigHandler<String, String> currentConfiguration = ConfigConfiguration.CONFIGURATION;
+        applyIfNotNull(springConfig, currentConfiguration::putAll);
+        config.refreshConfig(currentConfiguration);
+        config.setHeaders(Headers.buildFromConfig(currentConfiguration));
         monitoringBootstrap = new MonitoringBootstrap();
 
-        initializeInterceptors(monitoringBootstrap);
+        initializeInterceptors();
         monitoringBootstrap.contextInitialized();
         return monitoringBootstrap;
     }
@@ -98,6 +108,13 @@ public class InugamiMonitoringConfig {
     }
 
     @Bean
+    public HealthIndicator featureIndicator(final IFeatureService service) {
+        return FeatureIndicator.builder()
+                               .featureService(service)
+                               .build();
+    }
+
+    @Bean
     @ConditionalOnProperty(name = "inugami.monitoring.actuator.fail.safe.enabled", havingValue = "true", matchIfMissing = true)
     public StatusAggregator failSafeStatusAggregator() {
         return new FailSafeStatusAggregator();
@@ -106,11 +123,12 @@ public class InugamiMonitoringConfig {
     // ========================================================================
     // TOOLS
     // ========================================================================
-    private void initializeInterceptors(final MonitoringBootstrap monitoringBootstrap) {
+    private void initializeInterceptors() {
 
         addInterceptorIfNoPresent(MdcInterceptor.class, ctx -> ctx.getInterceptors().add(new MdcInterceptor()));
         addInterceptorIfNoPresent(IoLogInterceptor.class,
-                                  ctx -> ctx.getInterceptors().add(new IoLogInterceptor(ConfigConfiguration.CONFIGURATION)));
+                                  ctx -> ctx.getInterceptors()
+                                            .add(new IoLogInterceptor(ConfigConfiguration.CONFIGURATION)));
 
 
     }

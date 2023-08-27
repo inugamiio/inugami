@@ -52,6 +52,6 @@ public class JsonPasswordObfuscator implements ObfuscatorSpi {
 
     @Override
     public String obfuscate(final LogEventDto event) {
-        return replaceAll(event.getMessage(), REGEX, (value) -> MASK_JSON);
+        return replaceAll(event.getMessage(), REGEX, value -> MASK_JSON);
     }
 }

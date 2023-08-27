@@ -35,13 +35,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author patrickguillerm
  * @since Jan 15, 2019
  */
-public class ConfigurationLoaderTest implements TestUnitResources {
+@SuppressWarnings({"java:S5961"})
+class ConfigurationLoaderTest implements TestUnitResources {
 
     // =========================================================================
     // METHODS
     // =========================================================================
     @Test
-    public void testLoadConfiguration() {
+    void testLoadConfiguration() {
 
         final File configFile = FilesUtils.buildFile(initResourcesPath(), "monitoring.xml");
         System.getProperties().put("inugami-home", "foobar");

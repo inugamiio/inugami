@@ -13,9 +13,12 @@
     "localizedMessage" : "some error: ",
     "message" : "some error: ",
     "parameters" : {
+      "errorCode" : "ERR-0000",
       "fields" : [ ],
       "application" : "inugami",
-      "version" : "2.3.0"
+      "version" : "2.3.0",
+      "errorType" : "technical",
+      "errorCategory" : "other"
     },
     "stackTrace" : [ ],
     "status" : "INTERNAL_SERVER_ERROR",

@@ -16,6 +16,8 @@
  */
 package io.inugami.monitoring.core.interceptors.spi;
 
+import io.inugami.api.exceptions.Warning;
+import io.inugami.api.exceptions.WarningContext;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.models.JsonBuilder;
 import io.inugami.api.monitoring.MdcService;
@@ -24,8 +26,6 @@ import io.inugami.api.monitoring.data.ResquestData;
 import io.inugami.api.monitoring.exceptions.ErrorResult;
 import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.warn.WarnCode;
-import io.inugami.api.monitoring.warn.WarnContext;
 import io.inugami.api.processors.ConfigHandler;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 import org.slf4j.Logger;
@@ -39,23 +39,18 @@ import java.util.Map;
  * @author patrickguillerm
  * @since Jan 7, 2019
  */
+@SuppressWarnings({"java:S3457", "java:S2629", "java:S1168"})
 public class IoLogInterceptor implements MonitoringFilterInterceptor {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final Logger LOGGER = Loggers.IOLOG;
-
-    private static final String EMPTY_CONTENT = "empty";
-
-    private static final String EMPTY         = "";
-    public static final  String URL_SEPARATOR = "/";
-
-    private final String inputDecorator;
-
-    private final String outputDecorator;
-
-    private final boolean enableDecorator;
+    private static final Logger  LOGGER        = Loggers.IOLOG;
+    private static final String  EMPTY         = "";
+    public static final  String  URL_SEPARATOR = "/";
+    private final        String  inputDecorator;
+    private final        String  outputDecorator;
+    private final        boolean enableDecorator;
 
     // =========================================================================
     // CONSTRUCTORS
@@ -121,6 +116,7 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         return result.toString();
     }
 
+    @SuppressWarnings({"java:S3776"})
     @Override
     public List<GenericMonitoringModel> onDone(final ResquestData request,
                                                final ResponseData httpResponse,
@@ -139,18 +135,16 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         }
 
 
-        final Map<String, List<WarnCode>> warns = WarnContext.getInstance().getWarns();
+        final List<Warning> warns = WarningContext.getInstance().getWarnings();
         if (!warns.isEmpty()) {
             msg.tab().write("warning:").line();
-            for (final Map.Entry<String, List<WarnCode>> entry : warns.entrySet()) {
-                msg.tab().tab().write(entry.getKey()).write(":").line();
-                for (final WarnCode warn : entry.getValue()) {
-                    msg.tab().tab().tab().write(warn.getMessage());
-                    if (warn.getMessageDetail() != null) {
-                        msg.write(":").write(warn.getMessageDetail());
-                    }
-                    msg.line();
+            for (final Warning warning : warns) {
+                msg.tab().tab().write(warning.getWarningCode()).write(":").line();
+                msg.tab().tab().tab().write(warning.getMessage());
+                if (warning.getMessageDetail() != null) {
+                    msg.write(":").write(warning.getMessageDetail());
                 }
+                msg.line();
             }
         }
         msg.tab().write("payload:").write(httpResponse.getContent());

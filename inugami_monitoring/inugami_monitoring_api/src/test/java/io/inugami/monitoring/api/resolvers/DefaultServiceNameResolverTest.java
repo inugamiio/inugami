@@ -26,13 +26,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author patrickguillerm
  * @since Jan 7, 2019
  */
-public class DefaultServiceNameResolverTest {
+class DefaultServiceNameResolverTest {
 
     // =========================================================================
     // METHODS
     // =========================================================================
     @Test
-    public void testResolve() {
+    void testResolve() {
         final ServiceNameResolver resolver = new DefaultServiceNameResolver();
 
         assertEquals("my/service", resolver.resolve("http://foo.bar.org/my/service"));

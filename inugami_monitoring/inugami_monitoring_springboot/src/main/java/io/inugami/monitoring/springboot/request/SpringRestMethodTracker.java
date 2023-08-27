@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 
+@SuppressWarnings({"java:S1172"})
 public class SpringRestMethodTracker implements JavaRestMethodTracker {
 
     private static final String SEPARATOR = "/";
@@ -68,7 +69,7 @@ public class SpringRestMethodTracker implements JavaRestMethodTracker {
             return SEPARATOR;
         }
         final String[] paths = rootRequestMapping.path();
-        if (paths == null || paths.length == 0) {
+        if (paths.length == 0) {
             return SEPARATOR;
         }
         final String result = paths[0].endsWith(SEPARATOR) ? paths[0] : paths[0] + SEPARATOR;

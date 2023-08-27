@@ -21,6 +21,7 @@ import lombok.experimental.UtilityClass;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -114,7 +115,7 @@ public class ObfuscatorUtils {
     // =========================================================================
     public static String replaceAll(final String message,
                                     final Pattern pattern,
-                                    final Function<String, String> obfuscateFunction) {
+                                    final UnaryOperator<String> obfuscateFunction) {
         if (message == null || pattern == null || obfuscateFunction == null) {
             return message;
         }

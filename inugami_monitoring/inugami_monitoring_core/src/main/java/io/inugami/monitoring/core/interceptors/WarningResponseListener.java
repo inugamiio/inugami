@@ -28,11 +28,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings({"java:S1181"})
 @Slf4j
 public class WarningResponseListener implements ResponseListener {
-    private static final List<WarningTracker> WARNING_TRACKERS = SpiLoader.getInstance().loadSpiServicesByPriority(WarningTracker.class);
-    public static final String X_WARNINGS = "x-warnings";
-    public static final String HEADER_SEPARATOR = ",";
+    private static final List<WarningTracker> WARNING_TRACKERS = SpiLoader.getInstance()
+                                                                          .loadSpiServicesByPriority(WarningTracker.class);
+    public static final  String               X_WARNINGS       = "x-warnings";
+    public static final  String               HEADER_SEPARATOR = ",";
 
     // =========================================================================
     // API
@@ -57,11 +59,11 @@ public class WarningResponseListener implements ResponseListener {
     }
 
     private void trackWarning(final List<Warning> warnings) {
-        for(WarningTracker  warningTracker :WARNING_TRACKERS ){
-            try{
+        for (WarningTracker warningTracker : WARNING_TRACKERS) {
+            try {
                 warningTracker.track(warnings);
-            }catch (Throwable e){
-                log.error(e.getMessage(),e);
+            } catch (Throwable e) {
+                log.error(e.getMessage(), e);
             }
         }
     }

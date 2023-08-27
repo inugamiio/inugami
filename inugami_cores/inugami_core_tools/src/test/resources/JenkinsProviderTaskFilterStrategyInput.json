@@ -1,0 +1,35 @@
+{
+    "_class": "_class_foo",
+    "jobs": [
+        {
+            "_class" : "org.jenkinsci.plugins.workflow.job.WorkflowJob",
+            "name" : "_TESLA_installNewUSN",
+            "url" : "http://host.jenkins/jenkins/job/_TESLA_installNewUSN/",
+            "color" : "blue"
+        },
+        {
+            "_class" : "org.jenkinsci.plugins.workflow.job.WorkflowJob",
+            "name" : "RTESLA_installService",
+            "url" : "http://host.jenkins/jenkins/job/_TESLA_installService/",
+            "color" : "blue"
+        },
+        {
+            "_class" : "hudson.model.FreeStyleProject",
+            "name" : "AutomatorUpdate_release",
+            "url" : "http://host.jenkins/jenkins/job/AutomatorUpdate_release/",
+            "color" : "disabled"
+        },
+        {
+            "_class" : "com.cloudbees.hudson.plugins.folder.Folder",
+            "name" : "CD-USN4",
+            "url" : "http://host.jenkins/jenkins/job/USN4/",
+            "color": "blue"
+        },
+        {
+            "_class" : "com.cloudbees.hudson.plugins.folder.Folder",
+            "name" : "CI-VMA",
+            "url" : "http://host.jenkins/jenkins/job/CI-VMA/",
+            "color": "blue"
+        }
+    ]
+}

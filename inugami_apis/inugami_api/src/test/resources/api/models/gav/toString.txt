@@ -1,0 +1,1 @@
+Gav(groupId=io.inugami, artifactId=inugami_api, version=3.3.0, qualifier=jar)

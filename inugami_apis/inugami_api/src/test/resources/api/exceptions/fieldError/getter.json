@@ -1,0 +1,8 @@
+{
+  "getErrorCategory" : "GET",
+  "getErrorCode" : "ERR-1",
+  "getErrorType" : "functional",
+  "getMessage" : "invalid user id",
+  "getMessageDetail" : "user id XXXX is invalid",
+  "getName" : "user.id"
+}

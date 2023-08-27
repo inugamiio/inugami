@@ -1,0 +1,48 @@
+{
+  "_class": "_class_foo",
+  "jobs": [
+    {
+      "_class": "_class_0",
+      "name": "job_name_0",
+      "url": "http://host/jenkins/job/job_name_0",
+      "color": "blue"
+    },
+    {
+      "_class": "_class_1",
+      "name": "job_name_1",
+      "url": "http://host/jenkins/job/job_name_1",
+      "color": "disabled"
+    },
+    {
+      "_class" : "_class_2",
+      "name" : "job_name_2",
+      "url" : "http://host/jenkins/job/job_name_2",
+      "jobs": [
+          {
+            "_class": "_class_a",
+            "name": "job_name_a",
+            "url": "http://host/jenkins/job/job_name_a",
+            "color": "yellow_anime"
+          },
+          {
+            "_class": "_class_b",
+            "name": "job_name_b",
+            "url": "http://host/jenkins/job/job_name_b",
+            "color": "disabled_anime"
+          }
+        ]
+    },
+    {
+      "_class" : "_class_3",
+      "name" : "job_name_3",
+      "url" : "http://host/jenkins/job/job_name_3",
+      "color" : "yellow"
+    },
+    {
+      "_class" : "_class_4",
+      "name" : "job_name_4",
+      "url" : "http://host/jenkins/job/job_name_4",
+      "color" : "red"
+    }
+  ]
+}

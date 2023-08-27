@@ -1,20 +1,26 @@
 /* --------------------------------------------------------------------
- *  Inugami  
+ *  Inugami
  * --------------------------------------------------------------------
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.monitoring.sensors.defaults.system;
+
+import io.inugami.api.monitoring.models.GenericMonitoringModel;
+import io.inugami.api.monitoring.models.GenericMonitoringModelDTO;
+import io.inugami.api.monitoring.sensors.MonitoringSensor;
+import io.inugami.api.processors.ConfigHandler;
+import io.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
@@ -22,32 +28,26 @@ import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.inugami.api.models.data.graphite.number.LongNumber;
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.models.GenericMonitoringModelBuilder;
-import io.inugami.api.monitoring.sensors.MonitoringSensor;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.monitoring.api.tools.GenericMonitoringModelTools;
-
 /**
  * ThreadsSensor
- * 
+ *
  * @author patrickguillerm
  * @since Jan 17, 2019
  */
+@SuppressWarnings({"java:S1172"})
 public class ThreadsSensor implements MonitoringSensor {
-    
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final long    interval;
-    
-    private final String  timeUnit;
-    
+    private final long interval;
+
+    private final String timeUnit;
+
     private final boolean enableThreadsDump;
-    
-    private final int     maxDepth;
-    
+
+    private final int maxDepth;
+
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -57,7 +57,7 @@ public class ThreadsSensor implements MonitoringSensor {
         enableThreadsDump = true;
         maxDepth = 25;
     }
-    
+
     public ThreadsSensor(final long interval, final String query, final ConfigHandler<String, String> configuration) {
         super();
         this.interval = interval;
@@ -65,96 +65,95 @@ public class ThreadsSensor implements MonitoringSensor {
         enableThreadsDump = configuration.grabBoolean("enableThreadsDump", true);
         maxDepth = configuration.grabInt("maxDepth", 10);
     }
-    
+
     @Override
     public MonitoringSensor buildInstance(final long interval, final String query,
                                           final ConfigHandler<String, String> configuration) {
         return new ThreadsSensor(interval, query, configuration);
     }
-    
+
     // =========================================================================
     // METHODS
     // =========================================================================
-    
+
     @Override
     public List<GenericMonitoringModel> process() {
-        final List<GenericMonitoringModel> result = new ArrayList<>();
-        final GenericMonitoringModelBuilder builder = GenericMonitoringModelTools.initResultBuilder();
-        builder.setCounterType("system");
-        builder.setService("threads");
+        final List<GenericMonitoringModel>                               result  = new ArrayList<>();
+        final GenericMonitoringModelDTO.GenericMonitoringModelDTOBuilder builder = GenericMonitoringModelTools.initResultBuilder();
+        builder.counterType("system");
+        builder.service("threads");
         if ((timeUnit == null) || timeUnit.isEmpty()) {
-            builder.setTimeUnit(String.format("%sms", interval));
+            builder.timeUnit(String.format("%sms", interval));
+        } else {
+            builder.timeUnit(timeUnit);
         }
-        else {
-            builder.setTimeUnit(timeUnit);
-        }
-        
+
         final ThreadMXBean threadMxBean = ManagementFactory.getThreadMXBean();
         //@formatter:off
         final List<ThreadInfo> rawThreadsInfos = buildList(threadMxBean.getThreadInfo(threadMxBean.getAllThreadIds(),
                                                                                           enableThreadsDump ? maxDepth: 0));
         //@formatter:on
-        
+
         final ThreadsCounter data = extractThreadsUsage(rawThreadsInfos);
         // ALL //--------------------------------------------------------------
-        builder.setSubService("all");
-        builder.setValue(new LongNumber(data.count()));
+        builder.subService("all");
+        builder.addValue(data.count());
         if (enableThreadsDump) {
-            builder.setData(buildStackTrace(rawThreadsInfos, null));
+            builder.data(buildStackTrace(rawThreadsInfos, null));
         }
         result.add(builder.build());
-        
+
         // NEW //--------------------------------------------------------------
-        builder.setSubService("newThreads");
-        builder.setValue(new LongNumber(data.getNewThreads()));
+        builder.subService("newThreads");
+        builder.addValue(data.getNewThreads());
         if (enableThreadsDump) {
-            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.NEW));
+            builder.data(buildStackTrace(rawThreadsInfos, Thread.State.NEW));
         }
         result.add(builder.build());
-        
+
         // RUNNABLE //---------------------------------------------------------
-        builder.setSubService("runable");
-        builder.setValue(new LongNumber(data.getRunnable()));
+        builder.subService("runable");
+        builder.addValue(data.getRunnable());
         if (enableThreadsDump) {
-            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.RUNNABLE));
+            builder.data(buildStackTrace(rawThreadsInfos, Thread.State.RUNNABLE));
         }
         result.add(builder.build());
-        
+
         // BLOCKED //----------------------------------------------------------
-        builder.setSubService("blocked");
-        builder.setValue(new LongNumber(data.getBlocked()));
+        builder.subService("blocked");
+        builder.addValue(data.getBlocked());
         if (enableThreadsDump) {
-            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.BLOCKED));
+            builder.data(buildStackTrace(rawThreadsInfos, Thread.State.BLOCKED));
         }
         result.add(builder.build());
-        
+
         // WAITING //----------------------------------------------------------
-        builder.setSubService("waiting");
-        builder.setValue(new LongNumber(data.getWaitting()));
+        builder.subService("waiting");
+        builder.addValue(data.getWaitting());
         if (enableThreadsDump) {
-            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.WAITING));
+            builder.data(buildStackTrace(rawThreadsInfos, Thread.State.WAITING));
         }
         result.add(builder.build());
-        
+
         // TIMED_WAITING //----------------------------------------------------
-        builder.setSubService("timedWaiting");
-        builder.setValue(new LongNumber(data.getTimedWaiting()));
+        builder.subService("timedWaiting");
+        builder.addValue(data.getTimedWaiting());
         if (enableThreadsDump) {
-            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.TIMED_WAITING));
+            builder.data(buildStackTrace(rawThreadsInfos, Thread.State.TIMED_WAITING));
         }
         result.add(builder.build());
-        
+
         // TERMINATED //-------------------------------------------------------
-        builder.setSubService("terminated");
-        builder.setValue(new LongNumber(data.getTerminated()));
+        builder.subService("terminated");
+        builder.addValue(data.getTerminated());
         if (enableThreadsDump) {
-            builder.setData(buildStackTrace(rawThreadsInfos, Thread.State.TERMINATED));
+            builder.data(buildStackTrace(rawThreadsInfos, Thread.State.TERMINATED));
         }
         result.add(builder.build());
         return result;
-        
+
     }
-    
+
     private List<ThreadInfo> buildList(final ThreadInfo[] threadInfo) {
         final List<ThreadInfo> result = new ArrayList<>();
         for (int i = threadInfo.length - 1; i >= 0; i--) {
@@ -164,12 +163,12 @@ public class ThreadsSensor implements MonitoringSensor {
         }
         return result;
     }
-    
+
     private ThreadsCounter extractThreadsUsage(final List<ThreadInfo> rawThreadsInfos) {
         final ThreadsCounter counter = new ThreadsCounter();
         for (final ThreadInfo info : rawThreadsInfos) {
             final Thread.State state = info.getThreadState();
-            
+
             if (state != null) {
                 switch (state) {
                     case BLOCKED:
@@ -194,15 +193,15 @@ public class ThreadsSensor implements MonitoringSensor {
                         break;
                 }
             }
-            
+
         }
-        
+
         return counter;
     }
-    
+
     private String buildStackTrace(final List<ThreadInfo> rawThreadsInfos, final Thread.State state) {
         final StringBuilder result = new StringBuilder();
-        
+
         for (final ThreadInfo info : rawThreadsInfos) {
             if ((state == null) || (state == info.getThreadState())) {
                 renderStackTrace(info, result);
@@ -211,7 +210,7 @@ public class ThreadsSensor implements MonitoringSensor {
         }
         return result.toString();
     }
-    
+
     private String renderStackTrace(final ThreadInfo info, final StringBuilder result) {
         result.append(info.getThreadState());
         result.append(" - ");
@@ -235,7 +234,7 @@ public class ThreadsSensor implements MonitoringSensor {
         }
         return result.toString();
     }
-    
+
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================
@@ -243,7 +242,7 @@ public class ThreadsSensor implements MonitoringSensor {
     public String getName() {
         return "threads";
     }
-    
+
     @Override
     public long getInterval() {
         return interval;

@@ -1,0 +1,15 @@
+errorStatus:	400
+errorCode:	ERR-1
+message:	some message
+messageDetail:	detail : lorem
+exploitationError:	true
+errorType:	functional
+errorDomain:	USER
+errorSubDomain:	search
+payload:	{}
+url:	http://mock.inugami.io
+rollback:	true
+retryable:	true
+errorHandler:	true
+category:	GET
+field:	name

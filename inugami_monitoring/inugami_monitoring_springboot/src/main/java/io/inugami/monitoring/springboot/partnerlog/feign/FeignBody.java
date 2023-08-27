@@ -36,6 +36,6 @@ public class FeignBody implements Response.Body {
 
     @Override
     public void close() throws IOException {
-
+        // nothing to do
     }
 }

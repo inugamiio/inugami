@@ -1,0 +1,16 @@
+{
+  "errorStatus" : 500,
+  "errorCode" : "HTTP-2",
+  "message" : "request is require",
+  "messageDetail" : "hello joe",
+  "errorType" : "functional",
+  "payload" : "{}",
+  "exploitationError" : true,
+  "rollback" : true,
+  "retryable" : true,
+  "field" : "user.id",
+  "url" : "http://localhost",
+  "category" : "user",
+  "errorDomain" : "creation",
+  "errorSubDomain" : "address"
+}

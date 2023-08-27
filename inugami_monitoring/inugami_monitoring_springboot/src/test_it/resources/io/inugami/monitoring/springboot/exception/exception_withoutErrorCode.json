@@ -1,0 +1,26 @@
+{
+  "cause" : {
+    "localizedMessage" : "unable to connect to cache",
+    "message" : "unable to connect to cache",
+    "parameters" : { },
+    "stackTrace" : [ ],
+    "suppressed" : [ ],
+    "title" : "unable to connect to cache",
+    "type" : "about:blank"
+  },
+  "detail" : "",
+  "localizedMessage" : "unable to connect to cache: ",
+  "message" : "unable to connect to cache: ",
+  "parameters" : {
+    "errorCode" : "ERR-0000",
+    "fields" : [ ],
+    "version" : "1.0.0",
+    "errorType" : "technical",
+    "errorCategory" : "connection"
+  },
+  "stackTrace" : [ ],
+  "status" : "INTERNAL_SERVER_ERROR",
+  "suppressed" : [ ],
+  "title" : "unable to connect to cache",
+  "type" : "about:blank"
+}

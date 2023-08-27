@@ -1,0 +1,1 @@
+FieldError(name=user.id, errorCode=ERR-1, message=invalid user id, messageDetail=user id XXXX is invalid, errorType=functional, errorCategory=GET)

@@ -26,13 +26,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author patrickguillerm
  * @since Jan 8, 2019
  */
-public class TokenObfuscatorTest {
+class TokenObfuscatorTest {
 
     // =========================================================================
     // METHODS
     // =========================================================================
     @Test
-    public void testClean() throws Exception {
+    void testClean() throws Exception {
         final TokenObfuscator obfuscator = new TokenObfuscator();
         assertEquals("\"token\":\"xxxxx\"", obfuscator.clean("\"token\":\"azerty12345\""));
     }
