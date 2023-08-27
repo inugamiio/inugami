@@ -15,7 +15,7 @@
     <parent>
         <groupId>io.inugami.monitoring.sensors</groupId>
         <artifactId>inugami_monitoring_sensors</artifactId>
-        <version>3.3.0-SNAPSHOT</version>
+        <version>3.3.0</version>
     </parent>
 
 
