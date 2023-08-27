@@ -143,7 +143,7 @@ class SseServiceSender implements LifecycleBootstrap, FifoProcessorGlobaleProces
             chrono.stop();
 
             if (notAdmin) {
-                Loggers.SSE.info("[{}ms] send  data : {} : {} -> {}", chrono.getDurationInMillis(),
+                Loggers.SSE.info("[{}ms] send  data : {} : {} -> {}", chrono.getDuration(),
                                  System.currentTimeMillis(), event.getChannel(), json);
             }
             return null;

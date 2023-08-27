@@ -1,0 +1,123 @@
+{
+  "level" : "INFO",
+  "loggerName" : "IOLOG",
+  "mdc" : {
+    "traceId" : "6c6f2264-94a6-4ada-a150-57b6249d1dcc",
+    "applicationVersion" : "1.0.0",
+    "instanceName" : "",
+    "appUrl" : "http://localhost:34477/user/42",
+    "instanceNumber" : "",
+    "env" : "dev",
+    "appVerb" : "GET",
+    "callType" : "REST",
+    "appUri" : "/user/42",
+    "lifecycle" : "in",
+    "hostname" : "",
+    "correlation_id" : "9acb22ea-2b2b-430c-a7ad-c291ba752ac4",
+    "asset" : "inugami",
+    "request_id" : "da48f13e-fd4c-428d-9bd8-c68491667a4b",
+    "remoteAddress" : "127.0.0.1"
+  },
+  "message" : "[GET] /user/42
+headers :
+	content-type: application/json; charset=UTF-8
+	accept: */*
+	host: localhost:34477
+	connection: Keep-Alive
+	user-agent: Apache-HttpClient/4.5.13 (Java/11.0.2)
+	accept-encoding: gzip,deflate
+payload :
+"
+}
+{
+  "level" : "ERROR",
+  "loggerName" : "IOLOG",
+  "mdc" : {
+    "retryable" : "false",
+    "instanceName" : "",
+    "errorType" : "technical",
+    "errorCode" : "ERR-0000",
+    "appVerb" : "GET",
+    "callType" : "REST",
+    "duration" : "165",
+    "lifecycle" : "out",
+    "hostname" : "",
+    "payload" : "null",
+    "httpStatus" : "500",
+    "errorStatus" : "0",
+    "warning" : "",
+    "remoteAddress" : "127.0.0.1",
+    "traceId" : "6c6f2264-94a6-4ada-a150-57b6249d1dcc",
+    "applicationVersion" : "1.0.0",
+    "rollback" : "false",
+    "exploitationError" : "false",
+    "appUrl" : "http://localhost:34477/user/42",
+    "instanceNumber" : "",
+    "env" : "dev",
+    "message" : "null",
+    "url" : "null",
+    "appUri" : "/user/42",
+    "field" : "null",
+    "correlation_id" : "9acb22ea-2b2b-430c-a7ad-c291ba752ac4",
+    "asset" : "inugami",
+    "category" : "null",
+    "request_id" : "da48f13e-fd4c-428d-9bd8-c68491667a4b",
+    "messageDetail" : "null",
+    "status" : "500"
+  },
+  "message" : "[GET] /user/42
+headers :
+	content-type: application/json; charset=UTF-8
+	accept: */*
+	host: localhost:34477
+	connection: Keep-Alive
+	user-agent: Apache-HttpClient/4.5.13 (Java/11.0.2)
+	accept-encoding: gzip,deflate
+payload :
+
+response:
+	status:500
+	datetime:1693125379449
+	duration:165
+	contentType:application/json
+	headers:
+		x-correlation-id: 9acb22ea-2b2b-430c-a7ad-c291ba752ac4
+		x-conversation-id: 9acb22ea-2b2b-430c-a7ad-c291ba752ac4
+		x-b3-traceid: 6c6f2264-94a6-4ada-a150-57b6249d1dcc
+		Access-Control-Allow-Origin: *
+		Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS
+		Access-Control-Allow-Headers: x-device-identifier, x-correlation-id, x-b3-traceid, x-conversation-id, Authorization, x-device-type, x-device-system, x-device-class, x-device-version, x-device-os-version, x-device-network-type, x-device-network-speed-down, x-device-network-speed-up, x-device-network-speed-latency, clientIp, User-Agent, Accept-Language, country, Warning, errorCode, errorException, errorMessage, errorMessageDetail, x-front-version, x-application, Forwarded, X-Forwarded-For, X-Forwarded-Host, X-Forwarded-Proto, Via, Location, Refresh, From, Host, Referer, Referrer-Policy, Allow, Server, Last-Event-ID, NEL, Ping-From, Ping-To, Report-To, Transfer-Encoding, TE, Trailer, Sec-WebSocket-Key, Sec-WebSocket-Extensions, Sec-WebSocket-Accept, Sec-WebSocket-Protocol, Sec-WebSocket-Version, Date, Early-Data, Link, Retry-After, SourceMap, Upgrade, content-type, authorization
+		Access-Control-Expose-Headers: x-device-identifier, x-correlation-id, x-b3-traceid, x-conversation-id, Authorization, x-device-type, x-device-system, x-device-class, x-device-version, x-device-os-version, x-device-network-type, x-device-network-speed-down, x-device-network-speed-up, x-device-network-speed-latency, clientIp, User-Agent, Accept-Language, country, Warning, errorCode, errorException, errorMessage, errorMessageDetail, x-front-version, x-application, Forwarded, X-Forwarded-For, X-Forwarded-Host, X-Forwarded-Proto, Via, Location, Refresh, From, Host, Referer, Referrer-Policy, Allow, Server, Last-Event-ID, NEL, Ping-From, Ping-To, Report-To, Transfer-Encoding, TE, Trailer, Sec-WebSocket-Key, Sec-WebSocket-Extensions, Sec-WebSocket-Accept, Sec-WebSocket-Protocol, Sec-WebSocket-Version, Date, Early-Data, Link, Retry-After, SourceMap, Upgrade, content-type, authorization
+		Access-Control-Allow-Credentials: true
+		x-warnings:
+		Content-Type: application/json
+		Transfer-Encoding: chunked
+		Date: Sun, 27 Aug 2023 08:36:19 GMT
+		Connection: close
+	payload:{
+  "cause" : {
+    "localizedMessage" : "unable to connect to cache",
+    "message" : "unable to connect to cache",
+    "parameters" : { },
+    "stackTrace" : [ ],
+    "suppressed" : [ ],
+    "title" : "unable to connect to cache",
+    "type" : "about:blank"
+  },
+  "detail" : "",
+  "localizedMessage" : "unable to connect to cache: ",
+  "message" : "unable to connect to cache: ",
+  "parameters" : {
+    "errorCode" : "ERR-0000",
+    "fields" : [ ],
+    "version" : "1.0.0",
+    "errorType" : "technical",
+    "errorCategory" : "connection"
+  },
+  "stackTrace" : [ ],
+  "status" : "INTERNAL_SERVER_ERROR",
+  "suppressed" : [ ],
+  "title" : "unable to connect to cache",
+  "type" : "about:blank"
+}
+}

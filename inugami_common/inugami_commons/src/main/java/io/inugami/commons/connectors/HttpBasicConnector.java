@@ -630,7 +630,7 @@ public class HttpBasicConnector implements IHttpBasicConnector {
         HttpConnectorResult.HttpConnectorResultBuilder resultBuilder = HttpConnectorResult.builder();
         if (stepResult != null) {
             resultBuilder = stepResult.toBuilder();
-            resultBuilder.delay(chrono.getDurationInMillis());
+            resultBuilder.delay(chrono.getDuration());
         }
 
 

@@ -55,6 +55,5 @@ class UserRestControllerIT extends SpringBootIntegrationTest {
                                        result.set(user);
                                    })
                                    .build());
-        ;
     }
 }

@@ -58,8 +58,8 @@ class RunAndCloseServiceTest {
                                                      ).run();
         //@formatter:on
         chrono.stop();
-        LOGGER.info("duration : {}", chrono.getDelaisInMillis());
-        assertTrue(chrono.getDelaisInMillis() < 5000L);
+        LOGGER.info("duration : {}", chrono.getDuration());
+        assertTrue(chrono.getDuration() < 5000L);
         data.forEach(m -> LOGGER.info("number : {}", m));
         assertListEquals(data, "2", "1", "3", "4");
     }
@@ -79,9 +79,9 @@ class RunAndCloseServiceTest {
                                                      ).run();
         //@formatter:on
         chrono.stop();
-        LOGGER.info("duration : {}", chrono.getDelaisInMillis());
-        assertTrue(chrono.getDelaisInMillis() >= 2000L);
-        assertTrue(chrono.getDelaisInMillis() < 2050L);
+        LOGGER.info("duration : {}", chrono.getDuration());
+        assertTrue(chrono.getDuration() >= 2000L);
+        assertTrue(chrono.getDuration() < 2050L);
         data.forEach(m -> LOGGER.info("number : {}", m));
 
         assertEquals("1", data.get(0));
@@ -116,9 +116,9 @@ class RunAndCloseServiceTest {
                                                      ).run();
         //@formatter:on
         chrono.stop();
-        LOGGER.info("duration : {}", chrono.getDelaisInMillis());
-        assertTrue(chrono.getDelaisInMillis() >= 2000L);
-        assertTrue(chrono.getDelaisInMillis() < 2050L);
+        LOGGER.info("duration : {}", chrono.getDuration());
+        assertTrue(chrono.getDuration() >= 2000L);
+        assertTrue(chrono.getDuration() < 2050L);
         data.forEach(m -> LOGGER.info("number : {}", m));
         assertEquals("1", data.get(0));
         assertEquals("3", data.get(1));
@@ -142,7 +142,7 @@ class RunAndCloseServiceTest {
                                                      ).run();
         //@formatter:on
         chrono.stop();
-        LOGGER.info("duration : {}", chrono.getDelaisInMillis());
+        LOGGER.info("duration : {}", chrono.getDuration());
         data.forEach(m -> LOGGER.info("number : {}", m));
         //@formatter:off
         assertListEquals(data, "1.2 | 1.1 | error - 1.4 | 1.3",

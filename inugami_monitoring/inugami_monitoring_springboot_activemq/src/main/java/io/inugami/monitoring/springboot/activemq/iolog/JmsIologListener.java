@@ -59,7 +59,7 @@ public class JmsIologListener extends DefaultMessageListenerContainer {
             throw ex;
         } finally {
             chrono.stop();
-            traceIologOut(ioInfo, chrono.getDurationInMillis(), exception);
+            traceIologOut(ioInfo, chrono.getDuration(), exception);
             MdcService.getInstance().clear();
         }
         commitIfNecessary(session, message);

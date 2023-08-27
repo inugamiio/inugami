@@ -144,7 +144,7 @@ public class RunAndCloseService<T> implements ThreadFactory {
         long                  timeLeft  = timeout;
         final Chrono          chrono    = Chrono.startChrono();
 
-        while ((tasksLeft > 0) && (chrono.snapshot().getDelaisInMillis() < timeout)) {
+        while ((tasksLeft > 0) && (chrono.snapshot().getDuration() < timeout)) {
             timeLeft = computeTimeLeft(timeLeft, chrono);
             Future<T> itemFuture = null;
             T         taskData   = null;
@@ -169,7 +169,7 @@ public class RunAndCloseService<T> implements ThreadFactory {
     }
 
     private long computeTimeLeft(final long timeLeft, final Chrono chrono) {
-        final long result = timeLeft - chrono.snapshot().getDurationInMillis();
+        final long result = timeLeft - chrono.snapshot().getDuration();
         return result < 0 ? 0 : result;
     }
 

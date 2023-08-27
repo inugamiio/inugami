@@ -22,6 +22,11 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static io.inugami.api.exceptions.Asserts.assertHigher;
+import static io.inugami.api.exceptions.Asserts.assertNotNull;
+import static io.inugami.monitoring.springboot.app.UserErrors.READ_USER_ID_INVALID;
+import static io.inugami.monitoring.springboot.app.UserErrors.READ_USER_NOT_FOUND;
+
 @Service
 public class UserDAO {
     private final Map<Long, UserDataDTO> CACHE = new ConcurrentHashMap<>();
@@ -35,6 +40,23 @@ public class UserDAO {
     }
 
     public UserDataDTO getById(final long id) {
-        return CACHE.get(id);
+        assertHigher(READ_USER_ID_INVALID.addDetail("with id {0}", id), 0, id);
+        final UserDataDTO result = CACHE.get(id);
+
+        if (id == 42) {
+            throw new CacheConnectionException("unable to connect to cache");
+        }
+
+        assertNotNull(READ_USER_NOT_FOUND, result);
+        return result;
+    }
+
+
+    private final class CacheConnectionException extends RuntimeException {
+        private static final long serialVersionUID = 6232779694014145940L;
+
+        public CacheConnectionException(final String message) {
+            super(message);
+        }
     }
 }

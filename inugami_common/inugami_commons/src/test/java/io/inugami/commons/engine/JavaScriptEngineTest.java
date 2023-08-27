@@ -102,20 +102,20 @@ class JavaScriptEngineTest implements FunctionMustThrow {
         final Chrono chrono1 = Chrono.startChrono();
         final String result1 = engine.execute(function, "test");
         chrono1.stop();
-        LOGGER.info("[{}ms] : {}", chrono1.getDelaisInMillis(), result1);
+        LOGGER.info("[{}ms] : {}", chrono1.getDuration(), result1);
         assertEquals("2", result1);
 
         final Chrono chrono2 = Chrono.startChrono();
         final String result2 = engine.execute(function, "test");
         chrono2.stop();
         assertEquals("2", result2);
-        LOGGER.info("[{}ms] : {}", chrono2.getDelaisInMillis(), result2);
+        LOGGER.info("[{}ms] : {}", chrono2.getDuration(), result2);
 
         final Chrono chrono3 = Chrono.startChrono();
         final String result3 = engine.execute(function, "test");
         chrono3.stop();
         assertEquals("2", result3);
-        LOGGER.info("[{}ms] : {}", chrono3.getDelaisInMillis(), result3);
+        LOGGER.info("[{}ms] : {}", chrono3.getDuration(), result3);
     }
 
     @Test

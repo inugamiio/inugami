@@ -1,0 +1,132 @@
+{
+  "level" : "INFO",
+  "loggerName" : "IOLOG",
+  "mdc" : {
+    "traceId" : "a0fb33e7-fa48-4450-a944-342b8aeec3ba",
+    "applicationVersion" : "1.0.0",
+    "instanceName" : "",
+    "appUrl" : "http://localhost:37015/user/0",
+    "instanceNumber" : "",
+    "env" : "dev",
+    "appVerb" : "GET",
+    "callType" : "REST",
+    "appUri" : "/user/0",
+    "lifecycle" : "in",
+    "hostname" : "",
+    "correlation_id" : "e808c8f3-059a-44a7-b2c4-673b8fb5c9b0",
+    "asset" : "inugami",
+    "request_id" : "c8003302-1786-4af2-a18f-408028cd48e4",
+    "remoteAddress" : "127.0.0.1"
+  },
+  "message" : "[GET] /user/0
+headers :
+	content-type: application/json; charset=UTF-8
+	accept: */*
+	host: localhost:37015
+	connection: Keep-Alive
+	user-agent: Apache-HttpClient/4.5.13 (Java/11.0.2)
+	accept-encoding: gzip,deflate
+payload :
+"
+}
+{
+  "level" : "ERROR",
+  "loggerName" : "IOLOG",
+  "mdc" : {
+    "retryable" : "false",
+    "instanceName" : "",
+    "errorDomain" : "user",
+    "errorType" : "functional",
+    "errorCode" : "USER-1_0",
+    "appVerb" : "GET",
+    "callType" : "REST",
+    "duration" : "170685444",
+    "lifecycle" : "out",
+    "hostname" : "",
+    "payload" : "null",
+    "httpStatus" : "400",
+    "errorStatus" : "400",
+    "warning" : "",
+    "errorSubDomain" : "read",
+    "remoteAddress" : "127.0.0.1",
+    "traceId" : "a0fb33e7-fa48-4450-a944-342b8aeec3ba",
+    "applicationVersion" : "1.0.0",
+    "rollback" : "false",
+    "exploitationError" : "false",
+    "appUrl" : "http://localhost:37015/user/0",
+    "instanceNumber" : "",
+    "env" : "dev",
+    "message" : "null",
+    "url" : "null",
+    "appUri" : "/user/0",
+    "field" : "null",
+    "correlation_id" : "e808c8f3-059a-44a7-b2c4-673b8fb5c9b0",
+    "asset" : "inugami",
+    "category" : "null",
+    "request_id" : "c8003302-1786-4af2-a18f-408028cd48e4",
+    "messageDetail" : "null",
+    "status" : "400"
+  },
+  "message" : "[GET] /user/0
+headers :
+	content-type: application/json; charset=UTF-8
+	accept: */*
+	host: localhost:37015
+	connection: Keep-Alive
+	user-agent: Apache-HttpClient/4.5.13 (Java/11.0.2)
+	accept-encoding: gzip,deflate
+payload :
+
+response:
+	status:400
+	datetime:1693122427929
+	duration:170685444
+	contentType:application/json
+	headers:
+		x-correlation-id: e808c8f3-059a-44a7-b2c4-673b8fb5c9b0
+		x-conversation-id: e808c8f3-059a-44a7-b2c4-673b8fb5c9b0
+		x-b3-traceid: a0fb33e7-fa48-4450-a944-342b8aeec3ba
+		Access-Control-Allow-Origin: *
+		Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS
+		Access-Control-Allow-Headers: x-device-identifier, x-correlation-id, x-b3-traceid, x-conversation-id, Authorization, x-device-type, x-device-system, x-device-class, x-device-version, x-device-os-version, x-device-network-type, x-device-network-speed-down, x-device-network-speed-up, x-device-network-speed-latency, clientIp, User-Agent, Accept-Language, country, Warning, errorCode, errorException, errorMessage, errorMessageDetail, x-front-version, x-application, Forwarded, X-Forwarded-For, X-Forwarded-Host, X-Forwarded-Proto, Via, Location, Refresh, From, Host, Referer, Referrer-Policy, Allow, Server, Last-Event-ID, NEL, Ping-From, Ping-To, Report-To, Transfer-Encoding, TE, Trailer, Sec-WebSocket-Key, Sec-WebSocket-Extensions, Sec-WebSocket-Accept, Sec-WebSocket-Protocol, Sec-WebSocket-Version, Date, Early-Data, Link, Retry-After, SourceMap, Upgrade, content-type, authorization
+		Access-Control-Expose-Headers: x-device-identifier, x-correlation-id, x-b3-traceid, x-conversation-id, Authorization, x-device-type, x-device-system, x-device-class, x-device-version, x-device-os-version, x-device-network-type, x-device-network-speed-down, x-device-network-speed-up, x-device-network-speed-latency, clientIp, User-Agent, Accept-Language, country, Warning, errorCode, errorException, errorMessage, errorMessageDetail, x-front-version, x-application, Forwarded, X-Forwarded-For, X-Forwarded-Host, X-Forwarded-Proto, Via, Location, Refresh, From, Host, Referer, Referrer-Policy, Allow, Server, Last-Event-ID, NEL, Ping-From, Ping-To, Report-To, Transfer-Encoding, TE, Trailer, Sec-WebSocket-Key, Sec-WebSocket-Extensions, Sec-WebSocket-Accept, Sec-WebSocket-Protocol, Sec-WebSocket-Version, Date, Early-Data, Link, Retry-After, SourceMap, Upgrade, content-type, authorization
+		Access-Control-Allow-Credentials: true
+		x-warnings:
+		Content-Type: application/json
+		Transfer-Encoding: chunked
+		Date: Sun, 27 Aug 2023 07:47:07 GMT
+		Connection: close
+	payload:{
+  "cause" : {
+    "localizedMessage" : "user's id isn't valid",
+    "message" : "user's id isn't valid",
+    "parameters" : { },
+    "stackTrace" : [ ],
+    "suppressed" : [ ],
+    "title" : "user's id isn't valid",
+    "type" : "about:blank"
+  },
+  "detail" : "with id 0",
+  "localizedMessage" : "user's id isn't valid: with id 0",
+  "message" : "user's id isn't valid: with id 0",
+  "parameters" : {
+    "errorCode" : "USER-1_0",
+    "fields" : [ {
+      "errorCategory" : "GET",
+      "errorCode" : "USER-1_0",
+      "errorType" : "functional",
+      "message" : "user's id isn't valid",
+      "messageDetail" : "with id 0",
+      "name" : "id"
+    } ],
+    "version" : "1.0.0",
+    "errorType" : "functional",
+    "errorCategory" : "GET"
+  },
+  "stackTrace" : [ ],
+  "status" : "BAD_REQUEST",
+  "suppressed" : [ ],
+  "title" : "user's id isn't valid",
+  "type" : "about:blank"
+}
+}

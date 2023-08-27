@@ -110,29 +110,11 @@ public final class Chrono implements Serializable {
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================
-
-    /**
-     * Allow to grab delais is nanoSecond
-     *
-     * @return delais in nanoSecond
-     */
-    @Deprecated
-    public long getDelais() {
-        return getDuration();
+    public long getDuration() {
+        return getDurationNano() / 1000000;
     }
 
-    public long getDuration() {
+    public long getDurationNano() {
         return stopTime == -1 ? -1 : stopTime - startTime;
     }
-
-    @Deprecated
-    public long getDelaisInMillis() {
-        return getDurationInMillis();
-    }
-
-    public long getDurationInMillis() {
-        return getDuration() / 1000000;
-    }
-
-
 }

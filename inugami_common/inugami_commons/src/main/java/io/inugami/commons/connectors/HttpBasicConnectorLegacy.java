@@ -182,7 +182,7 @@ public final class HttpBasicConnectorLegacy {
         } finally {
             request.releaseConnection();
             chrono.stop();
-            Loggers.PARTNERLOG.info("[{}ms][GET] call request:{}", chrono.getDelaisInMillis(), url);
+            Loggers.PARTNERLOG.info("[{}ms][GET] call request:{}", chrono.getDuration(), url);
         }
 
         return result.build();
@@ -224,7 +224,7 @@ public final class HttpBasicConnectorLegacy {
             throw new ConnectorUndefinedCallException(e);
         } finally {
             chrono.snapshot();
-            Loggers.PARTNERLOG.info("[{}ms][POST] call request:{}", chrono.getDelaisInMillis(), url);
+            Loggers.PARTNERLOG.info("[{}ms][POST] call request:{}", chrono.getDuration(), url);
         }
 
         return result;
@@ -248,7 +248,7 @@ public final class HttpBasicConnectorLegacy {
             result = processPost(url, urlEncodedData, currentHttpclient, header, credentialsProvider, requestConfig);
         } finally {
             chrono.snapshot();
-            Loggers.PARTNERLOG.info("[{}ms][POST] call request:{}", chrono.getDelaisInMillis(), url);
+            Loggers.PARTNERLOG.info("[{}ms][POST] call request:{}", chrono.getDuration(), url);
             HttpBasicConnectorDelegateUtils.close(httpclient);
         }
 
