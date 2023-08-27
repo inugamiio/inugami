@@ -80,11 +80,14 @@ public class MdcService implements ApplicationLifecycleSPI {
         appSubService,
         applicationVersion,
         asset,
+        artifactId,
         authProtocol,
         callFrom,
         callType,
         conversation_id,
         correlation_id,
+        commitId,
+        commitDate,
         country,
         customerId,
         deviceClass,
@@ -120,6 +123,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         fromTimestamp(Long.valueOf(0)),
         functionalUid,
         globalStatus,
+        groupId,
         healthStatus("up"),
         hostname,
         httpStatus(Integer.valueOf(0)),
@@ -924,6 +928,46 @@ public class MdcService implements ApplicationLifecycleSPI {
     public LocalDateTime from() {
         return getLocalDateTime(MDCKeys.from);
     }
+
+
+    public MdcService groupId(final String value) {
+        setMdc(MDCKeys.groupId, value);
+        return this;
+    }
+
+    public String groupId() {
+        return getMdc(MDCKeys.groupId);
+    }
+
+
+    public MdcService artifactId(final String value) {
+        setMdc(MDCKeys.artifactId, value);
+        return this;
+    }
+
+    public String artifactId() {
+        return getMdc(MDCKeys.artifactId);
+    }
+
+    public MdcService commitId(final String value) {
+        setMdc(MDCKeys.commitId, value);
+        return this;
+    }
+
+    public String commitId() {
+        return getMdc(MDCKeys.commitId);
+    }
+
+
+    public MdcService commitDate(final String value) {
+        setMdc(MDCKeys.commitDate, value);
+        return this;
+    }
+
+    public String commitDate() {
+        return getMdc(MDCKeys.commitDate);
+    }
+
 
     public MdcService fromTimestamp(final long value) {
         setMdc(MDCKeys.fromTimestamp, value);

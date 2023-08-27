@@ -5,7 +5,7 @@ import ch.qos.logback.core.encoder.Encoder;
 import io.inugami.api.exceptions.FatalException;
 import io.inugami.api.processors.ConfigHandler;
 import io.inugami.api.processors.DefaultConfigHandler;
-import io.inugami.logs.obfuscator.appender.Configuration;
+import io.inugami.logs.obfuscator.appender.AppenderConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings({"java:S5852", "java:S899", "java:S6395", "java:S108"})
 public class FileWriter implements AppenderWriterStrategy {
 
-    private              Configuration             configuration    = null;
+    private              AppenderConfiguration     configuration    = null;
     private              Encoder<ILoggingEvent>    encoder;
     private              java.io.FileWriter        writer;
     private static final AtomicReference<String>   FILE_PATH        = new AtomicReference<>();
@@ -34,7 +34,7 @@ public class FileWriter implements AppenderWriterStrategy {
 
 
     @Override
-    public boolean accept(final Configuration configuration) {
+    public boolean accept(final AppenderConfiguration configuration) {
         if (configuration.getFile() != null) {
             this.configuration = configuration;
             refreshConfig();

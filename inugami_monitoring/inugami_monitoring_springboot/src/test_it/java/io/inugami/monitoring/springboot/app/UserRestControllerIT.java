@@ -18,6 +18,7 @@ package io.inugami.monitoring.springboot.app;
 
 import io.inugami.api.loggers.Loggers;
 import io.inugami.commons.test.UnitTestData;
+import io.inugami.commons.test.api.NumberLineMatcher;
 import io.inugami.commons.test.api.RegexLineMatcher;
 import io.inugami.commons.test.api.SkipLineMatcher;
 import io.inugami.commons.test.api.UuidLineMatcher;
@@ -43,9 +44,10 @@ class UserRestControllerIT extends SpringBootIntegrationTest {
                                    .path("io/inugami/monitoring/springboot/app/createUser_nominal.iolog.txt")
                                    .integrationTest(true)
                                    .addPattern(Loggers.IOLOG_NAME)
-                                   .addLineMatcher(SkipLineMatcher.of(25, 80, 63, 68, 106, 107))
-                                   .addLineMatcher(UuidLineMatcher.of(4, 15, 17, 54, 71, 110, 111, 112))
-                                   .addLineMatcher(RegexLineMatcher.of(".*/user.*", 7, 57))
+                                   .addLineMatcher(SkipLineMatcher.of(24, 78))
+                                   .addLineMatcher(UuidLineMatcher.of(4, 15, 16, 53, 67, 69, 108, 109, 110))
+                                   .addLineMatcher(RegexLineMatcher.of(".*/user.*", 7, 56))
+                                   .addLineMatcher(NumberLineMatcher.of(62, 104, 105))
                                    .process(() -> {
                                        UserDataDTO user = RestAssured.given()
                                                                      .body(asJson(UnitTestData.USER_1))

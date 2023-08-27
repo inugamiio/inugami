@@ -96,7 +96,7 @@ public class MonitoringConfig implements PostProcessing<ConfigHandler<String, St
         //@formatter:off
         enable                 = applyStrategyBoolean(JvmKeyValues.MONITORING_ENABLE, enable, true);
         env                    = applyStrategy(JvmKeyValues.ENVIRONMENT,env,"prod");
-        asset                  = applyStrategy(JvmKeyValues.ASSET,asset,"inugami");
+        asset                  = applyStrategy(JvmKeyValues.ASSET,asset,context.grabOrDefault("application.artifactId",null));
         hostname               = applyStrategy(JvmKeyValues.APPLICATION_HOST_NAME,hostname);
         instanceName           = applyStrategy(JvmKeyValues.INSTANCE,instanceName);
         instanceNumber         = applyStrategy(JvmKeyValues.INSTANCE_NUMBER,instanceNumber); 

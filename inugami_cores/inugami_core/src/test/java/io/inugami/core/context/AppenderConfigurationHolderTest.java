@@ -37,12 +37,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author patrick_guillerm
  * @since 30 déc. 2016
  */
-class ConfigurationHolderTest implements TestUnitResources {
+class AppenderConfigurationHolderTest implements TestUnitResources {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final static Logger LOGGER = LoggerFactory.getLogger(ConfigurationHolderTest.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(AppenderConfigurationHolderTest.class);
 
     // =========================================================================
     // METHODS

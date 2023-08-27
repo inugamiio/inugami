@@ -7,7 +7,7 @@ import io.inugami.commons.connectors.ConnectorConstants;
 import io.inugami.commons.connectors.ConnectorListener;
 import io.inugami.commons.connectors.HttpBasicConnector;
 import io.inugami.commons.connectors.HttpRequest;
-import io.inugami.logs.obfuscator.appender.Configuration;
+import io.inugami.logs.obfuscator.appender.AppenderConfiguration;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ public class LogstashWriter implements AppenderWriterStrategy, ConnectorListener
     public static final int                            DEFAULT_MAX_CONNECTIONS    = 50;
     public static final int                            DEFAULT_MAX_SOCKET_TIMEOUT = 1000;
     public static final String                         DEFAULT_HOST               = "http://localhost:5054";
-    private             Configuration                  configuration              = null;
+    private             AppenderConfiguration          configuration              = null;
     private             Encoder<ILoggingEvent>         encoder;
     private             HttpBasicConnector             connector;
     private             String                         baseUrl;
@@ -30,7 +30,7 @@ public class LogstashWriter implements AppenderWriterStrategy, ConnectorListener
     private             HttpRequest.HttpRequestBuilder request;
 
     @Override
-    public boolean accept(final Configuration configuration) {
+    public boolean accept(final AppenderConfiguration configuration) {
         if (LOGSTASH.equalsIgnoreCase(configuration.getMode())) {
             this.configuration = configuration;
             return true;

@@ -34,7 +34,7 @@ import io.inugami.api.models.JsonBuilder;
 import io.inugami.api.spi.SpiLoader;
 import io.inugami.logs.obfuscator.api.LogEventDto;
 import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
-import io.inugami.logs.obfuscator.appender.Configuration;
+import io.inugami.logs.obfuscator.appender.AppenderConfiguration;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -69,7 +69,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     private static final String                    TIMESTAMP      = "timestamp";
     private static final String                    DATE           = "date";
     private static final String                    STACKTRACE     = "stacktrace";
-    private              Configuration             configuration;
+    private              AppenderConfiguration     configuration;
 
 
     private Map<String, Serializable> additionalFieldsData = null;
@@ -80,7 +80,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     }
 
 
-    public ObfuscatorEncoder(final Configuration configuration) {
+    public ObfuscatorEncoder(final AppenderConfiguration configuration) {
         this.configuration = configuration;
         onContextRefreshed(null);
     }
@@ -322,11 +322,11 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     // GETTERS / SETTERS
     // =========================================================================
 
-    public Configuration getConfiguration() {
+    public AppenderConfiguration getConfiguration() {
         return configuration;
     }
 
-    public void setConfiguration(final Configuration configuration) {
+    public void setConfiguration(final AppenderConfiguration configuration) {
         this.configuration = configuration;
     }
 }

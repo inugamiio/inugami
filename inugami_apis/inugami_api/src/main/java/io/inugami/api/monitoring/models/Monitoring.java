@@ -96,6 +96,7 @@ public class Monitoring {
         instanceNumber = configuration.grabOrDefault("instanceNumber", null);
         applicationVersion = configuration.grabOrDefault("version", null);
         maxSensorsTasksThreads = configuration.grabInt("env", 10);
+        asset = configuration.grabOrDefault("application.application", null);
         properties = configuration;
 
         if (headers == null) {

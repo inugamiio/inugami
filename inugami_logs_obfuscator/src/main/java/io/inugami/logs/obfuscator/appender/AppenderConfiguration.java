@@ -13,7 +13,7 @@ import java.util.Map;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Configuration {
+public class AppenderConfiguration {
     @ToString.Include
     private String              mode;
     @ToString.Include
@@ -26,6 +26,8 @@ public class Configuration {
     private String              host;
     private String              headers;
     private Map<String, String> headersMap;
+    private String              index;
+    private String              indexDatePattern;
     private Integer             timeout;
     private Integer             timeToLive;
     private Integer             maxConnections;
@@ -33,12 +35,12 @@ public class Configuration {
     private Integer             socketTimeout;
 
 
-    public Configuration(final String encodeAsJson, final String additionalFields) {
+    public AppenderConfiguration(final String encodeAsJson, final String additionalFields) {
         this.encodeAsJson = Boolean.parseBoolean(encodeAsJson);
         this.additionalFields = additionalFields;
     }
 
-    public Configuration(final boolean encodeAsJson, final String additionalFields) {
+    public AppenderConfiguration(final boolean encodeAsJson, final String additionalFields) {
         this.encodeAsJson = encodeAsJson;
         this.additionalFields = additionalFields;
     }
