@@ -38,6 +38,31 @@ import java.util.stream.Collectors;
 @Setter
 @Getter
 public class Headers {
+    public static final String X_DEVICE_IDENTIFIER            = "x-device-identifier";
+    public static final String X_CORRELATION_ID               = "x-correlation-id";
+    public static final String X_CONVERSATION_ID              = "x-conversation-id";
+    public static final String X_B_3_TRACEID                  = "x-b3-traceid";
+    public static final String AUTHORIZATION                  = "Authorization";
+    public static final String X_DEVICE_TYPE                  = "x-device-type";
+    public static final String X_DEVICE_CLASS                 = "x-device-class";
+    public static final String X_DEVICE_SYSTEM                = "x-device-system";
+    public static final String X_DEVICE_VERSION               = "x-device-version";
+    public static final String X_DEVICE_OS_VERSION            = "x-device-os-version";
+    public static final String X_DEVICE_NETWORK_TYPE          = "x-device-network-type";
+    public static final String X_DEVICE_NETWORK_SPEED_DOWN    = "x-device-network-speed-down";
+    public static final String X_DEVICE_NETWORK_SPEED_UP      = "x-device-network-speed-up";
+    public static final String X_DEVICE_NETWORK_SPEED_LATENCY = "x-device-network-speed-latency";
+    public static final String CLIENT_IP                      = "clientIp";
+    public static final String USER_AGENT                     = "User-Agent";
+    public static final String ACCEPT_LANGUAGE                = "Accept-Language";
+    public static final String COUNTRY                        = "country";
+    public static final String WARNING                        = "Warning";
+    public static final String ERROR_CODE                     = "errorCode";
+    public static final String ERROR_EXCEPTION                = "errorException";
+    public static final String ERROR_MESSAGE                  = "errorMessage";
+    public static final String ERROR_MESSAGE_DETAIL           = "errorMessageDetail";
+    public static final String X_FRONT_VERSION                = "x-front-version";
+    public static final String X_APPLICATION                  = "x-application";
 
     private String correlationId;
     private String requestId;
@@ -84,32 +109,32 @@ public class Headers {
      * @return
      */
     public Headers refreshConfig(final ConfigHandler<String, String> configuration) {
-        correlationId = configuration.getOrDefault("inugami.monitoring.headers.correlationId", "x-correlation-id");
-        requestId = configuration.getOrDefault("inugami.monitoring.headers.requestId", "x-b3-traceid");
-        traceId = configuration.getOrDefault("inugami.monitoring.headers.traceId", "x-b3-traceid");
-        conversationId = configuration.getOrDefault("inugami.monitoring.headers.conversationId", "x-conversation-id");
-        token = configuration.getOrDefault("inugami.monitoring.headers.token", "Authorization");
-        deviceIdentifier = configuration.getOrDefault("inugami.monitoring.headers.deviceIdentifier", "x-device-identifier");
-        deviceType = configuration.getOrDefault("inugami.monitoring.headers.deviceType", "x-device-type");
-        deviceClass = configuration.getOrDefault("inugami.monitoring.headers.deviceClass", "x-device-class");
-        deviceSystem = configuration.getOrDefault("inugami.monitoring.headers.deviceSystem", "x-device-system");
-        deviceVersion = configuration.getOrDefault("inugami.monitoring.headers.deviceVersion", "x-device-version");
-        deviceOsVersion = configuration.getOrDefault("inugami.monitoring.headers.deviceOsVersion", "x-device-os-version");
-        deviceNetworkType = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkType", "x-device-network-type");
-        deviceNetworkSpeedDown = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkSpeedDown", "x-device-network-speed-down");
-        deviceNetworkSpeedUp = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkSpeedUp", "x-device-network-speed-up");
-        deviceNetworkSpeedLatency = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkSpeedLatency", "x-device-network-speed-latency");
-        deviceIp = configuration.getOrDefault("inugami.monitoring.headers.deviceIp", "clientIp");
-        userAgent = configuration.getOrDefault("inugami.monitoring.headers.userAgent", "User-Agent");
-        language = configuration.getOrDefault("inugami.monitoring.headers.language", "Accept-Language");
-        country = configuration.getOrDefault("inugami.monitoring.headers.country", "country");
-        warning = configuration.getOrDefault("inugami.monitoring.headers.warning", "Warning");
-        errorCode = configuration.getOrDefault("inugami.monitoring.headers.error.code", "errorCode");
-        errorException = configuration.getOrDefault("inugami.monitoring.headers.error.exception", "errorException");
-        errorMessage = configuration.getOrDefault("inugami.monitoring.headers.error.message", "errorMessage");
-        errorMessageDetail = configuration.getOrDefault("inugami.monitoring.headers.error.message.detail", "errorMessageDetail");
-        frontVersion = configuration.getOrDefault("inugami.monitoring.headers.front.version", "x-front-version");
-        callFrom = configuration.getOrDefault("inugami.monitoring.headers.front.application", "x-application");
+        correlationId = configuration.getOrDefault("inugami.monitoring.headers.correlationId", X_CORRELATION_ID);
+        requestId = configuration.getOrDefault("inugami.monitoring.headers.requestId", X_B_3_TRACEID);
+        traceId = configuration.getOrDefault("inugami.monitoring.headers.traceId", X_B_3_TRACEID);
+        conversationId = configuration.getOrDefault("inugami.monitoring.headers.conversationId", X_CONVERSATION_ID);
+        token = configuration.getOrDefault("inugami.monitoring.headers.token", AUTHORIZATION);
+        deviceIdentifier = configuration.getOrDefault("inugami.monitoring.headers.deviceIdentifier", X_DEVICE_IDENTIFIER);
+        deviceType = configuration.getOrDefault("inugami.monitoring.headers.deviceType", X_DEVICE_TYPE);
+        deviceClass = configuration.getOrDefault("inugami.monitoring.headers.deviceClass", X_DEVICE_CLASS);
+        deviceSystem = configuration.getOrDefault("inugami.monitoring.headers.deviceSystem", X_DEVICE_SYSTEM);
+        deviceVersion = configuration.getOrDefault("inugami.monitoring.headers.deviceVersion", X_DEVICE_VERSION);
+        deviceOsVersion = configuration.getOrDefault("inugami.monitoring.headers.deviceOsVersion", X_DEVICE_OS_VERSION);
+        deviceNetworkType = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkType", X_DEVICE_NETWORK_TYPE);
+        deviceNetworkSpeedDown = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkSpeedDown", X_DEVICE_NETWORK_SPEED_DOWN);
+        deviceNetworkSpeedUp = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkSpeedUp", X_DEVICE_NETWORK_SPEED_UP);
+        deviceNetworkSpeedLatency = configuration.getOrDefault("inugami.monitoring.headers.deviceNetworkSpeedLatency", X_DEVICE_NETWORK_SPEED_LATENCY);
+        deviceIp = configuration.getOrDefault("inugami.monitoring.headers.deviceIp", CLIENT_IP);
+        userAgent = configuration.getOrDefault("inugami.monitoring.headers.userAgent", USER_AGENT);
+        language = configuration.getOrDefault("inugami.monitoring.headers.language", ACCEPT_LANGUAGE);
+        country = configuration.getOrDefault("inugami.monitoring.headers.country", COUNTRY);
+        warning = configuration.getOrDefault("inugami.monitoring.headers.warning", WARNING);
+        errorCode = configuration.getOrDefault("inugami.monitoring.headers.error.code", ERROR_CODE);
+        errorException = configuration.getOrDefault("inugami.monitoring.headers.error.exception", ERROR_EXCEPTION);
+        errorMessage = configuration.getOrDefault("inugami.monitoring.headers.error.message", ERROR_MESSAGE);
+        errorMessageDetail = configuration.getOrDefault("inugami.monitoring.headers.error.message.detail", ERROR_MESSAGE_DETAIL);
+        frontVersion = configuration.getOrDefault("inugami.monitoring.headers.front.version", X_FRONT_VERSION);
+        callFrom = configuration.getOrDefault("inugami.monitoring.headers.front.application", X_APPLICATION);
 
 
         final String specifics = configuration.getOrDefault("inugami.monitoring.headers.specifics", "");
