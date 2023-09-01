@@ -5,3 +5,4 @@ io.inugami.logs.obfuscator.obfuscators.JsonAuthorizationObfuscator
 io.inugami.logs.obfuscator.obfuscators.BasicAuthorizationObfuscator
 io.inugami.logs.obfuscator.obfuscators.AccessControlAllowHeaderObfuscator
 io.inugami.logs.obfuscator.obfuscators.AccessControlExposedHeaderObfuscator
+io.inugami.logs.obfuscator.obfuscators.CookieObfuscator

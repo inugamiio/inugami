@@ -16,55 +16,22 @@
  */
 package io.inugami.logs.obfuscator.obfuscators;
 
-import io.inugami.logs.obfuscator.api.LogEventDto;
-import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
-
 import java.util.regex.Pattern;
 
-import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.MASK;
-import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.replaceAll;
-
 @SuppressWarnings({"java:S2068"})
-public class AccessControlExposedHeaderObfuscator implements ObfuscatorSpi {
+public class AccessControlExposedHeaderObfuscator extends AbstractTermObfuscator {
 
 
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
     public static final  String  TERM  = "Access-Control-Expose-Headers";
-    private static final Pattern REGEX = Pattern.compile(new StringBuilder()
-                                                                 .append("(?:")
-                                                                 .append(TERM)
-                                                                 .append(")")
-                                                                 .append("(?:\\s*[")
-                                                                 .append("=|:")
-                                                                 .append("]\\s*)")
-                                                                 .append("(.*)")
-                                                                 .toString(),
-                                                         Pattern.CASE_INSENSITIVE);
+    private static final Pattern REGEX = buildRegex(TERM);
 
-    private final boolean enabled = enabled();
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
     @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    // =========================================================================
-    // API
-    // =========================================================================
-    @Override
-    public boolean accept(final LogEventDto event) {
-        return contains(event.getMessage(), TERM, TERM.toUpperCase(), TERM.toLowerCase());
+    protected String getTerm() {
+        return TERM;
     }
 
     @Override
-    public String obfuscate(final LogEventDto event) {
-        return replaceAll(event.getMessage(), REGEX, value -> MASK);
+    protected Pattern getRegex() {
+        return REGEX;
     }
-
-
 }

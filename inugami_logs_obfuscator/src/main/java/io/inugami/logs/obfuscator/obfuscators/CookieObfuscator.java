@@ -19,12 +19,10 @@ package io.inugami.logs.obfuscator.obfuscators;
 import java.util.regex.Pattern;
 
 @SuppressWarnings({"java:S2068"})
-public class AccessControlAllowHeaderObfuscator extends AbstractTermObfuscator {
+public class CookieObfuscator extends AbstractTermObfuscator {
 
-
-    public static final  String  TERM  = "Access-Control-Allow-Headers";
+    public static final  String  TERM  = "Cookie";
     private static final Pattern REGEX = buildRegex(TERM);
-
 
     @Override
     protected String getTerm() {
