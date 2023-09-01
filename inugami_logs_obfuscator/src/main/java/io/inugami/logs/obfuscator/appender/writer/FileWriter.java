@@ -28,7 +28,7 @@ public class FileWriter implements AppenderWriterStrategy {
 
     private static final long MINUTE = 60000;
 
-    private static final String                        DATE_REGEX   = "(?:\\%d\\{)(yyyy[^}]+)(\\})";
+    private static final String                        DATE_REGEX   = "(?:[{])(yyyy[^}]+)(\\})";
     private static final Pattern                       DATE_PATTERN = Pattern.compile(".*" + DATE_REGEX + ".*");
     private static final ConfigHandler<String, String> CONFIG       = refreshConfig();
 
@@ -101,10 +101,14 @@ public class FileWriter implements AppenderWriterStrategy {
         if (matcher.matches()) {
             final String date        = matcher.group(1);
             final String currentDate = new SimpleDateFormat(date).format(new Date());
-            filePath = filePath.replaceAll(DATE_REGEX, currentDate);
+            filePath = replaceDate(filePath, currentDate);
         }
 
         return CONFIG.applyProperties(filePath);
+    }
+
+    protected static String replaceDate(final String filePath, final String currentDate) {
+        return filePath.replaceAll(DATE_REGEX, currentDate);
     }
 
     protected File createFileIfNotExists(final String filePath) {
