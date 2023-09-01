@@ -57,6 +57,7 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 @Configuration
 public class InugamiMonitoringConfig {
     public static final String INUGAMI_MONITORING_CONFIG = "io.inugami.monitoring.springboot";
+    public static final String INUGAMI                   = "io.inugami";
 
     private MonitoringBootstrap monitoringBootstrap;
 
