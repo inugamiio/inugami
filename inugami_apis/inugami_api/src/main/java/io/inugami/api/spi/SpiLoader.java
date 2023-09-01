@@ -49,7 +49,7 @@ public class SpiLoader {
     private SpiLoaderServiceSPI loaderService = new JavaSpiLoaderServiceSPI();
 
 
-    void reloadLoaderService(SpiLoaderServiceSPI loaderService) {
+    public void reloadLoaderService(SpiLoaderServiceSPI loaderService) {
         if (loaderService != null) {
             this.loaderService = loaderService;
         }

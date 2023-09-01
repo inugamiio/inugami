@@ -5,17 +5,11 @@
     "rollback" : "false",
     "retryable" : "false",
     "exploitationError" : "false",
-    "errorDomain" : "null",
     "errorType" : "technical",
+    "errorStatus" : "0",
     "errorCode" : "ERR-0000",
     "message" : "some error",
-    "url" : "null",
-    "field" : "null",
-    "payload" : "null",
-    "errorStatus" : "0",
-    "errorSubDomain" : "null",
-    "category" : "other",
-    "messageDetail" : "null"
+    "category" : "other"
   },
   "message" : "some error"
 } ]

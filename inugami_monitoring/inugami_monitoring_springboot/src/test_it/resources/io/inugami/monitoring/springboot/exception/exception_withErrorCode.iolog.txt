@@ -1,130 +1,128 @@
-{
-  "level" : "INFO",
-  "loggerName" : "IOLOG",
-  "mdc" : {
-    "traceId" : "0bc8899c-744d-4e9b-ba4c-69d965110cca",
-    "applicationVersion" : "1.0.0",
-    "instanceName" : "",
-    "appUrl" : "http://localhost:42961/user/0",
-    "instanceNumber" : "",
-    "env" : "dev",
-    "appVerb" : "GET",
-    "callType" : "REST",
-    "appUri" : "/user/0",
-    "lifecycle" : "in",
-    "hostname" : "",
-    "correlation_id" : "a1a2b4ef-7eef-4759-93f5-7ce7a01a1c86",
-    "request_id" : "4f48c43c-1260-4656-b22d-8be0c907bdad",
-    "remoteAddress" : "127.0.0.1"
-  },
-  "message" : "[GET] /user/0
-headers :
-	content-type: application/json; charset=UTF-8
-	accept: */*
-	host: localhost:42961
-	connection: Keep-Alive
-	user-agent: Apache-HttpClient/4.5.13 (Java/11.0.2)
-	accept-encoding: gzip,deflate
-payload :
-"
-}
-{
-  "level" : "ERROR",
-  "loggerName" : "IOLOG",
-  "mdc" : {
-    "retryable" : "false",
-    "instanceName" : "",
-    "errorDomain" : "user",
-    "errorType" : "functional",
-    "errorCode" : "USER-1_0",
-    "appVerb" : "GET",
-    "callType" : "REST",
-    "duration" : "19",
-    "lifecycle" : "out",
-    "hostname" : "",
-    "payload" : "null",
-    "httpStatus" : "400",
-    "errorStatus" : "400",
-    "warning" : "",
-    "errorSubDomain" : "read",
-    "remoteAddress" : "127.0.0.1",
-    "traceId" : "0bc8899c-744d-4e9b-ba4c-69d965110cca",
-    "applicationVersion" : "1.0.0",
-    "rollback" : "false",
-    "exploitationError" : "false",
-    "appUrl" : "http://localhost:42961/user/0",
-    "instanceNumber" : "",
-    "env" : "dev",
-    "message" : "null",
-    "url" : "null",
-    "appUri" : "/user/0",
-    "field" : "null",
-    "correlation_id" : "a1a2b4ef-7eef-4759-93f5-7ce7a01a1c86",
-    "category" : "null",
-    "request_id" : "4f48c43c-1260-4656-b22d-8be0c907bdad",
-    "messageDetail" : "null",
-    "status" : "400"
-  },
-  "message" : "[GET] /user/0
-headers :
-	content-type: application/json; charset=UTF-8
-	accept: */*
-	host: localhost:42961
-	connection: Keep-Alive
-	user-agent: Apache-HttpClient/4.5.13 (Java/11.0.2)
-	accept-encoding: gzip,deflate
-payload :
-
-response:
-	status:400
-	datetime:1693138846887
-	duration:19
-	contentType:application/json
-	headers:
-		x-correlation-id: a1a2b4ef-7eef-4759-93f5-7ce7a01a1c86
-		x-conversation-id: a1a2b4ef-7eef-4759-93f5-7ce7a01a1c86
-		x-b3-traceid: 0bc8899c-744d-4e9b-ba4c-69d965110cca
-		Access-Control-Allow-Origin: *
-		Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS
-		Access-Control-Allow-Headers: x-device-identifier, x-correlation-id, x-b3-traceid, x-conversation-id, Authorization, x-device-type, x-device-system, x-device-class, x-device-version, x-device-os-version, x-device-network-type, x-device-network-speed-down, x-device-network-speed-up, x-device-network-speed-latency, clientIp, User-Agent, Accept-Language, country, Warning, errorCode, errorException, errorMessage, errorMessageDetail, x-front-version, x-application, Forwarded, X-Forwarded-For, X-Forwarded-Host, X-Forwarded-Proto, Via, Location, Refresh, From, Host, Referer, Referrer-Policy, Allow, Server, Last-Event-ID, NEL, Ping-From, Ping-To, Report-To, Transfer-Encoding, TE, Trailer, Sec-WebSocket-Key, Sec-WebSocket-Extensions, Sec-WebSocket-Accept, Sec-WebSocket-Protocol, Sec-WebSocket-Version, Date, Early-Data, Link, Retry-After, SourceMap, Upgrade, content-type, authorization
-		Access-Control-Expose-Headers: x-device-identifier, x-correlation-id, x-b3-traceid, x-conversation-id, Authorization, x-device-type, x-device-system, x-device-class, x-device-version, x-device-os-version, x-device-network-type, x-device-network-speed-down, x-device-network-speed-up, x-device-network-speed-latency, clientIp, User-Agent, Accept-Language, country, Warning, errorCode, errorException, errorMessage, errorMessageDetail, x-front-version, x-application, Forwarded, X-Forwarded-For, X-Forwarded-Host, X-Forwarded-Proto, Via, Location, Refresh, From, Host, Referer, Referrer-Policy, Allow, Server, Last-Event-ID, NEL, Ping-From, Ping-To, Report-To, Transfer-Encoding, TE, Trailer, Sec-WebSocket-Key, Sec-WebSocket-Extensions, Sec-WebSocket-Accept, Sec-WebSocket-Protocol, Sec-WebSocket-Version, Date, Early-Data, Link, Retry-After, SourceMap, Upgrade, content-type, authorization
-		Access-Control-Allow-Credentials: true
-		x-warnings:
-		Content-Type: application/json
-		Transfer-Encoding: chunked
-		Date: Sun, 27 Aug 2023 12:20:46 GMT
-		Connection: close
-	payload:{
-  "cause" : {
-    "localizedMessage" : "user's id isn't valid",
-    "message" : "user's id isn't valid",
-    "parameters" : { },
-    "stackTrace" : [ ],
-    "suppressed" : [ ],
-    "title" : "user's id isn't valid",
-    "type" : "about:blank"
-  },
-  "detail" : "with id 0",
-  "localizedMessage" : "user's id isn't valid: with id 0",
-  "message" : "user's id isn't valid: with id 0",
-  "parameters" : {
-    "errorCode" : "USER-1_0",
-    "fields" : [ {
-      "errorCategory" : "GET",
-      "errorCode" : "USER-1_0",
-      "errorType" : "functional",
-      "message" : "user's id isn't valid",
-      "messageDetail" : "with id 0",
-      "name" : "id"
-    } ],
-    "version" : "1.0.0",
-    "errorType" : "functional",
-    "errorCategory" : "GET"
-  },
-  "stackTrace" : [ ],
-  "status" : "BAD_REQUEST",
-  "suppressed" : [ ],
-  "title" : "user's id isn't valid",
-  "type" : "about:blank"
-}
-}
+[
+    {
+        "loggerName":"IOLOG",
+        "level":"INFO",
+        "mdc":{
+            "appClass":"io.inugami.monitoring.springboot.app.UserRestController",
+            "appClassShortName":"UserRestController",
+            "appMethod":"getUserById",
+            "appUri":"/user/0",
+            "appUrl":"http://localhost:35931/user/0",
+            "appVerb":"GET",
+            "applicationVersion":"1.0.0",
+            "callType":"REST",
+            "correlation_id":"4977714b-65ca-4c36-8e67-18f51cf80e8a",
+            "env":"dev",
+            "lifecycle":"in",
+            "remoteAddress":"127.0.0.1",
+            "request_id":"1e2e8924-6128-4d88-a152-9b244184f27d",
+            "traceId":"b5f18d0d-cd53-4420-a275-38b3fe5cb02c"
+        },
+        "message":[
+            "[GET] /user/0",
+            "headers :",
+            "	content-type: application/json; charset=UTF-8",
+            "	accept: */*",
+            "	host: localhost:35931",
+            "	connection: Keep-Alive",
+            "	user-agent: Apache-HttpClient/4.5.13 (Java/11.0.2)",
+            "	accept-encoding: gzip,deflate",
+            "payload :"
+        ]
+    },
+    {
+        "loggerName":"IOLOG",
+        "level":"ERROR",
+        "mdc":{
+            "appClass":"io.inugami.monitoring.springboot.app.UserRestController",
+            "appClassShortName":"UserRestController",
+            "appMethod":"getUserById",
+            "appUri":"/user/0",
+            "appUrl":"http://localhost:35931/user/0",
+            "appVerb":"GET",
+            "applicationVersion":"1.0.0",
+            "callType":"REST",
+            "correlation_id":"4977714b-65ca-4c36-8e67-18f51cf80e8a",
+            "duration":"17",
+            "env":"dev",
+            "errorCode":"USER-1_0",
+            "errorDomain":"user",
+            "errorStatus":"400",
+            "errorSubDomain":"read",
+            "errorType":"functional",
+            "exploitationError":"false",
+            "httpStatus":"400",
+            "lifecycle":"out",
+            "remoteAddress":"127.0.0.1",
+            "request_id":"1e2e8924-6128-4d88-a152-9b244184f27d",
+            "retryable":"false",
+            "rollback":"false",
+            "status":"400",
+            "traceId":"b5f18d0d-cd53-4420-a275-38b3fe5cb02c"
+        },
+        "message":[
+            "[GET] /user/0",
+            "headers :",
+            "	content-type: application/json; charset=UTF-8",
+            "	accept: */*",
+            "	host: localhost:35931",
+            "	connection: Keep-Alive",
+            "	user-agent: Apache-HttpClient/4.5.13 (Java/11.0.2)",
+            "	accept-encoding: gzip,deflate",
+            "payload :",
+            "",
+            "response:",
+            "	status:400",
+            "	datetime:1693603884188",
+            "	duration:17",
+            "	contentType:application/json",
+            "	headers:",
+            "		x-correlation-id: 4977714b-65ca-4c36-8e67-18f51cf80e8a",
+            "		x-conversation-id: 4977714b-65ca-4c36-8e67-18f51cf80e8a",
+            "		x-b3-traceid: b5f18d0d-cd53-4420-a275-38b3fe5cb02c",
+            "		Access-Control-Allow-Origin: *",
+            "		Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS",
+            "		Access-Control-Allow-Headers: xxxxx",
+            "		Access-Control-Expose-Headers: xxxxx",
+            "		Access-Control-Allow-Credentials: true",
+            "		x-warnings: ",
+            "		Content-Type: application/json",
+            "		Transfer-Encoding: chunked",
+            "		Date: Fri, 01 Sep 2023 21:31:23 GMT",
+            "		Connection: close",
+            "	payload:{",
+            "  \"cause\" : {",
+            "    \"localizedMessage\" : \"user's id isn't valid\",",
+            "    \"message\" : \"user's id isn't valid\",",
+            "    \"parameters\" : { },",
+            "    \"stackTrace\" : [ ],",
+            "    \"suppressed\" : [ ],",
+            "    \"title\" : \"user's id isn't valid\",",
+            "    \"type\" : \"about:blank\"",
+            "  },",
+            "  \"detail\" : \"with id 0\",",
+            "  \"localizedMessage\" : \"user's id isn't valid: with id 0\",",
+            "  \"message\" : \"user's id isn't valid: with id 0\",",
+            "  \"parameters\" : {",
+            "    \"errorCode\" : \"USER-1_0\",",
+            "    \"fields\" : [ {",
+            "      \"errorCategory\" : \"GET\",",
+            "      \"errorCode\" : \"USER-1_0\",",
+            "      \"errorType\" : \"functional\",",
+            "      \"message\" : \"user's id isn't valid\",",
+            "      \"messageDetail\" : \"with id 0\",",
+            "      \"name\" : \"id\"",
+            "    } ],",
+            "    \"version\" : \"1.0.0\",",
+            "    \"errorType\" : \"functional\",",
+            "    \"errorCategory\" : \"GET\"",
+            "  },",
+            "  \"stackTrace\" : [ ],",
+            "  \"status\" : \"BAD_REQUEST\",",
+            "  \"suppressed\" : [ ],",
+            "  \"title\" : \"user's id isn't valid\",",
+            "  \"type\" : \"about:blank\"",
+            "}"
+        ]
+    }
+]

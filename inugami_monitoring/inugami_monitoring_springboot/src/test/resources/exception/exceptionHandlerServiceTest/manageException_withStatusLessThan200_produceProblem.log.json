@@ -5,17 +5,11 @@
     "rollback" : "false",
     "retryable" : "false",
     "exploitationError" : "false",
-    "errorDomain" : "null",
-    "errorType" : "technical",
-    "errorCode" : "ERR-0._0",
-    "message" : "null",
-    "url" : "null",
     "field" : "user.email",
-    "payload" : "null",
+    "errorType" : "technical",
     "errorStatus" : "150",
-    "errorSubDomain" : "null",
-    "category" : "user",
-    "messageDetail" : "null"
+    "errorCode" : "ERR-0._0",
+    "category" : "user"
   },
   "message" : ""
 } ]

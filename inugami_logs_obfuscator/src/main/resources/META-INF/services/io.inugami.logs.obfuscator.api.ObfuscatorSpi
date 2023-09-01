@@ -3,3 +3,5 @@ io.inugami.logs.obfuscator.obfuscators.BasicPasswordObfuscator
 io.inugami.logs.obfuscator.obfuscators.XMLPasswordObfuscator
 io.inugami.logs.obfuscator.obfuscators.JsonAuthorizationObfuscator
 io.inugami.logs.obfuscator.obfuscators.BasicAuthorizationObfuscator
+io.inugami.logs.obfuscator.obfuscators.AccessControlAllowHeaderObfuscator
+io.inugami.logs.obfuscator.obfuscators.AccessControlExposedHeaderObfuscator

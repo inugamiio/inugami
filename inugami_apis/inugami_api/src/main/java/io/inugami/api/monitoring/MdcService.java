@@ -42,6 +42,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     private static final String OUT                  = "out";
     private static final String SUCCESS              = "success";
     private static final String ERROR                = "error";
+    public static final  String NULL                 = "null";
 
     private Headers headers;
 
@@ -272,7 +273,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         if (key == null) {
             return this;
         }
-        if (value == null) {
+        if (isNull(value)) {
             remove(key);
             return this;
         }
@@ -280,9 +281,13 @@ public class MdcService implements ApplicationLifecycleSPI {
         return setMdc(key.getCurrentName(), value);
     }
 
+    private static boolean isNull(final Serializable value) {
+        return value == null || NULL.equals(value) || String.valueOf(value).isEmpty();
+    }
+
 
     public MdcService setMdc(final String key, final Serializable value) {
-        if (key == null || (value instanceof String && "null".equalsIgnoreCase(String.valueOf(value)))) {
+        if (isNull(value)) {
             remove(key);
             return this;
         }

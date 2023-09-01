@@ -5,17 +5,11 @@
     "rollback" : "false",
     "retryable" : "false",
     "exploitationError" : "true",
-    "errorDomain" : "null",
-    "errorType" : "technical",
-    "errorCode" : "ERR-0._0",
-    "message" : "null",
-    "url" : "null",
     "field" : "user.email",
-    "payload" : "null",
+    "errorType" : "technical",
     "errorStatus" : "500",
-    "errorSubDomain" : "null",
-    "category" : "user",
-    "messageDetail" : "null"
+    "errorCode" : "ERR-0._0",
+    "category" : "user"
   },
   "message" : ""
 }, {
@@ -24,21 +18,15 @@
   "mdc" : {
     "rollback" : "false",
     "retryable" : "false",
-    "traceId" : "b69e2878-2e17-4877-932a-6f7ef7966c2b",
-    "exploitationError" : "true",
-    "errorDomain" : "null",
-    "errorType" : "technical",
-    "errorCode" : "ERR-0._0",
-    "message" : "null",
-    "url" : "null",
+    "traceId" : "0652a9ad-cd77-43fe-a4cb-e3ecfad49235",
     "errorUrl" : "http://inugami.io/wiki/inugami#ERR-0._0",
+    "exploitationError" : "true",
     "field" : "user.email",
-    "payload" : "null",
+    "errorType" : "technical",
     "errorStatus" : "500",
-    "correlation_id" : "c7067f7e-364c-4a73-a198-92f56cddb2ad",
-    "errorSubDomain" : "null",
-    "category" : "user",
-    "messageDetail" : "null"
+    "errorCode" : "ERR-0._0",
+    "correlation_id" : "89d8fe60-4970-4a41-b322-da7af459fe26",
+    "category" : "user"
   },
   "message" : ""
 } ]

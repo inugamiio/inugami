@@ -1,121 +1,119 @@
-{
-  "level" : "INFO",
-  "loggerName" : "IOLOG",
-  "mdc" : {
-    "traceId" : "1ae2ad73-7f6c-48a5-8c96-d10504050f84",
-    "applicationVersion" : "1.0.0",
-    "instanceName" : "",
-    "appUrl" : "http://localhost:42961/user/42",
-    "instanceNumber" : "",
-    "env" : "dev",
-    "appVerb" : "GET",
-    "callType" : "REST",
-    "appUri" : "/user/42",
-    "lifecycle" : "in",
-    "hostname" : "",
-    "correlation_id" : "23e56a79-1946-4a8c-b24f-6827cd4c9de2",
-    "request_id" : "e3712a18-b78c-4f9b-8744-f136f12b0c09",
-    "remoteAddress" : "127.0.0.1"
-  },
-  "message" : "[GET] /user/42
-headers :
-	content-type: application/json; charset=UTF-8
-	accept: */*
-	host: localhost:42961
-	connection: Keep-Alive
-	user-agent: Apache-HttpClient/4.5.13 (Java/11.0.2)
-	accept-encoding: gzip,deflate
-payload :
-"
-}
-{
-  "level" : "ERROR",
-  "loggerName" : "IOLOG",
-  "mdc" : {
-    "retryable" : "false",
-    "instanceName" : "",
-    "errorType" : "technical",
-    "errorCode" : "ERR-0000",
-    "appVerb" : "GET",
-    "callType" : "REST",
-    "duration" : "149",
-    "lifecycle" : "out",
-    "hostname" : "",
-    "payload" : "null",
-    "httpStatus" : "500",
-    "errorStatus" : "0",
-    "warning" : "",
-    "remoteAddress" : "127.0.0.1",
-    "traceId" : "1ae2ad73-7f6c-48a5-8c96-d10504050f84",
-    "applicationVersion" : "1.0.0",
-    "rollback" : "false",
-    "exploitationError" : "false",
-    "appUrl" : "http://localhost:42961/user/42",
-    "instanceNumber" : "",
-    "env" : "dev",
-    "message" : "null",
-    "url" : "null",
-    "appUri" : "/user/42",
-    "field" : "null",
-    "correlation_id" : "23e56a79-1946-4a8c-b24f-6827cd4c9de2",
-    "category" : "null",
-    "request_id" : "e3712a18-b78c-4f9b-8744-f136f12b0c09",
-    "messageDetail" : "null",
-    "status" : "500"
-  },
-  "message" : "[GET] /user/42
-headers :
-	content-type: application/json; charset=UTF-8
-	accept: */*
-	host: localhost:42961
-	connection: Keep-Alive
-	user-agent: Apache-HttpClient/4.5.13 (Java/11.0.2)
-	accept-encoding: gzip,deflate
-payload :
-
-response:
-	status:500
-	datetime:1693138846657
-	duration:149
-	contentType:application/json
-	headers:
-		x-correlation-id: 23e56a79-1946-4a8c-b24f-6827cd4c9de2
-		x-conversation-id: 23e56a79-1946-4a8c-b24f-6827cd4c9de2
-		x-b3-traceid: 1ae2ad73-7f6c-48a5-8c96-d10504050f84
-		Access-Control-Allow-Origin: *
-		Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS
-		Access-Control-Allow-Headers: x-device-identifier, x-correlation-id, x-b3-traceid, x-conversation-id, Authorization, x-device-type, x-device-system, x-device-class, x-device-version, x-device-os-version, x-device-network-type, x-device-network-speed-down, x-device-network-speed-up, x-device-network-speed-latency, clientIp, User-Agent, Accept-Language, country, Warning, errorCode, errorException, errorMessage, errorMessageDetail, x-front-version, x-application, Forwarded, X-Forwarded-For, X-Forwarded-Host, X-Forwarded-Proto, Via, Location, Refresh, From, Host, Referer, Referrer-Policy, Allow, Server, Last-Event-ID, NEL, Ping-From, Ping-To, Report-To, Transfer-Encoding, TE, Trailer, Sec-WebSocket-Key, Sec-WebSocket-Extensions, Sec-WebSocket-Accept, Sec-WebSocket-Protocol, Sec-WebSocket-Version, Date, Early-Data, Link, Retry-After, SourceMap, Upgrade, content-type, authorization
-		Access-Control-Expose-Headers: x-device-identifier, x-correlation-id, x-b3-traceid, x-conversation-id, Authorization, x-device-type, x-device-system, x-device-class, x-device-version, x-device-os-version, x-device-network-type, x-device-network-speed-down, x-device-network-speed-up, x-device-network-speed-latency, clientIp, User-Agent, Accept-Language, country, Warning, errorCode, errorException, errorMessage, errorMessageDetail, x-front-version, x-application, Forwarded, X-Forwarded-For, X-Forwarded-Host, X-Forwarded-Proto, Via, Location, Refresh, From, Host, Referer, Referrer-Policy, Allow, Server, Last-Event-ID, NEL, Ping-From, Ping-To, Report-To, Transfer-Encoding, TE, Trailer, Sec-WebSocket-Key, Sec-WebSocket-Extensions, Sec-WebSocket-Accept, Sec-WebSocket-Protocol, Sec-WebSocket-Version, Date, Early-Data, Link, Retry-After, SourceMap, Upgrade, content-type, authorization
-		Access-Control-Allow-Credentials: true
-		x-warnings:
-		Content-Type: application/json
-		Transfer-Encoding: chunked
-		Date: Sun, 27 Aug 2023 12:20:46 GMT
-		Connection: close
-	payload:{
-  "cause" : {
-    "localizedMessage" : "unable to connect to cache",
-    "message" : "unable to connect to cache",
-    "parameters" : { },
-    "stackTrace" : [ ],
-    "suppressed" : [ ],
-    "title" : "unable to connect to cache",
-    "type" : "about:blank"
-  },
-  "detail" : "",
-  "localizedMessage" : "unable to connect to cache: ",
-  "message" : "unable to connect to cache: ",
-  "parameters" : {
-    "errorCode" : "ERR-0000",
-    "fields" : [ ],
-    "version" : "1.0.0",
-    "errorType" : "technical",
-    "errorCategory" : "connection"
-  },
-  "stackTrace" : [ ],
-  "status" : "INTERNAL_SERVER_ERROR",
-  "suppressed" : [ ],
-  "title" : "unable to connect to cache",
-  "type" : "about:blank"
-}
-}
+[
+    {
+        "loggerName":"IOLOG",
+        "level":"INFO",
+        "mdc":{
+            "appClass":"io.inugami.monitoring.springboot.app.UserRestController",
+            "appClassShortName":"UserRestController",
+            "appMethod":"getUserById",
+            "appUri":"/user/42",
+            "appUrl":"http://localhost:35931/user/42",
+            "appVerb":"GET",
+            "applicationVersion":"1.0.0",
+            "callType":"REST",
+            "correlation_id":"a1a32d82-be34-46a8-b43a-730f61b124c5",
+            "env":"dev",
+            "lifecycle":"in",
+            "remoteAddress":"127.0.0.1",
+            "request_id":"7a3c98f3-cdf7-44bd-8e60-b59f7424e76e",
+            "traceId":"a8654dcb-6116-404b-989c-f2f0bdf4c932"
+        },
+        "message":[
+            "[GET] /user/42",
+            "headers :",
+            "	content-type: application/json; charset=UTF-8",
+            "	accept: */*",
+            "	host: localhost:35931",
+            "	connection: Keep-Alive",
+            "	user-agent: Apache-HttpClient/4.5.13 (Java/11.0.2)",
+            "	accept-encoding: gzip,deflate",
+            "payload :"
+        ]
+    },
+    {
+        "loggerName":"IOLOG",
+        "level":"ERROR",
+        "mdc":{
+            "appClass":"io.inugami.monitoring.springboot.app.UserRestController",
+            "appClassShortName":"UserRestController",
+            "appMethod":"getUserById",
+            "appUri":"/user/42",
+            "appUrl":"http://localhost:35931/user/42",
+            "appVerb":"GET",
+            "applicationVersion":"1.0.0",
+            "callType":"REST",
+            "correlation_id":"a1a32d82-be34-46a8-b43a-730f61b124c5",
+            "duration":"102",
+            "env":"dev",
+            "errorCode":"ERR-0000",
+            "errorStatus":"0",
+            "errorType":"technical",
+            "exploitationError":"false",
+            "httpStatus":"500",
+            "lifecycle":"out",
+            "remoteAddress":"127.0.0.1",
+            "request_id":"7a3c98f3-cdf7-44bd-8e60-b59f7424e76e",
+            "retryable":"false",
+            "rollback":"false",
+            "status":"500",
+            "traceId":"a8654dcb-6116-404b-989c-f2f0bdf4c932"
+        },
+        "message":[
+            "[GET] /user/42",
+            "headers :",
+            "	content-type: application/json; charset=UTF-8",
+            "	accept: */*",
+            "	host: localhost:35931",
+            "	connection: Keep-Alive",
+            "	user-agent: Apache-HttpClient/4.5.13 (Java/11.0.2)",
+            "	accept-encoding: gzip,deflate",
+            "payload :",
+            "",
+            "response:",
+            "	status:500",
+            "	datetime:1693603883947",
+            "	duration:102",
+            "	contentType:application/json",
+            "	headers:",
+            "		x-correlation-id: a1a32d82-be34-46a8-b43a-730f61b124c5",
+            "		x-conversation-id: a1a32d82-be34-46a8-b43a-730f61b124c5",
+            "		x-b3-traceid: a8654dcb-6116-404b-989c-f2f0bdf4c932",
+            "		Access-Control-Allow-Origin: *",
+            "		Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS",
+            "		Access-Control-Allow-Headers: xxxxx",
+            "		Access-Control-Expose-Headers: xxxxx",
+            "		Access-Control-Allow-Credentials: true",
+            "		x-warnings: ",
+            "		Content-Type: application/json",
+            "		Transfer-Encoding: chunked",
+            "		Date: Fri, 01 Sep 2023 21:31:23 GMT",
+            "		Connection: close",
+            "	payload:{",
+            "  \"cause\" : {",
+            "    \"localizedMessage\" : \"unable to connect to cache\",",
+            "    \"message\" : \"unable to connect to cache\",",
+            "    \"parameters\" : { },",
+            "    \"stackTrace\" : [ ],",
+            "    \"suppressed\" : [ ],",
+            "    \"title\" : \"unable to connect to cache\",",
+            "    \"type\" : \"about:blank\"",
+            "  },",
+            "  \"detail\" : \"\",",
+            "  \"localizedMessage\" : \"unable to connect to cache: \",",
+            "  \"message\" : \"unable to connect to cache: \",",
+            "  \"parameters\" : {",
+            "    \"errorCode\" : \"ERR-0000\",",
+            "    \"fields\" : [ ],",
+            "    \"version\" : \"1.0.0\",",
+            "    \"errorType\" : \"technical\",",
+            "    \"errorCategory\" : \"connection\"",
+            "  },",
+            "  \"stackTrace\" : [ ],",
+            "  \"status\" : \"INTERNAL_SERVER_ERROR\",",
+            "  \"suppressed\" : [ ],",
+            "  \"title\" : \"unable to connect to cache\",",
+            "  \"type\" : \"about:blank\"",
+            "}"
+        ]
+    }
+]
