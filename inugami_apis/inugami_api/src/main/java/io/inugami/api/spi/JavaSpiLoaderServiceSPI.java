@@ -11,14 +11,31 @@ public class JavaSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
     @Override
     public <T> List<T> loadServices(final Class<?> type) {
         final List<T> result = new ArrayList<>();
+
+        ServiceLoader<T> servicesLoaders = null;
         try {
-            final ServiceLoader<T> servicesLoaders = (ServiceLoader<T>) ServiceLoader.load(type);
-            servicesLoaders.forEach(result::add);
+            servicesLoaders = (ServiceLoader<T>) ServiceLoader.load(type);
         } catch (Throwable e) {
-            if (Loggers.DEBUG.isDebugEnabled()) {
-                Loggers.DEBUG.error(e.getMessage(), e);
+            traceExcetion(e);
+        }
+        if (servicesLoaders == null) {
+            return result;
+        }
+
+        for (T service : servicesLoaders) {
+            try {
+                result.add(service);
+            } catch (Throwable e) {
+                traceExcetion(e);
             }
         }
+
         return result;
+    }
+
+    private void traceExcetion(final Throwable e) {
+        if (Loggers.DEBUG.isTraceEnabled()) {
+            Loggers.DEBUG.error(e.getMessage(), e);
+        }
     }
 }
