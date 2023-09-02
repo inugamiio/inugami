@@ -13,11 +13,6 @@
         </configuration>
     </appender>
 
-    <appender name="logTest" class="io.inugami.commons.test.logs.LogTestAppender">
-        <encoder class="io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder">
-            <pattern>%m</pattern>
-        </encoder>
-    </appender>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder">
@@ -34,8 +29,7 @@
 
     <root level="DEBUG">
         <appender-ref ref="json"/>
-
-        <appender-ref ref="logTest"/>
+        <appender-ref ref="STDOUT"/>
     </root>
 
 </configuration>
