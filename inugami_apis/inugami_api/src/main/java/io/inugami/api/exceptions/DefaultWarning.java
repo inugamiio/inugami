@@ -60,6 +60,26 @@ public final class DefaultWarning implements Warning {
             }
             return this;
         }
+
+        public DefaultWarning.DefaultWarningBuilder typeFunctional() {
+            this.warningType = "functional";
+            return this;
+        }
+
+        public DefaultWarning.DefaultWarningBuilder typeTechnical() {
+            this.warningType = "technical";
+            return this;
+        }
+
+        public DefaultWarning.DefaultWarningBuilder typeSecurity() {
+            this.warningType = "security";
+            return this;
+        }
+
+        public DefaultWarning.DefaultWarningBuilder typeFeature() {
+            this.warningType = "feature";
+            return this;
+        }
     }
 
     // =========================================================================
