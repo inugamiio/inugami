@@ -41,6 +41,39 @@ public final class FunctionalUtils {
         return applyIfNotNull(data == null ? defaultValue : data, consumer);
     }
 
+    public static <T> T processIfNull(T object, Supplier<T> supplier) {
+        if (object == null) {
+            return supplier.get();
+        } else {
+            return object;
+        }
+    }
+
+    public static <T> void processIfNull(T object, VoidFunction supplier) {
+        if (object == null) {
+            supplier.process();
+        }
+    }
+
+    public static <T> void processIfNotNull(T object, VoidFunction supplier) {
+        if (object != null) {
+            supplier.process();
+        }
+    }
+
+    public static <T> void processIfNotNull(T object, Consumer<T> supplier) {
+        if (object != null) {
+            supplier.accept(object);
+        }
+    }
+
+    public static <T> T processIfNotNull(T object, Supplier<T> supplier) {
+        if (object == null) {
+            return object;
+        } else {
+            return supplier.get();
+        }
+    }
 
     // =================================================================================================================
     // APPLY IF NULL
@@ -140,7 +173,9 @@ public final class FunctionalUtils {
     }
 
 
-    public static <T extends Object> boolean applyIfChangeAndNotNull(final T ref, final T newValue, final Consumer<T> consumer) {
+    public static <T extends Object> boolean applyIfChangeAndNotNull(final T ref,
+                                                                     final T newValue,
+                                                                     final Consumer<T> consumer) {
         if (hasChange(ref, newValue)) {
             return applyIfNotNull(newValue, consumer);
         }
@@ -155,4 +190,5 @@ public final class FunctionalUtils {
         }
         return !ref.equals(newValue);
     }
+
 }
