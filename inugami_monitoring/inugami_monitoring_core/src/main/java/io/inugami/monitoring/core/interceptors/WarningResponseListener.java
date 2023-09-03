@@ -45,7 +45,7 @@ public class WarningResponseListener implements ResponseListener {
         if (warnings != null) {
             final List<Warning> currentWarning = warnings.getWarnings();
             final Set<String>   warningCodes   = new LinkedHashSet<>();
-            if (currentWarning != null) {
+            if (currentWarning != null && !currentWarning.isEmpty()) {
                 trackWarning(currentWarning);
                 for (Warning warning : currentWarning) {
                     warningCodes.add(warning.getWarningCode());

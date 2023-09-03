@@ -5,17 +5,9 @@
     "rollback" : "false",
     "retryable" : "false",
     "exploitationError" : "false",
-    "errorDomain" : "null",
     "errorType" : "technical",
-    "errorCode" : "err-undefine",
-    "message" : "null",
-    "url" : "null",
-    "field" : "null",
-    "payload" : "null",
     "errorStatus" : "500",
-    "errorSubDomain" : "null",
-    "category" : "null",
-    "messageDetail" : "null"
+    "errorCode" : "err-undefine"
   },
   "message" : "undefined error"
 } ]

@@ -17,6 +17,7 @@
 package io.inugami.commons.test.dto;
 
 import io.inugami.api.functionnals.VoidFunctionWithException;
+import io.inugami.api.monitoring.logs.BasicLogEvent;
 import io.inugami.commons.test.api.LineMatcher;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,21 +25,22 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 @Getter
 @Builder(toBuilder = true)
 @AllArgsConstructor
 public class AssertLogContext {
 
-    private String                    logs;
-    private String                    path;
-    private VoidFunctionWithException process;
-    private List<Class<?>>            classes;
-    private List<String>              patterns;
-    private List<LineMatcher>         lineMatchers;
-    private Boolean                   cleanMdc;
-    private Boolean                   integrationTest;
-
+    private String                                logs;
+    private String                                path;
+    private VoidFunctionWithException             process;
+    private List<Class<?>>                        classes;
+    private List<String>                          patterns;
+    private List<LineMatcher>                     lineMatchers;
+    private Boolean                               cleanMdc;
+    private Boolean                               integrationTest;
+    private Function<List<BasicLogEvent>, String> logRenderer;
 
     public static class AssertLogContextBuilder {
         public AssertLogContextBuilder addClass(final Class<?> classToIntercept) {

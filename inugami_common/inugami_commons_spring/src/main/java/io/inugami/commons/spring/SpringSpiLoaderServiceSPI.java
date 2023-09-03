@@ -1,6 +1,7 @@
 package io.inugami.commons.spring;
 
 import io.inugami.api.spi.JavaSpiLoaderServiceSPI;
+import io.inugami.api.spi.SpiLoader;
 import io.inugami.api.spi.SpiLoaderServiceSPI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -17,6 +18,7 @@ public class SpringSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
 
     static synchronized void initSpringContext(final ConfigurableListableBeanFactory context) {
         SPRING_CONTEXT.set(context);
+        SpiLoader.getInstance().reloadLoaderService(new SpringSpiLoaderServiceSPI());
     }
 
     @Override

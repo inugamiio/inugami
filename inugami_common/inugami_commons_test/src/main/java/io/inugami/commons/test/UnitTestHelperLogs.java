@@ -16,10 +16,9 @@
  */
 package io.inugami.commons.test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.inugami.api.exceptions.UncheckedException;
 import io.inugami.api.functionnals.VoidFunctionWithException;
-import io.inugami.api.marshalling.JsonMarshaller;
+import io.inugami.api.models.JsonBuilder;
 import io.inugami.api.monitoring.MdcService;
 import io.inugami.api.monitoring.logs.BasicLogEvent;
 import io.inugami.api.monitoring.logs.DefaultLogListener;
@@ -29,10 +28,8 @@ import io.inugami.commons.test.dto.AssertLogContext;
 import io.inugami.commons.test.logs.LogTestAppender;
 import lombok.experimental.UtilityClass;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.io.Serializable;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static io.inugami.commons.test.UnitTestHelperText.assertText;
@@ -41,6 +38,11 @@ import static io.inugami.commons.test.UnitTestHelperText.assertText;
 @SuppressWarnings({"java:S112", "java:S5361"})
 @UtilityClass
 public class UnitTestHelperLogs {
+
+    public static final String LINE         = "\n";
+    public static final String WINDOWS_LINE = "\r";
+    public static final String EMPTY        = "";
+    public static final String TAB          = "    ";
 
     static void assertLogs(final VoidFunctionWithException process,
                            final Class<?> objClass,
@@ -161,30 +163,87 @@ public class UnitTestHelperLogs {
         final LineMatcher[] matchers = Optional.ofNullable(context.getLineMatchers())
                                                .orElse(new ArrayList<>())
                                                .toArray(new LineMatcher[]{});
-        List<String> currentLogs = new ArrayList<>();
-        for (BasicLogEvent event : logs) {
-            String json = convertToJson(event).replaceAll("\\n", "\n")
-                                              .replaceAll("\\\\n", "\n")
-                                              .replaceAll("\\t", "\t")
-                                              .replaceAll("\\\\t", "\t")
-                                              .replaceAll("\\\"", "\"")
-                                              .replaceAll("\\\\\"", "\"")
-                                              .replaceAll("}\\\"", "}");
 
+        String log = context.getLogRenderer() == null
+                ? processLogsRendering(logs)
+                : context.getLogRenderer().apply(logs);
 
-            currentLogs.add(json);
-        }
-
-
-        assertText(String.join("\n", currentLogs), logsContent, matchers);
+        assertText(log, logsContent, matchers);
     }
 
-    private static String convertToJson(final BasicLogEvent event) {
-        try {
-            return JsonMarshaller.getInstance().getIndentedObjectMapper().writeValueAsString(event);
-        } catch (JsonProcessingException e) {
-            return "";
+    private static String processLogsRendering(final List<BasicLogEvent> logs) {
+        JsonBuilder json = new JsonBuilder();
+        json.openList().line();
+
+        final Iterator<BasicLogEvent> iterator = Optional.ofNullable(logs)
+                                                         .orElse(new ArrayList<>())
+                                                         .iterator();
+
+        while (iterator.hasNext()) {
+            final BasicLogEvent log = iterator.next();
+            json.write(processLogRendering(log));
+            if (iterator.hasNext()) {
+                json.addSeparator().line();
+            }
         }
+
+        json.line().closeList();
+        return json.toString();
     }
+
+    private String processLogRendering(final BasicLogEvent log) {
+        JsonBuilder json = new JsonBuilder();
+        json.write(TAB).openObject().line();
+
+        json.write(TAB).write(TAB).addField("loggerName").valueQuot(log.getLoggerName()).addSeparator().line();
+        json.write(TAB).write(TAB).addField("level").valueQuot(log.getLevel()).addSeparator().line();
+
+        final Map<String, Serializable> mdc = Optional.ofNullable(log.getMdc()).orElse(new HashMap<>());
+        if (mdc.isEmpty()) {
+            json.write(TAB).write(TAB).addField("mdc").openObject().closeObject().line();
+        } else {
+            json.write(TAB).write(TAB).addField("mdc").openObject().line();
+
+            final List<String> keys = new ArrayList<>(mdc.keySet());
+            Collections.sort(keys);
+            final Iterator<String> mdcIterator = keys.iterator();
+
+            while (mdcIterator.hasNext()) {
+                final String key = mdcIterator.next();
+                json.write(TAB).write(TAB).write(TAB).addField(key).valueQuot(mdc.get(key));
+                if (mdcIterator.hasNext()) {
+                    json.addSeparator().line();
+                }
+            }
+            json.line().write(TAB).write(TAB).closeObject().addSeparator().line();
+        }
+
+        json.write(TAB).write(TAB).addField("message");
+        if (log.getMessage().contains(LINE)) {
+            final Iterator<String> linesIterator = Arrays.asList(log.getMessage().split(LINE)).iterator();
+            json.openList().line();
+            while (linesIterator.hasNext()) {
+                final String line = linesIterator.next();
+                json.write(TAB).write(TAB).write(TAB).valueQuot(cleanLine(line));
+                if (linesIterator.hasNext()) {
+                    json.addSeparator().line();
+                }
+            }
+            json.line()
+                .write(TAB).write(TAB).closeList()
+                .line();
+        } else {
+            json.valueQuot(cleanLine(log.getMessage()));
+            json.line();
+        }
+
+        json.write(TAB).closeObject();
+        return json.toString();
+    }
+
+    private static String cleanLine(final String message) {
+        return message == null ? null : message.replaceAll("\"", "\\\\\"").replaceAll(WINDOWS_LINE, EMPTY);
+    }
+
 
 }

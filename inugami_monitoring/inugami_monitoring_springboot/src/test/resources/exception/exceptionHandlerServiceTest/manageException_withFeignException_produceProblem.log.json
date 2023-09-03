@@ -5,18 +5,11 @@
     "rollback" : "false",
     "retryable" : "false",
     "exploitationError" : "false",
-    "errorDomain" : "null",
-    "errorType" : "technical",
-    "errorCode" : "feign-client-401",
-    "message" : "bad credentials",
-    "url" : "null",
     "partner" : "feign-client",
-    "field" : "null",
-    "payload" : "null",
+    "errorType" : "technical",
     "errorStatus" : "401",
-    "errorSubDomain" : "null",
-    "category" : "null",
-    "messageDetail" : "null"
+    "errorCode" : "feign-client-401",
+    "message" : "bad credentials"
   },
   "message" : "bad credentials"
 } ]

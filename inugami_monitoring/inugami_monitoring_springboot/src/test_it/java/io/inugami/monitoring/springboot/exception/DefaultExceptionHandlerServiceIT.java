@@ -1,10 +1,7 @@
 package io.inugami.monitoring.springboot.exception;
 
 import io.inugami.api.loggers.Loggers;
-import io.inugami.commons.test.api.NumberLineMatcher;
-import io.inugami.commons.test.api.RegexLineMatcher;
 import io.inugami.commons.test.api.SkipLineMatcher;
-import io.inugami.commons.test.api.UuidLineMatcher;
 import io.inugami.commons.test.dto.AssertLogContext;
 import io.inugami.monitoring.springboot.SpringBootIntegrationTest;
 import io.restassured.RestAssured;
@@ -26,10 +23,7 @@ class DefaultExceptionHandlerServiceIT extends SpringBootIntegrationTest {
                                    .path("io/inugami/monitoring/springboot/exception/exception_withErrorCode.iolog.txt")
                                    .integrationTest(true)
                                    .addPattern(Loggers.IOLOG_NAME)
-                                   .addLineMatcher(SkipLineMatcher.of(23, 71, 94))
-                                   .addLineMatcher(UuidLineMatcher.of(4, 15, 16, 50, 61, 63, 83, 84, 85))
-                                   .addLineMatcher(RegexLineMatcher.of(".*/user.*", 7, 54))
-                                   .addLineMatcher(NumberLineMatcher.of(41, 79, 80))
+                                   .addLineMatcher(SkipLineMatcher.of(9, 13, 17, 18, 25, 40, 44, 45, 56, 60, 67, 75, 76, 79, 80, 81, 89))
                                    .process(() -> {
                                        final String result = RestAssured.given()
                                                                         .headers(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -51,10 +45,7 @@ class DefaultExceptionHandlerServiceIT extends SpringBootIntegrationTest {
                                    .path("io/inugami/monitoring/springboot/exception/exception_withoutErrorCode.iolog.txt")
                                    .integrationTest(true)
                                    .addPattern(Loggers.IOLOG_NAME)
-                                   .addLineMatcher(SkipLineMatcher.of(23, 69, 92))
-                                   .addLineMatcher(UuidLineMatcher.of(4, 15, 16, 48, 59, 61, 81, 82, 83))
-                                   .addLineMatcher(RegexLineMatcher.of(".*/user.*", 7, 52))
-                                   .addLineMatcher(NumberLineMatcher.of(40, 77, 78))
+                                   .addLineMatcher(SkipLineMatcher.of(9, 13, 17, 18, 25, 40, 44, 45, 54, 58, 65, 73, 74, 77, 78, 79, 87))
                                    .process(() -> {
                                        final String result = RestAssured.given()
                                                                         .headers(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)

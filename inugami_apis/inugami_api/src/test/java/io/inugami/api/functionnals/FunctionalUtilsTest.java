@@ -19,6 +19,35 @@ class FunctionalUtilsTest {
     public static final String MAP_HELLO  = "{key=hello}";
 
     // =================================================================================================================
+    // PROCESS
+    // =================================================================================================================
+    @Test
+    void processIfNull_nominal() {
+        final List<String> values = new ArrayList<>();
+        processIfNull(null, () -> values.add("nullValue"));
+        processIfNull("non null", () -> values.add("nonNullValue"));
+        assertThat(values).hasToString("[nullValue]");
+    }
+
+    @Test
+    void processIfNotNull_nominal() {
+        final List<String> values = new ArrayList<>();
+        processIfNotNull(null, () -> values.add("nullValue"));
+        processIfNotNull("non null", () -> values.add("nonNullValue"));
+        assertThat(values).hasToString("[nonNullValue]");
+    }
+
+
+    @Test
+    void processIfNotNull_consumer() {
+        final List<String> values    = new ArrayList<>();
+        String             nullValue = null;
+        processIfNotNull(nullValue, values::add);
+        processIfNotNull("non null", values::add);
+        assertThat(values).hasToString("[non null]");
+    }
+
+    // =================================================================================================================
     // APPLY IF NOT NULL
     // =================================================================================================================
     @Test

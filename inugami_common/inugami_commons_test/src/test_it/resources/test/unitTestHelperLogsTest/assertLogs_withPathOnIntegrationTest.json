@@ -1,6 +1,11 @@
-{
-  "level" : "INFO",
-  "loggerName" : "io.inugami.commons.test.UnitTestHelperLogsTest$Service",
-  "mdc" : { },
-  "message" : "hello"
-}
+[
+  {
+    "loggerName":"io.inugami.commons.test.UnitTestHelperLogsTest$Service",
+    "level":"INFO",
+    "mdc":{
+      "appSubService":"sayHello",
+      "service":"Service"
+    },
+    "message":"hello"
+  }
+]

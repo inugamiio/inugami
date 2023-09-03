@@ -17,8 +17,10 @@
 package io.inugami.logs.obfuscator.encoder;
 
 import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.PatternLayout;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Context;
+import ch.qos.logback.core.Layout;
 import ch.qos.logback.core.pattern.PatternLayoutEncoderBase;
 import ch.qos.logback.core.spi.ContextAware;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -45,6 +47,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 
@@ -57,6 +60,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     private static final String                    MESSAGE        = "message";
     private static final String                    LINE           = "\n";
     private static final Clock                     CLOCK          = Clock.systemUTC();
+    public static final  String                    NO_FORMATTER   = "%m";
     private              List<ObfuscatorSpi>       obfuscators;
     private              List<LoggerMdcMappingSPI> mdcMappers;
     private              List<MdcDynamicFieldSPI>  mdcDynamicFields;
@@ -71,8 +75,11 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     private static final String                    STACKTRACE     = "stacktrace";
     private              AppenderConfiguration     configuration;
 
+    private Function<ILoggingEvent, String> messageEncoder = null;
+    private PatternLayout                   patternLayout  = null;
 
     private Map<String, Serializable> additionalFieldsData = null;
+    private String                    pattern;
 
     public ObfuscatorEncoder() {
         onContextRefreshed(null);
@@ -127,16 +134,24 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     private LogEventDto buildEvent(final ILoggingEvent event) {
         final LogEventDto.LogEventDtoBuilder builder = LogEventDto.builder();
 
+        if (messageEncoder == null) {
+            initMessageEncoder();
+        }
+        String message = messageEncoder.apply(event);
+        if (message != null) {
+            message = message.trim();
+        }
         builder.timestamp(event.getTimeStamp())
                .threadName(event.getThreadName())
                .loggerName(event.getLoggerName())
-               .message(event.getFormattedMessage())
+               .message(message)
                .stacktrace(event.getCallerData())
                .mdc(cloneMap(event.getMDCPropertyMap(), event.getMdc()));
 
 
         return builder.build();
     }
+
 
     private Map<String, Serializable> cloneMap(final Map<String, String> mdcPropertyMap,
                                                final Map<String, String> mdc) {
@@ -318,6 +333,19 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
         this.additionalFieldsData = result == null ? new LinkedHashMap<>() : result;
     }
 
+    private void initMessageEncoder() {
+        if (layout != null) {
+            messageEncoder = (event) -> getLayout().doLayout(event);
+        } else if (pattern != null && !(NO_FORMATTER.equals(pattern))) {
+            patternLayout = new PatternLayout();
+            patternLayout.setPattern(pattern);
+            patternLayout.setContext(this.getContext());
+            patternLayout.start();
+            messageEncoder = (event) -> patternLayout.doLayout(event);
+        } else {
+            messageEncoder = (event) -> event.getFormattedMessage();
+        }
+    }
     // =========================================================================
     // GETTERS / SETTERS
     // =========================================================================
@@ -328,5 +356,25 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
 
     public void setConfiguration(final AppenderConfiguration configuration) {
         this.configuration = configuration;
+    }
+
+    @Override
+    public String getPattern() {
+        return pattern;
+    }
+
+    @Override
+    public void setPattern(final String pattern) {
+        this.pattern = pattern;
+    }
+
+    @Override
+    public Layout<ILoggingEvent> getLayout() {
+        return layout;
+    }
+
+    @Override
+    public void setLayout(final Layout<ILoggingEvent> layout) {
+        this.layout = layout;
     }
 }

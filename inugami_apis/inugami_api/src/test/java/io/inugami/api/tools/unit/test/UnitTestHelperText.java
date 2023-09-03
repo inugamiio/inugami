@@ -2,7 +2,6 @@ package io.inugami.api.tools.unit.test;
 
 import io.inugami.api.exceptions.Asserts;
 import io.inugami.api.exceptions.UncheckedException;
-import io.inugami.api.loggers.Loggers;
 import io.inugami.api.models.JsonBuilder;
 import io.inugami.api.tools.ConsoleColors;
 import io.inugami.api.tools.unit.test.api.DefaultLineMatcher;
@@ -10,10 +9,12 @@ import io.inugami.api.tools.unit.test.api.LineMatcher;
 import io.inugami.api.tools.unit.test.api.SkipLineMatcher;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UnitTestHelperText {
 
@@ -60,7 +61,7 @@ public final class UnitTestHelperText {
 
         try {
             if (jsonValue.length != refLines.length) {
-                Loggers.DEBUG.error(renderDiff(jsonValue, refLines));
+                log.error(renderDiff(jsonValue, refLines));
             }
             Asserts.assertTrue(
                     String.format("reference and json have not same size : %s,%s", jsonValue.length, refLines.length),
@@ -79,9 +80,10 @@ public final class UnitTestHelperText {
                 continue;
             }
             if (!matcher.match(i, valueLine, refLine)) {
-                Loggers.DEBUG.error(renderDiff(jsonValue, refLines));
+                log.error(renderDiff(jsonValue, refLines));
                 throw new AssertTextException(
-                        String.format("[%s][%s] %s != %s", matcher.getClass(), i + 1, jsonValue[i].trim(), refLines[i].trim()));
+                        String.format("[%s][%s] %s != %s", matcher.getClass(),
+                                      i + 1, jsonValue[i].trim(), refLines[i].trim()));
             }
 
         }

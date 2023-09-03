@@ -126,7 +126,7 @@ class DefaultDefaultExceptionHandlerServiceTest {
                 ),
                 "exception/exceptionHandlerServiceTest/manageException_withExploitationException_produceProblem.json",
                 "exception/exceptionHandlerServiceTest/manageException_withExploitationException_produceProblem.json.log.json",
-                UuidLineMatcher.of(26, 37));
+                UuidLineMatcher.of(21, 28));
     }
 
     @Test
@@ -144,7 +144,7 @@ class DefaultDefaultExceptionHandlerServiceTest {
                 ),
                 "exception/exceptionHandlerServiceTest/manageException_withoutDetail_produceProblem.json",
                 "exception/exceptionHandlerServiceTest/manageException_withoutDetail_produceProblem.json.log.json",
-                UuidLineMatcher.of(26, 37));
+                UuidLineMatcher.of(21, 28));
     }
 
     @Test
@@ -161,7 +161,7 @@ class DefaultDefaultExceptionHandlerServiceTest {
                 ),
                 "exception/exceptionHandlerServiceTest/manageException_withoutMessageDetail_produceProblem.json",
                 "exception/exceptionHandlerServiceTest/manageException_withoutMessageDetail_produceProblem.log.json",
-                UuidLineMatcher.of(26, 37));
+                UuidLineMatcher.of(20, 27));
     }
 
     @Test

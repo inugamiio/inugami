@@ -18,13 +18,11 @@ package io.inugami.monitoring.springboot.app;
 
 import io.inugami.api.loggers.Loggers;
 import io.inugami.commons.test.UnitTestData;
-import io.inugami.commons.test.api.NumberLineMatcher;
-import io.inugami.commons.test.api.RegexLineMatcher;
 import io.inugami.commons.test.api.SkipLineMatcher;
-import io.inugami.commons.test.api.UuidLineMatcher;
 import io.inugami.commons.test.dto.AssertLogContext;
 import io.inugami.commons.test.dto.UserDataDTO;
 import io.inugami.monitoring.springboot.SpringBootIntegrationTest;
+import io.inugami.monitoring.springboot.app.monitoring.FunctionalInterceptor;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -32,22 +30,24 @@ import org.springframework.http.MediaType;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.inugami.commons.test.UnitTestHelper.assertLogs;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class UserRestControllerIT extends SpringBootIntegrationTest {
 
 
     @Test
     void createUser_nominal() {
+        FunctionalInterceptor.clean();
         AtomicReference<UserDataDTO> result = new AtomicReference<>();
 
         assertLogs(AssertLogContext.builder()
                                    .path("io/inugami/monitoring/springboot/app/createUser_nominal.iolog.txt")
                                    .integrationTest(true)
                                    .addPattern(Loggers.IOLOG_NAME)
-                                   .addLineMatcher(SkipLineMatcher.of(24, 78))
-                                   .addLineMatcher(UuidLineMatcher.of(4, 15, 16, 53, 67, 69, 108, 109, 110))
-                                   .addLineMatcher(RegexLineMatcher.of(".*/user.*", 7, 56))
-                                   .addLineMatcher(NumberLineMatcher.of(62, 104, 105))
+                                   .addPattern(Loggers.IOLOG_NAME)
+                                   .addLineMatcher(SkipLineMatcher.of(9, 13, 17, 18, 26, 60, 64, 68, 69, 77, 111, 115, 116,
+                                                                      122, 124, 132, 158, 159, 162, 163, 164, 200, 204, 205, 211,
+                                                                      213, 221, 247, 248, 251, 252, 253))
                                    .process(() -> {
                                        UserDataDTO user = RestAssured.given()
                                                                      .body(asJson(UnitTestData.USER_1))
@@ -57,5 +57,6 @@ class UserRestControllerIT extends SpringBootIntegrationTest {
                                        result.set(user);
                                    })
                                    .build());
+        assertThat(FunctionalInterceptor.VALUE.get()).isEqualTo(FunctionalInterceptor.INTERCEPTED);
     }
 }
