@@ -41,14 +41,6 @@ public final class FunctionalUtils {
         return applyIfNotNull(data == null ? defaultValue : data, consumer);
     }
 
-    public static <T> T processIfNull(T object, Supplier<T> supplier) {
-        if (object == null) {
-            return supplier.get();
-        } else {
-            return object;
-        }
-    }
-
     public static <T> void processIfNull(T object, VoidFunction supplier) {
         if (object == null) {
             supplier.process();
@@ -67,13 +59,6 @@ public final class FunctionalUtils {
         }
     }
 
-    public static <T> T processIfNotNull(T object, Supplier<T> supplier) {
-        if (object == null) {
-            return object;
-        } else {
-            return supplier.get();
-        }
-    }
 
     // =================================================================================================================
     // APPLY IF NULL
