@@ -21,13 +21,17 @@ public class JavaSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
         if (servicesLoaders == null) {
             return result;
         }
-
-        for (T service : servicesLoaders) {
-            try {
-                result.add(service);
-            } catch (Throwable e) {
-                traceExcetion(e);
+        
+        try {
+            for (T service : servicesLoaders) {
+                try {
+                    result.add(service);
+                } catch (Throwable e) {
+                    traceExcetion(e);
+                }
             }
+        } catch (Throwable e) {
+            traceExcetion(e);
         }
 
         return result;
