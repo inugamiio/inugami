@@ -241,7 +241,7 @@
         <org-mockito.mockito-core>2.0.31-beta</org-mockito.mockito-core>
 
         <!--[ Data base drivers ]++++++++++++++++++++++++++++++++++++++++++++-->
-        <com.h2database.h2.version>2.1.210</com.h2database.h2.version>
+        <com.h2database.h2.version>2.2.220</com.h2database.h2.version>
 
         <com.sun.xml.bind.version>4.0.2</com.sun.xml.bind.version>
         <jaxb.version>2.3.0</jaxb.version>
