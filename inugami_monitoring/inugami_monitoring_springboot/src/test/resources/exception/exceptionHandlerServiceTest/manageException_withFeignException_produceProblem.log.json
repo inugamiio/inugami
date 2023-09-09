@@ -11,5 +11,5 @@
     "errorCode" : "feign-client-401",
     "message" : "bad credentials"
   },
-  "message" : "bad credentials"
+  "message" : "bad credentials\n"
 } ]

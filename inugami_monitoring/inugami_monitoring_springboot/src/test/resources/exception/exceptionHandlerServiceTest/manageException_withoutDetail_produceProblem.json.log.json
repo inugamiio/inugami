@@ -12,23 +12,23 @@
     "category" : "user",
     "messageDetail" : "invalid email address"
   },
-  "message" : ""
+  "message" : "\n"
 }, {
   "level" : "ERROR",
   "loggerName" : "XLLOG",
   "mdc" : {
     "rollback" : "false",
     "retryable" : "false",
-    "traceId" : "9cc02d60-3488-4379-abd5-7b1e1078fc1a",
+    "traceId" : "b353eae7-e6fa-43c7-932d-bdbb225aaa04",
     "errorUrl" : "http://inugami.io/wiki/inugami#ERR-0._0",
     "exploitationError" : "true",
     "field" : "user.email",
     "errorType" : "technical",
     "errorStatus" : "500",
     "errorCode" : "ERR-0._0",
-    "correlation_id" : "060c99e6-b795-4404-9f56-4a2200a8bced",
+    "correlation_id" : "0d631a6d-aebc-4265-99ef-668ce1104dbf",
     "category" : "user",
     "messageDetail" : "invalid email address"
   },
-  "message" : "null : invalid email address"
+  "message" : "null : invalid email address\n"
 } ]
