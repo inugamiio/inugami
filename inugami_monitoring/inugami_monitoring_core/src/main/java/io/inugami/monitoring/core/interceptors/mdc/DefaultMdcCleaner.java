@@ -14,25 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.monitoring.springboot;
+package io.inugami.monitoring.core.interceptors.mdc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.inugami.api.marshalling.JsonMarshaller;
-import io.inugami.monitoring.springboot.config.InugamiMonitoringConfig;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Primary;
+import io.inugami.api.monitoring.MdcCleanerSPI;
+import io.inugami.api.monitoring.MdcService;
 
-@ComponentScan(basePackages = {
-        InugamiMonitoringConfig.INUGAMI
-})
-@SpringBootApplication
-public class SpringBootITApplication {
-
-    @Primary
-    @Bean
-    public ObjectMapper buildObjectMapper() {
-        return JsonMarshaller.getInstance().getIndentedObjectMapper();
+public class DefaultMdcCleaner implements MdcCleanerSPI {
+    @Override
+    public void clean() {
+        MdcService.getInstance().clear();
     }
 }

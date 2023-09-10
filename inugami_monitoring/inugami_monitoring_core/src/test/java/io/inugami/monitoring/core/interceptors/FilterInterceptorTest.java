@@ -35,7 +35,7 @@ class FilterInterceptorTest {
     @Test
     void resolveError_withoutError_shouldReturnNull() {
         final FilterInterceptor filter = buildFilter();
-        assertThat(filter.resolveError(null)).isNull();
+        assertThat(filter.resolveError(null, null)).isNull();
     }
 
     @Test
@@ -45,7 +45,7 @@ class FilterInterceptorTest {
                   .errorCode(DefaultErrorCode.buildUndefineError());
 
         final FilterInterceptor filter = buildFilter();
-        final ErrorResult       error  = filter.resolveError(null);
+        final ErrorResult       error  = filter.resolveError(null, null);
         assertThat(error).isNotNull();
         assertThat(error.getErrorCode()).isEqualTo("err-undefine");
         assertThat(error.getHttpCode()).isEqualTo(500);

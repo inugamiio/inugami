@@ -30,6 +30,11 @@
     ======================================================================== -->
     <dependencies>
         <dependency>
+            <groupId>io.inugami</groupId>
+            <artifactId>inugami_api_interfaces</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>

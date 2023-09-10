@@ -40,7 +40,9 @@ public class FileWriter implements AppenderWriterStrategy {
     public boolean accept(final AppenderConfiguration configuration) {
         if (configuration.getFile() != null) {
             this.configuration = configuration;
-            forceNewLine = this.configuration.isForceNewLine();
+            forceNewLine = this.configuration.getForceNewLine() == null
+                    ? true
+                    : Boolean.parseBoolean(this.configuration.getForceNewLine());
             refreshConfig();
             return true;
         }

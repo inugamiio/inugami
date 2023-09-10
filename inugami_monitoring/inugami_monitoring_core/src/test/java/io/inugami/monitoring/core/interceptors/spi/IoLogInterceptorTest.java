@@ -7,20 +7,15 @@ import io.inugami.api.monitoring.MdcService;
 import io.inugami.api.monitoring.data.ResponseData;
 import io.inugami.api.monitoring.data.ResquestData;
 import io.inugami.api.monitoring.exceptions.ErrorResult;
-import io.inugami.api.monitoring.logs.BasicLogEvent;
-import io.inugami.api.monitoring.logs.DefaultLogListener;
-import io.inugami.api.monitoring.logs.LogListener;
-import io.inugami.commons.test.logs.LogTestAppender;
+import io.inugami.commons.test.dto.AssertLogContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.List;
 
-import static io.inugami.commons.test.UnitTestHelper.assertTextRelative;
+import static io.inugami.commons.test.UnitTestHelper.assertLogs;
 
 class IoLogInterceptorTest {
 
@@ -46,8 +41,7 @@ class IoLogInterceptorTest {
                                                  .addHeader("app", "myApplication")
                                                  .content("{\"name\":\"John Smith\"}")
                                                  .build();
-        assertTextRelative(processOnBegin(request),
-                           "monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_nominal.json");
+        processOnBegin(request, "monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_nominal.json");
     }
 
 
@@ -60,8 +54,7 @@ class IoLogInterceptorTest {
                                                  .content("{\"name\":\"John Smith\"}")
                                                  .build();
 
-        assertTextRelative(processOnBegin(request),
-                           "monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_withoutContextPath.json");
+        processOnBegin(request, "monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_withoutContextPath.json");
     }
 
     @Test
@@ -74,8 +67,7 @@ class IoLogInterceptorTest {
                                                  .content("{\"name\":\"John Smith\"}")
                                                  .build();
 
-        assertTextRelative(processOnBegin(request),
-                           "monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_withContextPathInUri.json");
+        processOnBegin(request, "monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_withContextPathInUri.json");
     }
 
     // =================================================================================================================
@@ -104,8 +96,7 @@ class IoLogInterceptorTest {
                                                                .message("account need to be confirmed ")
                                                                .messageDetail("some detail")
                                                                .build());
-        assertTextRelative(processOnDone(request, responseData, null),
-                           "monitoring/core/interceptors/spi/ioLogInterceptor/onDone_nominal.json");
+        processOnDone(request, responseData, null, "monitoring/core/interceptors/spi/ioLogInterceptor/onDone_nominal.json");
     }
 
     @Test
@@ -123,17 +114,17 @@ class IoLogInterceptorTest {
                                                       .contentType("UTF-8")
                                                       .addHeader("x-correlation-id", UID)
                                                       .build();
-        assertTextRelative(processOnDone(request, responseData, ErrorResult.builder()
-                                                                           .exception(new NullPointerException("oups"))
-                                                                           .message("Null pointer occurs")
-                                                                           .errorType("technic")
-                                                                           .errorCode("ERR-0")
-                                                                           .cause("NPE")
-                                                                           .fallBack("{}")
-                                                                           .stack("io.inugami....")
 
-                                                                           .build()),
-                           "monitoring/core/interceptors/spi/ioLogInterceptor/onDone_withError.json");
+        processOnDone(request, responseData, ErrorResult.builder()
+                                                        .exception(new NullPointerException("oups"))
+                                                        .message("Null pointer occurs")
+                                                        .errorType("technic")
+                                                        .errorCode("ERR-0")
+                                                        .cause("NPE")
+                                                        .fallBack("{}")
+                                                        .stack("io.inugami....")
+                                                        .build(),
+                      "monitoring/core/interceptors/spi/ioLogInterceptor/onDone_withError.json");
     }
 
 
@@ -144,24 +135,25 @@ class IoLogInterceptorTest {
         return new IoLogInterceptor();
     }
 
-    private List<BasicLogEvent> processOnBegin(final ResquestData request) {
-        final List<BasicLogEvent> logs     = new ArrayList<>();
-        final LogListener         listener = new DefaultLogListener(Loggers.IOLOG_NAME, logs::add);
-        LogTestAppender.register(listener);
-        buildInterceptor().onBegin(request);
-        LogTestAppender.removeListener(listener);
-        return logs;
+    private void processOnBegin(final ResquestData request, final String path) {
+        assertLogs(AssertLogContext.builder()
+                                   .process(() -> buildInterceptor().onBegin(request))
+                                   .addPattern(Loggers.IOLOG_NAME)
+                                   .path(path)
+                                   .build());
+
     }
 
-    private List<BasicLogEvent> processOnDone(final ResquestData request,
-                                              final ResponseData responseData,
-                                              final ErrorResult error) {
-        final List<BasicLogEvent> logs     = new ArrayList<>();
-        final LogListener         listener = new DefaultLogListener(Loggers.IOLOG_NAME, logs::add);
-        LogTestAppender.register(listener);
-        buildInterceptor().onDone(request, responseData, error);
-        LogTestAppender.removeListener(listener);
-        return logs;
+    private void processOnDone(final ResquestData request,
+                               final ResponseData responseData,
+                               final ErrorResult error,
+                               final String path) {
+
+        assertLogs(AssertLogContext.builder()
+                                   .process(() -> buildInterceptor().onDone(request, responseData, error))
+                                   .addPattern(Loggers.IOLOG_NAME)
+                                   .path(path)
+                                   .build());
     }
 
 }

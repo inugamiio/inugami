@@ -92,7 +92,9 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     public ObfuscatorEncoder(final AppenderConfiguration configuration) {
         this.configuration = configuration;
         onContextRefreshed(null);
-        forceNewLine = this.configuration.isForceNewLine();
+        forceNewLine = this.configuration.getForceNewLine() == null
+                ? true
+                : Boolean.parseBoolean(this.configuration.getForceNewLine());
 
     }
 

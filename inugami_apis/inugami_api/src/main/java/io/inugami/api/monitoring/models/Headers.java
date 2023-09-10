@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Setter
 @Getter
-public class Headers {
+public class Headers implements IHeaders {
     public static final String X_DEVICE_IDENTIFIER            = "x-device-identifier";
     public static final String X_CORRELATION_ID               = "x-correlation-id";
     public static final String X_CONVERSATION_ID              = "x-conversation-id";

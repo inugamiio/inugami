@@ -40,8 +40,28 @@ class UserRestControllerIT extends SpringBootIntegrationTest {
         FunctionalInterceptor.clean();
         AtomicReference<UserDataDTO> result = new AtomicReference<>();
 
+
         assertLogs(AssertLogContext.builder()
-                                   .path("io/inugami/monitoring/springboot/app/createUser_nominal.iolog.txt")
+                                   .path("io/inugami/monitoring/springboot/app/createUser_nominal.iolog.1.txt")
+                                   .integrationTest(true)
+                                   .addPattern(Loggers.IOLOG_NAME)
+                                   .addPattern(Loggers.IOLOG_NAME)
+                                   .addLineMatcher(SkipLineMatcher.of(9, 13, 17, 18, 26, 59, 63, 67, 68, 76, 109, 113, 114,
+                                                                      126, 130, 138, 163, 164, 167, 168, 169, 177, 221, 225, 226,
+                                                                      238, 242, 250, 275, 276, 279, 280, 281, 289))
+                                   .process(() -> {
+                                       RestAssured.given()
+                                                  .body(asJson(UnitTestData.USER_1.toBuilder()
+                                                                                  .email(null)
+                                                                                  .build()))
+                                                  .headers(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                                  .post("/user");
+                                   })
+                                   .build());
+
+
+        assertLogs(AssertLogContext.builder()
+                                   .path("io/inugami/monitoring/springboot/app/createUser_nominal.iolog.2.txt")
                                    .integrationTest(true)
                                    .addPattern(Loggers.IOLOG_NAME)
                                    .addPattern(Loggers.IOLOG_NAME)

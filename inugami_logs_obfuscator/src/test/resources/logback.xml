@@ -4,6 +4,7 @@
     <appender name="json" class="io.inugami.logs.obfuscator.appender.JsonAppender">
         <configuration>
             <encodeAsJson>true</encodeAsJson>
+            <forceNewLine>true</forceNewLine>
             <file>target/log.json</file>
             <additionalFields>
                 {
@@ -16,6 +17,9 @@
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder">
+            <configuration>
+                <forceNewLine>true</forceNewLine>
+            </configuration>
             <pattern>%d{dd/MM HH:mm:ss} %5p [%c:%L] - %m%n</pattern>
         </encoder>
     </appender>

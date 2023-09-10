@@ -14,25 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.monitoring.springboot;
+package io.inugami.monitoring.core.interceptors.mdc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.inugami.api.marshalling.JsonMarshaller;
-import io.inugami.monitoring.springboot.config.InugamiMonitoringConfig;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Primary;
+import io.inugami.api.monitoring.MdcCleanerSPI;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-@ComponentScan(basePackages = {
-        InugamiMonitoringConfig.INUGAMI
-})
-@SpringBootApplication
-public class SpringBootITApplication {
+import java.util.List;
+import java.util.Optional;
 
-    @Primary
-    @Bean
-    public ObjectMapper buildObjectMapper() {
-        return JsonMarshaller.getInstance().getIndentedObjectMapper();
+@Slf4j
+@Builder
+@RequiredArgsConstructor
+public class MdcCleaner {
+
+    private final List<MdcCleanerSPI> cleaners;
+
+    public synchronized void cleanMdc() {
+        try {
+            for (MdcCleanerSPI cleaner : Optional.ofNullable(cleaners).orElse(List.of())) {
+                cleaner.clean();
+            }
+        } catch (Throwable e) {
+            log.error(e.getMessage(), e);
+        }
     }
+
 }

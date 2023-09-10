@@ -21,6 +21,9 @@ import io.inugami.commons.test.dto.UserDataDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
+import static io.inugami.api.exceptions.Asserts.assertNotEmpty;
+import static io.inugami.monitoring.springboot.app.UserErrors.READ_USER_ID_INVALID;
+
 @RequiredArgsConstructor
 @RestController
 public class UserRestController implements UserRestClient {
@@ -30,6 +33,7 @@ public class UserRestController implements UserRestClient {
     @Feature("user.create")
     @Override
     public UserDataDTO createUser(final UserDataDTO user) {
+        assertNotEmpty(READ_USER_ID_INVALID, user.getEmail());
         return userDAO.create(user);
     }
 

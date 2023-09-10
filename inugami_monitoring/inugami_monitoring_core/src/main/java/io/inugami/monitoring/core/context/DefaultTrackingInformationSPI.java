@@ -2,7 +2,7 @@ package io.inugami.monitoring.core.context;
 
 import io.inugami.api.monitoring.MdcService;
 import io.inugami.api.monitoring.TrackingInformationSPI;
-import io.inugami.api.monitoring.models.Headers;
+import io.inugami.api.monitoring.models.IHeaders;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 public class DefaultTrackingInformationSPI implements TrackingInformationSPI {
 
     @Override
-    public Map<String, String> getInformation(final Headers headers) {
+    public Map<String, String> getInformation(final IHeaders headers) {
         Map<String, String> result = new LinkedHashMap<>();
 
 

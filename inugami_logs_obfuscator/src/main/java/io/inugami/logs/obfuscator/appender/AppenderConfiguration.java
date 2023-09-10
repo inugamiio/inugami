@@ -33,7 +33,7 @@ public class AppenderConfiguration {
     private Integer             maxConnections;
     private Integer             maxPerRoute;
     private Integer             socketTimeout;
-    private boolean             forceNewLine = true;
+    private String              forceNewLine;
 
 
     public AppenderConfiguration(final String encodeAsJson, final String additionalFields) {
