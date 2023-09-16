@@ -17,6 +17,7 @@
 package io.inugami.monitoring.springboot.app;
 
 import io.inugami.api.loggers.Loggers;
+import io.inugami.api.monitoring.models.Headers;
 import io.inugami.commons.test.UnitTestData;
 import io.inugami.commons.test.api.SkipLineMatcher;
 import io.inugami.commons.test.dto.AssertLogContext;
@@ -33,7 +34,8 @@ import static io.inugami.commons.test.UnitTestHelper.assertLogs;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserRestControllerIT extends SpringBootIntegrationTest {
-
+    private static final String CORRELATION_ID = "b0116bae-1da0-465d-845b-79bd7a82ec8d";
+    private static final String TRACE_ID       = "79bd7a82ec8d";
 
     @Test
     void createUser_nominal() {
@@ -46,15 +48,15 @@ class UserRestControllerIT extends SpringBootIntegrationTest {
                                    .integrationTest(true)
                                    .addPattern(Loggers.IOLOG_NAME)
                                    .addPattern(Loggers.IOLOG_NAME)
-                                   .addLineMatcher(SkipLineMatcher.of(9, 13, 17, 18, 26, 59, 63, 67, 68, 76, 109, 113, 114,
-                                                                      126, 130, 138, 163, 164, 167, 168, 169, 177, 221, 225, 226,
-                                                                      238, 242, 250, 275, 276, 279, 280, 281, 289))
+                                   .addLineMatcher(SkipLineMatcher.of(9, 28, 61, 80, 113, 118, 144, 169, 170, 182, 226, 231, 257, 282, 283, 295))
                                    .process(() -> {
                                        RestAssured.given()
                                                   .body(asJson(UnitTestData.USER_1.toBuilder()
                                                                                   .email(null)
                                                                                   .build()))
                                                   .headers(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                                  .headers(Headers.X_CORRELATION_ID, CORRELATION_ID)
+                                                  .headers(Headers.X_B_3_TRACEID, TRACE_ID)
                                                   .post("/user");
                                    })
                                    .build());
@@ -65,13 +67,13 @@ class UserRestControllerIT extends SpringBootIntegrationTest {
                                    .integrationTest(true)
                                    .addPattern(Loggers.IOLOG_NAME)
                                    .addPattern(Loggers.IOLOG_NAME)
-                                   .addLineMatcher(SkipLineMatcher.of(9, 13, 17, 18, 26, 60, 64, 68, 69, 77, 111, 115, 116,
-                                                                      122, 124, 132, 158, 159, 162, 163, 164, 200, 204, 205, 211,
-                                                                      213, 221, 247, 248, 251, 252, 253))
+                                   .addLineMatcher(SkipLineMatcher.of(9, 28, 62, 81, 115, 120, 138, 164, 165, 205, 210, 228, 254, 255))
                                    .process(() -> {
                                        UserDataDTO user = RestAssured.given()
                                                                      .body(asJson(UnitTestData.USER_1))
                                                                      .headers(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                                                     .headers(Headers.X_CORRELATION_ID, CORRELATION_ID)
+                                                                     .headers(Headers.X_B_3_TRACEID, TRACE_ID)
                                                                      .post("/user")
                                                                      .as(UserDataDTO.class);
                                        result.set(user);

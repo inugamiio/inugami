@@ -260,11 +260,12 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
                                         final JavaRestMethodDTO javaRestMethod) {
         final Headers headers = MonitoringBootstrap.CONTEXT.getConfig().getHeaders();
 
-        applyIfNotNull(requestInfo.getDeviceIdentifier(), value -> response.setHeader(headers.getDeviceIdentifier(), value));
-        applyIfNotNull(requestInfo.getCorrelationId(), value -> response.setHeader(headers.getCorrelationId(), value));
+        final MdcService mdc = MdcService.getInstance();
+        applyIfNotNull(mdc.deviceIdentifier(), value -> response.setHeader(headers.getDeviceIdentifier(), value));
+        applyIfNotNull(mdc.conversationId(), value -> response.setHeader(headers.getConversationId(), value));
 
-        response.setHeader(headers.getConversationId(), MdcService.getInstance().correlationId());
-        response.setHeader(headers.getRequestId(), MdcService.getInstance().traceId());
+        response.setHeader(headers.getCorrelationId(), mdc.correlationId());
+        response.setHeader(headers.getRequestId(), mdc.traceId());
 
 
         if (javaRestMethod != null) {
