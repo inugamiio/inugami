@@ -202,7 +202,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
         initCorrelationIdAndTraceId(requestInfo, request);
         final JavaRestMethodDTO javaRestMethod = resolveJavaRestMethod(request);
-        addTrackingInformation(response, requestInfo, javaRestMethod);
+        addTrackingInformation(response, javaRestMethod);
 
         onBegin(httpRequest, response, content);
 
@@ -256,7 +256,6 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
 
     private void addTrackingInformation(final HttpServletResponse response,
-                                        final RequestInformation requestInfo,
                                         final JavaRestMethodDTO javaRestMethod) {
         final Headers headers = MonitoringBootstrap.CONTEXT.getConfig().getHeaders();
 

@@ -51,7 +51,7 @@ import java.util.function.Function;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 
-@SuppressWarnings({"java:S1181", "java:S108", "java:S1185", "java:S1185", "java:S1874"})
+@SuppressWarnings({"java:S1181", "java:S108", "java:S1185", "java:S1185", "java:S1874", "java:S1125"})
 public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> implements ContextAware, ApplicationLifecycleSPI {
 
     // =========================================================================

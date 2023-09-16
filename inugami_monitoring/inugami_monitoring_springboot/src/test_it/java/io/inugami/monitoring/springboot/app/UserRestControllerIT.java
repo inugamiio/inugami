@@ -37,6 +37,7 @@ class UserRestControllerIT extends SpringBootIntegrationTest {
     private static final String CORRELATION_ID = "b0116bae-1da0-465d-845b-79bd7a82ec8d";
     private static final String TRACE_ID       = "79bd7a82ec8d";
 
+
     @Test
     void createUser_nominal() {
         FunctionalInterceptor.clean();

@@ -94,6 +94,18 @@ public class ObfuscatorUtils {
         return Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
     }
 
+    public static Pattern buildRegexFullLine(final String term, final String delimiter) {
+        final StringBuilder regex = new StringBuilder();
+        regex.append("(?:")
+             .append(term)
+             .append(")");
+        regex.append("(?:\\s*[")
+             .append(delimiter)
+             .append("]\\s*)");
+        regex.append("((?:[^\\n]+)|(?:.*))");
+        return Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
+    }
+
     public static Pattern buildJsonRegex(final String field) {
         final StringBuilder regex = new StringBuilder();
         regex.append("(?:\"");

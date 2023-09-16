@@ -35,4 +35,7 @@ public class SpringBootITApplication {
     public ObjectMapper buildObjectMapper() {
         return JsonMarshaller.getInstance().getIndentedObjectMapper();
     }
+
+
 }
+

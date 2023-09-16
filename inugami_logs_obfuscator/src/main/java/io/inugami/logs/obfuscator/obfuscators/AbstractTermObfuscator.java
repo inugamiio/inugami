@@ -18,12 +18,13 @@ package io.inugami.logs.obfuscator.obfuscators;
 
 import io.inugami.logs.obfuscator.api.LogEventDto;
 import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.regex.Pattern;
 
-import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.MASK;
-import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.replaceAll;
+import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.*;
 
+@Slf4j
 public abstract class AbstractTermObfuscator implements ObfuscatorSpi {
     private final boolean enabled = enabled();
 
@@ -35,17 +36,14 @@ public abstract class AbstractTermObfuscator implements ObfuscatorSpi {
         return enabled;
     }
 
-    static Pattern buildRegex(final String term) {
-        return Pattern.compile(new StringBuilder()
-                                       .append("(?:")
-                                       .append(term)
-                                       .append(")")
-                                       .append("(?:\\s*[")
-                                       .append("=|:")
-                                       .append("]\\s*)")
-                                       .append("(.*)")
-                                       .toString(),
-                               Pattern.CASE_INSENSITIVE);
+    public static Pattern buildRegex(final String term) {
+        try {
+            return buildRegexFullLine(term, DEFAULT_DELIMITERS);
+        } catch (Throwable e) {
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+
     }
 
     // =========================================================================
@@ -59,7 +57,11 @@ public abstract class AbstractTermObfuscator implements ObfuscatorSpi {
 
     @Override
     public String obfuscate(final LogEventDto event) {
-        return replaceAll(event.getMessage(), getRegex(), value -> MASK);
+        return replaceAll(event.getMessage(), getRegex(), this::obfuscateValue);
+    }
+
+    protected String obfuscateValue(String value) {
+        return MASK;
     }
 
     protected abstract String getTerm();

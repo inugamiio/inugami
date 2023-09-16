@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings({"java:S1181"})
 @Slf4j
 @Builder
 @RequiredArgsConstructor

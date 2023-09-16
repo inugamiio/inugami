@@ -16,44 +16,34 @@
  */
 package io.inugami.logs.obfuscator.obfuscators;
 
-import io.inugami.logs.obfuscator.api.LogEventDto;
-import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
-
 import java.util.regex.Pattern;
 
-import static io.inugami.logs.obfuscator.obfuscators.JsonAuthorizationObfuscator.AUTHORIZATION;
-import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.*;
+import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.keepLastChars;
 
-public class BasicAuthorizationObfuscator implements ObfuscatorSpi {
+public class BasicAuthorizationObfuscator extends AbstractTermObfuscator {
 
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final Pattern REGEX = buildRegex(AUTHORIZATION, "=|:");
+    public static final  String  TERM     = "Authorization";
+    private static final Pattern REGEX    = buildRegex(TERM);
+    public static final  int     NB_CHARS = 5;
 
-    private final boolean enabled = enabled();
 
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
     @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    // =========================================================================
-    // API
-    // =========================================================================
-    @Override
-    public boolean accept(final LogEventDto event) {
-        return contains(event.getMessage(), AUTHORIZATION, AUTHORIZATION.toLowerCase(), AUTHORIZATION.toUpperCase());
+    protected String getTerm() {
+        return TERM;
     }
 
     @Override
-    public String obfuscate(final LogEventDto event) {
-        return replaceAll(event.getMessage(), REGEX, value -> keepLastChars(value, 3));
+    protected Pattern getRegex() {
+        return REGEX;
     }
 
+    @Override
+    protected String obfuscateValue(String value) {
+        return keepLastChars(value, NB_CHARS);
+    }
 
 }

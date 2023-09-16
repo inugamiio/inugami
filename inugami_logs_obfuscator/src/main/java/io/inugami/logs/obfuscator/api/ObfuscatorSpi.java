@@ -24,9 +24,13 @@ import io.inugami.logs.obfuscator.tools.ObfuscatorUtils;
  * Each obfuscator should be defined as SPI implementation in file <strong>/META-INF/services/io.inugami.logs.obfuscator.api.ObfuscatorSpi</strong>
  */
 public interface ObfuscatorSpi {
+
+    String DEFAULT_DELIMITERS = "=|:";
+
     /**
      * By default, this method retrieve Obfuscator enabled configuration.
      * The corresponding configuration key should be <strong>{{full.obfuscator.Name}}.enabled</strong>
+     *
      * @return true is obfuscator is enabled
      */
     default boolean enabled() {
