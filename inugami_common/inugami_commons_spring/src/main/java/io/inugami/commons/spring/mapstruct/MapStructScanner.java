@@ -42,6 +42,7 @@ public class MapStructScanner {
     public static final  String                          PROPERTY              = "inugami.spring.mapstruct.scanner.enabled";
     public static final  String                          PROPERTY_BASE_PACKAGE = "inugami.spring.mapstruct.scanner.basePackage";
     private static final Set<Class<?>>                   MAPPERS               = new LinkedHashSet<>();
+    public static final  String                          LINE                  = "\n";
     private final        ConfigurableListableBeanFactory beanFactory;
     private final        ClassLoader                     classLoader;
     private final        ConfigurableEnvironment         environment;
@@ -87,6 +88,7 @@ public class MapStructScanner {
             return;
         }
 
+        Set<String> classNames = new LinkedHashSet<>();
         for (final Class mapperClass : MAPPERS) {
             Object existingBean = null;
             try {
@@ -98,13 +100,15 @@ public class MapStructScanner {
             }
 
             if (existingBean == null) {
-                log.info("register MapStruct Mapper : {}", mapperClass);
                 try {
                     beanFactory.registerSingleton(mapperClass.getName(), Mappers.getMapper(mapperClass));
+                    classNames.add(mapperClass.getName());
                 } catch (final Throwable e) {
                     log.error(e.getMessage(), e);
                 }
             }
         }
+
+        log.info("register MapStruct Mapper : \n{}", String.join(LINE, classNames));
     }
 }
