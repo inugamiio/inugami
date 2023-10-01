@@ -43,13 +43,14 @@ class UserRestControllerIT extends SpringBootIntegrationTest {
         FunctionalInterceptor.clean();
         AtomicReference<UserDataDTO> result = new AtomicReference<>();
 
-
         assertLogs(AssertLogContext.builder()
                                    .path("io/inugami/monitoring/springboot/app/createUser_nominal.iolog.1.txt")
                                    .integrationTest(true)
                                    .addPattern(Loggers.IOLOG_NAME)
                                    .addPattern(Loggers.IOLOG_NAME)
-                                   .addLineMatcher(SkipLineMatcher.of(9, 28, 61, 80, 113, 118, 144, 169, 170, 182, 226, 231, 257, 282, 283, 295))
+                                   .addLineMatcher(SkipLineMatcher.of(9, 28, 61, 80, 113, 118, 144, 169, 170, 182, 226, 231,
+                                                                      257, 282, 283, 295, 339, 358, 392, 411, 445, 450,
+                                                                      468, 494, 495, 535, 540, 558, 584, 585))
                                    .process(() -> {
                                        RestAssured.given()
                                                   .body(asJson(UnitTestData.USER_1.toBuilder()
@@ -59,17 +60,7 @@ class UserRestControllerIT extends SpringBootIntegrationTest {
                                                   .headers(Headers.X_CORRELATION_ID, CORRELATION_ID)
                                                   .headers(Headers.X_B_3_TRACEID, TRACE_ID)
                                                   .post("/user");
-                                   })
-                                   .build());
 
-
-        assertLogs(AssertLogContext.builder()
-                                   .path("io/inugami/monitoring/springboot/app/createUser_nominal.iolog.2.txt")
-                                   .integrationTest(true)
-                                   .addPattern(Loggers.IOLOG_NAME)
-                                   .addPattern(Loggers.IOLOG_NAME)
-                                   .addLineMatcher(SkipLineMatcher.of(9, 28, 62, 81, 115, 120, 138, 164, 165, 205, 210, 228, 254, 255))
-                                   .process(() -> {
                                        UserDataDTO user = RestAssured.given()
                                                                      .body(asJson(UnitTestData.USER_1))
                                                                      .headers(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
