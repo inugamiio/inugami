@@ -23,7 +23,7 @@ class DefaultExceptionHandlerServiceIT extends SpringBootIntegrationTest {
                                    .path("io/inugami/monitoring/springboot/exception/exception_withErrorCode.iolog.txt")
                                    .integrationTest(true)
                                    .addPattern(Loggers.IOLOG_NAME)
-                                   .addLineMatcher(SkipLineMatcher.of(9, 13, 17, 18, 25, 40, 44, 45, 56, 60, 67, 75, 76, 79, 80, 81, 89))
+                                   .addLineMatcher(SkipLineMatcher.of(9, 13, 17, 18, 25, 40, 44, 45, 57, 61, 68, 76, 77, 80, 81, 89))
                                    .process(() -> {
                                        final String result = RestAssured.given()
                                                                         .headers(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -45,7 +45,7 @@ class DefaultExceptionHandlerServiceIT extends SpringBootIntegrationTest {
                                    .path("io/inugami/monitoring/springboot/exception/exception_withoutErrorCode.iolog.txt")
                                    .integrationTest(true)
                                    .addPattern(Loggers.IOLOG_NAME)
-                                   .addLineMatcher(SkipLineMatcher.of(9, 13, 17, 18, 25, 40, 44, 45, 54, 58, 65, 73, 74, 77, 78, 79, 87))
+                                   .addLineMatcher(SkipLineMatcher.of(9, 13, 17, 18, 25, 40, 44, 45, 55, 59, 66, 74, 75, 78, 79, 87))
                                    .process(() -> {
                                        final String result = RestAssured.given()
                                                                         .headers(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)

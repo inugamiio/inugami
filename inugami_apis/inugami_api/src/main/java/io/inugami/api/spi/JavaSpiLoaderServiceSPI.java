@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
 
-@SuppressWarnings({"java:S1181"})
+@SuppressWarnings({"java:S1181", "java:S1141"})
 public class JavaSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
     @Override
     public <T> List<T> loadServices(final Class<?> type) {
@@ -21,7 +21,7 @@ public class JavaSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
         if (servicesLoaders == null) {
             return result;
         }
-        
+
         try {
             for (T service : servicesLoaders) {
                 try {

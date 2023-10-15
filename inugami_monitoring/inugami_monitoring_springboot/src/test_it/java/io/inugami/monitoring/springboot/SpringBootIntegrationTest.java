@@ -19,28 +19,26 @@ package io.inugami.monitoring.springboot;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.annotation.PostConstruct;
-
 @ActiveProfiles("test")
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = SpringBootITApplication.class)
-public abstract class SpringBootIntegrationTest {
+public abstract class SpringBootIntegrationTest implements InitializingBean {
     public static final String CONTENT_TYPE = "Content-Type";
-    
+
     @Autowired
     protected ObjectMapper objectMapper;
 
     @LocalServerPort
     private Integer port;
 
-    @PostConstruct
-    public void init() {
+    public void afterPropertiesSet() throws Exception {
         RestAssured.port = port;
     }
 

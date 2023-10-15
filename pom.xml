@@ -348,6 +348,14 @@
             :: PROJECT
             :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
             <!--[ Project base ]+++++++++++++++++++++++++++++++++++++++++++++-->
+
+
+            <dependency>
+                <groupId>io.inugami</groupId>
+                <artifactId>inugami_api_interfaces</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>io.inugami</groupId>
                 <artifactId>inugami_api</artifactId>

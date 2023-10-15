@@ -28,7 +28,6 @@ import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.api.monitoring.models.GenericMonitoringModel;
 import io.inugami.api.processors.ConfigHandler;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
-import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.Map;
@@ -45,7 +44,6 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final Logger  LOGGER        = Loggers.IOLOG;
     private static final String  EMPTY         = "";
     public static final  String  URL_SEPARATOR = "/";
     private final        String  inputDecorator;
@@ -84,7 +82,8 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     public List<GenericMonitoringModel> onBegin(final ResquestData request) {
         final JsonBuilder msg = buildIologIn(request);
         MdcService.getInstance().lifecycleIn();
-        LOGGER.info((enableDecorator ? inputDecorator : EMPTY) + ObfuscatorTools.applyObfuscators(msg.toString()));
+        Loggers.IOLOG.info(
+                (enableDecorator ? inputDecorator : EMPTY) + ObfuscatorTools.applyObfuscators(msg.toString()));
         MdcService.getInstance().lifecycleRemove();
         return null;
     }
@@ -96,7 +95,7 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         result.writeSpace().write(fullPath).line();
         result.write("headers :").line();
         for (final Map.Entry<String, String> entry : request.getHearder().entrySet()) {
-            result.tab().write(entry.getKey()).write(":").writeSpace().write(entry.getValue()).line();
+            result.tab().write(entry.getKey().trim()).write(":").writeSpace().write(entry.getValue().trim()).line();
         }
 
         result.write("payload :").line();
@@ -152,19 +151,23 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
 
         //@formatter:on
         MdcService.getInstance().lifecycleOut();
-        if (error == null) {
-            MdcService.getInstance().globalStatusSuccess();
-            LOGGER.info((enableDecorator ? outputDecorator : EMPTY) + msg);
-        } else {
-            if (error.isExploitationError()) {
-                MdcService.getInstance().globalStatusError();
-                Loggers.XLLOG.error("[HTTP-{}:{}] {} : {}", error.getHttpCode(), error.getErrorCode(), error.getMessage(), error.getCause());
+        if (error != null || httpResponse.getCode() >= 400) {
+            MdcService.getInstance().globalStatusError();
+            ErrorResult errorResult = error != null ? error : ErrorResult.builder()
+                                                                         .errorCode("ERR-0000")
+                                                                         .httpCode(httpResponse.getCode())
+                                                                         .message("undefined error")
+                                                                         .build();
+            if (errorResult.isExploitationError()) {
+                Loggers.XLLOG.error("[HTTP-{}:{}] {} : {}", errorResult.getHttpCode(), errorResult.getErrorCode(), errorResult.getMessage(), errorResult.getCause());
             }
-            LOGGER.error((enableDecorator ? outputDecorator : EMPTY) + msg);
+            Loggers.IOLOG.error((enableDecorator ? outputDecorator : EMPTY) + msg);
+        } else {
+            MdcService.getInstance().globalStatusSuccess();
+            Loggers.IOLOG.info((enableDecorator ? outputDecorator : EMPTY) + msg);
+
         }
-        MdcService.getInstance()
-                  .lifecycleRemove()
-                  .removeGlobalStatus();
+        MdcService.getInstance().lifecycleRemove().removeGlobalStatus();
         return null;
     }
 

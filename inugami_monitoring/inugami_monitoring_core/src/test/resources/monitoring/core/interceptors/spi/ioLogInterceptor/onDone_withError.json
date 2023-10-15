@@ -1,8 +1,25 @@
-[ {
-  "level" : "ERROR",
-  "loggerName" : "IOLOG",
-  "mdc" : {
-    "lifecycle" : "out"
-  },
-  "message" : "[OUT] [POST] /my/service\nheaders :\n\tapp: myApplication\npayload :\n{\"name\":\"John Smith\"}\nresponse:\n\tstatus:500\n\tdatetime:1688223240\n\tduration:42\n\tcontentType:UTF-8\n\theaders:\n\t\tx-correlation-id: fd508efe-9b7e-403f-b0bc-44e379d0171d\n\tpayload:null"
-} ]
+[
+  {
+    "loggerName":"IOLOG",
+    "level":"ERROR",
+    "mdc":{
+      "globalStatus":"error",
+      "lifecycle":"out"
+    },
+    "message":[
+      "[OUT] [POST] /my/service",
+      "headers :",
+      "	app: myApplication",
+      "payload :",
+      "{\"name\":\"John Smith\"}",
+      "response:",
+      "	status:500",
+      "	datetime:1688223240",
+      "	duration:42",
+      "	contentType:UTF-8",
+      "	headers:",
+      "		x-correlation-id: fd508efe-9b7e-403f-b0bc-44e379d0171d",
+      "	payload:null"
+    ]
+  }
+]

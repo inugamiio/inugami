@@ -3,6 +3,9 @@
 
     <appender name="logTest" class="io.inugami.commons.test.logs.LogTestAppender">
         <encoder class="io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder">
+            <configuration>
+                <forceNewLine>false</forceNewLine>
+            </configuration>
             <pattern>%m</pattern>
         </encoder>
     </appender>

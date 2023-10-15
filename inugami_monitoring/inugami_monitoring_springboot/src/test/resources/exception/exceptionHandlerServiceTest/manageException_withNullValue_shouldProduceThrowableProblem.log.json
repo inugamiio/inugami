@@ -9,5 +9,5 @@
     "errorStatus" : "500",
     "errorCode" : "err-undefine"
   },
-  "message" : "undefined error"
+  "message" : "undefined error\n"
 } ]

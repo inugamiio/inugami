@@ -22,8 +22,8 @@ import java.util.regex.Pattern;
 public class AccessControlAllowHeaderObfuscator extends AbstractTermObfuscator {
 
 
-    public static final  String  TERM  = "Access-Control-Allow-Headers";
-    private static final Pattern REGEX = buildRegex(TERM);
+    public static final String  TERM  = "Access-Control-Allow-Headers";
+    private final       Pattern regex = buildRegex(TERM);
 
 
     @Override
@@ -33,6 +33,6 @@ public class AccessControlAllowHeaderObfuscator extends AbstractTermObfuscator {
 
     @Override
     protected Pattern getRegex() {
-        return REGEX;
+        return regex;
     }
 }

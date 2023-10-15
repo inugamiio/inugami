@@ -51,16 +51,17 @@ import java.util.function.Function;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 
-@SuppressWarnings({"java:S1181", "java:S108", "java:S1185", "java:S1185", "java:S1874"})
+@SuppressWarnings({"java:S1181", "java:S108", "java:S1185", "java:S1185", "java:S1874", "java:S1125"})
 public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> implements ContextAware, ApplicationLifecycleSPI {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final String                    MESSAGE        = "message";
-    private static final String                    LINE           = "\n";
-    private static final Clock                     CLOCK          = Clock.systemUTC();
-    public static final  String                    NO_FORMATTER   = "%m";
+    private static final String MESSAGE      = "message";
+    private static final String LINE         = "\n";
+    private static final Clock  CLOCK        = Clock.systemUTC();
+    public static final  String NO_FORMATTER = "%m";
+
     private              List<ObfuscatorSpi>       obfuscators;
     private              List<LoggerMdcMappingSPI> mdcMappers;
     private              List<MdcDynamicFieldSPI>  mdcDynamicFields;
@@ -80,6 +81,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
 
     private Map<String, Serializable> additionalFieldsData = null;
     private String                    pattern;
+    private boolean                   forceNewLine         = true;
 
     public ObfuscatorEncoder() {
         onContextRefreshed(null);
@@ -90,6 +92,10 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     public ObfuscatorEncoder(final AppenderConfiguration configuration) {
         this.configuration = configuration;
         onContextRefreshed(null);
+        forceNewLine = this.configuration.getForceNewLine() == null
+                ? true
+                : Boolean.parseBoolean(this.configuration.getForceNewLine());
+
     }
 
     @Override
@@ -120,10 +126,18 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
         if (this.configuration != null && this.configuration.isEncodeAsJson()) {
             result = renderAsJson(message, event);
         } else {
-            result = message.getBytes(StandardCharsets.UTF_8);
+            result = renderPlainText(message);
         }
 
         return result == null ? EMPTY : result;
+    }
+
+    private byte[] renderPlainText(final String message) {
+        String currentMessage = message == null ? EMPTY_STR : message;
+        if (forceNewLine && !currentMessage.endsWith(LINE)) {
+            currentMessage = currentMessage + LINE;
+        }
+        return currentMessage.getBytes(StandardCharsets.UTF_8);
     }
 
 
@@ -202,7 +216,11 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     // RENDER AS JSON
     // =========================================================================
     private byte[] renderAsJson(final String message, final ILoggingEvent event) {
-        final String json = EMPTY_STR + renderJson(message, event) + ObfuscatorEncoder.LINE;
+        String json = EMPTY_STR + renderJson(message, event) + ObfuscatorEncoder.LINE;
+        if (forceNewLine && !json.endsWith(ObfuscatorEncoder.LINE)) {
+            json = json + ObfuscatorEncoder.LINE;
+        }
+
         return json.getBytes(StandardCharsets.UTF_8);
     }
 

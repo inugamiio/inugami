@@ -11,5 +11,5 @@
     "message" : "some error",
     "category" : "other"
   },
-  "message" : "some error"
+  "message" : "some error\n"
 } ]

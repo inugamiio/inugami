@@ -11,22 +11,22 @@
     "errorCode" : "ERR-0._0",
     "category" : "user"
   },
-  "message" : ""
+  "message" : "\n"
 }, {
   "level" : "ERROR",
   "loggerName" : "XLLOG",
   "mdc" : {
     "rollback" : "false",
     "retryable" : "false",
-    "traceId" : "0652a9ad-cd77-43fe-a4cb-e3ecfad49235",
+    "traceId" : "23b137b1-6b9f-4981-b9b4-78ef4d402f85",
     "errorUrl" : "http://inugami.io/wiki/inugami#ERR-0._0",
     "exploitationError" : "true",
     "field" : "user.email",
     "errorType" : "technical",
     "errorStatus" : "500",
     "errorCode" : "ERR-0._0",
-    "correlation_id" : "89d8fe60-4970-4a41-b322-da7af459fe26",
+    "correlation_id" : "8d162046-d005-4da8-990f-55d6abbb22fa",
     "category" : "user"
   },
-  "message" : ""
+  "message" : "\n"
 } ]

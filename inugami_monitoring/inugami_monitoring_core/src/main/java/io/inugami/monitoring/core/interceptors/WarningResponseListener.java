@@ -20,7 +20,10 @@ import io.inugami.api.exceptions.CurrentWarningContext;
 import io.inugami.api.exceptions.Warning;
 import io.inugami.api.exceptions.WarningContext;
 import io.inugami.api.exceptions.WarningTracker;
+import io.inugami.api.monitoring.MdcCleanerSPI;
 import io.inugami.api.spi.SpiLoader;
+import io.inugami.monitoring.core.interceptors.mdc.DefaultMdcCleaner;
+import io.inugami.monitoring.core.interceptors.mdc.MdcCleaner;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletResponse;
@@ -36,11 +39,19 @@ public class WarningResponseListener implements ResponseListener {
     public static final  String               X_WARNINGS       = "x-warnings";
     public static final  String               HEADER_SEPARATOR = ",";
 
+    private static MdcCleaner mdcCleaner = null;
+
     // =========================================================================
     // API
     // =========================================================================
     @Override
     public void beforeWriting(final HttpServletResponse response) {
+
+        if (mdcCleaner == null) {
+            initMdcCleaner();
+        }
+
+
         final CurrentWarningContext warnings = WarningContext.getInstance();
         if (warnings != null) {
             final List<Warning> currentWarning = warnings.getWarnings();
@@ -56,6 +67,11 @@ public class WarningResponseListener implements ResponseListener {
             }
         }
         WarningContext.getInstance().setWarnings(List.of());
+    }
+
+    private synchronized void initMdcCleaner() {
+        mdcCleaner = new MdcCleaner(SpiLoader.getInstance()
+                                             .loadSpiServicesWithDefault(MdcCleanerSPI.class, new DefaultMdcCleaner()));
     }
 
     private void trackWarning(final List<Warning> warnings) {
@@ -75,5 +91,6 @@ public class WarningResponseListener implements ResponseListener {
             response.setHeader(warning.getWarningCode(), warning.getMessage());
         }
     }
+
 
 }

@@ -17,10 +17,13 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@SuppressWarnings({"java:S5852", "java:S899", "java:S6395", "java:S108"})
+@SuppressWarnings({"java:S5852", "java:S899", "java:S6395", "java:S108", "java:S1125"})
 public class FileWriter implements AppenderWriterStrategy {
 
+    public static final  String                    LINE             = "\n";
+    public static final  String                    EMPTY            = "";
     private              AppenderConfiguration     configuration    = null;
+    private              boolean                   forceNewLine;
     private              Encoder<ILoggingEvent>    encoder;
     private              java.io.FileWriter        writer;
     private static final AtomicReference<String>   FILE_PATH        = new AtomicReference<>();
@@ -37,6 +40,9 @@ public class FileWriter implements AppenderWriterStrategy {
     public boolean accept(final AppenderConfiguration configuration) {
         if (configuration.getFile() != null) {
             this.configuration = configuration;
+            forceNewLine = this.configuration.getForceNewLine() == null
+                    ? true
+                    : Boolean.parseBoolean(this.configuration.getForceNewLine());
             refreshConfig();
             return true;
         }
@@ -152,7 +158,11 @@ public class FileWriter implements AppenderWriterStrategy {
         final byte[] encoded = encoder.encode(iLoggingEvent);
 
         try {
-            writer.write(new String(encoded, StandardCharsets.UTF_8));
+            final String line = encoded == null ? EMPTY : new String(encoded, StandardCharsets.UTF_8);
+            writer.write(line);
+            if (forceNewLine && !line.endsWith(LINE)) {
+                writer.write(LINE);
+            }
             writer.flush();
         } catch (final IOException e) {
         }

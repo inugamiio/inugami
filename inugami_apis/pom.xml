@@ -26,6 +26,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>inugami_api_interfaces</module>
         <module>inugami_api</module>
         <module>inugami_api_core</module>
     </modules>

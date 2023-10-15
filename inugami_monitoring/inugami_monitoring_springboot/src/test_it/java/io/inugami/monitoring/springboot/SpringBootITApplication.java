@@ -18,13 +18,14 @@ package io.inugami.monitoring.springboot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inugami.api.marshalling.JsonMarshaller;
+import io.inugami.monitoring.springboot.config.InugamiMonitoringConfig;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
 
 @ComponentScan(basePackages = {
-        "io.inugami"
+        InugamiMonitoringConfig.INUGAMI
 })
 @SpringBootApplication
 public class SpringBootITApplication {
@@ -34,4 +35,7 @@ public class SpringBootITApplication {
     public ObjectMapper buildObjectMapper() {
         return JsonMarshaller.getInstance().getIndentedObjectMapper();
     }
+
+
 }
+
