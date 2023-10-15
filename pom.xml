@@ -204,14 +204,14 @@
         <javax.mail-api.version>1.6.1</javax.mail-api.version>
         <javax.servlet.version>3.1.0</javax.servlet.version>
         <org.jboss.weld.version>3.1.9.Final</org.jboss.weld.version>
-        <org.jboss.resteasy.version>4.0.0.Beta1</org.jboss.resteasy.version>
+        <org.jboss.resteasy.version>4.0.0.Beta5</org.jboss.resteasy.version>
         <org.jboss.async-http-servlet.version>3.1.0.Beta2</org.jboss.async-http-servlet.version>
         <org.picketlink.version>2.7.1.Final</org.picketlink.version>
         <com.jackson-annotations.version>2.14.2</com.jackson-annotations.version>
 
 
         <org.hibernate.ogm.version>5.1.0.Final</org.hibernate.ogm.version>
-        <org.hibernate.validator.version>6.0.7.Final</org.hibernate.validator.version>
+        <org.hibernate.validator.version>6.2.5.Final</org.hibernate.validator.version>
         <javax.validation.version>2.0.1.Final</javax.validation.version>
 
 
@@ -241,7 +241,7 @@
         <org-mockito.mockito-core>2.0.31-beta</org-mockito.mockito-core>
 
         <!--[ Data base drivers ]++++++++++++++++++++++++++++++++++++++++++++-->
-        <com.h2database.h2.version>2.1.210</com.h2database.h2.version>
+        <com.h2database.h2.version>2.2.224</com.h2database.h2.version>
 
         <com.sun.xml.bind.version>4.0.2</com.sun.xml.bind.version>
         <jaxb.version>2.3.0</jaxb.version>
@@ -696,6 +696,11 @@
                 <version>${com.jackson-annotations.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>1.5</version>
+            </dependency>
 
             <dependency>
                 <groupId>javax.servlet</groupId>
@@ -951,6 +956,11 @@
             </dependency>
 
             <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-rsa</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+            <dependency>
                 <groupId>org.zalando</groupId>
                 <artifactId>problem</artifactId>
                 <version>${org.zalando.problem.version}</version>
@@ -1103,12 +1113,6 @@
                 <groupId>io.swagger.core.v3</groupId>
                 <artifactId>swagger-jaxrs2</artifactId>
                 <version>${swagger-jaxrs2.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${com.google.guava.version}</version>
             </dependency>
 
             <dependency>
