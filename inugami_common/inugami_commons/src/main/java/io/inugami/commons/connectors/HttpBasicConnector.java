@@ -788,7 +788,7 @@ public class HttpBasicConnector implements IHttpBasicConnector {
     // CLOSE
     // =========================================================================
 
-
+    @Override
     public void close() {
         try {
             httpClient.close();
