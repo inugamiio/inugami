@@ -2,8 +2,9 @@
   "charset" : "UTF-8",
   "contentType" : "application/json",
   "data" : "InRlc3RpbmctbGlicmFyeSI6ICJXaXJlTW9jayI=",
-  "delay" : 9,
+  "delay" : 6,
   "encoding" : "UTF-8",
+  "errorCode" : null,
   "hashHumanReadable" : "[GET]http://localhost:1234?page=1",
   "length" : 29,
   "message" : "OK",
@@ -13,10 +14,10 @@
     "application-host" : "",
     "my-app" : "unit-test"
   },
-  "responseAt" : 1691572450788,
+  "responseAt" : 1697973609695,
   "responseHeaders" : {
     "Content-Type" : "application/json",
-    "Matched-Stub-Id" : "c9b87fb0-31ce-4059-b3ea-9c64f6e20119",
+    "Matched-Stub-Id" : "f1544926-0be2-44d8-b671-edd06fc536f3",
     "Vary" : "Accept-Encoding, User-Agent",
     "Transfer-Encoding" : "chunked"
   },

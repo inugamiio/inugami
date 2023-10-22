@@ -163,7 +163,7 @@ class HttpBasicConnectorTest {
 
         final HttpConnectorResult result = connector.get(buildUrl("?page=1"));
 
-        assertTextRelatif(result, "commons/connectors/get_withOnlyUrl_nominal.json", 4, 13, 16);
+        assertTextRelatif(result, "commons/connectors/get_withOnlyUrl_nominal.json", 4, 14, 17);
         assertThat(new String(result.getData())).isEqualTo("\"testing-library\": \"WireMock\"");
     }
 
@@ -183,7 +183,7 @@ class HttpBasicConnectorTest {
 
         final HttpConnectorResult result = connector.get(buildUrl("?page=1"), credentials, headers);
 
-        assertTextRelatif(result, "commons/connectors/get_fullParams_nominal.json", 4, 15, 18);
+        assertTextRelatif(result, "commons/connectors/get_fullParams_nominal.json", 4, 16, 19);
         assertThat(new String(result.getData())).isEqualTo("\"testing-library\": \"WireMock\"");
     }
 
