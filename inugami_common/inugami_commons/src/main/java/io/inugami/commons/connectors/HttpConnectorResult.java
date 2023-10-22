@@ -145,6 +145,16 @@ public final class HttpConnectorResult implements Serializable {
         return marshaller.readValue(currentData, objectClass);
     }
 
+    public <T> T getResponseBody(final Class<? extends T> objectClass) throws JsonProcessingException {
+        if (data == null) {
+            return null;
+        }
+        final String       currentData = new String(data, charset == null ? StandardCharsets.UTF_8 : charset);
+        final ObjectMapper marshaller  = JsonMarshaller.getInstance().getDefaultObjectMapper();
+
+        return marshaller.readValue(currentData, objectClass);
+    }
+
     public <T> T getBodyFromJson(final TypeReference<T> refObjectType) throws JsonProcessingException {
         if (bodyData == null) {
             return null;
@@ -155,6 +165,15 @@ public final class HttpConnectorResult implements Serializable {
         return marshaller.readValue(currentData, refObjectType);
     }
 
+    public <T> T getResponseBody(final TypeReference<T> refObjectType) throws JsonProcessingException {
+        if (data == null) {
+            return null;
+        }
+        final String       currentData = new String(data, charset == null ? StandardCharsets.UTF_8 : charset);
+        final ObjectMapper marshaller  = JsonMarshaller.getInstance().getDefaultObjectMapper();
+
+        return marshaller.readValue(currentData, refObjectType);
+    }
 
     public <T> T getBodyFromYaml(final Class<? extends T> objectClass) {
         if (bodyData == null) {
@@ -164,11 +183,28 @@ public final class HttpConnectorResult implements Serializable {
         return YamlMarshaller.getInstance().convertFromYaml(currentData, objectClass);
     }
 
+    public <T> T getResponseBodyYaml(final Class<? extends T> objectClass) {
+        if (data == null) {
+            return null;
+        }
+        final String currentData = new String(data, charset == null ? StandardCharsets.UTF_8 : charset);
+        return YamlMarshaller.getInstance().convertFromYaml(currentData, objectClass);
+    }
+
     public <T> T getBodyFromYaml(final TypeReference<T> refObjectType) {
         if (bodyData == null) {
             return null;
         }
         final String currentData = new String(bodyData, charset == null ? StandardCharsets.UTF_8 : charset);
+
+        return YamlMarshaller.getInstance().convertFromYaml(currentData, refObjectType);
+    }
+
+    public <T> T getResponseBodyYaml(final TypeReference<T> refObjectType) {
+        if (data == null) {
+            return null;
+        }
+        final String currentData = new String(data, charset == null ? StandardCharsets.UTF_8 : charset);
 
         return YamlMarshaller.getInstance().convertFromYaml(currentData, refObjectType);
     }

@@ -34,4 +34,5 @@ public interface IHttpBasicConnector {
 
     void close();
 
+
 }

@@ -430,7 +430,10 @@ class HttpBasicConnectorDelegateUtils {
             return result.build();
         }
 
-        result.contentType(httpEntity.getContentType().getValue());
+        if (httpEntity.getContentType() != null) {
+            result.contentType(httpEntity.getContentType().getValue());
+        }
+
 
         byte[] rawData = null;
         try {
