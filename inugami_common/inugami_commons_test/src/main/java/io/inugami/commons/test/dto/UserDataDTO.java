@@ -31,7 +31,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public final class UserDataDTO implements Serializable {
     @ToString.Include
-    private long      id;
+    private Long      id;
     @ToString.Include
     private String    firstName;
     @ToString.Include
