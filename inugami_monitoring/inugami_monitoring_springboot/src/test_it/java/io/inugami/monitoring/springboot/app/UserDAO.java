@@ -33,7 +33,7 @@ public class UserDAO {
 
     public UserDataDTO create(final UserDataDTO user) {
 
-        final UserDataDTO value = user.toBuilder().id(CACHE.size() + 1).build();
+        final UserDataDTO value = user.toBuilder().id(Long.valueOf(CACHE.size() + 1)).build();
         CACHE.put(value.getId(), value);
 
         return value;
