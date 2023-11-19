@@ -126,7 +126,7 @@ class DefaultDefaultExceptionHandlerServiceTest {
                 ),
                 "exception/exceptionHandlerServiceTest/manageException_withExploitationException_produceProblem.json",
                 "exception/exceptionHandlerServiceTest/manageException_withExploitationException_produceProblem.json.log.json",
-                UuidLineMatcher.of(21, 28));
+                UuidLineMatcher.of(21, 27, 38, 45));
     }
 
     @Test

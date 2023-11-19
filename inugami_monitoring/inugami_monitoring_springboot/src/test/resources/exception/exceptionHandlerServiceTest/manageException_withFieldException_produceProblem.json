@@ -23,7 +23,12 @@
       "application" : "inugami",
       "version" : "2.3.0",
       "errorType" : "technical",
-      "errorCategory" : "user"
+      "errorCategory" : "user",
+      "rollback" : false,
+      "retryable" : false,
+      "field" : "user.email",
+      "category" : "user",
+      "service" : "technical_main"
     },
     "stackTrace" : [ ],
     "status" : "INTERNAL_SERVER_ERROR",

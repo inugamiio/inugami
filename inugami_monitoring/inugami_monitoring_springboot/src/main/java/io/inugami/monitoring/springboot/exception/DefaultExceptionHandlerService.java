@@ -4,6 +4,8 @@ import io.inugami.api.exceptions.*;
 import io.inugami.api.loggers.Loggers;
 import io.inugami.api.marshalling.JsonMarshaller;
 import io.inugami.api.monitoring.MdcService;
+import io.inugami.api.monitoring.RequestContext;
+import io.inugami.api.monitoring.RequestInformation;
 import io.inugami.api.spi.SpiLoader;
 import io.inugami.commons.spring.exception.ExceptionHandlerService;
 import io.inugami.monitoring.springboot.api.ProblemAdditionalFieldBuilder;
@@ -28,6 +30,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.inugami.api.exceptions.ErrorCode.*;
+
 @SuppressWarnings({"java:S1181", "java:S108"})
 @Slf4j
 @Component
@@ -49,6 +53,7 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
     public static final  String FIELDS         = "fields";
     public static final  String VERSION        = "version";
     private static final String CONTENT_TYPE   = "Content-Type";
+    public static final  String SERVICE        = "service";
 
     @Value("${application.name:#{null}}")
     private String applicationName;
@@ -107,6 +112,7 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
                                                      .with(ERROR_CODE, errorCode.getErrorCode())
                                                      .with(FIELDS, resolveField(errorCode, exception))
                                                      .withStatus(currentStatus);
+        final RequestInformation requestContext = RequestContext.getInstance();
 
         if (showAllDetail) {
             problemBuilder.withTitle(errorCode.getMessage())
@@ -115,9 +121,14 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
                           .with(VERSION, applicationVersion)
                           .with(ERROR_TYPE, errorCode.getErrorType())
                           .with(ERROR_CATEGORY, errorCode.getCategory())
-                          .withCause(Problem.builder()
-                                            .withTitle(exception.getMessage())
-                                            .build());
+                          .with(ROLLBACK, errorCode.isRollbackRequire())
+                          .with(RETRYABLE, errorCode.isRetryable())
+                          .with(FIELD, errorCode.getField())
+                          .with(CATEGORY, errorCode.getCategory())
+                          .with(DOMAIN, errorCode.getDomain())
+                          .with(SUB_DOMAIN, errorCode.getSubDomain())
+                          .with(SERVICE, requestContext == null ? null : requestContext.getService())
+                          .withCause(Problem.builder().withTitle(exception.getMessage()).build());
         }
 
         if (problemAdditionalFieldBuilders != null) {
