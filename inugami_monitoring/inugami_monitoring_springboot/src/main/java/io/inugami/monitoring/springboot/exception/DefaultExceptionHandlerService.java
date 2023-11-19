@@ -193,7 +193,7 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
 
     StatusType resolveStatus(final ErrorCode errorCode) {
         StatusType result = Status.INTERNAL_SERVER_ERROR;
-        int        status = errorCode.getStatusCode();
+        int        status = errorCode == null ? 500 : errorCode.getStatusCode();
         if (errorCode.getStatusCode() <= 200 || errorCode.getStatusCode() > 511) {
             status = 500;
         }

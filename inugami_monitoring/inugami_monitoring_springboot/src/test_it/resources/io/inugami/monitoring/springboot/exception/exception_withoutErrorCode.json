@@ -16,7 +16,10 @@
     "fields" : [ ],
     "version" : "1.0.0",
     "errorType" : "technical",
-    "errorCategory" : "connection"
+    "errorCategory" : "connection",
+    "rollback" : false,
+    "retryable" : false,
+    "category" : "connection"
   },
   "stackTrace" : [ ],
   "status" : "INTERNAL_SERVER_ERROR",

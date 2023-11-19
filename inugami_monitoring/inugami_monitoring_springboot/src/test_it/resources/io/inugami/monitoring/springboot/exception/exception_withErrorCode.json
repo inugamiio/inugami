@@ -23,7 +23,13 @@
     } ],
     "version" : "1.0.0",
     "errorType" : "functional",
-    "errorCategory" : "GET"
+    "errorCategory" : "GET",
+    "rollback" : false,
+    "retryable" : false,
+    "field" : "id",
+    "category" : "GET",
+    "errorDomain" : "user",
+    "errorSubDomain" : "read"
   },
   "stackTrace" : [ ],
   "status" : "BAD_REQUEST",
