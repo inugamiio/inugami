@@ -1,6 +1,7 @@
 package io.inugami.commons.test;
 
 import io.inugami.commons.test.api.RegexLineMatcher;
+import io.inugami.commons.test.api.RegexLineReplacer;
 import io.inugami.commons.test.api.SkipLineMatcher;
 import io.inugami.commons.test.dto.UserDto;
 import org.junit.jupiter.api.Test;
@@ -48,14 +49,25 @@ class UnitTestHelperTextTest {
     // =========================================================================
     @Test
     void assertTextRelative_withSkipLine_shouldSkip() {
+
         final UserDto user = UserDto.builder()
                                     .lastName("Smith")
                                     .firstName("John")
                                     .creationDate(LocalDateTime.now())
                                     .build();
 
+        String data = "{\n" +
+                      "xxx\n" +
+                      "  \"firstName\" : \"John\",\n" +
+                      "  \"lastName\" : \"Smith\"\n" +
+                      "}";
+        UnitTestHelperText.assertText(user,
+                                      data,
+                                      RegexLineReplacer.of(".*creationDate.*", "xxx"));
+
         UnitTestHelperText.assertTextRelative(user, "test/dto/user.1.valid.json", SkipLineMatcher.of(1));
         UnitTestHelperText.assertTextRelative(user, "test/dto/user.1.valid.json", UnitTestHelperText.buildSkipLines(1));
+
 
     }
 

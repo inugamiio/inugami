@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @SuppressWarnings({"java:S2629", "java:S1168", "java:S1181", "java:S2737"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UnitTestHelperText {
@@ -63,30 +64,44 @@ public final class UnitTestHelperText {
             if (jsonValue.length != refLines.length) {
                 Loggers.DEBUG.error(renderDiff(jsonValue, refLines));
             }
-            Asserts.assertTrue(
-                    String.format("reference and json have not same size : %s,%s", jsonValue.length, refLines.length),
-                    jsonValue.length == refLines.length);
+            Asserts.assertTrue(String.format("reference and json have not same size : %s,%s", jsonValue.length, refLines.length),
+                               jsonValue.length == refLines.length);
         } catch (final Throwable e) {
             throw e;
         }
 
 
         for (int i = 0; i < refLines.length; i++) {
-            final String      valueLine = jsonValue[i].trim();
+            String            valueLine = replace(i, jsonValue[i].trim(), matchers);
             final String      refLine   = refLines[i].trim();
             final LineMatcher matcher   = resolveMatcher(i, valueLine, refLine, matchers);
 
             if (matcher.skip(i, valueLine, refLine)) {
                 continue;
             }
+
+
             if (!matcher.match(i, valueLine, refLine)) {
                 Loggers.DEBUG.error(renderDiff(jsonValue, refLines));
-                throw new AssertTextException(
-                        String.format("[%s][%s] %s != %s", matcher.getClass(),
-                                      i + 1, jsonValue[i].trim(), refLines[i].trim()));
+                throw new AssertTextException(String.format("[%s][%s] %s != %s", matcher.getClass(),
+                                                            i + 1, valueLine, refLine));
             }
 
         }
+    }
+
+    private static String replace(final int index, final String value, LineMatcher[] matchers) {
+        if (matchers == null) {
+            return value;
+        }
+
+        String result = value;
+        for (LineMatcher matcher : matchers) {
+            if (matcher.acceptReplace(index, result)) {
+                result = matcher.replace(index, result);
+            }
+        }
+        return result;
     }
 
     private static LineMatcher resolveMatcher(final int index,
