@@ -4,6 +4,8 @@ import io.inugami.api.functionnals.VoidFunctionWithException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -25,7 +27,8 @@ class AssertsTest {
     private static final String    REF        = "REF";
 
 
-    private static final String NULL_MSG = null;
+    private static final String NULL_MSG     = null;
+    public static final  String SOME_MESSAGE = "some message";
 
     // =========================================================================
     // assertTrue
@@ -52,11 +55,7 @@ class AssertsTest {
 
     @Test
     void assertTrue__shouldThrow() {
-        final List<VoidFunctionWithException> functions = List.of(
-                () -> Asserts.assertTrue(false),
-                () -> Asserts.assertTrue(MESSAGE, false),
-                () -> Asserts.assertTrue(MESSAGE_PRODUCER, false),
-                () -> Asserts.assertTrue(ERROR_CODE, false)
+        final List<VoidFunctionWithException> functions = List.of(() -> Asserts.assertTrue(false), () -> Asserts.assertTrue(MESSAGE, false), () -> Asserts.assertTrue(MESSAGE_PRODUCER, false), () -> Asserts.assertTrue(ERROR_CODE, false)
 
         );
         for (int i = 0; i < functions.size(); i++) {
@@ -167,27 +166,7 @@ class AssertsTest {
 
     @Test
     void assertEquals__shouldThrow() {
-        final List<VoidFunctionWithException> functions = List.of(
-                () -> Asserts.assertEquals(REF, VALUE),
-                () -> Asserts.assertEquals(MESSAGE, REF, VALUE),
-                () -> Asserts.assertEquals(MESSAGE_PRODUCER, REF, VALUE),
-                () -> Asserts.assertEquals(ERROR_CODE, REF, VALUE),
-                () -> Asserts.assertEquals(10, 11),
-                () -> Asserts.assertEquals(MESSAGE, 10, 11),
-                () -> Asserts.assertEquals(MESSAGE_PRODUCER, 10, 11),
-                () -> Asserts.assertEquals(ERROR_CODE, 10, 11),
-                () -> Asserts.assertEquals(10L, 11L),
-                () -> Asserts.assertEquals(MESSAGE, 10L, 11L),
-                () -> Asserts.assertEquals(MESSAGE_PRODUCER, 10L, 11L),
-                () -> Asserts.assertEquals(ERROR_CODE, 10L, 11L),
-                () -> Asserts.assertEquals(10.0f, 11.0f),
-                () -> Asserts.assertEquals(MESSAGE, 10.0f, 11.0f),
-                () -> Asserts.assertEquals(MESSAGE_PRODUCER, 10.0f, 11.0f),
-                () -> Asserts.assertEquals(ERROR_CODE, 10.0f, 11.0f),
-                () -> Asserts.assertEquals(10.0, 11.0),
-                () -> Asserts.assertEquals(MESSAGE, 10.0, 11.0),
-                () -> Asserts.assertEquals(MESSAGE_PRODUCER, 10.0, 11.0),
-                () -> Asserts.assertEquals(ERROR_CODE, 10.0, 11.0)
+        final List<VoidFunctionWithException> functions = List.of(() -> Asserts.assertEquals(REF, VALUE), () -> Asserts.assertEquals(MESSAGE, REF, VALUE), () -> Asserts.assertEquals(MESSAGE_PRODUCER, REF, VALUE), () -> Asserts.assertEquals(ERROR_CODE, REF, VALUE), () -> Asserts.assertEquals(10, 11), () -> Asserts.assertEquals(MESSAGE, 10, 11), () -> Asserts.assertEquals(MESSAGE_PRODUCER, 10, 11), () -> Asserts.assertEquals(ERROR_CODE, 10, 11), () -> Asserts.assertEquals(10L, 11L), () -> Asserts.assertEquals(MESSAGE, 10L, 11L), () -> Asserts.assertEquals(MESSAGE_PRODUCER, 10L, 11L), () -> Asserts.assertEquals(ERROR_CODE, 10L, 11L), () -> Asserts.assertEquals(10.0f, 11.0f), () -> Asserts.assertEquals(MESSAGE, 10.0f, 11.0f), () -> Asserts.assertEquals(MESSAGE_PRODUCER, 10.0f, 11.0f), () -> Asserts.assertEquals(ERROR_CODE, 10.0f, 11.0f), () -> Asserts.assertEquals(10.0, 11.0), () -> Asserts.assertEquals(MESSAGE, 10.0, 11.0), () -> Asserts.assertEquals(MESSAGE_PRODUCER, 10.0, 11.0), () -> Asserts.assertEquals(ERROR_CODE, 10.0, 11.0)
 
         );
         for (int i = 0; i < functions.size(); i++) {
@@ -229,27 +208,7 @@ class AssertsTest {
 
     @Test
     void assertNotEquals__shouldThrow() {
-        final List<VoidFunctionWithException> functions = List.of(
-                () -> Asserts.assertNotEquals(VALUE, VALUE),
-                () -> Asserts.assertNotEquals(MESSAGE, VALUE, VALUE),
-                () -> Asserts.assertNotEquals(MESSAGE_PRODUCER, VALUE, VALUE),
-                () -> Asserts.assertNotEquals(ERROR_CODE, VALUE, VALUE),
-                () -> Asserts.assertNotEquals(10, 10),
-                () -> Asserts.assertNotEquals(MESSAGE, 10, 10),
-                () -> Asserts.assertNotEquals(MESSAGE_PRODUCER, 10, 10),
-                () -> Asserts.assertNotEquals(ERROR_CODE, 10, 10),
-                () -> Asserts.assertNotEquals(10L, 10L),
-                () -> Asserts.assertNotEquals(MESSAGE, 10L, 10L),
-                () -> Asserts.assertNotEquals(MESSAGE_PRODUCER, 10L, 10L),
-                () -> Asserts.assertNotEquals(ERROR_CODE, 10L, 10L),
-                () -> Asserts.assertNotEquals(10.0f, 10.0f),
-                () -> Asserts.assertNotEquals(MESSAGE, 10.0f, 10.0f),
-                () -> Asserts.assertNotEquals(MESSAGE_PRODUCER, 10.0f, 10.0f),
-                () -> Asserts.assertNotEquals(ERROR_CODE, 10.0f, 10.0f),
-                () -> Asserts.assertNotEquals(10.0, 10.0),
-                () -> Asserts.assertNotEquals(MESSAGE, 10.0, 10.0),
-                () -> Asserts.assertNotEquals(MESSAGE_PRODUCER, 10.0, 10.0),
-                () -> Asserts.assertNotEquals(ERROR_CODE, 10.0, 10.0)
+        final List<VoidFunctionWithException> functions = List.of(() -> Asserts.assertNotEquals(VALUE, VALUE), () -> Asserts.assertNotEquals(MESSAGE, VALUE, VALUE), () -> Asserts.assertNotEquals(MESSAGE_PRODUCER, VALUE, VALUE), () -> Asserts.assertNotEquals(ERROR_CODE, VALUE, VALUE), () -> Asserts.assertNotEquals(10, 10), () -> Asserts.assertNotEquals(MESSAGE, 10, 10), () -> Asserts.assertNotEquals(MESSAGE_PRODUCER, 10, 10), () -> Asserts.assertNotEquals(ERROR_CODE, 10, 10), () -> Asserts.assertNotEquals(10L, 10L), () -> Asserts.assertNotEquals(MESSAGE, 10L, 10L), () -> Asserts.assertNotEquals(MESSAGE_PRODUCER, 10L, 10L), () -> Asserts.assertNotEquals(ERROR_CODE, 10L, 10L), () -> Asserts.assertNotEquals(10.0f, 10.0f), () -> Asserts.assertNotEquals(MESSAGE, 10.0f, 10.0f), () -> Asserts.assertNotEquals(MESSAGE_PRODUCER, 10.0f, 10.0f), () -> Asserts.assertNotEquals(ERROR_CODE, 10.0f, 10.0f), () -> Asserts.assertNotEquals(10.0, 10.0), () -> Asserts.assertNotEquals(MESSAGE, 10.0, 10.0), () -> Asserts.assertNotEquals(MESSAGE_PRODUCER, 10.0, 10.0), () -> Asserts.assertNotEquals(ERROR_CODE, 10.0, 10.0)
 
         );
         for (int i = 0; i < functions.size(); i++) {
@@ -306,76 +265,19 @@ class AssertsTest {
 
     @Test
     void assertLower__shouldThrow() {
-        final List<VoidFunctionWithException> functions = List.of(
-                () -> Asserts.assertLower(10, 11),
-                () -> Asserts.assertLower(10, 10),
-                () -> Asserts.assertLower(MESSAGE, 10, 11),
-                () -> Asserts.assertLower(MESSAGE, 10, 10),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, 10, 11),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, 10, 10),
-                () -> Asserts.assertLower(ERROR_CODE, 10, 11),
-                () -> Asserts.assertLower(ERROR_CODE, 10, 10),
+        final List<VoidFunctionWithException> functions = List.of(() -> Asserts.assertLower(10, 11), () -> Asserts.assertLower(10, 10), () -> Asserts.assertLower(MESSAGE, 10, 11), () -> Asserts.assertLower(MESSAGE, 10, 10), () -> Asserts.assertLower(MESSAGE_PRODUCER, 10, 11), () -> Asserts.assertLower(MESSAGE_PRODUCER, 10, 10), () -> Asserts.assertLower(ERROR_CODE, 10, 11), () -> Asserts.assertLower(ERROR_CODE, 10, 10),
 
-                () -> Asserts.assertLower(10L, 11L),
-                () -> Asserts.assertLower(10L, 10L),
-                () -> Asserts.assertLower(MESSAGE, 10L, 11L),
-                () -> Asserts.assertLower(MESSAGE, 10L, 10L),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, 10L, 11L),
-                () -> Asserts.assertLower(ERROR_CODE, 10L, 11L),
-                () -> Asserts.assertLower(ERROR_CODE, 10L, 10L),
+                                                                  () -> Asserts.assertLower(10L, 11L), () -> Asserts.assertLower(10L, 10L), () -> Asserts.assertLower(MESSAGE, 10L, 11L), () -> Asserts.assertLower(MESSAGE, 10L, 10L), () -> Asserts.assertLower(MESSAGE_PRODUCER, 10L, 11L), () -> Asserts.assertLower(ERROR_CODE, 10L, 11L), () -> Asserts.assertLower(ERROR_CODE, 10L, 10L),
 
-                () -> Asserts.assertLower(10.0f, 11.0f),
-                () -> Asserts.assertLower(10.0f, 10.0f),
-                () -> Asserts.assertLower(MESSAGE, 10.0f, 11.0f),
-                () -> Asserts.assertLower(MESSAGE, 10.0f, 10.0f),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, 10.0f, 11.0f),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, 10.0f, 10.0f),
-                () -> Asserts.assertLower(ERROR_CODE, 10.0f, 11.0f),
-                () -> Asserts.assertLower(ERROR_CODE, 10.0f, 10.0f),
+                                                                  () -> Asserts.assertLower(10.0f, 11.0f), () -> Asserts.assertLower(10.0f, 10.0f), () -> Asserts.assertLower(MESSAGE, 10.0f, 11.0f), () -> Asserts.assertLower(MESSAGE, 10.0f, 10.0f), () -> Asserts.assertLower(MESSAGE_PRODUCER, 10.0f, 11.0f), () -> Asserts.assertLower(MESSAGE_PRODUCER, 10.0f, 10.0f), () -> Asserts.assertLower(ERROR_CODE, 10.0f, 11.0f), () -> Asserts.assertLower(ERROR_CODE, 10.0f, 10.0f),
 
-                () -> Asserts.assertLower(10.0, 11.0),
-                () -> Asserts.assertLower(10.0, 10.0),
-                () -> Asserts.assertLower(MESSAGE, 10.0, 11.0),
-                () -> Asserts.assertLower(MESSAGE, 10.0, 10.0),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, 10.0, 11.0),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, 10.0, 10.0),
-                () -> Asserts.assertLower(ERROR_CODE, 10.0, 11.0),
-                () -> Asserts.assertLower(ERROR_CODE, 10.0, 10.0),
+                                                                  () -> Asserts.assertLower(10.0, 11.0), () -> Asserts.assertLower(10.0, 10.0), () -> Asserts.assertLower(MESSAGE, 10.0, 11.0), () -> Asserts.assertLower(MESSAGE, 10.0, 10.0), () -> Asserts.assertLower(MESSAGE_PRODUCER, 10.0, 11.0), () -> Asserts.assertLower(MESSAGE_PRODUCER, 10.0, 10.0), () -> Asserts.assertLower(ERROR_CODE, 10.0, 11.0), () -> Asserts.assertLower(ERROR_CODE, 10.0, 10.0),
 
-                () -> Asserts.assertLower(Integer.valueOf(10), Integer.valueOf(11)),
-                () -> Asserts.assertLower(Integer.valueOf(10), Integer.valueOf(10)),
-                () -> Asserts.assertLower(MESSAGE, Integer.valueOf(10), Integer.valueOf(11)),
-                () -> Asserts.assertLower(MESSAGE, Integer.valueOf(10), Integer.valueOf(10)),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, Integer.valueOf(10), Integer.valueOf(11)),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, Integer.valueOf(10), Integer.valueOf(10)),
-                () -> Asserts.assertLower(ERROR_CODE, Integer.valueOf(10), Integer.valueOf(11)),
-                () -> Asserts.assertLower(ERROR_CODE, Integer.valueOf(10), Integer.valueOf(10)),
+                                                                  () -> Asserts.assertLower(Integer.valueOf(10), Integer.valueOf(11)), () -> Asserts.assertLower(Integer.valueOf(10), Integer.valueOf(10)), () -> Asserts.assertLower(MESSAGE, Integer.valueOf(10), Integer.valueOf(11)), () -> Asserts.assertLower(MESSAGE, Integer.valueOf(10), Integer.valueOf(10)), () -> Asserts.assertLower(MESSAGE_PRODUCER, Integer.valueOf(10), Integer.valueOf(11)), () -> Asserts.assertLower(MESSAGE_PRODUCER, Integer.valueOf(10), Integer.valueOf(10)), () -> Asserts.assertLower(ERROR_CODE, Integer.valueOf(10), Integer.valueOf(11)), () -> Asserts.assertLower(ERROR_CODE, Integer.valueOf(10), Integer.valueOf(10)),
 
-                () -> Asserts.assertLower(Long.valueOf(10), Long.valueOf(11)),
-                () -> Asserts.assertLower(Long.valueOf(10), Long.valueOf(10)),
-                () -> Asserts.assertLower(MESSAGE, Long.valueOf(10), Long.valueOf(11)),
-                () -> Asserts.assertLower(MESSAGE, Long.valueOf(10), Long.valueOf(10)),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, Long.valueOf(10), Long.valueOf(11)),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, Long.valueOf(10), Long.valueOf(10)),
-                () -> Asserts.assertLower(ERROR_CODE, Long.valueOf(10), Long.valueOf(11)),
-                () -> Asserts.assertLower(ERROR_CODE, Long.valueOf(10), Long.valueOf(10)),
+                                                                  () -> Asserts.assertLower(Long.valueOf(10), Long.valueOf(11)), () -> Asserts.assertLower(Long.valueOf(10), Long.valueOf(10)), () -> Asserts.assertLower(MESSAGE, Long.valueOf(10), Long.valueOf(11)), () -> Asserts.assertLower(MESSAGE, Long.valueOf(10), Long.valueOf(10)), () -> Asserts.assertLower(MESSAGE_PRODUCER, Long.valueOf(10), Long.valueOf(11)), () -> Asserts.assertLower(MESSAGE_PRODUCER, Long.valueOf(10), Long.valueOf(10)), () -> Asserts.assertLower(ERROR_CODE, Long.valueOf(10), Long.valueOf(11)), () -> Asserts.assertLower(ERROR_CODE, Long.valueOf(10), Long.valueOf(10)),
 
-                () -> Asserts.assertLower(Double.valueOf(10), Double.valueOf(11)),
-                () -> Asserts.assertLower(Double.valueOf(10), Double.valueOf(10)),
-                () -> Asserts.assertLower(MESSAGE, Double.valueOf(10), Double.valueOf(11)),
-                () -> Asserts.assertLower(MESSAGE, Double.valueOf(10), Double.valueOf(10)),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, Long.valueOf(10), Double.valueOf(11)),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, Long.valueOf(10), Double.valueOf(10)),
-                () -> Asserts.assertLower(ERROR_CODE, Double.valueOf(10), Double.valueOf(11)),
-                () -> Asserts.assertLower(ERROR_CODE, Double.valueOf(10), Double.valueOf(10)),
-                () -> Asserts.assertLower(BigDecimal.valueOf(10), BigDecimal.valueOf(11)),
-                () -> Asserts.assertLower(BigDecimal.valueOf(10), BigDecimal.valueOf(10)),
-                () -> Asserts.assertLower(MESSAGE, BigDecimal.valueOf(10), BigDecimal.valueOf(11)),
-                () -> Asserts.assertLower(MESSAGE, BigDecimal.valueOf(10), BigDecimal.valueOf(10)),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, BigDecimal.valueOf(10), BigDecimal.valueOf(11)),
-                () -> Asserts.assertLower(MESSAGE_PRODUCER, BigDecimal.valueOf(10), BigDecimal.valueOf(10)),
-                () -> Asserts.assertLower(ERROR_CODE, BigDecimal.valueOf(10), BigDecimal.valueOf(11)),
-                () -> Asserts.assertLower(ERROR_CODE, BigDecimal.valueOf(10), BigDecimal.valueOf(10))
+                                                                  () -> Asserts.assertLower(Double.valueOf(10), Double.valueOf(11)), () -> Asserts.assertLower(Double.valueOf(10), Double.valueOf(10)), () -> Asserts.assertLower(MESSAGE, Double.valueOf(10), Double.valueOf(11)), () -> Asserts.assertLower(MESSAGE, Double.valueOf(10), Double.valueOf(10)), () -> Asserts.assertLower(MESSAGE_PRODUCER, Long.valueOf(10), Double.valueOf(11)), () -> Asserts.assertLower(MESSAGE_PRODUCER, Long.valueOf(10), Double.valueOf(10)), () -> Asserts.assertLower(ERROR_CODE, Double.valueOf(10), Double.valueOf(11)), () -> Asserts.assertLower(ERROR_CODE, Double.valueOf(10), Double.valueOf(10)), () -> Asserts.assertLower(BigDecimal.valueOf(10), BigDecimal.valueOf(11)), () -> Asserts.assertLower(BigDecimal.valueOf(10), BigDecimal.valueOf(10)), () -> Asserts.assertLower(MESSAGE, BigDecimal.valueOf(10), BigDecimal.valueOf(11)), () -> Asserts.assertLower(MESSAGE, BigDecimal.valueOf(10), BigDecimal.valueOf(10)), () -> Asserts.assertLower(MESSAGE_PRODUCER, BigDecimal.valueOf(10), BigDecimal.valueOf(11)), () -> Asserts.assertLower(MESSAGE_PRODUCER, BigDecimal.valueOf(10), BigDecimal.valueOf(10)), () -> Asserts.assertLower(ERROR_CODE, BigDecimal.valueOf(10), BigDecimal.valueOf(11)), () -> Asserts.assertLower(ERROR_CODE, BigDecimal.valueOf(10), BigDecimal.valueOf(10))
 
 
         );
@@ -465,45 +367,19 @@ class AssertsTest {
 
     @Test
     void assertLowerOrEquals_shouldThrow() {
-        final List<VoidFunctionWithException> functions = List.of(
-                () -> Asserts.assertLowerOrEquals(10, 11),
-                () -> Asserts.assertLowerOrEquals(MESSAGE, 10, 11),
-                () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, 10, 11),
-                () -> Asserts.assertLowerOrEquals(ERROR_CODE, 10, 11),
+        final List<VoidFunctionWithException> functions = List.of(() -> Asserts.assertLowerOrEquals(10, 11), () -> Asserts.assertLowerOrEquals(MESSAGE, 10, 11), () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, 10, 11), () -> Asserts.assertLowerOrEquals(ERROR_CODE, 10, 11),
 
-                () -> Asserts.assertLowerOrEquals(10L, 11L),
-                () -> Asserts.assertLowerOrEquals(MESSAGE, 10L, 11L),
-                () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, 10L, 11L),
-                () -> Asserts.assertLowerOrEquals(ERROR_CODE, 10L, 11L),
+                                                                  () -> Asserts.assertLowerOrEquals(10L, 11L), () -> Asserts.assertLowerOrEquals(MESSAGE, 10L, 11L), () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, 10L, 11L), () -> Asserts.assertLowerOrEquals(ERROR_CODE, 10L, 11L),
 
-                () -> Asserts.assertLowerOrEquals(10.0f, 11.0f),
-                () -> Asserts.assertLowerOrEquals(MESSAGE, 10.0f, 11.0f),
-                () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, 10.0f, 11.0f),
-                () -> Asserts.assertLowerOrEquals(ERROR_CODE, 10.0f, 11.0f),
+                                                                  () -> Asserts.assertLowerOrEquals(10.0f, 11.0f), () -> Asserts.assertLowerOrEquals(MESSAGE, 10.0f, 11.0f), () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, 10.0f, 11.0f), () -> Asserts.assertLowerOrEquals(ERROR_CODE, 10.0f, 11.0f),
 
-                () -> Asserts.assertLowerOrEquals(10.0, 11.0),
-                () -> Asserts.assertLowerOrEquals(MESSAGE, 10.0, 11.0),
-                () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, 10.0, 11.0),
-                () -> Asserts.assertLowerOrEquals(ERROR_CODE, 10.0, 11.0),
+                                                                  () -> Asserts.assertLowerOrEquals(10.0, 11.0), () -> Asserts.assertLowerOrEquals(MESSAGE, 10.0, 11.0), () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, 10.0, 11.0), () -> Asserts.assertLowerOrEquals(ERROR_CODE, 10.0, 11.0),
 
-                () -> Asserts.assertLowerOrEquals(Integer.valueOf(10), Integer.valueOf(11)),
-                () -> Asserts.assertLowerOrEquals(MESSAGE, Integer.valueOf(10), Integer.valueOf(11)),
-                () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, Integer.valueOf(10), Integer.valueOf(11)),
-                () -> Asserts.assertLowerOrEquals(ERROR_CODE, Integer.valueOf(10), Integer.valueOf(11)),
+                                                                  () -> Asserts.assertLowerOrEquals(Integer.valueOf(10), Integer.valueOf(11)), () -> Asserts.assertLowerOrEquals(MESSAGE, Integer.valueOf(10), Integer.valueOf(11)), () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, Integer.valueOf(10), Integer.valueOf(11)), () -> Asserts.assertLowerOrEquals(ERROR_CODE, Integer.valueOf(10), Integer.valueOf(11)),
 
-                () -> Asserts.assertLowerOrEquals(Long.valueOf(10), Long.valueOf(11)),
-                () -> Asserts.assertLowerOrEquals(MESSAGE, Long.valueOf(10), Long.valueOf(11)),
-                () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, Long.valueOf(10), Long.valueOf(11)),
-                () -> Asserts.assertLowerOrEquals(ERROR_CODE, Long.valueOf(10), Long.valueOf(11)),
+                                                                  () -> Asserts.assertLowerOrEquals(Long.valueOf(10), Long.valueOf(11)), () -> Asserts.assertLowerOrEquals(MESSAGE, Long.valueOf(10), Long.valueOf(11)), () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, Long.valueOf(10), Long.valueOf(11)), () -> Asserts.assertLowerOrEquals(ERROR_CODE, Long.valueOf(10), Long.valueOf(11)),
 
-                () -> Asserts.assertLowerOrEquals(Double.valueOf(10), Double.valueOf(11)),
-                () -> Asserts.assertLowerOrEquals(MESSAGE, Double.valueOf(10), Double.valueOf(11)),
-                () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, Long.valueOf(10), Double.valueOf(11)),
-                () -> Asserts.assertLowerOrEquals(ERROR_CODE, Double.valueOf(10), Double.valueOf(11)),
-                () -> Asserts.assertLowerOrEquals(BigDecimal.valueOf(10), BigDecimal.valueOf(11)),
-                () -> Asserts.assertLowerOrEquals(MESSAGE, BigDecimal.valueOf(10), BigDecimal.valueOf(11)),
-                () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, BigDecimal.valueOf(10), BigDecimal.valueOf(11)),
-                () -> Asserts.assertLowerOrEquals(ERROR_CODE, BigDecimal.valueOf(10), BigDecimal.valueOf(11))
+                                                                  () -> Asserts.assertLowerOrEquals(Double.valueOf(10), Double.valueOf(11)), () -> Asserts.assertLowerOrEquals(MESSAGE, Double.valueOf(10), Double.valueOf(11)), () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, Long.valueOf(10), Double.valueOf(11)), () -> Asserts.assertLowerOrEquals(ERROR_CODE, Double.valueOf(10), Double.valueOf(11)), () -> Asserts.assertLowerOrEquals(BigDecimal.valueOf(10), BigDecimal.valueOf(11)), () -> Asserts.assertLowerOrEquals(MESSAGE, BigDecimal.valueOf(10), BigDecimal.valueOf(11)), () -> Asserts.assertLowerOrEquals(MESSAGE_PRODUCER, BigDecimal.valueOf(10), BigDecimal.valueOf(11)), () -> Asserts.assertLowerOrEquals(ERROR_CODE, BigDecimal.valueOf(10), BigDecimal.valueOf(11))
 
         );
         for (int i = 0; i < functions.size(); i++) {
@@ -560,78 +436,21 @@ class AssertsTest {
 
     @Test
     void assertHigher_shouldThrow() {
-        final List<VoidFunctionWithException> functions = List.of(
-                () -> Asserts.assertHigher(10, 9),
-                () -> Asserts.assertHigher(10, 10),
-                () -> Asserts.assertHigher(MESSAGE, 10, 9),
-                () -> Asserts.assertHigher(MESSAGE, 10, 10),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10, 9),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10, 10),
-                () -> Asserts.assertHigher(ERROR_CODE, 10, 9),
-                () -> Asserts.assertHigher(ERROR_CODE, 10, 10),
+        final List<VoidFunctionWithException> functions = List.of(() -> Asserts.assertHigher(10, 9), () -> Asserts.assertHigher(10, 10), () -> Asserts.assertHigher(MESSAGE, 10, 9), () -> Asserts.assertHigher(MESSAGE, 10, 10), () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10, 9), () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10, 10), () -> Asserts.assertHigher(ERROR_CODE, 10, 9), () -> Asserts.assertHigher(ERROR_CODE, 10, 10),
 
-                () -> Asserts.assertHigher(10L, 9L),
-                () -> Asserts.assertHigher(10L, 10L),
-                () -> Asserts.assertHigher(MESSAGE, 10L, 9L),
-                () -> Asserts.assertHigher(MESSAGE, 10L, 10L),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10L, 9L),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10L, 10L),
-                () -> Asserts.assertHigher(ERROR_CODE, 10L, 9L),
-                () -> Asserts.assertHigher(ERROR_CODE, 10L, 10L),
+                                                                  () -> Asserts.assertHigher(10L, 9L), () -> Asserts.assertHigher(10L, 10L), () -> Asserts.assertHigher(MESSAGE, 10L, 9L), () -> Asserts.assertHigher(MESSAGE, 10L, 10L), () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10L, 9L), () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10L, 10L), () -> Asserts.assertHigher(ERROR_CODE, 10L, 9L), () -> Asserts.assertHigher(ERROR_CODE, 10L, 10L),
 
-                () -> Asserts.assertHigher(10.0f, 9.0f),
-                () -> Asserts.assertHigher(10.0f, 10.0f),
-                () -> Asserts.assertHigher(MESSAGE, 10.0f, 9.0f),
-                () -> Asserts.assertHigher(MESSAGE, 10.0f, 10.0f),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10.0f, 9.0f),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10.0f, 10.0f),
-                () -> Asserts.assertHigher(ERROR_CODE, 10.0f, 9.0f),
-                () -> Asserts.assertHigher(ERROR_CODE, 10.0f, 10.0f),
+                                                                  () -> Asserts.assertHigher(10.0f, 9.0f), () -> Asserts.assertHigher(10.0f, 10.0f), () -> Asserts.assertHigher(MESSAGE, 10.0f, 9.0f), () -> Asserts.assertHigher(MESSAGE, 10.0f, 10.0f), () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10.0f, 9.0f), () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10.0f, 10.0f), () -> Asserts.assertHigher(ERROR_CODE, 10.0f, 9.0f), () -> Asserts.assertHigher(ERROR_CODE, 10.0f, 10.0f),
 
-                () -> Asserts.assertHigher(10.0, 9.0),
-                () -> Asserts.assertHigher(10.0, 10.0),
-                () -> Asserts.assertHigher(MESSAGE, 10.0, 9.0),
-                () -> Asserts.assertHigher(MESSAGE, 10.0, 10.0),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10.0, 9.0),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10.0, 10.0),
-                () -> Asserts.assertHigher(ERROR_CODE, 10.0, 9.0),
-                () -> Asserts.assertHigher(ERROR_CODE, 10.0, 10.0),
+                                                                  () -> Asserts.assertHigher(10.0, 9.0), () -> Asserts.assertHigher(10.0, 10.0), () -> Asserts.assertHigher(MESSAGE, 10.0, 9.0), () -> Asserts.assertHigher(MESSAGE, 10.0, 10.0), () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10.0, 9.0), () -> Asserts.assertHigher(MESSAGE_PRODUCER, 10.0, 10.0), () -> Asserts.assertHigher(ERROR_CODE, 10.0, 9.0), () -> Asserts.assertHigher(ERROR_CODE, 10.0, 10.0),
 
-                () -> Asserts.assertHigher(Integer.valueOf(10), Integer.valueOf(9)),
-                () -> Asserts.assertHigher(Integer.valueOf(10), Integer.valueOf(10)),
-                () -> Asserts.assertHigher(MESSAGE, Integer.valueOf(10), Integer.valueOf(9)),
-                () -> Asserts.assertHigher(MESSAGE, Integer.valueOf(10), Integer.valueOf(10)),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, Integer.valueOf(10), Integer.valueOf(9)),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, Integer.valueOf(10), Integer.valueOf(10)),
-                () -> Asserts.assertHigher(ERROR_CODE, Integer.valueOf(10), Integer.valueOf(9)),
-                () -> Asserts.assertHigher(ERROR_CODE, Integer.valueOf(10), Integer.valueOf(10)),
+                                                                  () -> Asserts.assertHigher(Integer.valueOf(10), Integer.valueOf(9)), () -> Asserts.assertHigher(Integer.valueOf(10), Integer.valueOf(10)), () -> Asserts.assertHigher(MESSAGE, Integer.valueOf(10), Integer.valueOf(9)), () -> Asserts.assertHigher(MESSAGE, Integer.valueOf(10), Integer.valueOf(10)), () -> Asserts.assertHigher(MESSAGE_PRODUCER, Integer.valueOf(10), Integer.valueOf(9)), () -> Asserts.assertHigher(MESSAGE_PRODUCER, Integer.valueOf(10), Integer.valueOf(10)), () -> Asserts.assertHigher(ERROR_CODE, Integer.valueOf(10), Integer.valueOf(9)), () -> Asserts.assertHigher(ERROR_CODE, Integer.valueOf(10), Integer.valueOf(10)),
 
-                () -> Asserts.assertHigher(Long.valueOf(10), Long.valueOf(9)),
-                () -> Asserts.assertHigher(Long.valueOf(10), Long.valueOf(10)),
-                () -> Asserts.assertHigher(MESSAGE, Long.valueOf(10), Long.valueOf(9)),
-                () -> Asserts.assertHigher(MESSAGE, Long.valueOf(10), Long.valueOf(10)),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, Long.valueOf(10), Long.valueOf(9)),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, Long.valueOf(10), Long.valueOf(10)),
-                () -> Asserts.assertHigher(ERROR_CODE, Long.valueOf(10), Long.valueOf(9)),
-                () -> Asserts.assertHigher(ERROR_CODE, Long.valueOf(10), Long.valueOf(10)),
+                                                                  () -> Asserts.assertHigher(Long.valueOf(10), Long.valueOf(9)), () -> Asserts.assertHigher(Long.valueOf(10), Long.valueOf(10)), () -> Asserts.assertHigher(MESSAGE, Long.valueOf(10), Long.valueOf(9)), () -> Asserts.assertHigher(MESSAGE, Long.valueOf(10), Long.valueOf(10)), () -> Asserts.assertHigher(MESSAGE_PRODUCER, Long.valueOf(10), Long.valueOf(9)), () -> Asserts.assertHigher(MESSAGE_PRODUCER, Long.valueOf(10), Long.valueOf(10)), () -> Asserts.assertHigher(ERROR_CODE, Long.valueOf(10), Long.valueOf(9)), () -> Asserts.assertHigher(ERROR_CODE, Long.valueOf(10), Long.valueOf(10)),
 
-                () -> Asserts.assertHigher(Double.valueOf(10), Double.valueOf(9)),
-                () -> Asserts.assertHigher(Double.valueOf(10), Double.valueOf(10)),
-                () -> Asserts.assertHigher(MESSAGE, Double.valueOf(10), Double.valueOf(9)),
-                () -> Asserts.assertHigher(MESSAGE, Double.valueOf(10), Double.valueOf(10)),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, Double.valueOf(10), Double.valueOf(9)),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, Double.valueOf(10), Double.valueOf(10)),
-                () -> Asserts.assertHigher(ERROR_CODE, Double.valueOf(10), Double.valueOf(9)),
-                () -> Asserts.assertHigher(ERROR_CODE, Double.valueOf(10), Double.valueOf(10)),
+                                                                  () -> Asserts.assertHigher(Double.valueOf(10), Double.valueOf(9)), () -> Asserts.assertHigher(Double.valueOf(10), Double.valueOf(10)), () -> Asserts.assertHigher(MESSAGE, Double.valueOf(10), Double.valueOf(9)), () -> Asserts.assertHigher(MESSAGE, Double.valueOf(10), Double.valueOf(10)), () -> Asserts.assertHigher(MESSAGE_PRODUCER, Double.valueOf(10), Double.valueOf(9)), () -> Asserts.assertHigher(MESSAGE_PRODUCER, Double.valueOf(10), Double.valueOf(10)), () -> Asserts.assertHigher(ERROR_CODE, Double.valueOf(10), Double.valueOf(9)), () -> Asserts.assertHigher(ERROR_CODE, Double.valueOf(10), Double.valueOf(10)),
 
-                () -> Asserts.assertHigher(BigDecimal.valueOf(10), BigDecimal.valueOf(9)),
-                () -> Asserts.assertHigher(BigDecimal.valueOf(10), BigDecimal.valueOf(10)),
-                () -> Asserts.assertHigher(MESSAGE, BigDecimal.valueOf(10), BigDecimal.valueOf(9)),
-                () -> Asserts.assertHigher(MESSAGE, BigDecimal.valueOf(10), BigDecimal.valueOf(10)),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, BigDecimal.valueOf(10), BigDecimal.valueOf(9)),
-                () -> Asserts.assertHigher(MESSAGE_PRODUCER, BigDecimal.valueOf(10), BigDecimal.valueOf(10)),
-                () -> Asserts.assertHigher(ERROR_CODE, BigDecimal.valueOf(10), BigDecimal.valueOf(9)),
-                () -> Asserts.assertHigher(ERROR_CODE, BigDecimal.valueOf(10), BigDecimal.valueOf(10))
+                                                                  () -> Asserts.assertHigher(BigDecimal.valueOf(10), BigDecimal.valueOf(9)), () -> Asserts.assertHigher(BigDecimal.valueOf(10), BigDecimal.valueOf(10)), () -> Asserts.assertHigher(MESSAGE, BigDecimal.valueOf(10), BigDecimal.valueOf(9)), () -> Asserts.assertHigher(MESSAGE, BigDecimal.valueOf(10), BigDecimal.valueOf(10)), () -> Asserts.assertHigher(MESSAGE_PRODUCER, BigDecimal.valueOf(10), BigDecimal.valueOf(9)), () -> Asserts.assertHigher(MESSAGE_PRODUCER, BigDecimal.valueOf(10), BigDecimal.valueOf(10)), () -> Asserts.assertHigher(ERROR_CODE, BigDecimal.valueOf(10), BigDecimal.valueOf(9)), () -> Asserts.assertHigher(ERROR_CODE, BigDecimal.valueOf(10), BigDecimal.valueOf(10))
 
         );
         for (int i = 0; i < functions.size(); i++) {
@@ -721,53 +540,80 @@ class AssertsTest {
 
     @Test
     void assertHigherOrEquals_shouldThrow() {
-        final List<VoidFunctionWithException> functions = List.of(
-                () -> Asserts.assertHigherOrEquals(10, 9),
-                () -> Asserts.assertHigherOrEquals(MESSAGE, 10, 9),
-                () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, 10, 9),
-                () -> Asserts.assertHigherOrEquals(ERROR_CODE, 10, 9),
+        final List<VoidFunctionWithException> functions = List.of(() -> Asserts.assertHigherOrEquals(10, 9), () -> Asserts.assertHigherOrEquals(MESSAGE, 10, 9), () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, 10, 9), () -> Asserts.assertHigherOrEquals(ERROR_CODE, 10, 9),
 
-                () -> Asserts.assertHigherOrEquals(10L, 9L),
-                () -> Asserts.assertHigherOrEquals(MESSAGE, 10L, 9L),
-                () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, 10L, 9L),
-                () -> Asserts.assertHigherOrEquals(ERROR_CODE, 10L, 9L),
+                                                                  () -> Asserts.assertHigherOrEquals(10L, 9L), () -> Asserts.assertHigherOrEquals(MESSAGE, 10L, 9L), () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, 10L, 9L), () -> Asserts.assertHigherOrEquals(ERROR_CODE, 10L, 9L),
 
-                () -> Asserts.assertHigherOrEquals(10.0f, 9.0f),
-                () -> Asserts.assertHigherOrEquals(MESSAGE, 10.0f, 9.0f),
-                () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, 10.0f, 9.0f),
-                () -> Asserts.assertHigherOrEquals(ERROR_CODE, 10.0f, 9.0f),
+                                                                  () -> Asserts.assertHigherOrEquals(10.0f, 9.0f), () -> Asserts.assertHigherOrEquals(MESSAGE, 10.0f, 9.0f), () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, 10.0f, 9.0f), () -> Asserts.assertHigherOrEquals(ERROR_CODE, 10.0f, 9.0f),
 
-                () -> Asserts.assertHigherOrEquals(10.0, 9.0),
-                () -> Asserts.assertHigherOrEquals(MESSAGE, 10.0, 9.0),
-                () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, 10.0, 9.0),
-                () -> Asserts.assertHigherOrEquals(ERROR_CODE, 10.0, 9.0),
+                                                                  () -> Asserts.assertHigherOrEquals(10.0, 9.0), () -> Asserts.assertHigherOrEquals(MESSAGE, 10.0, 9.0), () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, 10.0, 9.0), () -> Asserts.assertHigherOrEquals(ERROR_CODE, 10.0, 9.0),
 
-                () -> Asserts.assertHigherOrEquals(Integer.valueOf(10), Integer.valueOf(9)),
-                () -> Asserts.assertHigherOrEquals(MESSAGE, Integer.valueOf(10), Integer.valueOf(9)),
-                () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, Integer.valueOf(10), Integer.valueOf(9)),
-                () -> Asserts.assertHigherOrEquals(ERROR_CODE, Integer.valueOf(10), Integer.valueOf(9)),
+                                                                  () -> Asserts.assertHigherOrEquals(Integer.valueOf(10), Integer.valueOf(9)), () -> Asserts.assertHigherOrEquals(MESSAGE, Integer.valueOf(10), Integer.valueOf(9)), () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, Integer.valueOf(10), Integer.valueOf(9)), () -> Asserts.assertHigherOrEquals(ERROR_CODE, Integer.valueOf(10), Integer.valueOf(9)),
 
-                () -> Asserts.assertHigherOrEquals(Long.valueOf(10), Long.valueOf(9)),
-                () -> Asserts.assertHigherOrEquals(MESSAGE, Long.valueOf(10), Long.valueOf(9)),
-                () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, Long.valueOf(10), Long.valueOf(9)),
-                () -> Asserts.assertHigherOrEquals(ERROR_CODE, Long.valueOf(10), Long.valueOf(9)),
+                                                                  () -> Asserts.assertHigherOrEquals(Long.valueOf(10), Long.valueOf(9)), () -> Asserts.assertHigherOrEquals(MESSAGE, Long.valueOf(10), Long.valueOf(9)), () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, Long.valueOf(10), Long.valueOf(9)), () -> Asserts.assertHigherOrEquals(ERROR_CODE, Long.valueOf(10), Long.valueOf(9)),
 
-                () -> Asserts.assertHigherOrEquals(Double.valueOf(10), Double.valueOf(9)),
-                () -> Asserts.assertHigherOrEquals(MESSAGE, Double.valueOf(10), Double.valueOf(9)),
-                () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, Double.valueOf(10), Double.valueOf(9)),
-                () -> Asserts.assertHigherOrEquals(ERROR_CODE, Double.valueOf(10), Double.valueOf(9)),
+                                                                  () -> Asserts.assertHigherOrEquals(Double.valueOf(10), Double.valueOf(9)), () -> Asserts.assertHigherOrEquals(MESSAGE, Double.valueOf(10), Double.valueOf(9)), () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, Double.valueOf(10), Double.valueOf(9)), () -> Asserts.assertHigherOrEquals(ERROR_CODE, Double.valueOf(10), Double.valueOf(9)),
 
-                () -> Asserts.assertHigherOrEquals(BigDecimal.valueOf(10), BigDecimal.valueOf(9)),
-                () -> Asserts.assertHigherOrEquals(MESSAGE, BigDecimal.valueOf(10), BigDecimal.valueOf(9)),
-                () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, BigDecimal.valueOf(10), BigDecimal.valueOf(9)),
-                () -> Asserts.assertHigherOrEquals(ERROR_CODE, BigDecimal.valueOf(10), BigDecimal.valueOf(9))
-        );
+                                                                  () -> Asserts.assertHigherOrEquals(BigDecimal.valueOf(10), BigDecimal.valueOf(9)), () -> Asserts.assertHigherOrEquals(MESSAGE, BigDecimal.valueOf(10), BigDecimal.valueOf(9)), () -> Asserts.assertHigherOrEquals(MESSAGE_PRODUCER, BigDecimal.valueOf(10), BigDecimal.valueOf(9)), () -> Asserts.assertHigherOrEquals(ERROR_CODE, BigDecimal.valueOf(10), BigDecimal.valueOf(9)));
         for (int i = 0; i < functions.size(); i++) {
             final int index = i;
             Asserts.assertThrow("assertHigherOrEquals_shouldThrow  " + i, () -> functions.get(index).process());
         }
     }
 
+    @Test
+    void assertBefore_nominal() {
+        final LocalDateTime localDateTime = LocalDateTime.of(2023, 11, 12, 10, 0);
+        final LocalDate     localDate     = LocalDate.of(2023, 11, 12);
+
+        assertThrows(() -> Asserts.assertBefore(localDate, localDate.plusDays(2)));
+        assertThrows(SOME_MESSAGE, () -> Asserts.assertBefore(SOME_MESSAGE, localDate, localDate.plusDays(2)));
+        assertThrows(ERROR_CODE, () -> Asserts.assertBefore(ERROR_CODE, localDate, localDate.plusDays(2)));
+        assertThrows(SOME_MESSAGE, () -> Asserts.assertBefore(() -> SOME_MESSAGE, localDate, localDate.plusDays(2)));
+        Asserts.assertBefore(localDate, localDate.minusDays(2));
+
+        assertThrows(() -> Asserts.assertBefore(localDateTime, localDateTime.plusDays(2)));
+        assertThrows(SOME_MESSAGE, () -> Asserts.assertBefore(SOME_MESSAGE, localDateTime, localDateTime.plusDays(2)));
+        assertThrows(ERROR_CODE, () -> Asserts.assertBefore(ERROR_CODE, localDateTime, localDateTime.plusDays(2)));
+        assertThrows(SOME_MESSAGE, () -> Asserts.assertBefore(() -> SOME_MESSAGE, localDateTime, localDateTime.plusDays(2)));
+        Asserts.assertBefore(localDateTime, localDateTime.minusDays(2));
+    }
+
+    @Test
+    void assertAfter_nominal() {
+        final LocalDateTime localDateTime = LocalDateTime.of(2023, 11, 12, 10, 0);
+        final LocalDate     localDate     = LocalDate.of(2023, 11, 12);
+
+        assertThrows(() -> Asserts.assertAfter(localDate, localDate.minusDays(2)));
+        assertThrows(SOME_MESSAGE, () -> Asserts.assertAfter(SOME_MESSAGE, localDate, localDate.minusDays(2)));
+        assertThrows(ERROR_CODE, () -> Asserts.assertAfter(ERROR_CODE, localDate, localDate.minusDays(2)));
+        assertThrows(SOME_MESSAGE, () -> Asserts.assertAfter(() -> SOME_MESSAGE, localDate, localDate.minusDays(2)));
+        Asserts.assertAfter(localDate, localDate.plusDays(2));
+
+        assertThrows(() -> Asserts.assertAfter(localDateTime, localDateTime.minusDays(2)));
+        assertThrows(SOME_MESSAGE, () -> Asserts.assertAfter(SOME_MESSAGE, localDateTime, localDateTime.minusDays(2)));
+        assertThrows(ERROR_CODE, () -> Asserts.assertAfter(ERROR_CODE, localDateTime, localDateTime.minusDays(2)));
+        assertThrows(SOME_MESSAGE, () -> Asserts.assertAfter(() -> SOME_MESSAGE, localDateTime, localDateTime.minusDays(2)));
+        Asserts.assertAfter(localDateTime, localDateTime.plusDays(2));
+    }
+
+    @Test
+    void assertEquals_nominal() {
+        final LocalDateTime localDateTime = LocalDateTime.of(2023, 11, 12, 10, 0);
+        final LocalDate     localDate     = LocalDate.of(2023, 11, 12);
+
+        assertThrows(() -> Asserts.assertEquals(localDate, localDate.minusDays(2)));
+        assertThrows(SOME_MESSAGE, () -> Asserts.assertEquals(SOME_MESSAGE, localDate, localDate.minusDays(2)));
+        assertThrows(ERROR_CODE, () -> Asserts.assertEquals(ERROR_CODE, localDate, localDate.minusDays(2)));
+        assertThrows(SOME_MESSAGE, () -> Asserts.assertEquals(() -> SOME_MESSAGE, localDate, localDate.minusDays(2)));
+        Asserts.assertAfter(localDate, localDate);
+
+        assertThrows(() -> Asserts.assertEquals(localDateTime, localDateTime.minusDays(2)));
+        assertThrows(SOME_MESSAGE, () -> Asserts.assertEquals(SOME_MESSAGE, localDateTime, localDateTime.minusDays(2)));
+        assertThrows(ERROR_CODE, () -> Asserts.assertEquals(ERROR_CODE, localDateTime, localDateTime.minusDays(2)));
+        assertThrows(SOME_MESSAGE, () -> Asserts.assertEquals(() -> SOME_MESSAGE, localDateTime, localDateTime.minusDays(2)));
+        Asserts.assertAfter(localDateTime, localDateTime);
+    }
 
     // =========================================================================
     // assertThrow
@@ -793,14 +639,12 @@ class AssertsTest {
         try {
             Asserts.wrapErrorForVoidFunction(AssertsTest::throwErrorCodeOnErrorWithVoidFunction, ERROR_CODE);
         } catch (final Exception e) {
-            assertThat(e).isNotNull()
-                         .isInstanceOf(ExceptionWithErrorCode.class)
-                         .hasMessage("some message");
+            assertThat(e).isNotNull().isInstanceOf(ExceptionWithErrorCode.class).hasMessage(SOME_MESSAGE);
         }
 
     }
 
     private static void throwErrorCodeOnErrorWithVoidFunction() {
-        throw new RuntimeException("some message");
+        throw new RuntimeException(SOME_MESSAGE);
     }
 }

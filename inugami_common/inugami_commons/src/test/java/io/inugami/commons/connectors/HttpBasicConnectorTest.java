@@ -1,10 +1,12 @@
 package io.inugami.commons.connectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.github.tomakehurst.wiremock.matching.UrlPattern;
 import io.inugami.api.exceptions.services.ConnectorException;
 import io.inugami.api.exceptions.services.exceptions.ConnectorUndefinedCallException;
+import io.inugami.api.marshalling.JsonMarshaller;
 import io.inugami.api.monitoring.MdcService;
 import lombok.Getter;
 import lombok.ToString;
@@ -17,6 +19,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +40,16 @@ class HttpBasicConnectorTest {
     public static final String URL  = "http://localhost:";
     private static      int    PORT = 1234;
 
+    public static final String LASTNAME2      = "Lalonde";
+    public static final String PHONE_NUMBER_1 = "0615031522";
+    public static final String NAVS13_1       = "7564971247732";
+    public static final String NATIONALITY    = "CH";
+    public static final String CANTON         = "VD";
+    public static final String STREET_NAME    = "du Château";
+    public static final String STREET_TYPE    = "Chem.";
+    public static final String CITY           = "Cheseaux-sur-Lausanne";
+    public static final String ZIP_CODE       = "1033";
+    public static final String STREET_NUMBER  = "10";
 
     // =========================================================================
     // INIT
@@ -107,6 +120,38 @@ class HttpBasicConnectorTest {
     }
 
     @Test
+    void get_withHttpRequest_withJson() throws ConnectorException, JsonProcessingException {
+        final HttpBasicConnector connector = buildConnector();
+
+        stubFor(get("/?page=1")
+                        .willReturn(aResponse()
+                                            .withStatus(200)
+                                            .withHeader("Content-Type", "application/json")
+                                            .withBody(JsonMarshaller.getInstance()
+                                                                    .getIndentedObjectMapper()
+                                                                    .writeValueAsString(buildUser()))));
+
+        final BasicConnectorListener listener = buildListener();
+        MdcService.getInstance()
+                  .deviceIdentifier("912c8721-f7d5-4bea-84ba-f13381a4fcdb")
+                  .correlationId("0d9e9d18-f5cf-44ff-8537-276506d884b0")
+                  .traceId("bff3187a6760")
+                  .requestId("59cf058fc08b");
+
+        final HttpConnectorResult result = connector.get(HttpRequest.builder()
+                                                                    .url(buildUrl(""))
+                                                                    .options(Map.of("page", "1"))
+                                                                    .listener(listener)
+                                                                    .build());
+
+        assertListenerSuccess(listener);
+        assertTextRelatif(result.getResponseBody(UserDataDTO.class),
+                          "commons/connectors/get_withHttpRequest_withJson.json");
+
+    }
+
+
+    @Test
     void get_withOnlyUrl_nominal() throws ConnectorException {
         final HttpBasicConnector connector = buildConnector();
 
@@ -118,7 +163,7 @@ class HttpBasicConnectorTest {
 
         final HttpConnectorResult result = connector.get(buildUrl("?page=1"));
 
-        assertTextRelatif(result, "commons/connectors/get_withOnlyUrl_nominal.json", 4, 13, 16);
+        assertTextRelatif(result, "commons/connectors/get_withOnlyUrl_nominal.json", 4, 14, 17);
         assertThat(new String(result.getData())).isEqualTo("\"testing-library\": \"WireMock\"");
     }
 
@@ -138,7 +183,7 @@ class HttpBasicConnectorTest {
 
         final HttpConnectorResult result = connector.get(buildUrl("?page=1"), credentials, headers);
 
-        assertTextRelatif(result, "commons/connectors/get_fullParams_nominal.json", 4, 15, 18);
+        assertTextRelatif(result, "commons/connectors/get_fullParams_nominal.json", 4, 16, 19);
         assertThat(new String(result.getData())).isEqualTo("\"testing-library\": \"WireMock\"");
     }
 
@@ -372,5 +417,27 @@ class HttpBasicConnectorTest {
         public void onError(final HttpConnectorResult stepResult) {
             this.error.add(stepResult);
         }
+    }
+
+    UserDataDTO buildUser() {
+        return UserDataDTO.builder()
+                          .id(1L)
+                          .sex(UserDataDTO.Sex.FEMALE)
+                          .firstName("Émilie")
+                          .lastName(LASTNAME2)
+                          .email("emilie.lalonde@mock.org")
+                          .phoneNumber(PHONE_NUMBER_1)
+                          .old(35)
+                          .birthday(LocalDate.of(1988, 4, 12))
+                          .socialId(NAVS13_1)
+                          .nationality(NATIONALITY)
+                          .canton(CANTON)
+                          .streetName(STREET_NAME)
+                          .streetNumber(STREET_NUMBER)
+                          .streetType(STREET_TYPE)
+                          .zipCode(ZIP_CODE)
+                          .city(CITY)
+                          .deviceIdentifier("401f0498-c43f-43ad-a3f4-2888838332ad")
+                          .build();
     }
 }

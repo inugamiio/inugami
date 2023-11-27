@@ -1,0 +1,19 @@
+{
+  "birthday" : "1988-04-12",
+  "canton" : "VD",
+  "city" : "Cheseaux-sur-Lausanne",
+  "deviceIdentifier" : "401f0498-c43f-43ad-a3f4-2888838332ad",
+  "email" : "emilie.lalonde@mock.org",
+  "firstName" : "Émilie",
+  "id" : 1,
+  "lastName" : "Lalonde",
+  "nationality" : "CH",
+  "old" : 35,
+  "phoneNumber" : "0615031522",
+  "sex" : "FEMALE",
+  "socialId" : "7564971247732",
+  "streetName" : "du Château",
+  "streetNumber" : "10",
+  "streetType" : "Chem.",
+  "zipCode" : "1033"
+}

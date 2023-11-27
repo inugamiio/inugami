@@ -31,4 +31,8 @@ public interface IHttpBasicConnector {
     HttpConnectorResult delete(final HttpRequest request) throws ConnectorException;
 
     HttpConnectorResult option(final HttpRequest request) throws ConnectorException;
+
+    void close();
+
+
 }

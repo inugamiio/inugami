@@ -6,4 +6,12 @@ public interface LineMatcher {
     boolean skip(int index, String value, String reference);
 
     boolean match(int index, String value, String reference);
+
+    default boolean acceptReplace(int index, String value) {
+        return false;
+    }
+
+    default String replace(int index, String value) {
+        return value;
+    }
 }

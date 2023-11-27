@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.commons.test.dto;
+package io.inugami.commons.connectors;
 
 import lombok.*;
 
@@ -31,7 +31,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public final class UserDataDTO implements Serializable {
     @ToString.Include
-    private Long      id;
+    private long      id;
     @ToString.Include
     private String    firstName;
     @ToString.Include
