@@ -491,6 +491,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return this;
     }
 
+
     // =========================================================================
     // FIELDS
     // =========================================================================
@@ -1106,16 +1107,34 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
     public MdcService removeIoinfoPartner() {
-        remove(MDCKeys.partnerUrl,
-               MDCKeys.partnerVerb,
-               MDCKeys.partner,
-               MDCKeys.partnerService,
-               MDCKeys.partnerSubService,
-               MDCKeys.partnerRequestCharset,
-               MDCKeys.partnerResponseStatus,
-               MDCKeys.partnerResponseDuration,
-               MDCKeys.partnerResponseMessage,
-               MDCKeys.partnerResponseCharset
+        remove(
+                MDCKeys.errorCategory,
+                MDCKeys.errorCode,
+                MDCKeys.errorExploitationError,
+                MDCKeys.errorField,
+                MDCKeys.errorMessage,
+                MDCKeys.errorMessageDetail,
+                MDCKeys.errorRetryable,
+                MDCKeys.errorRollback,
+                MDCKeys.errorStatus,
+                MDCKeys.errorType,
+                MDCKeys.errorUrl,
+                MDCKeys.exceptionName,
+                MDCKeys.errorDomain,
+                MDCKeys.errorSubDomain,
+                MDCKeys.partner,
+                MDCKeys.partnerRequestCharset,
+                MDCKeys.partnerResponseCharset,
+                MDCKeys.partnerResponseDuration,
+                MDCKeys.partnerResponseMessage,
+                MDCKeys.partnerResponseStatus,
+                MDCKeys.partnerService,
+                MDCKeys.partnerSubService,
+                MDCKeys.partnerType,
+                MDCKeys.partnerUrl,
+                MDCKeys.partnerVerb,
+                MDCKeys.lifecycle,
+                MDCKeys.duration
         );
         return this;
     }
