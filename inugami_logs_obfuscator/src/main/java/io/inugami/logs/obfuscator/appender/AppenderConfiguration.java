@@ -34,6 +34,8 @@ public class AppenderConfiguration {
     private Integer             maxPerRoute;
     private Integer             socketTimeout;
     private String              forceNewLine;
+    private String              messageAsJson;
+    private Boolean             messageJson;
 
 
     public AppenderConfiguration(final String encodeAsJson, final String additionalFields) {
@@ -54,5 +56,12 @@ public class AppenderConfiguration {
                 headersMap = new HashMap<>();
             }
         }
+    }
+
+    public boolean isMessageAsJson() {
+        if (messageJson == null) {
+            messageJson = Boolean.parseBoolean(messageAsJson);
+        }
+        return messageJson;
     }
 }
