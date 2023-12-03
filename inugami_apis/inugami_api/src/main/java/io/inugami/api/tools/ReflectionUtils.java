@@ -380,8 +380,120 @@ public final class ReflectionUtils {
                 result = annotatedElement.getAnnotation(annotation);
             }
         }
+
+        if (result == null) {
+            result = searchAnnotationInInterface(annotatedElement, annotation);
+        }
+
         return result;
     }
+
+    public static <A extends Annotation, AE extends AnnotatedElement> A searchAnnotationInInterface(final AE annotatedElement,
+                                                                                                    final Class<A> annotation) {
+
+        if (annotatedElement instanceof Method) {
+            return searchAnnotationInInterfaceFromMethod((Method) annotatedElement, annotation);
+        } else if (annotatedElement instanceof Class<?>) {
+            return searchAnnotationInInterfaceFromClass((Class<?>) annotatedElement, annotation);
+        }
+        return null;
+    }
+
+
+    public static <A extends Annotation> A searchAnnotationInInterfaceFromMethod(final Method method,
+                                                                                 final Class<A> annotation) {
+        if (method == null || annotation == null) {
+            return null;
+        }
+
+        A result = method.getAnnotation(annotation);
+
+        if (method.getDeclaringClass() != null && method.getDeclaringClass().getInterfaces() != null) {
+            for (Class<?> InterfaceClass : method.getDeclaringClass().getInterfaces()) {
+                final Method interfaceMethod = searchMethodInInterface(method, InterfaceClass);
+                result = searchAnnotationInInterfaceFromMethod(interfaceMethod, annotation);
+                if (result != null) {
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public static Method searchMethodInInterface(final Method method, final Class<?> clazz) {
+        if (method == null || clazz == null) {
+            return null;
+        }
+
+        Method result = searchMethodInClass(method, clazz);
+
+        if (result == null && clazz.getInterfaces() != null) {
+            for (final Class<?> interfaceClass : clazz.getInterfaces()) {
+                result = searchMethodInInterface(method, interfaceClass);
+                if (result != null) {
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public static Method searchMethodInClass(final Method method, final Class<?> clazz) {
+        if (method == null || clazz == null) {
+            return null;
+        }
+
+        final Method[] methods = clazz.getDeclaredMethods();
+
+        for (Method currentMethod : methods) {
+            if (currentMethod.getName().equals(method.getName()) &&
+                currentMethod.getReturnType() == method.getReturnType() &&
+                isSameParameters(method.getParameters(), currentMethod.getParameters())) {
+                return currentMethod;
+            }
+        }
+        return null;
+    }
+
+    private static boolean isSameParameters(final Parameter[] refParameters, final Parameter[] parameters) {
+        if (refParameters == null && parameters == null) {
+            return true;
+        } else if ((refParameters == null && parameters != null) || (refParameters != null && parameters == null)) {
+            return false;
+        } else if (refParameters.length != parameters.length) {
+            return false;
+        }
+
+        for (int i = 0; i < refParameters.length; i++) {
+            if (refParameters[i].getType() != parameters[i].getType()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static <A extends Annotation> A searchAnnotationInInterfaceFromClass(final Class<?> clazz,
+                                                                                final Class<A> annotation) {
+        if (clazz == null || annotation == null) {
+            return null;
+        }
+
+        A result = clazz.getAnnotation(annotation);
+        if (result == null && clazz.getInterfaces() != null) {
+            for (Class<?> InterfaceClass : clazz.getInterfaces()) {
+                result = searchAnnotationInInterfaceFromClass(InterfaceClass, annotation);
+                if (result != null) {
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
     // =========================================================================
     // FIELDS
     // =========================================================================
