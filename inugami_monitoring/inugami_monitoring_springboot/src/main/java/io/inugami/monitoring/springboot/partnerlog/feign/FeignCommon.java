@@ -4,12 +4,16 @@ import feign.Request;
 import feign.RequestTemplate;
 import feign.Response;
 import io.inugami.api.monitoring.models.IoInfoDTO;
+import io.inugami.api.monitoring.partner.Partner;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Collection;
+
+import static io.inugami.api.functionnals.FunctionalUtils.orNull;
+import static io.inugami.api.tools.ReflectionUtils.getAnnotation;
 
 @SuppressWarnings({"java:S1181", "java:S108"})
 @Slf4j
@@ -31,13 +35,59 @@ public class FeignCommon {
             if (request.body() != null) {
                 builder.payload(request.body());
             }
-            if (request.feignTarget() != null) {
-                builder.partnerName(request.feignTarget().name());
-            }
+
+            resolvePartnerInformation(request, builder);
+
         } catch (final Throwable e) {
         }
 
         return builder.build();
+    }
+
+    private static void resolvePartnerInformation(final RequestTemplate request,
+                                                  final IoInfoDTO.IoInfoDTOBuilder builder) {
+        Partner rootPartner = null;
+        Partner partner     = null;
+
+        String partnerName       = null;
+        String partnerService    = null;
+        String partnerSubService = null;
+
+        if (request.feignTarget() != null) {
+            rootPartner = getAnnotation(request.feignTarget().type(), Partner.class);
+        }
+
+        if (request.methodMetadata() != null) {
+            partner = getAnnotation(request.methodMetadata().method(), Partner.class);
+        }
+
+        if (rootPartner != null) {
+            partnerName = orNull(rootPartner.name());
+            partnerService = orNull(rootPartner.service());
+
+        }
+
+        if (partner != null) {
+            final String currentName = orNull(partner.name());
+            if (currentName != null) {
+                partnerName = currentName;
+            }
+
+            final String currentPartnerService = orNull(partner.service());
+            if (currentPartnerService != null) {
+                partnerService = currentPartnerService;
+            }
+
+            partnerSubService = orNull(partner.subService());
+        }
+
+        if (partnerName == null && request.feignTarget() != null) {
+            partnerName = request.feignTarget().name();
+        }
+
+        builder.partnerName(partnerName);
+        builder.partnerService(partnerService);
+        builder.partnerSubService(partnerSubService);
     }
 
     public static long resolveCallDate(final Response response) {
