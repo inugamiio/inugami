@@ -21,6 +21,8 @@ public class FeignPartnerRequestInterceptor implements RequestInterceptor {
     @Override
     public void apply(final RequestTemplate requestTemplate) {
         try {
+            MdcService.getInstance().partnerRemove();
+            
             final IoInfoDTO info = FeignCommon.buildInfo(requestTemplate);
             MdcService.getInstance().ioinfoPartner(info);
 

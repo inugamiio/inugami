@@ -45,9 +45,7 @@ public class FeignPartnerErrorDecoder implements ErrorDecoder {
 
         Loggers.PARTNERLOG.error(ioInfo.toString());
 
-        MdcService.getInstance().partnerRemove()
-                  .lifecycleRemove()
-                  .remove(MdcService.MDCKeys.duration);
+        MdcService.getInstance().partnerRemove();
 
         return buildException(errorCode, resolver);
     }

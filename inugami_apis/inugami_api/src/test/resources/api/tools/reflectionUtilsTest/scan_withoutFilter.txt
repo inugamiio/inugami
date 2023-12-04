@@ -19,7 +19,11 @@ io.inugami.api.tools.PathUtils
 io.inugami.api.tools.PathUtilsTest
 io.inugami.api.tools.ReflectionUtils
 io.inugami.api.tools.ReflectionUtilsTest
+io.inugami.api.tools.ReflectionUtilsTest$BasicAnnotation
+io.inugami.api.tools.ReflectionUtilsTest$Client
+io.inugami.api.tools.ReflectionUtilsTest$Clientmpl
 io.inugami.api.tools.ReflectionUtilsTest$Levels
+io.inugami.api.tools.ReflectionUtilsTest$ParentClient
 io.inugami.api.tools.ReflectionUtilsTest$ParentService
 io.inugami.api.tools.ReflectionUtilsTest$SomeService
 io.inugami.api.tools.ReflectionUtilsTest$SomeService$SomeServiceBuilder

@@ -48,9 +48,10 @@ class UserRestControllerIT extends SpringBootIntegrationTest {
                                    .integrationTest(true)
                                    .addPattern(Loggers.IOLOG_NAME)
                                    .addPattern(Loggers.IOLOG_NAME)
-                                   .addLineMatcher(SkipLineMatcher.of(9, 28, 61, 80, 113, 118, 144, 169, 170, 182, 232, 237, 263, 288,
-                                                                      289, 301, 351, 370, 404, 423, 457, 462, 480, 506, 507, 547, 552, 570,
-                                                                      596, 597))
+                                   .addLineMatcher(SkipLineMatcher.of(9, 29, 62, 82, 115, 120, 147,
+                                                                      172, 173, 175, 185, 235, 240, 248, 267, 292, 293,
+                                                                      305, 355, 375, 409, 429, 463, 468, 487,
+                                                                      513, 514, 554, 559, 578, 604, 605))
                                    .process(() -> {
                                        RestAssured.given()
                                                   .body(asJson(UnitTestData.USER_1.toBuilder()

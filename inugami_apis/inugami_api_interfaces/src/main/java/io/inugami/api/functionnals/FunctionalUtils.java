@@ -83,6 +83,10 @@ public final class FunctionalUtils {
         return data == null || data.trim().isEmpty() ? supplier.get() : data;
     }
 
+    public static String orNull(final String data) {
+        return data == null || data.trim().isEmpty() ? null : data;
+    }
+
     // =================================================================================================================
     // APPLY IF NOT EMPTY
     // =================================================================================================================

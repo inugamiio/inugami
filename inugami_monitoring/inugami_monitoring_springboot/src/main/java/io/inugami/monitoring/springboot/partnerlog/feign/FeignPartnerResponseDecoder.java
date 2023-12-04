@@ -32,9 +32,8 @@ public class FeignPartnerResponseDecoder implements Decoder {
         } else {
             Loggers.PARTNERLOG.info(ioInfo.toString());
         }
-        MdcService.getInstance().partnerRemove()
-                  .lifecycleRemove()
-                  .remove(MdcService.MDCKeys.duration);
+        
+        MdcService.getInstance().partnerRemove();
 
         return decoder.decode(wrappedResponse, type);
     }

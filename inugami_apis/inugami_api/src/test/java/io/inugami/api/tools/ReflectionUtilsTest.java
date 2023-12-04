@@ -1,5 +1,6 @@
 package io.inugami.api.tools;
 
+import io.inugami.api.feature.Feature;
 import io.inugami.api.spi.SpiPriority;
 import io.inugami.api.tools.unit.test.UnitTestHelper;
 import lombok.*;
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
+import java.lang.annotation.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
@@ -97,6 +98,27 @@ class ReflectionUtilsTest {
         assertThat(result).hasToString("[1]");
     }
 
+    @Test
+    void searchAnnotationInInterface_withMethod() {
+        final Feature case1 = searchAnnotationInInterface(searchMethodByName(Clientmpl.class, "retrieveInfo"), Feature.class);
+        assertThat(case1).isNotNull();
+        assertThat(case1.value()).isEqualTo("feature_retrieveInfo");
+
+        final Feature case2 = getAnnotation(searchMethodByName(Clientmpl.class, "retrieveInfo"), Feature.class);
+        assertThat(case2).isNotNull();
+        assertThat(case2.value()).isEqualTo("feature_retrieveInfo");
+    }
+
+    @Test
+    void searchAnnotationInInterface_withClass() {
+        final BasicAnnotation case1 = searchAnnotationInInterface(Clientmpl.class, BasicAnnotation.class);
+        assertThat(case1).isNotNull();
+        assertThat(case1.value()).isEqualTo("partner");
+
+        final BasicAnnotation case2 = getAnnotation(Clientmpl.class, BasicAnnotation.class);
+        assertThat(case2).isNotNull();
+        assertThat(case2.value()).isEqualTo("partner");
+    }
 
     // =================================================================================================================
     // enum
@@ -389,7 +411,7 @@ class ReflectionUtilsTest {
 
 
     @RequiredArgsConstructor
-    public enum Levels {
+    enum Levels {
         ADMIN("admin", 10),
         GUEST("guest", 0);
 
@@ -397,5 +419,31 @@ class ReflectionUtilsTest {
         private final int    level;
     }
 
+    @BasicAnnotation("partner")
+    interface ParentClient {
+        @Feature("feature_retrieveInfo")
+        String retrieveInfo();
+    }
+
+    interface Client extends ParentClient {
+
+    }
+
+
+    static class Clientmpl implements Client {
+
+        @Override
+        public String retrieveInfo() {
+            return null;
+        }
+    }
+
+
+    @Target({ElementType.METHOD, ElementType.TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    @Documented
+    public @interface BasicAnnotation {
+        String value() default "";
+    }
 
 }

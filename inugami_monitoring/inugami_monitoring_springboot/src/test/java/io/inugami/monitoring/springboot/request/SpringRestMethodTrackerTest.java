@@ -61,7 +61,7 @@ class SpringRestMethodTrackerTest {
 
     private void processTest(final Class<?> endpointClass, final String methodName, final String urlPatternRef) {
         MdcService.getInstance().clear();
-        final Method method = ReflectionUtils.searchMethod(endpointClass, methodName);
+        final Method method = ReflectionUtils.searchMethodByName(endpointClass, methodName);
         final JavaRestMethodDTO data = JavaRestMethodDTO.builder()
                                                         .restMethod(method)
                                                         .restClass(endpointClass)
@@ -77,35 +77,45 @@ class SpringRestMethodTrackerTest {
     // TOOLS
     // ========================================================================
     @RequestMapping(path = "root")
-    public static class EndpointWithRootPath {
-
+    interface EndpointClient {
         @RequestMapping(path = "request/{someParameter}")
+        void requestMapping();
+
+        @DeleteMapping(path = "delete/{someParameter}")
+        void deleteMapping();
+
+
+        @GetMapping(path = "get/{someParameter}")
+        void getMapping();
+
+        @PatchMapping(path = "patch/{someParameter}")
+        void patchMapping();
+
+        @PostMapping(path = "post/{someParameter}")
+        void postMapping();
+
+        @PutMapping(path = "put/{someParameter}")
+        void putMapping();
+    }
+
+
+    static class EndpointWithRootPath implements EndpointClient {
         public void requestMapping() {
         }
 
-        @DeleteMapping(path = "delete/{someParameter}")
         public void deleteMapping() {
-
         }
 
-        @GetMapping(path = "get/{someParameter}")
         public void getMapping() {
-
         }
 
-        @PatchMapping(path = "patch/{someParameter}")
         public void patchMapping() {
-
         }
 
-        @PostMapping(path = "post/{someParameter}")
         public void postMapping() {
-
         }
 
-        @PutMapping(path = "put/{someParameter}")
         public void putMapping() {
-
         }
     }
 

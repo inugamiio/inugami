@@ -6,6 +6,7 @@ import io.inugami.api.monitoring.MdcService;
 import org.springframework.web.bind.annotation.*;
 
 import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
+import static io.inugami.api.tools.ReflectionUtils.getAnnotation;
 
 @SuppressWarnings({"java:S1172"})
 public class SpringRestMethodTracker implements JavaRestMethodTracker {
@@ -22,33 +23,14 @@ public class SpringRestMethodTracker implements JavaRestMethodTracker {
     // ========================================================================
     @Override
     public void track(final JavaRestMethodDTO data) {
-        final RequestMapping rootRequestMapping = data.getRestClass().getAnnotation(RequestMapping.class);
+        final RequestMapping rootRequestMapping = getAnnotation(data.getRestClass(), RequestMapping.class);
 
-        applyIfNotNull(
-                data.getRestMethod().getAnnotation(DeleteMapping.class),
-                annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data)
-        );
-        applyIfNotNull(
-                data.getRestMethod().getAnnotation(GetMapping.class),
-                annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data)
-        );
-        applyIfNotNull(
-                data.getRestMethod().getAnnotation(PatchMapping.class),
-                annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data)
-        );
-
-        applyIfNotNull(
-                data.getRestMethod().getAnnotation(PostMapping.class),
-                annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data)
-        );
-        applyIfNotNull(
-                data.getRestMethod().getAnnotation(PutMapping.class),
-                annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data)
-        );
-        applyIfNotNull(
-                data.getRestMethod().getAnnotation(RequestMapping.class),
-                annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data)
-        );
+        applyIfNotNull(getAnnotation(data.getRestMethod(), DeleteMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data));
+        applyIfNotNull(getAnnotation(data.getRestMethod(), GetMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data));
+        applyIfNotNull(getAnnotation(data.getRestMethod(), PatchMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data));
+        applyIfNotNull(getAnnotation(data.getRestMethod(), PostMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data));
+        applyIfNotNull(getAnnotation(data.getRestMethod(), PutMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data));
+        applyIfNotNull(getAnnotation(data.getRestMethod(), RequestMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data));
     }
 
 

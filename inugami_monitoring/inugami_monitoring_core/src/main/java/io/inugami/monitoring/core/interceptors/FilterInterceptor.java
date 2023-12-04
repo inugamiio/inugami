@@ -149,10 +149,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     public void doFilter(final ServletRequest request,
                          final ServletResponse response,
                          final FilterChain chain) throws IOException, ServletException {
-        if (mdcCleaner == null) {
-            initMdcCleaner();
-        }
-        mdcCleaner.cleanMdc();
+        MdcService.getInstance().clear();
 
         if (isAttributesNotInitialized()) {
             initAttributes();
@@ -162,21 +159,21 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
         if (mustIntercept(currentPath)) {
             try {
-
                 processIntercepting(request, (HttpServletResponse) response, chain, httpRequest);
             } catch (final Exception e) {
                 throw new IOException(e.getMessage(), e);
+            } finally {
+                MdcService.getInstance().clear();
             }
         } else {
-            chain.doFilter(request, response);
+            try {
+                chain.doFilter(request, response);
+            } finally {
+                MdcService.getInstance().clear();
+            }
         }
-        mdcCleaner.cleanMdc();
     }
 
-    private void initMdcCleaner() {
-        mdcCleaner = new MdcCleaner(SpiLoader.getInstance()
-                                             .loadSpiServicesWithDefault(MdcCleanerSPI.class, new DefaultMdcCleaner()));
-    }
 
     private boolean isAttributesNotInitialized() {
         return javaRestMethodResolvers == null || javaRestMethodTrackers == null || interceptableResolver == null ||

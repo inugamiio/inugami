@@ -61,6 +61,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     private static final String LINE         = "\n";
     private static final Clock  CLOCK        = Clock.systemUTC();
     public static final  String NO_FORMATTER = "%m";
+    public static final  String DATA         = "data";
 
     private              List<ObfuscatorSpi>       obfuscators;
     private              List<LoggerMdcMappingSPI> mdcMappers;
@@ -225,7 +226,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     }
 
     private String renderJson(final String message, final ILoggingEvent event) {
-        final Map<String, Serializable> result = buildBaseData(event);
+        final Map<String, Object> result = buildBaseData(event);
 
         result.put(THREAD_NAME, event.getThreadName());
         result.put(LOGGER_NAME, event.getLoggerName());
@@ -233,7 +234,16 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
         result.put(LEVEL_PRIORITY, event.getLevel().toInt());
         result.put(TIMESTAMP, event.getTimeStamp());
         result.put(DATE, DateTimeFormatter.ISO_DATE_TIME.format(LocalDateTime.now(CLOCK)));
-        result.put(MESSAGE, message);
+
+        if (configuration.isMessageAsJson()) {
+            final Object data = convertToData(message);
+            if (data != null) {
+                result.put(DATA, data);
+            }
+        } else {
+            result.put(MESSAGE, message);
+        }
+
 
         if (event.getLevel().toInt() >= Level.ERROR.toInt()) {
             result.put(STACKTRACE, convertStackTrace(event.getCallerData()));
@@ -244,6 +254,17 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
             return JsonMarshaller.getInstance().getDefaultObjectMapper().writeValueAsString(result);
         } catch (final JsonProcessingException e) {
             return EMPTY_STR;
+        }
+    }
+
+    private Object convertToData(final String message) {
+        try {
+            final Object result = JsonMarshaller.getInstance()
+                                                .getDefaultObjectMapper()
+                                                .readValue(message, Object.class);
+            return result;
+        } catch (JsonProcessingException e) {
+            return null;
         }
     }
 
@@ -268,9 +289,9 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
         return String.join(LINE, result);
     }
 
-    private Map<String, Serializable> buildBaseData(final ILoggingEvent event) {
-        final Map<String, String>       mdc    = new LinkedHashMap<>();
-        final Map<String, Serializable> result = new LinkedHashMap<>();
+    private Map<String, Object> buildBaseData(final ILoggingEvent event) {
+        final Map<String, String> mdc    = new LinkedHashMap<>();
+        final Map<String, Object> result = new LinkedHashMap<>();
 
 
         if (event.getMDCPropertyMap() != null) {
@@ -396,3 +417,4 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
         this.layout = layout;
     }
 }
+
