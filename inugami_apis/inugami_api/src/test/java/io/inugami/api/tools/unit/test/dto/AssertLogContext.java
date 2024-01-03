@@ -16,7 +16,7 @@
  */
 package io.inugami.api.tools.unit.test.dto;
 
-import io.inugami.api.functionnals.VoidFunctionWithException;
+import io.inugami.interfaces.functionnals.VoidFunctionWithException;
 import io.inugami.api.tools.unit.test.api.LineMatcher;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

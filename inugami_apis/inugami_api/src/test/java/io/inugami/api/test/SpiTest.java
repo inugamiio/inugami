@@ -1,6 +1,6 @@
 package io.inugami.api.test;
 
-import io.inugami.api.spi.SpiLoader;
+import io.inugami.interfaces.spi.SpiLoader;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings({"java:S2699"})

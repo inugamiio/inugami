@@ -17,7 +17,8 @@
 package io.inugami.api.tools;
 
 import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.processors.ConfigHandler;
+import io.inugami.interfaces.processors.ConfigHandler;
+import lombok.experimental.UtilityClass;
 
 /**
  * ConfigHandlerTools
@@ -25,18 +26,13 @@ import io.inugami.api.processors.ConfigHandler;
  * @author patrick_guillerm
  * @since 20 mars 2018
  */
+@UtilityClass
 public final class ConfigHandlerTools {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
     public static final String ENABLE = "enable";
 
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-
-    private ConfigHandlerTools() {
-    }
 
     // =========================================================================
     // METHODS

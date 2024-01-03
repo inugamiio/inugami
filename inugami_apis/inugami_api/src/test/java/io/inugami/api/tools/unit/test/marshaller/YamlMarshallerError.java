@@ -1,9 +1,9 @@
 package io.inugami.api.tools.unit.test.marshaller;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
+import io.inugami.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.interfaces.exceptions.ErrorCode;
 
-import static io.inugami.api.exceptions.DefaultErrorCode.newBuilder;
+import static io.inugami.interfaces.exceptions.DefaultErrorCode.newBuilder;
 
 public enum YamlMarshallerError implements ErrorCode {
     YAML_CLASS_REQUIRED(newBuilder()

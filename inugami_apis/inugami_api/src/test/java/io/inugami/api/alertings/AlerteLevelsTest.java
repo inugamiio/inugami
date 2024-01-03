@@ -1,5 +1,6 @@
 package io.inugami.api.alertings;
 
+import io.inugami.interfaces.alertings.AlerteLevels;
 import org.junit.jupiter.api.Test;
 
 import static io.inugami.api.tools.unit.test.UnitTestData.OTHER;

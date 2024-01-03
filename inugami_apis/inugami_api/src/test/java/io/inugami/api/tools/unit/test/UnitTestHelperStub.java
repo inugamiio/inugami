@@ -1,7 +1,7 @@
 package io.inugami.api.tools.unit.test;
 
 import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.MessagesFormatter;
+import io.inugami.interfaces.exceptions.MessagesFormatter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.mockito.invocation.InvocationOnMock;

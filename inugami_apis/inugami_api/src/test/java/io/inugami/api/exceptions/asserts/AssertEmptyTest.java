@@ -1,11 +1,11 @@
 package io.inugami.api.exceptions.asserts;
 
 import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.exceptions.UncheckedException;
-import io.inugami.api.functionnals.IsEmptyFacet;
-import io.inugami.api.functionnals.VoidFunctionWithException;
+import io.inugami.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.interfaces.exceptions.ErrorCode;
+import io.inugami.interfaces.exceptions.UncheckedException;
+import io.inugami.interfaces.functionnals.IsEmptyFacet;
+import io.inugami.interfaces.functionnals.VoidFunctionWithException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

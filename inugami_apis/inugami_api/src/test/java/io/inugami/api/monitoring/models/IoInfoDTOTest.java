@@ -1,5 +1,6 @@
 package io.inugami.api.monitoring.models;
 
+import io.inugami.interfaces.monitoring.models.IoInfoDTO;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;

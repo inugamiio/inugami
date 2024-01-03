@@ -3,6 +3,8 @@ package io.inugami.api.feature;
 import io.inugami.api.tools.ReflectionUtils;
 import io.inugami.api.tools.unit.test.dto.AssertDtoContext;
 import io.inugami.api.tools.unit.test.dto.UserDataDTO;
+import io.inugami.interfaces.feature.Feature;
+import io.inugami.interfaces.feature.FeatureContext;
 import org.junit.jupiter.api.Test;
 
 import static io.inugami.api.tools.unit.test.UnitTestData.OTHER;

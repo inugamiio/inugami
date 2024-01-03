@@ -2,8 +2,8 @@ package io.inugami.api.tools.unit.test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.UncheckedException;
+import io.inugami.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.interfaces.exceptions.UncheckedException;
 import io.inugami.api.marshalling.JsonMarshaller;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

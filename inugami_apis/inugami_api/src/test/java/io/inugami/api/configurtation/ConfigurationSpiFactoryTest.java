@@ -1,5 +1,6 @@
 package io.inugami.api.configurtation;
 
+import io.inugami.interfaces.configurtation.ConfigurationSpi;
 import org.junit.jupiter.api.Test;
 
 import static io.inugami.api.tools.unit.test.UnitTestHelper.assertUtilityClassLombok;

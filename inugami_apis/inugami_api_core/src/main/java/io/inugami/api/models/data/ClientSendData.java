@@ -16,7 +16,7 @@
  */
 package io.inugami.api.models.data;
 
-import io.inugami.api.models.data.basic.JsonObject;
+import io.inugami.interfaces.models.basic.JsonObject;
 import lombok.*;
 
 import java.util.ArrayList;

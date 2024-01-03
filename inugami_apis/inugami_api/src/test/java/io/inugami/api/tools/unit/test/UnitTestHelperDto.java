@@ -1,8 +1,8 @@
 package io.inugami.api.tools.unit.test;
 
-import io.inugami.api.tools.FieldGetterSetter;
 import io.inugami.api.tools.ReflectionUtils;
 import io.inugami.api.tools.unit.test.dto.AssertDtoContext;
+import io.inugami.interfaces.tools.reflection.FieldGetterSetter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

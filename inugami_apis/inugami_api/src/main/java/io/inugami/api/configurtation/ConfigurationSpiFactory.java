@@ -16,7 +16,8 @@
  */
 package io.inugami.api.configurtation;
 
-import io.inugami.api.spi.SpiLoader;
+import io.inugami.interfaces.configurtation.ConfigurationSpi;
+import io.inugami.interfaces.spi.SpiLoader;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

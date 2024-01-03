@@ -1,5 +1,6 @@
 package io.inugami.api.tools;
 
+import io.inugami.interfaces.tools.StringTools;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

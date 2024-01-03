@@ -17,9 +17,9 @@
 package io.inugami.api.metrics.events;
 
 import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.models.Gav;
-import io.inugami.api.models.events.GenericEvent;
-import io.inugami.api.models.tools.Chrono;
+import io.inugami.interfaces.models.maven.Gav;
+import io.inugami.interfaces.models.event.GenericEvent;
+import io.inugami.interfaces.models.tools.Chrono;
 
 import java.util.HashSet;
 import java.util.Map;

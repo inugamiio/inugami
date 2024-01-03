@@ -16,6 +16,8 @@
  */
 package io.inugami.api.configurtation;
 
+import io.inugami.interfaces.configurtation.ConfigurationSpi;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;

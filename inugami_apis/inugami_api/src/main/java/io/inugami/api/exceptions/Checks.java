@@ -16,6 +16,10 @@
  */
 package io.inugami.api.exceptions;
 
+import io.inugami.interfaces.exceptions.CheckedException;
+import io.inugami.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.interfaces.exceptions.ErrorCode;
+import io.inugami.interfaces.exceptions.UncheckedException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

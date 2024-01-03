@@ -18,9 +18,9 @@ package io.inugami.api.metrics;
 
 import java.util.List;
 
-import io.inugami.api.models.data.basic.JsonObject;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.spi.SpiConfigurable;
+import io.inugami.interfaces.models.basic.JsonObject;
+import io.inugami.interfaces.processors.ConfigHandler;
+import io.inugami.interfaces.spi.SpiConfigurable;
 
 /**
  * MetricsProvider

@@ -16,8 +16,8 @@
  */
 package io.inugami.api.loggers;
 
-import io.inugami.api.exceptions.FatalException;
-import io.inugami.api.models.Rgb;
+import io.inugami.interfaces.exceptions.FatalException;
+import io.inugami.interfaces.tools.Rgb;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;

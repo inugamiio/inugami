@@ -1,16 +1,18 @@
 package io.inugami.api.monitoring;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.functionnals.VoidFunctionWithException;
-import io.inugami.api.listeners.ApplicationLifecycleSPI;
 import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
-import io.inugami.api.loggers.mdc.mapper.LoggerMdcMappingSPI;
-import io.inugami.api.models.Tuple;
-import io.inugami.api.monitoring.models.Headers;
-import io.inugami.api.monitoring.models.IoInfoDTO;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.spi.SpiLoader;
+import io.inugami.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.interfaces.exceptions.ErrorCode;
+import io.inugami.interfaces.functionnals.VoidFunctionWithException;
+import io.inugami.interfaces.listeners.ApplicationLifecycleSPI;
+import io.inugami.interfaces.models.Tuple;
+import io.inugami.interfaces.monitoring.MdcServiceSpi;
+import io.inugami.interfaces.monitoring.RequestInformation;
+import io.inugami.interfaces.monitoring.logger.MDCKeys;
+import io.inugami.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI;
+import io.inugami.interfaces.monitoring.models.Headers;
+import io.inugami.interfaces.monitoring.models.IoInfoDTO;
+import io.inugami.interfaces.spi.SpiLoader;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -24,12 +26,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
+import static io.inugami.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
 @SuppressWarnings({"java:S1845", "java:S115", "java:S1181", "java:S2386", "java:S1125"})
 @Getter
 @Slf4j
-public class MdcService implements ApplicationLifecycleSPI {
+public class MdcService implements ApplicationLifecycleSPI, MdcServiceSpi {
 
     private static final String X_B_3_TRACE_ID       = "X-B3-TraceId";
     public static final  String ISO_DATE             = "yyyy-MM-dd'T'HH:mm:ss.sss";
@@ -44,8 +46,6 @@ public class MdcService implements ApplicationLifecycleSPI {
     private static final String ERROR                = "error";
     public static final  String NULL                 = "null";
 
-    private Headers headers;
-
     private List<LoggerMdcMappingSPI> mdcMappers = SpiLoader.getInstance()
                                                             .loadSpiServicesByPriority(LoggerMdcMappingSPI.class);
 
@@ -53,15 +53,11 @@ public class MdcService implements ApplicationLifecycleSPI {
     // =========================================================================
     // CONSTRUCTOR
     // =========================================================================
-    private MdcService() {
+    public MdcService() {
         DefaultApplicationLifecycleSPI.register(this);
-        headers = new Headers().refreshConfig();
+        initialize();
     }
 
-    @Override
-    public void onConfigurationReady(final ConfigHandler<String, String> configuration) {
-        headers = new Headers().refreshConfig(configuration);
-    }
 
     @Override
     public void onContextRefreshed(final Object event) {
@@ -72,143 +68,6 @@ public class MdcService implements ApplicationLifecycleSPI {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    @Getter
-    public enum MDCKeys {
-        appClass,
-        appClassShortName,
-        appMethod,
-        appService,
-        appSubService,
-        applicationVersion,
-        asset,
-        artifactId,
-        authProtocol,
-        callFrom,
-        callType,
-        conversation_id,
-        correlation_id,
-        commitId,
-        commitDate,
-        country,
-        customerId,
-        deviceClass,
-        deviceIdentifier,
-        deviceIp,
-        deviceNetworkSpeedDown(Double.valueOf(0.0)),
-        deviceNetworkSpeedLatency(Double.valueOf(0.0)),
-        deviceNetworkSpeedUp(Double.valueOf(0.0)),
-        deviceNetworkType,
-        deviceType,
-        domain("xxxx", "appDomain"),
-        duration(Long.valueOf(0)),
-        env,
-        errorCategory,
-        errorCode,
-        errorExploitationError(Boolean.FALSE),
-        errorField,
-        errorMessage,
-        errorMessageDetail,
-        errorRetryable(Boolean.FALSE),
-        errorRollback(Boolean.FALSE),
-        /**
-         * errorStatus is <strong>int value</strong>
-         */
-        errorStatus,
-        errorType,
-        errorUrl,
-        exceptionName,
-        errorDomain,
-        errorSubDomain,
-        flags,
-        from(LocalDateTime.now()),
-        fromTimestamp(Long.valueOf(0)),
-        functionalUid,
-        globalStatus,
-        groupId,
-        healthStatus("up"),
-        hostname,
-        httpStatus(Integer.valueOf(0)),
-        instanceName,
-        instanceNumber,
-        language,
-        lifecycle,
-        majorVersion,
-        messageId,
-        methodInCause,
-        orderId,
-        osVersion,
-        parentSpanId,
-        partner,
-        partnerRequestCharset,
-        partnerResponseCharset,
-        partnerResponseDuration(Long.valueOf(0)),
-        partnerResponseMessage,
-        partnerResponseStatus(Integer.valueOf(0)),
-        partnerService,
-        partnerSubService,
-        partnerType,
-        partnerUrl,
-        partnerVerb,
-        price(Double.valueOf(0.0)),
-        principal,
-        productId,
-        processId,
-        processName,
-        processStatus,
-        quantity(Double.valueOf(0.0)),
-        remoteAddress,
-        requestHeaders,
-        request_id,
-        reservationNumber,
-        responseHeaders,
-        service,
-        sessionId,
-        size(Double.valueOf(0.0)),
-        traceId,
-        until(LocalDateTime.now()),
-        untilTimestamp(Long.valueOf(0)),
-        uri("xxxx", "appUri"),
-        url("xxxx", "appUrl"),
-        urlPattern,
-        userAgent,
-        userId,
-        status,
-        subDomain("xxxx", "appSubDomain"),
-        verb("xxxx", "appVerb"),
-        version,
-        warning;
-
-        public static final MDCKeys[]                     VALUES = values();
-        private final       Serializable                  defaultValue;
-        private final       Class<? extends Serializable> type;
-
-        private final String currentName;
-
-        private MDCKeys() {
-            this.defaultValue = DEFAULT_STRING_VALUE;
-            type = String.class;
-            currentName = this.name();
-        }
-
-        private MDCKeys(final Serializable defaultValue) {
-            this.defaultValue = defaultValue;
-            type = defaultValue.getClass();
-            currentName = this.name();
-        }
-
-        private MDCKeys(final Serializable defaultValue, final String name) {
-            this.defaultValue = defaultValue;
-            type = defaultValue.getClass();
-            currentName = name;
-        }
-    }
-
-    private static final MdcService INSTANCE = new MdcService();
-
-    public static MdcService getInstance() {
-        return INSTANCE;
-    }
-
     // =========================================================================
     // METHODS
     // =========================================================================
@@ -258,7 +117,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     // =========================================================================
     // SET MDC
     // =========================================================================
-    public MdcService setMdc(final Map<String, Serializable> values) {
+    public MdcServiceSpi setMdc(final Map<String, Serializable> values) {
         if (values == null) {
             return this;
         }
@@ -269,7 +128,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return this;
     }
 
-    public MdcService setMdc(final MDCKeys key, final Serializable value) {
+    public MdcServiceSpi setMdc(final MDCKeys key, final Serializable value) {
         if (key == null) {
             return this;
         }
@@ -286,7 +145,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
 
-    public MdcService setMdc(final String key, final Serializable value) {
+    public MdcServiceSpi setMdc(final String key, final Serializable value) {
         if (isNull(value)) {
             remove(key);
             return this;
@@ -308,7 +167,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
 
-    public MdcService addMdc(final Tuple<String, Serializable>... keys) {
+    public MdcServiceSpi addMdc(final Tuple<String, Serializable>... keys) {
         if (keys != null) {
             for (final Tuple<String, Serializable> key : keys) {
                 setMdc(key.getKey(), key.getValue());
@@ -317,7 +176,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return this;
     }
 
-    public MdcService addMdc(final Collection<Tuple<String, Serializable>> keys) {
+    public MdcServiceSpi addMdc(final Collection<Tuple<String, Serializable>> keys) {
         if (keys != null) {
             for (final Tuple<String, Serializable> key : keys) {
                 setMdc(key.getKey(), key.getValue());
@@ -353,11 +212,11 @@ public class MdcService implements ApplicationLifecycleSPI {
         return Boolean.parseBoolean(value);
     }
 
-    private int getInt(final MDCKeys key) {
+    public int getInt(final MDCKeys key) {
         return key == null ? 0 : getInt(key.name());
     }
 
-    private int getInt(final String key) {
+    public int getInt(final String key) {
         try {
             final String value = getMdc(key);
             return value == null ? 0 : Integer.parseInt(value);
@@ -366,11 +225,11 @@ public class MdcService implements ApplicationLifecycleSPI {
         }
     }
 
-    private long getLong(final MDCKeys key) {
+    public long getLong(final MDCKeys key) {
         return key == null ? 0L : getLong(key.name());
     }
 
-    private long getLong(final String key) {
+    public long getLong(final String key) {
         try {
             final String value = getMdc(key);
             return value == null ? 0 : Long.parseLong(value);
@@ -379,11 +238,11 @@ public class MdcService implements ApplicationLifecycleSPI {
         }
     }
 
-    private double getDouble(final MDCKeys key) {
+    public double getDouble(final MDCKeys key) {
         return key == null ? 0.0 : getDouble(key.name());
     }
 
-    private double getDouble(final String key) {
+    public double getDouble(final String key) {
         if (key == null) {
             return 0.0;
         }
@@ -468,7 +327,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     // =========================================================================
     // REMOVE
     // =========================================================================
-    public MdcService remove(final MDCKeys... keys) {
+    public MdcServiceSpi remove(final MDCKeys... keys) {
         if (keys != null) {
             for (final MDCKeys key : keys) {
                 MDC.remove(key.name());
@@ -477,7 +336,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return this;
     }
 
-    public MdcService remove(final String... keys) {
+    public MdcServiceSpi remove(final String... keys) {
         if (keys != null) {
             for (final String key : keys) {
                 MDC.remove(key);
@@ -486,7 +345,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return this;
     }
 
-    public MdcService clear() {
+    public MdcServiceSpi clear() {
         MDC.clear();
         return this;
     }
@@ -495,7 +354,8 @@ public class MdcService implements ApplicationLifecycleSPI {
     // =========================================================================
     // FIELDS
     // =========================================================================
-    public MdcService appClass(final String value) {
+
+    public MdcServiceSpi appClass(final String value) {
         setMdc(MDCKeys.appClass, value);
         return this;
     }
@@ -504,7 +364,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.appClass);
     }
 
-    public MdcService appClassShortName(final String value) {
+    public MdcServiceSpi appClassShortName(final String value) {
         setMdc(MDCKeys.appClassShortName, value);
         return this;
     }
@@ -513,7 +373,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.appClassShortName);
     }
 
-    public MdcService domain(final String value) {
+    public MdcServiceSpi domain(final String value) {
         setMdc(MDCKeys.domain, value);
         return this;
     }
@@ -522,7 +382,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.domain);
     }
 
-    public MdcService subDomain(final String value) {
+    public MdcServiceSpi subDomain(final String value) {
         setMdc(MDCKeys.subDomain, value);
         return this;
     }
@@ -532,7 +392,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
 
-    public MdcService appMethod(final String value) {
+    public MdcServiceSpi appMethod(final String value) {
         setMdc(MDCKeys.appMethod, value);
         return this;
     }
@@ -542,7 +402,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
 
-    public MdcService appService(final String value) {
+    public MdcServiceSpi appService(final String value) {
         setMdc(MDCKeys.appService, value);
         return this;
     }
@@ -551,7 +411,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.appService);
     }
 
-    public MdcService appSubService(final String value) {
+    public MdcServiceSpi appSubService(final String value) {
         setMdc(MDCKeys.appSubService, value);
         return this;
     }
@@ -560,7 +420,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.appSubService);
     }
 
-    public MdcService applicationVersion(final String value) {
+    public MdcServiceSpi applicationVersion(final String value) {
         setMdc(MDCKeys.applicationVersion, value);
         return this;
     }
@@ -569,7 +429,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.applicationVersion);
     }
 
-    public MdcService asset(final String value) {
+    public MdcServiceSpi asset(final String value) {
         setMdc(MDCKeys.asset, value);
         return this;
     }
@@ -578,7 +438,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.asset);
     }
 
-    public MdcService authProtocol(final String value) {
+    public MdcServiceSpi authProtocol(final String value) {
         setMdc(MDCKeys.authProtocol, value);
         return this;
     }
@@ -587,7 +447,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.authProtocol);
     }
 
-    public MdcService callFrom(final String value) {
+    public MdcServiceSpi callFrom(final String value) {
         setMdc(MDCKeys.callFrom, value);
         return this;
     }
@@ -596,7 +456,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.callFrom);
     }
 
-    public MdcService callType(final String value) {
+    public MdcServiceSpi callType(final String value) {
         setMdc(MDCKeys.callType, value);
         return this;
     }
@@ -605,7 +465,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.callType);
     }
 
-    public MdcService conversationId(final String value) {
+    public MdcServiceSpi conversationId(final String value) {
         setMdc(MDCKeys.conversation_id, value);
         return this;
     }
@@ -614,7 +474,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.conversation_id);
     }
 
-    public MdcService correlationId(final String value) {
+    public MdcServiceSpi correlationId(final String value) {
         setMdc(MDCKeys.correlation_id, value);
         return this;
     }
@@ -628,7 +488,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return value;
     }
 
-    public MdcService country(final String value) {
+    public MdcServiceSpi country(final String value) {
         setMdc(MDCKeys.country, value);
         return this;
     }
@@ -637,7 +497,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.country);
     }
 
-    public MdcService customerId(final String value) {
+    public MdcServiceSpi customerId(final String value) {
         setMdc(MDCKeys.customerId, value);
         return this;
     }
@@ -646,7 +506,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.customerId);
     }
 
-    public MdcService deviceClass(final String value) {
+    public MdcServiceSpi deviceClass(final String value) {
         setMdc(MDCKeys.deviceClass, value);
         return this;
     }
@@ -655,7 +515,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.deviceClass);
     }
 
-    public MdcService deviceIdentifier(final String value) {
+    public MdcServiceSpi deviceIdentifier(final String value) {
         setMdc(MDCKeys.deviceIdentifier, value);
         return this;
     }
@@ -664,7 +524,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.deviceIdentifier);
     }
 
-    public MdcService deviceIp(final String value) {
+    public MdcServiceSpi deviceIp(final String value) {
         setMdc(MDCKeys.deviceIp, value);
         return this;
     }
@@ -673,7 +533,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.deviceIp);
     }
 
-    public MdcService deviceNetworkSpeedDown(final double value) {
+    public MdcServiceSpi deviceNetworkSpeedDown(final double value) {
         setMdc(MDCKeys.deviceNetworkSpeedDown, value);
         return this;
     }
@@ -682,7 +542,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getDouble(MDCKeys.deviceNetworkSpeedDown);
     }
 
-    public MdcService deviceNetworkSpeedLatency(final double value) {
+    public MdcServiceSpi deviceNetworkSpeedLatency(final double value) {
         setMdc(MDCKeys.deviceNetworkSpeedLatency, value);
         return this;
     }
@@ -691,7 +551,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getDouble(MDCKeys.deviceNetworkSpeedLatency);
     }
 
-    public MdcService deviceNetworkSpeedUp(final double value) {
+    public MdcServiceSpi deviceNetworkSpeedUp(final double value) {
         setMdc(MDCKeys.deviceNetworkSpeedUp, value);
         return this;
     }
@@ -700,7 +560,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getDouble(MDCKeys.deviceNetworkSpeedUp);
     }
 
-    public MdcService deviceNetworkType(final String value) {
+    public MdcServiceSpi deviceNetworkType(final String value) {
         setMdc(MDCKeys.deviceNetworkType, value);
         return this;
     }
@@ -709,7 +569,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.deviceNetworkType);
     }
 
-    public MdcService deviceType(final String value) {
+    public MdcServiceSpi deviceType(final String value) {
         setMdc(MDCKeys.deviceType, value);
         return this;
     }
@@ -718,7 +578,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.deviceType);
     }
 
-    public MdcService duration(final long value) {
+    public MdcServiceSpi duration(final long value) {
         setMdc(MDCKeys.duration, value);
         return this;
     }
@@ -727,7 +587,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getLong(MDCKeys.duration);
     }
 
-    public MdcService env(final String value) {
+    public MdcServiceSpi env(final String value) {
         setMdc(MDCKeys.env, value);
         return this;
     }
@@ -736,7 +596,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.env);
     }
 
-    public MdcService errorCategory(final String value) {
+    public MdcServiceSpi errorCategory(final String value) {
         setMdc(MDCKeys.errorCategory, value);
         return this;
     }
@@ -745,7 +605,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.errorCategory);
     }
 
-    public MdcService errorCode(final String value) {
+    public MdcServiceSpi errorCode(final String value) {
         setMdc(MDCKeys.errorCode, value);
         return this;
     }
@@ -755,7 +615,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return errorCode() != null;
     }
 
-    public MdcService errorCode(final ErrorCode errorCode) {
+    public MdcServiceSpi errorCode(final ErrorCode errorCode) {
         if (errorCode == null) {
             errorCodeRemove();
             return this;
@@ -772,7 +632,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return this;
     }
 
-    public MdcService errorCodeRemove() {
+    public MdcServiceSpi errorCodeRemove() {
         for (final String key : ErrorCode.KEYS_SET) {
             remove(key);
         }
@@ -802,7 +662,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
 
-    public MdcService errorExploitationError(final boolean value) {
+    public MdcServiceSpi errorExploitationError(final boolean value) {
         setMdc(MDCKeys.errorExploitationError, value);
         return this;
     }
@@ -811,7 +671,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getBoolean(MDCKeys.errorExploitationError);
     }
 
-    public MdcService errorField(final String... value) {
+    public MdcServiceSpi errorField(final String... value) {
         if (value == null) {
             remove(MDCKeys.errorField);
         }
@@ -824,7 +684,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
 
-    public MdcService errorMessage(final String value) {
+    public MdcServiceSpi errorMessage(final String value) {
         setMdc(MDCKeys.errorMessage, value);
         return this;
     }
@@ -833,7 +693,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.errorMessage);
     }
 
-    public MdcService errorMessageDetail(final String value) {
+    public MdcServiceSpi errorMessageDetail(final String value) {
         setMdc(MDCKeys.errorMessageDetail, value);
         return this;
     }
@@ -842,7 +702,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.errorMessageDetail);
     }
 
-    public MdcService errorRetryable(final boolean value) {
+    public MdcServiceSpi errorRetryable(final boolean value) {
         setMdc(MDCKeys.errorRetryable, value);
         return this;
     }
@@ -851,7 +711,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getBoolean(MDCKeys.errorRetryable);
     }
 
-    public MdcService errorRollback(final boolean value) {
+    public MdcServiceSpi errorRollback(final boolean value) {
         setMdc(MDCKeys.errorRollback, value);
         return this;
     }
@@ -863,7 +723,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     /**
      * errorStatus is <strong>int value</strong>
      */
-    public MdcService errorStatus(final int value) {
+    public MdcServiceSpi errorStatus(final int value) {
         setMdc(MDCKeys.errorStatus, value);
         return this;
     }
@@ -872,7 +732,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getInt(MDCKeys.errorStatus);
     }
 
-    public MdcService errorType(final String value) {
+    public MdcServiceSpi errorType(final String value) {
         setMdc(MDCKeys.errorType, value);
         return this;
     }
@@ -881,7 +741,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.errorType);
     }
 
-    public MdcService errorUrl(final String value) {
+    public MdcServiceSpi errorUrl(final String value) {
         setMdc(MDCKeys.errorUrl, value);
         return this;
     }
@@ -890,12 +750,12 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.errorUrl);
     }
 
-    public MdcService exceptionName(final String value) {
+    public MdcServiceSpi exceptionName(final String value) {
         setMdc(MDCKeys.exceptionName, value);
         return this;
     }
 
-    public MdcService errorDomain(final String value) {
+    public MdcServiceSpi errorDomain(final String value) {
         setMdc(MDCKeys.errorDomain, value);
         return this;
     }
@@ -904,7 +764,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.errorDomain);
     }
 
-    public MdcService errorSubDomain(final String value) {
+    public MdcServiceSpi errorSubDomain(final String value) {
         setMdc(MDCKeys.errorSubDomain, value);
         return this;
     }
@@ -917,7 +777,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.exceptionName);
     }
 
-    public MdcService flags(final String value) {
+    public MdcServiceSpi flags(final String value) {
         setMdc(MDCKeys.flags, value);
         return this;
     }
@@ -926,7 +786,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.flags);
     }
 
-    public MdcService from(final LocalDateTime value) {
+    public MdcServiceSpi from(final LocalDateTime value) {
         setMdc(MDCKeys.from, value);
         return this;
     }
@@ -936,7 +796,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
 
-    public MdcService groupId(final String value) {
+    public MdcServiceSpi groupId(final String value) {
         setMdc(MDCKeys.groupId, value);
         return this;
     }
@@ -946,7 +806,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
 
-    public MdcService artifactId(final String value) {
+    public MdcServiceSpi artifactId(final String value) {
         setMdc(MDCKeys.artifactId, value);
         return this;
     }
@@ -955,7 +815,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.artifactId);
     }
 
-    public MdcService commitId(final String value) {
+    public MdcServiceSpi commitId(final String value) {
         setMdc(MDCKeys.commitId, value);
         return this;
     }
@@ -965,7 +825,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
 
-    public MdcService commitDate(final String value) {
+    public MdcServiceSpi commitDate(final String value) {
         setMdc(MDCKeys.commitDate, value);
         return this;
     }
@@ -975,7 +835,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
 
-    public MdcService fromTimestamp(final long value) {
+    public MdcServiceSpi fromTimestamp(final long value) {
         setMdc(MDCKeys.fromTimestamp, value);
         return this;
     }
@@ -984,7 +844,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getLong(MDCKeys.fromTimestamp);
     }
 
-    public MdcService functionalUid(final String value) {
+    public MdcServiceSpi functionalUid(final String value) {
         setMdc(MDCKeys.functionalUid, value);
         return this;
     }
@@ -993,7 +853,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.functionalUid);
     }
 
-    public MdcService globalStatus(final String value) {
+    public MdcServiceSpi globalStatus(final String value) {
         setMdc(MDCKeys.globalStatus, value);
         return this;
     }
@@ -1010,12 +870,12 @@ public class MdcService implements ApplicationLifecycleSPI {
         setMdc(MDCKeys.globalStatus, ERROR);
     }
 
-    public MdcService removeGlobalStatus() {
+    public MdcServiceSpi removeGlobalStatus() {
         remove(MDCKeys.globalStatus);
         return this;
     }
 
-    public MdcService healthStatus(final String value) {
+    public MdcServiceSpi healthStatus(final String value) {
         setMdc(MDCKeys.healthStatus, value);
         return this;
     }
@@ -1024,7 +884,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.healthStatus);
     }
 
-    public MdcService hostname(final String value) {
+    public MdcServiceSpi hostname(final String value) {
         setMdc(MDCKeys.hostname, value);
         return this;
     }
@@ -1033,7 +893,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.hostname);
     }
 
-    public MdcService httpStatus(final int value) {
+    public MdcServiceSpi httpStatus(final int value) {
         setMdc(MDCKeys.httpStatus, value);
         return this;
     }
@@ -1042,7 +902,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getInt(MDCKeys.httpStatus);
     }
 
-    public MdcService instanceName(final String value) {
+    public MdcServiceSpi instanceName(final String value) {
         setMdc(MDCKeys.instanceName, value);
         return this;
     }
@@ -1051,7 +911,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.instanceName);
     }
 
-    public MdcService instanceNumber(final String value) {
+    public MdcServiceSpi instanceNumber(final String value) {
         setMdc(MDCKeys.instanceNumber, value);
         return this;
     }
@@ -1060,7 +920,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.instanceNumber);
     }
 
-    public MdcService ioinfoIoLog(final IoInfoDTO info) {
+    public MdcServiceSpi ioinfoIoLog(final IoInfoDTO info) {
         if (info == null) {
             return removeIoinfoIoLog();
         }
@@ -1074,7 +934,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return this;
     }
 
-    private MdcService removeIoinfoIoLog() {
+    public MdcServiceSpi removeIoinfoIoLog() {
         remove(MDCKeys.url,
                MDCKeys.verb,
                MDCKeys.service,
@@ -1085,7 +945,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return this;
     }
 
-    public MdcService ioinfoPartner(final IoInfoDTO info) {
+    public MdcServiceSpi ioinfoPartner(final IoInfoDTO info) {
         if (info == null) {
             return removeIoinfoPartner();
         }
@@ -1102,11 +962,11 @@ public class MdcService implements ApplicationLifecycleSPI {
         return this;
     }
 
-    public MdcService partnerRemove() {
+    public MdcServiceSpi partnerRemove() {
         return removeIoinfoPartner();
     }
 
-    public MdcService removeIoinfoPartner() {
+    public MdcServiceSpi removeIoinfoPartner() {
         remove(
                 MDCKeys.errorCategory,
                 MDCKeys.errorCode,
@@ -1139,7 +999,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return this;
     }
 
-    public MdcService language(final String value) {
+    public MdcServiceSpi language(final String value) {
         setMdc(MDCKeys.language, value);
         return this;
     }
@@ -1148,7 +1008,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.language);
     }
 
-    public MdcService lifecycle(final String value) {
+    public MdcServiceSpi lifecycle(final String value) {
         setMdc(MDCKeys.lifecycle, value);
         return this;
     }
@@ -1157,7 +1017,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.lifecycle);
     }
 
-    public MdcService lifecycleIn() {
+    public MdcServiceSpi lifecycleIn() {
         setMdc(MDCKeys.lifecycle, IN);
         return this;
     }
@@ -1178,7 +1038,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return error;
     }
 
-    public MdcService lifecycleOut() {
+    public MdcServiceSpi lifecycleOut() {
         setMdc(MDCKeys.lifecycle, OUT);
         return this;
     }
@@ -1200,12 +1060,12 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
 
-    public MdcService lifecycleRemove() {
+    public MdcServiceSpi lifecycleRemove() {
         remove(MDCKeys.lifecycle);
         return this;
     }
 
-    public MdcService majorVersion(final String value) {
+    public MdcServiceSpi majorVersion(final String value) {
         setMdc(MDCKeys.majorVersion, value);
         return this;
     }
@@ -1214,7 +1074,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.majorVersion);
     }
 
-    public MdcService messageId(final String value) {
+    public MdcServiceSpi messageId(final String value) {
         setMdc(MDCKeys.messageId, value);
         return this;
     }
@@ -1223,7 +1083,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.messageId);
     }
 
-    public MdcService methodInCause(final String value) {
+    public MdcServiceSpi methodInCause(final String value) {
         setMdc(MDCKeys.methodInCause, value);
         return this;
     }
@@ -1237,18 +1097,16 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
     public Map<String, String> getTrackingInformation(final Headers headers) {
-        final Map<String, String> result         = new LinkedHashMap<>();
-        final Headers             currentHeaders = headers == null ? this.headers : headers;
-
-        applyIfNotNull(deviceIdentifier(), value -> result.put(currentHeaders.getDeviceIdentifier(), value));
-        applyIfNotNull(correlationId(), value -> result.put(currentHeaders.getCorrelationId(), value));
-        applyIfNotNull(conversationId(), value -> result.put(currentHeaders.getConversationId(), value));
-        applyIfNotNull(traceId(), value -> result.put(currentHeaders.getRequestId(), value));
+        final Map<String, String> result = new LinkedHashMap<>();
+        applyIfNotNull(deviceIdentifier(), value -> result.put(Headers.X_DEVICE_IDENTIFIER, value));
+        applyIfNotNull(correlationId(), value -> result.put(Headers.X_CORRELATION_ID, value));
+        applyIfNotNull(conversationId(), value -> result.put(Headers.X_CONVERSATION_ID, value));
+        applyIfNotNull(traceId(), value -> result.put(Headers.X_B_3_TRACEID, value));
 
         return result;
     }
 
-    public MdcService orderId(final String value) {
+    public MdcServiceSpi orderId(final String value) {
         setMdc(MDCKeys.orderId, value);
         return this;
     }
@@ -1257,7 +1115,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.orderId);
     }
 
-    public MdcService osVersion(final String value) {
+    public MdcServiceSpi osVersion(final String value) {
         setMdc(MDCKeys.osVersion, value);
         return this;
     }
@@ -1266,7 +1124,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.osVersion);
     }
 
-    public MdcService parentSpanId(final String value) {
+    public MdcServiceSpi parentSpanId(final String value) {
         setMdc(MDCKeys.parentSpanId, value);
         return this;
     }
@@ -1275,7 +1133,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.parentSpanId);
     }
 
-    public MdcService partner(final String value) {
+    public MdcServiceSpi partner(final String value) {
         setMdc(MDCKeys.partner, value);
         return this;
     }
@@ -1284,12 +1142,12 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.partner);
     }
 
-    public MdcService partnerRequestCharset(final String value) {
+    public MdcServiceSpi partnerRequestCharset(final String value) {
         setMdc(MDCKeys.partnerRequestCharset, value);
         return this;
     }
 
-    public MdcService partnerRequestCharset(final Charset value) {
+    public MdcServiceSpi partnerRequestCharset(final Charset value) {
         if (value == null) {
             remove(MDCKeys.partnerRequestCharset);
         } else {
@@ -1303,12 +1161,12 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
 
-    public MdcService partnerResponseCharset(final String value) {
+    public MdcServiceSpi partnerResponseCharset(final String value) {
         setMdc(MDCKeys.partnerResponseCharset, value);
         return this;
     }
 
-    public MdcService partnerResponseCharset(final Charset value) {
+    public MdcServiceSpi partnerResponseCharset(final Charset value) {
         if (value == null) {
             remove(MDCKeys.partnerResponseCharset);
         } else {
@@ -1321,7 +1179,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getCharset(MDCKeys.partnerResponseCharset);
     }
 
-    public MdcService partnerResponseDuration(final long value) {
+    public MdcServiceSpi partnerResponseDuration(final long value) {
         setMdc(MDCKeys.partnerResponseDuration, value);
         return this;
     }
@@ -1330,7 +1188,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getLong(MDCKeys.partnerResponseDuration);
     }
 
-    public MdcService partnerResponseMessage(final String value) {
+    public MdcServiceSpi partnerResponseMessage(final String value) {
         setMdc(MDCKeys.partnerResponseMessage, value);
         return this;
     }
@@ -1339,7 +1197,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.partnerResponseMessage);
     }
 
-    public MdcService partnerResponseStatus(final int value) {
+    public MdcServiceSpi partnerResponseStatus(final int value) {
         setMdc(MDCKeys.partnerResponseStatus, value);
         return this;
     }
@@ -1348,7 +1206,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getInt(MDCKeys.partnerResponseStatus);
     }
 
-    public MdcService partnerService(final String value) {
+    public MdcServiceSpi partnerService(final String value) {
         setMdc(MDCKeys.partnerService, value);
         return this;
     }
@@ -1357,7 +1215,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.partnerService);
     }
 
-    public MdcService partnerSubService(final String value) {
+    public MdcServiceSpi partnerSubService(final String value) {
         setMdc(MDCKeys.partnerSubService, value);
         return this;
     }
@@ -1366,7 +1224,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.partnerSubService);
     }
 
-    public MdcService partnerType(final String value) {
+    public MdcServiceSpi partnerType(final String value) {
         setMdc(MDCKeys.partnerType, value);
         return this;
     }
@@ -1375,7 +1233,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.partnerType);
     }
 
-    public MdcService partnerUrl(final String value) {
+    public MdcServiceSpi partnerUrl(final String value) {
         setMdc(MDCKeys.partnerUrl, value);
         return this;
     }
@@ -1384,7 +1242,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.partnerUrl);
     }
 
-    public MdcService partnerVerb(final String value) {
+    public MdcServiceSpi partnerVerb(final String value) {
         setMdc(MDCKeys.partnerVerb, value);
         return this;
     }
@@ -1393,7 +1251,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.partnerVerb);
     }
 
-    public MdcService price(final double value) {
+    public MdcServiceSpi price(final double value) {
         setMdc(MDCKeys.price, value);
         return this;
     }
@@ -1402,7 +1260,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getDouble(MDCKeys.price);
     }
 
-    public MdcService principal(final String value) {
+    public MdcServiceSpi principal(final String value) {
         setMdc(MDCKeys.principal, value);
         return this;
     }
@@ -1411,7 +1269,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.principal);
     }
 
-    public MdcService productId(final String value) {
+    public MdcServiceSpi productId(final String value) {
         setMdc(MDCKeys.productId, value);
         return this;
     }
@@ -1420,7 +1278,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.productId);
     }
 
-    public MdcService processId(final String value) {
+    public MdcServiceSpi processId(final String value) {
         setMdc(MDCKeys.processId, value);
         return this;
     }
@@ -1429,7 +1287,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.processId);
     }
 
-    public MdcService processName(final String value) {
+    public MdcServiceSpi processName(final String value) {
         setMdc(MDCKeys.processName, value);
         return this;
     }
@@ -1438,7 +1296,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.processName);
     }
 
-    public MdcService processStatus(final String value) {
+    public MdcServiceSpi processStatus(final String value) {
         setMdc(MDCKeys.processStatus, value);
         return this;
     }
@@ -1447,7 +1305,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.processStatus);
     }
 
-    public MdcService quantity(final double value) {
+    public MdcServiceSpi quantity(final double value) {
         setMdc(MDCKeys.quantity, value);
         return this;
     }
@@ -1456,7 +1314,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getDouble(MDCKeys.quantity);
     }
 
-    public MdcService remoteAddress(final String value) {
+    public MdcServiceSpi remoteAddress(final String value) {
         setMdc(MDCKeys.remoteAddress, value);
         return this;
     }
@@ -1465,7 +1323,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.remoteAddress);
     }
 
-    public MdcService requestHeaders(final String value) {
+    public MdcServiceSpi requestHeaders(final String value) {
         setMdc(MDCKeys.requestHeaders, value);
         return this;
     }
@@ -1474,7 +1332,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.requestHeaders);
     }
 
-    public MdcService requestId(final String value) {
+    public MdcServiceSpi requestId(final String value) {
         setMdc(MDCKeys.request_id, value);
         return this;
     }
@@ -1488,7 +1346,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return value;
     }
 
-    public MdcService reservationNumber(final String value) {
+    public MdcServiceSpi reservationNumber(final String value) {
         setMdc(MDCKeys.reservationNumber, value);
         return this;
     }
@@ -1497,7 +1355,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.reservationNumber);
     }
 
-    public MdcService responseHeaders(final String value) {
+    public MdcServiceSpi responseHeaders(final String value) {
         setMdc(MDCKeys.responseHeaders, value);
         return this;
     }
@@ -1506,7 +1364,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.responseHeaders);
     }
 
-    public MdcService service(final String value) {
+    public MdcServiceSpi service(final String value) {
         setMdc(MDCKeys.service, value);
         return this;
     }
@@ -1515,7 +1373,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.service);
     }
 
-    public MdcService sessionId(final String value) {
+    public MdcServiceSpi sessionId(final String value) {
         setMdc(MDCKeys.sessionId, value);
         return this;
     }
@@ -1524,7 +1382,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.sessionId);
     }
 
-    public MdcService size(final double value) {
+    public MdcServiceSpi size(final double value) {
         setMdc(MDCKeys.size, value);
         return this;
     }
@@ -1533,7 +1391,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getDouble(MDCKeys.size);
     }
 
-    public MdcService traceId(final String value) {
+    public MdcServiceSpi traceId(final String value) {
         setMdc(MDCKeys.traceId, value);
         return this;
     }
@@ -1547,7 +1405,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return value;
     }
 
-    public MdcService until(final LocalDateTime value) {
+    public MdcServiceSpi until(final LocalDateTime value) {
         setMdc(MDCKeys.until, value);
         return this;
     }
@@ -1556,7 +1414,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getLocalDateTime(MDCKeys.until);
     }
 
-    public MdcService untilTimestamp(final long value) {
+    public MdcServiceSpi untilTimestamp(final long value) {
         setMdc(MDCKeys.untilTimestamp, value);
         return this;
     }
@@ -1565,7 +1423,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getLong(MDCKeys.untilTimestamp);
     }
 
-    public MdcService uri(final String value) {
+    public MdcServiceSpi uri(final String value) {
         setMdc(MDCKeys.uri, value);
         return this;
     }
@@ -1574,7 +1432,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.uri);
     }
 
-    public MdcService url(final String value) {
+    public MdcServiceSpi url(final String value) {
         setMdc(MDCKeys.url, value);
         return this;
     }
@@ -1583,7 +1441,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.url);
     }
 
-    public MdcService urlPattern(final String value) {
+    public MdcServiceSpi urlPattern(final String value) {
         setMdc(MDCKeys.urlPattern, value);
         return this;
     }
@@ -1593,7 +1451,7 @@ public class MdcService implements ApplicationLifecycleSPI {
     }
 
 
-    public MdcService userAgent(final String value) {
+    public MdcServiceSpi userAgent(final String value) {
         setMdc(MDCKeys.userAgent, value);
         return this;
     }
@@ -1602,7 +1460,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.userAgent);
     }
 
-    public MdcService userId(final String value) {
+    public MdcServiceSpi userId(final String value) {
         setMdc(MDCKeys.userId, value);
         return this;
     }
@@ -1611,12 +1469,12 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.userId);
     }
 
-    public MdcService verb(final String value) {
+    public MdcServiceSpi verb(final String value) {
         setMdc(MDCKeys.verb, value);
         return this;
     }
 
-    public MdcService status(final int status) {
+    public MdcServiceSpi status(final int status) {
         setMdc(MDCKeys.status, status);
         return this;
     }
@@ -1630,7 +1488,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.verb);
     }
 
-    public MdcService version(final String value) {
+    public MdcServiceSpi version(final String value) {
         setMdc(MDCKeys.version, value);
         return this;
     }
@@ -1639,7 +1497,7 @@ public class MdcService implements ApplicationLifecycleSPI {
         return getMdc(MDCKeys.version);
     }
 
-    public MdcService warning(final String value) {
+    public MdcServiceSpi warning(final String value) {
         setMdc(MDCKeys.warning, value);
         return this;
     }
@@ -1647,7 +1505,6 @@ public class MdcService implements ApplicationLifecycleSPI {
     public String warning() {
         return getMdc(MDCKeys.warning);
     }
-
 
 }
 

@@ -1,6 +1,6 @@
 package io.inugami.api.exceptions.asserts;
 
-import io.inugami.api.exceptions.*;
+import io.inugami.interfaces.exceptions.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

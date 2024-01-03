@@ -16,8 +16,8 @@
  */
 package io.inugami.api.tools;
 
-import io.inugami.api.exceptions.FatalException;
-import io.inugami.api.functionnals.VoidFunctionWithException;
+import io.inugami.interfaces.exceptions.FatalException;
+import io.inugami.interfaces.functionnals.VoidFunctionWithException;
 
 import java.io.File;
 import java.io.FileWriter;

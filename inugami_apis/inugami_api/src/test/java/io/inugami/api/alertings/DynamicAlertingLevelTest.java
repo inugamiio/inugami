@@ -1,6 +1,8 @@
 package io.inugami.api.alertings;
 
 import io.inugami.api.tools.unit.test.dto.AssertDtoContext;
+import io.inugami.interfaces.alertings.AlerteLevels;
+import io.inugami.interfaces.alertings.DynamicAlertingLevel;
 import org.junit.jupiter.api.Test;
 
 import static io.inugami.api.tools.unit.test.UnitTestHelper.assertDto;

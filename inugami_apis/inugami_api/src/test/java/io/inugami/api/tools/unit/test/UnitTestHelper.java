@@ -18,8 +18,8 @@ package io.inugami.api.tools.unit.test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.exceptions.Warning;
+import io.inugami.interfaces.exceptions.ErrorCode;
+import io.inugami.interfaces.exceptions.Warning;
 import io.inugami.api.tools.unit.test.api.LineMatcher;
 import io.inugami.api.tools.unit.test.dto.AssertDtoContext;
 import lombok.AccessLevel;

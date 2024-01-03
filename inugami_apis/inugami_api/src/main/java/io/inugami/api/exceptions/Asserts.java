@@ -17,10 +17,11 @@
 package io.inugami.api.exceptions;
 
 import io.inugami.api.exceptions.asserts.*;
-import io.inugami.api.functionnals.ActionWithException;
-import io.inugami.api.functionnals.IsEmptyFacet;
-import io.inugami.api.functionnals.VoidFunction;
-import io.inugami.api.functionnals.VoidFunctionWithException;
+import io.inugami.interfaces.exceptions.*;
+import io.inugami.interfaces.functionnals.ActionWithException;
+import io.inugami.interfaces.functionnals.IsEmptyFacet;
+import io.inugami.interfaces.functionnals.VoidFunction;
+import io.inugami.interfaces.functionnals.VoidFunctionWithException;
 import lombok.experimental.UtilityClass;
 
 import java.io.File;

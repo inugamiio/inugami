@@ -1,5 +1,6 @@
 package io.inugami.api.dao;
 
+import io.inugami.interfaces.dao.Identifiable;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

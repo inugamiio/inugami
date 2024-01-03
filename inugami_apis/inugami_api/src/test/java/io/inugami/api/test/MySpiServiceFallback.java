@@ -1,6 +1,6 @@
 package io.inugami.api.test;
 
-import io.inugami.api.spi.SpiPriority;
+import io.inugami.interfaces.spi.SpiPriority;
 
 @SpiPriority(10)
 public class MySpiServiceFallback implements MySpiService {

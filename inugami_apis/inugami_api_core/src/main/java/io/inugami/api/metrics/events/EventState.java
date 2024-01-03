@@ -16,7 +16,7 @@
  */
 package io.inugami.api.metrics.events;
 
-import io.inugami.api.models.data.basic.JsonObject;
+import io.inugami.interfaces.models.basic.JsonObject;
 
 /**
  * EventState

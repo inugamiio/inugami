@@ -1,1 +1,0 @@
-Les différents plugins sont à placer ici

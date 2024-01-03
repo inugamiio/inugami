@@ -1,9 +1,9 @@
 package io.inugami.api.exceptions.asserts;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.exceptions.ExceptionWithErrorCode;
-import io.inugami.api.functionnals.VoidFunctionWithException;
+import io.inugami.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.interfaces.exceptions.ErrorCode;
+import io.inugami.interfaces.exceptions.ExceptionWithErrorCode;
+import io.inugami.interfaces.functionnals.VoidFunctionWithException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

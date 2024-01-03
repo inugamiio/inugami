@@ -1,27 +1,26 @@
 package io.inugami.api.exceptions.warnings;
 
-import io.inugami.api.exceptions.Warning;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import io.inugami.interfaces.exceptions.Warning;
+import lombok.experimental.UtilityClass;
 
 import java.util.function.BooleanSupplier;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-class WarningTrue {
-    static void warningTrue(final Warning warning,
-                            final boolean condition,
-                            final String messageDetail,
-                            final Object... values) {
+@UtilityClass
+public class WarningTrue {
+    public static void warningTrue(final Warning warning,
+                                   final boolean condition,
+                                   final String messageDetail,
+                                   final Object... values) {
         if (condition) {
             WarningCommons.addWarningInContext(warning, messageDetail, values);
         }
     }
 
 
-    static void warningTrue(final Warning warning,
-                            final BooleanSupplier condition,
-                            final String messageDetail,
-                            final Object... values) {
+    public static void warningTrue(final Warning warning,
+                                   final BooleanSupplier condition,
+                                   final String messageDetail,
+                                   final Object... values) {
         if (condition != null) {
             final Boolean value = condition.getAsBoolean();
             if (value != null && value) {
@@ -31,19 +30,19 @@ class WarningTrue {
     }
 
 
-    static void warningFalse(final Warning warning,
-                             final boolean condition,
-                             final String messageDetail,
-                             final Object... values) {
+    public static void warningFalse(final Warning warning,
+                                    final boolean condition,
+                                    final String messageDetail,
+                                    final Object... values) {
         if (condition) {
             WarningCommons.addWarningInContext(warning, messageDetail, values);
         }
     }
 
-    static void warningFalse(final Warning warning,
-                             final BooleanSupplier condition,
-                             final String messageDetail,
-                             final Object... values) {
+    public static void warningFalse(final Warning warning,
+                                    final BooleanSupplier condition,
+                                    final String messageDetail,
+                                    final Object... values) {
         if (condition != null) {
             final Boolean value = condition.getAsBoolean();
             if (value != null && !value) {

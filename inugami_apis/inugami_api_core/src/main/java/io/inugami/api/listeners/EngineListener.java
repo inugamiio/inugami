@@ -19,8 +19,8 @@ package io.inugami.api.listeners;
 import java.util.Map;
 
 import io.inugami.api.models.data.ClientSendData;
-import io.inugami.api.models.events.GenericEvent;
-import io.inugami.api.models.tools.Chrono;
+import io.inugami.interfaces.models.event.GenericEvent;
+import io.inugami.interfaces.models.tools.Chrono;
 
 /**
  * EngineListener

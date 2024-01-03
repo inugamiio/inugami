@@ -19,7 +19,7 @@ package io.inugami.api.marshalling;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import io.inugami.api.models.JsonBuilder;
+import io.inugami.interfaces.models.JsonBuilder;
 
 import java.io.IOException;
 import java.lang.reflect.Field;

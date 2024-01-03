@@ -2,7 +2,7 @@ package io.inugami.api.tools;
 
 import org.junit.jupiter.api.Test;
 
-import static io.inugami.api.tools.PathUtils.toUnixPath;
+import static io.inugami.interfaces.tools.PathUtils.toUnixPath;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PathUtilsTest {

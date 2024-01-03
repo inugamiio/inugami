@@ -16,7 +16,7 @@
  */
 package io.inugami.api.exceptions.asserts;
 
-import io.inugami.api.exceptions.ErrorCode;
+import io.inugami.interfaces.exceptions.ErrorCode;
 
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDateTime;

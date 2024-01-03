@@ -29,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum JvmKeyValues {
+
+
     // =========================================================================
     // ENUM
     // =========================================================================
@@ -143,6 +145,7 @@ public enum JvmKeyValues {
 
     CACHE_CONFIG_PATH("cache.configuration.path");
 
+    public static final int    TIMEOUT                  = 55000;
     public static final String DEFAULT_APPLICATION_NAME = "inugami";
 
     // =========================================================================

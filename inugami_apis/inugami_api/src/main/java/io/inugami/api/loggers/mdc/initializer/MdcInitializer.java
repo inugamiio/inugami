@@ -1,8 +1,10 @@
 package io.inugami.api.loggers.mdc.initializer;
 
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.monitoring.MdcService;
-import io.inugami.api.spi.SpiLoader;
+import io.inugami.interfaces.monitoring.MdcServiceSpi;
+import io.inugami.interfaces.monitoring.MdcServiceSpiFactory;
+import io.inugami.interfaces.monitoring.logger.Loggers;
+import io.inugami.interfaces.monitoring.logger.initializer.MdcInitializerSpi;
+import io.inugami.interfaces.spi.SpiLoader;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -15,11 +17,12 @@ import java.util.Map;
 public final class MdcInitializer {
 
     public static void initialize() {
-        final List<MdcInitializerSpi> initializers = SpiLoader.getInstance().loadSpiServicesByPriority(MdcInitializerSpi.class);
+        final List<MdcInitializerSpi> initializers = SpiLoader.getInstance()
+                                                              .loadSpiServicesByPriority(MdcInitializerSpi.class);
 
         final Map<String, Serializable> mdcContext = loadValues(initializers);
 
-        final MdcService mdcService = MdcService.getInstance();
+        final MdcServiceSpi mdcService = MdcServiceSpiFactory.getInstance();
         for (Map.Entry<String, Serializable> entry : mdcContext.entrySet()) {
             mdcService.setMdc(entry.getKey(), entry.getValue());
         }
@@ -30,7 +33,7 @@ public final class MdcInitializer {
     private static Map<String, Serializable> loadValues(final List<MdcInitializerSpi> initializers) {
         final Map<String, Serializable> result = new LinkedHashMap<>();
 
-        for(MdcInitializerSpi initializer : initializers){
+        for (MdcInitializerSpi initializer : initializers) {
             result.putAll(initializer.getDefaultValue());
         }
         return result;

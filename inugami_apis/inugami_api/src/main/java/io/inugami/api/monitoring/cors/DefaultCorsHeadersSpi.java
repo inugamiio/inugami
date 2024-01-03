@@ -1,8 +1,9 @@
 package io.inugami.api.monitoring.cors;
 
-import io.inugami.api.monitoring.data.ResquestData;
-import io.inugami.api.monitoring.models.Headers;
-import io.inugami.api.processors.ConfigHandler;
+import io.inugami.interfaces.monitoring.core.CorsHeadersSpi;
+import io.inugami.interfaces.monitoring.data.ResquestData;
+import io.inugami.interfaces.monitoring.models.Headers;
+import io.inugami.interfaces.processors.ConfigHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,9 @@ public class DefaultCorsHeadersSpi implements CorsHeadersSpi {
 
 
     @Override
-    public List<String> buildCorsHeaders(final ResquestData request, final Headers headers, final ConfigHandler<String, String> configuration) {
+    public List<String> buildCorsHeaders(final ResquestData request,
+                                         final Headers headers,
+                                         final ConfigHandler<String, String> configuration) {
         final List<String> result = new ArrayList<>(List.of(
                 headers.getDeviceIdentifier(),
                 headers.getCorrelationId(),

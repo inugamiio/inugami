@@ -1,5 +1,6 @@
 package io.inugami.api.dao;
 
+import io.inugami.interfaces.dao.SaveEntitiesResult;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

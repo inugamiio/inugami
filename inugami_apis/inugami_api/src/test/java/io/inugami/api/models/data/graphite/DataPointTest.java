@@ -1,6 +1,7 @@
 package io.inugami.api.models.data.graphite;
 
 import io.inugami.api.tools.unit.test.dto.AssertDtoContext;
+import io.inugami.interfaces.models.number.DataPoint;
 import org.junit.jupiter.api.Test;
 
 import static io.inugami.api.tools.unit.test.UnitTestHelper.assertDto;

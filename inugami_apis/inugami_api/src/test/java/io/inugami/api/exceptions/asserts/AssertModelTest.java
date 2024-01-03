@@ -1,8 +1,8 @@
 package io.inugami.api.exceptions.asserts;
 
-import io.inugami.api.exceptions.MultiUncheckedException;
-import io.inugami.api.functionnals.VoidFunctionWithException;
 import io.inugami.api.tools.unit.test.UnitTestData;
+import io.inugami.interfaces.exceptions.MultiUncheckedException;
+import io.inugami.interfaces.functionnals.VoidFunctionWithException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

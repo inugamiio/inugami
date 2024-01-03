@@ -16,7 +16,9 @@
  */
 package io.inugami.api.tools;
 
-import io.inugami.api.loggers.Loggers;
+import io.inugami.interfaces.monitoring.logger.Loggers;
+import io.inugami.interfaces.tools.NamedComponent;
+import io.inugami.interfaces.tools.reflection.FieldGetterSetter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

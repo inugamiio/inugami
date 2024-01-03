@@ -1,7 +1,8 @@
 package io.inugami.api.models.data.graphite;
 
-import io.inugami.api.models.data.basic.JsonObject;
-import io.inugami.api.models.data.basic.JsonObjects;
+import io.inugami.interfaces.models.basic.JsonObject;
+import io.inugami.interfaces.models.basic.JsonObjects;
+import io.inugami.interfaces.models.number.DataPoint;
 
 import java.util.List;
 import java.util.function.Function;

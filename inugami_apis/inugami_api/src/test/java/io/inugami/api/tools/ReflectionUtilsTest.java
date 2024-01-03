@@ -1,8 +1,9 @@
 package io.inugami.api.tools;
 
-import io.inugami.api.feature.Feature;
-import io.inugami.api.spi.SpiPriority;
 import io.inugami.api.tools.unit.test.UnitTestHelper;
+import io.inugami.interfaces.feature.Feature;
+import io.inugami.interfaces.spi.SpiPriority;
+import io.inugami.interfaces.tools.reflection.FieldGetterSetter;
 import lombok.*;
 import org.junit.jupiter.api.Test;
 
@@ -240,14 +241,6 @@ class ReflectionUtilsTest {
 
 
     @Test
-    void buildField_nominal() {
-        final Field field = buildField(SomeService.class, FIELD_NAME);
-        assertThat(field).isNotNull();
-        assertThat(field.getName()).isEqualTo(FIELD_NAME);
-    }
-
-
-    @Test
     void extractFieldGetterAndSetter_nominal() {
         final List<FieldGetterSetter> result = extractFieldGetterAndSetter(SomeService.builder()
                                                                                       .name("Joe")
@@ -349,7 +342,7 @@ class ReflectionUtilsTest {
 
     @Test
     void searchMethod_withAnnotation() {
-        assertThat(searchMethod(searchAnnotation(SomeService.class.getAnnotations(), SpiPriority.class.getName()), "value")).hasToString("public abstract int io.inugami.api.spi.SpiPriority.value()");
+        assertThat(searchMethod(searchAnnotation(SomeService.class.getAnnotations(), SpiPriority.class.getName()), "value")).hasToString("public abstract int io.inugami.interfaces.spi.SpiPriority.value()");
         Annotation annotation = null;
         assertThat(searchMethod(annotation, "getName")).isNull();
         assertThat(searchMethod(searchAnnotation(SomeService.class.getAnnotations(), SpiPriority.class.getName()), null)).isNull();

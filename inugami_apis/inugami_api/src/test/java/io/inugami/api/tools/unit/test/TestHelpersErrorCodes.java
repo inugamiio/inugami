@@ -1,9 +1,9 @@
 package io.inugami.api.tools.unit.test;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
+import io.inugami.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.interfaces.exceptions.ErrorCode;
 
-import static io.inugami.api.exceptions.DefaultErrorCode.newBuilder;
+import static io.inugami.interfaces.exceptions.DefaultErrorCode.newBuilder;
 
 
 public enum TestHelpersErrorCodes implements ErrorCode {

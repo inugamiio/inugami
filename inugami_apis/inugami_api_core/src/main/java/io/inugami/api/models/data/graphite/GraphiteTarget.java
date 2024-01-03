@@ -19,8 +19,9 @@ package io.inugami.api.models.data.graphite;
 import flexjson.JSON;
 import flexjson.JSONDeserializer;
 import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.models.JsonBuilder;
-import io.inugami.api.models.data.basic.JsonObject;
+import io.inugami.interfaces.models.JsonBuilder;
+import io.inugami.interfaces.models.basic.JsonObject;
+import io.inugami.interfaces.models.number.DataPoint;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -123,8 +124,10 @@ public class GraphiteTarget implements JsonObject {
             final String json = encoding == null ? new String(data) : new String(data, encoding);
 
             result = new JSONDeserializer<GraphiteTarget>().use(".",
-                                                                GraphiteTarget.class).use(DataPoint.class,
-                                                                                          new DataPointTransformer()).deserialize(json);
+                                                                GraphiteTarget.class)
+                                                           .use(DataPoint.class,
+                                                                new DataPointTransformer())
+                                                           .deserialize(json);
         }
 
         return (T) result;
