@@ -19,9 +19,6 @@ package io.inugami.api.tools;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import javax.script.Bindings;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -30,6 +27,7 @@ import java.util.List;
  * @author patrick_guillerm
  * @since 7 févr. 2018
  */
+// TODO: refactor
 @SuppressWarnings({"java:S6355", "java:S1123", "java:S1133"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Deprecated
@@ -51,14 +49,18 @@ public final class NashornTools {
 
     public static boolean isArray(final Object object) {
         boolean result = false;
+        /*
         if (object instanceof Bindings) {
             result = OBJECT_ARRAY.equals(String.valueOf(object));
         }
+
+         */
         return result;
     }
 
     public static List<Object> convertToList(final Object object) {
         List<Object> result = null;
+        /*
         if (object instanceof Bindings) {
             final Collection<Object> raw = ((Bindings) object).values();
             if (raw != null) {
@@ -66,6 +68,8 @@ public final class NashornTools {
                 result.addAll(raw);
             }
         }
+
+         */
         return result;
     }
 

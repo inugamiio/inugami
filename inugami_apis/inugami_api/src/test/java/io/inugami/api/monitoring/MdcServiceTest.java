@@ -1,8 +1,11 @@
 package io.inugami.api.monitoring;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.exceptions.UncheckedException;
+import io.inugami.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.interfaces.exceptions.ErrorCode;
+import io.inugami.interfaces.exceptions.UncheckedException;
+import io.inugami.interfaces.monitoring.MdcServiceSpi;
+import io.inugami.interfaces.monitoring.MdcServiceSpiFactory;
+import io.inugami.interfaces.monitoring.logger.MDCKeys;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
@@ -34,12 +37,12 @@ class MdcServiceTest {
     @Test
     void mdcKeys_shouldHaveGetterAndSetter() {
         final Method[] methods = MdcService.class.getDeclaredMethods();
-        for (final MdcService.MDCKeys key : MdcService.MDCKeys.VALUES) {
+        for (final MDCKeys key : MDCKeys.VALUES) {
             verify(key, methods);
         }
     }
 
-    private void verify(final MdcService.MDCKeys key, final Method[] methods) {
+    private void verify(final MDCKeys key, final Method[] methods) {
         switch (key) {
             case partnerResponseCharset:
             case partnerRequestCharset:
@@ -52,16 +55,16 @@ class MdcServiceTest {
         assertNotNull("getter not found for " + key.name(), getter);
         assertNotNull("setter not found for " + key.name(), setter);
 
-        MdcService.getInstance().clear();
+        MdcServiceSpiFactory.getInstance().clear();
 
         final Object value = createValue(setter);
         assertNotNull("no value for " + key.name(), value);
 
         try {
             if (setter.getParameters()[0].getType().getName().equals("[Ljava.lang.String;")) {
-                setter.invoke(MdcService.getInstance(), new Object[]{new String[]{DEFAULT_STRING}});
+                setter.invoke(MdcServiceSpiFactory.getInstance(), new Object[]{new String[]{DEFAULT_STRING}});
             } else {
-                setter.invoke(MdcService.getInstance(), new Object[]{value});
+                setter.invoke(MdcServiceSpiFactory.getInstance(), new Object[]{value});
             }
 
         } catch (final Throwable e) {
@@ -70,7 +73,7 @@ class MdcServiceTest {
 
         Object newValue = null;
         try {
-            newValue = getter.invoke(MdcService.getInstance(), new Object[]{});
+            newValue = getter.invoke(MdcServiceSpiFactory.getInstance(), new Object[]{});
         } catch (final Throwable e) {
             throw new UncheckedException("unable to get value for " + key.name());
         }
@@ -89,7 +92,7 @@ class MdcServiceTest {
     }
 
 
-    private Method searchGetter(final MdcService.MDCKeys key, final Method[] methods) {
+    private Method searchGetter(final MDCKeys key, final Method[] methods) {
         Method       method     = null;
         final String methodName = buildMethodName(key.name());
 
@@ -103,7 +106,7 @@ class MdcServiceTest {
     }
 
 
-    private Method searchSetter(final MdcService.MDCKeys key, final Method[] methods) {
+    private Method searchSetter(final MDCKeys key, final Method[] methods) {
         Method       method     = null;
         final String methodName = buildMethodName(key.name());
 
@@ -173,7 +176,7 @@ class MdcServiceTest {
     // =========================================================================
     @Test
     void setMdc_withNullValue_shouldRemove() {
-        final MdcService mdc = MdcService.getInstance().clear();
+        final MdcServiceSpi mdc = MdcServiceSpiFactory.getInstance().clear();
 
         mdc.callFrom(null);
         assertThat(mdc.callFrom()).isNull();

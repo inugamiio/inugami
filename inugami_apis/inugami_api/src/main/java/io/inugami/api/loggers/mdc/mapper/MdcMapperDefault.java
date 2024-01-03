@@ -1,6 +1,7 @@
 package io.inugami.api.loggers.mdc.mapper;
 
-import io.inugami.api.spi.SpiPriority;
+import io.inugami.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI;
+import io.inugami.interfaces.spi.SpiPriority;
 
 import java.io.Serializable;
 

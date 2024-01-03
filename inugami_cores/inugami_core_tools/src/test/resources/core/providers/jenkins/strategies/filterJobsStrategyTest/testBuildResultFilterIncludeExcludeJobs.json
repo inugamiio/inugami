@@ -1,8 +1,0 @@
-{
-  "jobs" : [ {
-    "classAtt" : "com.cloudbees.hudson.plugins.folder.Folder",
-    "color" : "blue",
-    "name" : "CI-VMA",
-    "url" : "http://host.jenkins/jenkins/job/CI-VMA/"
-  } ]
-}

@@ -16,7 +16,9 @@
  */
 package io.inugami.api.monitoring;
 
-import io.inugami.api.monitoring.models.Monitoring;
+import io.inugami.interfaces.monitoring.MonitoringLoaderSpi;
+import io.inugami.interfaces.monitoring.RequestInformation;
+import io.inugami.interfaces.monitoring.models.Monitoring;
 import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;

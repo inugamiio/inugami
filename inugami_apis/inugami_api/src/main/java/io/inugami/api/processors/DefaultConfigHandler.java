@@ -1,12 +1,13 @@
 package io.inugami.api.processors;
 
 import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.listeners.ApplicationLifecycleSPI;
 import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
-import io.inugami.api.mapping.JsonUnmarshalling;
-import io.inugami.api.spi.SpiLoader;
 import io.inugami.api.tools.ConfigTemplateValues;
-import io.inugami.api.tools.TemplateProviderSPI;
+import io.inugami.interfaces.listeners.ApplicationLifecycleSPI;
+import io.inugami.interfaces.mapping.JsonUnmarshalling;
+import io.inugami.interfaces.processors.ConfigHandler;
+import io.inugami.interfaces.spi.SpiLoader;
+import io.inugami.interfaces.tools.TemplateProviderSPI;
 
 import java.util.*;
 import java.util.regex.Pattern;

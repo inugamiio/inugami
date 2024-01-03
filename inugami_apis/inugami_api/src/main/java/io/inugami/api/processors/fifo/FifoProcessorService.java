@@ -16,8 +16,11 @@
  */
 package io.inugami.api.processors.fifo;
 
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.providers.concurrent.LifecycleBootstrap;
+import io.inugami.interfaces.concurrent.LifecycleBootstrap;
+import io.inugami.interfaces.monitoring.logger.Loggers;
+import io.inugami.interfaces.tools.fifo.FifoMapper;
+import io.inugami.interfaces.tools.fifo.FifoProcessor;
+import io.inugami.interfaces.tools.fifo.FifoProcessorGlobaleProcessor;
 
 import java.util.concurrent.*;
 

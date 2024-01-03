@@ -1,6 +1,8 @@
 package io.inugami.api.models;
 
-import io.inugami.api.models.data.graphite.DataPoint;
+import io.inugami.interfaces.models.JsonBuilder;
+import io.inugami.interfaces.models.maven.Gav;
+import io.inugami.interfaces.models.number.DataPoint;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;

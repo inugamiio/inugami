@@ -9,8 +9,8 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.UncheckedException;
+import io.inugami.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.interfaces.exceptions.UncheckedException;
 
 import static io.inugami.api.tools.unit.test.marshaller.YamlMarshallerError.YAML_UNMARSHALLING_ERROR;
 

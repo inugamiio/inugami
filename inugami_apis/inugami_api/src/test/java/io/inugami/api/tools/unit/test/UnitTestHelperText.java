@@ -1,12 +1,12 @@
 package io.inugami.api.tools.unit.test;
 
 import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.UncheckedException;
-import io.inugami.api.models.JsonBuilder;
-import io.inugami.api.tools.ConsoleColors;
 import io.inugami.api.tools.unit.test.api.DefaultLineMatcher;
 import io.inugami.api.tools.unit.test.api.LineMatcher;
 import io.inugami.api.tools.unit.test.api.SkipLineMatcher;
+import io.inugami.interfaces.exceptions.UncheckedException;
+import io.inugami.interfaces.models.JsonBuilder;
+import io.inugami.interfaces.monitoring.logger.ConsoleColors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

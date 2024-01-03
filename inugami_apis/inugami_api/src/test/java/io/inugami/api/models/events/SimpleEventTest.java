@@ -16,7 +16,9 @@
  */
 package io.inugami.api.models.events;
 
-import io.inugami.api.processors.ProcessorModel;
+import io.inugami.interfaces.processors.ProcessorModel;
+import io.inugami.interfaces.models.event.AlertingModel;
+import io.inugami.interfaces.models.event.SimpleEvent;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

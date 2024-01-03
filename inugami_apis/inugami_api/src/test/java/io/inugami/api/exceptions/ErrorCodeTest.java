@@ -1,7 +1,9 @@
 package io.inugami.api.exceptions;
 
-import io.inugami.api.loggers.LogInfoDTO;
 import io.inugami.api.tools.unit.test.UnitTestData;
+import io.inugami.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.interfaces.exceptions.ErrorCode;
+import io.inugami.interfaces.monitoring.logger.LogInfoDTO;
 import org.junit.jupiter.api.Test;
 
 import static io.inugami.api.tools.unit.test.UnitTestHelper.assertTextRelative;

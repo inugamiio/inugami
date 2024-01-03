@@ -16,6 +16,8 @@
  */
 package io.inugami.api.exceptions;
 
+import io.inugami.interfaces.exceptions.Warning;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

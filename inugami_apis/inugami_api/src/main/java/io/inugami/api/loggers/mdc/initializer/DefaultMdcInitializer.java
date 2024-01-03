@@ -1,6 +1,7 @@
 package io.inugami.api.loggers.mdc.initializer;
 
-import io.inugami.api.monitoring.MdcService;
+import io.inugami.interfaces.monitoring.logger.MDCKeys;
+import io.inugami.interfaces.monitoring.logger.initializer.MdcInitializerSpi;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
@@ -11,7 +12,7 @@ public class DefaultMdcInitializer implements MdcInitializerSpi {
     public Map<String, Serializable> getDefaultValue() {
         final Map<String, Serializable> result = new LinkedHashMap<>();
 
-        for (MdcService.MDCKeys key : MdcService.MDCKeys.VALUES) {
+        for (MDCKeys key : MDCKeys.VALUES) {
             result.put(key.name(), key.getDefaultValue());
         }
         return result;

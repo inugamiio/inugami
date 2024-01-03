@@ -18,9 +18,9 @@ package io.inugami.api.mapping.events.json;
 
 import flexjson.JSONContext;
 import flexjson.transformer.AbstractTransformer;
-import io.inugami.api.models.JsonBuilder;
-import io.inugami.api.models.events.SimpleEvent;
-import io.inugami.api.models.events.TargetConfig;
+import io.inugami.interfaces.models.JsonBuilder;
+import io.inugami.interfaces.models.event.SimpleEvent;
+import io.inugami.interfaces.models.event.TargetConfig;
 
 /**
  * SimpleEventTransformer

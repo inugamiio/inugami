@@ -2,6 +2,7 @@ package io.inugami.api.models;
 
 import io.inugami.api.tools.unit.test.UnitTestData;
 import io.inugami.api.tools.unit.test.dto.AssertDtoContext;
+import io.inugami.interfaces.models.Tuple;
 import org.junit.jupiter.api.Test;
 
 import static io.inugami.api.tools.unit.test.UnitTestData.OTHER;

@@ -1,4 +1,0 @@
-io.inugami.monitoring.config.spi.CpuSensorforTest
-io.inugami.monitoring.config.spi.MBeanSensorForTest
-io.inugami.monitoring.config.spi.MemorySensorforTest
-io.inugami.monitoring.config.spi.ThreadsSensorForTest

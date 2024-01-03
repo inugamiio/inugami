@@ -1,8 +1,9 @@
 package io.inugami.api.tools;
 
-import io.inugami.api.exceptions.UncheckedException;
-import io.inugami.api.functionnals.GenericActionWithException;
-import io.inugami.api.loggers.Loggers;
+import io.inugami.interfaces.exceptions.UncheckedException;
+import io.inugami.interfaces.functionnals.GenericActionWithException;
+import io.inugami.interfaces.monitoring.logger.Loggers;
+import io.inugami.interfaces.tools.reflection.FieldGetterSetter;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static io.inugami.api.tools.PathUtils.toUnixPath;
+import static io.inugami.interfaces.tools.PathUtils.toUnixPath;
 
 @SuppressWarnings({"java:S119", "java:S3011", "java:S1452", "java:S1181", "java:S1123", "java:S2326", "java:S1133", "java:S5042", "java:S5361"})
 @Slf4j
@@ -591,22 +592,10 @@ public final class ReflectionUtils {
         return result;
     }
 
-    public static Field buildField(final Class<?> type, final String name) {
-        Field                field       = null;
-        final Constructor<?> constructor = Field.class.getDeclaredConstructors()[0];
-        constructor.setAccessible(true);
-        try {
-            field = (Field) constructor.newInstance(type, name, type, 0, 0, null, null);
-        } catch (final Exception e) {
-            Loggers.DEBUG.error(e.getMessage());
-        }
-        return field;
-    }
-
 
     public static <T extends Object> T setFieldValue(final Field field, final Object value, final T instance) {
         if (field != null && instance != null) {
-            field.setAccessible(true);
+            setAccessible(field);
             try {
                 field.set(instance, value);
             } catch (final IllegalAccessException e) {
@@ -741,8 +730,19 @@ public final class ReflectionUtils {
     // =========================================================================
     // ACCESSIBLE
     // =========================================================================
+
+    public static void setAccessible(final Constructor<?> constructor) {
+        if (constructor != null || !Modifier.isPublic(constructor.getModifiers())) {
+            try {
+                constructor.setAccessible(true);
+            } catch (final Throwable e) {
+                traceError(e, log);
+            }
+        }
+    }
+
     public static void setAccessible(final Method method) {
-        if (method != null) {
+        if (method != null || !Modifier.isPublic(method.getModifiers())) {
             try {
                 method.setAccessible(true);
             } catch (final Throwable e) {
@@ -752,7 +752,7 @@ public final class ReflectionUtils {
     }
 
     public static void setAccessible(final Field field) {
-        if (field != null) {
+        if (field != null || !Modifier.isPublic(field.getModifiers())) {
             try {
                 field.setAccessible(true);
             } catch (final Throwable e) {

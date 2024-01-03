@@ -17,13 +17,14 @@
 package io.inugami.api.monitoring.models;
 
 import flexjson.JSON;
-import io.inugami.api.dao.Identifiable;
+import io.inugami.interfaces.dao.Identifiable;
 import io.inugami.api.mapping.DateTransformer;
-import io.inugami.api.models.data.basic.JsonObject;
-import io.inugami.api.models.data.graphite.number.FloatNumber;
-import io.inugami.api.models.data.graphite.number.GraphiteNumber;
+import io.inugami.interfaces.models.basic.JsonObject;
+import io.inugami.interfaces.models.number.FloatNumber;
+import io.inugami.interfaces.models.number.GraphiteNumber;
 import io.inugami.api.models.data.graphite.number.GraphiteNumberTransformer;
-import io.inugami.api.models.data.graphite.number.LongNumber;
+import io.inugami.interfaces.models.number.LongNumber;
+import io.inugami.interfaces.monitoring.models.GenericMonitoringModel;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Hex;

@@ -16,7 +16,8 @@
  */
 package io.inugami.api.metrics;
 
-import io.inugami.api.models.data.basic.JsonObject;
+import io.inugami.interfaces.metrics.MetricsDataType;
+import io.inugami.interfaces.models.basic.JsonObject;
 
 /**
  * MetricsData

@@ -1,6 +1,6 @@
 package io.inugami.api.monitoring.cors;
 
-import io.inugami.api.monitoring.models.Headers;
+import io.inugami.interfaces.monitoring.models.Headers;
 import io.inugami.api.processors.DefaultConfigHandler;
 import org.junit.jupiter.api.Test;
 

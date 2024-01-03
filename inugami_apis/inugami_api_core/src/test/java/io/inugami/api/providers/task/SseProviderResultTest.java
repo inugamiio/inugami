@@ -16,9 +16,10 @@
  */
 package io.inugami.api.providers.task;
 
-import io.inugami.api.models.data.graphite.DataPoint;
 import io.inugami.api.models.data.graphite.GraphiteTarget;
 import io.inugami.api.models.data.graphite.GraphiteTargets;
+import io.inugami.interfaces.models.number.DataPoint;
+import io.inugami.interfaces.task.SseProviderResult;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

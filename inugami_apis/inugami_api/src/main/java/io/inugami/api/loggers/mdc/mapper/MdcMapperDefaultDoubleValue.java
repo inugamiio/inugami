@@ -1,6 +1,7 @@
 package io.inugami.api.loggers.mdc.mapper;
 
-import io.inugami.api.monitoring.MdcService;
+import io.inugami.interfaces.monitoring.logger.MDCKeys;
+import io.inugami.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class MdcMapperDefaultDoubleValue implements LoggerMdcMappingSPI {
     private static List<String> initializeKeys() {
         List<String> result = new ArrayList<>();
 
-        for (MdcService.MDCKeys key : MdcService.MDCKeys.VALUES) {
+        for (MDCKeys key : MDCKeys.VALUES) {
             if (key.getDefaultValue() instanceof Double) {
                 result.add(key.name());
             }

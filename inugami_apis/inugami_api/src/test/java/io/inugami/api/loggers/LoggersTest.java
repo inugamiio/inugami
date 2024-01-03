@@ -16,6 +16,7 @@
  */
 package io.inugami.api.loggers;
 
+import io.inugami.interfaces.monitoring.logger.Loggers;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

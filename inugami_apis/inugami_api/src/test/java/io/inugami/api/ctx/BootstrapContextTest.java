@@ -1,5 +1,6 @@
 package io.inugami.api.ctx;
 
+import io.inugami.interfaces.ctx.BootstrapContext;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

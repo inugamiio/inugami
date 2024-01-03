@@ -1,6 +1,7 @@
 package io.inugami.api.spi;
 
-import io.inugami.api.loggers.Loggers;
+import io.inugami.interfaces.monitoring.logger.Loggers;
+import io.inugami.interfaces.spi.SpiLoaderServiceSPI;
 
 import java.util.ArrayList;
 import java.util.List;

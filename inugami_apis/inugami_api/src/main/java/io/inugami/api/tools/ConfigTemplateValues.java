@@ -16,6 +16,8 @@
  */
 package io.inugami.api.tools;
 
+import io.inugami.interfaces.tools.TemplateProviderSPI;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

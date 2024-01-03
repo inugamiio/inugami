@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<plugin>
-    <gav groupId="plugin-group-id" artifactId="plugin-foo" version="0.1" />
-
-    <events-files>
-        <events-file name="plugin_foobar_event_file.xml" />
-    </events-files>
-
-</plugin>

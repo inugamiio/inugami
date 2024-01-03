@@ -1,6 +1,6 @@
 package io.inugami.api.tools.unit.test;
 
-import io.inugami.api.exceptions.UncheckedException;
+import io.inugami.interfaces.exceptions.UncheckedException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

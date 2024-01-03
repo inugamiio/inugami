@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static io.inugami.api.functionnals.FunctionalUtils.*;
+import static io.inugami.interfaces.functionnals.FunctionalUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FunctionalUtilsTest {

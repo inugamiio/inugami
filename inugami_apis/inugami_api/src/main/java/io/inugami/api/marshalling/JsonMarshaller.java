@@ -20,10 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import io.inugami.api.spi.SpiLoader;
+import io.inugami.interfaces.spi.SpiLoader;
 import lombok.Getter;
 
 import java.lang.reflect.Field;
@@ -102,9 +99,6 @@ public class JsonMarshaller {
             objectMapper.findAndRegisterModules();
             objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
 
-            objectMapper.registerModule(new ParameterNamesModule())
-                        .registerModule(new Jdk8Module())
-                        .registerModule(new JavaTimeModule());
 
             for (Module module : EXTERNAL_MODULES) {
                 objectMapper.registerModule(module);
@@ -126,9 +120,13 @@ public class JsonMarshaller {
             objectMapper.enable(SerializationFeature.INDENT_OUTPUT)
                         .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
 
+            // TODO: refactor
+            /*
             objectMapper.registerModule(new ParameterNamesModule())
                         .registerModule(new Jdk8Module())
                         .registerModule(new JavaTimeModule());
+
+             */
 
             for (Module module : EXTERNAL_MODULES) {
                 objectMapper.registerModule(module);

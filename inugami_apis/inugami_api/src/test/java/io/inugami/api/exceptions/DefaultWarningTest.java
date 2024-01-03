@@ -1,5 +1,7 @@
 package io.inugami.api.exceptions;
 
+import io.inugami.interfaces.exceptions.DefaultWarning;
+import io.inugami.interfaces.exceptions.Warning;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

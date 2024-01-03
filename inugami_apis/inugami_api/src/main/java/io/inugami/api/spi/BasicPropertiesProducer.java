@@ -1,5 +1,7 @@
 package io.inugami.api.spi;
 
+import io.inugami.interfaces.spi.PropertiesProducerSpi;
+
 import java.util.HashMap;
 import java.util.Map;
 

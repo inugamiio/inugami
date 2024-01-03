@@ -21,7 +21,7 @@ import flexjson.JsonNumber;
 import flexjson.ObjectBinder;
 import flexjson.ObjectFactory;
 import flexjson.transformer.AbstractTransformer;
-import io.inugami.api.models.data.basic.JsonObject;
+import io.inugami.interfaces.models.basic.JsonObject;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;

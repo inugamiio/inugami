@@ -20,6 +20,7 @@ import flexjson.JsonNumber;
 import flexjson.ObjectBinder;
 import flexjson.ObjectFactory;
 import flexjson.transformer.AbstractTransformer;
+import io.inugami.interfaces.models.number.DataPoint;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;

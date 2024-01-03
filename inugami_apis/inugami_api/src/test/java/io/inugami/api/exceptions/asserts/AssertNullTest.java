@@ -1,7 +1,7 @@
 package io.inugami.api.exceptions.asserts;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
+import io.inugami.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.interfaces.exceptions.ErrorCode;
 import org.junit.jupiter.api.Test;
 
 import static io.inugami.api.exceptions.Asserts.assertNotNull;

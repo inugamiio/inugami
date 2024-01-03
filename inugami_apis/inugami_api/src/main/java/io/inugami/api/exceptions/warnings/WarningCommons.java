@@ -1,15 +1,14 @@
 package io.inugami.api.exceptions.warnings;
 
-import io.inugami.api.exceptions.Warning;
 import io.inugami.api.exceptions.WarningContext;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import io.inugami.interfaces.exceptions.Warning;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 class WarningCommons {
 
 
-    static void addWarningInContext(final Warning warning, final String message, final Object... values) {
+    public static void addWarningInContext(final Warning warning, final String message, final Object... values) {
         if (warning != null) {
             Warning currentWarning = warning;
             if (message != null) {

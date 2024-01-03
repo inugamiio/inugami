@@ -1,6 +1,6 @@
 package io.inugami.api.tools.unit.test;
 
-import io.inugami.api.exceptions.FatalException;
+import io.inugami.interfaces.exceptions.FatalException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 

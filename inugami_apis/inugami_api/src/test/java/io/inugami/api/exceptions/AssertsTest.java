@@ -1,6 +1,10 @@
 package io.inugami.api.exceptions;
 
-import io.inugami.api.functionnals.VoidFunctionWithException;
+import io.inugami.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.interfaces.exceptions.ErrorCode;
+import io.inugami.interfaces.exceptions.ExceptionWithErrorCode;
+import io.inugami.interfaces.exceptions.UncheckedException;
+import io.inugami.interfaces.functionnals.VoidFunctionWithException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

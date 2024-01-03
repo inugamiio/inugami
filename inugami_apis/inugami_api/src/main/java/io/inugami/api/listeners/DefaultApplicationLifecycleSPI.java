@@ -1,6 +1,7 @@
 package io.inugami.api.listeners;
 
 import io.inugami.api.loggers.mdc.initializer.MdcInitializer;
+import io.inugami.interfaces.listeners.ApplicationLifecycleSPI;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

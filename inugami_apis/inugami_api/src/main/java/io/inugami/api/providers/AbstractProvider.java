@@ -16,14 +16,15 @@
  */
 package io.inugami.api.providers;
 
-import io.inugami.api.models.events.SimpleEvent;
-import io.inugami.api.processors.ClassBehavior;
-import io.inugami.api.processors.Config;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.providers.concurrent.FutureData;
-import io.inugami.api.providers.concurrent.FutureDataBuilder;
-import io.inugami.api.providers.task.ProviderFutureResult;
-import io.inugami.api.providers.task.ProviderTask;
+import io.inugami.interfaces.concurrent.FutureData;
+import io.inugami.interfaces.concurrent.FutureDataModel;
+import io.inugami.interfaces.models.Config;
+import io.inugami.interfaces.models.event.SimpleEvent;
+import io.inugami.interfaces.processors.ClassBehavior;
+import io.inugami.interfaces.processors.ConfigHandler;
+import io.inugami.interfaces.providers.ProviderRunner;
+import io.inugami.interfaces.task.ProviderFutureResult;
+import io.inugami.interfaces.task.ProviderTask;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -80,12 +81,11 @@ public abstract class AbstractProvider {
     // =========================================================================
     protected FutureData<ProviderFutureResult> runTask(final ProviderTask task, final SimpleEvent event,
                                                        final FutureData<ProviderFutureResult> future) {
-
-        final FutureDataBuilder<ProviderFutureResult> builder = new FutureDataBuilder<>(future);
-        builder.addTask(task);
-        builder.addEvent(event);
-        builder.addFuture(providerRunner.run(getName(), task));
-        return builder.build();
+        return FutureDataModel.<ProviderFutureResult>builder().
+                              task(task)
+                              .event(event)
+                              .future(providerRunner.run(getName(), task))
+                              .build();
 
     }
 

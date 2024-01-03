@@ -17,7 +17,7 @@
 package io.inugami.api.models.data.graphite;
 
 import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.TechnicalException;
+import io.inugami.interfaces.exceptions.TechnicalException;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import java.io.IOException;

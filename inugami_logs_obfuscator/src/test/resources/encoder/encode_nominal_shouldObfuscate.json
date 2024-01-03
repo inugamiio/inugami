@@ -1,9 +1,0 @@
-[ {
-  "level" : "INFO",
-  "loggerName" : "io.inugami.logs.obfuscator.encoder.ObfuscatorEncoderTest",
-  "mdc" : {
-    "lifecycle" : "in",
-    "partner" : "test"
-  },
-  "message" : "password=xxxxx"
-} ]

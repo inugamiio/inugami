@@ -1,7 +1,7 @@
 package io.inugami.api.exceptions.asserts;
 
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.functionnals.IsEmptyFacet;
+import io.inugami.interfaces.exceptions.ErrorCode;
+import io.inugami.interfaces.functionnals.IsEmptyFacet;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
