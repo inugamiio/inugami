@@ -21,7 +21,6 @@ import io.inugami.interfaces.models.Config;
 import io.inugami.interfaces.models.maven.ManifestInfo;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -32,97 +31,18 @@ import java.util.Optional;
  * @author patrick_guillerm
  * @since 26 déc. 2016
  */
-public class ClassBehavior implements Serializable, ClassBehaviorParametersSPI {
-
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
-    /**
-     * The Constant serialVersionUID.
-     */
-    private static final long serialVersionUID = -7577815562851080926L;
+public interface ClassBehavior<T> extends Serializable, ClassBehaviorParametersSPI<T> {
 
 
-    private String       name;
-    private String       className;
-    private List<Config> configs;
-    private ManifestInfo manifest;
+    List<Config> getConfigs();
 
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    public ClassBehavior() {
-        super();
-    }
+    void setConfigs(final List<Config> configs);
 
-    public ClassBehavior(final String name, final String className, final Config... configs) {
-        super();
-        this.name = name;
-        this.className = className;
-        this.configs = Arrays.asList(configs);
-    }
-
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    @Override
-    public int hashCode() {
-        return ((name == null) ? 0 : name.hashCode());
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        boolean result = this == obj;
-        if (!result && (obj != null) && (obj instanceof ClassBehavior)) {
-            final ClassBehavior other = (ClassBehavior) obj;
-            result = name == null ? other.getName() == null : name.equals(other.getName());
-        }
-
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder(this.getClass().getSimpleName());
-        builder.append("[name=");
-        builder.append(name);
-        builder.append(", className=");
-        builder.append(className);
-        builder.append(", configs=");
-        if (configs == null) {
-            builder.append("null");
-        } else {
-            builder.append('[');
-            for (final Config value : configs) {
-                builder.append('{');
-                builder.append(value.getKey());
-                builder.append(':');
-                builder.append(value.getValue());
-                builder.append('}');
-                builder.append(',');
-            }
-            builder.append(']');
-        }
-        builder.append("]");
-        return builder.toString();
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public List<Config> getConfigs() {
-        return configs;
-    }
-
-    public void setConfigs(final List<Config> configs) {
-        this.configs = configs;
-    }
-
-    public Optional<String> getConfig(final String key) {
+    default Optional<String> getConfig(final String key) {
         Objects.requireNonNull(key);
         Optional<String> result = Optional.empty();
-        if (configs != null) {
-            for (final Config conf : configs) {
+        if (getConfigs() != null) {
+            for (final Config conf : getConfigs()) {
                 if (key.equals(conf.getKey())) {
                     result = Optional.of(conf.getValue());
                     break;
@@ -132,40 +52,21 @@ public class ClassBehavior implements Serializable, ClassBehaviorParametersSPI {
         return result;
     }
 
-    public String getName() {
-        return name;
-    }
+    String getName();
 
-    public void setName(final String name) {
-        this.name = name;
-    }
+    void setName(final String name);
 
-    public String getClassName() {
-        return className;
-    }
+    String getClassName();
 
-    public void setClassName(final String className) {
-        this.className = className;
-    }
+    void setClassName(final String className);
 
-    public ManifestInfo getManifest() {
-        return manifest;
-    }
+    ManifestInfo getManifest();
 
-    public void setManifest(final ManifestInfo manifest) {
-        this.manifest = manifest;
-    }
+    void setManifest(final ManifestInfo manifest);
 
-    // =========================================================================
-    // Override ClassBehaviorAttributes
-    // =========================================================================
     @Override
-    public boolean accept(final Class<?> clazz) {
+    default boolean accept(final Class<?> clazz) {
         return clazz.isAssignableFrom(this.getClass());
     }
 
-    @Override
-    public <T> T build(final ClassBehavior behavior, final ConfigHandler<String, String> config) {
-        return (T) behavior;
-    }
 }

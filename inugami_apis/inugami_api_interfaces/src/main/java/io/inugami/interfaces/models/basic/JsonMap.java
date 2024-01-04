@@ -16,7 +16,8 @@
  */
 package io.inugami.interfaces.models.basic;
 
-import io.inugami.api.models.JsonBuilder;
+
+import io.inugami.interfaces.models.JsonBuilder;
 
 import java.io.Serializable;
 import java.util.HashMap;

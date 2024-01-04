@@ -16,7 +16,6 @@
  */
 package io.inugami.interfaces.tools.strategy;
 
-import io.inugami.api.exceptions.tools.StrategyException;
 
 /**
  * Strategy

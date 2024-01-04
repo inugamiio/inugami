@@ -16,7 +16,9 @@
  */
 package io.inugami.interfaces.models.basic;
 
-import io.inugami.api.spi.SpiLoader;
+
+import io.inugami.interfaces.exceptions.FatalException;
+import io.inugami.interfaces.spi.SpiLoader;
 import lombok.*;
 
 /**
@@ -55,7 +57,11 @@ public final class RawJsonObject implements JsonObject {
         final RawJsonObject     result         = new RawJsonObject();
         final JsonSerializerSpi jsonSerializer = SpiLoader.getInstance().loadSpiSingleService(JsonSerializerSpi.class);
 
-        result.setData(jsonSerializer.deserialize(data));
+        try {
+            result.setData(jsonSerializer.deserialize(data));
+        } catch (JsonSerializerSpiException e) {
+            throw new FatalException(e);
+        }
         return result;
     }
 

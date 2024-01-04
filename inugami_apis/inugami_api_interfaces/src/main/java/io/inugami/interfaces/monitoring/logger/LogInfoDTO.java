@@ -1,6 +1,7 @@
 package io.inugami.interfaces.monitoring.logger;
 
-import io.inugami.api.models.JsonBuilder;
+
+import io.inugami.interfaces.models.JsonBuilder;
 import lombok.Builder;
 
 import java.io.Serializable;

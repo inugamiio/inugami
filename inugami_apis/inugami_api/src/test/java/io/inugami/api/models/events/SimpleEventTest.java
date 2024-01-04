@@ -16,9 +16,9 @@
  */
 package io.inugami.api.models.events;
 
-import io.inugami.interfaces.processors.ProcessorModel;
 import io.inugami.interfaces.models.event.AlertingModel;
 import io.inugami.interfaces.models.event.SimpleEvent;
+import io.inugami.interfaces.processors.ProcessorModel;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -41,24 +41,36 @@ class SimpleEventTest {
     @Test
     void testCloneObj() {
 
-        final SimpleEvent event = new SimpleEvent("event-name", "-10min", "-5min", "provider", buildProcessors(),
-                                                  "query", "parent", "scheduler", "mapper", buildAlertings());
+        final SimpleEvent event = SimpleEvent.builder()
+                                             .name("event-name")
+                                             .fromFirstTime("-10min")
+                                             .from("-5min")
+                                             .processors(buildProcessors())
+                                             .query("query")
+                                             .scheduler("scheduler")
+                                             .mapper("mapper")
+                                             .alertings(buildAlertings())
+                                             .provider("provider")
+                                             .build();
 
-        final SimpleEvent newEvent = (SimpleEvent) event.cloneObj();
+        final SimpleEvent newEvent = event.cloneObj();
 
         assertNotSame(event, newEvent);
         assertEquals(event.getName(), newEvent.getName());
-        assertEquals(event.getProvider().get(), newEvent.getProvider().get());
-        assertEquals(event.getFrom().get(), newEvent.getFrom().get());
+        assertEquals(event.getProvider(), newEvent.getProvider());
+        assertEquals(event.getFrom(), newEvent.getFrom());
         assertEquals(event.getQuery(), newEvent.getQuery());
-        assertEquals(1, newEvent.getProcessors().get().size());
-        assertEquals(event.getMapper().get(), newEvent.getMapper().get());
-        assertEquals(1, newEvent.getAlertings().get().size());
+        assertEquals(1, newEvent.getProcessors().size());
+        assertEquals(event.getMapper(), newEvent.getMapper());
+        assertEquals(1, newEvent.getAlertings().size());
     }
 
     private List<ProcessorModel> buildProcessors() {
         final List<ProcessorModel> result = new ArrayList<>();
-        result.add(new ProcessorModel("processor_name", "foo.bar.Processor"));
+        result.add(ProcessorModel.builder()
+                                 .name("processor_name")
+                                 .className("foo.bar.Processor")
+                                 .build());
         return result;
     }
 

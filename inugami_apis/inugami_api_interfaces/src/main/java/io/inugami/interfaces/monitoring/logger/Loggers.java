@@ -16,7 +16,8 @@
  */
 package io.inugami.interfaces.monitoring.logger;
 
-import io.inugami.interfaces.models.Rgb;
+
+import io.inugami.interfaces.tools.Rgb;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;

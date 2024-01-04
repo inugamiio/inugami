@@ -16,8 +16,6 @@
  */
 package io.inugami.interfaces.processors;
 
-import io.inugami.interfaces.processors.ConfigHandler;
-
 /**
  * Inugami use a lot of SPI implementation, Some components required to be configured.
  * SPI implementation required to have on implementation a constructor without parameters.
@@ -25,8 +23,8 @@ import io.inugami.interfaces.processors.ConfigHandler;
  * To do it, the <strong>ClassBehaviorParametersSPI</strong> allows to build a newer SPI instance with given
  * configuration.
  */
-public interface ClassBehaviorParametersSPI {
+public interface ClassBehaviorParametersSPI<T> {
     boolean accept(Class<?> clazz);
 
-    <T> T build(final ClassBehavior behavior, final ConfigHandler<String, String> config);
+    T build(final ClassBehavior behavior, final ConfigHandler<String, String> config);
 }

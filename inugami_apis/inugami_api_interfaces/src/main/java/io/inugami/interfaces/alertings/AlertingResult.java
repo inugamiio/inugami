@@ -35,7 +35,7 @@ import java.util.List;
 @Setter
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public final class AlertingResult implements JsonObject {
+public final class AlertingResult implements JsonObject<AlertingResult> {
 
     // =========================================================================
     // ATTRIBUTES
@@ -65,7 +65,7 @@ public final class AlertingResult implements JsonObject {
     //  TOOLS
     // =========================================================================
     @Override
-    public JsonObject cloneObj() {
+    public AlertingResult cloneObj() {
         return toBuilder().build();
     }
 

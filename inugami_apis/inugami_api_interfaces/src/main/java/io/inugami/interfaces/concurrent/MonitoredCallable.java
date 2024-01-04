@@ -16,7 +16,7 @@
  */
 package io.inugami.interfaces.concurrent;
 
-import io.inugami.api.monitoring.MdcService;
+
 import io.inugami.interfaces.models.tools.Chrono;
 import io.inugami.interfaces.monitoring.MdcServiceSpiFactory;
 import io.inugami.interfaces.monitoring.threads.MonitoredCallableListener;
@@ -45,7 +45,7 @@ public class MonitoredCallable<T> implements Callable<T> {
     @Override
     public T call() throws Exception {
         if (mdc != null) {
-            MdcService.getInstance().setMdc(mdc);
+            MdcServiceSpiFactory.getInstance().setMdc(mdc);
         }
 
         invokeListenerOnStart();

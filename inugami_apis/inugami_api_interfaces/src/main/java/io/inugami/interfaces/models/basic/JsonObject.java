@@ -32,7 +32,7 @@ import java.nio.charset.Charset;
  * @author patrick_guillerm
  * @since 12 janv. 2017
  */
-public interface JsonObject extends JsonObjectToJson, ClonableObject<JsonObject> {
+public interface JsonObject<T> extends JsonObjectToJson, ClonableObject<T> {
 
     default <T extends JsonObject> T convertToObject(final byte[] data, final Charset encoding) {
         final JsonSerializerSpi serializer = SpiLoader.getInstance().loadSpiSingleService(JsonSerializerSpi.class);
@@ -46,9 +46,5 @@ public interface JsonObject extends JsonObjectToJson, ClonableObject<JsonObject>
         }
     }
 
-    @Override
-    default JsonObject cloneObj() {
-        return null;
-    }
 
 }

@@ -16,8 +16,8 @@
  */
 package io.inugami.interfaces.models;
 
-import lombok.*;
 import lombok.Builder;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -35,7 +35,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 // config
-public final class Config implements Serializable {
+public final class Config implements Serializable, ClonableObject<Config> {
 
     /**
      * The Constant serialVersionUID.
@@ -45,4 +45,8 @@ public final class Config implements Serializable {
     private String key;
     private String value;
 
+    @Override
+    public Config cloneObj() {
+        return toBuilder().build();
+    }
 }
