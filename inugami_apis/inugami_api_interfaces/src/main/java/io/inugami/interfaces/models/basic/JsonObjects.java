@@ -16,8 +16,9 @@
  */
 package io.inugami.interfaces.models.basic;
 
-import io.inugami.api.exceptions.NotYetImplementedException;
-import io.inugami.api.models.JsonBuilder;
+
+import io.inugami.interfaces.exceptions.NotYetImplementedException;
+import io.inugami.interfaces.models.JsonBuilder;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;

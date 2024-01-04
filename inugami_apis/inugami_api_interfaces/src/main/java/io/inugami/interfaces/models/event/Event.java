@@ -16,11 +16,11 @@
  */
 package io.inugami.interfaces.models.event;
 
-import io.inugami.api.processors.ProcessorModel;
+import io.inugami.interfaces.processors.ProcessorModel;
+import lombok.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Event
@@ -30,84 +30,60 @@ import java.util.List;
  */
 @SuppressWarnings({"java:S107", "java:S2160"})
 // event
-public class Event extends GenericEvent {
-
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
-    /**
-     * The Constant serialVersionUID.
-     */
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Setter
+@Getter
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+public class Event implements GenericEvent<Event> {
     private static final long serialVersionUID = 1783705856498891253L;
 
-    private final List<TargetConfig> targets;
-    private       String             scheduler;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private String               name;
+    @ToString.Include
+    private String               fromFirstTime;
+    @ToString.Include
+    private String               from;
+    @ToString.Include
+    private String               until;
+    @ToString.Include
+    private String               provider;
+    @ToString.Include
+    private String               mapper;
+    @Singular("processors")
+    private List<ProcessorModel> processors;
+    @Singular("alertings")
+    private List<AlertingModel>  alertings;
 
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public Event() {
-        super();
-        targets = new ArrayList<>();
-    }
-
-    //@formatter:off
-    public Event(final String name, final String from, final String until, final String provider,
-                 final List<ProcessorModel> processors, final List<TargetConfig> targets,
-                 final String scheduler, final String mapper, final List<AlertingModel> alertings) {
-        //@formatter:on
-        super(name, from, until, provider, processors, mapper, alertings);
-        this.targets = targets == null ? null : Collections.unmodifiableList(targets);
-        this.scheduler = scheduler;
-    }
+    //------------------------------------------------------------------------------------------------------------------
+    @Singular("targets")
+    private List<TargetConfig> targets;
+    private String             scheduler;
 
     @Override
-    public GenericEvent cloneObj() {
-        final List<ProcessorModel> cpProcessors = new ArrayList<>();
-        getProcessors().ifPresent(cpProcessors::addAll);
+    public Event cloneObj() {
+        final var builder = toBuilder();
 
-        final List<AlertingModel> cpAlertings = new ArrayList<>();
-        getAlertings().ifPresent(cpAlertings::addAll);
+        builder.processors(Optional.ofNullable(processors)
+                                   .orElse(List.of())
+                                   .stream()
+                                   .map(ProcessorModel::cloneObj)
+                                   .toList());
 
-        List<TargetConfig> newTarget = null;
-        if (targets != null) {
-            newTarget = new ArrayList<>();
-            for (final TargetConfig target : targets) {
-                newTarget.add((TargetConfig) target.cloneObj());
-            }
-        }
+        builder.alertings(Optional.ofNullable(alertings)
+                                  .orElse(List.of())
+                                  .stream()
+                                  .map(AlertingModel::cloneObj)
+                                  .toList());
 
-        final String mapper   = getMapper().orElse(null);
-        final String from     = getFrom().orElse(null);
-        final String until    = getUntil().orElse(null);
-        final String provider = getProvider().orElse(null);
-
-        //@formatter:off
-        final Event result = new Event(getName(), from, until, provider, cpProcessors, newTarget, scheduler, mapper, cpAlertings);
-        //@formatter:on
-
-        getFromFirstTime().ifPresent(result::buildFromFirstTime);
-
-        return result;
+        builder.targets(Optional.ofNullable(targets)
+                                .orElse(List.of())
+                                .stream()
+                                .map(TargetConfig::cloneObj)
+                                .toList());
+        return builder.build();
     }
-
-    // =========================================================================
-    // GETTERS
-    // =========================================================================
-    public List<TargetConfig> getTargets() {
-        List<TargetConfig> result = null;
-        if (targets != null) {
-            result = targets;
-        }
-        return result;
-    }
-
-    public String getScheduler() {
-        return scheduler;
-    }
-
-    public void setScheduler(final String scheduler) {
-        this.scheduler = scheduler;
-    }
-
 }

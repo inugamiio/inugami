@@ -17,7 +17,7 @@
 package io.inugami.interfaces.alertings;
 
 
-import io.inugami.api.tools.AnnotationTools;
+import io.inugami.interfaces.tools.reflection.AnnotationTools;
 
 import java.util.LinkedHashMap;
 import java.util.List;

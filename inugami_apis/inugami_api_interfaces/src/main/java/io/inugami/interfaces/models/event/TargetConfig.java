@@ -17,9 +17,9 @@
 package io.inugami.interfaces.models.event;
 
 
-import io.inugami.api.processors.ProcessorModel;
+import io.inugami.interfaces.processors.ProcessorModel;
+import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,46 +30,55 @@ import java.util.Optional;
  * @since 4 oct. 2016
  */
 // target
-public class TargetConfig extends SimpleEvent {
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Setter
+@Getter
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+public class TargetConfig implements GenericEvent<TargetConfig> {
 
-    /**
-     * The Constant serialVersionUID.
-     */
-    private static final long serialVersionUID = -8813704499596910994L;
 
-    public TargetConfig() {
-        super();
-    }
+    private static final long                 serialVersionUID = -8813704499596910994L;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private              String               name;
+    @ToString.Include
+    private              String               fromFirstTime;
+    @ToString.Include
+    private              String               from;
+    @ToString.Include
+    private              String               until;
+    @ToString.Include
+    private              String               provider;
+    @ToString.Include
+    private              String               mapper;
+    @Singular("processors")
+    private              List<ProcessorModel> processors;
+    @Singular("alertings")
+    private              List<AlertingModel>  alertings;
 
-    public TargetConfig(final String name, final String from, final String until, final String provider,
-                        final List<ProcessorModel> processors, final String query, final String parent,
-                        final String scheduler, final String mapper, final List<AlertingModel> alertings) {
-        super(name, from, until, provider, processors, query, parent, scheduler, mapper, alertings);
-    }
+    //------------------------------------------------------------------------------------------------------------------
+    private String query;
+    private String parent;
+    private String scheduler;
+
 
     @Override
-    public GenericEvent cloneObj() {
-        final List<ProcessorModel> cpProcessors = new ArrayList<>();
-        getProcessors().ifPresent(cpProcessors::addAll);
+    public TargetConfig cloneObj() {
+        final var builder = toBuilder();
+        builder.processors(Optional.ofNullable(processors)
+                                   .orElse(List.of())
+                                   .stream()
+                                   .map(ProcessorModel::cloneObj)
+                                   .toList());
 
-        final List<AlertingModel> cpAlertings = new ArrayList<>();
-        getAlertings().ifPresent(cpAlertings::addAll);
-
-        final String from      = grabData(getFrom());
-        final String until     = grabData(getUntil());
-        final String provider  = grabData(getProvider());
-        final String parent    = grabData(getParent());
-        final String mapper    = grabData(getMapper());
-        final String scheduler = getScheduler();
-
-        final TargetConfig result = new TargetConfig(getName(), from, until, provider, cpProcessors, getQuery(), parent,
-                                                     scheduler, mapper, cpAlertings);
-
-        getFromFirstTime().ifPresent(result::buildFromFirstTime);
-        return result;
-    }
-
-    private String grabData(final Optional<String> value) {
-        return value.isPresent() ? value.get() : null;
+        builder.alertings(Optional.ofNullable(alertings)
+                                  .orElse(List.of())
+                                  .stream()
+                                  .map(AlertingModel::cloneObj)
+                                  .toList());
+        return builder.build();
     }
 }

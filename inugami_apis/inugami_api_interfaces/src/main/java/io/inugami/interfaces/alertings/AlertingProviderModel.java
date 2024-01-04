@@ -16,8 +16,15 @@
  */
 package io.inugami.interfaces.alertings;
 
-import io.inugami.api.processors.ClassBehavior;
-import io.inugami.api.processors.Config;
+import io.inugami.interfaces.models.ClonableObject;
+import io.inugami.interfaces.models.Config;
+import io.inugami.interfaces.models.maven.ManifestInfo;
+import io.inugami.interfaces.processors.ClassBehavior;
+import io.inugami.interfaces.processors.ConfigHandler;
+import lombok.*;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * AlertingModel
@@ -25,16 +32,44 @@ import io.inugami.api.processors.Config;
  * @author patrick_guillerm
  * @since 20 déc. 2017
  */
-public class AlertingProviderModel extends ClassBehavior {
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Setter
+@Getter
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+public class AlertingProviderModel implements ClassBehavior<AlertingProviderModel>, ClonableObject<AlertingProviderModel> {
 
-    private static final long serialVersionUID = 6084938077729235541L;
+    private static final long         serialVersionUID = 6084938077729235541L;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private              String       name;
+    @ToString.Include
+    private              String       className;
+    private              List<Config> configs;
+    private              ManifestInfo manifest;
 
-    public AlertingProviderModel() {
-        super();
+
+    @Override
+    public AlertingProviderModel build(final ClassBehavior behavior, final ConfigHandler<String, String> config) {
+        final var builder = AlertingProviderModel.builder();
+        builder.name(behavior.getName());
+        builder.className(behavior.getClassName());
+        builder.className(behavior.getClassName());
+        builder.configs(behavior.getConfigs());
+        builder.manifest(behavior.getManifest());
+        return builder.build();
     }
 
-    public AlertingProviderModel(final String name, final String className, final Config... configs) {
-        super(name, className, configs);
+    @Override
+    public AlertingProviderModel cloneObj() {
+        final var builder = toBuilder();
+        builder.configs(Optional.ofNullable(configs)
+                                .orElse(List.of())
+                                .stream()
+                                .map(Config::cloneObj)
+                                .toList());
+        return builder.build();
     }
-
 }

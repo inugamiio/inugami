@@ -16,13 +16,10 @@
  */
 package io.inugami.interfaces.models.event;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import io.inugami.interfaces.models.ClonableObject;
+import lombok.*;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * AlertingModel
@@ -30,12 +27,15 @@ import java.util.Optional;
  * @author patrick_guillerm
  * @since 20 déc. 2017
  */
+@ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
 @Setter
 @Getter
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
 // alerting
-public final class AlertingModel implements Serializable {
+public final class AlertingModel implements Serializable, ClonableObject<AlertingModel> {
 
     // =========================================================================
     // ATTRIBUTES
@@ -43,18 +43,16 @@ public final class AlertingModel implements Serializable {
     private static final long serialVersionUID = 2557187994399108457L;
 
     @EqualsAndHashCode.Include
-    private   String name;
-    private   String provider;
-    private   String message;
-    private   String level;
-    private   String condition;
-    protected String function;
+    private String name;
+    private String provider;
+    private String message;
+    private String level;
+    private String condition;
+    private String function;
 
 
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public Optional<String> grabFunction() {
-        return Optional.ofNullable(function);
+    @Override
+    public AlertingModel cloneObj() {
+        return toBuilder().build();
     }
 }

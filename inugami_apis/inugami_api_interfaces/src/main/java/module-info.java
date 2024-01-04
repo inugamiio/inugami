@@ -18,6 +18,8 @@ module inugami.api.interfaces {
     requires com.fasterxml.jackson.annotation;
     requires jakarta.servlet;
     requires lombok;
+    requires org.slf4j;
+    requires java.desktop;
 
     exports io.inugami.interfaces.alertings;
     exports io.inugami.interfaces.concurrent;
