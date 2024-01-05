@@ -1,0 +1,12 @@
+{
+  "getActivationDelay" : 5,
+  "getComponent" : "app",
+  "getDuration" : 1,
+  "getLevel" : "ERROR",
+  "getName" : "alert1",
+  "getNominal" : "1.0",
+  "getService" : "search",
+  "getThreshold" : 10.0,
+  "getUnit" : "HIT",
+  "isInverse" : true
+}

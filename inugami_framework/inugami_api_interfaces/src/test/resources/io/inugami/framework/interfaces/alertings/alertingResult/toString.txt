@@ -1,0 +1,1 @@
+AlertingResult(alerteName=alertName, level=error ios, levelType=ERROR, message=foobar message)

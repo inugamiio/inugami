@@ -1,0 +1,1 @@
+FeatureContext(featureName=search, bean=class io.inugami.framework.api.feature.FeatureContextTest$Service)

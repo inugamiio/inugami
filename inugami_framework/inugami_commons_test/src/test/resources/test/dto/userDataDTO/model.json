@@ -1,0 +1,19 @@
+{
+  "birthday" : "1985-07-10",
+  "canton" : "VD",
+  "city" : "Cheseaux-sur-Lausanne",
+  "deviceIdentifier" : "45fa3dd1-714e-4887-b27d-9792b327ad56",
+  "email" : "theodore.lalonde@mock.org",
+  "firstName" : "Théodore",
+  "id" : 3,
+  "lastName" : "Lalonde",
+  "nationality" : "CH",
+  "old" : 38,
+  "phoneNumber" : "0624455065",
+  "sex" : "MALE",
+  "socialId" : "7564971247732",
+  "streetName" : "du Château",
+  "streetNumber" : "10",
+  "streetType" : "Chem.",
+  "zipCode" : "1033"
+}
