@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="json" class="io.inugami.logs.obfuscator.appender.JsonAppender">
+        <configuration>
+            <encodeAsJson>true</encodeAsJson>
+            <forceNewLine>true</forceNewLine>
+            <file>target/log.json</file>
+            <additionalFields>
+                {
+                "useCase":"test"
+                }
+            </additionalFields>
+        </configuration>
+    </appender>
+
+
+    <appender name="metrics" class="io.inugami.logs.obfuscator.appender.JsonAppender">
+        <configuration>
+            <encodeAsJson>true</encodeAsJson>
+            <forceNewLine>true</forceNewLine>
+            <messageAsJson>true</messageAsJson>
+            <file>target/log.metrics.json</file>
+            <additionalFields>
+                {
+                "useCase":"test"
+                }
+            </additionalFields>
+        </configuration>
+    </appender>
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder">
+            <configuration>
+                <forceNewLine>true</forceNewLine>
+            </configuration>
+            <pattern>%d{dd/MM HH:mm:ss} %5p [%c:%L] - %m%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <logger name="org.eclipse.jetty">
+        <level value="WARN"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="METRICS">
+        <level value="INFO"/>
+        <appender-ref ref="metrics"/>
+    </logger>
+
+
+    <root level="DEBUG">
+        <appender-ref ref="json"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>

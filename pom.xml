@@ -205,7 +205,7 @@
         :: DEPENDENCIES VERSIONS
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <ch.qos.logback.version>1.4.14</ch.qos.logback.version>
-        <com.jackson-annotations.version>2.14.2</com.jackson-annotations.version>
+        <com.jackson.version>2.16.1</com.jackson.version>
         <io.github.openfeign.version>12.3</io.github.openfeign.version>
         <org-mockito.mockito-core>2.0.31-beta</org-mockito.mockito-core>
         <org.apache.commons.cli.version>1.4</org.apache.commons.cli.version>
@@ -254,7 +254,8 @@
     = MODULES
     ======================================================================== -->
     <modules>
-        <module>inugami_apis</module>
+        <module>inugami_framework</module>
+        <module>inugami_monitoring</module>
     </modules>
 
     <!-- =======================================================================
@@ -305,37 +306,37 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>
-                <version>${com.jackson-annotations.version}</version>
+                <version>${com.jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
-                <version>${com.jackson-annotations.version}</version>
+                <version>${com.jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>${com.jackson-annotations.version}</version>
+                <version>${com.jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.dataformat</groupId>
                 <artifactId>jackson-dataformat-yaml</artifactId>
-                <version>${com.jackson-annotations.version}</version>
+                <version>${com.jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-jdk8</artifactId>
-                <version>${com.jackson-annotations.version}</version>
+                <version>${com.jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-jsr310</artifactId>
-                <version>${com.jackson-annotations.version}</version>
+                <version>${com.jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-parameter-names</artifactId>
-                <version>${com.jackson-annotations.version}</version>
+                <version>${com.jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.tomakehurst</groupId>
@@ -368,20 +369,35 @@
                 <version>${io.github.openfeign.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.inugami</groupId>
+                <groupId>io.inugami.framework</groupId>
                 <artifactId>inugami_api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.inugami</groupId>
+                <groupId>io.inugami.framework</groupId>
                 <artifactId>inugami_api_core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.inugami</groupId>
+                <groupId>io.inugami.framework</groupId>
                 <artifactId>inugami_api_interfaces</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.inugami.framework</groupId>
+                <artifactId>inugami_commons_test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>io.inugami.monitoring</groupId>
+                <artifactId>inugami_logs_obfuscator</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+
             <dependency>
                 <groupId>jakarta.servlet</groupId>
                 <artifactId>jakarta.servlet-api</artifactId>

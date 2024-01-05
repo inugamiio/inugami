@@ -1,0 +1,1 @@
+UserDataDTO(id=3, firstName=Théodore, lastName=Lalonde, email=theodore.lalonde@mock.org)

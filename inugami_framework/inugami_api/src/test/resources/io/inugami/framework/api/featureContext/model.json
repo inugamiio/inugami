@@ -1,0 +1,10 @@
+{
+  "args" : [ "bb895294-efe7-484b-b670-14d004eaf461" ],
+  "bean" : "io.inugami.framework.api.feature.FeatureContextTest$Service",
+  "enabledByDefault" : true,
+  "fallback" : "searchFallback",
+  "featureName" : "search",
+  "method" : "io.inugami.framework.api.tools.unit.test.dto.UserDataDTO io.inugami.framework.api.feature.FeatureContextTest$Servicesearch(java.lang.reflect.Parameter)",
+  "monitored" : true,
+  "propertyPrefix" : "io.inungami.feature.featureContext"
+}
