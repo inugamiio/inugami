@@ -1,0 +1,206 @@
+{
+  "JVM_HOME_PATH" : {
+    "key" : "inugami-home"
+  },
+  "MONITORING_FILE" : {
+    "key" : "monitoring-file"
+  },
+  "PLUGIN_PREFIX" : {
+    "key" : "inugami-plugin"
+  },
+  "ENVIRONMENT" : {
+    "key" : "env"
+  },
+  "ASSET" : {
+    "key" : "asset"
+  },
+  "INSTANCE" : {
+    "key" : "instance"
+  },
+  "INSTANCE_NUMBER" : {
+    "key" : "instance.number"
+  },
+  "APPLICATION_NAME" : {
+    "key" : "application.name"
+  },
+  "APPLICATION_HOST_NAME" : {
+    "key" : "application.hostname"
+  },
+  "APPLICATION_VERSION" : {
+    "key" : "application.version"
+  },
+  "APPLICATION_TITLE" : {
+    "key" : "application.title"
+  },
+  "APPLICATION_TIMEOUT" : {
+    "key" : "application.timeout"
+  },
+  "APPLICATION_SCRIPT_TIMEOUT" : {
+    "key" : "application.script.timeout"
+  },
+  "APPLICATION_PLUGIN_RUNNING" : {
+    "key" : "application.plugin.running"
+  },
+  "APPLICATION_PLUGIN_RUNNING_STANDALONE" : {
+    "key" : "application.plugin.running.standalone"
+  },
+  "APPLICATION_MAX_THREADS" : {
+    "key" : "application.max.threads"
+  },
+  "APPLICATION_VERBOSE" : {
+    "key" : "application.verbose"
+  },
+  "APPLICATION_MONITORING" : {
+    "key" : "application.monitoring"
+  },
+  "APPLICATION_MAX_USER_SOCKETS" : {
+    "key" : "application.max.user.sockets"
+  },
+  "HTTP_CONNECTION_TIMEOUT" : {
+    "key" : "http.connection.timeout"
+  },
+  "HTTP_CONNECTION_SOCKET_TIMEOUT" : {
+    "key" : "http.connection.socket.timeout"
+  },
+  "HTTP_CONNECTION_TTL" : {
+    "key" : "http.connection.ttl"
+  },
+  "HTTP_CONNECTION_MAX_CONNECTIONS" : {
+    "key" : "http.connection.max.connections"
+  },
+  "HTTP_CONNECTION_MAX_PER_ROUTE" : {
+    "key" : "http.connection.max.per.route"
+  },
+  "HTTP_CONNECTION_HEADER_FIELD" : {
+    "key" : "http.connection.header.field"
+  },
+  "SECURITY_USERS" : {
+    "key" : "security.users"
+  },
+  "SECURITY_ROLES" : {
+    "key" : "security.roles"
+  },
+  "SECURITY_AES_SECRET_KET" : {
+    "key" : "security.aes.secret.key"
+  },
+  "SECURITY_FILE_TOKEN" : {
+    "key" : "security.file.token"
+  },
+  "SECURITY_FILE_USER" : {
+    "key" : "security.file.user"
+  },
+  "SECURITY_SQL_INJECT_REGEX" : {
+    "key" : "security.sql.inject.regex"
+  },
+  "SERCURITY_ENCODING" : {
+    "key" : "security.encoding"
+  },
+  "SECURITY_CRYPTOGRAPHIC_KEYS" : {
+    "key" : "security.crypto.keys"
+  },
+  "SECURITY_TOKEN_MAX_SIZE" : {
+    "key" : "security.token.max.size"
+  },
+  "SERCURITY_CIPHER_ALGO" : {
+    "key" : "security.cipher.algo"
+  },
+  "SERCURITY_CIPHER_ALGO_KEY" : {
+    "key" : "security.cipher.algo.key"
+  },
+  "SECURITY_AES_SECRET_KEY" : {
+    "key" : "security.aes.secret.key"
+  },
+  "DATA_STORAGE_DRIVER" : {
+    "key" : "data.storage.driver"
+  },
+  "DATA_STORAGE_DIALECT" : {
+    "key" : "data.storage.dialect"
+  },
+  "DATA_STORAGE_URL" : {
+    "key" : "data.storage.url"
+  },
+  "DATA_STORAGE_USER" : {
+    "key" : "data.storage.user"
+  },
+  "DATA_STORAGE_PASSWORD" : {
+    "key" : "data.storage.password"
+  },
+  "DATA_STORAGE_VERBOSE" : {
+    "key" : "data.verbose"
+  },
+  "DATA_STORAGE_HBM2DDL" : {
+    "key" : "data.hbm2ddl"
+  },
+  "ALERTING_ENABLE" : {
+    "key" : "alerting.enable"
+  },
+  "ALERTING_DYNAMIC_MAX_THREADS" : {
+    "key" : "alerting.dynamic.max.threads"
+  },
+  "SCRIPT_FULL_SCRIPT_PATH" : {
+    "key" : "script.full.script.path"
+  },
+  "CHAOS" : {
+    "key" : "chaos.enable"
+  },
+  "HEADER_KEY_CORRELATION_ID" : {
+    "key" : "header.key.correlation.id"
+  },
+  "HEADER_KEY_REQUEST_ID" : {
+    "key" : "header.key.request.id"
+  },
+  "HEADER_KEY_CONVERSATION_ID" : {
+    "key" : "header.key.conversation.id"
+  },
+  "HEADER_KEY_TOKEN" : {
+    "key" : "header.key.token"
+  },
+  "HEADER_KEY_DEVICE_IDENTIFIER" : {
+    "key" : "header.key.device.identifier"
+  },
+  "HEADER_KEY_DEVICE_TYPE" : {
+    "key" : "header.key.device.type"
+  },
+  "HEADER_KEY_DEVICE_CLASS" : {
+    "key" : "header.key.device.class"
+  },
+  "HEADER_KEY_DEVICE_VERSION" : {
+    "key" : "header.key.device.version"
+  },
+  "HEADER_KEY_DEVICE_OS_VERSION" : {
+    "key" : "header.key.device.os.version"
+  },
+  "HEADER_KEY_DEVICE_NETWORK_TYPE" : {
+    "key" : "header.key.device.network.type"
+  },
+  "HEADER_KEY_DEVICE_NETWORK_SPEED_DOWN" : {
+    "key" : "header.key.device.network.speed.down"
+  },
+  "HEADER_KEY_DEVICE_NETWORK_SPEED_UP" : {
+    "key" : "header.key.device.network.speed.up"
+  },
+  "HEADER_KEY_DEVICE_NETWORK_SPEED_LATENCY" : {
+    "key" : "header.key.device.network.speed.latency"
+  },
+  "HEADER_KEY_DEVICE_IP" : {
+    "key" : "header.key.device.os.ip"
+  },
+  "HEADER_KEY_USER_AGENT" : {
+    "key" : "header.key.user.agent"
+  },
+  "HEADER_KEY_LANGUAGE" : {
+    "key" : "header.key.language"
+  },
+  "HEADER_KEY_COUNTRY" : {
+    "key" : "header.key.country"
+  },
+  "MONITORING_ENABLE" : {
+    "key" : "monitoring.enable"
+  },
+  "DEV_FILTER_BAN_URI_REGEX" : {
+    "key" : "dev.filter.ban.uri.regex"
+  },
+  "CACHE_CONFIG_PATH" : {
+    "key" : "cache.configuration.path"
+  }
+}

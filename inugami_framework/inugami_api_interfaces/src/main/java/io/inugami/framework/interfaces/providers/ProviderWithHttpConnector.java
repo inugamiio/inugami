@@ -16,7 +16,7 @@
  */
 package io.inugami.framework.interfaces.providers;
 
-import io.inugami.framework.interfaces.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 
 /**
  * The <strong>ProviderWithHttpConnector</strong> is design to configure HTTP connector on <strong>Provider</strong>.

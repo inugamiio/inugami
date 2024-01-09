@@ -17,6 +17,7 @@
 package io.inugami.framework.interfaces.processors;
 
 
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.models.ClonableObject;
 import io.inugami.framework.interfaces.models.Config;
 import io.inugami.framework.interfaces.models.maven.ManifestInfo;

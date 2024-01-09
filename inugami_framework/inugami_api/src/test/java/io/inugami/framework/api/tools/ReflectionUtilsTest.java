@@ -137,12 +137,12 @@ class ReflectionUtilsTest {
     // =================================================================================================================
     @Test
     void scan_nominal() {
-        assertTextRelative(splitResult(ReflectionUtils.scan("io.inugami.api.tools",
+        assertTextRelative(splitResult(ReflectionUtils.scan("io.inugami.framework.api.tools",
                                                             this.getClass().getClassLoader(),
                                                             objClass -> objClass.getSimpleName().endsWith("Test"))),
                            "io/inugami/framework/api/tools/reflectionUtilsTest/scan_nominal.txt");
 
-        assertTextRelative(splitResult(ReflectionUtils.scan("io.inugami.api.tools",
+        assertTextRelative(splitResult(ReflectionUtils.scan("io.inugami.framework.api.tools",
                                                             this.getClass().getClassLoader())),
                            "io/inugami/framework/api/tools/reflectionUtilsTest/scan_withoutFilter.txt");
 
@@ -218,7 +218,7 @@ class ReflectionUtilsTest {
     @Test
     void getAllFields_nominal() {
         Assertions.assertThat(ReflectionUtils.getAllFields(SomeService.class))
-                  .hasToString("[private static final java.lang.String io.inugami.api.tools.ReflectionUtilsTest$SomeService.TYPE, private java.lang.String io.inugami.api.tools.ReflectionUtilsTest$SomeService.name, private java.lang.String io.inugami.api.tools.ReflectionUtilsTest$ParentService.url]");
+                  .hasToString("[private static final java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService.TYPE, private java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService.name, private java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$ParentService.url]");
         Assertions.assertThat(ReflectionUtils.getAllFields(Object.class)).isEmpty();
         Assertions.assertThat(ReflectionUtils.getAllFields(null)).isEmpty();
     }
@@ -227,7 +227,7 @@ class ReflectionUtilsTest {
     @Test
     void loadAllFields_nominal() {
         Assertions.assertThat(ReflectionUtils.loadAllFields(SomeService.class))
-                  .hasToString("[private static final java.lang.String io.inugami.api.tools.ReflectionUtilsTest$SomeService.TYPE, private java.lang.String io.inugami.api.tools.ReflectionUtilsTest$SomeService.name, private java.lang.String io.inugami.api.tools.ReflectionUtilsTest$ParentService.url]");
+                  .hasToString("[private static final java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService.TYPE, private java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService.name, private java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$ParentService.url]");
         Assertions.assertThat(ReflectionUtils.loadAllFields(Object.class)).isEmpty();
         Assertions.assertThat(ReflectionUtils.loadAllFields(null)).isEmpty();
     }
@@ -235,7 +235,7 @@ class ReflectionUtilsTest {
     @Test
     void loadAllStaticFields_nominal() {
         Assertions.assertThat(ReflectionUtils.loadAllStaticFields(SomeService.class))
-                  .hasToString("[private static final java.lang.String io.inugami.api.tools.ReflectionUtilsTest$SomeService.TYPE]");
+                  .hasToString("[private static final java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService.TYPE]");
         Assertions.assertThat(ReflectionUtils.loadAllStaticFields(Object.class)).isEmpty();
         Assertions.assertThat(ReflectionUtils.loadAllStaticFields(null)).isEmpty();
     }
@@ -243,7 +243,7 @@ class ReflectionUtilsTest {
     @Test
     void extractParentsFields_nominal() {
         Assertions.assertThat(ReflectionUtils.extractParentsFields(SomeService.class))
-                  .hasToString("[private static final java.lang.String io.inugami.api.tools.ReflectionUtilsTest$SomeService.TYPE, private java.lang.String io.inugami.api.tools.ReflectionUtilsTest$SomeService.name, private java.lang.String io.inugami.api.tools.ReflectionUtilsTest$ParentService.url]");
+                  .hasToString("[private static final java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService.TYPE, private java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService.name, private java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$ParentService.url]");
         Assertions.assertThat(ReflectionUtils.extractParentsFields(Object.class)).isEmpty();
         Assertions.assertThat(ReflectionUtils.extractParentsFields(null)).isEmpty();
     }
@@ -257,7 +257,7 @@ class ReflectionUtilsTest {
         assertThat(String.join("\n", result.stream()
                                            .map(v -> v.toString())
                                            .collect(Collectors.toList())))
-                .hasToString("FieldGetterSetter(field=private java.lang.String io.inugami.api.tools.ReflectionUtilsTest$SomeService.name, value=Joe, getter=public java.lang.String io.inugami.api.tools.ReflectionUtilsTest$SomeService.getName(), setter=public void io.inugami.api.tools.ReflectionUtilsTest$SomeService.setName(java.lang.String))");
+                .hasToString("FieldGetterSetter(field=private java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService.name, value=Joe, getter=public java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService.getName(), setter=public void io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService.setName(java.lang.String))");
         Assertions.assertThat(ReflectionUtils.extractFieldGetterAndSetter(SomeService.builder().build()))
                   .hasToString("[]");
         Assertions.assertThat(ReflectionUtils.extractFieldGetterAndSetter(null)).hasToString("[]");
@@ -268,10 +268,10 @@ class ReflectionUtilsTest {
         Assertions.assertThat(ReflectionUtils.extractGetters(SomeService.builder()
                                                                         .name("Joe")
                                                                         .build()))
-                  .hasToString("[public java.lang.String io.inugami.api.tools.ReflectionUtilsTest$SomeService.getName()]");
+                  .hasToString("[public java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService.getName()]");
         Assertions.assertThat(ReflectionUtils.extractGetters(SomeService.builder()
                                                                         .build()))
-                  .hasToString("[public java.lang.String io.inugami.api.tools.ReflectionUtilsTest$SomeService.getName()]");
+                  .hasToString("[public java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService.getName()]");
         Assertions.assertThat(ReflectionUtils.extractGetters(null)).hasToString("[]");
     }
 
@@ -331,7 +331,7 @@ class ReflectionUtilsTest {
     @Test
     void loadAllConstructors_nominal() {
         Assertions.assertThat(ReflectionUtils.loadAllConstructors(SomeService.class))
-                  .hasToString("[public io.inugami.api.tools.ReflectionUtilsTest$SomeService(java.lang.String), io.inugami.api.tools.ReflectionUtilsTest$ParentService()]");
+                  .hasToString("[public io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService(java.lang.String), io.inugami.framework.api.tools.ReflectionUtilsTest$ParentService()]");
         Assertions.assertThat(ReflectionUtils.loadAllConstructors(null)).isEmpty();
     }
 
@@ -348,7 +348,7 @@ class ReflectionUtilsTest {
     @Test
     void searchMethod_nominal() {
         Assertions.assertThat(ReflectionUtils.searchMethod(SomeService.class, "getName"))
-                  .hasToString("public java.lang.String io.inugami.api.tools.ReflectionUtilsTest$SomeService.getName()");
+                  .hasToString("public java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService.getName()");
         Class<?> objClass = null;
         Assertions.assertThat(ReflectionUtils.searchMethod(objClass, "getName")).isNull();
         Assertions.assertThat(ReflectionUtils.searchMethod(SomeService.class, null)).isNull();
@@ -357,7 +357,7 @@ class ReflectionUtilsTest {
     @Test
     void searchMethod_withAnnotation() {
         Assertions.assertThat(ReflectionUtils.searchMethod(ReflectionUtils.searchAnnotation(SomeService.class.getAnnotations(), SpiPriority.class.getName()), "value"))
-                  .hasToString("public abstract int io.inugami.interfaces.spi.SpiPriority.value()");
+                  .hasToString("public abstract int io.inugami.framework.interfaces.spi.SpiPriority.value()");
         Annotation annotation = null;
         Assertions.assertThat(ReflectionUtils.searchMethod(annotation, "getName")).isNull();
         Assertions.assertThat(ReflectionUtils.searchMethod(ReflectionUtils.searchAnnotation(SomeService.class.getAnnotations(), SpiPriority.class.getName()), null))
@@ -367,7 +367,7 @@ class ReflectionUtilsTest {
     @Test
     void searchMethodByName_nominal() {
         Assertions.assertThat(ReflectionUtils.searchMethodByName(SomeService.class, "getName"))
-                  .hasToString("public java.lang.String io.inugami.api.tools.ReflectionUtilsTest$SomeService.getName()");
+                  .hasToString("public java.lang.String io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService.getName()");
         Class<?> objClass = null;
         Assertions.assertThat(ReflectionUtils.searchMethodByName(objClass, "getName")).isNull();
         Assertions.assertThat(ReflectionUtils.searchMethodByName(SomeService.class, null)).isNull();

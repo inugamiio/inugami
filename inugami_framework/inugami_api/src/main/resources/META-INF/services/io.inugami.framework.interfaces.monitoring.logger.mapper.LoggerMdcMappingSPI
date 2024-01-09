@@ -1,5 +1,0 @@
-io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefault
-io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefaultBooleanValue
-io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefaultIntValue
-io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefaultLongValue
-io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefaultDoubleValue

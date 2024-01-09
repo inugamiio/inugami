@@ -18,7 +18,7 @@ package io.inugami.framework.interfaces.monitoring.models;
 
 import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
 import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
-import io.inugami.framework.interfaces.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
 import lombok.*;
 
@@ -45,9 +45,9 @@ public class Monitoring {
     private String                            instanceNumber;
     private String                            applicationVersion;
     private Headers                           headers;
-    private int                           maxSensorsTasksThreads;
-    private ConfigHandler<String, String> properties;
-    private List<MonitoringSender>        senders;
+    private int                               maxSensorsTasksThreads;
+    private ConfigHandler<String, String>     properties;
+    private List<MonitoringSender>            senders;
     private List<MonitoringSensor>            sensors;
     private List<MonitoringFilterInterceptor> interceptors;
 

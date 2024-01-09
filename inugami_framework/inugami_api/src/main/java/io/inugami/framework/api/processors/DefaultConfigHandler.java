@@ -6,7 +6,7 @@ import io.inugami.framework.api.tools.ConfigTemplateValues;
 import io.inugami.framework.interfaces.exceptions.Asserts;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
 import io.inugami.framework.interfaces.mapping.JsonUnmarshalling;
-import io.inugami.framework.interfaces.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.tools.TemplateProviderSPI;
 

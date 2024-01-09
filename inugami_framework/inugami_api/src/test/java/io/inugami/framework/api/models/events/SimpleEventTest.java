@@ -66,12 +66,10 @@ class SimpleEventTest {
     }
 
     private List<ProcessorModel> buildProcessors() {
-        final List<ProcessorModel> result = new ArrayList<>();
-        result.add(ProcessorModel.builder()
-                                 .name("processor_name")
-                                 .className("foo.bar.Processor")
-                                 .build());
-        return result;
+        return List.of(ProcessorModel.builder()
+                                     .name("processor_name")
+                                     .className("foo.bar.Processor")
+                                     .build());
     }
 
     private List<AlertingModel> buildAlertings() {

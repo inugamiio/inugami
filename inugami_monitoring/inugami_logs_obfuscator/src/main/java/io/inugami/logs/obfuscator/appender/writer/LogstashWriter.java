@@ -2,11 +2,11 @@ package io.inugami.logs.obfuscator.appender.writer;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.encoder.Encoder;
-import io.inugami.api.exceptions.services.ConnectorException;
-import io.inugami.commons.connectors.ConnectorConstants;
-import io.inugami.commons.connectors.ConnectorListener;
-import io.inugami.commons.connectors.HttpBasicConnector;
-import io.inugami.commons.connectors.HttpRequest;
+import io.inugami.framework.api.connectors.HttpBasicConnector;
+import io.inugami.framework.interfaces.connectors.ConnectorConstants;
+import io.inugami.framework.interfaces.connectors.ConnectorListener;
+import io.inugami.framework.interfaces.connectors.HttpRequest;
+import io.inugami.framework.interfaces.exceptions.services.ConnectorException;
 import io.inugami.logs.obfuscator.appender.AppenderConfiguration;
 
 import java.nio.charset.StandardCharsets;
