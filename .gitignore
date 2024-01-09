@@ -45,3 +45,4 @@ dependency-reduced-pom.xml
 *.factorypath
 pom.xml.versionsBackup
 /legacy/
+/legacy/__inugami/
