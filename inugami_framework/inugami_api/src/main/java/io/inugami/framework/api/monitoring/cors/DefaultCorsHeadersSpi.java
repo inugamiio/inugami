@@ -3,7 +3,7 @@ package io.inugami.framework.api.monitoring.cors;
 import io.inugami.framework.interfaces.monitoring.core.CorsHeadersSpi;
 import io.inugami.framework.interfaces.monitoring.data.ResquestData;
 import io.inugami.framework.interfaces.monitoring.models.Headers;
-import io.inugami.framework.interfaces.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -18,7 +18,7 @@ package io.inugami.framework.interfaces.monitoring.sensors;
 
 import java.util.List;
 
-import io.inugami.framework.interfaces.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.spi.NamedSpi;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 

@@ -17,7 +17,7 @@
 package io.inugami.framework.api.metrics;
 
 import io.inugami.framework.interfaces.models.basic.Dto;
-import io.inugami.framework.interfaces.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.spi.SpiConfigurable;
 
 import java.util.List;

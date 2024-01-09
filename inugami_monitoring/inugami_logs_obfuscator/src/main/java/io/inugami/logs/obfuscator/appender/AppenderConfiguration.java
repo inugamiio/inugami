@@ -1,7 +1,7 @@
 package io.inugami.logs.obfuscator.appender;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.inugami.api.marshalling.JsonMarshaller;
+import io.inugami.framework.api.marshalling.JsonMarshaller;
 import lombok.*;
 
 import java.util.HashMap;

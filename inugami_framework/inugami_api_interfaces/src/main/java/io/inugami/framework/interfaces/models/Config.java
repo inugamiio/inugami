@@ -27,7 +27,7 @@ import java.io.Serializable;
  * @author patrick_guillerm
  * @since 22 déc. 2016
  */
-@ToString(onlyExplicitlyIncluded = true)
+@ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Setter
 @Getter
@@ -42,6 +42,7 @@ public final class Config implements Serializable, ClonableObject<Config> {
      */
     private static final long serialVersionUID = 2342544486726397745L;
 
+    @EqualsAndHashCode.Include
     private String key;
     private String value;
 

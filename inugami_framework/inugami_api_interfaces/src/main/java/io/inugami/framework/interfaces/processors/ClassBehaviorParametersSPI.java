@@ -16,6 +16,8 @@
  */
 package io.inugami.framework.interfaces.processors;
 
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+
 /**
  * Inugami use a lot of SPI implementation, Some components required to be configured.
  * SPI implementation required to have on implementation a constructor without parameters.

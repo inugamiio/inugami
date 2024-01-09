@@ -2,9 +2,9 @@ package io.inugami.logs.obfuscator.appender.writer;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.encoder.Encoder;
-import io.inugami.api.exceptions.FatalException;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.processors.DefaultConfigHandler;
+import io.inugami.framework.api.processors.DefaultConfigHandler;
+import io.inugami.framework.interfaces.exceptions.FatalException;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.logs.obfuscator.appender.AppenderConfiguration;
 
 import java.io.File;

@@ -22,6 +22,10 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
+import io.inugami.framework.interfaces.marshalling.serializers.ClassSerializer;
+import io.inugami.framework.interfaces.marshalling.serializers.FieldSerializer;
+import io.inugami.framework.interfaces.marshalling.serializers.MethodSerializer;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import lombok.Getter;
 
@@ -57,9 +61,10 @@ public class JsonMarshaller {
     }
 
     private JsonMarshaller() {
-        final JsonMarshallerSpi builder = SpiLoader.getInstance().loadSpiServiceByPriority(JsonMarshallerSpi.class,
-                                                                                           new DefaultObjectMapperBuilder());
-        
+        final JacksonMarshallerSpi builder = SpiLoader.getInstance()
+                                                      .loadSpiServiceByPriority(JacksonMarshallerSpi.class,
+                                                                                new DefaultObjectMapperBuilder());
+
         indentedObjectMapper = builder.buildIndentedObjectMapper();
     }
 
@@ -67,7 +72,7 @@ public class JsonMarshaller {
     // =========================================================================
     // API
     // =========================================================================
-    private static class DefaultObjectMapperBuilder implements JsonMarshallerSpi {
+    private static class DefaultObjectMapperBuilder implements JacksonMarshallerSpi {
 
         @Override
         public ObjectMapper buildObjectMapper() {

@@ -1,0 +1,1 @@
+DynamicAlertingLevel(name=alert1, level=ERROR, threshold=10.0, activationDelay=5, duration=1, nominal=1.0, unit=HIT, service=search, component=app, inverse=true)

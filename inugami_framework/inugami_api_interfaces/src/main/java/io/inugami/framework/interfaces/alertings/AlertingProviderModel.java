@@ -20,7 +20,7 @@ import io.inugami.framework.interfaces.models.ClonableObject;
 import io.inugami.framework.interfaces.models.Config;
 import io.inugami.framework.interfaces.models.maven.ManifestInfo;
 import io.inugami.framework.interfaces.processors.ClassBehavior;
-import io.inugami.framework.interfaces.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import lombok.*;
 
 import java.util.List;

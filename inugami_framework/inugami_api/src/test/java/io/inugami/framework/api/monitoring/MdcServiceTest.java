@@ -7,6 +7,7 @@ import io.inugami.framework.interfaces.exceptions.UncheckedException;
 import io.inugami.framework.interfaces.monitoring.MdcServiceSpi;
 import io.inugami.framework.interfaces.monitoring.MdcServiceSpiFactory;
 import io.inugami.framework.interfaces.monitoring.logger.MDCKeys;
+import io.inugami.framework.interfaces.spi.JavaSpiLoaderServiceSPI;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ServiceLoader;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -34,6 +36,17 @@ class MdcServiceTest {
     // =========================================================================
     // TEST KEYS
     // =========================================================================
+    @Test
+    void load() {
+
+        final ServiceLoader<MdcServiceSpi> spi = (ServiceLoader<MdcServiceSpi>) ServiceLoader.load(MdcServiceSpi.class);
+        assertThat(spi.findFirst()).isPresent();
+        assertThat(new JavaSpiLoaderServiceSPI().loadServices(MdcServiceSpi.class)).isNotNull();
+
+        final var service = SpiLoader.getInstance().loadSpiSingleServicesByPriority(MdcServiceSpi.class);
+        assertThat(service).isNotNull();
+    }
+
     @Test
     void mdcKeys_shouldHaveGetterAndSetter() {
         final Method[] methods = MdcService.class.getDeclaredMethods();
@@ -54,7 +67,7 @@ class MdcServiceTest {
 
         Asserts.assertNotNull("getter not found for " + key.name(), getter);
         Asserts.assertNotNull("setter not found for " + key.name(), setter);
-        SpiLoader.getInstance().loadSpiSingleServicesByPriority(MdcServiceSpi.class);
+        
         MdcServiceSpiFactory.getInstance().clear();
 
         final Object value = createValue(setter);

@@ -25,8 +25,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class MdcServiceSpiFactory {
     private static final AtomicReference<MdcServiceSpi> INSTANCE = new AtomicReference<>();
 
-    public static MdcServiceSpi getInstance() {
-        MdcServiceSpi result = null;
+    public synchronized static MdcServiceSpi getInstance() {
+        MdcServiceSpi result = INSTANCE.get();
         if (INSTANCE.get() == null) {
             result = SpiLoader.getInstance().loadSpiSingleServicesByPriority(MdcServiceSpi.class);
             INSTANCE.set(result);

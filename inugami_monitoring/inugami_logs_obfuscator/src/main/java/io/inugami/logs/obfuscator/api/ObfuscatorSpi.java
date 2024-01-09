@@ -16,7 +16,8 @@
  */
 package io.inugami.logs.obfuscator.api;
 
-import io.inugami.api.configurtation.ConfigurationSpiFactory;
+
+import io.inugami.framework.api.configurtation.ConfigurationSpiFactory;
 import io.inugami.logs.obfuscator.tools.ObfuscatorUtils;
 
 /**

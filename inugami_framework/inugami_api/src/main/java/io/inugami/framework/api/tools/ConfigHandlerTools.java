@@ -18,7 +18,7 @@ package io.inugami.framework.api.tools;
 
 
 import io.inugami.framework.interfaces.exceptions.Asserts;
-import io.inugami.framework.interfaces.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import lombok.experimental.UtilityClass;
 
 /**

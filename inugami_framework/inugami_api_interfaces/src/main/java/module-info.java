@@ -20,10 +20,15 @@ module inugami.api.interfaces {
     requires org.slf4j;
     requires java.desktop;
     requires com.fasterxml.jackson.annotation;
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.databind;
 
     exports io.inugami.framework.interfaces.alertings;
     exports io.inugami.framework.interfaces.concurrent;
     exports io.inugami.framework.interfaces.configurtation;
+    exports io.inugami.framework.interfaces.connectors;
+    exports io.inugami.framework.interfaces.connectors.config;
+    exports io.inugami.framework.interfaces.connectors.exceptions;
     exports io.inugami.framework.interfaces.ctx;
     exports io.inugami.framework.interfaces.dao;
     exports io.inugami.framework.interfaces.dao.event;
@@ -37,6 +42,7 @@ module inugami.api.interfaces {
     exports io.inugami.framework.interfaces.listeners;
     exports io.inugami.framework.interfaces.mapping;
     exports io.inugami.framework.interfaces.marshalling;
+    exports io.inugami.framework.interfaces.marshalling.serializers;
     exports io.inugami.framework.interfaces.metrics;
     exports io.inugami.framework.interfaces.models;
     exports io.inugami.framework.interfaces.models.basic;
@@ -65,4 +71,12 @@ module inugami.api.interfaces {
     exports io.inugami.framework.interfaces.tools.reflection;
     exports io.inugami.framework.interfaces.tools.strategy;
     exports io.inugami.framework.interfaces.task;
+
+    uses io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
+    uses io.inugami.framework.interfaces.monitoring.MdcServiceSpi;
+    uses io.inugami.framework.interfaces.monitoring.MonitoringLoaderSpi;
+    uses io.inugami.framework.interfaces.monitoring.logger.initializer.MdcInitializerSpi;
+    uses io.inugami.framework.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI;
+    uses io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
+    uses io.inugami.framework.interfaces.tools.TemplateProviderSPI;
 }

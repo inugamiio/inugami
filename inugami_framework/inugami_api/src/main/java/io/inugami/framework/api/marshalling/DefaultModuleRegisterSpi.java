@@ -17,6 +17,7 @@
 package io.inugami.framework.api.marshalling;
 
 import com.fasterxml.jackson.databind.Module;
+import io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
 
 import java.util.List;
 

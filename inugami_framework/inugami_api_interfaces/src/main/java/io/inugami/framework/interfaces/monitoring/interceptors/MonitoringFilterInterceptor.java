@@ -20,7 +20,7 @@ import io.inugami.framework.interfaces.monitoring.MonitoringInitializer;
 import io.inugami.framework.interfaces.monitoring.data.ResponseData;
 import io.inugami.framework.interfaces.monitoring.data.ResquestData;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
-import io.inugami.framework.interfaces.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.spi.NamedSpi;
 import io.inugami.framework.interfaces.monitoring.ErrorResult;
 

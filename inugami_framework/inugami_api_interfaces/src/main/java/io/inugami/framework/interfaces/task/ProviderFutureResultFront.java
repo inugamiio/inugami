@@ -17,11 +17,10 @@
 package io.inugami.framework.interfaces.task;
 
 import io.inugami.framework.interfaces.alertings.AlertingResult;
-import io.inugami.framework.interfaces.models.event.GenericEvent;
 import io.inugami.framework.interfaces.models.basic.Dto;
+import io.inugami.framework.interfaces.models.event.GenericEvent;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,11 +43,12 @@ public class ProviderFutureResultFront implements Dto<ProviderFutureResultFront>
 
     private String               message;
     private String               channel;
-    private Exception       exception;
-    private GenericEvent<?> event;
-    private String          cronExpression;
+    private Exception            exception;
+    private GenericEvent<?>      event;
+    private String               cronExpression;
     private String               data;
-    private List<AlertingResult> alerts = new ArrayList<>();
+    @Singular("alerts")
+    private List<AlertingResult> alerts;
 
 
     @Override
@@ -59,11 +59,7 @@ public class ProviderFutureResultFront implements Dto<ProviderFutureResultFront>
             builder.event((GenericEvent<?>) event.cloneObj());
         }
 
-        builder.alerts(Optional.ofNullable(alerts)
-                               .orElse(List.of())
-                               .stream()
-                               .map(AlertingResult::cloneObj)
-                               .toList());
+        builder.alerts(Optional.ofNullable(alerts).orElse(List.of()).stream().map(AlertingResult::cloneObj).toList());
         return builder.build();
     }
 }

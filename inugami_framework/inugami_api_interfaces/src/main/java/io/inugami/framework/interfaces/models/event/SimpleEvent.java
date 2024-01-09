@@ -68,6 +68,9 @@ public class SimpleEvent implements GenericEvent<SimpleEvent> {
     @Override
     public SimpleEvent cloneObj() {
         final var builder = toBuilder();
+        builder.clearProcessors();
+        builder.clearAlertings();
+        
         builder.processors(Optional.ofNullable(processors)
                                    .orElse(List.of())
                                    .stream()

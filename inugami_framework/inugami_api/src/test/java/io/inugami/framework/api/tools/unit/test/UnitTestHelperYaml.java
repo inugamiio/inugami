@@ -2,7 +2,7 @@ package io.inugami.framework.api.tools.unit.test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import io.inugami.framework.api.tools.unit.test.marshaller.YamlMarshaller;
+import io.inugami.framework.api.marshalling.YamlMarshaller;
 import io.inugami.framework.interfaces.exceptions.Asserts;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

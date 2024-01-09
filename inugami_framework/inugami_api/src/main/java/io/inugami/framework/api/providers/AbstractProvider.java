@@ -21,7 +21,7 @@ import io.inugami.framework.interfaces.concurrent.FutureDataModel;
 import io.inugami.framework.interfaces.models.Config;
 import io.inugami.framework.interfaces.models.event.SimpleEvent;
 import io.inugami.framework.interfaces.processors.ClassBehavior;
-import io.inugami.framework.interfaces.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.providers.ProviderRunner;
 import io.inugami.framework.interfaces.task.ProviderFutureResult;
 import io.inugami.framework.interfaces.task.ProviderTask;
