@@ -21,7 +21,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inugami.framework.api.marshalling.JsonMarshaller;
+import io.inugami.framework.api.marshalling.YamlMarshaller;
 import io.inugami.framework.interfaces.connectors.IHttpConnectorResult;
+import io.inugami.framework.interfaces.connectors.exceptions.HttpConntectorParsingException;
 import lombok.*;
 
 import java.io.Serializable;
@@ -56,22 +58,22 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
     public static final  String PARAMETERS       = "parameters";
     public static final  String ERROR_CODE       = "errorCode";
 
-    private final           String    verb;
-    private final           String    url;
+    private           String    verb;
+    private           String    url;
     @EqualsAndHashCode.Include
-    private final           String    hashHumanReadable;
-    private final           String    jsonInputData;
-    private final           int       statusCode;
-    private final           String    message;
-    private final           byte[]    data;
-    private final           byte[]    bodyData;
-    private final           int       length;
-    private final           String    contentType;
-    private final           long      responseAt;
-    private final           long      delay;
-    private final           String    encoding;
-    private final           Exception error;
-    private final transient Charset   charset;
+    private           String    hashHumanReadable;
+    private           String    jsonInputData;
+    private           int       statusCode;
+    private           String    message;
+    private           byte[]    data;
+    private           byte[]    bodyData;
+    private           int       length;
+    private           String    contentType;
+    private           long      responseAt;
+    private           long      delay;
+    private           String    encoding;
+    private           Exception error;
+    private transient Charset   charset;
 
     private Map<String, String> requestHeaders;
     private Map<String, String> responseHeaders;
@@ -82,6 +84,7 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
     public static class HttpConnectorResultBuilder {
         private Map<String, String> requestHeaders;
         private Map<String, String> responseHeaders;
+
 
         public HttpConnectorResult build() {
             final StringBuilder hashBuilder = new StringBuilder().append('[')
@@ -125,44 +128,96 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
         }
     }
 
-    public <T> T getBodyFromJson(final Class<? extends T> objectClass) throws JsonProcessingException {
+    public <T> T getBodyFromJson(final Class<? extends T> objectClass) throws HttpConntectorParsingException {
         if (bodyData == null) {
             return null;
         }
         final String       currentData = new String(bodyData, charset == null ? StandardCharsets.UTF_8 : charset);
         final ObjectMapper marshaller  = JsonMarshaller.getInstance().getDefaultObjectMapper();
 
-        return marshaller.readValue(currentData, objectClass);
-    }
-
-    public <T> T getResponseBody(final Class<? extends T> objectClass) throws JsonProcessingException {
-        if (data == null) {
-            return null;
+        try {
+            return marshaller.readValue(currentData, objectClass);
+        } catch (JsonProcessingException e) {
+            throw new HttpConntectorParsingException(e);
         }
-        final String       currentData = new String(data, charset == null ? StandardCharsets.UTF_8 : charset);
-        final ObjectMapper marshaller  = JsonMarshaller.getInstance().getDefaultObjectMapper();
-
-        return marshaller.readValue(currentData, objectClass);
     }
 
-    public <T> T getRequestDataFromJson(final TypeReference<T> refObjectType) throws JsonProcessingException {
+    @Override
+    public <T> T getBodyFromJson(final TypeReference<T> refObjectType) throws HttpConntectorParsingException {
         if (bodyData == null) {
             return null;
         }
         final String       currentData = new String(bodyData, charset == null ? StandardCharsets.UTF_8 : charset);
         final ObjectMapper marshaller  = JsonMarshaller.getInstance().getDefaultObjectMapper();
 
-        return marshaller.readValue(currentData, refObjectType);
+        try {
+            return marshaller.readValue(currentData, refObjectType);
+        } catch (JsonProcessingException e) {
+            throw new HttpConntectorParsingException(e);
+        }
     }
 
-    public <T> T getResponseBody(final TypeReference<T> refObjectType) throws JsonProcessingException {
+
+    @Override
+    public void getJsonInputData(final String value) {
+
+    }
+
+    @Override
+    public byte[] getRequestData() {
+        return new byte[0];
+    }
+
+    @Override
+    public void setRequestData(final byte[] value) {
+
+    }
+
+    @Override
+    public void getEncoding(final String value) {
+
+    }
+
+    public <T> T getResponseBody(final Class<? extends T> objectClass) throws HttpConntectorParsingException {
         if (data == null) {
             return null;
         }
         final String       currentData = new String(data, charset == null ? StandardCharsets.UTF_8 : charset);
         final ObjectMapper marshaller  = JsonMarshaller.getInstance().getDefaultObjectMapper();
 
-        return marshaller.readValue(currentData, refObjectType);
+        try {
+            return marshaller.readValue(currentData, objectClass);
+        } catch (JsonProcessingException e) {
+            throw new HttpConntectorParsingException(e);
+        }
+    }
+
+    public <T> T getRequestDataFromJson(final TypeReference<T> refObjectType) throws HttpConntectorParsingException {
+        if (bodyData == null) {
+            return null;
+        }
+        final String       currentData = new String(bodyData, charset == null ? StandardCharsets.UTF_8 : charset);
+        final ObjectMapper marshaller  = JsonMarshaller.getInstance().getDefaultObjectMapper();
+
+        try {
+            return marshaller.readValue(currentData, refObjectType);
+        } catch (JsonProcessingException e) {
+            throw new HttpConntectorParsingException(e);
+        }
+    }
+
+    public <T> T getResponseBody(final TypeReference<T> refObjectType) throws HttpConntectorParsingException {
+        if (data == null) {
+            return null;
+        }
+        final String       currentData = new String(data, charset == null ? StandardCharsets.UTF_8 : charset);
+        final ObjectMapper marshaller  = JsonMarshaller.getInstance().getDefaultObjectMapper();
+
+        try {
+            return marshaller.readValue(currentData, refObjectType);
+        } catch (JsonProcessingException e) {
+            throw new HttpConntectorParsingException(e);
+        }
     }
 
     public <T> T getBodyFromYaml(final Class<? extends T> objectClass) {
@@ -188,6 +243,16 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
         final String currentData = new String(bodyData, charset == null ? StandardCharsets.UTF_8 : charset);
 
         return YamlMarshaller.getInstance().convertFromYaml(currentData, refObjectType);
+    }
+
+    @Override
+    public <T> T getResponseFromYaml(final Class<? extends T> objectClass) throws HttpConntectorParsingException {
+        return null;
+    }
+
+    @Override
+    public <T> T getResponseFromYaml(final TypeReference<T> refObjectType) throws HttpConntectorParsingException {
+        return null;
     }
 
     public <T> T getResponseBodyYaml(final TypeReference<T> refObjectType) {

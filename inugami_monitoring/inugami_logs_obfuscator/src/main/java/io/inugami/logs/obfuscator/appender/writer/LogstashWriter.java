@@ -6,6 +6,7 @@ import io.inugami.framework.api.connectors.HttpBasicConnector;
 import io.inugami.framework.interfaces.connectors.ConnectorConstants;
 import io.inugami.framework.interfaces.connectors.ConnectorListener;
 import io.inugami.framework.interfaces.connectors.HttpRequest;
+import io.inugami.framework.interfaces.connectors.config.HttpBasicConnectorConfiguration;
 import io.inugami.framework.interfaces.exceptions.services.ConnectorException;
 import io.inugami.logs.obfuscator.appender.AppenderConfiguration;
 
@@ -43,17 +44,11 @@ public class LogstashWriter implements AppenderWriterStrategy, ConnectorListener
         this.encoder = encoder;
 
         final int timeout = configuration.getTimeout() == null ? DEFAULT_TIMEOUT : configuration.getTimeout();
-        final int timeToLive =
-                configuration.getTimeout() == null ? DEFAULT_TIME_TO_LIVE : configuration.getTimeToLive();
-        final int maxConnections =
-                configuration.getTimeout() == null ? DEFAULT_MAX_CONNECTIONS : configuration.getMaxConnections();
-        final int maxPerRoute =
-                configuration.getTimeout() == null ? DEFAULT_MAX_CONNECTIONS : configuration.getMaxPerRoute();
-        final int socketTimeout =
-                configuration.getTimeout() == null ? DEFAULT_MAX_SOCKET_TIMEOUT : configuration.getSocketTimeout();
-
+        
         baseUrl = configuration.getHost() == null ? DEFAULT_HOST : configuration.getHost();
-        connector = new HttpBasicConnector(timeout, timeToLive, maxConnections, maxPerRoute, socketTimeout);
+        connector = new HttpBasicConnector(HttpBasicConnectorConfiguration.builder()
+                                                                          .timeout(timeout)
+                                                                          .build());
         headers = configuration.getHeadersMap() == null ? new HashMap<>() : configuration.getHeadersMap();
 
         request = HttpRequest.builder()

@@ -17,8 +17,7 @@
 package io.inugami.framework.interfaces.connectors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.inugami.framework.interfaces.connectors.exceptions.JsonProcessingException;
-import io.inugami.framework.interfaces.connectors.exceptions.YamlProcessingException;
+import io.inugami.framework.interfaces.connectors.exceptions.HttpConntectorParsingException;
 
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -94,21 +93,21 @@ public interface IHttpConnectorResult {
 
     void setResponseHeaders(final Map<String, String> value);
 
-    <T> T getResponseBody(final Class<? extends T> objectClass) throws JsonProcessingException;
+    <T> T getResponseBody(final Class<? extends T> objectClass) throws HttpConntectorParsingException;
 
-    <T> T getResponseBody(final TypeReference<T> refObjectType) throws JsonProcessingException;
+    <T> T getResponseBody(final TypeReference<T> refObjectType) throws HttpConntectorParsingException;
 
-    <T> T getBodyFromJson(final Class<? extends T> objectClass) throws JsonProcessingException;
+    <T> T getBodyFromJson(final Class<? extends T> objectClass) throws HttpConntectorParsingException;
 
-    <T> T getBodyFromJson(final TypeReference<T> refObjectType) throws JsonProcessingException;
+    <T> T getBodyFromJson(final TypeReference<T> refObjectType) throws HttpConntectorParsingException;
 
-    <T> T getBodyFromYaml(final Class<? extends T> objectClass) throws YamlProcessingException;
+    <T> T getBodyFromYaml(final Class<? extends T> objectClass) throws HttpConntectorParsingException;
 
-    <T> T getBodyFromYaml(final TypeReference<T> refObjectType) throws YamlProcessingException;
+    <T> T getBodyFromYaml(final TypeReference<T> refObjectType) throws HttpConntectorParsingException;
 
-    <T> T getResponseFromYaml(final Class<? extends T> objectClass) throws JsonProcessingException;
+    <T> T getResponseFromYaml(final Class<? extends T> objectClass) throws HttpConntectorParsingException;
 
-    <T> T getResponseFromYaml(final TypeReference<T> refObjectType) throws JsonProcessingException;
+    <T> T getResponseFromYaml(final TypeReference<T> refObjectType) throws HttpConntectorParsingException;
 
     Optional<String> getErrorCode();
 }

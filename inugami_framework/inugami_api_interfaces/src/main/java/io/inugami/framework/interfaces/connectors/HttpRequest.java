@@ -17,38 +17,37 @@
 package io.inugami.framework.interfaces.connectors;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
 @Getter
+@Setter
 @Builder(toBuilder = true)
-public class HttpRequest {
+public final class HttpRequest {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    private String              verb;
-    private String              url;
-    private Map<String, String> headers;
-    private Map<String, String> options;
-    private int                 nbRetry;
-    private CredentialsProvider credentialsProvider;
-    private String              token;
-    private Object              body;
-    private boolean             throwable = true;
-    private String              partner;
-    private String              partnerService;
-    private ConnectorListener   listener;
-    private boolean             disableListener;
+    // =================================================================================================================
+    private String                  verb;
+    private String                  url;
+    private Map<String, String>     headers;
+    private Map<String, String>     options;
+    private String                  token;
+    private Object                  body;
+    private boolean                 throwable = true;
+    private String                  partner;
+    private String                  partnerService;
+    @Singular("listener")
+    private List<ConnectorListener> listener;
+    private boolean                 disableListener;
 
-    // =========================================================================
+    // =================================================================================================================
     // BUILDER
-    // =========================================================================
+    // =================================================================================================================
     public static class HttpRequestBuilder {
 
         public HttpRequestBuilder addHeader(final String key, final String value) {

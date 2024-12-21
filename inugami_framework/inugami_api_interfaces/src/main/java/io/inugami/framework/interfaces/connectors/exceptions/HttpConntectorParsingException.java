@@ -19,52 +19,52 @@ package io.inugami.framework.interfaces.connectors.exceptions;
 import io.inugami.framework.interfaces.exceptions.CheckedException;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 
-public class JsonProcessingException extends CheckedException {
-    public JsonProcessingException(final int code, final String message, final Throwable cause) {
+public class HttpConntectorParsingException extends CheckedException {
+    public HttpConntectorParsingException(final int code, final String message, final Throwable cause) {
         super(code, message, cause);
     }
 
-    public JsonProcessingException(final ErrorCode errorCode,
-                                   final Throwable cause) {
+    public HttpConntectorParsingException(final ErrorCode errorCode,
+                                          final Throwable cause) {
         super(errorCode, cause);
     }
 
-    public JsonProcessingException() {
+    public HttpConntectorParsingException() {
     }
 
-    public JsonProcessingException(final String message, final Throwable cause) {
+    public HttpConntectorParsingException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public JsonProcessingException(final String message, final Object... values) {
+    public HttpConntectorParsingException(final String message, final Object... values) {
         super(message, values);
     }
 
-    public JsonProcessingException(final Throwable cause, final String message, final Object... values) {
+    public HttpConntectorParsingException(final Throwable cause, final String message, final Object... values) {
         super(cause, message, values);
     }
 
-    public JsonProcessingException(final String message) {
+    public HttpConntectorParsingException(final String message) {
         super(message);
     }
 
-    public JsonProcessingException(final Throwable cause) {
+    public HttpConntectorParsingException(final Throwable cause) {
         super(cause);
     }
 
-    public JsonProcessingException(final ErrorCode errorCode) {
+    public HttpConntectorParsingException(final ErrorCode errorCode) {
         super(errorCode);
     }
 
-    public JsonProcessingException(final ErrorCode errorCode,
-                                   final String message) {
+    public HttpConntectorParsingException(final ErrorCode errorCode,
+                                          final String message) {
         super(errorCode, message);
     }
 
-    public JsonProcessingException(final ErrorCode errorCode,
-                                   final Throwable cause,
-                                   final String message,
-                                   final Object... values) {
+    public HttpConntectorParsingException(final ErrorCode errorCode,
+                                          final Throwable cause,
+                                          final String message,
+                                          final Object... values) {
         super(errorCode, cause, message, values);
     }
 }
