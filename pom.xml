@@ -206,12 +206,12 @@
         :: DEPENDENCIES VERSIONS
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <ch.qos.logback.version>1.4.14</ch.qos.logback.version>
-        <com.jackson.version>2.16.1</com.jackson.version>
+        <com.jackson.version>2.18.2</com.jackson.version>
         <io.github.openfeign.version>12.3</io.github.openfeign.version>
         <org-mockito.mockito-core>2.0.31-beta</org-mockito.mockito-core>
         <org.apache.commons.cli.version>1.4</org.apache.commons.cli.version>
         <org.apache.commons.codec.version>1.16.0</org.apache.commons.codec.version>
-        <org.apache.commons.io.version>2.7</org.apache.commons.io.version>
+        <org.apache.commons.io.version>2.18.0</org.apache.commons.io.version>
         <org.apache.httpcomponents.version>4.5.13</org.apache.httpcomponents.version>
         <org.ehcache.version>3.3.1</org.ehcache.version>
         <org.jboss.async-http-servlet.version>3.1.0.Beta2</org.jboss.async-http-servlet.version>
@@ -320,6 +320,13 @@
                 <artifactId>jackson-databind</artifactId>
                 <version>${com.jackson.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-parameter-names</artifactId>
+                <version>${com.jackson.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.fasterxml.jackson.dataformat</groupId>
                 <artifactId>jackson-dataformat-yaml</artifactId>

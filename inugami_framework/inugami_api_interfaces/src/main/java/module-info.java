@@ -22,6 +22,7 @@ module inugami.api.interfaces {
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
+    requires okhttp3;
 
     exports io.inugami.framework.interfaces.alertings;
     exports io.inugami.framework.interfaces.concurrent;

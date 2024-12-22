@@ -14,29 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.interfaces.connectors;
+package io.inugami.framework.api.connectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.inugami.framework.api.marshalling.JsonMarshaller;
+import io.inugami.framework.interfaces.connectors.HttpPayloadMarshaller;
+import io.inugami.framework.interfaces.exceptions.connector.ConnectorMarshallingException;
 
-import io.inugami.framework.interfaces.exceptions.services.ConnectorException;
+public class JsonHttpPayloadMarshaller implements HttpPayloadMarshaller {
 
-public interface ConnectorListener {
-    default HttpRequest beforeCalling(final HttpRequest request) {
-        return null;
-    }
-
-    default HttpRequest processCalling(final HttpRequest request) {
-        return null;
-    }
-
-    default void onError(final ConnectorException exception) {
-
-    }
-
-    default void onDone(final IHttpConnectorResult stepResult) {
-
-    }
-
-    default void onError(final IHttpConnectorResult stepResult) {
-
+    @Override
+    public String convertToPayload(final Object object) throws ConnectorMarshallingException {
+        try {
+            return JsonMarshaller.getInstance().getDefaultObjectMapper().writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new ConnectorMarshallingException(e);
+        }
     }
 }

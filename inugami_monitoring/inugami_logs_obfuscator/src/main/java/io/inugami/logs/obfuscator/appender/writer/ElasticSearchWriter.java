@@ -62,9 +62,7 @@ public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorLis
         final int timeout = configuration.getTimeout() == null ? DEFAULT_TIMEOUT : configuration.getTimeout();
 
         baseUrl = configuration.getHost() == null ? DEFAULT_HOST : configuration.getHost();
-        connector = new HttpBasicConnector(HttpBasicConnectorConfiguration.builder()
-                                                                          .timeout(timeout)
-                                                                          .build());
+        connector = new HttpBasicConnector(HttpBasicConnectorConfiguration.builder().build());
         headers = configuration.getHeadersMap() == null ? new HashMap<>() : configuration.getHeadersMap();
         index = configuration.getIndex() == null ? DEFAULT_INDEX : this.configuration.getIndex();
         indexPattern =

@@ -44,6 +44,7 @@ public final class HttpRequest {
     @Singular("listener")
     private List<ConnectorListener> listener;
     private boolean                 disableListener;
+    private HttpPayloadMarshaller   marshaller;
 
     // =================================================================================================================
     // BUILDER

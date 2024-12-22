@@ -16,27 +16,10 @@
  */
 package io.inugami.framework.interfaces.connectors;
 
+import io.inugami.framework.interfaces.exceptions.connector.ConnectorMarshallingException;
 
-import io.inugami.framework.interfaces.exceptions.services.ConnectorException;
+public interface HttpPayloadMarshaller {
 
-public interface ConnectorListener {
-    default HttpRequest beforeCalling(final HttpRequest request) {
-        return null;
-    }
+    String convertToPayload(final Object object) throws ConnectorMarshallingException;
 
-    default HttpRequest processCalling(final HttpRequest request) {
-        return null;
-    }
-
-    default void onError(final ConnectorException exception) {
-
-    }
-
-    default void onDone(final IHttpConnectorResult stepResult) {
-
-    }
-
-    default void onError(final IHttpConnectorResult stepResult) {
-
-    }
 }

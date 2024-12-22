@@ -1,5 +1,3 @@
-import io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
-
 /* --------------------------------------------------------------------
  *  Inugami
  * --------------------------------------------------------------------
@@ -31,21 +29,27 @@ module inugami.api {
     exports io.inugami.framework.api.providers;
     exports io.inugami.framework.api.spi;
     exports io.inugami.framework.api.tools;
-
+    exports io.inugami.framework.api.connectors;
 
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.datatype.jdk8;
+    requires com.fasterxml.jackson.datatype.jsr310;
+    requires com.fasterxml.jackson.module.paramnames;
+    requires com.fasterxml.jackson.dataformat.yaml;
     requires inugami.api.interfaces;
     requires jakarta.servlet;
     requires lombok;
     requires org.slf4j;
     requires java.desktop;
     requires okhttp3;
+    requires kotlin.stdlib;
 
 
-    uses JacksonMarshallerSpi;
     uses io.inugami.framework.interfaces.configurtation.ConfigurationSpi;
+    uses io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
+    uses io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
     uses io.inugami.framework.interfaces.monitoring.MdcServiceSpi;
     uses io.inugami.framework.interfaces.monitoring.MonitoringLoaderSpi;
     uses io.inugami.framework.interfaces.monitoring.logger.initializer.MdcInitializerSpi;

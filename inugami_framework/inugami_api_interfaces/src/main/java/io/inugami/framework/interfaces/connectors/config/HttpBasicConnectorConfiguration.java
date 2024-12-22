@@ -18,8 +18,10 @@ package io.inugami.framework.interfaces.connectors.config;
 
 import io.inugami.framework.interfaces.connectors.ConnectorListener;
 import lombok.*;
+import okhttp3.OkHttpClient;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -30,8 +32,11 @@ import java.util.List;
 @AllArgsConstructor
 public class HttpBasicConnectorConfiguration {
     private String                  partnerName;
-    private Integer                 timeout = 60000;
+    private Integer                 timeoutConnecting = 10000;
+    private Integer                 timeoutWriting    = 30000;
+    private Integer                 timeoutReading    = 60000;
     private List<ConnectorListener> listeners;
     private String                  baseUrl;
-    private int                     retry   = 3;
+    private int                     retry             = 3;
+    private Supplier<OkHttpClient>  clientBuilder;
 }
