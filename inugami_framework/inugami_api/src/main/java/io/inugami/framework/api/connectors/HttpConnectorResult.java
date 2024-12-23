@@ -62,7 +62,7 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
     private           String    url;
     @EqualsAndHashCode.Include
     private           String    hashHumanReadable;
-    private           String    jsonInputData;
+    private           String    requestData;
     private           int       statusCode;
     private           String    message;
     private           byte[]    data;
@@ -94,13 +94,13 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
 
             this.encoding = encoding == null ? "UTF-8" : encoding;
             this.length = data == null ? 0 : data.length;
-            if (jsonInputData != null) {
-                hashBuilder.append("?data=").append(jsonInputData.replaceAll("\\n", ""));
+            if (requestData != null) {
+                hashBuilder.append("?data=").append(requestData.replaceAll("\\n", ""));
             }
 
             this.hashHumanReadable = hashBuilder.toString();
 
-            return new HttpConnectorResult(verb, url, hashHumanReadable, jsonInputData, statusCode, message, data, bodyData, length, contentType, responseAt, delay, encoding, error,
+            return new HttpConnectorResult(verb, url, hashHumanReadable, requestData, statusCode, message, data, bodyData, length, contentType, responseAt, delay, encoding, error,
                                            charset ==
                                            null ? StandardCharsets.UTF_8 : charset, requestHeaders, responseHeaders);
         }
@@ -157,26 +157,6 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
         }
     }
 
-
-    @Override
-    public void getJsonInputData(final String value) {
-
-    }
-
-    @Override
-    public byte[] getRequestData() {
-        return new byte[0];
-    }
-
-    @Override
-    public void setRequestData(final byte[] value) {
-
-    }
-
-    @Override
-    public void getEncoding(final String value) {
-
-    }
 
     public <T> T getResponseBody(final Class<? extends T> objectClass) throws HttpConntectorParsingException {
         if (data == null) {

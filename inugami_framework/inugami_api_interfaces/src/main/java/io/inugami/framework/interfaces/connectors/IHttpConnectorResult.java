@@ -37,9 +37,6 @@ public interface IHttpConnectorResult {
 
     void setHashHumanReadable(final String value);
 
-    String getJsonInputData();
-
-    void getJsonInputData(final String value);
 
     int getStatusCode();
 
@@ -52,10 +49,6 @@ public interface IHttpConnectorResult {
     byte[] getData();
 
     void setData(final byte[] value);
-
-    byte[] getRequestData();
-
-    void setRequestData(final byte[] value);
 
     int getLength();
 
@@ -72,10 +65,6 @@ public interface IHttpConnectorResult {
     long getDelay();
 
     void setDelay(final long value);
-
-    String getEncoding();
-
-    void getEncoding(final String value);
 
     Exception getError();
 

@@ -26,13 +26,15 @@ import io.inugami.framework.interfaces.exceptions.connector.ConnectorMarshalling
 import io.inugami.framework.interfaces.exceptions.services.ConnectorException;
 import io.inugami.framework.interfaces.functionnals.ConsumerWithException;
 import io.inugami.framework.interfaces.functionnals.FunctionWithException;
-import io.inugami.framework.interfaces.functionnals.SupplierWithException;
 import io.inugami.framework.interfaces.models.tools.Chrono;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -59,24 +61,23 @@ public class HttpBasicConnector implements IHttpBasicConnector {
     private final        HttpBasicConnectorConfiguration configuration;
     private final        OkHttpClient                    client;
     private final        int                             retry;
+    private final        Clock                           clock;
 
     // =================================================================================================================
     // CONSTRUCTOR
     // =================================================================================================================
     public HttpBasicConnector(final HttpBasicConnectorConfiguration configuration) {
         this.configuration = configuration == null ? HttpBasicConnectorConfiguration.builder().build() : configuration;
-        final int timeoutConnecting = Math.max(this.configuration.getTimeoutConnecting() == null
-                                                       ? 0
-                                                       : this.configuration.getTimeoutConnecting(), 10000);
+        final int timeoutConnecting = Math.max(this.configuration.getTimeoutConnecting() ==
+                                               null ? 0 : this.configuration.getTimeoutConnecting(), 10000);
 
-        final int timeoutWriting = Math.max(this.configuration.getTimeoutWriting() == null
-                                                    ? 0
-                                                    : this.configuration.getTimeoutWriting(), 10000);
+        final int timeoutWriting = Math.max(
+                this.configuration.getTimeoutWriting() == null ? 0 : this.configuration.getTimeoutWriting(), 10000);
 
-        final int timeoutReading = Math.max(this.configuration.getTimeoutReading() == null
-                                                    ? 0
-                                                    : this.configuration.getTimeoutReading(), 60000);
+        final int timeoutReading = Math.max(
+                this.configuration.getTimeoutReading() == null ? 0 : this.configuration.getTimeoutReading(), 60000);
 
+        this.clock = this.configuration.getClock() == null ? Clock.systemDefaultZone() : this.configuration.getClock();
         this.retry = Math.max(this.configuration.getRetry(), 0);
         this.client = this.configuration.getClientBuilder() != null ? this.configuration.getClientBuilder()
                                                                                         .get() : new OkHttpClient().newBuilder()
@@ -95,7 +96,7 @@ public class HttpBasicConnector implements IHttpBasicConnector {
         return processGenericRequest(request.toBuilder()
                                             .verb(HTTP_GET)
                                             .body(null)
-                                            .build(), () -> new Request.Builder().get());
+                                            .build(), r -> new Request.Builder().get());
     }
 
 
@@ -103,13 +104,11 @@ public class HttpBasicConnector implements IHttpBasicConnector {
     // POST
     // =================================================================================================================
     @Override
-
-
     public HttpConnectorResult post(final HttpRequest request) throws ConnectorException {
         Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder()
                                             .verb(HTTP_POST)
-                                            .build(), () -> new Request.Builder().post(buildBody(request)));
+                                            .build(), r -> new Request.Builder().post(buildBody(r)));
     }
 
 
@@ -121,7 +120,7 @@ public class HttpBasicConnector implements IHttpBasicConnector {
         Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder()
                                             .verb(PUT)
-                                            .build(), () -> new Request.Builder().put(buildBody(request)));
+                                            .build(), r -> new Request.Builder().put(buildBody(r)));
     }
 
 
@@ -133,7 +132,7 @@ public class HttpBasicConnector implements IHttpBasicConnector {
         Asserts.assertNotNull(REQUEST_REQUIRE, request);
         return processGenericRequest(request.toBuilder()
                                             .verb(PATCH)
-                                            .build(), () -> new Request.Builder().patch(buildBody(request)));
+                                            .build(), r -> new Request.Builder().patch(buildBody(r)));
     }
 
 
@@ -143,7 +142,7 @@ public class HttpBasicConnector implements IHttpBasicConnector {
     @Override
     public HttpConnectorResult delete(final HttpRequest request) throws ConnectorException {
         Asserts.assertNotNull(REQUEST_REQUIRE, request);
-        return processGenericRequest(request.toBuilder().verb(DELETE).build(), () -> new Request.Builder().delete());
+        return processGenericRequest(request.toBuilder().verb(DELETE).build(), r -> new Request.Builder().delete());
     }
 
 
@@ -156,7 +155,7 @@ public class HttpBasicConnector implements IHttpBasicConnector {
         return processGenericRequest(request.toBuilder()
                                             .verb(OPTION)
                                             .body(null)
-                                            .build(), () -> new Request.Builder().method(OPTION, null));
+                                            .build(), r -> new Request.Builder().method(OPTION, null));
     }
 
 
@@ -164,7 +163,7 @@ public class HttpBasicConnector implements IHttpBasicConnector {
     // TOOLS
     // =================================================================================================================
     private HttpConnectorResult processGenericRequest(final HttpRequest request,
-                                                      final SupplierWithException<Request.Builder, ConnectorException> requestClientBuilder) throws ConnectorException {
+                                                      final FunctionWithException<HttpRequest, Request.Builder, ConnectorException> requestClientBuilder) throws ConnectorException {
 
         HttpRequest currentRequest = request;
         if (!request.isDisableListener()) {
@@ -172,7 +171,7 @@ public class HttpBasicConnector implements IHttpBasicConnector {
         }
 
 
-        final var httpClientBuilder = requestClientBuilder.get();
+        final var httpClientBuilder = requestClientBuilder.process(currentRequest);
         httpClientBuilder.url(buildFullUrl(currentRequest));
 
         if (currentRequest.getHeaders() != null) {
@@ -183,8 +182,9 @@ public class HttpBasicConnector implements IHttpBasicConnector {
         }
 
 
-        final Call          call   = this.client.newCall(httpClientBuilder.build());
-        HttpConnectorResult result = null;
+        final Request       httpRequest = httpClientBuilder.build();
+        final Call          call        = this.client.newCall(httpRequest);
+        HttpConnectorResult result      = null;
 
         for (int i = retry; i >= 0; i--) {
             final Chrono chrono = Chrono.startChrono();
@@ -192,7 +192,7 @@ public class HttpBasicConnector implements IHttpBasicConnector {
             try {
                 invokeListenersOnProcessCalling(currentRequest);
                 final Response      response   = call.execute();
-                HttpConnectorResult stepResult = convertToResult(response, chrono.getDuration());
+                HttpConnectorResult stepResult = convertToResult(response, currentRequest, chrono.getDuration());
                 if (!request.isDisableListener()) {
                     if (response.code() < 400) {
                         callListenerOnDone(request.getListener(), stepResult);
@@ -214,17 +214,22 @@ public class HttpBasicConnector implements IHttpBasicConnector {
     }
 
     private HttpConnectorResult convertToResult(final Response response,
+                                                final HttpRequest currentRequest,
                                                 final long duration) throws ConnectorMarshallingException {
         final var builder = HttpConnectorResult.builder()
+                                               .responseAt(LocalDateTime.now(clock).toEpochSecond(ZoneOffset.UTC))
                                                .message(response.message())
                                                .statusCode(response.code())
                                                .delay(duration)
                                                .verb(response.request().method())
                                                .url(response.request().url().toString());
 
+        if (currentRequest.getBody() != null) {
+            builder.requestData(buildRequestPayload(currentRequest.getBody(), currentRequest.getMarshaller()));
+        }
         if (response.body() != null) {
             try {
-                builder.data(response.body().bytes());
+                builder.bodyData(response.body().bytes());
             } catch (IOException e) {
                 throw new ConnectorMarshallingException(e);
             } finally {
@@ -410,9 +415,19 @@ public class HttpBasicConnector implements IHttpBasicConnector {
     }
 
     private RequestBody buildBody(final HttpRequest request) throws ConnectorMarshallingException {
-        final var    marshaller = request.getMarshaller() == null ? DEFAULT_MARSHALLER : request.getMarshaller();
-        final String payload    = marshaller.convertToPayload(request.getBody());
-        return RequestBody.create(payload.getBytes(StandardCharsets.UTF_8));
+
+        byte[] data = null;
+
+        if (request.getBody() != null) {
+            data = buildRequestPayload(request.getBody(), request.getMarshaller()).getBytes(StandardCharsets.UTF_8);
+        }
+        return data == null ? RequestBody.create(new byte[]{}) : RequestBody.create(data);
+    }
+
+    private String buildRequestPayload(final Object value,
+                                       final HttpPayloadMarshaller marshaller) throws ConnectorMarshallingException {
+        final var currentMarshaller = marshaller == null ? DEFAULT_MARSHALLER : marshaller;
+        return currentMarshaller.convertToPayload(value);
     }
 
 

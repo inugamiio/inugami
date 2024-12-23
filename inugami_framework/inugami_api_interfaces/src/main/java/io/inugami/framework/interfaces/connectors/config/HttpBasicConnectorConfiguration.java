@@ -20,6 +20,7 @@ import io.inugami.framework.interfaces.connectors.ConnectorListener;
 import lombok.*;
 import okhttp3.OkHttpClient;
 
+import java.time.Clock;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -39,4 +40,5 @@ public class HttpBasicConnectorConfiguration {
     private String                  baseUrl;
     private int                     retry             = 3;
     private Supplier<OkHttpClient>  clientBuilder;
+    private Clock                   clock;
 }

@@ -73,6 +73,7 @@ module inugami.api.interfaces {
     exports io.inugami.framework.interfaces.tools.strategy;
     exports io.inugami.framework.interfaces.task;
 
+    uses io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
     uses io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
     uses io.inugami.framework.interfaces.monitoring.MdcServiceSpi;
     uses io.inugami.framework.interfaces.monitoring.MonitoringLoaderSpi;
