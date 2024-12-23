@@ -1,10 +1,10 @@
 package io.inugami.commons.test;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
 
-import static io.inugami.api.exceptions.DefaultErrorCode.newBuilder;
+import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
 
+import static io.inugami.framework.interfaces.exceptions.DefaultErrorCode.newBuilder;
 
 public enum TestHelpersErrorCodes implements ErrorCode {
     MUST_BE_NULL(newBuilder().message("value must be null")),

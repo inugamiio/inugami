@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static io.inugami.api.exceptions.Asserts.assertRegexFind;
+import static io.inugami.framework.interfaces.exceptions.Asserts.assertRegexFind;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class FileWriterTest {

@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-open module inugami.api.core {
-    requires inugami.api.interfaces;
-    requires inugami.api;
+open module inugami.framework.api.core {
+    requires inugami.framework.api.interfaces;
+    requires inugami.framework.api;
     requires lombok;
 }

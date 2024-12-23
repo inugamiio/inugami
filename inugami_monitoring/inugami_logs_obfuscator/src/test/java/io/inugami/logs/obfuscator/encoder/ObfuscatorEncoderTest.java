@@ -1,8 +1,8 @@
 package io.inugami.logs.obfuscator.encoder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.marshalling.JsonMarshaller;
+import io.inugami.framework.api.marshalling.JsonMarshaller;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;

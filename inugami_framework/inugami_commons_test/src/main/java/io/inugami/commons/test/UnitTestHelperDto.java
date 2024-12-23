@@ -1,8 +1,8 @@
 package io.inugami.commons.test;
 
-import io.inugami.api.tools.FieldGetterSetter;
-import io.inugami.api.tools.ReflectionUtils;
 import io.inugami.commons.test.dto.AssertDtoContext;
+import io.inugami.framework.api.tools.ReflectionUtils;
+import io.inugami.framework.interfaces.tools.reflection.FieldGetterSetter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.inugami.api.exceptions.Asserts.assertNotNull;
+import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SuppressWarnings({"java:S3878", "java:S1764"})

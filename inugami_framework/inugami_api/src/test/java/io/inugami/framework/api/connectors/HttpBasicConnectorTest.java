@@ -39,11 +39,11 @@ class HttpBasicConnectorTest {
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
-    private final static Clock                            CLOCK         = Clock.fixed(Instant.parse("2018-08-19T16:02:42.00Z"), ZoneId.of("UTC"));
-    private final static TypeReference<List<EndpointDTO>> TYPE          = new TypeReference<List<EndpointDTO>>() {
+    private final static Clock                            CLOCK          = Clock.fixed(Instant.parse("2018-08-19T16:02:42.00Z"), ZoneId.of("UTC"));
+    private final static TypeReference<List<EndpointDTO>> TYPE           = new TypeReference<List<EndpointDTO>>() {
     };
-    public static final  String                           FULL_URL      = "http://localhost:8080/mock/my/endpoint?full=true";
-    public static final  String                           HEADERS       = """
+    public static final  String                           FULL_URL       = "http://localhost:8080/mock/my/endpoint?full=true";
+    public static final  String                           HEADERS        = """
             [ {
               "first" : "trace",
               "second" : "91e0e458-93df-4d23-8653-3c6e5cd8794e"
@@ -52,12 +52,14 @@ class HttpBasicConnectorTest {
               "second" : "test"
             } ]
             """;
-    public static final  String                           ENDPOINT      = "my/endpoint";
-    public static final  String                           RESPONSE_LIST = """
+    public static final  String                           ENDPOINT       = "my/endpoint";
+    public static final  String                           RESPONSE_LIST  = """
             [ {
               "status" : "success"
             } ]
             """;
+    public static final  String                           SUCCESS        = "success";
+    public static final  String                           CORRELATION_ID = "06adc5f2-22b7-4e68-b436-05304f484ca4";
 
     @Mock
     private OkHttpClient            client;
@@ -129,7 +131,7 @@ class HttpBasicConnectorTest {
     // =================================================================================================================
     @Test
     void post_nominal() throws Exception {
-        final var requestPayload = List.of(EndpointDTO.builder().status("success").build());
+        final var requestPayload = List.of(EndpointDTO.builder().status(SUCCESS).build());
 
         final TestConnectorListener    listener = new TestConnectorListener();
         final AtomicReference<Request> request  = new AtomicReference<>();
@@ -177,6 +179,205 @@ class HttpBasicConnectorTest {
 
     }
 
+
+    // =================================================================================================================
+    // PATCH
+    // =================================================================================================================
+    @Test
+    void patch_nominal() throws Exception {
+        final var requestPayload = List.of(EndpointDTO.builder().status(SUCCESS).build());
+
+        final TestConnectorListener    listener = new TestConnectorListener();
+        final AtomicReference<Request> request  = new AtomicReference<>();
+        when(client.newCall(any())).thenAnswer(answer -> {
+            request.set(answer.getArgument(0));
+            return call;
+        });
+        when(call.execute()).thenAnswer(a -> buildListResponse(request.get(), requestPayload));
+
+
+        final HttpConnectorResult result = connector().patch(HttpRequest.builder()
+                                                                        .addHeader("trace", "91e0e458-93df-4d23-8653-3c6e5cd8794e")
+                                                                        .addOption("full", "true")
+                                                                        .listener(listener)
+                                                                        .url(ENDPOINT)
+                                                                        .body(requestPayload)
+                                                                        .build());
+
+
+        assertThat(result).isNotNull();
+        verify(client).newCall(requestCaptor.capture());
+        assertThat(requestCaptor.getValue().url()).hasToString(FULL_URL);
+        assertText(requestCaptor.getValue().headers(), HEADERS);
+        assertText(result, """
+                {
+                  "bodyData" : "WyB7CiAgInN0YXR1cyIgOiAic3VjY2VzcyIKfSBd",
+                  "charset" : "UTF-8",
+                  "delay" : 0,
+                  "encoding" : "UTF-8",
+                  "hashHumanReadable" : "[PATCH]http://localhost:8080/mock/my/endpoint?full=true?data=[{\\"status\\":\\"success\\"}]",
+                  "length" : 0,
+                  "message" : "success",
+                  "requestData" : "[{\\"status\\":\\"success\\"}]",
+                  "responseAt" : 1534694562,
+                  "responseHeaders" : {
+                    "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
+                  },
+                  "statusCode" : 200,
+                  "url" : "http://localhost:8080/mock/my/endpoint?full=true",
+                  "verb" : "PATCH",
+                  "errorCode" : null
+                }
+                """);
+        assertText(result.getBodyFromJson(TYPE), RESPONSE_LIST);
+    }
+
+    // =================================================================================================================
+    // PUT
+    // =================================================================================================================
+    @Test
+    void put_nominal() throws Exception {
+        final var requestPayload = List.of(EndpointDTO.builder().status(SUCCESS).build());
+
+        final TestConnectorListener    listener = new TestConnectorListener();
+        final AtomicReference<Request> request  = new AtomicReference<>();
+        when(client.newCall(any())).thenAnswer(answer -> {
+            request.set(answer.getArgument(0));
+            return call;
+        });
+        when(call.execute()).thenAnswer(a -> buildListResponse(request.get(), requestPayload));
+
+
+        final HttpConnectorResult result = connector().put(HttpRequest.builder()
+                                                                      .addHeader("trace", "91e0e458-93df-4d23-8653-3c6e5cd8794e")
+                                                                      .addOption("full", "true")
+                                                                      .listener(listener)
+                                                                      .url(ENDPOINT)
+                                                                      .body(requestPayload)
+                                                                      .build());
+
+
+        assertThat(result).isNotNull();
+        verify(client).newCall(requestCaptor.capture());
+        assertThat(requestCaptor.getValue().url()).hasToString(FULL_URL);
+        assertText(requestCaptor.getValue().headers(), HEADERS);
+        assertText(result, """
+                {
+                  "bodyData" : "WyB7CiAgInN0YXR1cyIgOiAic3VjY2VzcyIKfSBd",
+                  "charset" : "UTF-8",
+                  "delay" : 0,
+                  "encoding" : "UTF-8",
+                  "hashHumanReadable" : "[PUT]http://localhost:8080/mock/my/endpoint?full=true?data=[{\\"status\\":\\"success\\"}]",
+                  "length" : 0,
+                  "message" : "success",
+                  "requestData" : "[{\\"status\\":\\"success\\"}]",
+                  "responseAt" : 1534694562,
+                  "responseHeaders" : {
+                    "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
+                  },
+                  "statusCode" : 200,
+                  "url" : "http://localhost:8080/mock/my/endpoint?full=true",
+                  "verb" : "PUT",
+                  "errorCode" : null
+                }
+                """);
+        assertText(result.getBodyFromJson(TYPE), RESPONSE_LIST);
+    }
+
+
+    // =================================================================================================================
+    // DELETE
+    // =================================================================================================================
+    @Test
+    void delete_nominal() throws Exception {
+        final TestConnectorListener    listener = new TestConnectorListener();
+        final AtomicReference<Request> request  = new AtomicReference<>();
+        when(client.newCall(any())).thenAnswer(answer -> {
+            request.set(answer.getArgument(0));
+            return call;
+        });
+        when(call.execute()).thenAnswer(a -> buildEmptyResponse(request.get()));
+
+
+        final HttpConnectorResult result = connector().delete(HttpRequest.builder()
+                                                                         .addHeader("trace", "91e0e458-93df-4d23-8653-3c6e5cd8794e")
+                                                                         .addOption("full", "true")
+                                                                         .listener(listener)
+                                                                         .url(ENDPOINT)
+                                                                         .build());
+
+
+        assertThat(result).isNotNull();
+        verify(client).newCall(requestCaptor.capture());
+        assertThat(requestCaptor.getValue().url()).hasToString(FULL_URL);
+        assertText(requestCaptor.getValue().headers(), HEADERS);
+        assertText(result,
+                   """
+                           {
+                             "charset" : "UTF-8",
+                             "delay" : 0,
+                             "encoding" : "UTF-8",
+                             "hashHumanReadable" : "[DELETE]http://localhost:8080/mock/my/endpoint?full=true",
+                             "length" : 0,
+                             "message" : "success",
+                             "responseAt" : 1534694562,
+                             "responseHeaders" : {
+                               "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
+                             },
+                             "statusCode" : 200,
+                             "url" : "http://localhost:8080/mock/my/endpoint?full=true",
+                             "verb" : "DELETE",
+                             "errorCode" : null
+                           }         
+                           """);
+    }
+
+    // =================================================================================================================
+    // OPTION
+    // =================================================================================================================
+    @Test
+    void option_nominal() throws Exception {
+        final TestConnectorListener    listener = new TestConnectorListener();
+        final AtomicReference<Request> request  = new AtomicReference<>();
+        when(client.newCall(any())).thenAnswer(answer -> {
+            request.set(answer.getArgument(0));
+            return call;
+        });
+        when(call.execute()).thenAnswer(a -> buildEmptyResponse(request.get()));
+
+
+        final HttpConnectorResult result = connector().option(HttpRequest.builder()
+                                                                         .addHeader("trace", "91e0e458-93df-4d23-8653-3c6e5cd8794e")
+                                                                         .addOption("full", "true")
+                                                                         .listener(listener)
+                                                                         .url(ENDPOINT)
+                                                                         .build());
+
+
+        assertThat(result).isNotNull();
+        verify(client).newCall(requestCaptor.capture());
+        assertThat(requestCaptor.getValue().url()).hasToString(FULL_URL);
+        assertText(requestCaptor.getValue().headers(), HEADERS);
+        assertText(result,
+                   """ 
+                           {
+                             "charset" : "UTF-8",
+                             "delay" : 0,
+                             "encoding" : "UTF-8",
+                             "hashHumanReadable" : "[OPTION]http://localhost:8080/mock/my/endpoint?full=true",
+                             "length" : 0,
+                             "message" : "success",
+                             "responseAt" : 1534694562,
+                             "responseHeaders" : {
+                               "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
+                             },
+                             "statusCode" : 200,
+                             "url" : "http://localhost:8080/mock/my/endpoint?full=true",
+                             "verb" : "OPTION",
+                             "errorCode" : null
+                           }    
+                           """);
+    }
 
     // =================================================================================================================
     // TOOLS
@@ -236,24 +437,34 @@ class HttpBasicConnectorTest {
     private Response buildResponse(final Request request) {
         return new Response.Builder().code(200)
                                      .request(request)
-                                     .addHeader(Headers.X_CORRELATION_ID, "06adc5f2-22b7-4e68-b436-05304f484ca4")
+                                     .addHeader(Headers.X_CORRELATION_ID, CORRELATION_ID)
                                      .body(ResponseBody.create("""
                                                                        {"status":"success"}
                                                                        """.getBytes(StandardCharsets.UTF_8), MediaType.get("application/json")))
                                      .protocol(Protocol.HTTP_1_1)
-                                     .message("success")
+                                     .message(SUCCESS)
                                      .build();
     }
 
     private Response buildListResponse(final Request request, final Object value) throws JsonProcessingException {
         return new Response.Builder().code(200)
                                      .request(request)
-                                     .addHeader(Headers.X_CORRELATION_ID, "06adc5f2-22b7-4e68-b436-05304f484ca4")
+                                     .addHeader(Headers.X_CORRELATION_ID, CORRELATION_ID)
                                      .body(ResponseBody.create(JsonMarshaller.getInstance()
                                                                              .getIndentedObjectMapper()
                                                                              .writeValueAsBytes(value), MediaType.get("application/json")))
                                      .protocol(Protocol.HTTP_1_1)
-                                     .message("success")
+                                     .message(SUCCESS)
                                      .build();
     }
+
+    private Response buildEmptyResponse(final Request request) throws JsonProcessingException {
+        return new Response.Builder().code(200)
+                                     .request(request)
+                                     .addHeader(Headers.X_CORRELATION_ID, CORRELATION_ID)
+                                     .protocol(Protocol.HTTP_1_1)
+                                     .message(SUCCESS)
+                                     .build();
+    }
+
 }

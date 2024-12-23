@@ -22,15 +22,12 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings({"java:S108", "java:S1450"})
 public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorListener, Runnable {
 
-    public static final String ELASTIC_SEARCH             = "elasticSearch";
-    public static final int    DEFAULT_TIMEOUT            = 2000;
-    public static final int    DEFAULT_TIME_TO_LIVE       = 10000;
-    public static final int    DEFAULT_MAX_CONNECTIONS    = 50;
-    public static final int    DEFAULT_MAX_SOCKET_TIMEOUT = 1000;
-    public static final String DEFAULT_HOST               = "http://localhost:9000";
-    public static final String DEFAULT_INDEX              = "application";
-    public static final String DEFAULT_DATE               = "yyyy-MM-dd";
-    public static final String EMPTY                      = "";
+    public static final String ELASTIC_SEARCH  = "elasticSearch";
+    public static final int    DEFAULT_TIMEOUT = 2000;
+    public static final String DEFAULT_HOST    = "http://localhost:9000";
+    public static final String DEFAULT_INDEX   = "application";
+    public static final String DEFAULT_DATE    = "yyyy-MM-dd";
+    public static final String EMPTY           = "";
 
     private       AppenderConfiguration          configuration = null;
     private       Encoder<ILoggingEvent>         encoder;
@@ -62,7 +59,7 @@ public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorLis
         final int timeout = configuration.getTimeout() == null ? DEFAULT_TIMEOUT : configuration.getTimeout();
 
         baseUrl = configuration.getHost() == null ? DEFAULT_HOST : configuration.getHost();
-        connector = new HttpBasicConnector(HttpBasicConnectorConfiguration.builder().build());
+        connector = new HttpBasicConnector(HttpBasicConnectorConfiguration.builder().timeoutReading(timeout).build());
         headers = configuration.getHeadersMap() == null ? new HashMap<>() : configuration.getHeadersMap();
         index = configuration.getIndex() == null ? DEFAULT_INDEX : this.configuration.getIndex();
         indexPattern =
@@ -78,11 +75,6 @@ public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorLis
 
     }
 
-
-    @Override
-    public String serializeToJson(final Object body) {
-        return body == null ? null : String.valueOf(body);
-    }
 
     @Override
     public void stop() {

@@ -1,10 +1,10 @@
 package io.inugami.commons.test;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.exceptions.UncheckedException;
 import io.inugami.commons.test.api.SkipLineMatcher;
 import io.inugami.commons.test.dto.UserDto;
+import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.exceptions.UncheckedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -174,11 +174,6 @@ class UnitTestHelperTest {
         UnitTestHelper.assertTextRelative(UnitTestHelper.convertFromJson(json, USER_DTO_TYPE), "test/dto/user_1_ref.json");
     }
 
-    @Test
-    void forceConvertToJson_nominal() {
-        final UserDto ref = UnitTestHelperJson.loadJson("test/dto/user.1.json", USER_DTO_TYPE);
-        UnitTestHelper.assertTextRelative(UnitTestHelper.forceConvertToJson(ref), "test/dto/user_1_refForceConvertToJson.valid.json");
-    }
 
     @Test
     void convertToJsonWithoutIndent_nominal() {
@@ -200,11 +195,11 @@ class UnitTestHelperTest {
     void AssertTextException_withDiff_shouldThrow() {
         final UserDto ref = UnitTestHelperJson.loadJson("test/dto/user.1.json", USER_DTO_TYPE);
         ref.setLastName("foobar");
-        assertThrows(() -> UnitTestHelper.assertTextRelative(UnitTestHelperJson.forceConvertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
+        assertThrows(() -> UnitTestHelper.assertTextRelative(UnitTestHelperJson.convertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
 
 
         assertThrows(UnitTestHelperText.AssertTextException.class, "reference and json have not same size : 17,16",
-                     () -> UnitTestHelper.assertTextRelative(UnitTestHelper.forceConvertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
+                     () -> UnitTestHelper.assertTextRelative(UnitTestHelper.convertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
     }
 
     // =========================================================================

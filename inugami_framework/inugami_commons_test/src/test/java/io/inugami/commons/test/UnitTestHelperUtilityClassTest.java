@@ -1,6 +1,6 @@
 package io.inugami.commons.test;
 
-import io.inugami.api.exceptions.UncheckedException;
+import io.inugami.framework.interfaces.exceptions.UncheckedException;
 import lombok.experimental.UtilityClass;
 import org.junit.jupiter.api.Test;
 

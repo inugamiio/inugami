@@ -14,18 +14,6 @@ class UnitTestHelperTextTest {
 
 
     @Test
-    void forceConvertToJson_nominal() {
-        final UserDto ref = UnitTestHelperJson.loadJson("test/dto/user.1.json", USER_DTO_TYPE);
-        ref.setLastName("foobar");
-        UnitTestHelper.assertThrows(() -> UnitTestHelperText.assertTextRelative(UnitTestHelperJson.forceConvertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
-
-
-        UnitTestHelper.assertThrows(UnitTestHelperText.AssertTextException.class, "reference and json have not same size : 17,16",
-                                    () -> UnitTestHelperText.assertTextRelative(UnitTestHelperJson.forceConvertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
-    }
-
-
-    @Test
     void assertTextRelative_withoutSameSize_shouldThrow() {
         final UserDto ref = UnitTestHelperJson.loadJson("test/dto/user.1.json", USER_DTO_TYPE);
         UnitTestHelper.assertThrows("reference and json have not same size : 5,17",

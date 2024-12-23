@@ -1,8 +1,8 @@
 package io.inugami.commons.test;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.exceptions.UncheckedException;
+import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.exceptions.UncheckedException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 

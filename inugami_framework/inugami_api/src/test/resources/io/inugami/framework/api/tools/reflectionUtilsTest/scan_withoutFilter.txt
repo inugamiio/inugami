@@ -49,5 +49,3 @@ io.inugami.framework.api.tools.unit.test.dto.AssertLogContext$AssertLogContextBu
 io.inugami.framework.api.tools.unit.test.dto.UserDataDTO
 io.inugami.framework.api.tools.unit.test.dto.UserDataDTO$Sex
 io.inugami.framework.api.tools.unit.test.dto.UserDataDTO$UserDataDTOBuilder
-io.inugami.framework.api.marshalling.YamlMarshaller
-io.inugami.framework.api.marshalling.YamlMarshallerError

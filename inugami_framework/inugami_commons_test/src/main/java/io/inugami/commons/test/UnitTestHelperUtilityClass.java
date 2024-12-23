@@ -1,6 +1,7 @@
 package io.inugami.commons.test;
 
-import io.inugami.api.exceptions.FatalException;
+
+import io.inugami.framework.interfaces.exceptions.FatalException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -8,8 +9,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import static io.inugami.api.exceptions.Asserts.assertNotNull;
-import static io.inugami.api.exceptions.Asserts.assertTrue;
+import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
+import static io.inugami.framework.interfaces.exceptions.Asserts.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings({"java:S3011", "java:S1181"})

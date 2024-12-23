@@ -1,6 +1,7 @@
 package io.inugami.commons.test;
 
-import io.inugami.api.exceptions.Asserts;
+
+import io.inugami.framework.interfaces.exceptions.Asserts;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.io.FileUtils;

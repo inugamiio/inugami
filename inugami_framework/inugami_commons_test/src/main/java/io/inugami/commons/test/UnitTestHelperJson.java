@@ -1,11 +1,10 @@
 package io.inugami.commons.test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import flexjson.JSONSerializer;
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.UncheckedException;
-import io.inugami.api.marshalling.JsonMarshaller;
+import io.inugami.framework.api.marshalling.JsonMarshaller;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.framework.interfaces.exceptions.UncheckedException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -79,12 +78,6 @@ public final class UnitTestHelperJson {
         return UnitTestHelperCommon.cleanWindowsChar(result);
     }
 
-    static String forceConvertToJson(final Object value) {
-        final String json = new JSONSerializer().prettyPrint(true)
-                                                .exclude("*.class")
-                                                .deepSerialize(value);
-        return UnitTestHelperCommon.cleanWindowsChar(json);
-    }
 
     static String convertToJsonWithoutIndent(final Object value) {
         String result = null;

@@ -1,7 +1,7 @@
 package io.inugami.logs.obfuscator.appender;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.monitoring.MdcService;
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

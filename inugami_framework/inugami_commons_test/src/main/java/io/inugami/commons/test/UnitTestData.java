@@ -16,8 +16,9 @@
  */
 package io.inugami.commons.test;
 
-import io.inugami.api.models.data.DataGeneratorUtils;
+
 import io.inugami.commons.test.dto.UserDataDTO;
+import io.inugami.framework.api.models.data.DataGeneratorUtils;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;

@@ -1,13 +1,14 @@
 package io.inugami.commons.test;
 
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.UncheckedException;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.models.JsonBuilder;
-import io.inugami.api.tools.ConsoleColors;
+
 import io.inugami.commons.test.api.DefaultLineMatcher;
 import io.inugami.commons.test.api.LineMatcher;
 import io.inugami.commons.test.api.SkipLineMatcher;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.exceptions.UncheckedException;
+import io.inugami.framework.interfaces.models.JsonBuilder;
+import io.inugami.framework.interfaces.monitoring.logger.ConsoleColors;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

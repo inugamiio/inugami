@@ -37,12 +37,12 @@
 
         <dependency>
             <groupId>io.inugami.framework</groupId>
-            <artifactId>inugami_api</artifactId>
+            <artifactId>inugami_api_interfaces</artifactId>
         </dependency>
 
         <dependency>
             <groupId>io.inugami.framework</groupId>
-            <artifactId>inugami_api_interfaces</artifactId>
+            <artifactId>inugami_api</artifactId>
         </dependency>
 
         <dependency>
@@ -50,31 +50,34 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <scope>test</scope>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.apache.maven.surefire</groupId>
+            <artifactId>common-java5</artifactId>
+            <version>${plugins.org-apache-maven-plugins.maven-surefire-plugin}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>

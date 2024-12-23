@@ -18,12 +18,12 @@ package io.inugami.commons.test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.exceptions.Warning;
-import io.inugami.api.functionnals.VoidFunctionWithException;
 import io.inugami.commons.test.api.LineMatcher;
 import io.inugami.commons.test.dto.AssertDtoContext;
 import io.inugami.commons.test.dto.AssertLogContext;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.exceptions.Warning;
+import io.inugami.framework.interfaces.functionnals.VoidFunctionWithException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.mockito.invocation.InvocationOnMock;
@@ -174,9 +174,6 @@ public class UnitTestHelper {
         return UnitTestHelperJson.loadJson(relativePath, objectType);
     }
 
-    public static String forceConvertToJson(final Object value) {
-        return UnitTestHelperJson.forceConvertToJson(value);
-    }
 
     public static String convertToJson(final Object value) {
         return UnitTestHelperJson.convertToJson(value);

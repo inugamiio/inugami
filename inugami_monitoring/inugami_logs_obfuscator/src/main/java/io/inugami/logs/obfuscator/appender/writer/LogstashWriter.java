@@ -46,7 +46,9 @@ public class LogstashWriter implements AppenderWriterStrategy, ConnectorListener
         final int timeout = configuration.getTimeout() == null ? DEFAULT_TIMEOUT : configuration.getTimeout();
 
         baseUrl = configuration.getHost() == null ? DEFAULT_HOST : configuration.getHost();
-        connector = new HttpBasicConnector(HttpBasicConnectorConfiguration.builder().build());
+        connector = new HttpBasicConnector(HttpBasicConnectorConfiguration.builder()
+                                                                          .timeoutReading(timeout)
+                                                                          .build());
         headers = configuration.getHeadersMap() == null ? new HashMap<>() : configuration.getHeadersMap();
 
         request = HttpRequest.builder()
@@ -57,12 +59,6 @@ public class LogstashWriter implements AppenderWriterStrategy, ConnectorListener
                              .listener(this)
                              .addHeader("ContentType", "application/json");
 
-    }
-
-
-    @Override
-    public String serializeToJson(final Object body) {
-        return body == null ? null : String.valueOf(body);
     }
 
     @Override

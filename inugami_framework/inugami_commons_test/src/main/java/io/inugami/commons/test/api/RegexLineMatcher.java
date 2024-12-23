@@ -1,6 +1,6 @@
 package io.inugami.commons.test.api;
 
-import io.inugami.api.exceptions.Asserts;
+import io.inugami.framework.interfaces.exceptions.Asserts;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 

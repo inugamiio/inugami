@@ -39,11 +39,6 @@ class UnitTestHelperJsonTest {
         UnitTestHelper.assertTextRelative(UnitTestHelperJson.convertFromJson(json, USER_DTO_TYPE), "test/dto/user_1_ref.json");
     }
 
-    @Test
-    void forceConvertToJson_nominal() {
-        final UserDto ref = UnitTestHelperJson.loadJson("test/dto/user.1.json", USER_DTO_TYPE);
-        UnitTestHelper.assertTextRelative(UnitTestHelperJson.forceConvertToJson(ref), "test/dto/user_1_refForceConvertToJson.valid.json");
-    }
 
     @Test
     void convertToJsonWithoutIndent_nominal() {

@@ -49,6 +49,11 @@ public class MdcService implements MdcServiceSpi {
     private List<LoggerMdcMappingSPI> mdcMappers = SpiLoader.getInstance()
                                                             .loadSpiServicesByPriority(LoggerMdcMappingSPI.class);
 
+    private static final MdcService INSTANCE = new MdcService();
+
+    public static MdcService getInstance() {
+        return INSTANCE;
+    }
 
     // =========================================================================
     // CONSTRUCTOR

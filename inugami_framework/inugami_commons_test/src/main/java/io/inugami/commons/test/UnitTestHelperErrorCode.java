@@ -1,8 +1,8 @@
 package io.inugami.commons.test;
 
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.exceptions.UncheckedException;
-import io.inugami.api.exceptions.Warning;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.exceptions.UncheckedException;
+import io.inugami.framework.interfaces.exceptions.Warning;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.inugami.api.exceptions.Asserts.assertNotNull;
+import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
 
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

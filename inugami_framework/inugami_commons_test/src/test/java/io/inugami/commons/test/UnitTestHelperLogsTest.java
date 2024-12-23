@@ -1,8 +1,9 @@
 package io.inugami.commons.test;
 
-import io.inugami.api.monitoring.MdcService;
+
 import io.inugami.commons.test.api.SkipLineMatcher;
 import io.inugami.commons.test.dto.AssertLogContext;
+import io.inugami.framework.api.monitoring.MdcService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -92,8 +93,9 @@ class UnitTestHelperLogsTest {
     void assertLogs_withMdc() {
         final Service service = new Service();
 
-        MdcService.getInstance().clear();
-        MdcService.getInstance().appService("service");
+        MdcService.getInstance()
+                  .clear()
+                  .appService("service");
         UnitTestHelperLogs.assertLogs(AssertLogContext.builder()
                                                       .process(service::sayHello)
                                                       .addClass(Service.class)
