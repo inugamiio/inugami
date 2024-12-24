@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module inugami.framework.api.interfaces {
+module io.inugami.framework.interfaces {
     requires jakarta.servlet;
     requires lombok;
     requires org.slf4j;
@@ -45,12 +45,14 @@ module inugami.framework.api.interfaces {
     exports io.inugami.framework.interfaces.marshalling;
     exports io.inugami.framework.interfaces.marshalling.serializers;
     exports io.inugami.framework.interfaces.metrics;
+    exports io.inugami.framework.interfaces.metrics.dto;
     exports io.inugami.framework.interfaces.models;
     exports io.inugami.framework.interfaces.models.basic;
     exports io.inugami.framework.interfaces.models.event;
     exports io.inugami.framework.interfaces.models.maven;
     exports io.inugami.framework.interfaces.models.number;
     exports io.inugami.framework.interfaces.models.tools;
+    exports io.inugami.framework.interfaces.models.graphite;
     exports io.inugami.framework.interfaces.monitoring;
     exports io.inugami.framework.interfaces.monitoring.core;
     exports io.inugami.framework.interfaces.monitoring.data;

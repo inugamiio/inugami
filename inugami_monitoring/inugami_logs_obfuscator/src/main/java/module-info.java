@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module inugami.monitoring.logs.obfuscator {
+module io.inugami.logs.obfuscator {
     requires jakarta.servlet;
     requires lombok;
     requires org.slf4j;
@@ -23,9 +23,15 @@ module inugami.monitoring.logs.obfuscator {
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
-    requires inugami.framework.api.interfaces;
-    requires inugami.framework.api;
+    requires io.inugami.framework.interfaces;
+    requires io.inugami.framework.api;
 
+    exports io.inugami.logs.obfuscator.api;
+    exports io.inugami.logs.obfuscator.appender;
+    exports io.inugami.logs.obfuscator.appender.writer;
+    exports io.inugami.logs.obfuscator.encoder;
+    exports io.inugami.logs.obfuscator.obfuscators;
+    exports io.inugami.logs.obfuscator.tools;
 
     uses io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
     uses io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
@@ -35,4 +41,8 @@ module inugami.monitoring.logs.obfuscator {
     uses io.inugami.framework.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI;
     uses io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
     uses io.inugami.framework.interfaces.tools.TemplateProviderSPI;
+    uses io.inugami.logs.obfuscator.api.ObfuscatorSpi;
+    uses io.inugami.framework.interfaces.configurtation.ConfigurationSpi;
+
+    provides io.inugami.logs.obfuscator.api.ObfuscatorSpi with io.inugami.logs.obfuscator.obfuscators.JsonPasswordObfuscator, io.inugami.logs.obfuscator.obfuscators.BasicPasswordObfuscator, io.inugami.logs.obfuscator.obfuscators.XMLPasswordObfuscator, io.inugami.logs.obfuscator.obfuscators.JsonAuthorizationObfuscator, io.inugami.logs.obfuscator.obfuscators.BasicAuthorizationObfuscator, io.inugami.logs.obfuscator.obfuscators.AccessControlAllowHeaderObfuscator, io.inugami.logs.obfuscator.obfuscators.AccessControlExposedHeaderObfuscator, io.inugami.logs.obfuscator.obfuscators.CookieObfuscator;
 }
