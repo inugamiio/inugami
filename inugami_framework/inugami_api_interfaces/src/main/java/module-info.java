@@ -83,4 +83,5 @@ module io.inugami.framework.interfaces {
     uses io.inugami.framework.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI;
     uses io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
     uses io.inugami.framework.interfaces.tools.TemplateProviderSPI;
+    uses io.inugami.framework.interfaces.configurtation.ConfigurationSpi;
 }

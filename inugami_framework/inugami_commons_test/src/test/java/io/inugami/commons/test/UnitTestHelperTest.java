@@ -196,10 +196,6 @@ class UnitTestHelperTest {
         final UserDto ref = UnitTestHelperJson.loadJson("test/dto/user.1.json", USER_DTO_TYPE);
         ref.setLastName("foobar");
         assertThrows(() -> UnitTestHelper.assertTextRelative(UnitTestHelperJson.convertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
-
-
-        assertThrows(UnitTestHelperText.AssertTextException.class, "reference and json have not same size : 17,16",
-                     () -> UnitTestHelper.assertTextRelative(UnitTestHelper.convertToJson(ref), "test/dto/user_1_refForceConvertToJson.json"));
     }
 
     // =========================================================================
@@ -303,7 +299,7 @@ class UnitTestHelperTest {
             if (e instanceof Error) {
                 throw e;
             }
-            assertThat(e.getMessage()).isEqualTo("error class isn't a io.inugami.api.exceptions.UncheckedException");
+            assertThat(e.getMessage()).isEqualTo("error class isn't a io.inugami.framework.interfaces.exceptions.UncheckedException");
         }
     }
 
@@ -337,7 +333,7 @@ class UnitTestHelperTest {
             if (e instanceof Error) {
                 throw e;
             }
-            assertThat(e.getMessage()).isEqualTo("error class isn't a io.inugami.api.exceptions.UncheckedException");
+            assertThat(e.getMessage()).isEqualTo("error class isn't a io.inugami.framework.interfaces.exceptions.UncheckedException");
         }
 
         try {

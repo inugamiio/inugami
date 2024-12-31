@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 @SuppressWarnings({"java:S3878", "java:S1764"})
 @Slf4j

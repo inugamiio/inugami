@@ -23,17 +23,20 @@ class UnitTestHelperLogsTest {
         UnitTestHelperLogs.assertLogs(AssertLogContext.builder()
                                                       .process(service::sayHello)
                                                       .addClass(Service.class)
-                                                      .logs("[\n" +
-                                                            "    {\n" +
-                                                            "        \"loggerName\":\"io.inugami.commons.test.UnitTestHelperLogsTest$Service\",\n" +
-                                                            "        \"level\":\"INFO\",\n" +
-                                                            "        \"mdc\":{\n" +
-                                                            "            \"appSubService\":\"sayHello\",\n" +
-                                                            "            \"service\":\"Service\"\n" +
-                                                            "        },\n" +
-                                                            "        \"message\":\"hello\"\n" +
-                                                            "    }\n" +
-                                                            "]")
+                                                      .logs("""
+                                                                    [
+                                                                        {
+                                                                            "loggerName":"io.inugami.commons.test.UnitTestHelperLogsTest$Service",
+                                                                            "level":"INFO",
+                                                                            "mdc":{
+                                                                                "appSubService":"sayHello",
+                                                                                "service":"Service"
+                                                                            },
+                                                                            "message":"hello"
+                                                                        }
+                                                                    ]
+                                                                    """
+                                                      )
                                                       .build());
     }
 
@@ -43,17 +46,19 @@ class UnitTestHelperLogsTest {
 
         UnitTestHelperLogs.assertLogs(service::sayHello,
                                       Service.class,
-                                      "[\n" +
-                                      "    {\n" +
-                                      "        \"loggerName\":\"io.inugami.commons.test.UnitTestHelperLogsTest$Service\",\n" +
-                                      "        \"level\":\"INFO\",\n" +
-                                      "        \"mdc\":{\n" +
-                                      "            \"appSubService\":\"sayHello\",\n" +
-                                      "            \"service\":\"Service\"\n" +
-                                      "        },\n" +
-                                      "        \"message\":\"hello\"\n" +
-                                      "    }\n" +
-                                      "]");
+                                      """
+                                              [
+                                                  {
+                                                      "loggerName":"io.inugami.commons.test.UnitTestHelperLogsTest$Service",
+                                                      "level":"INFO",
+                                                      "mdc":{
+                                                          "appSubService":"sayHello",
+                                                          "service":"Service"
+                                                      },
+                                                      "message":"hello"
+                                                  }
+                                              ]
+                                              """);
     }
 
 
@@ -64,27 +69,32 @@ class UnitTestHelperLogsTest {
         assertThrows("some error",
                      () -> UnitTestHelperLogs.assertLogs(service::shouldThrow,
                                                          Service.class,
-                                                         "[\n" +
-                                                         "    {\n" +
-                                                         "        \"loggerName\":\"io.inugami.commons.test.UnitTestHelperLogsTest$Service\",\n" +
-                                                         "        \"level\":\"ERROR\",\n" +
-                                                         "        \"mdc\":{}\n" +
-                                                         "        \"message\":\"sorry\"\n" +
-                                                         "    }\n" +
-                                                         "]"));
+                                                         """
+                                                                 [
+                                                                     {
+                                                                         "loggerName":"io.inugami.commons.test.UnitTestHelperLogsTest$Service",
+                                                                         "level":"ERROR",
+                                                                         "mdc":{}
+                                                                         "message":"sorry"
+                                                                     }
+                                                                 ]
+                                                                 """));
 
         UnitTestHelperLogs.assertLogs(() -> {
                                           assertThrows("some error", service::shouldThrow);
                                       },
                                       Service.class,
-                                      "[\n" +
-                                      "    {\n" +
-                                      "        \"loggerName\":\"io.inugami.commons.test.UnitTestHelperLogsTest$Service\",\n" +
-                                      "        \"level\":\"ERROR\",\n" +
-                                      "        \"mdc\":{}\n" +
-                                      "        \"message\":\"sorry\"\n" +
-                                      "    }\n" +
-                                      "]");
+                                      """
+                                              [
+                                                  {
+                                                      "loggerName":"io.inugami.commons.test.UnitTestHelperLogsTest$Service",
+                                                      "level":"ERROR",
+                                                      "mdc":{}
+                                                      "message":"sorry"
+                                                  }
+                                              ]
+                                              """);
+
 
     }
 
@@ -100,18 +110,20 @@ class UnitTestHelperLogsTest {
                                                       .process(service::sayHello)
                                                       .addClass(Service.class)
                                                       .cleanMdcDisabled()
-                                                      .logs("[\n" +
-                                                            "    {\n" +
-                                                            "        \"loggerName\":\"io.inugami.commons.test.UnitTestHelperLogsTest$Service\",\n" +
-                                                            "        \"level\":\"INFO\",\n" +
-                                                            "        \"mdc\":{\n" +
-                                                            "            \"appService\":\"service\",\n" +
-                                                            "            \"appSubService\":\"sayHello\",\n" +
-                                                            "            \"service\":\"Service\"\n" +
-                                                            "        },\n" +
-                                                            "        \"message\":\"hello\"\n" +
-                                                            "    }\n" +
-                                                            "]")
+                                                      .logs("""
+                                                                    [
+                                                                        {
+                                                                            "loggerName":"io.inugami.commons.test.UnitTestHelperLogsTest$Service",
+                                                                            "level":"INFO",
+                                                                            "mdc":{
+                                                                                "appService":"service",
+                                                                                "appSubService":"sayHello",
+                                                                                "service":"Service"
+                                                                            },
+                                                                            "message":"hello"
+                                                                        }
+                                                                    ]
+                                                                    """)
                                                       .build());
 
         MdcService.getInstance().clear();
@@ -152,18 +164,20 @@ class UnitTestHelperLogsTest {
                                                       .process(service::sayHello)
                                                       .addClass(Service.class)
                                                       .cleanMdcDisabled()
-                                                      .logs("[\n" +
-                                                            "    {\n" +
-                                                            "        \"loggerName\":\"io.inugami.commons.test.UnitTestHelperLogsTest$Service\",\n" +
-                                                            "        \"level\":\"INFO\",\n" +
-                                                            "        \"mdc\":{\n" +
-                                                            "            \"appSubService\":\"sayHello\",\n" +
-                                                            "            \"service\":\"Service\",\n" +
-                                                            "            \"userId\":\"79249100-d614-4ab3-ae0f-44d342de2c68\"\n" +
-                                                            "        },\n" +
-                                                            "        \"message\":\"hello\"\n" +
-                                                            "    }\n" +
-                                                            "]")
+                                                      .logs("""
+                                                                    [
+                                                                        {
+                                                                            "loggerName":"io.inugami.commons.test.UnitTestHelperLogsTest$Service",
+                                                                            "level":"INFO",
+                                                                            "mdc":{
+                                                                                "appSubService":"sayHello",
+                                                                                "service":"Service",
+                                                                                "userId":"e744ca85-c135-4439-b0f3-16d05c60e027"
+                                                                            },
+                                                                            "message":"hello"
+                                                                        }
+                                                                    ]
+                                                                    """)
                                                       .addLineMatcher(SkipLineMatcher.of(7))
                                                       .build());
 
