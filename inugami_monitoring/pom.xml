@@ -25,6 +25,7 @@
     ======================================================================== -->
     <groupId>io.inugami.monitoring</groupId>
     <artifactId>inugami_monitoring</artifactId>
+    <name>${project.groupId}:${project.artifactId}</name>
     <packaging>pom</packaging>
 
 

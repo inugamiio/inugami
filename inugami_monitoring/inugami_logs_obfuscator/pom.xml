@@ -23,6 +23,7 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_logs_obfuscator</artifactId>
+    <name>${project.groupId}:${project.artifactId}</name>
     <url>http://inugami.io/inugami/inugami_logs_obfuscator</url>
 
     <!-- ======================================================================= 

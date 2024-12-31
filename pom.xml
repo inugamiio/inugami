@@ -396,7 +396,7 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.inugami.framework</groupId>
+                <groupId>io.inugami.framework.commons</groupId>
                 <artifactId>inugami_commons_test</artifactId>
                 <version>${project.version}</version>
             </dependency>

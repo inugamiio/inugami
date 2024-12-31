@@ -17,6 +17,7 @@
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_commons_test</artifactId>
+    <name>${project.groupId}:${project.artifactId}</name>
     <url>http://inugami.io/inugami/inugami_commons_test</url>
 
     <!-- =======================================================================

@@ -25,6 +25,7 @@
     ======================================================================== -->
     <artifactId>inugami_dashboard</artifactId>
     <groupId>io.inugami.dashboard</groupId>
+    <name>${project.groupId}:${project.artifactId}</name>
     <packaging>pom</packaging>
 
 

@@ -100,7 +100,7 @@ class UnitTestHelperExceptionTest {
             if (e instanceof Error) {
                 throw e;
             }
-            assertThat(e.getMessage()).isEqualTo("error class isn't a io.inugami.api.exceptions.UncheckedException");
+            assertThat(e.getMessage()).isEqualTo("error class isn't a io.inugami.framework.interfaces.exceptions.UncheckedException");
         }
     }
 
@@ -134,7 +134,7 @@ class UnitTestHelperExceptionTest {
             if (e instanceof Error) {
                 throw e;
             }
-            assertThat(e.getMessage()).isEqualTo("error class isn't a io.inugami.api.exceptions.UncheckedException");
+            assertThat(e.getMessage()).isEqualTo("error class isn't a io.inugami.framework.interfaces.exceptions.UncheckedException");
         }
 
         try {
