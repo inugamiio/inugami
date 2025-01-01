@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- ======================================================================= 
+    <!--================================================================================================================
     = MAVEN
-    ======================================================================== -->
+    =================================================================================================================-->
     <prerequisites>
         <maven>3.2.3</maven>
     </prerequisites>
@@ -17,10 +17,9 @@
         <relativePath/>
     </parent>
 
-
-    <!-- ======================================================================= 
+    <!--================================================================================================================
     = PROJECT
-    ======================================================================== -->
+    =================================================================================================================-->
     <groupId>io.inugami</groupId>
     <artifactId>inugami</artifactId>
     <version>4.0.0-SNAPSHOT</version>
@@ -29,9 +28,9 @@
     <description>Specifics maven lifecycle to package and run inugami project</description>
     <url>http://inugami.io/inugami</url>
 
-    <!-- =======================================================================
+    <!--================================================================================================================
     = DEVELOPERS
-    ======================================================================== -->
+    =================================================================================================================-->
     <developers>
         <developer>
             <name>Mikhaïl Sadovnikov</name>
@@ -46,12 +45,11 @@
             <organization>Inugami.io</organization>
             <organizationUrl>http://inugami.io</organizationUrl>
         </developer>
-
     </developers>
 
-    <!-- =======================================================================
+    <!--================================================================================================================
     = LICENSE
-    ======================================================================== -->
+    =================================================================================================================-->
     <licenses>
         <license>
             <name>GNU GENERAL PUBLIC LICENSE, Version 3</name>
@@ -59,9 +57,9 @@
         </license>
     </licenses>
 
-    <!-- =======================================================================
+    <!--================================================================================================================
     = PROPERTIES
-    ======================================================================== -->
+    =================================================================================================================-->
     <properties>
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PROJECT
@@ -165,8 +163,10 @@
         <plugins.org-apache-maven-plugins.maven-enforcer-plugin>1.3
         </plugins.org-apache-maven-plugins.maven-enforcer-plugin>
         <plugins.org-apache-maven-plugins.maven-site-plugin>3.3</plugins.org-apache-maven-plugins.maven-site-plugin>
-        <plugins.org-apache-maven-plugins.maven-surefire-plugin>3.2.3</plugins.org-apache-maven-plugins.maven-surefire-plugin>
-        <plugins.org-apache-maven-plugins.maven-failsafe-plugin>3.2.3</plugins.org-apache-maven-plugins.maven-failsafe-plugin>
+        <plugins.org-apache-maven-plugins.maven-surefire-plugin>3.2.3
+        </plugins.org-apache-maven-plugins.maven-surefire-plugin>
+        <plugins.org-apache-maven-plugins.maven-failsafe-plugin>3.2.3
+        </plugins.org-apache-maven-plugins.maven-failsafe-plugin>
         <plugins.org-codehaus-mojo.cobertura-maven-plugin>2.7</plugins.org-codehaus-mojo.cobertura-maven-plugin>
         <org.codehaus.mojo.version>3.3.0</org.codehaus.mojo.version>
 
@@ -250,19 +250,18 @@
         </sonar.coverage.exclusions>
     </properties>
 
-
-    <!-- =======================================================================
+    <!--================================================================================================================
     = MODULES
-    ======================================================================== -->
+    =================================================================================================================-->
     <modules>
         <module>inugami_framework</module>
         <module>inugami_monitoring</module>
         <module>inugami_dashboard</module>
     </modules>
 
-    <!-- =======================================================================
+    <!--================================================================================================================
     = SCM
-    ======================================================================== -->
+    =================================================================================================================-->
     <scm>
         <url>https://github.com/inugamiio/inugami-maven-plugin</url>
         <connection>scm:git:git@github.com:inugamiio/inugami.git</connection>
@@ -282,26 +281,105 @@
         </repository>
     </distributionManagement>
 
-    <!--
-        <repositories>
-            <repository>
-                <id>ossrh</id>
-                <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-            </repository>
-        </repositories>
 
-        <pluginRepositories>
-            <pluginRepository>
-                <id>ossrh</id>
-                <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-            </pluginRepository>
-        </pluginRepositories>
-        -->
-        <!-- =======================================================================
-        = DEPENDENCIES
-        ======================================================================== -->
+    <repositories>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <!--================================================================================================================
+    = DEPENDENCIES
+    =================================================================================================================-->
     <dependencyManagement>
         <dependencies>
+            <!--*** inugami_framework *******************************************************************************-->
+            <dependency>
+                <groupId>io.inugami.framework</groupId>
+                <artifactId>inugami_api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami.framework</groupId>
+                <artifactId>inugami_api_interfaces</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami.framework.commons</groupId>
+                <artifactId>inugami_commons_test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--*** inugami_monitoring ******************************************************************************-->
+            <dependency>
+                <groupId>io.inugami.monitoring</groupId>
+                <artifactId>inugami_logs_obfuscator</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--*** inugami_dashboard *******************************************************************************-->
+            <dependency>
+                <groupId>io.inugami.dashboard</groupId>
+                <artifactId>inugami_dashboard_api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami.dashboard</groupId>
+                <artifactId>inugami_dashboard_core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami.dashboard</groupId>
+                <artifactId>inugami_dashboard_front</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami.dashboard</groupId>
+                <artifactId>inugami_dashboard_infrastructure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami.dashboard</groupId>
+                <artifactId>inugami_dashboard_webapp</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami.dashboard.interfaces</groupId>
+                <artifactId>inugami_dashboard_interfaces_api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami.dashboard.interfaces</groupId>
+                <artifactId>inugami_dashboard_interfaces_core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami.dashboard.interfaces</groupId>
+                <artifactId>inugami_dashboard_interfaces_feign</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            + OTHER
+            +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
@@ -385,28 +463,7 @@
                 <artifactId>feign-okhttp</artifactId>
                 <version>${io.github.openfeign.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.inugami.framework</groupId>
-                <artifactId>inugami_api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.inugami.framework</groupId>
-                <artifactId>inugami_api_interfaces</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.inugami.framework.commons</groupId>
-                <artifactId>inugami_commons_test</artifactId>
-                <version>${project.version}</version>
-            </dependency>
 
-
-            <dependency>
-                <groupId>io.inugami.monitoring</groupId>
-                <artifactId>inugami_logs_obfuscator</artifactId>
-                <version>${project.version}</version>
-            </dependency>
 
 
 
@@ -490,10 +547,9 @@
         </dependencies>
     </dependencyManagement>
 
-
-    <!-- =======================================================================
+    <!--================================================================================================================
     = DEPENDENCIES
-    =========================================================================-->
+    =================================================================================================================-->
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -515,10 +571,9 @@
 
     </dependencies>
 
-
-    <!-- =======================================================================
+    <!--================================================================================================================
     = BUILD
-    =========================================================================-->
+    =================================================================================================================-->
     <build>
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: RESOURCES
@@ -891,7 +946,9 @@
         </plugins>
     </build>
 
-
+    <!--================================================================================================================
+    = profiles
+    =================================================================================================================-->
     <profiles>
         <profile>
             <id>local</id>

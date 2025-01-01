@@ -30,6 +30,19 @@
     = DEPENDENCIES
     =================================================================================================================-->
     <dependencies>
+        <dependency>
+            <groupId>io.inugami.framework</groupId>
+            <artifactId>inugami_api</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>io.inugami.framework</groupId>
+            <artifactId>inugami_api_interfaces</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.inugami.dashboard</groupId>
+            <artifactId>inugami_dashboard_api</artifactId>
+        </dependency>
     </dependencies>
 </project>

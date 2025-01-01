@@ -34,7 +34,6 @@
     =================================================================================================================-->
     <modules>
         <module>inugami_dashboard_api</module>
-        <module>inugami_dashboard_commons</module>
         <module>inugami_dashboard_core</module>
         <module>inugami_dashboard_front</module>
         <module>inugami_dashboard_infrastructure</module>
