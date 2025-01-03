@@ -23,7 +23,7 @@
     <!--================================================================================================================
     = PROJECT
     =================================================================================================================-->
-    <artifactId>inugami_commons</artifactId>
+    <artifactId>inugami_common</artifactId>
     <groupId>io.inugami.framework.commons</groupId>
     <name>${project.groupId}:${project.artifactId}</name>
     <packaging>pom</packaging>
@@ -34,5 +34,6 @@
     =================================================================================================================-->
     <modules>
         <module>inugami_commons_test</module>
+        <module>inugami_commons</module>
     </modules>
 </project>

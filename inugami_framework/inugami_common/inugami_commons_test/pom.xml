@@ -8,7 +8,7 @@
     = PARENT
     ======================================================================== -->
     <parent>
-        <artifactId>inugami_commons</artifactId>
+        <artifactId>inugami_common</artifactId>
         <groupId>io.inugami.framework.commons</groupId>
         <version>4.0.0-SNAPSHOT</version>
     </parent>

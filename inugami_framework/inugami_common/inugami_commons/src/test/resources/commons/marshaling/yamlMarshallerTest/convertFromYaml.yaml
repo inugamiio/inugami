@@ -1,0 +1,7 @@
+id: 1
+firstName: "John"
+lastName: "Smith"
+creationDate: 2023-04-08T08:17:00
+preferences:
+  - type: motocycle
+    description: trail

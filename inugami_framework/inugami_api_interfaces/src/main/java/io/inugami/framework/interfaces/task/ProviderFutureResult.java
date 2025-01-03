@@ -17,8 +17,8 @@
 package io.inugami.framework.interfaces.task;
 
 import io.inugami.framework.interfaces.alertings.AlertingResult;
-import io.inugami.framework.interfaces.models.event.GenericEvent;
 import io.inugami.framework.interfaces.models.basic.Dto;
+import io.inugami.framework.interfaces.models.event.GenericEvent;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -46,6 +46,7 @@ public class ProviderFutureResult implements Dto<ProviderFutureResult> {
     private String               message;
     private Exception            exception;
     private String               scheduler;
+    @Singular("data")
     private List<Dto<?>>         data;
     @ToString.Include
     @EqualsAndHashCode.Include
@@ -55,6 +56,7 @@ public class ProviderFutureResult implements Dto<ProviderFutureResult> {
     private String               channel;
     @ToString.Include
     private String               fieldData;
+    @Singular("alerts")
     private List<AlertingResult> alerts;
 
     @Override

@@ -22,6 +22,9 @@ module io.inugami.framework.interfaces {
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.datatype.jdk8;
+    requires com.fasterxml.jackson.datatype.jsr310;
+    requires com.fasterxml.jackson.module.paramnames;
     requires okhttp3;
 
     exports io.inugami.framework.interfaces.alertings;
@@ -38,6 +41,7 @@ module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.exceptions.connector;
     exports io.inugami.framework.interfaces.exceptions.services;
     exports io.inugami.framework.interfaces.feature;
+    exports io.inugami.framework.interfaces.files.zip;
     exports io.inugami.framework.interfaces.functionnals;
     exports io.inugami.framework.interfaces.handlers;
     exports io.inugami.framework.interfaces.listeners;
@@ -67,8 +71,10 @@ module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.monitoring.threads;
     exports io.inugami.framework.interfaces.processors;
     exports io.inugami.framework.interfaces.providers;
+    exports io.inugami.framework.interfaces.scan;
     exports io.inugami.framework.interfaces.spi;
     exports io.inugami.framework.interfaces.spring;
+    exports io.inugami.framework.interfaces.threads;
     exports io.inugami.framework.interfaces.tools;
     exports io.inugami.framework.interfaces.tools.fifo;
     exports io.inugami.framework.interfaces.tools.reflection;
