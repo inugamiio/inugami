@@ -1,10 +1,10 @@
 package io.inugami.framework.commons.marshaling;
 
 import io.inugami.framework.api.listeners.DefaultApplicationLifecycleSPI;
-import io.inugami.framework.commons.marshaling.jaxb.JaxbClassRegister;
 import io.inugami.framework.interfaces.exceptions.UncheckedException;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
 import io.inugami.framework.interfaces.marshalling.XmlJaxbMarshallerSpi;
+import io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;

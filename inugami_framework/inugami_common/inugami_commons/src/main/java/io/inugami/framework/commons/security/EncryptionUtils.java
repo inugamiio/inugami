@@ -201,11 +201,11 @@ public class EncryptionUtils {
 
 
     public String decodeAES(final String value) {
-
+        final byte[] bytes = decodeBase64Bytes(value);
         try {
             final Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(SECRET_KEY, KEY_ALGORITHM));
-            return new String(cipher.doFinal(decodeBase64(value).getBytes(StandardCharsets.UTF_8)));
+            return new String(cipher.doFinal(bytes));
         } catch (final NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException |
                        IllegalBlockSizeException
                        | BadPaddingException e) {
@@ -227,7 +227,7 @@ public class EncryptionUtils {
         if (value == null) {
             return null;
         }
-        return new String(Base64.getDecoder().decode(value));
+        return new String(Base64.getEncoder().encode(value));
     }
 
 

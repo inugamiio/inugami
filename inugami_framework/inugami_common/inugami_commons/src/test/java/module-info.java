@@ -1,3 +1,5 @@
+import io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister;
+
 /* --------------------------------------------------------------------
  *  Inugami
  * --------------------------------------------------------------------
@@ -14,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.commons {
+module io.inugami.commons.testing {
 
     requires io.inugami.framework.interfaces;
     requires io.inugami.framework.api;
@@ -34,19 +36,22 @@ module io.inugami.commons {
     requires com.fasterxml.jackson.datatype.jdk8;
     requires com.fasterxml.jackson.datatype.jsr310;
     requires com.fasterxml.jackson.module.paramnames;
-
-    exports io.inugami.framework.commons.data;
-    exports io.inugami.framework.commons.files;
-    exports io.inugami.framework.commons.marshaling;
-    exports io.inugami.framework.commons.marshaling.jaxb;
-    exports io.inugami.framework.commons.messages;
-    exports io.inugami.framework.commons.providers;
-    exports io.inugami.framework.commons.security;
-    exports io.inugami.framework.commons.spi;
-    exports io.inugami.framework.commons.threads;
-    exports io.inugami.framework.commons.tools;
-    exports io.inugami.framework.commons.writer;
+    requires io.inugami.commons;
+    requires io.inugami.commons.test;
+    requires org.junit.jupiter.api;
+    requires org.assertj.core;
+    requires org.mockito;
+    requires ch.qos.logback.core;
+    requires ch.qos.logback.classic;
+    requires net.bytebuddy;
 
 
-    provides io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister with io.inugami.framework.commons.marshaling.jaxb.DefaultJaxbClassRegister;
+    opens io.inugami.framework.commons.testing.data;
+    opens io.inugami.framework.commons.testing.marshaling;
+    opens io.inugami.framework.commons.testing.providers;
+    opens io.inugami.framework.commons.testing.security;
+    opens io.inugami.framework.commons.testing.threads;
+
+    uses io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister;
+    provides JaxbClassRegister with io.inugami.framework.commons.testing.marshaling.TestJaxbClassRegister;
 }

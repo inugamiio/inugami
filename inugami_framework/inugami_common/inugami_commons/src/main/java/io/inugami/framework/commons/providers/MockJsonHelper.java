@@ -70,7 +70,7 @@ public class MockJsonHelper {
     // =================================================================================================================
     // CONSTRUCTORS
     // =================================================================================================================
-    protected MockJsonHelper(final Map<String, String> data) {
+    public MockJsonHelper(final Map<String, String> data) {
         this.data = data;
         keys = new ArrayList<>();
         files = null;
@@ -79,7 +79,7 @@ public class MockJsonHelper {
         }
     }
 
-    protected MockJsonHelper(final Map<String, String> data, final List<String> keys) {
+    public MockJsonHelper(final Map<String, String> data, final List<String> keys) {
         this.data = data;
         this.keys = keys;
         files = null;
@@ -290,7 +290,7 @@ public class MockJsonHelper {
         return builder.toString();
     }
 
-    protected String cleanFileName(final String fileName) {
+    public String cleanFileName(final String fileName) {
         String result = fileName;
         Asserts.assertNotNull("file name mustn't be null!", fileName);
         // @formatter:off
@@ -301,12 +301,12 @@ public class MockJsonHelper {
         return result;
     }
 
-    protected boolean matchNameWithIndex(final String name, final String key) {
+    public boolean matchNameWithIndex(final String name, final String key) {
         final Pattern regex = Pattern.compile(String.format("%s-[0-9]+", name));
         return regex.matcher(key).matches();
     }
 
-    protected int grabRandomIndex(final int maxValue) {
+    public int grabRandomIndex(final int maxValue) {
         int result = 0;
         if (maxValue > 0) {
             final double max           = maxValue;

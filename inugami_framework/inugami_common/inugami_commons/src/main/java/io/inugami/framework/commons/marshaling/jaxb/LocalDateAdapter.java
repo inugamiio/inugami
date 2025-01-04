@@ -1,6 +1,7 @@
 package io.inugami.framework.commons.marshaling.jaxb;
 
 
+import io.inugami.framework.interfaces.marshalling.jaxb.JaxbAdapterSpi;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import java.time.LocalDate;

@@ -26,6 +26,8 @@ module io.inugami.framework.interfaces {
     requires com.fasterxml.jackson.datatype.jsr310;
     requires com.fasterxml.jackson.module.paramnames;
     requires okhttp3;
+    requires java.xml;
+    requires jakarta.xml.bind;
 
     exports io.inugami.framework.interfaces.alertings;
     exports io.inugami.framework.interfaces.concurrent;
@@ -47,6 +49,7 @@ module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.listeners;
     exports io.inugami.framework.interfaces.mapping;
     exports io.inugami.framework.interfaces.marshalling;
+    exports io.inugami.framework.interfaces.marshalling.jaxb;
     exports io.inugami.framework.interfaces.marshalling.serializers;
     exports io.inugami.framework.interfaces.metrics;
     exports io.inugami.framework.interfaces.metrics.dto;
@@ -83,6 +86,7 @@ module io.inugami.framework.interfaces {
 
     uses io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
     uses io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
+    uses io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister;
     uses io.inugami.framework.interfaces.monitoring.MdcServiceSpi;
     uses io.inugami.framework.interfaces.monitoring.MonitoringLoaderSpi;
     uses io.inugami.framework.interfaces.monitoring.logger.initializer.MdcInitializerSpi;

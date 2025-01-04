@@ -1,9 +1,9 @@
 package io.inugami.framework.commons.marshaling;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
 
-import static io.inugami.api.exceptions.DefaultErrorCode.newBuilder;
+import static io.inugami.framework.interfaces.exceptions.DefaultErrorCode.newBuilder;
 
 public enum YamlMarshallerError implements ErrorCode {
     YAML_CLASS_REQUIRED(newBuilder()
