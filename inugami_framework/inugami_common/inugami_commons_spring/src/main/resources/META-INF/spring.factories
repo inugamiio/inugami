@@ -1,0 +1,2 @@
+org.springframework.context.ApplicationListener=io.inugami.commons.spring.InugamiSpringApplicationListener
+org.springframework.context.ApplicationContextInitializer=io.inugami.commons.spring.mapstruct.MapStructContextInitializer

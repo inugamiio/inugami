@@ -1,0 +1,34 @@
+Manifest-Version: 1.0
+Build-Date: 
+Build-Job-Node: 
+Built-By: patrickguillerm
+Implementation-Sources-Tags: 
+Specification-Title: plugin-dashboard
+Implementation-Vendor-Id: io.inugami.plugins
+Build-Job-Name: ${env.BUILD_TAG} (${env.BUILD_URL})
+Implementation-Group: io.inugami.plugins
+Build-Job-User: 
+Build-Jdk-Details: 1.8 (Oracle Corporation)
+Built-On-OS: Mac OS X (10.12.6 / x86_64)
+Implementation-Sources-Commit-Id: 
+Implementation-Sources-Commit-Date: 
+Implementation-Sources-Describe: 
+Implementation-Title: plugin-dashboard
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Sources-Commit-Message: 
+Specification-Vendor: ${super.organization.name}
+Built-On-Host: 
+Implementation-Vendor: ${super.organization.name}
+Build-Job-Date: 
+ArtifactType: inugami_plugin
+Implementation-Sources-Branch: 
+Implementation-Sources-Commit-Author: ${git.commit.user.name} (${git.c
+ ommit.user.email})
+Implementation-Encoding: UTF-8
+Build-Jdk: 1.8.0_144
+Specification-Version: 0.0.1-SNAPSHOT
+Implementation-URL: /inugami-superpom-java/inugami-superpom-
+ plugin/plugin-dashboard
+Created-By: Maven Integration for Eclipse
+Implementation-Module: plugin-dashboard
+workspace: /tmp

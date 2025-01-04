@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+	<!--========================================================================
+    =   GAV
+    =========================================================================-->
+    <gav groupId="plugin-group-id" artifactId="plugin-artifact-id" version="0.1" />
+    
+    
+    <!--========================================================================
+    =   RESOURCES
+    =========================================================================-->
+    <resources>
+        <css path="inugami_plugin/css/" name="theme.css" />
+        <javascript path="inugami_plugin/js/" name="formatter.js" />
+        <javascript path="inugami_plugin/js/" name="loader.js" />
+        <page path="inugami_plugin/" name="index.html" />
+    </resources>
+    
+    <!--========================================================================
+    =   PROPERTIES
+    =========================================================================-->
+    <properties>
+        <property key="data" value="FoobarData"></property>
+        <property key="joe" value="Joe {{data}}"></property>
+    </properties>
+    
+    <!--========================================================================
+    =   PROVIDERS
+    =========================================================================-->
+    <providers>
+        <provider name="foobar.system" type="system" className="io.inugami.plugins.callers.SystemCaller">
+            <config key="data" value="FoobarData" />
+        </provider>
+    </providers>
+        
+    <!--========================================================================
+    =   PROCESSORS
+    =========================================================================-->
+    <processors>
+        <processor name="foo" className="io.inugami.plugins.processors.Foo" />
+    </processors>
+
+    <!--========================================================================
+    =   LISTENERS
+    =========================================================================-->
+    <listeners>
+        <listener name="customListener" className="io.inugami.plugins.listeners.CustomListerner" />
+    </listeners>
+    
+    <!--========================================================================
+    =   EVENTS FILES
+    =========================================================================-->
+    <events-files>
+        <events-file name="foobar.xml" />
+        <events-file name="titi.xml" />
+    </events-files>
+
+
+    <!--========================================================================
+    =   SECURITY
+    =========================================================================-->
+    <security name="ldap">
+        <config key="security.ldap.domain"        value="FOOBAR" />
+        <config key="security.ldap.rootDn"        value="dc=joegroup,dc=org" />
+        <config key="security.ldap.url"           value="ldaps://1.2.3.4:1234" />
+        <config key="security.ldap.referral"      value="follow" />
+        <config key="security.ldap.searchFilter"  value="(name={0})" />
+        <config key="security.ldap.roleBase"      value="dc=joegroup,dc=org" />
+        <config key="security.ldap.roleSearch"    value="(member={0})" />
+        <config key="security.ldap.timeout"       value="5000" />
+       
+        <roles>
+            <role name="admin" level="1000">
+                 <matcher expr="CN=joe-admin" type="EXACT"/>
+                 <matcher expr=".*JOE.*" type="REGEX"/>
+            </role>
+            <role name="user" level="1">
+                <matcher expr="CN=foobar"/>
+                <matcher expr="OU=foobarService"/>
+            </role>
+        </roles>
+    
+    </security>
+
+    <security name="technical">
+        <users>
+            <user login="admin" password="ada76c3861a84664b172" token="ada76c38-61a8-4664-b172" firstName="Joe" lastName="Administrator">
+                <userRoles>
+                    <userRole>admin</userRole>
+                    <userRole>user</userRole>
+                </userRoles>
+            </user>
+            <user login="user" password="da3b40659e3b7ff9f4d2ccfe" token="a3b-4065-9e3b-7ff9f4d2-ccfe" firstName="Joe" lastName="User">
+                <userRoles>                    
+                    <userRole>user</userRole>
+                </userRoles>
+            </user>
+        </users>
+    </security>
+    
+    <!--========================================================================
+    =   ALERTING
+    =========================================================================-->
+    <alertings>
+        <alerting-provider name="simpleGraphiteAlerting" className="{{simpleGraphiteAlerting}}" />
+        <alerting-provider name="withOptionAlerting" className="org.foo.bar.Alerting">
+            <config key="sender.sse" value="SseAlertingSenderService" />
+            <config key="min-level"  value="warn" />
+        </alerting-provider>
+    </alertings>
+    
+    <!--========================================================================
+    =   DEPENDENCIES
+    =========================================================================-->
+    <!-- will be generated by Maven plugin -->
+    <dependencies>
+        <!-- gav maven style -->
+        <dependency>
+            <groupId>plugin-group-id-foobar</groupId>
+            <artifactId>other-plugin</artifactId>
+            <version>0.15</version>
+        </dependency>
+
+        <!-- gav ivy style -->
+        <dependency groupId="org.foo.bar" artifactId="plugin-joe" version="0.2" />
+
+    </dependencies>
+
+
+</plugin>

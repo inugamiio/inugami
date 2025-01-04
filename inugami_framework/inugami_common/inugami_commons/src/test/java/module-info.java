@@ -16,7 +16,7 @@ import io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.commons.testing {
+module io.inugami.framework.commons.testing {
 
     requires io.inugami.framework.interfaces;
     requires io.inugami.framework.api;
@@ -36,7 +36,7 @@ module io.inugami.commons.testing {
     requires com.fasterxml.jackson.datatype.jdk8;
     requires com.fasterxml.jackson.datatype.jsr310;
     requires com.fasterxml.jackson.module.paramnames;
-    requires io.inugami.commons;
+    requires io.inugami.framework.commons;
     requires io.inugami.commons.test;
     requires org.junit.jupiter.api;
     requires org.assertj.core;

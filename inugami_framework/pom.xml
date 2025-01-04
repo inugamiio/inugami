@@ -35,6 +35,7 @@
     <modules>
         <module>inugami_api_interfaces</module>
         <module>inugami_api</module>
+        <module>inugami_configurations</module>
         <module>inugami_common</module>
     </modules>
 

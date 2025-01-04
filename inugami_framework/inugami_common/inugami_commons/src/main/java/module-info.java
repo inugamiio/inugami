@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.commons {
+module io.inugami.framework.commons {
 
     requires io.inugami.framework.interfaces;
     requires io.inugami.framework.api;
@@ -47,6 +47,14 @@ module io.inugami.commons {
     exports io.inugami.framework.commons.tools;
     exports io.inugami.framework.commons.writer;
 
+    uses io.inugami.framework.interfaces.monitoring.MonitoringInitializer;
+    uses io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister;
+    uses io.inugami.framework.interfaces.marshalling.jaxb.JaxbAdapterSpi;
+    uses io.inugami.framework.interfaces.marshalling.XmlJaxbMarshallerSpi;
 
     provides io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister with io.inugami.framework.commons.marshaling.jaxb.DefaultJaxbClassRegister;
+    provides io.inugami.framework.interfaces.marshalling.jaxb.JaxbAdapterSpi with io.inugami.framework.commons.marshaling.jaxb.LocalDateTimeAdapter, io.inugami.framework.commons.marshaling.jaxb.LocalDateAdapter;
+    provides io.inugami.framework.interfaces.marshalling.XmlJaxbMarshallerSpi with io.inugami.framework.commons.marshaling.DefaultXmlJaxbMarshallerSpi;
+
+
 }
