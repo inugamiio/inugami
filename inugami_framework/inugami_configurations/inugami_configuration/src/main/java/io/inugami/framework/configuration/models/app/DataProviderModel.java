@@ -16,12 +16,13 @@
  */
 package io.inugami.framework.configuration.models.app;
 
-import java.io.Serializable;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.JvmKeyValues;
+import io.inugami.framework.interfaces.exceptions.TechnicalException;
+import io.inugami.framework.interfaces.functionnals.PostProcessing;
+import lombok.*;
 
-import io.inugami.api.constants.JvmKeyValues;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.functionnals.PostProcessing;
-import io.inugami.api.processors.ConfigHandler;
+import java.io.Serializable;
 
 /**
  * DataProviderModel
@@ -29,101 +30,46 @@ import io.inugami.api.processors.ConfigHandler;
  * @author patrick_guillerm
  * @since 15 janv. 2018
  */
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class DataProviderModel implements Serializable, PostProcessing<ConfigHandler<String, String>> {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
+    // =================================================================================================================
     private static final long serialVersionUID = 8595593826843555371L;
 
-    private String driver;
-
-    private String dialect;
-
-    private String url;
-
-    private String user;
-
-    private String password;
-
-    private String hbm2ddl;
-
+    private String  driver;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private String  dialect;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private String  url;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private String  user;
+    private String  password;
+    private String  hbm2ddl;
     private boolean verbose;
 
-    // =========================================================================
-    // CONSTRUCTOR
-    // =========================================================================
+    // =================================================================================================================
+    // OVERRIDES
+    // =================================================================================================================
     @Override
     public void postProcessing(ConfigHandler<String, String> ctx) throws TechnicalException {
-        //@formatter:off
-        driver   = ctx.applyProperties(JvmKeyValues.DATA_STORAGE_DRIVER.or(driver));
-        dialect  = ctx.applyProperties(JvmKeyValues.DATA_STORAGE_DIALECT.or(dialect));
-        url      = ctx.applyProperties(JvmKeyValues.DATA_STORAGE_URL.or(url));
-        user     = ctx.applyProperties(JvmKeyValues.DATA_STORAGE_USER.or(user));
+        driver = ctx.applyProperties(JvmKeyValues.DATA_STORAGE_DRIVER.or(driver));
+        dialect = ctx.applyProperties(JvmKeyValues.DATA_STORAGE_DIALECT.or(dialect));
+        url = ctx.applyProperties(JvmKeyValues.DATA_STORAGE_URL.or(url));
+        user = ctx.applyProperties(JvmKeyValues.DATA_STORAGE_USER.or(user));
         password = ctx.applyProperties(JvmKeyValues.DATA_STORAGE_PASSWORD.or(password));
-        verbose  = Boolean.parseBoolean(ctx.applyProperties(JvmKeyValues.DATA_STORAGE_VERBOSE.or("false")));
+        verbose = Boolean.parseBoolean(ctx.applyProperties(JvmKeyValues.DATA_STORAGE_VERBOSE.or("false")));
         hbm2ddl = ctx.applyProperties(JvmKeyValues.DATA_STORAGE_HBM2DDL.or(hbm2ddl));
-        //@formatter:on        
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-
-    public String getDriver() {
-        return driver;
-    }
-
-    public void setDriver(String driver) {
-        this.driver = driver;
-    }
-
-    public String getDialect() {
-        return dialect;
-    }
-
-    public void setDialect(String dialect) {
-        this.dialect = dialect;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isVerbose() {
-        return verbose;
-    }
-
-    public void setVerbose(boolean verbose) {
-        this.verbose = verbose;
-    }
-
-    public String getHbm2ddl() {
-        return hbm2ddl;
-    }
-
-    public void setHbm2ddl(String hbm2ddl) {
-        this.hbm2ddl = hbm2ddl;
     }
 
 }

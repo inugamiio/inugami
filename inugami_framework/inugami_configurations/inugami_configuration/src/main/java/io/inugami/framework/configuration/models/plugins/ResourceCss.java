@@ -16,7 +16,6 @@
  */
 package io.inugami.framework.configuration.models.plugins;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * ResourceCss
@@ -24,22 +23,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @author patrick_guillerm
  * @since 22 déc. 2016
  */
-@XStreamAlias("css")
+@Deprecated
 public class ResourceCss extends Resource {
-
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
-    /**
-     * The Constant serialVersionUID.
-     */
-    private static final long serialVersionUID = -1393902105938133342L;
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public ResourceCss(final String path, final String name) {
-        super(path, name);
-    }
 
 }

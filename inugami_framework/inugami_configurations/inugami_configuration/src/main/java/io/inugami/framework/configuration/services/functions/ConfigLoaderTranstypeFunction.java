@@ -16,7 +16,8 @@
  */
 package io.inugami.framework.configuration.services.functions;
 
-import io.inugami.configuration.exceptions.ConfigurationException;
+
+import io.inugami.framework.configuration.exceptions.ConfigurationException;
 
 /**
  * ConfigLoaderTranstypeFunction

@@ -16,7 +16,8 @@
  */
 package io.inugami.framework.configuration.services.resolver;
 
-import io.inugami.api.exceptions.TechnicalException;
+
+import io.inugami.framework.interfaces.exceptions.TechnicalException;
 
 /**
  * ConfigurationResolverException.

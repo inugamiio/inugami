@@ -16,11 +16,10 @@
  */
 package io.inugami.framework.configuration.models.components;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import io.inugami.api.models.Gav;
-import io.inugami.api.models.data.basic.JsonObject;
+import io.inugami.framework.interfaces.models.maven.Gav;
+import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -30,74 +29,28 @@ import java.util.List;
  * @since 30 août 2018
  */
 @SuppressWarnings({"java:S1700"})
-@XStreamAlias("components")
-public class Components implements JsonObject {
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Components implements Serializable {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    private static final long serialVersionUID = 8367886592682309031L;
-
-    private Gav gav;
-
-    @XStreamImplicit
-    private List<ComponentModel> components;
-
-    // =========================================================================
-    // OVERRIDE
-    // =========================================================================
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder(this.getClass().getSimpleName());
-        builder.append(convertToJson());
-        return builder.toString();
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime  = 31;
-        int       result = 1;
-        result = prime * result + ((gav == null) ? 0 : gav.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        boolean result = this == obj;
-
-        if (!result && obj != null) {
-            Gav otherGav = null;
-            if (obj instanceof Components) {
-                otherGav = ((Components) obj).getGav();
-            }
-
-            result = isSameGav(otherGav);
-        }
-
-        return result;
-    }
-
+    // =================================================================================================================
+    private static final long                 serialVersionUID = 8367886592682309031L;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private              Gav                  gav;
+    private              List<ComponentModel> components;
+    
+    // =================================================================================================================
+    // OVERRIDES
+    // =================================================================================================================
     public boolean isSameGav(Gav otherGav) {
         return gav == null ? otherGav == null : gav.equals(otherGav);
     }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public List<ComponentModel> getComponents() {
-        return components;
-    }
-
-    public void setComponents(List<ComponentModel> components) {
-        this.components = components;
-    }
-
-    public Gav getGav() {
-        return gav;
-    }
-
-    public void setGav(Gav gav) {
-        this.gav = gav;
-    }
-
 }

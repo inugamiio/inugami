@@ -16,7 +16,7 @@
  */
 package io.inugami.framework.configuration.models.app;
 
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -28,19 +28,18 @@ import java.util.List;
  * @since 18 déc. 2017
  */
 @SuppressWarnings({"java:S1700"})
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
 public class UserRoles implements Serializable {
 
     private static final long serialVersionUID = 1438748070951725838L;
 
-    @XStreamImplicit(itemFieldName = "userRole")
+    @Singular("userRoles")
     private List<String> userRoles;
-
-    public List<String> getUserRoles() {
-        return userRoles;
-    }
-
-    public void setUserRoles(List<String> userRoles) {
-        this.userRoles = userRoles;
-    }
 
 }

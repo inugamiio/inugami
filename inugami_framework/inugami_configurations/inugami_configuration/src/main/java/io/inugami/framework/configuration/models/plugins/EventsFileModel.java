@@ -16,10 +16,9 @@
  */
 package io.inugami.framework.configuration.models.plugins;
 
-import java.io.Serializable;
+import lombok.*;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import java.io.Serializable;
 
 /**
  * EventsFile
@@ -27,69 +26,19 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  * @author patrick_guillerm
  * @since 26 déc. 2016
  */
-@XStreamAlias("events-file")
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
 public class EventsFileModel implements Serializable {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    /**
-     * The Constant serialVersionUID.
-     */
-    private static final long serialVersionUID = -7319088596927383309L;
+    // =================================================================================================================
+    private static final long   serialVersionUID = -7319088596927383309L;
+    private              String name;
 
-    @XStreamAsAttribute
-    private String name;
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public EventsFileModel() {
-        super();
-    }
-
-    public EventsFileModel(final String name) {
-        super();
-        this.name = name;
-    }
-
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    @Override
-    public int hashCode() {
-        return ((name == null) ? 0 : name.hashCode());
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        boolean result = this == obj;
-
-        if (!result && (obj != null) && (obj instanceof EventsFileModel)) {
-            final EventsFileModel other = (EventsFileModel) obj;
-            result = name == null ? other.getName() == null : name.equals(other.getName());
-        }
-
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("EventsFileModel [name=");
-        builder.append(name);
-        builder.append("]");
-        return builder.toString();
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
 }

@@ -16,10 +16,9 @@
  */
 package io.inugami.framework.configuration.models.plugins;
 
-import java.io.Serializable;
+import lombok.*;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import java.io.Serializable;
 
 /**
  * PropertyModel
@@ -27,81 +26,20 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  * @author patrick_guillerm
  * @since 10 mai 2017
  */
-@XStreamAlias("property")
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
 public class PropertyModel implements Serializable {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
+    // =================================================================================================================
     private static final long serialVersionUID = 1681249573619420546L;
 
-    @XStreamAsAttribute
     private String key;
-
-    @XStreamAsAttribute
     private String value;
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public PropertyModel() {
-        super();
-    }
-
-    public PropertyModel(final String key, final String value) {
-        super();
-        this.key = key;
-        this.value = value;
-    }
-
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    @Override
-    public int hashCode() {
-        return 31 + ((key == null) ? 0 : key.hashCode());
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        boolean result = this == obj;
-        if (!result && (obj != null) && (obj instanceof PropertyModel)) {
-            final PropertyModel other = (PropertyModel) obj;
-            result = key == null ? other.getKey() == null : key.equals(other.getKey());
-
-        }
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("PropertyModel [key=");
-        builder.append(key);
-        builder.append(", value=");
-        builder.append(value);
-        builder.append("]");
-        return builder.toString();
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(final String key) {
-        this.key = key;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(final String value) {
-        this.value = value;
-    }
-
 }

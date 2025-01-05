@@ -16,7 +16,9 @@
  */
 package io.inugami.framework.configuration;
 
-import io.inugami.configuration.models.ProviderConfig;
+
+import io.inugami.framework.configuration.models.ProviderConfig;
+import lombok.*;
 
 /**
  * Pojo
@@ -24,106 +26,29 @@ import io.inugami.configuration.models.ProviderConfig;
  * @author rachid_nidsaid
  * @since 22 sept. 2016
  */
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class MetricData {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    protected String name;
-
-    protected String request;
-
+    // =================================================================================================================
+    @EqualsAndHashCode.Include
+    @ToString.Include
+    protected String         name;
+    @ToString.Include
+    protected String         request;
     protected ProviderConfig config;
-
-    protected Long lastCallTime;
-
-    protected String from;
-
-    protected String until;
-
-    protected String groupName;
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public MetricData() {
-        super();
-    }
-
-    public MetricData(final String name) {
-        this();
-        this.name = name;
-    }
-
-    public MetricData(final String name, final ProviderConfig config) {
-        this(name);
-        this.config = config;
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public String getName() {
-        return name;
-    }
-
-    public String getRequset() {
-        return request;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(final String from) {
-        this.from = from;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public String getRequest() {
-        return request;
-    }
-
-    public void setRequest(final String request) {
-        this.request = request;
-    }
-
-    public void updateLastCallTime(final Long lastCallTime) {
-        this.lastCallTime = lastCallTime;
-    }
-
-    public void setGroupName(final String groupName) {
-        this.groupName = groupName;
-    }
-
-    public Long getLastCallTime() {
-        return lastCallTime;
-    }
-
-    public String getUntil() {
-        return until;
-    }
-
-    public void setUntil(final String until) {
-        this.until = until;
-    }
-
-    @Override
-    public String toString() {
-        return new StringBuilder("[").append(name)
-                                     .append(":")
-                                     .append(request)
-                                     .append(":")
-                                     .append(config.toString())
-                                     .append("]")
-                                     .toString();
-    }
-
-    public ProviderConfig getConfig() {
-        return config;
-    }
-
+    protected Long           lastCallTime;
+    @ToString.Include
+    protected String         from;
+    @ToString.Include
+    protected String         until;
+    @ToString.Include
+    protected String         groupName;
 }

@@ -16,22 +16,18 @@
  */
 package io.inugami.framework.configuration.models.app;
 
+import io.inugami.framework.configuration.models.plugins.PropertyModel;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.JvmKeyValues;
+import io.inugami.framework.interfaces.connectors.config.HttpDefaultConfig;
+import io.inugami.framework.interfaces.exceptions.TechnicalException;
+import io.inugami.framework.interfaces.functionnals.PostProcessing;
+import lombok.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-import io.inugami.api.constants.JvmKeyValues;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.functionnals.PostProcessing;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.commons.connectors.config.HttpDefaultConfig;
-import io.inugami.configuration.models.plugins.PropertyModel;
-
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 /**
  * ApplicationConfig
@@ -39,66 +35,41 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
  * @author patrick_guillerm
  * @since 15 déc. 2017
  */
-@XStreamAlias("application")
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ApplicationConfig implements Serializable, PostProcessing<ConfigHandler<String, String>> {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    private static final long serialVersionUID = -3387499578573275619L;
+    // =================================================================================================================
+    private static final long                        serialVersionUID = -3387499578573275619L;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private              String                      applicationName;
+    private              boolean                     enableTechnicalsUsers;
+    private              long                        timeout;
+    private              long                        scriptTimeout;
+    private              int                         maxPluginRunning;
+    private              int                         maxPluginRunningStandalone;
+    private              int                         maxRunningEvents;
+    private              int                         maxThreads       = 1500;
+    private              Integer                     alertingDynamicMaxThreads;
+    private              DataProviderModel           dataStorage;
+    @Singular("properties")
+    private              List<PropertyModel>         properties;
+    @Singular("security")
+    private              List<SecurityConfiguration> security;
+    private              HttpDefaultConfig           httpDefaultConfig;
+    private              boolean                     alertingEnable;
 
-    @XStreamAsAttribute
-    private String applicationName;
-
-    @XStreamAsAttribute
-    private boolean enableTechnicalsUsers;
-
-    @XStreamAsAttribute
-    private long timeout;
-
-    @XStreamAsAttribute
-    private long scriptTimeout;
-
-    @XStreamAsAttribute
-    private int maxPluginRunning;
-
-    @XStreamAsAttribute
-    private int maxPluginRunningStandalone;
-
-    @XStreamAsAttribute
-    private int maxRunningEvents;
-
-    @XStreamAsAttribute
-    private int maxThreads = 1500;
-
-    @XStreamAsAttribute
-    private Integer alertingDynamicMaxThreads;
-
-    private DataProviderModel dataStorage;
-
-    private List<PropertyModel> properties;
-
-    @XStreamImplicit
-    private List<SecurityConfiguration> security;
-
-    private HttpDefaultConfig httpDefaultConfig;
-
-    private boolean alertingEnable;
-
-    // =========================================================================
+    // =================================================================================================================
     // OVERRIDES
-    // =========================================================================
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("ApplicationConfig [properties=");
-        builder.append(properties);
-        builder.append(", security=");
-        builder.append(security);
-        builder.append("]");
-        return builder.toString();
-    }
-
+    // =================================================================================================================
     @Override
     public void postProcessing(final ConfigHandler<String, String> ctx) throws TechnicalException {
         //@formatter:off
@@ -131,158 +102,6 @@ public class ApplicationConfig implements Serializable, PostProcessing<ConfigHan
            secu.postProcessing(ctx);
         }
     }
-    
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public String getApplicationName() {
-        return applicationName;
-    }
-    
-    public void setApplicationName(final String applicationName) {
-        this.applicationName = applicationName;
-    }
-    
-    public long getTimeout() {
-        return timeout;
-    }
-    
-    public void setTimeout(final long timeout) {
-        this.timeout = timeout;
-    }
-    
-    public int getMaxPluginRunning() {
-        return maxPluginRunning;
-    }
-    
-    public void setMaxPluginRunning(final int maxPluginRunning) {
-        this.maxPluginRunning = maxPluginRunning;
-    }
-    
-    public int getMaxPluginRunningStandalone() {
-        return maxPluginRunningStandalone;
-    }
-    
-    public void setMaxPluginRunningStandalone(final int maxPluginRunningStandalone) {
-        this.maxPluginRunningStandalone = maxPluginRunningStandalone;
-    }
-    
-    public int getMaxRunningEvents() {
-        return maxRunningEvents;
-    }
-    
-    public void setMaxRunningEvents(final int maxRunningEvents) {
-        this.maxRunningEvents = maxRunningEvents;
-    }
-    
-    public List<PropertyModel> getProperties() {
-        return properties;
-    }
-    
-    public void setProperties(final List<PropertyModel> properties) {
-        this.properties = properties;
-    }
-    
-    public List<SecurityConfiguration> getSecurity() {
-        return security;
-    }
-    
-    public Optional<SecurityConfiguration> getSecurity(final String name){
-        Optional<SecurityConfiguration> result =Optional.empty();
-        
-        if(security!=null) {
-            //@formatter:off
-            result =security.stream()
-                            .filter(secu-> secu.getName().equalsIgnoreCase(name))
-                            .findFirst();
-            //@formatter:on            
-        }
-        return result;
-    }
 
-    public ApplicationConfig addSecurityConfiguration(final SecurityConfiguration config) {
-        if (security == null) {
-            security = new ArrayList<>();
-        }
-        if (config != null) {
-            security.add(config);
-        }
-        return this;
-    }
-
-    public ApplicationConfig addSecurityConfigurations(final List<SecurityConfiguration> config) {
-        if (security == null) {
-            security = new ArrayList<>();
-        }
-        if (config != null) {
-            security.addAll(config);
-        }
-        return this;
-    }
-
-    public void setSecurity(final List<SecurityConfiguration> security) {
-        this.security = security;
-    }
-
-    public HttpDefaultConfig getHttpDefaultConfig() {
-        return httpDefaultConfig;
-    }
-
-    public void setHttpDefaultConfig(final HttpDefaultConfig httpDefaultConfig) {
-        this.httpDefaultConfig = httpDefaultConfig;
-    }
-
-    public boolean isEnableTechnicalsUsers() {
-        return enableTechnicalsUsers;
-    }
-
-    public void setEnableTechnicalsUsers(final boolean enableTechnicalsUsers) {
-        this.enableTechnicalsUsers = enableTechnicalsUsers;
-    }
-
-    public long getScriptTimeout() {
-        return scriptTimeout;
-    }
-
-    public void setScriptTimeout(final long scriptTimeout) {
-        this.scriptTimeout = scriptTimeout;
-    }
-
-    public List<SecurityConfiguration> getSecurityTechnicalConfig() {
-        final List<SecurityConfiguration> secuConfig = (security == null ? new ArrayList<>() : security);
-        //@formatter:off
-        return  secuConfig.stream()
-                          .filter(secu-> "technical".equals(secu.getName()))
-                          .collect(Collectors.toList());
-        //@formatter:off                
-    }
-
-    public DataProviderModel getDataStorage() {
-        return dataStorage;
-    }
-
-    public void setDataStorage(final DataProviderModel dataStorage) {
-        this.dataStorage = dataStorage;
-    }
-
-    public boolean isAlertingEnable() {
-        return alertingEnable;
-    }
-
-    public void setAlertingEnable(final boolean alertingEnable) {
-        this.alertingEnable = alertingEnable;
-    }
-
-    public int getMaxThreads() {
-        return maxThreads;
-    }
-    public void setMaxThreads(final int maxThreads) {
-        this.maxThreads = maxThreads;
-    }
-
-    public int getAlertingDynamicMaxThreads() {
-        return alertingDynamicMaxThreads;
-    }
-    
     
 }

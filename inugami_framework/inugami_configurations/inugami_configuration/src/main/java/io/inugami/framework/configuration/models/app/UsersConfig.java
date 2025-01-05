@@ -16,15 +16,13 @@
  */
 package io.inugami.framework.configuration.models.app;
 
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.exceptions.TechnicalException;
+import io.inugami.framework.interfaces.functionnals.PostProcessing;
+import lombok.*;
+
 import java.io.Serializable;
 import java.util.List;
-
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.functionnals.PostProcessing;
-import io.inugami.api.processors.ConfigHandler;
-
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 /**
  * UsersConfig
@@ -32,21 +30,19 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
  * @author patrickguillerm
  * @since 16 déc. 2017
  */
-@XStreamAlias("users")
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
 public class UsersConfig implements Serializable, PostProcessing<ConfigHandler<String, String>> {
 
     private static final long serialVersionUID = -5456237328606340402L;
 
-    @XStreamImplicit
+    @Singular("users")
     private List<UserConfig> users;
-
-    public List<UserConfig> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<UserConfig> users) {
-        this.users = users;
-    }
 
     @Override
     public void postProcessing(ConfigHandler<String, String> ctx) throws TechnicalException {

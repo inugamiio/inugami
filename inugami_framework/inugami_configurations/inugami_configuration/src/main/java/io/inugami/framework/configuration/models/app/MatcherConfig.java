@@ -16,13 +16,11 @@
  */
 package io.inugami.framework.configuration.models.app;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.functionnals.PostProcessing;
-import io.inugami.api.models.JsonBuilder;
-import io.inugami.api.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.exceptions.TechnicalException;
+import io.inugami.framework.interfaces.functionnals.PostProcessing;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -32,100 +30,31 @@ import java.io.Serializable;
  * @author patrick_guillerm
  * @since 15 déc. 2017
  */
-@XStreamAlias("matcher")
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
 public class MatcherConfig implements Serializable, PostProcessing<ConfigHandler<String, String>> {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
+    // =================================================================================================================
     private static final long serialVersionUID = -1051920675890974241L;
 
-    @XStreamAsAttribute
-    private String expr;
-
-    @XStreamAsAttribute
+    private String         expr;
     private ExpressionType type = ExpressionType.EXACT;
 
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    public MatcherConfig() {
-        super();
-    }
 
-    public MatcherConfig(final String expr, final ExpressionType type) {
-        super();
-        this.expr = expr;
-        this.type = type;
-    }
-
-    // =========================================================================
+    // =================================================================================================================
     // OVERRIDES
-    // =========================================================================
+    // =================================================================================================================
     @Override
     public void postProcessing(final ConfigHandler<String, String> ctx) throws TechnicalException {
         Asserts.assertNotEmpty("Matcher expression mustn't be empty!", expr);
         expr = ctx.applyProperties(expr);
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime  = 31;
-        int       result = 1;
-        result = prime * result + ((expr == null) ? 0 : expr.hashCode());
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        boolean result = this == obj;
-        if (!result && obj != null && obj instanceof MatcherConfig) {
-            result = hash().equals(((MatcherConfig) obj).hash());
-        }
-        return result;
-    }
-
-    private String hash() {
-        //@formatter:off
-        return new JsonBuilder()
-                .openObject()
-                .addField("expr").valueQuot(expr).addSeparator()
-                .addField("type").valueQuot(type)
-                .closeObject()
-                .toString();
-        //@formatter:on
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("MatcherConfig [");
-        builder.append(", expr=");
-        builder.append(expr);
-        builder.append(", type=");
-        builder.append(type);
-        builder.append("]");
-        return builder.toString();
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public String getExpr() {
-        return expr;
-    }
-
-    public void setExpr(final String expr) {
-        this.expr = expr;
-    }
-
-    public ExpressionType getType() {
-        return type;
-    }
-
-    public void setType(final ExpressionType type) {
-        this.type = type;
     }
 
 }

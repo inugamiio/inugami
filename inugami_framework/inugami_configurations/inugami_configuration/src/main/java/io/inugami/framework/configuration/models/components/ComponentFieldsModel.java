@@ -16,10 +16,9 @@
  */
 package io.inugami.framework.configuration.models.components;
 
-import io.inugami.api.models.data.basic.JsonObject;
+import lombok.*;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import java.io.Serializable;
 
 /**
  * ComponentFieldsModel
@@ -27,87 +26,25 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  * @author patrickguillerm
  * @since 31 août 2018
  */
-@XStreamAlias("field")
-public class ComponentFieldsModel implements JsonObject {
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class ComponentFieldsModel implements Serializable {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    private static final long serialVersionUID = -2436093273296848422L;
-
-    @XStreamAsAttribute
-    private String name;
-
-    @XStreamAsAttribute
-    private String type;
-
-    @XStreamAsAttribute
-    private String defaultValue;
-
-    @XStreamAsAttribute
-    private String description;
-
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    @Override
-    public int hashCode() {
-        final int prime  = 31;
-        int       result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        boolean result = this == obj;
-        if (!result && obj != null && obj instanceof ComponentFieldsModel) {
-            final ComponentFieldsModel other = (ComponentFieldsModel) obj;
-            result = name == null ? other.getName() == null : name.equals(other.getName());
-        }
-
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder(this.getClass().getSimpleName());
-        builder.append(convertToJson());
-        return builder.toString();
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getDefaultValue() {
-        return defaultValue;
-    }
-
-    public void setDefaultValue(String defaultValue) {
-        this.defaultValue = defaultValue;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    // =================================================================================================================
+    private static final long   serialVersionUID = -2436093273296848422L;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private              String name;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private              String type;
+    private              String defaultValue;
+    private              String description;
 }

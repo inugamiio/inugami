@@ -16,10 +16,13 @@
  */
 package io.inugami.framework.configuration.models;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import io.inugami.api.processors.ClassBehavior;
-import io.inugami.api.processors.Config;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.models.Config;
+import io.inugami.framework.interfaces.models.maven.ManifestInfo;
+import io.inugami.framework.interfaces.processors.ClassBehavior;
+import lombok.*;
+
+import java.util.List;
 
 /**
  * Caller
@@ -28,44 +31,30 @@ import io.inugami.api.processors.Config;
  * @since 22 déc. 2016
  */
 @SuppressWarnings({"java:S2160"})
-@XStreamAlias("provider")
-public class ProviderConfig extends ClassBehavior {
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class ProviderConfig implements ClassBehavior<Object> {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
     /**
      * The Constant serialVersionUID.
      */
-    private static final long serialVersionUID = -3725988814035334991L;
+    private static final long         serialVersionUID = -3725988814035334991L;
+    private              String       type;
+    private              String       name;
+    private              List<Config> configs;
+    private              String       className;
+    private              ManifestInfo manifest;
 
-    @XStreamAsAttribute
-    private String type;
 
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public ProviderConfig() {
-        super();
+    @Override
+    public Object build(final ClassBehavior behavior, final ConfigHandler<String, String> config) {
+        return null;
     }
-
-    public ProviderConfig(final String name, final String className, final Config... configs) {
-        super(name, className, configs);
-    }
-
-    public ProviderConfig(final String name, final String className, final String type, final Config... configs) {
-        super(name, className, configs);
-        this.type = type;
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public void setType(final String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
-    }
-
 }

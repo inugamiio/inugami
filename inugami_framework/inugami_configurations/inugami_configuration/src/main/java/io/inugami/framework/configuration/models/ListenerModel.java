@@ -16,10 +16,13 @@
  */
 package io.inugami.framework.configuration.models;
 
-import io.inugami.api.processors.ClassBehavior;
-import io.inugami.api.processors.Config;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.models.Config;
+import io.inugami.framework.interfaces.models.maven.ManifestInfo;
+import io.inugami.framework.interfaces.processors.ClassBehavior;
+import lombok.*;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import java.util.List;
 
 /**
  * PostProcessorModel
@@ -27,19 +30,26 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @author patrick_guillerm
  * @since 6 oct. 2016
  */
-@XStreamAlias("listener")
-public class ListenerModel extends ClassBehavior {
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class ListenerModel implements ClassBehavior<Object> {
     /**
      * The Constant serialVersionUID.
      */
-    private static final long serialVersionUID = -7163537432113412806L;
+    private static final long         serialVersionUID = -7163537432113412806L;
+    private              String       name;
+    private              List<Config> configs;
+    private              String       className;
+    private              ManifestInfo manifest;
 
-    public ListenerModel() {
-        super();
+
+    @Override
+    public Object build(final ClassBehavior behavior, final ConfigHandler config) {
+        return null;
     }
-
-    public ListenerModel(final String name, final String className, final Config... configs) {
-        super(name, className, configs);
-    }
-
 }

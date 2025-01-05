@@ -16,8 +16,7 @@
  */
 package io.inugami.framework.configuration.models.components;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -27,68 +26,20 @@ import java.io.Serializable;
  * @author patrickguillerm
  * @since 30 août 2018
  */
-@XStreamAlias("description")
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
 public class ComponentDescriptionContentModel implements Serializable {
 
-    private static final long   serialVersionUID = -1057183917570860667L;
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    @XStreamAsAttribute
+    // =================================================================================================================
+    private static final long   serialVersionUID = -1057183917570860667L;
     private              String type;
+    private              String path;
 
-    @XStreamAsAttribute
-    private String path;
-
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    @Override
-    public int hashCode() {
-        final int prime  = 31;
-        int       result = 1;
-        result = prime * result + ((path == null) ? 0 : path.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        boolean result = this == obj;
-        if (!result && obj != null && obj instanceof ComponentDescriptionContentModel) {
-            final ComponentDescriptionContentModel other = (ComponentDescriptionContentModel) obj;
-            result = path == null ? other.getPath() == null : path.equals(other.getPath());
-        }
-
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("ComponentDescriptionContentModel [type=");
-        builder.append(type);
-        builder.append(", path=");
-        builder.append(path);
-        builder.append("]");
-        return builder.toString();
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public String getType() {
-        return type;
-    }
-
-    public void setType(final String type) {
-        this.type = type;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(final String path) {
-        this.path = path;
-    }
 }

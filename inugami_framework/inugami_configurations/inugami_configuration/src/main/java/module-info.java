@@ -15,6 +15,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 module io.inugami.framework.configurations.configuration {
+    requires lombok;
+    requires org.slf4j;
 
-
+    requires io.inugami.framework.interfaces;
+    requires io.inugami.framework.api;
 }

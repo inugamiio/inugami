@@ -16,11 +16,12 @@
  */
 package io.inugami.framework.configuration.services.mapping;
 
+import io.inugami.framework.interfaces.mapping.Mapper;
+import io.inugami.framework.interfaces.models.maven.Gav;
+
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
-import io.inugami.api.mapping.Mapper;
-import io.inugami.api.models.Gav;
 
 /**
  * ManifestMapper

@@ -16,10 +16,9 @@
  */
 package io.inugami.framework.configuration.models.components;
 
-import io.inugami.api.models.data.basic.JsonObject;
+import lombok.*;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import java.io.Serializable;
 
 /**
  * ComponentViewModel
@@ -27,68 +26,23 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  * @author patrickguillerm
  * @since 30 août 2018
  */
-@XStreamAlias("view")
-public class ComponentViewModel implements JsonObject {
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class ComponentViewModel implements Serializable {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    private static final long serialVersionUID = 3866176689190520809L;
-
-    @XStreamAsAttribute
-    private String type;
-
-    @XStreamAsAttribute
-    private String selector;
-
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    @Override
-    public int hashCode() {
-        final int prime  = 31;
-        int       result = 1;
-        result = prime * result + ((selector == null) ? 0 : selector.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        boolean result = this == obj;
-
-        if (!result && obj != null && obj instanceof ComponentViewModel) {
-            final ComponentViewModel other = (ComponentViewModel) obj;
-            result = selector == null ? other.getSelector() == null : selector.equals(other.getSelector());
-        }
-
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder(this.getClass().getSimpleName());
-        builder.append(convertToJson());
-        return builder.toString();
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getSelector() {
-        return selector;
-    }
-
-    public void setSelector(String selector) {
-        this.selector = selector;
-    }
+    // =================================================================================================================
+    private static final long   serialVersionUID = 3866176689190520809L;
+    @ToString.Include
+    private              String type;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private              String selector;
 
 }

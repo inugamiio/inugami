@@ -16,7 +16,7 @@
  */
 package io.inugami.framework.configuration.services.functions;
 
-import io.inugami.api.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -127,7 +127,12 @@ public class FunctionsServices {
             final String   functionName = matcher.group(KEY_FUNCTION_NAME);
             final String   rawParams    = matcher.group(KEY_FUNCTION_PARAMS);
             final String[] params       = cleanParams(rawParams);
-            data.add(new FunctionData(functionName, params, matcher.start(), matcher.end()));
+            data.add(FunctionData.builder()
+                                 .functionName(functionName)
+                                 .parameters(params)
+                                 .start(matcher.start())
+                                 .end(matcher.end())
+                                 .build());
         }
 
         return data;

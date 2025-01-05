@@ -16,15 +16,13 @@
  */
 package io.inugami.framework.configuration.models.app;
 
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.exceptions.TechnicalException;
+import io.inugami.framework.interfaces.functionnals.PostProcessing;
+import lombok.*;
+
 import java.io.Serializable;
 import java.util.List;
-
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.functionnals.PostProcessing;
-import io.inugami.api.processors.ConfigHandler;
-
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 /**
  * RolesMappeurConfig
@@ -32,13 +30,18 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
  * @author patrickguillerm
  * @since 16 déc. 2017
  */
-@XStreamAlias("roles")
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
 public class RolesMappeurConfig implements Serializable, PostProcessing<ConfigHandler<String, String>> {
 
-    private static final long serialVersionUID = -6254381791279607759L;
-
-    @XStreamImplicit
-    private List<RoleMappeurConfig> roles;
+    private static final long                    serialVersionUID = -6254381791279607759L;
+    @Singular("roles")
+    private              List<RoleMappeurConfig> roles;
 
     @Override
     public void postProcessing(ConfigHandler<String, String> ctx) throws TechnicalException {
@@ -49,11 +52,4 @@ public class RolesMappeurConfig implements Serializable, PostProcessing<ConfigHa
         }
     }
 
-    public List<RoleMappeurConfig> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<RoleMappeurConfig> roles) {
-        this.roles = roles;
-    }
 }

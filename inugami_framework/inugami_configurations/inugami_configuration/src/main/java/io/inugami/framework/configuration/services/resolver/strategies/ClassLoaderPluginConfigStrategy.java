@@ -16,15 +16,15 @@
  */
 package io.inugami.framework.configuration.services.resolver.strategies;
 
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.configuration.models.EventConfig;
-import io.inugami.configuration.models.plugins.EventsFileModel;
-import io.inugami.configuration.models.plugins.PluginConfiguration;
-import io.inugami.configuration.models.plugins.components.config.Components;
-import io.inugami.configuration.services.PluginConfigurationLoader;
+import io.inugami.framework.configuration.models.EventConfig;
+import io.inugami.framework.configuration.models.components.Components;
+import io.inugami.framework.configuration.models.plugins.EventsFileModel;
+import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
+import io.inugami.framework.configuration.services.PluginConfigurationLoader;
 import io.inugami.framework.configuration.services.resolver.ConfigurationResolverException;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.exceptions.TechnicalException;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;

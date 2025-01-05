@@ -16,9 +16,8 @@
  */
 package io.inugami.framework.configuration.models.plugins;
 
-import io.inugami.api.models.Gav;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import io.inugami.framework.interfaces.models.maven.Gav;
 
 /**
  * Dependency
@@ -26,22 +25,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @author patrick_guillerm
  * @since 28 déc. 2016
  */
-@XStreamAlias("dependency")
+@Deprecated
 public class Dependency extends Gav {
-
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
-    /**
-     * The Constant serialVersionUID.
-     */
-    private static final long serialVersionUID = 196708674385895250L;
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-
-    public Dependency(final String groupId, final String artifactId, final String version) {
-        super(groupId, artifactId, version, null);
-    }
+    
 }

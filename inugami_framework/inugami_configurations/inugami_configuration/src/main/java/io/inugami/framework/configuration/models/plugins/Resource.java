@@ -16,9 +16,9 @@
  */
 package io.inugami.framework.configuration.models.plugins;
 
-import java.io.Serializable;
+import lombok.*;
 
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import java.io.Serializable;
 
 /**
  * Resources
@@ -26,63 +26,18 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  * @author patrick_guillerm
  * @since 22 déc. 2016
  */
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+@EqualsAndHashCode
 public class Resource implements Serializable {
-
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    /**
-     * The Constant serialVersionUID.
-     */
-    private static final long serialVersionUID = -4852393784977428286L;
-
-    @XStreamAsAttribute
-    private final String path;
-
-    @XStreamAsAttribute
-    private final String name;
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public Resource(final String path, final String name) {
-        super();
-        this.path = path == null ? "" : path;
-        this.name = name;
-
-    }
-
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    @Override
-    public int hashCode() {
-        return getFullPath().hashCode();
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        boolean result = this == obj;
-
-        if (!result && (obj != null) && (obj instanceof Resource)) {
-            result = getFullPath().equals(((Resource) obj).getFullPath());
-        }
-        return result;
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public String getPath() {
-        return path;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getFullPath() {
-        return path + name;
-    }
-
+    // =================================================================================================================
+    private static final long   serialVersionUID = -4852393784977428286L;
+    private              String path;
+    private              String name;
 }

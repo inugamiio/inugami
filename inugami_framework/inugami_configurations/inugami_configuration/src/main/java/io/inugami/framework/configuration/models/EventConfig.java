@@ -16,17 +16,13 @@
  */
 package io.inugami.framework.configuration.models;
 
+import io.inugami.framework.interfaces.models.event.Event;
+import io.inugami.framework.interfaces.models.event.SimpleEvent;
+import io.inugami.framework.interfaces.models.maven.Gav;
+import lombok.*;
+
 import java.io.Serializable;
 import java.util.List;
-
-import io.inugami.api.models.Gav;
-import io.inugami.api.models.events.Event;
-import io.inugami.api.models.events.SimpleEvent;
-
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * ConfigurationData
@@ -34,106 +30,33 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
  * @author patrick_guillerm
  * @since 4 oct. 2016
  */
-@XStreamAlias("configuration")
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class EventConfig implements Serializable {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    /**
-     * The Constant serialVersionUID.
-     */
-    private static final long serialVersionUID = -1501568308837189494L;
-
-    @XStreamOmitField
-    private final Gav gav;
-
-    @XStreamOmitField
-    private final String name;
-
-    @XStreamAsAttribute
-    private String scheduler;
-
-    @XStreamAsAttribute
-    private Boolean enable;
-
-    @XStreamOmitField
-    private final String configFile;
-
-    @XStreamImplicit
-    private final List<Event> events;
-
-    @XStreamImplicit
-    private final List<SimpleEvent> simpleEvents;
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public EventConfig() {
-        this(null, null, null, null, null, null, null);
-    }
-
-    public EventConfig(final List<Event> events) {
-        this(events, null, null, null, null, null, null);
-    }
-
-    public EventConfig(final List<Event> events, final List<SimpleEvent> simpleEvents) {
-        this(events, simpleEvents, null, null, null, null, null);
-    }
-
-    public EventConfig(final EventConfig eventConfig, final String filePath, final String fileName, final Gav gav) {
-        this(eventConfig.getEvents(), eventConfig.getSimpleEvents(), filePath, fileName, eventConfig.getEnable(), gav,
-             eventConfig.getScheduler());
-    }
-
-    public EventConfig(final List<Event> events, final List<SimpleEvent> simpleEvents, final String configFile,
-                       final String name, final Boolean enable, final Gav gav, final String scheduler) {
-        this.events = events;
-        this.simpleEvents = simpleEvents;
-        this.configFile = configFile;
-        this.name = name;
-        this.enable = enable;
-        this.gav = gav;
-        this.scheduler = scheduler;
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public List<SimpleEvent> getSimpleEvents() {
-        return simpleEvents;
-    }
-
-    public String getConfigFile() {
-        return configFile;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Boolean getEnable() {
-        return enable == null ? Boolean.TRUE : enable;
-    }
-
-    public void setEnable(final Boolean enable) {
-        this.enable = enable;
-    }
-
-    public Gav getGav() {
-        return gav;
-    }
-
-    public String getScheduler() {
-        return scheduler;
-    }
-
-    public void setScheduler(final String scheduler) {
-        this.scheduler = scheduler;
-    }
-
+    // =================================================================================================================
+    private static final long              serialVersionUID = -1501568308837189494L;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private              Gav               gav;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private              String            name;
+    @ToString.Include
+    private              String            scheduler;
+    @ToString.Include
+    private              Boolean           enable;
+    @ToString.Include
+    private              String            configFile;
+    @Singular("events")
+    private              List<Event>       events;
+    @Singular("simpleEvents")
+    private              List<SimpleEvent> simpleEvents;
 }

@@ -16,7 +16,7 @@
  */
 package io.inugami.framework.configuration.services.functions;
 
-import io.inugami.api.exceptions.FatalException;
+import io.inugami.framework.interfaces.exceptions.FatalException;
 
 /**
  * ProviderAttributFunctionException

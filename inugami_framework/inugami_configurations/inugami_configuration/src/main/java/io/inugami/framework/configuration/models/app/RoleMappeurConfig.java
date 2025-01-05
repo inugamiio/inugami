@@ -16,17 +16,14 @@
  */
 package io.inugami.framework.configuration.models.app;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import io.inugami.api.constants.JvmKeyValues;
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.functionnals.PostProcessing;
-import io.inugami.api.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.JvmKeyValues;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.exceptions.TechnicalException;
+import io.inugami.framework.interfaces.functionnals.PostProcessing;
+import lombok.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,35 +32,28 @@ import java.util.List;
  * @author patrick_guillerm
  * @since 15 déc. 2017
  */
-@XStreamAlias("role")
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class RoleMappeurConfig implements Serializable, PostProcessing<ConfigHandler<String, String>> {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final long serialVersionUID = 7212233398463837059L;
+    private static final long                serialVersionUID = 7212233398463837059L;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private              String              name;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private              int                 level;
+    @Singular("matchers")
+    private              List<MatcherConfig> matchers;
 
-    @XStreamAsAttribute
-    private String name;
-
-    @XStreamAsAttribute
-    private int level;
-
-    @XStreamImplicit
-    private List<MatcherConfig> matchers;
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public RoleMappeurConfig() {
-        super();
-    }
-
-    public RoleMappeurConfig(final String name, final int level) {
-        super();
-        this.name = name;
-        this.level = level;
-    }
 
     // =========================================================================
     // OVERRIDES
@@ -71,84 +61,14 @@ public class RoleMappeurConfig implements Serializable, PostProcessing<ConfigHan
     @Override
     public void postProcessing(final ConfigHandler<String, String> ctx) throws TechnicalException {
         Asserts.assertNotNull("Role name is mandatory!", name);
-        //@formatter:off
+        
         level = Integer.parseInt(ctx.applyProperties(JvmKeyValues.SECURITY_ROLES.or(name.concat(".level"), level)));
-        //@formatter:on  
+
         if (matchers != null) {
             for (final MatcherConfig matcher : matchers) {
                 matcher.postProcessing(ctx);
             }
         }
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime  = 31;
-        int       result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        boolean result = this == obj;
-
-        if (!result && obj != null && obj instanceof RoleMappeurConfig) {
-            final RoleMappeurConfig other = (RoleMappeurConfig) obj;
-            result = name == null ? other.getName() == null : name.equals(other.getName());
-        }
-
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("RoleMappeurConfig [name=");
-        builder.append(name);
-        builder.append(", level=");
-        builder.append(level);
-        builder.append(", matchers=");
-        builder.append(matchers);
-        builder.append("]");
-        return builder.toString();
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(final int level) {
-        this.level = level;
-    }
-
-    public List<MatcherConfig> getMatchers() {
-        return matchers;
-    }
-
-    public RoleMappeurConfig addMatcher(final MatcherConfig matcher) {
-        if (matchers == null) {
-            matchers = new ArrayList<>();
-        }
-        if (matcher != null) {
-            matchers.add(matcher);
-        }
-        return this;
-    }
-
-    public void setMatchers(final List<MatcherConfig> matchers) {
-        this.matchers = matchers;
     }
 
 }

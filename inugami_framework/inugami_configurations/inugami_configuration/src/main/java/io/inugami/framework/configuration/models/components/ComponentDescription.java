@@ -16,8 +16,7 @@
  */
 package io.inugami.framework.configuration.models.components;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -28,49 +27,24 @@ import java.util.List;
  * @author patrickguillerm
  * @since 30 août 2018
  */
-@XStreamAlias("description")
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ComponentDescription implements Serializable {
 
-    private static final long                                   serialVersionUID = -1483992189580390931L;
-    // =========================================================================
+
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    @XStreamImplicit
+    // =================================================================================================================
+    private static final long                                   serialVersionUID = -1483992189580390931L;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    @Singular("descriptions")
     private              List<ComponentDescriptionContentModel> descriptions;
-
-    @XStreamImplicit
-    private List<ComponentScreenshot> screenshots;
-
-    // =========================================================================
-    // METHODS
-    // =========================================================================
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("ComponentDescription [descriptions=");
-        builder.append(descriptions);
-        builder.append(", screenshots=");
-        builder.append(screenshots);
-        builder.append("]");
-        return builder.toString();
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public List<ComponentDescriptionContentModel> getDescriptions() {
-        return descriptions;
-    }
-
-    public void setDescriptions(final List<ComponentDescriptionContentModel> descriptions) {
-        this.descriptions = descriptions;
-    }
-
-    public List<ComponentScreenshot> getScreenshots() {
-        return screenshots;
-    }
-
-    public void setScreenshots(final List<ComponentScreenshot> screenshots) {
-        this.screenshots = screenshots;
-    }
+    @Singular("screenshots")
+    private              List<ComponentScreenshot>              screenshots;
 }

@@ -16,7 +16,9 @@
  */
 package io.inugami.framework.configuration.services.functions;
 
-import java.util.Arrays;
+import lombok.*;
+
+import java.io.Serializable;
 
 /**
  * FunctionData
@@ -24,63 +26,26 @@ import java.util.Arrays;
  * @author patrick_guillerm
  * @since 17 août 2017
  */
-public class FunctionData {
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class FunctionData implements Serializable {
 
-    // =========================================================================
+
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    private final int start;
-
-    private final int end;
-
-    private final String functionName;
-
-    private final String[] parameters;
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public FunctionData(final String functionName, final String[] parameters, final int start, final int end) {
-        super();
-        this.start = start;
-        this.end = end;
-        this.functionName = functionName;
-        this.parameters = parameters;
-    }
-
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("FunctionData [functionName=");
-        builder.append(functionName);
-        builder.append(", parameters=");
-        builder.append(Arrays.toString(parameters));
-        builder.append(", start=").append(start);
-        builder.append(", end=").append(end);
-        builder.append("]");
-        return builder.toString();
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public String getFunctionName() {
-        return functionName;
-    }
-
-    public String[] getParameters() {
-        return parameters;
-    }
-
-    public int getStart() {
-        return start;
-    }
-
-    public int getEnd() {
-        return end;
-    }
-
+    // =================================================================================================================
+    private static final long     serialVersionUID = 105677807803599897L;
+    @ToString.Include
+    private              int      start;
+    @ToString.Include
+    private              int      end;
+    @EqualsAndHashCode.Include
+    @ToString.Include
+    private              String   functionName;
+    private              String[] parameters;
 }
