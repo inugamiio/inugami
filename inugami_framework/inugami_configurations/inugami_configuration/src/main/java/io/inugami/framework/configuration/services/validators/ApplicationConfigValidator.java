@@ -16,17 +16,19 @@
  */
 package io.inugami.framework.configuration.services.validators;
 
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.MessagesFormatter;
-import io.inugami.api.processors.Config;
-import io.inugami.configuration.exceptions.ConfigurationException;
-import io.inugami.configuration.models.app.*;
-import io.inugami.configuration.models.plugins.PropertyModel;
+
+import io.inugami.framework.configuration.exceptions.ConfigurationException;
+import io.inugami.framework.configuration.models.app.*;
+import io.inugami.framework.configuration.models.plugins.PropertyModel;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.exceptions.MessagesFormatter;
+import io.inugami.framework.interfaces.models.Config;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.inugami.configuration.services.validators.ValidatorProcessor.*;
+import static io.inugami.framework.configuration.services.validators.ValidatorProcessor.*;
+
 
 /**
  * ApplicationConfigValidator
@@ -59,6 +61,7 @@ public class ApplicationConfigValidator implements Validator {
     @Override
     public void validate() throws ConfigurationException {
         final List<Condition> conditions = new ArrayList<>();
+
         Asserts.assertNotNull("Application configuration is mandatory!", appConfig);
         conditions.addAll(validateRootApplicationConfiguration(appConfig));
         conditions.addAll(validateProperties(appConfig));

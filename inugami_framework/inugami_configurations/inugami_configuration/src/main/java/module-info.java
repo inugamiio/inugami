@@ -20,4 +20,19 @@ module io.inugami.framework.configurations.configuration {
 
     requires io.inugami.framework.interfaces;
     requires io.inugami.framework.api;
+    requires io.inugami.framework.commons;
+
+    exports io.inugami.framework.configuration.exceptions;
+    exports io.inugami.framework.configuration.models;
+    exports io.inugami.framework.configuration.models.app;
+    exports io.inugami.framework.configuration.models.components;
+    exports io.inugami.framework.configuration.models.front;
+    exports io.inugami.framework.configuration.models.plugins;
+    exports io.inugami.framework.configuration.services;
+    exports io.inugami.framework.configuration.services.functions;
+    exports io.inugami.framework.configuration.services.mapping;
+    exports io.inugami.framework.configuration.services.resolver;
+    exports io.inugami.framework.configuration.services.resolver.strategies;
+    exports io.inugami.framework.configuration.services.validators;
+
 }

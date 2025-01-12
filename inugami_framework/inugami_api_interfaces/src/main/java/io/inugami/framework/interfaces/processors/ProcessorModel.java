@@ -48,6 +48,7 @@ public class ProcessorModel implements ClonableObject<ProcessorModel>, ClassBeha
     private String       name;
     @ToString.Include
     private String       className;
+    @Singular("configs")
     private List<Config> configs;
     private ManifestInfo manifest;
 

@@ -16,9 +16,9 @@
  */
 package io.inugami.framework.configuration.services.resolver.strategies;
 
-import io.inugami.configuration.models.plugins.PluginConfiguration;
-import io.inugami.configuration.services.PluginConfigurationLoader;
-import io.inugami.configuration.services.SystemProperties;
+import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
+import io.inugami.framework.configuration.services.PluginConfigurationLoader;
+import io.inugami.framework.configuration.services.SystemProperties;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

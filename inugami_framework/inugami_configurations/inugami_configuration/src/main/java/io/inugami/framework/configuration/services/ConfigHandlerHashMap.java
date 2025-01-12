@@ -16,19 +16,19 @@
  */
 package io.inugami.framework.configuration.services;
 
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.listeners.ApplicationLifecycleSPI;
-import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
-import io.inugami.api.mapping.JsonUnmarshalling;
-import io.inugami.api.processors.ClassBehavior;
-import io.inugami.api.processors.ClassBehaviorParametersSPI;
-import io.inugami.api.processors.Config;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.spi.SpiLoader;
-import io.inugami.api.tools.ConfigTemplateValues;
-import io.inugami.api.tools.TemplateProviderSPI;
-import io.inugami.configuration.services.functions.FunctionsServices;
-import io.inugami.configuration.services.functions.ProviderAttributFunction;
+import io.inugami.framework.api.listeners.DefaultApplicationLifecycleSPI;
+import io.inugami.framework.api.tools.ConfigTemplateValues;
+import io.inugami.framework.configuration.services.functions.FunctionsServices;
+import io.inugami.framework.configuration.services.functions.ProviderAttributFunction;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
+import io.inugami.framework.interfaces.mapping.JsonUnmarshalling;
+import io.inugami.framework.interfaces.models.Config;
+import io.inugami.framework.interfaces.processors.ClassBehavior;
+import io.inugami.framework.interfaces.processors.ClassBehaviorParametersSPI;
+import io.inugami.framework.interfaces.spi.SpiLoader;
+import io.inugami.framework.interfaces.tools.TemplateProviderSPI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,8 +43,7 @@ import java.util.regex.Pattern;
  * @since 5 janv. 2017
  */
 @SuppressWarnings({"java:S3878", "java:S2160"})
-public class ConfigHandlerHashMap extends HashMap<String, String>
-        implements ConfigHandler<String, String>, ClassBehaviorParametersSPI, ApplicationLifecycleSPI {
+public class ConfigHandlerHashMap extends HashMap<String, String> implements ConfigHandler<String, String>, ClassBehaviorParametersSPI<ConfigHandler<String, String>>, ApplicationLifecycleSPI {
 
     // =========================================================================
     // ATTRIBUTES
@@ -80,8 +79,7 @@ public class ConfigHandlerHashMap extends HashMap<String, String>
     }
 
 
-    public ConfigHandlerHashMap(final Map<String, String> map,
-                                final ProviderAttributFunction... functions) {
+    public ConfigHandlerHashMap(final Map<String, String> map, final ProviderAttributFunction... functions) {
         super(map);
 
         template = SpiLoader.getInstance()
@@ -320,7 +318,8 @@ public class ConfigHandlerHashMap extends HashMap<String, String>
     }
 
     @Override
-    public <T> T build(final ClassBehavior behavior, final ConfigHandler<String, String> config) {
-        return (T) config;
+    public ConfigHandler<String, String> build(final ClassBehavior behavior,
+                                               final ConfigHandler<String, String> config) {
+        return new ConfigHandlerHashMap(config);
     }
 }

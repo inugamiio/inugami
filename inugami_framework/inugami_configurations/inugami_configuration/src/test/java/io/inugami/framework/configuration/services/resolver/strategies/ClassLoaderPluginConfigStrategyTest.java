@@ -16,11 +16,10 @@
  */
 package io.inugami.framework.configuration.services.resolver.strategies;
 
-import io.inugami.configuration.models.EventConfig;
-import io.inugami.configuration.models.ProviderConfig;
-import io.inugami.configuration.models.plugins.PluginConfiguration;
-import io.inugami.configuration.services.PluginConfigurationLoader;
-import io.inugami.configuration.test.TestPlugin;
+import io.inugami.framework.configuration.models.EventConfig;
+import io.inugami.framework.configuration.models.ProviderConfig;
+import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
+import io.inugami.framework.configuration.services.PluginConfigurationLoader;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,8 +48,6 @@ class ClassLoaderPluginConfigStrategyTest {
     // =========================================================================
     @Test
     void testResolveFiles() throws Exception {
-        LOGGER.trace("from dependency : {}:{}", TestPlugin.GROUP_ID, TestPlugin.ARTIFACT_ID);
-
         final ClassLoaderPluginConfigStrategy resolver = new ClassLoaderPluginConfigStrategy(null);
         final List<URL>                       urls     = resolver.resolveFiles();
         assertNotNull(urls, "resolved configurations files mustn't be null!");
@@ -146,7 +143,7 @@ class ClassLoaderPluginConfigStrategyTest {
         assertNull(localConfig.getProcessors());
         assertNull(localConfig.getEventsFiles());
 
-        assertTrue(localConfig.getFrontConfig().isPresent(), "no front config found!");
+        assertTrue(localConfig.getFrontConfig() != null, "no front config found!");
 
     }
 

@@ -16,13 +16,13 @@
  */
 package io.inugami.framework.configuration.services.resolver.strategies;
 
-import io.inugami.api.constants.JvmKeyValues;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.configuration.models.EventConfig;
-import io.inugami.configuration.models.plugins.EventsFileModel;
-import io.inugami.configuration.models.plugins.PluginConfiguration;
-import io.inugami.configuration.services.PluginConfigurationLoader;
+import io.inugami.framework.configuration.models.EventConfig;
+import io.inugami.framework.configuration.models.plugins.EventsFileModel;
+import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
+import io.inugami.framework.configuration.services.PluginConfigurationLoader;
 import io.inugami.framework.configuration.services.resolver.ConfigurationResolverException;
+import io.inugami.framework.interfaces.configurtation.JvmKeyValues;
+import io.inugami.framework.interfaces.exceptions.TechnicalException;
 
 import java.io.File;
 import java.util.ArrayList;

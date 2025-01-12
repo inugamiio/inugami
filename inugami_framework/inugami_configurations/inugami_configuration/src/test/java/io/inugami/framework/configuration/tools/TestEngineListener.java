@@ -16,7 +16,8 @@
  */
 package io.inugami.framework.configuration.tools;
 
-import io.inugami.api.listeners.EngineListener;
+
+import io.inugami.framework.interfaces.listeners.EngineListener;
 
 /**
  * TestEngineListener

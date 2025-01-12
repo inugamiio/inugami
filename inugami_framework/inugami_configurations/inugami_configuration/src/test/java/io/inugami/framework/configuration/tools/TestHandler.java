@@ -16,7 +16,8 @@
  */
 package io.inugami.framework.configuration.tools;
 
-import io.inugami.api.handlers.Handler;
+
+import io.inugami.framework.interfaces.handlers.Handler;
 
 public class TestHandler implements Handler {
     @Override

@@ -16,7 +16,8 @@
  */
 package io.inugami.framework.configuration.exceptions;
 
-import io.inugami.api.exceptions.TechnicalException;
+
+import io.inugami.framework.interfaces.exceptions.TechnicalException;
 
 /**
  * NotPluginConfigurationException

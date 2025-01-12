@@ -39,6 +39,7 @@ module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.dao;
     exports io.inugami.framework.interfaces.dao.event;
     exports io.inugami.framework.interfaces.documentation;
+    exports io.inugami.framework.interfaces.engine;
     exports io.inugami.framework.interfaces.exceptions;
     exports io.inugami.framework.interfaces.exceptions.connector;
     exports io.inugami.framework.interfaces.exceptions.services;
@@ -83,6 +84,7 @@ module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.tools.reflection;
     exports io.inugami.framework.interfaces.tools.strategy;
     exports io.inugami.framework.interfaces.task;
+    exports io.inugami.framework.interfaces.exceptions.asserts;
 
     uses io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
     uses io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;

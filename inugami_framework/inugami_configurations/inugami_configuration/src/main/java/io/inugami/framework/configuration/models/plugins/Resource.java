@@ -37,7 +37,12 @@ public class Resource implements Serializable {
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
-    private static final long   serialVersionUID = -4852393784977428286L;
-    private              String path;
-    private              String name;
+    private static final long          serialVersionUID = -4852393784977428286L;
+    private              String        path;
+    private              String        name;
+    private              RessourceType type;
+
+    public String getFullPath() {
+        return String.join("/", path, name);
+    }
 }

@@ -34,9 +34,14 @@
             <artifactId>inugami_api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.inugami.framework.commons</groupId>
+            <artifactId>inugami_commons</artifactId>
+        </dependency>
+
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        + TEST
-        +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+            + TEST
+            +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <dependency>
             <groupId>io.inugami.framework.commons</groupId>
             <artifactId>inugami_commons_test</artifactId>
@@ -66,6 +71,11 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-observation</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

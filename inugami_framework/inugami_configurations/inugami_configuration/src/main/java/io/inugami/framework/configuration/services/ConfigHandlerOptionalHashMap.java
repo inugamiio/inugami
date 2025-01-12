@@ -16,16 +16,16 @@
  */
 package io.inugami.framework.configuration.services;
 
-import flexjson.JSONDeserializer;
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.mapping.JsonUnmarshalling;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.spi.SpiLoader;
-import io.inugami.api.tools.ConfigTemplateValues;
-import io.inugami.api.tools.TemplateProviderSPI;
-import io.inugami.configuration.services.functions.FunctionsServices;
-import io.inugami.configuration.services.functions.ProviderAttributFunction;
+import io.inugami.framework.api.marshalling.JsonMarshaller;
+import io.inugami.framework.api.tools.ConfigTemplateValues;
+import io.inugami.framework.configuration.services.functions.FunctionsServices;
+import io.inugami.framework.configuration.services.functions.ProviderAttributFunction;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.mapping.JsonUnmarshalling;
+import io.inugami.framework.interfaces.spi.SpiLoader;
+import io.inugami.framework.interfaces.tools.TemplateProviderSPI;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
  * @since 5 janv. 2017
  */
 @SuppressWarnings({"java:S1068", "java:S1172", "java:S2160"})
+@Slf4j
 public class ConfigHandlerOptionalHashMap extends HashMap<String, String> implements ConfigHandler<String, String> {
 
     // =========================================================================
@@ -241,7 +242,7 @@ public class ConfigHandlerOptionalHashMap extends HashMap<String, String> implem
         T result = null;
         if (value != null) {
             if (unmarshaller == null) {
-                result = new JSONDeserializer<T>().deserialize(value);
+                result = (T) JsonMarshaller.getInstance().getDefaultObjectMapper().convertValue(value, Object.class);
             } else {
                 result = unmarshaller.process(value);
             }
@@ -263,7 +264,7 @@ public class ConfigHandlerOptionalHashMap extends HashMap<String, String> implem
             try {
                 result = Integer.parseInt(valueStr);
             } catch (final NumberFormatException e) {
-                Loggers.XLLOG.error("defined key configuration isn't number : {}={}", key, valueStr);
+                log.error("defined key configuration isn't number : {}={}", key, valueStr);
             }
         }
         return result;
@@ -274,7 +275,7 @@ public class ConfigHandlerOptionalHashMap extends HashMap<String, String> implem
         try {
             result = Double.parseDouble(valueStr);
         } catch (final NumberFormatException e) {
-            Loggers.XLLOG.error("defined key configuration isn't double number : {}={}", key, valueStr);
+            log.error("defined key configuration isn't double number : {}={}", key, valueStr);
         }
         return result;
     }
@@ -287,7 +288,7 @@ public class ConfigHandlerOptionalHashMap extends HashMap<String, String> implem
             if (BOOLEAN_MATCH.matcher(strValue).matches()) {
                 result = BOOLEAN_TRUE_MATCH.matcher(strValue).matches();
             } else {
-                Loggers.XLLOG.error("defined key configuration isn't boolean value : {}={}", key, strValue);
+                log.error("defined key configuration isn't boolean value : {}={}", key, strValue);
             }
         }
 

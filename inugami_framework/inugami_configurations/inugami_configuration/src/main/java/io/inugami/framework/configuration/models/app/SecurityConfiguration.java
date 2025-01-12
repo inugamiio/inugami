@@ -43,14 +43,16 @@ public class SecurityConfiguration implements Serializable, PostProcessing<Confi
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
-    private static final long               serialVersionUID = 2251616016609037084L;
+    private static final long                    serialVersionUID = 2251616016609037084L;
     @ToString.Include
     @EqualsAndHashCode.Include
-    private              String             name;
+    private              String                  name;
     @Singular("configs")
-    private              List<Config>       configs;
-    private              UsersConfig        users;
-    private              RolesMappeurConfig roles;
+    private              List<Config>            configs;
+    @Singular("users")
+    private              List<UserConfig>        users;
+    @Singular("roles")
+    private              List<RoleMappeurConfig> roles;
 
 
     // =================================================================================================================

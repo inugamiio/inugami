@@ -16,10 +16,11 @@
  */
 package io.inugami.framework.configuration.tools;
 
-import io.inugami.api.exceptions.services.ProcessorException;
-import io.inugami.api.models.events.GenericEvent;
-import io.inugami.api.processors.Processor;
-import io.inugami.api.providers.task.ProviderFutureResult;
+
+import io.inugami.framework.interfaces.exceptions.services.ProcessorException;
+import io.inugami.framework.interfaces.models.event.GenericEvent;
+import io.inugami.framework.interfaces.processors.Processor;
+import io.inugami.framework.interfaces.task.ProviderFutureResult;
 
 /**
  * TestProcessor

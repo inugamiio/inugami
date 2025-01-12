@@ -24,6 +24,7 @@ import io.inugami.framework.interfaces.functionnals.PostProcessing;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * UserConfig
@@ -43,17 +44,18 @@ public class UserConfig implements Serializable, PostProcessing<ConfigHandler<St
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final long      serialVersionUID = -1426894131168094022L;
+    private static final long            serialVersionUID = -1426894131168094022L;
     @ToString.Include
     @EqualsAndHashCode.Include
-    private              String    login;
-    private              String    password;
-    private              String    token;
+    private              String          login;
+    private              String          password;
+    private              String          token;
     @ToString.Include
-    private              String    firstName;
+    private              String          firstName;
     @ToString.Include
-    private              String    lastName;
-    private              UserRoles userRoles;
+    private              String          lastName;
+    @Singular("userRoles")
+    private              List<UserRoles> userRoles;
 
     // =========================================================================
     // OVERRIDES

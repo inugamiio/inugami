@@ -16,8 +16,8 @@
  */
 package io.inugami.framework.configuration.services.resolver;
 
-import io.inugami.configuration.models.EventConfig;
-import io.inugami.configuration.models.plugins.PluginConfiguration;
+import io.inugami.framework.configuration.models.EventConfig;
+import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

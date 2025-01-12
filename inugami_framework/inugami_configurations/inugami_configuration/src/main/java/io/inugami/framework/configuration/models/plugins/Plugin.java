@@ -56,15 +56,21 @@ public final class Plugin implements Serializable {
 
     private           boolean                          enabled = true;
     private           PluginConfiguration              config;
+    @Singular("events")
     private           List<EventConfig>                events;
     private           boolean                          eventConfigPresent;
     private           ManifestInfo                     manifest;
     private           Map<String, Map<String, String>> properties;
     private           PluginFrontConfig                frontConfig;
+    @Singular("listeners")
     private transient List<EngineListener>             listeners;
+    @Singular("processors")
     private transient List<Processor>                  processors;
+    @Singular("providers")
     private transient List<Provider>                   providers;
+    @Singular("handlers")
     private transient List<Handler>                    handlers;
+    @Singular("alertingProviders")
     private transient List<AlertingProvider>           alertingProviders;
     @ToString.Include
     @EqualsAndHashCode.Include

@@ -16,19 +16,19 @@
  */
 package io.inugami.framework.configuration.services.resolver;
 
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.FatalException;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.mapping.Mapper;
-import io.inugami.api.models.Gav;
-import io.inugami.api.models.Tuple;
-import io.inugami.api.models.plugins.ManifestInfo;
-import io.inugami.commons.files.FilesUtils;
-import io.inugami.configuration.exceptions.FatalConfigurationException;
-import io.inugami.configuration.models.plugins.PluginConfiguration;
-import io.inugami.configuration.services.mapping.ManifestGavMapper;
-import io.inugami.configuration.services.mapping.ManifestGavMapperForce;
-import io.inugami.configuration.services.mapping.ManifestMapper;
+import io.inugami.framework.commons.files.FilesUtils;
+import io.inugami.framework.configuration.exceptions.FatalConfigurationException;
+import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
+import io.inugami.framework.configuration.services.mapping.ManifestGavMapper;
+import io.inugami.framework.configuration.services.mapping.ManifestGavMapperForce;
+import io.inugami.framework.configuration.services.mapping.ManifestMapper;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.exceptions.FatalException;
+import io.inugami.framework.interfaces.mapping.Mapper;
+import io.inugami.framework.interfaces.models.Tuple;
+import io.inugami.framework.interfaces.models.maven.Gav;
+import io.inugami.framework.interfaces.models.maven.ManifestInfo;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +47,7 @@ import java.util.jar.Manifest;
  * @author patrick_guillerm
  * @since 27 déc. 2017
  */
+@Slf4j
 class ManifestResolver {
 
     // =========================================================================
@@ -106,21 +107,21 @@ class ManifestResolver {
         try {
             stream = url.openStream();
         } catch (final IOException e) {
-            Loggers.DEBUG.error(e.getMessage());
+            log.error(e.getMessage());
         }
 
         Manifest manifest = null;
         try {
             manifest = new Manifest(stream);
         } catch (final IOException e) {
-            Loggers.DEBUG.error(e.getMessage());
+            log.error(e.getMessage());
         } finally {
             try {
                 if (stream != null) {
                     stream.close();
                 }
             } catch (final IOException e) {
-                Loggers.DEBUG.error(e.getMessage());
+                log.error(e.getMessage());
             }
         }
 
@@ -165,7 +166,7 @@ class ManifestResolver {
                 result = new ManifestInfo(mapper.mapping(manifest), url);
             }
         } else {
-            Loggers.INIT.error("Can't read manifest : {}", manifestFile);
+            log.error("Can't read manifest : {}", manifestFile);
         }
 
         return result;
@@ -179,7 +180,7 @@ class ManifestResolver {
         try {
             result = new File(new URI(path).toURL().getFile());
         } catch (final Exception e) {
-            Loggers.IO.error(e.getMessage());
+            log.error(e.getMessage());
         }
         return result;
     }

@@ -16,10 +16,10 @@
  */
 package io.inugami.framework.configuration.services.validators;
 
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.MessagesFormatter;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.configuration.exceptions.ConfigurationException;
+import io.inugami.framework.configuration.exceptions.ConfigurationException;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.exceptions.MessagesFormatter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -30,6 +30,7 @@ import java.util.List;
  * @since 29 déc. 2016
  */
 @SuppressWarnings({"java:S2629", "java:S1125"})
+@Slf4j
 public class ValidatorProcessor {
 
     // =========================================================================
@@ -75,7 +76,7 @@ public class ValidatorProcessor {
             }
         }
         if (errors.length() > 0) {
-            Loggers.CONFIG.error(errors.toString());
+            log.error(errors.toString());
             throw new PluginConfigurationValidatorException(errors.toString());
         }
 

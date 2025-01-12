@@ -16,21 +16,21 @@
  */
 package io.inugami.framework.configuration.services;
 
-import io.inugami.api.alertings.AlertingProviderModel;
-import io.inugami.api.models.Gav;
-import io.inugami.api.processors.Config;
-import io.inugami.api.processors.ProcessorModel;
-import io.inugami.commons.connectors.config.HttpDefaultConfig;
-import io.inugami.commons.files.FilesUtils;
-import io.inugami.commons.tools.TestUnitResources;
-import io.inugami.configuration.models.ListenerModel;
-import io.inugami.configuration.models.ProviderConfig;
-import io.inugami.configuration.models.app.ApplicationConfig;
-import io.inugami.configuration.models.app.DataProviderModel;
-import io.inugami.configuration.models.app.SecurityConfiguration;
-import io.inugami.configuration.models.plugins.*;
-import io.inugami.configuration.models.plugins.components.config.ComponentModel;
-import io.inugami.configuration.models.plugins.components.config.Components;
+import io.inugami.framework.commons.files.FilesUtils;
+import io.inugami.framework.commons.tools.TestUnitResources;
+import io.inugami.framework.configuration.models.ListenerModel;
+import io.inugami.framework.configuration.models.ProviderConfig;
+import io.inugami.framework.configuration.models.app.ApplicationConfig;
+import io.inugami.framework.configuration.models.app.DataProviderModel;
+import io.inugami.framework.configuration.models.app.SecurityConfiguration;
+import io.inugami.framework.configuration.models.components.ComponentModel;
+import io.inugami.framework.configuration.models.components.Components;
+import io.inugami.framework.configuration.models.plugins.*;
+import io.inugami.framework.interfaces.alertings.AlertingProviderModel;
+import io.inugami.framework.interfaces.connectors.config.HttpDefaultConfig;
+import io.inugami.framework.interfaces.models.Config;
+import io.inugami.framework.interfaces.models.maven.Gav;
+import io.inugami.framework.interfaces.processors.ProcessorModel;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -208,10 +208,10 @@ class PluginConfigurationLoaderTest implements TestUnitResources {
         assertThat(resources).isNotNull();
         assertEquals(4, resources.size());
 
-        assertTrue(resources.get(0) instanceof ResourceCss);
-        assertTrue(resources.get(1) instanceof ResourceJavaScript);
-        assertTrue(resources.get(2) instanceof ResourceJavaScript);
-        assertTrue(resources.get(3) instanceof ResourcePage);
+        assertThat(resources.get(0).getType()).isEqualTo(RessourceType.CSS);
+        assertThat(resources.get(1).getType()).isEqualTo(RessourceType.JAVASCRIPT);
+        assertThat(resources.get(2).getType()).isEqualTo(RessourceType.JAVASCRIPT);
+        assertThat(resources.get(3).getType()).isEqualTo(RessourceType.PAGE);
 
         assertEquals("inugami_plugin/css/", resources.get(0).getPath());
         assertEquals("theme.css", resources.get(0).getName());
@@ -309,7 +309,7 @@ class PluginConfigurationLoaderTest implements TestUnitResources {
         assertEquals("titi.xml", eventsFiles.get(1).getName());
     }
 
-    private void validateDependencies(final List<Dependency> dependencies) {
+    private void validateDependencies(final List<Gav> dependencies) {
         LOGGER.info("dependencies");
         assertThat(dependencies).isNotNull();
         assertEquals(2, dependencies.size());

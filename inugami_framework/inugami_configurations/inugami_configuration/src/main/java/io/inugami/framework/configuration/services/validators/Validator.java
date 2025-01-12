@@ -16,11 +16,12 @@
  */
 package io.inugami.framework.configuration.services.validators;
 
+import io.inugami.framework.configuration.exceptions.ConfigurationException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import io.inugami.configuration.exceptions.ConfigurationException;
 
 /**
  * Validator

@@ -16,24 +16,24 @@
  */
 package io.inugami.framework.configuration.services.resolver;
 
-import io.inugami.api.constants.JvmKeyValues;
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.exceptions.FatalException;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.models.Gav;
-import io.inugami.api.models.plugins.ManifestInfo;
-import io.inugami.configuration.models.EventConfig;
-import io.inugami.configuration.models.app.ApplicationConfig;
-import io.inugami.configuration.models.plugins.Dependency;
-import io.inugami.configuration.models.plugins.EventsFileModel;
-import io.inugami.configuration.models.plugins.PluginConfiguration;
-import io.inugami.configuration.models.plugins.components.config.Components;
-import io.inugami.configuration.services.PluginConfigurationLoader;
-import io.inugami.configuration.services.resolver.strategies.ClassLoaderPluginConfigStrategy;
-import io.inugami.configuration.services.resolver.strategies.HomePluginConfigStrategy;
-import io.inugami.configuration.services.resolver.strategies.JvmPluginConfigStrategy;
-import io.inugami.configuration.services.resolver.strategies.PluginConfigResolverStrategy;
+import io.inugami.framework.configuration.models.EventConfig;
+import io.inugami.framework.configuration.models.app.ApplicationConfig;
+import io.inugami.framework.configuration.models.components.Components;
+import io.inugami.framework.configuration.models.plugins.EventsFileModel;
+import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
+import io.inugami.framework.configuration.services.PluginConfigurationLoader;
+import io.inugami.framework.configuration.services.resolver.strategies.ClassLoaderPluginConfigStrategy;
+import io.inugami.framework.configuration.services.resolver.strategies.HomePluginConfigStrategy;
+import io.inugami.framework.configuration.services.resolver.strategies.JvmPluginConfigStrategy;
+import io.inugami.framework.configuration.services.resolver.strategies.PluginConfigResolverStrategy;
+import io.inugami.framework.interfaces.configurtation.JvmKeyValues;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.exceptions.FatalException;
+import io.inugami.framework.interfaces.exceptions.TechnicalException;
+import io.inugami.framework.interfaces.models.maven.Gav;
+import io.inugami.framework.interfaces.models.maven.ManifestInfo;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +50,7 @@ import static java.util.stream.Collectors.toList;
  * @since 26 déc. 2016
  */
 @SuppressWarnings({"java:S3655", "java:S2139"})
+@Slf4j
 public class ConfigurationResolver {
 
     // =========================================================================
@@ -127,7 +128,7 @@ public class ConfigurationResolver {
             }
             return result.get();
         } catch (final TechnicalException e) {
-            Loggers.DEBUG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new FatalException("Can't load application configuration : {0} : {1}", file.getAbsolutePath(),
                                      e.getMessage());
         }
@@ -231,9 +232,9 @@ public class ConfigurationResolver {
     // =========================================================================
     private void addPluginToConfig(final Map<Gav, PluginConfiguration> configs, final PluginConfiguration plugin) {
         if (configs.containsKey(plugin.getGav())) {
-            if (plugin.getFrontConfig().isPresent()) {
+            if (plugin.getFrontConfig() != null) {
                 final PluginConfiguration resolvedPlugin = configs.get(plugin.getGav());
-                resolvedPlugin.setFrontConfig(plugin.getFrontConfig().get());
+                resolvedPlugin.setFrontConfig(plugin.getFrontConfig());
             }
         } else {
             Loggers.PLUGINS.info("plugin found : {}", plugin.getGav().getHash());
@@ -273,7 +274,7 @@ public class ConfigurationResolver {
                 final PluginConfiguration item = withDependencies.get(index);
 
                 boolean allDependInResolved = true;
-                for (final Dependency depend : item.getDependencies()) {
+                for (final Gav depend : item.getDependencies()) {
                     allDependInResolved = foundDependency(result, depend);
                     if (matchDependency(item, depend)) {
                         throwUnresolved("extension can't depend him self ! ({0})", item);
@@ -293,7 +294,7 @@ public class ConfigurationResolver {
         return result;
     }
 
-    private boolean foundDependency(final List<PluginConfiguration> values, final Dependency item) {
+    private boolean foundDependency(final List<PluginConfiguration> values, final Gav item) {
         boolean foundInResolved = false;
         for (final PluginConfiguration resolved : values) {
             if (matchDependency(resolved, item)) {
@@ -304,7 +305,7 @@ public class ConfigurationResolver {
         return foundInResolved;
     }
 
-    private boolean matchDependency(final PluginConfiguration item, final Dependency depend) {
+    private boolean matchDependency(final PluginConfiguration item, final Gav depend) {
         final boolean match = item.getGav().equalsWithoutVersion(depend);
         if (match && !item.getGav().getVersion().equals(depend.getVersion())) {
             Loggers.XLLOG.warn("plugin dependency error : {} -> {}", item.getGav(), depend);

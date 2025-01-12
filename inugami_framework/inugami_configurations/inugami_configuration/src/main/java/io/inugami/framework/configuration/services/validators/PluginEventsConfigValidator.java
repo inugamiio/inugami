@@ -16,18 +16,20 @@
  */
 package io.inugami.framework.configuration.services.validators;
 
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.models.events.*;
-import io.inugami.api.processors.ClassBehavior;
-import io.inugami.commons.engine.JavaScriptEngine;
-import io.inugami.configuration.exceptions.ConfigurationException;
-import io.inugami.configuration.models.EventConfig;
+import io.inugami.framework.configuration.exceptions.ConfigurationException;
+import io.inugami.framework.configuration.models.EventConfig;
+import io.inugami.framework.interfaces.engine.JavaScriptEngine;
+import io.inugami.framework.interfaces.engine.ScriptException;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.models.event.*;
+import io.inugami.framework.interfaces.processors.ProcessorModel;
+import lombok.RequiredArgsConstructor;
 
-import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.inugami.configuration.services.validators.ValidatorProcessor.*;
+import static io.inugami.framework.configuration.services.validators.ValidatorProcessor.*;
+
 
 /**
  * PluginEventsConfigValidator.
@@ -36,37 +38,27 @@ import static io.inugami.configuration.services.validators.ValidatorProcessor.*;
  * @since 29 déc. 2016
  */
 @SuppressWarnings({"java:S3655", "java:S5361"})
+@RequiredArgsConstructor
 public class PluginEventsConfigValidator implements Validator {
 
-    // =========================================================================
+    //==================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
+    //==================================================================================================================
     private final EventConfig      eventConfig;
     private final String           configFile;
     private final JavaScriptEngine jsEngine;
 
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
 
-    public PluginEventsConfigValidator(final EventConfig eventConfig, final String configFile) {
-        this.eventConfig = eventConfig;
-        this.configFile = configFile;
-        jsEngine = JavaScriptEngine.getInstance();
-    }
-    // =========================================================================
+    //==================================================================================================================
     // METHODS
-    // =========================================================================
-
+    //==================================================================================================================
     @Override
     public void validate() throws ConfigurationException {
         final List<Condition> conditions = new ArrayList<>();
 
-        //@formatter:off
         conditions.add(condition("Can't validate null event config!", eventConfig == null));
         conditions.add(condition("error configuration event file hasn't path!", configFile == null));
         Asserts.assertNotNull("error in initialization of event configuration, no name found!", eventConfig.getName());
-        //@formatter:on
 
         if (eventConfig.getEvents() != null) {
             eventConfig.getEvents().forEach(event -> conditions.addAll(buildConditionsForEvent(event)));
@@ -76,39 +68,47 @@ public class PluginEventsConfigValidator implements Validator {
             eventConfig.getSimpleEvents().forEach(event -> conditions.addAll(buildConditionsForSimpleEvent(event)));
         }
 
-        //@formatter:off
         new ValidatorProcessor().validate(configFile,
                                           conditions,
                                           (condition, path) -> format(condition.getMessage() + " {0}", configFile));
-        //@formatter:on
     }
 
-    // =========================================================================
+    //==================================================================================================================
     // EVENTS / SIMPLE EVENT
-    // =========================================================================
+    //==================================================================================================================
     private List<Condition> buildConditionForGenericEvent(final GenericEvent event) {
         final List<Condition> conditions = new ArrayList<>();
         conditions.add(condition("event must have name!", event.getName() == null));
 
         final String eventName = event.getName() == null ? "" : " " + event.getName();
 
-        if (event.getFrom().isPresent()) {
-            conditions.add(condition(eventName + " from attribute mustn't be empty!", isEmpty(event.getFrom().get())));
+        if (event.getFrom() != null) {
+            conditions.add(condition(eventName + " from attribute mustn't be empty!", isEmpty(event.getFrom())));
         }
 
-        if (event.getUntil().isPresent()) {
-            conditions.add(condition(eventName + " until attribute mustn't be empty!",
-                                     isEmpty(event.getUntil().get())));
+        if (event.getUntil() != null) {
+            conditions.add(condition(eventName + " until attribute mustn't be empty!", isEmpty(event.getUntil())));
         }
 
-        if (event.getProvider().isPresent()) {
-            conditions.add(condition(eventName + " provider attribute mustn't be empty!",
-                                     isEmpty(event.getProvider().get())));
+        if (event.getProvider() != null) {
+            conditions.add(condition(
+                    eventName + " provider attribute mustn't be empty!", isEmpty(event.getProvider())));
         }
 
-        if (event.getProcessors().isPresent()) {
-            event.getProcessors().get().forEach(item -> conditions.addAll(buildConditionForClassBehavior(item)));
+
+        final List aaa = event.getProcessors();
+        /*
+
+        for(final ProcessorModel processorModel : event.getProcessors()){
+
         }
+        conditions.addAll(
+                                  .orElse(new ArrayList<ProcessorModel>())
+                                  .stream()
+                                  .map(this::buildConditionForClassBehavior)
+                                  .toList());
+
+*/
         return conditions;
     }
 
@@ -118,14 +118,14 @@ public class PluginEventsConfigValidator implements Validator {
 
         final String eventName = event.getName() == null ? "" : event.getName();
         conditions.add(condition(eventName + " targets are mandatory for event!", event.getTargets() == null));
-        conditions.addAll(validateAlerting(event.getAlertings().orElse(null)));
+        conditions.addAll(validateAlerting(event.getAlertings()));
 
         boolean allTargetsHavesProvider = true;
         for (final TargetConfig target : event.getTargets()) {
             conditions.addAll(buildConditionForGenericEvent(target));
             conditions.add(condition(eventName + " query is mandatory for target!", isEmpty(target.getQuery())));
-            conditions.addAll(validateAlerting(target.getAlertings().orElse(null)));
-            if (!target.getProvider().isPresent()) {
+            conditions.addAll(validateAlerting(target.getAlertings()));
+            if (target.getProvider() == null) {
                 allTargetsHavesProvider = false;
             }
         }
@@ -134,7 +134,7 @@ public class PluginEventsConfigValidator implements Validator {
             //@formatter:off
             conditions.add(condition(
                     eventName + " all targets doen't define specific provider, you must define generic provider on event!",
-                    !event.getProvider().isPresent()));
+                    event.getProvider()==null));
             //@formatter:on
         }
         return conditions;
@@ -145,14 +145,13 @@ public class PluginEventsConfigValidator implements Validator {
         final List<Condition> conditions = buildConditionForGenericEvent(event);
         final String          eventName  = event.getName() == null ? "" : event.getName();
 
-        conditions.add(condition(eventName + " provider is mandatory for simple event!",
-                                 !event.getProvider().isPresent()));
-        conditions.addAll(validateAlerting(event.getAlertings().orElse(null)));
+        conditions.add(condition(eventName + " provider is mandatory for simple event!", event.getProvider() == null));
+        conditions.addAll(validateAlerting(event.getAlertings()));
         return conditions;
     }
 
 
-    private List<Condition> buildConditionForClassBehavior(final ClassBehavior behavior) {
+    private List<Condition> buildConditionForClassBehavior(final ProcessorModel behavior) {
         final List<Condition> conditions = new ArrayList<>();
         Asserts.assertNotNull(behavior);
 
@@ -171,9 +170,9 @@ public class PluginEventsConfigValidator implements Validator {
                 result.add(condition("Alerte name is mandatory!", isEmpty(item.getName())));
                 final String name = item.getName() == null ? "" : String.format("(%s)", item.getName());
 
-                if (item.grabFunction().isPresent()) {
-                    result.add(condition("You can't have JavaScript function and condition on same alerte!" + name,
-                                         isNotNull(item.getCondition())));
+                if (item.getFunction() != null) {
+                    result.add(condition("You can't have JavaScript function and condition on same alerte!" +
+                                         name, isNotNull(item.getCondition())));
                 } else {
                     result.add(condition("Alerte provider is mandatory!" + name, isEmpty(item.getProvider())));
                     result.add(condition("Alerte condition is mandatory!" + name, isEmpty(item.getCondition())));
@@ -192,8 +191,8 @@ public class PluginEventsConfigValidator implements Validator {
         try {
             jsEngine.checkScriptInnerFunction(condition);
         } catch (final ScriptException e) {
-            result.add(condition("Alerting script error :" + e.getMessage().replaceAll("\\{", "").replaceAll("\\}", ""),
-                                 true));
+            result.add(condition(
+                    "Alerting script error :" + e.getMessage().replaceAll("\\{", "").replaceAll("\\}", ""), true));
         }
         return result;
     }

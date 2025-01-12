@@ -37,6 +37,7 @@ import java.util.List;
  * @since 22 déc. 2016
  */
 @SuppressWarnings({"java:S2326"})
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -77,7 +78,7 @@ public class PluginConfiguration implements Serializable {
     @Singular("eventsFiles")
     private              List<EventsFileModel>       eventsFiles;
     @Singular("dependencies")
-    private              List<Dependency>            dependencies;
+    private              List<Gav>                   dependencies;
     @Singular("security")
     private              List<SecurityConfiguration> security;
     private              Components                  components;

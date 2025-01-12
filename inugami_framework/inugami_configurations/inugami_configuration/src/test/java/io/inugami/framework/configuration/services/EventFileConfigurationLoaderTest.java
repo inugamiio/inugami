@@ -16,14 +16,14 @@
  */
 package io.inugami.framework.configuration.services;
 
-import io.inugami.api.exceptions.FatalException;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.models.Gav;
-import io.inugami.api.models.events.AlertingModel;
-import io.inugami.api.models.events.Event;
-import io.inugami.api.models.events.SimpleEvent;
-import io.inugami.api.models.events.TargetConfig;
-import io.inugami.configuration.models.EventConfig;
+import io.inugami.framework.configuration.models.EventConfig;
+import io.inugami.framework.interfaces.exceptions.FatalException;
+import io.inugami.framework.interfaces.exceptions.TechnicalException;
+import io.inugami.framework.interfaces.models.event.AlertingModel;
+import io.inugami.framework.interfaces.models.event.Event;
+import io.inugami.framework.interfaces.models.event.SimpleEvent;
+import io.inugami.framework.interfaces.models.event.TargetConfig;
+import io.inugami.framework.interfaces.models.maven.Gav;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -136,54 +136,54 @@ class EventFileConfigurationLoaderTest {
         assertThat(view30Event).isNotNull();
 
         // ----------------------------------------------------------------
-        assertEquals("graphite.bigdata", qualityEvent.getProvider().get());
-        assertEquals("foo.bar.Mapper", qualityEvent.getMapper().get());
+        assertEquals("graphite.bigdata", qualityEvent.getProvider());
+        assertEquals("foo.bar.Mapper", qualityEvent.getMapper());
         assertThat(qualityEvent.getProcessors()).isNotNull();
         assertEquals("0 0/2 * * * ?", qualityEvent.getScheduler());
-        assertTrue(qualityEvent.getAlertings().isPresent());
-        assertEquals(1, qualityEvent.getAlertings().get().size());
-        final AlertingModel qualityAlert = qualityEvent.getAlertings().get().get(0);
+        assertTrue(qualityEvent.getAlertings() != null);
+        assertEquals(1, qualityEvent.getAlertings().size());
+        final AlertingModel qualityAlert = qualityEvent.getAlertings().get(0);
         assertEquals("prd-prod-001", qualityAlert.getName());
         assertEquals("{{myAlertingProvider}}", qualityAlert.getProvider());
         assertEquals("value > 5", qualityAlert.getCondition());
         assertEquals("Attention augmentation d'erreur sur le service JOE", qualityAlert.getMessage());
         assertEquals("warn", qualityAlert.getLevel());
 
-        assertEquals(2, qualityEvent.getProcessors().get().size());
-        assertEquals("foo", qualityEvent.getProcessors().get().get(0).getName());
-        assertEquals("bar", qualityEvent.getProcessors().get().get(1).getName());
+        assertEquals(2, qualityEvent.getProcessors().size());
+        assertEquals("foo", qualityEvent.getProcessors().get(0).getName());
+        assertEquals("bar", qualityEvent.getProcessors().get(1).getName());
         //@formatter:off
         assertEquals("scale(summarize(avg(org.foobar.joe.*.count), '24h', 'avg', true),100)",qualityEvent.getQuery());
         //@formatter:on
-        assertFalse(qualityEvent.getFrom().isPresent());
-        assertFalse(qualityEvent.getUntil().isPresent());
+        assertFalse(qualityEvent.getFrom() != null);
+        assertFalse(qualityEvent.getUntil() != null);
 
         // ----------------------------------------------------------------
-        assertEquals("graphite.bigdata", apiEvent.getProvider().get());
+        assertEquals("graphite.bigdata", apiEvent.getProvider());
         //@formatter:off
         assertEquals("scale(summarize(avg(org.foo.bar.joe.percent), '24h', 'avg', true),100)",apiEvent.getQuery());
         //@formatter:on
-        assertFalse(apiEvent.getProcessors().isPresent());
-        assertFalse(apiEvent.getFrom().isPresent());
-        assertFalse(apiEvent.getUntil().isPresent());
+        assertFalse(apiEvent.getProcessors() != null);
+        assertFalse(apiEvent.getFrom() != null);
+        assertFalse(apiEvent.getUntil() != null);
 
         // ----------------------------------------------------------------
-        assertEquals("graphite.bigdata", view10Event.getProvider().get());
-        assertEquals("-10min", view10Event.getFrom().get());
+        assertEquals("graphite.bigdata", view10Event.getProvider());
+        assertEquals("-10min", view10Event.getFrom());
         //@formatter:off
         assertEquals("sumSeries(summarize(org.foo.bar.view,\"10min\",\"avg\",true))",view10Event.getQuery());
         //@formatter:on
-        assertFalse(view10Event.getProcessors().isPresent());
-        assertFalse(view10Event.getUntil().isPresent());
+        assertFalse(view10Event.getProcessors() != null);
+        assertFalse(view10Event.getUntil() != null);
 
         // ----------------------------------------------------------------
-        assertEquals("graphite.bigdata", view30Event.getProvider().get());
-        assertEquals("-30min", view30Event.getFrom().get());
+        assertEquals("graphite.bigdata", view30Event.getProvider());
+        assertEquals("-30min", view30Event.getFrom());
         //@formatter:off
         assertEquals("sumSeries(summarize(org.foo.bar.view,\"10min\",\"avg\",true))",view30Event.getQuery());
         //@formatter:on
-        assertFalse(view30Event.getProcessors().isPresent());
-        assertFalse(view30Event.getUntil().isPresent());
+        assertFalse(view30Event.getProcessors() != null);
+        assertFalse(view30Event.getUntil() != null);
     }
 
     private void validateEvents(final List<Event> events) {
@@ -208,15 +208,15 @@ class EventFileConfigurationLoaderTest {
     }
 
     private void validateApiPercent(final Event event) {
-        assertEquals("graphite.bigdata", event.getProvider().get());
-        assertEquals("foo.bar.MapperOnEvent", event.getMapper().get());
-        assertFalse(event.getFrom().isPresent());
-        assertFalse(event.getUntil().isPresent());
+        assertEquals("graphite.bigdata", event.getProvider());
+        assertEquals("foo.bar.MapperOnEvent", event.getMapper());
+        assertFalse(event.getFrom() != null);
+        assertFalse(event.getUntil() != null);
         assertEquals("0 0/3 * * * ?", event.getScheduler());
 
-        assertTrue(event.getProcessors().isPresent());
-        assertEquals(1, event.getProcessors().get().size());
-        assertEquals("foo", event.getProcessors().get().get(0).getName());
+        assertTrue(event.getProcessors() != null);
+        assertEquals(1, event.getProcessors().size());
+        assertEquals("foo", event.getProcessors().get(0).getName());
 
         assertNotNull(event.getTargets());
         assertEquals(3, event.getTargets().size());
@@ -239,43 +239,43 @@ class EventFileConfigurationLoaderTest {
         assertNotNull(gravida);
         assertNotNull(sapien);
 
-        assertFalse(foobarSys.getProvider().isPresent());
-        assertFalse(foobarSys.getUntil().isPresent());
-        assertFalse(foobarSys.getFrom().isPresent());
-        assertEquals("foo.bar.MapperOnTarget", foobarSys.getMapper().get());
+        assertFalse(foobarSys.getProvider() != null);
+        assertFalse(foobarSys.getUntil() != null);
+        assertFalse(foobarSys.getFrom() != null);
+        assertEquals("foo.bar.MapperOnTarget", foobarSys.getMapper());
 
-        assertTrue(foobarSys.getProcessors().isPresent());
-        assertEquals(1, foobarSys.getProcessors().get().size());
-        assertEquals("bar", foobarSys.getProcessors().get().get(0).getName());
+        assertTrue(foobarSys.getProcessors() != null);
+        assertEquals(1, foobarSys.getProcessors().size());
+        assertEquals("bar", foobarSys.getProcessors().get(0).getName());
         //@formatter:off
         assertEquals("summarize(asPercent(sumSeries(org.foo.bar.jmx.joe.sessions),sumSeries(org.foo.bar.jmx.*.session)), \"24h\", \"avg\",true)",
                      foobarSys.getQuery());
         //@formatter:on
 
-        assertFalse(gravida.getProvider().isPresent());
-        assertFalse(gravida.getUntil().isPresent());
-        assertFalse(gravida.getFrom().isPresent());
-        assertFalse(gravida.getProcessors().isPresent());
+        assertFalse(gravida.getProvider() != null);
+        assertFalse(gravida.getUntil() != null);
+        assertFalse(gravida.getFrom() != null);
+        assertFalse(gravida.getProcessors() != null);
         //@formatter:off
         assertEquals("summarize(asPercent(sumSeries(org.foo.bar.jmx.gravida.sessions),sumSeries(org.foo.bar.jmx.*.session)), \"24h\", \"avg\",true)",
                      gravida.getQuery());
         //@formatter:on
 
-        assertFalse(sapien.getProvider().isPresent());
-        assertFalse(sapien.getUntil().isPresent());
-        assertFalse(sapien.getFrom().isPresent());
+        assertFalse(sapien.getProvider() != null);
+        assertFalse(sapien.getUntil() != null);
+        assertFalse(sapien.getFrom() != null);
 
-        assertTrue(sapien.getProcessors().isPresent());
-        assertEquals(1, sapien.getProcessors().get().size());
-        assertEquals("joe", sapien.getProcessors().get().get(0).getName());
+        assertTrue(sapien.getProcessors() != null);
+        assertEquals(1, sapien.getProcessors().size());
+        assertEquals("joe", sapien.getProcessors().get(0).getName());
         //@formatter:off
         assertEquals("summarize(asPercent(sumSeries(org.foo.bar.jmx.sapien.sessions),sumSeries(org.foo.bar.jmx.*.session)), \"24h\", \"avg\",true)",
                      sapien.getQuery());
         //@formatter:on
 
-        assertTrue(event.getAlertings().isPresent());
-        assertEquals(1, event.getAlertings().get().size());
-        final AlertingModel alerte = event.getAlertings().get().get(0);
+        assertTrue(event.getAlertings() != null);
+        assertEquals(1, event.getAlertings().size());
+        final AlertingModel alerte = event.getAlertings().get(0);
         assertEquals("prd-prod-002", alerte.getName());
         assertEquals("{{myAlertingProvider}}", alerte.getProvider());
         assertEquals("Oups", alerte.getMessage());
@@ -304,8 +304,8 @@ class EventFileConfigurationLoaderTest {
     }
 
     private void validatePaiement(final Event event) {
-        assertFalse(event.getFrom().isPresent());
-        assertFalse(event.getUntil().isPresent());
+        assertFalse(event.getFrom() != null);
+        assertFalse(event.getUntil() != null);
 
         assertNotNull(event.getTargets());
         assertEquals(2, event.getTargets().size());
@@ -323,10 +323,10 @@ class EventFileConfigurationLoaderTest {
 
         // targetCurrent -----------------------------------------------------
         assertEquals("current-paiement-cumul", targetCurrent.getName());
-        assertFalse(targetCurrent.getUntil().isPresent());
-        assertFalse(targetCurrent.getFrom().isPresent());
-        assertFalse(targetCurrent.getProcessors().isPresent());
-        assertEquals("graphite.bigdata", targetCurrent.getProvider().get());
+        assertFalse(targetCurrent.getUntil() != null);
+        assertFalse(targetCurrent.getFrom() != null);
+        assertFalse(targetCurrent.getProcessors() != null);
+        assertEquals("graphite.bigdata", targetCurrent.getProvider());
         //@formatter:off
         assertEquals("summarize(sumSeries(org.foo.bar.paiement.*.count),\"24h\", true)",
                      targetCurrent.getQuery());
@@ -334,10 +334,10 @@ class EventFileConfigurationLoaderTest {
 
         // lastYear ----------------------------------------------------------
         assertEquals("lastyear-paiement-cumul", lastYear.getName());
-        assertFalse(lastYear.getUntil().isPresent());
-        assertFalse(lastYear.getFrom().isPresent());
-        assertFalse(lastYear.getProcessors().isPresent());
-        assertEquals("jdbc.provider", lastYear.getProvider().get());
+        assertFalse(lastYear.getUntil() != null);
+        assertFalse(lastYear.getFrom() != null);
+        assertFalse(lastYear.getProcessors() != null);
+        assertEquals("jdbc.provider", lastYear.getProvider());
         //@formatter:off
         assertEquals("select max(dateTime), sum(OBJ) from FOOBAR",
                      lastYear.getQuery());

@@ -16,25 +16,26 @@
  */
 package io.inugami.framework.configuration.services.validators;
 
-import io.inugami.api.alertings.AlertingProviderModel;
-import io.inugami.api.exceptions.MessagesFormatter;
-import io.inugami.api.processors.Config;
-import io.inugami.api.processors.ProcessorModel;
-import io.inugami.configuration.exceptions.ConfigurationException;
-import io.inugami.configuration.models.ListenerModel;
-import io.inugami.configuration.models.ProviderConfig;
-import io.inugami.configuration.models.plugins.Dependency;
-import io.inugami.configuration.models.plugins.EventsFileModel;
-import io.inugami.configuration.models.plugins.PluginConfiguration;
-import io.inugami.configuration.models.plugins.Resource;
+import io.inugami.framework.configuration.exceptions.ConfigurationException;
+import io.inugami.framework.configuration.models.ListenerModel;
+import io.inugami.framework.configuration.models.ProviderConfig;
+import io.inugami.framework.configuration.models.plugins.EventsFileModel;
+import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
+import io.inugami.framework.configuration.models.plugins.Resource;
+import io.inugami.framework.interfaces.alertings.AlertingProviderModel;
+import io.inugami.framework.interfaces.exceptions.MessagesFormatter;
+import io.inugami.framework.interfaces.models.Config;
+import io.inugami.framework.interfaces.models.maven.Gav;
+import io.inugami.framework.interfaces.processors.ProcessorModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.inugami.configuration.services.validators.ValidatorProcessor.condition;
-import static io.inugami.configuration.services.validators.ValidatorProcessor.isEmpty;
+import static io.inugami.framework.configuration.services.validators.ValidatorProcessor.condition;
+import static io.inugami.framework.configuration.services.validators.ValidatorProcessor.isEmpty;
+
 
 /**
  * PluginConfigurationValidator
@@ -160,7 +161,7 @@ public class PluginConfigurationValidator implements Validator {
 
     private List<Condition> validateDependencies(final PluginConfiguration config) {
         return validate(config.getDependencies(), (data, result) -> {
-            for (final Dependency item : data) {
+            for (final Gav item : data) {
                 result.add(condition("dependency groupId is mandatory", isEmpty(item.getGroupId())));
                 result.add(condition("dependency artifactId is mandatory", isEmpty(item.getArtifactId())));
                 result.add(condition("dependency version is mandatory", isEmpty(item.getVersion())));

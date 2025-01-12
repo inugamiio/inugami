@@ -16,12 +16,12 @@
  */
 package io.inugami.framework.configuration.tools;
 
-import io.inugami.api.exceptions.services.ProviderException;
-import io.inugami.api.models.Gav;
-import io.inugami.api.models.events.SimpleEvent;
-import io.inugami.api.providers.Provider;
-import io.inugami.api.providers.concurrent.FutureData;
-import io.inugami.api.providers.task.ProviderFutureResult;
+import io.inugami.framework.interfaces.concurrent.FutureData;
+import io.inugami.framework.interfaces.exceptions.services.ProviderException;
+import io.inugami.framework.interfaces.models.event.SimpleEvent;
+import io.inugami.framework.interfaces.models.maven.Gav;
+import io.inugami.framework.interfaces.providers.Provider;
+import io.inugami.framework.interfaces.task.ProviderFutureResult;
 
 import java.util.List;
 

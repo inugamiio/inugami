@@ -16,13 +16,13 @@
  */
 package io.inugami.framework.configuration.services.resolver;
 
-import io.inugami.api.mapping.Mapper;
-import io.inugami.api.models.Gav;
-import io.inugami.api.models.plugins.ManifestInfo;
-import io.inugami.commons.files.FilesUtils;
-import io.inugami.commons.tools.TestUnitResources;
-import io.inugami.configuration.services.mapping.ManifestGavMapper;
-import io.inugami.configuration.services.mapping.ManifestMapper;
+import io.inugami.framework.commons.files.FilesUtils;
+import io.inugami.framework.commons.tools.TestUnitResources;
+import io.inugami.framework.configuration.services.mapping.ManifestGavMapper;
+import io.inugami.framework.configuration.services.mapping.ManifestMapper;
+import io.inugami.framework.interfaces.mapping.Mapper;
+import io.inugami.framework.interfaces.models.maven.Gav;
+import io.inugami.framework.interfaces.models.maven.ManifestInfo;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

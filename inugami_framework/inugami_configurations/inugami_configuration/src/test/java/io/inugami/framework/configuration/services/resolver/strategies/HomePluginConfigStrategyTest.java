@@ -16,9 +16,9 @@
  */
 package io.inugami.framework.configuration.services.resolver.strategies;
 
-import io.inugami.configuration.models.EventConfig;
-import io.inugami.configuration.models.plugins.PluginConfiguration;
-import io.inugami.configuration.services.PluginConfigurationLoader;
+import io.inugami.framework.configuration.models.EventConfig;
+import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
+import io.inugami.framework.configuration.services.PluginConfigurationLoader;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +27,9 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
+import static io.inugami.framework.interfaces.exceptions.Asserts.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * HomePluginConfigStrategyTest
@@ -77,7 +77,7 @@ class HomePluginConfigStrategyTest {
         final HomePluginConfigStrategy strategy = new HomePluginConfigStrategy(new PluginConfigurationLoader(),
                                                                                TEST_HOME);
         final Optional<List<PluginConfiguration>> configsOpt = strategy.resolve();
-        assertTrue(configsOpt.isPresent(), "can't load plugin configuration from home folder");
+        assertTrue("can't load plugin configuration from home folder", configsOpt.isPresent());
 
         final List<PluginConfiguration> configs = configsOpt.get();
         assertEquals(2, configs.size());
@@ -104,7 +104,7 @@ class HomePluginConfigStrategyTest {
                                                                                         + "/home-configs-events"));
 
         final Optional<List<PluginConfiguration>> configsOpt = strategy.resolve();
-        assertTrue(configsOpt.isPresent(), "can't load plugin configuration from home folder");
+        assertTrue("can't load plugin configuration from home folder", configsOpt.isPresent());
         assertEquals(1, configsOpt.get().size());
 
         final PluginConfiguration pluginConfig = configsOpt.get().get(0);
@@ -114,7 +114,7 @@ class HomePluginConfigStrategyTest {
         //@formatter:off
         final Optional<EventConfig> eventConfig = strategy.resolveEventFile(pluginConfig,pluginConfig.getEventsFiles().get(0));
         //@formatter:on
-        assertTrue(eventConfig.isPresent(), "can't load events plugin configuration!");
+        assertTrue("can't load events plugin configuration!", eventConfig.isPresent());
         final EventConfig config = eventConfig.get();
 
     }

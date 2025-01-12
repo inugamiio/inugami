@@ -16,8 +16,8 @@
  */
 package io.inugami.framework.configuration.services.resolver;
 
-import io.inugami.configuration.models.plugins.PluginConfiguration;
-import io.inugami.configuration.services.SystemProperties;
+import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
+import io.inugami.framework.configuration.services.SystemProperties;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -27,7 +27,9 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static io.inugami.framework.interfaces.exceptions.Asserts.assertEquals;
+import static io.inugami.framework.interfaces.exceptions.Asserts.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * ConfigurationResolverTests
@@ -62,19 +64,19 @@ class ConfigurationResolverWithHomeTests {
 
         final ConfigurationResolver               resolver = new ConfigurationResolver();
         final Optional<List<PluginConfiguration>> optional = resolver.resolvePluginsConfigurations();
-        assertTrue(optional.isPresent(), "no one plugin configuration found!");
+        assertTrue("no one plugin configuration found!", optional.isPresent());
         final List<PluginConfiguration> configs = optional.get();
         assertFalse(configs.isEmpty(), "no one plugin configuration in result set!");
 
         assertEquals(3, configs.size());
         configs.sort((r, v) -> r.getGav().getHash().compareTo(v.getGav().getHash()));
-        //@formatter:off
-        final String[] gavs = { 
-            "io.inugami:inugami_configuration:x.y.z",
-            "io.inugami:inugami_configuration_test:0.2.0-SNAPSHOT",
-            "plugin-group-id:plugin-foo:0.1",
+
+        final String[] gavs = {
+                "io.inugami:inugami_configuration:x.y.z",
+                "io.inugami:inugami_configuration_test:0.2.0-SNAPSHOT",
+                "plugin-group-id:plugin-foo:0.1",
         };
-        //@formatter:on
+        
 
         for (int i = 0; i < gavs.length; i++) {
             assertEquals(gavs[i], configs.get(i).getGav().getHash());
