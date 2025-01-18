@@ -1,5 +1,6 @@
 package io.inugami.framework.interfaces.tools;
 
+import io.inugami.framework.interfaces.exceptions.MessagesFormatter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -78,5 +79,9 @@ public final class StringTools {
     // =========================================================================
     public static boolean containsChars(final String value, final String specialChar) {
         return value == null ? false : value.contains(specialChar);
+    }
+
+    public static String format(final String message, final Object... values) {
+        return MessagesFormatter.format(message, values);
     }
 }

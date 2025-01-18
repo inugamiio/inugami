@@ -1,0 +1,117 @@
+########################################################################################################################
+# EventConfig
+########################################################################################################################
+gav:
+  groupId: io.inugami.test
+  artifactId: configuration-testing
+  version: 4.0.0
+  qualifier: for-test
+
+name: events-test
+scheduler: "0 0/5 * * * ?"
+enable: true
+
+#=======================================================================================================================
+# SimpleEvents
+#=======================================================================================================================
+simpleEvents:
+  - name: foobar-quality
+    provider: graphite.bigdata
+    scheduler: 0 0/2 * * * ?
+    mapper: oo.bar.Mapper
+    query: scale(summarize(avg(org.foobar.joe.*.count), '24h', 'avg', true),100)
+    processors:
+      - name: foo
+      - name: bar
+    alertings:
+      - name: prd-prod-001
+        provider: "{{myAlertingProvider}}"
+        condition: "value > 5"
+        message: Attention augmentation d'erreur sur le service JOE
+        level: "warn"
+
+  - name: foobar-pourcentage
+    provider: graphite.bigdata
+    query: scale(summarize(avg(org.foo.bar.joe.percent), '24h', 'avg', true),100)
+    alertings:
+      - name: prd-prod-0011
+        provider: "{{myAlertingProvider}}"
+        function: mySupraFaboulousJavaScriptFunctionInMyPlugin
+
+  - name: foobar-views-10mn
+    provider: graphite.bigdata
+    from: -10min
+    query: sumSeries(summarize(org.foo.bar.view,"10min","avg",true))
+
+  - name: foobar-views-30mn
+    provider: graphite.bigdata
+    from: -30min
+    query: sumSeries(summarize(org.foo.bar.view,"10min","avg",true))
+
+#=======================================================================================================================
+# Events
+#=======================================================================================================================
+events:
+  #---------------------------------------------------------------------------------------------------------------------
+  # foobar-api-pourcentrage
+  #---------------------------------------------------------------------------------------------------------------------
+  - name: foobar-api-pourcentrage
+    provider: graphite.bigdata
+    scheduler: 0 0/3 * * * ?
+    mapper: foo.bar.MapperOnEvent
+    processors:
+      - name: foo
+    alertings:
+      - name: prd-prod-002
+        provider: "{{myAlertingProvider}}"
+        message: Oups
+        level: error
+        condition: >
+          var level=null;
+          var message=null;
+
+          if(value>0.8){
+            level="error";
+            message="Erreur le seuil sur les sessions client est trop élevé";
+          }else if(value>0.6){
+            level="warning";
+            message="Attention le seuil sur les sessions client est haut";
+          }
+
+          return {
+            "level"   :level,
+            "message" :message
+          }
+    targets:
+      - name: foobar-sys
+        mapper: foo.bar.MapperOnTarget
+        query: summarize(asPercent(sumSeries(org.foo.bar.jmx.joe.sessions),sumSeries(org.foo.bar.jmx.*.session)), "24h", "avg",true)
+        processor:
+          - name: bar
+        alertings:
+          - name: prd-prod-003
+            provider: "{{myAlertingProvider}}"
+            condition: "value > 0.7"
+            message: "_msg_oups_front"
+            level: info
+
+      - name: gravida-pourcentrage
+        query: >
+          summarize(asPercent(sumSeries(org.foo.bar.jmx.gravida.sessions),sumSeries(org.foo.bar.jmx.*.session)), "24h", "avg",true)
+
+      - name: sapien-pourcentrage
+        query: >
+          summarize(asPercent(sumSeries(org.foo.bar.jmx.sapien.sessions),sumSeries(org.foo.bar.jmx.*.session)), "24h", "avg",true)
+
+  #---------------------------------------------------------------------------------------------------------------------
+  # foobar-paiement
+  #---------------------------------------------------------------------------------------------------------------------
+  - name: foobar-paiement
+    targets:
+      - name: current-paiement-cumul
+        provider: graphite.bigdata
+        query: summarize(sumSeries(org.foo.bar.paiement.*.count),"24h", true)
+
+      - name: lastyear-paiement-cumul
+        provider: jdbc.provider
+        query: select max(dateTime), sum(OBJ) from FOOBAR

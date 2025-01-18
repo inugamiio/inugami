@@ -16,9 +16,9 @@
  */
 package io.inugami.framework.configuration.services;
 
-import io.inugami.api.models.events.Event;
-import io.inugami.api.models.events.TargetConfig;
-import io.inugami.configuration.models.EventConfig;
+import io.inugami.framework.configuration.models.EventConfig;
+import io.inugami.framework.interfaces.models.event.Event;
+import io.inugami.framework.interfaces.models.event.TargetConfig;
 
 import java.util.Optional;
 
@@ -65,15 +65,15 @@ class PluginConfigurationInitilizer {
     }
 
     private void initialierTarget(final TargetConfig target, final Event event) {
-        final Optional<String> parentFrom  = event.getFrom();
-        final Optional<String> parentUntil = event.getUntil();
+        final Optional<String> parentFrom  = Optional.ofNullable(event.getFrom());
+        final Optional<String> parentUntil = Optional.ofNullable(event.getUntil());
 
-        if (!target.getFrom().isPresent() && parentFrom.isPresent()) {
-            target.buildFrom(parentFrom.get());
+        if (target.getFrom() == null && parentFrom.isPresent()) {
+            target.setFrom(parentFrom.get());
         }
 
-        if (!target.getUntil().isPresent() && parentUntil.isPresent()) {
-            target.buildUntil(parentUntil.get());
+        if (target.getUntil() == null && parentUntil.isPresent()) {
+            target.setUntil(parentUntil.get());
         }
     }
 

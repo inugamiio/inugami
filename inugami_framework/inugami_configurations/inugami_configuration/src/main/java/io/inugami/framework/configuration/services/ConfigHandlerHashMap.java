@@ -23,7 +23,6 @@ import io.inugami.framework.configuration.services.functions.ProviderAttributFun
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.exceptions.Asserts;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
-import io.inugami.framework.interfaces.mapping.JsonUnmarshalling;
 import io.inugami.framework.interfaces.models.Config;
 import io.inugami.framework.interfaces.processors.ClassBehavior;
 import io.inugami.framework.interfaces.processors.ClassBehaviorParametersSPI;
@@ -223,34 +222,6 @@ public class ConfigHandlerHashMap extends HashMap<String, String> implements Con
         return value == null ? defaultValue : Long.parseLong(value);
     }
 
-    // -------------------------------------------------------------------------
-    // JSON
-    // -------------------------------------------------------------------------
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> T grabJson(final String key, final String json, final JsonUnmarshalling unmarshaller) {
-        final T result = optional.grabJson(key, json, unmarshaller);
-        assertNotNull(key, result);
-        return result;
-    }
-
-    @Override
-    public <T> T grabJson(final String key, final JsonUnmarshalling unmarshaller) {
-        return optional.convertToObject(grab(key), unmarshaller);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> T grabJson(final String key, final Object jsonObj, final JsonUnmarshalling unmarshaller) {
-        final T result = optional.grabJson(key, unmarshaller);
-        Asserts.assertNotNull(result);
-        return result;
-    }
 
     @Override
     public ConfigHandler<String, String> optionnal() {

@@ -16,13 +16,11 @@
  */
 package io.inugami.framework.configuration.services;
 
-import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.api.tools.ConfigTemplateValues;
 import io.inugami.framework.configuration.services.functions.FunctionsServices;
 import io.inugami.framework.configuration.services.functions.ProviderAttributFunction;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.exceptions.Asserts;
-import io.inugami.framework.interfaces.mapping.JsonUnmarshalling;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.tools.TemplateProviderSPI;
 import lombok.extern.slf4j.Slf4j;
@@ -197,58 +195,6 @@ public class ConfigHandlerOptionalHashMap extends HashMap<String, String> implem
         return value == null ? defaultValue : Long.parseLong(value);
     }
 
-    // -------------------------------------------------------------------------
-    // JSON
-    // -------------------------------------------------------------------------
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> T grabJson(final String key, final String json, final JsonUnmarshalling unmarshaller) {
-        T result = null;
-
-        final Object value = getValue(key);
-        if (value == null) {
-            result = convertToObject(json, unmarshaller);
-        } else {
-            result = convertToObject(value, unmarshaller);
-        }
-
-        return result;
-    }
-
-    @Override
-    public <T> T grabJson(final String key, final JsonUnmarshalling unmarshaller) {
-        return convertToObject(grab(key), unmarshaller);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> T grabJson(final String key, final Object jsonObj, final JsonUnmarshalling unmarshaller) {
-        T            result = null;
-        final String value  = getValue(key);
-        if (value == null) {
-            result = (T) jsonObj;
-        } else {
-            result = unmarshalling(value, unmarshaller);
-        }
-        return result;
-    }
-
-    private <T> T unmarshalling(final String value, final JsonUnmarshalling unmarshaller) {
-        T result = null;
-        if (value != null) {
-            if (unmarshaller == null) {
-                result = (T) JsonMarshaller.getInstance().getDefaultObjectMapper().convertValue(value, Object.class);
-            } else {
-                result = unmarshaller.process(value);
-            }
-        }
-        return result;
-    }
 
     // =========================================================================
     // TOOLS
@@ -297,12 +243,6 @@ public class ConfigHandlerOptionalHashMap extends HashMap<String, String> implem
 
     /* package */ String convertToString(final Object value) {
         return value == null ? null : String.valueOf(value).trim();
-    }
-
-    /* package */ <T> T convertToObject(final Object value, final JsonUnmarshalling unmarshaller) {
-        final T result;
-        result = (value instanceof String) ? unmarshalling((String) value, unmarshaller) : (T) value;
-        return result;
     }
 
     @Override

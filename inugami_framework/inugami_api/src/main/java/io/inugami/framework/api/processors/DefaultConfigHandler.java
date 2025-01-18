@@ -3,10 +3,9 @@ package io.inugami.framework.api.processors;
 
 import io.inugami.framework.api.listeners.DefaultApplicationLifecycleSPI;
 import io.inugami.framework.api.tools.ConfigTemplateValues;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.exceptions.Asserts;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
-import io.inugami.framework.interfaces.mapping.JsonUnmarshalling;
-import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.tools.TemplateProviderSPI;
 
@@ -175,35 +174,6 @@ public class DefaultConfigHandler implements ConfigHandler<String, String>, Appl
         return result;
     }
 
-    @Override
-    public <T> T grabJson(final String key, final String json, final JsonUnmarshalling unmarshaller) {
-        final String value  = grab(key);
-        T            result = null;
-        if (value != null) {
-            result = unmarshaller.process(value);
-        }
-        return result;
-    }
-
-    @Override
-    public <T> T grabJson(final String key, final JsonUnmarshalling unmarshaller) {
-        final String value  = grab(key);
-        T            result = null;
-        if (value != null) {
-            result = unmarshaller.process(value);
-        }
-        return result;
-    }
-
-    @Override
-    public <T> T grabJson(final String key, final Object jsonObj, final JsonUnmarshalling unmarshaller) {
-        final String value  = grab(key);
-        T            result = null;
-        if (value != null) {
-            result = unmarshaller.process(value);
-        }
-        return result;
-    }
 
     @Override
     public ConfigHandler<String, String> optionnal() {

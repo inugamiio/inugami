@@ -16,8 +16,6 @@
  */
 package io.inugami.framework.interfaces.configurtation;
 
-import io.inugami.framework.interfaces.mapping.JsonUnmarshalling;
-
 import java.util.List;
 import java.util.Map;
 
@@ -68,15 +66,6 @@ public interface ConfigHandler<K, V> extends Map<K, V> {
 
 
     Double grabDouble(final K key);
-
-
-    <T> T grabJson(final K key, final String json, final JsonUnmarshalling unmarshaller);
-
-
-    <T> T grabJson(final K key, final JsonUnmarshalling unmarshaller);
-
-
-    <T> T grabJson(final K key, final Object jsonObj, final JsonUnmarshalling unmarshaller);
 
     ConfigHandler<K, V> optionnal();
 

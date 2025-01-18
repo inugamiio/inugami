@@ -16,7 +16,8 @@
  */
 package io.inugami.framework.configuration.services;
 
-import io.inugami.api.constants.JvmKeyValues;
+
+import io.inugami.framework.interfaces.configurtation.JvmKeyValues;
 
 /**
  * SystemProperties
@@ -26,16 +27,21 @@ import io.inugami.api.constants.JvmKeyValues;
  */
 public class SystemProperties {
 
-    // =========================================================================
+    // =================================================================================================================
+    // ATTRIBUTES
+    // =================================================================================================================
+    public static final String SEPARATOR = "-";
+
+    // =================================================================================================================
     // METHODS
-    // =========================================================================
+    // =================================================================================================================
     public static synchronized void setJvmParam(final String name, final String filePath) {
-        final String key = JvmKeyValues.PLUGIN_PREFIX.getKey() + "-" + name;
+        final String key = JvmKeyValues.PLUGIN_PREFIX.getKey() + SEPARATOR + name;
         System.setProperty(key, filePath);
     }
 
     public static synchronized void removeJvmParam(final String key) {
-        System.getProperties().remove(JvmKeyValues.PLUGIN_PREFIX.getKey() + "-" + key);
+        System.getProperties().remove(JvmKeyValues.PLUGIN_PREFIX.getKey() + SEPARATOR + key);
     }
 
     public static synchronized void setHome(final String absolutePath) {

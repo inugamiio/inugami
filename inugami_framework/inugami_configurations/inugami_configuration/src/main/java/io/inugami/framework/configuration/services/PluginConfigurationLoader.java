@@ -16,6 +16,9 @@
  */
 package io.inugami.framework.configuration.services;
 
+import io.inugami.framework.api.marshalling.YamlMarshaller;
+import io.inugami.framework.commons.files.FilesUtils;
+import io.inugami.framework.configuration.exceptions.FatalConfigurationException;
 import io.inugami.framework.configuration.models.EventConfig;
 import io.inugami.framework.configuration.models.app.ApplicationConfig;
 import io.inugami.framework.configuration.models.components.Components;
@@ -30,7 +33,9 @@ import io.inugami.framework.interfaces.exceptions.TechnicalException;
 import io.inugami.framework.interfaces.functionnals.FilterFunction;
 import io.inugami.framework.interfaces.functionnals.ValidatorFunction;
 import io.inugami.framework.interfaces.models.maven.Gav;
+import io.inugami.framework.interfaces.tools.StringTools;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +51,7 @@ import java.util.function.Supplier;
  * @since 26 déc. 2016
  */
 @SuppressWarnings({"java:S2139", "java:S1874", "java:S1612"})
+@Slf4j
 @NoArgsConstructor
 public class PluginConfigurationLoader {
 
@@ -95,7 +101,6 @@ public class PluginConfigurationLoader {
         return Optional.empty();
     }
 
-    //@formatter:off
     private <T> Optional<T> processLoadFromFile(final String file,
                                                 final Supplier<Object> reader,
                                                 final FilterFunction<Object> filter,
@@ -128,17 +133,24 @@ public class PluginConfigurationLoader {
      * @throws TechnicalException if exception is occurs
      */
     public Optional<EventConfig> loadEventConfigFromFile(final Gav gav, final File file) throws TechnicalException {
-        //TODO: REFACTOR
-        return Optional.empty();
+        EventConfig  result  = null;
+        final String content = readFile(file);
+        result = YamlMarshaller.getInstance().convertFromYaml(content, EventConfig.class);
+
+
+        return Optional.ofNullable(result);
     }
 
-    public Optional<EventConfig> loadEventConfigFromUrl(final URL url, final Gav gav,
+    public Optional<EventConfig> loadEventConfigFromUrl(final URL url,
+                                                        final Gav gav,
                                                         final EventsFileModel eventFile) throws TechnicalException {
         //TODO: REFACTOR
         return Optional.empty();
     }
 
-    private Optional<EventConfig> loadingEventFile(final Gav gav, final String file, final String fileNameFull,
+    private Optional<EventConfig> loadingEventFile(final Gav gav,
+                                                   final String file,
+                                                   final String fileNameFull,
                                                    final Object xmlLoaded) throws TechnicalException {
 
         //TODO: REFACTOR
@@ -160,5 +172,27 @@ public class PluginConfigurationLoader {
     }
 
 
+    private String readFile(final File file) {
+        if (file == null) {
+            throw buildException("can't read file with null path");
+        }
+        if (!file.exists()) {
+            throw buildException("file not found : {0}", file.getAbsolutePath());
+        }
+        if (!file.isFile() || !file.canRead()) {
+            throw buildException("can't read file : {0}", file.getAbsolutePath());
+        }
+        try {
+            return FilesUtils.readContent(file);
+        } catch (Throwable e) {
+            throw new FatalConfigurationException(e.getMessage(), e);
+        }
 
+    }
+
+    private FatalConfigurationException buildException(final String message, final Object... values) {
+        final String errorMessage = StringTools.format(message, values);
+        log.error(errorMessage);
+        return new FatalConfigurationException(errorMessage);
+    }
 }

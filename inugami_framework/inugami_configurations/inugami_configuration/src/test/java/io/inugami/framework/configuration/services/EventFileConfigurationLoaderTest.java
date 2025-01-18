@@ -17,23 +17,17 @@
 package io.inugami.framework.configuration.services;
 
 import io.inugami.framework.configuration.models.EventConfig;
-import io.inugami.framework.interfaces.exceptions.FatalException;
 import io.inugami.framework.interfaces.exceptions.TechnicalException;
-import io.inugami.framework.interfaces.models.event.AlertingModel;
-import io.inugami.framework.interfaces.models.event.Event;
-import io.inugami.framework.interfaces.models.event.SimpleEvent;
-import io.inugami.framework.interfaces.models.event.TargetConfig;
 import io.inugami.framework.interfaces.models.maven.Gav;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static io.inugami.commons.test.UnitTestHelper.assertText;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * PluginConfigurationTest
@@ -43,16 +37,15 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class EventFileConfigurationLoaderTest {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
+    // =================================================================================================================
     private static final String RESOURCES_PATH = initResourcesPath();
+    private static final Logger LOGGER         = LoggerFactory.getLogger(EventFileConfigurationLoaderTest.class);
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EventFileConfigurationLoaderTest.class);
-
-    // =========================================================================
+    // =================================================================================================================
     // INIT
-    // =========================================================================
+    // =================================================================================================================
     private static String initResourcesPath() {
         final File   file       = new File(".");
         final String currentDir = file.getAbsoluteFile().getParentFile().getAbsolutePath();
@@ -60,288 +53,116 @@ class EventFileConfigurationLoaderTest {
         return currentDir + "/src/test/resources";
     }
 
-    // =========================================================================
+    // =================================================================================================================
     // METHODS
-    // =========================================================================
+    // =================================================================================================================
     @Test
     void testLoadFromFile() throws TechnicalException {
-        try {
-            process();
-        } catch (final TechnicalException e) {
-            LOGGER.error(e.getMessage());
-            throw e;
-        }
-
-    }
-
-    private void process() throws TechnicalException {
         final PluginConfigurationLoader loader = new PluginConfigurationLoader();
 
-        LOGGER.info("load events-test-configuration.xml");
-        //@formatter:off
-        final File file = new File(RESOURCES_PATH + "/events-test-configuration.xml");
-        final Optional<EventConfig> configOpt;
-        try {
-            configOpt = loader.loadEventConfigFromFile(new Gav(),file);
-        } catch (final TechnicalException e) {
-            LOGGER.error(e.getMessage());
-            throw e;
-        }
-        //@formatter:on
+        LOGGER.info("load events-test-configuration.yaml");
+        final File                  file      = new File(RESOURCES_PATH + "/events-test-configuration.yaml");
+        final Optional<EventConfig> configOpt = loader.loadEventConfigFromFile(new Gav(), file);
 
         assertTrue(configOpt.isPresent());
-        final EventConfig config = configOpt.get();
-        LOGGER.info("validate data");
-        assertEquals("events-test-configuration", config.getName());
-        assertThat(config.getScheduler()).isNotNull();
-        assertEquals("0 0/5 * * * ?", config.getScheduler());
-        assertEquals(file.getAbsolutePath(), config.getConfigFile());
-        assertEquals(Boolean.FALSE, config.getEnable());
+        assertText(configOpt.get(), """
+                {
+                  "enable" : true,
+                  "events" : [ {
+                    "alertings" : [ {
+                      "condition" : "var level=null; var message=null;\\nif(value>0.8){\\n  level=\\"error\\";\\n  message=\\"Erreur le seuil sur les sessions client est trop élevé\\";\\n}else if(value>0.6){\\n  level=\\"warning\\";\\n  message=\\"Attention le seuil sur les sessions client est haut\\";\\n}\\nreturn {\\n  \\"level\\"   :level,\\n  \\"message\\" :message\\n}\\n",
+                      "level" : "error",
+                      "message" : "Oups",
+                      "name" : "prd-prod-002",
+                      "provider" : "{{myAlertingProvider}}"
+                    } ],
+                    "mapper" : "foo.bar.MapperOnEvent",
+                    "name" : "foobar-api-pourcentrage",
+                    "processors" : [ {
+                      "name" : "foo"
+                    } ],
+                    "provider" : "graphite.bigdata",
+                    "scheduler" : "0 0/3 * * * ?",
+                    "targets" : [ {
+                      "alertings" : [ {
+                        "condition" : "value > 0.7",
+                        "level" : "info",
+                        "message" : "_msg_oups_front",
+                        "name" : "prd-prod-003",
+                        "provider" : "{{myAlertingProvider}}"
+                      } ],
+                      "mapper" : "foo.bar.MapperOnTarget",
+                      "name" : "foobar-sys",
+                      "query" : "summarize(asPercent(sumSeries(org.foo.bar.jmx.joe.sessions),sumSeries(org.foo.bar.jmx.*.session)), \\"24h\\", \\"avg\\",true)"
+                    }, {
+                      "name" : "gravida-pourcentrage",
+                      "query" : "summarize(asPercent(sumSeries(org.foo.bar.jmx.gravida.sessions),sumSeries(org.foo.bar.jmx.*.session)), \\"24h\\", \\"avg\\",true)\\n"
+                    }, {
+                      "name" : "sapien-pourcentrage",
+                      "query" : "summarize(asPercent(sumSeries(org.foo.bar.jmx.sapien.sessions),sumSeries(org.foo.bar.jmx.*.session)), \\"24h\\", \\"avg\\",true)\\n"
+                    } ]
+                  }, {
+                    "name" : "foobar-paiement",
+                    "targets" : [ {
+                      "name" : "current-paiement-cumul",
+                      "provider" : "graphite.bigdata",
+                      "query" : "summarize(sumSeries(org.foo.bar.paiement.*.count),\\"24h\\", true)"
+                    }, {
+                      "name" : "lastyear-paiement-cumul",
+                      "provider" : "jdbc.provider",
+                      "query" : "select max(dateTime), sum(OBJ) from FOOBAR"
+                    } ]
+                  } ],
+                  "gav" : {
+                    "artifactId" : "configuration-testing",
+                    "groupId" : "io.inugami.test",
+                    "hash" : "io.inugami.test:configuration-testing:4.0.0:for-test",
+                    "qualifier" : "for-test",
+                    "version" : "4.0.0"
+                  },
+                  "name" : "events-test",
+                  "scheduler" : "0 0/5 * * * ?",
+                  "simpleEvents" : [ {
+                    "alertings" : [ {
+                      "condition" : "value > 5",
+                      "level" : "warn",
+                      "message" : "Attention augmentation d'erreur sur le service JOE",
+                      "name" : "prd-prod-001",
+                      "provider" : "{{myAlertingProvider}}"
+                    } ],
+                    "mapper" : "oo.bar.Mapper",
+                    "name" : "foobar-quality",
+                    "processors" : [ {
+                      "name" : "foo"
+                    }, {
+                      "name" : "bar"
+                    } ],
+                    "provider" : "graphite.bigdata",
+                    "query" : "scale(summarize(avg(org.foobar.joe.*.count), '24h', 'avg', true),100)",
+                    "scheduler" : "0 0/2 * * * ?"
+                  }, {
+                    "alertings" : [ {
+                      "function" : "mySupraFaboulousJavaScriptFunctionInMyPlugin",
+                      "name" : "prd-prod-0011",
+                      "provider" : "{{myAlertingProvider}}"
+                    } ],
+                    "name" : "foobar-pourcentage",
+                    "provider" : "graphite.bigdata",
+                    "query" : "scale(summarize(avg(org.foo.bar.joe.percent), '24h', 'avg', true),100)"
+                  }, {
+                    "from" : "-10min",
+                    "name" : "foobar-views-10mn",
+                    "provider" : "graphite.bigdata",
+                    "query" : "sumSeries(summarize(org.foo.bar.view,\\"10min\\",\\"avg\\",true))"
+                  }, {
+                    "from" : "-30min",
+                    "name" : "foobar-views-30mn",
+                    "provider" : "graphite.bigdata",
+                    "query" : "sumSeries(summarize(org.foo.bar.view,\\"10min\\",\\"avg\\",true))"
+                  } ]
+                }
+                """);
 
-        validateSimplesEvents(config.getSimpleEvents());
-        validateEvents(config.getEvents());
-    }
-
-    private void validateSimplesEvents(final List<SimpleEvent> events) {
-        assertThat(events).isNotNull();
-        assertEquals(4, events.size());
-
-        SimpleEvent qualityEvent = null;
-        SimpleEvent apiEvent     = null;
-        SimpleEvent view10Event  = null;
-        SimpleEvent view30Event  = null;
-
-        for (final SimpleEvent event : events) {
-            switch (event.getName()) {
-                case "foobar-quality":
-                    qualityEvent = event;
-                    break;
-                case "foobar-pourcentage":
-                    apiEvent = event;
-                    break;
-                case "foobar-views-10mn":
-                    view10Event = event;
-                    break;
-                case "foobar-views-30mn":
-                    view30Event = event;
-                    break;
-
-                default:
-                    throw new FatalException("unkown element {0}", event.getName());
-            }
-        }
-        assertThat(qualityEvent).isNotNull();
-        assertThat(apiEvent).isNotNull();
-        assertThat(view10Event).isNotNull();
-        assertThat(view30Event).isNotNull();
-
-        // ----------------------------------------------------------------
-        assertEquals("graphite.bigdata", qualityEvent.getProvider());
-        assertEquals("foo.bar.Mapper", qualityEvent.getMapper());
-        assertThat(qualityEvent.getProcessors()).isNotNull();
-        assertEquals("0 0/2 * * * ?", qualityEvent.getScheduler());
-        assertTrue(qualityEvent.getAlertings() != null);
-        assertEquals(1, qualityEvent.getAlertings().size());
-        final AlertingModel qualityAlert = qualityEvent.getAlertings().get(0);
-        assertEquals("prd-prod-001", qualityAlert.getName());
-        assertEquals("{{myAlertingProvider}}", qualityAlert.getProvider());
-        assertEquals("value > 5", qualityAlert.getCondition());
-        assertEquals("Attention augmentation d'erreur sur le service JOE", qualityAlert.getMessage());
-        assertEquals("warn", qualityAlert.getLevel());
-
-        assertEquals(2, qualityEvent.getProcessors().size());
-        assertEquals("foo", qualityEvent.getProcessors().get(0).getName());
-        assertEquals("bar", qualityEvent.getProcessors().get(1).getName());
-        //@formatter:off
-        assertEquals("scale(summarize(avg(org.foobar.joe.*.count), '24h', 'avg', true),100)",qualityEvent.getQuery());
-        //@formatter:on
-        assertFalse(qualityEvent.getFrom() != null);
-        assertFalse(qualityEvent.getUntil() != null);
-
-        // ----------------------------------------------------------------
-        assertEquals("graphite.bigdata", apiEvent.getProvider());
-        //@formatter:off
-        assertEquals("scale(summarize(avg(org.foo.bar.joe.percent), '24h', 'avg', true),100)",apiEvent.getQuery());
-        //@formatter:on
-        assertFalse(apiEvent.getProcessors() != null);
-        assertFalse(apiEvent.getFrom() != null);
-        assertFalse(apiEvent.getUntil() != null);
-
-        // ----------------------------------------------------------------
-        assertEquals("graphite.bigdata", view10Event.getProvider());
-        assertEquals("-10min", view10Event.getFrom());
-        //@formatter:off
-        assertEquals("sumSeries(summarize(org.foo.bar.view,\"10min\",\"avg\",true))",view10Event.getQuery());
-        //@formatter:on
-        assertFalse(view10Event.getProcessors() != null);
-        assertFalse(view10Event.getUntil() != null);
-
-        // ----------------------------------------------------------------
-        assertEquals("graphite.bigdata", view30Event.getProvider());
-        assertEquals("-30min", view30Event.getFrom());
-        //@formatter:off
-        assertEquals("sumSeries(summarize(org.foo.bar.view,\"10min\",\"avg\",true))",view30Event.getQuery());
-        //@formatter:on
-        assertFalse(view30Event.getProcessors() != null);
-        assertFalse(view30Event.getUntil() != null);
-    }
-
-    private void validateEvents(final List<Event> events) {
-        assertNotNull(events);
-        assertEquals(2, events.size());
-
-        Event apiPercent = null;
-        Event paiement   = null;
-        if ("foobar-api-pourcentrage".equals(events.get(0).getName())) {
-            apiPercent = events.get(0);
-            paiement = events.get(1);
-        } else {
-            apiPercent = events.get(1);
-            paiement = events.get(0);
-        }
-        assertEquals("foobar-api-pourcentrage", apiPercent.getName());
-        assertEquals("foobar-paiement", paiement.getName());
-
-        validateApiPercent(apiPercent);
-        validatePaiement(paiement);
-
-    }
-
-    private void validateApiPercent(final Event event) {
-        assertEquals("graphite.bigdata", event.getProvider());
-        assertEquals("foo.bar.MapperOnEvent", event.getMapper());
-        assertFalse(event.getFrom() != null);
-        assertFalse(event.getUntil() != null);
-        assertEquals("0 0/3 * * * ?", event.getScheduler());
-
-        assertTrue(event.getProcessors() != null);
-        assertEquals(1, event.getProcessors().size());
-        assertEquals("foo", event.getProcessors().get(0).getName());
-
-        assertNotNull(event.getTargets());
-        assertEquals(3, event.getTargets().size());
-
-        TargetConfig foobarSys = null;
-        TargetConfig gravida   = null;
-        TargetConfig sapien    = null;
-
-        //@formatter:off
-        for (final TargetConfig target : event.getTargets()){
-            switch (target.getName()) {
-                case "foobar-sys" : foobarSys = target; break;
-                case "gravida-pourcentrage"  : gravida = target; break;
-                case "sapien-pourcentrage"      : sapien = target; break;
-                default: throw new FatalException("unkown element : {0}",target.getName());
-            }
-        }
-        // @formatter:on
-        assertNotNull(foobarSys);
-        assertNotNull(gravida);
-        assertNotNull(sapien);
-
-        assertFalse(foobarSys.getProvider() != null);
-        assertFalse(foobarSys.getUntil() != null);
-        assertFalse(foobarSys.getFrom() != null);
-        assertEquals("foo.bar.MapperOnTarget", foobarSys.getMapper());
-
-        assertTrue(foobarSys.getProcessors() != null);
-        assertEquals(1, foobarSys.getProcessors().size());
-        assertEquals("bar", foobarSys.getProcessors().get(0).getName());
-        //@formatter:off
-        assertEquals("summarize(asPercent(sumSeries(org.foo.bar.jmx.joe.sessions),sumSeries(org.foo.bar.jmx.*.session)), \"24h\", \"avg\",true)",
-                     foobarSys.getQuery());
-        //@formatter:on
-
-        assertFalse(gravida.getProvider() != null);
-        assertFalse(gravida.getUntil() != null);
-        assertFalse(gravida.getFrom() != null);
-        assertFalse(gravida.getProcessors() != null);
-        //@formatter:off
-        assertEquals("summarize(asPercent(sumSeries(org.foo.bar.jmx.gravida.sessions),sumSeries(org.foo.bar.jmx.*.session)), \"24h\", \"avg\",true)",
-                     gravida.getQuery());
-        //@formatter:on
-
-        assertFalse(sapien.getProvider() != null);
-        assertFalse(sapien.getUntil() != null);
-        assertFalse(sapien.getFrom() != null);
-
-        assertTrue(sapien.getProcessors() != null);
-        assertEquals(1, sapien.getProcessors().size());
-        assertEquals("joe", sapien.getProcessors().get(0).getName());
-        //@formatter:off
-        assertEquals("summarize(asPercent(sumSeries(org.foo.bar.jmx.sapien.sessions),sumSeries(org.foo.bar.jmx.*.session)), \"24h\", \"avg\",true)",
-                     sapien.getQuery());
-        //@formatter:on
-
-        assertTrue(event.getAlertings() != null);
-        assertEquals(1, event.getAlertings().size());
-        final AlertingModel alerte = event.getAlertings().get(0);
-        assertEquals("prd-prod-002", alerte.getName());
-        assertEquals("{{myAlertingProvider}}", alerte.getProvider());
-        assertEquals("Oups", alerte.getMessage());
-        assertEquals("error", alerte.getLevel());
-        //@formatter:off
-        final String condition=
-        "var level=null;\n" + 
-        "            var message=null;\n" + 
-        "            \n" + 
-        "            if(value>0.8){\n" + 
-        "                level=\"error\";\n" + 
-        "                message=\"Erreur le seuil sur les sessions client est trop élevé\";\n" + 
-        "            }else if(value>0.6){\n" + 
-        "                level=\"warning\";\n" + 
-        "                message=\"Attention le seuil sur les sessions client est haut\";\n" + 
-        "            }\n" + 
-        "            \n" + 
-        "            return {\n" + 
-        "                \"level\"   :level,\n" + 
-        "                \"message\" :message\n" + 
-        "            }"; 
-        //@formatter:on
-
-        assertEquals(condition, alerte.getCondition().trim());
-
-    }
-
-    private void validatePaiement(final Event event) {
-        assertFalse(event.getFrom() != null);
-        assertFalse(event.getUntil() != null);
-
-        assertNotNull(event.getTargets());
-        assertEquals(2, event.getTargets().size());
-
-        TargetConfig targetCurrent = null;
-        TargetConfig lastYear      = null;
-
-        if ("current-paiement-cumul".equals(event.getTargets().get(0).getName())) {
-            targetCurrent = event.getTargets().get(0);
-            lastYear = event.getTargets().get(1);
-        } else {
-            targetCurrent = event.getTargets().get(1);
-            lastYear = event.getTargets().get(0);
-        }
-
-        // targetCurrent -----------------------------------------------------
-        assertEquals("current-paiement-cumul", targetCurrent.getName());
-        assertFalse(targetCurrent.getUntil() != null);
-        assertFalse(targetCurrent.getFrom() != null);
-        assertFalse(targetCurrent.getProcessors() != null);
-        assertEquals("graphite.bigdata", targetCurrent.getProvider());
-        //@formatter:off
-        assertEquals("summarize(sumSeries(org.foo.bar.paiement.*.count),\"24h\", true)",
-                     targetCurrent.getQuery());
-        //@formatter:on
-
-        // lastYear ----------------------------------------------------------
-        assertEquals("lastyear-paiement-cumul", lastYear.getName());
-        assertFalse(lastYear.getUntil() != null);
-        assertFalse(lastYear.getFrom() != null);
-        assertFalse(lastYear.getProcessors() != null);
-        assertEquals("jdbc.provider", lastYear.getProvider());
-        //@formatter:off
-        assertEquals("select max(dateTime), sum(OBJ) from FOOBAR",
-                     lastYear.getQuery());
-        //@formatter:on
 
     }
 
