@@ -210,7 +210,8 @@
         <org.ehcache.version>3.3.1</org.ehcache.version>
         <org.jboss.async-http-servlet.version>3.1.0.Beta2</org.jboss.async-http-servlet.version>
         <org.jsoup.version>1.15.3</org.jsoup.version>
-        <org.junit.jupiter>5.10.1</org.junit.jupiter>
+        <org.junit.jupiter>5.11.4</org.junit.jupiter>
+        <org.junit.platform.version>1.11.4</org.junit.platform.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <org.projectlombok.lombok-mapstruct-binding.version>0.2.0</org.projectlombok.lombok-mapstruct-binding.version>
         <org.projectlombok.version>1.18.30</org.projectlombok.version>
@@ -500,12 +501,6 @@
             </dependency>
 
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.junit}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
                 <version>3.17.1</version>
@@ -514,6 +509,12 @@
                 <groupId>org.ehcache</groupId>
                 <artifactId>ehcache</artifactId>
                 <version>${org.ehcache.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.maven.surefire</groupId>
+                <artifactId>common-java5</artifactId>
+                <version>${plugins.org-apache-maven-plugins.maven-surefire-plugin}</version>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
@@ -525,17 +526,24 @@
                 <artifactId>junit-jupiter-api</artifactId>
                 <version>${org.junit.jupiter}</version>
             </dependency>
-            <dependency>
-                <groupId>org.junit.platform</groupId>
-                <artifactId>junit-platform-engine</artifactId>
-                <version>1.11.4</version>
-            </dependency>
 
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
                 <version>${org.junit.jupiter}</version>
             </dependency>
+            <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-engine</artifactId>
+                <version>${org.junit.platform.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-commons</artifactId>
+                <version>${org.junit.platform.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
@@ -571,6 +579,8 @@
                 <artifactId>problem</artifactId>
                 <version>${org.zalando.problem.version}</version>
             </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 
@@ -808,6 +818,10 @@
                         --add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
                         --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
                     </argLine>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+
                     <excludes>
                         <exclude>**/*IT.java</exclude>
                     </excludes>
