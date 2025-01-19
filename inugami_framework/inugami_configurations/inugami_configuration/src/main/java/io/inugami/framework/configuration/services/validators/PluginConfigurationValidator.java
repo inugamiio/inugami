@@ -19,12 +19,10 @@ package io.inugami.framework.configuration.services.validators;
 import io.inugami.framework.configuration.exceptions.ConfigurationException;
 import io.inugami.framework.configuration.models.ListenerModel;
 import io.inugami.framework.configuration.models.ProviderConfig;
-import io.inugami.framework.configuration.models.plugins.EventsFileModel;
 import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
 import io.inugami.framework.configuration.models.plugins.Resource;
 import io.inugami.framework.interfaces.alertings.AlertingProviderModel;
 import io.inugami.framework.interfaces.exceptions.MessagesFormatter;
-import io.inugami.framework.interfaces.models.Config;
 import io.inugami.framework.interfaces.models.maven.Gav;
 import io.inugami.framework.interfaces.processors.ProcessorModel;
 import org.slf4j.Logger;
@@ -32,6 +30,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static io.inugami.framework.configuration.services.validators.ValidatorProcessor.condition;
 import static io.inugami.framework.configuration.services.validators.ValidatorProcessor.isEmpty;
@@ -121,9 +121,11 @@ public class PluginConfigurationValidator implements Validator {
         });
     }
 
-    private List<Condition> validateConfigTags(final List<Config> configs) {
+    private List<Condition> validateConfigTags(final Map<String, String> configs) {
         return validate(configs, (data, result) -> {
-            for (final Config currentConfig : data) {
+            for (final Map.Entry<String, String> currentConfig : Optional.ofNullable(configs)
+                                                                         .orElse(Map.of())
+                                                                         .entrySet()) {
                 result.add(condition("config key is mandatory", currentConfig.getKey() == null));
             }
         });
@@ -153,8 +155,8 @@ public class PluginConfigurationValidator implements Validator {
 
     private List<Condition> validateEventsFiles(final PluginConfiguration config) {
         return validate(config.getEventsFiles(), (data, result) -> {
-            for (final EventsFileModel item : data) {
-                result.add(condition("events-file name is mandatory", isEmpty(item.getName())));
+            for (final String item : data) {
+                result.add(condition("events-file name is mandatory", isEmpty(item)));
             }
         });
     }

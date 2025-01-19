@@ -22,10 +22,10 @@ import io.inugami.framework.configuration.models.app.*;
 import io.inugami.framework.configuration.models.plugins.PropertyModel;
 import io.inugami.framework.interfaces.exceptions.Asserts;
 import io.inugami.framework.interfaces.exceptions.MessagesFormatter;
-import io.inugami.framework.interfaces.models.Config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static io.inugami.framework.configuration.services.validators.ValidatorProcessor.*;
 
@@ -155,10 +155,10 @@ public class ApplicationConfigValidator implements Validator {
         });
     }
 
-    private List<Condition> validateConfigTags(final List<Config> configs) {
+    private List<Condition> validateConfigTags(final Map<String, String> configs) {
         return validate(configs, (data, result) -> {
-            for (final Config config : data) {
-                result.add(condition("config key is mandatory", config.getKey() == null));
+            for (final Map.Entry<String, String> entry : configs.entrySet()) {
+                result.add(condition("config key is mandatory", entry.getKey() == null));
             }
         });
     }

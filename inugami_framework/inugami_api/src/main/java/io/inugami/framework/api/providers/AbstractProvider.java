@@ -18,10 +18,9 @@ package io.inugami.framework.api.providers;
 
 import io.inugami.framework.interfaces.concurrent.FutureData;
 import io.inugami.framework.interfaces.concurrent.FutureDataModel;
-import io.inugami.framework.interfaces.models.Config;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.models.event.SimpleEvent;
 import io.inugami.framework.interfaces.processors.ClassBehavior;
-import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.providers.ProviderRunner;
 import io.inugami.framework.interfaces.task.ProviderFutureResult;
 import io.inugami.framework.interfaces.task.ProviderTask;
@@ -31,6 +30,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Future;
 
@@ -100,7 +100,7 @@ public abstract class AbstractProvider {
         return classBehavior.getName();
     }
 
-    public List<Config> getConfigs() {
+    public Map<String, String> getConfigs() {
         return classBehavior.getConfigs();
     }
 

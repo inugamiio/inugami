@@ -23,7 +23,6 @@ import io.inugami.framework.configuration.models.EventConfig;
 import io.inugami.framework.configuration.models.app.ApplicationConfig;
 import io.inugami.framework.configuration.models.components.Components;
 import io.inugami.framework.configuration.models.front.PluginFrontConfig;
-import io.inugami.framework.configuration.models.plugins.EventsFileModel;
 import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
 import io.inugami.framework.configuration.services.functions.ConfigLoaderTranstypeFunction;
 import io.inugami.framework.configuration.services.resolver.ConfigurationResolverException;
@@ -77,7 +76,6 @@ public class PluginConfigurationLoader {
 
 
         final PluginConfiguration config = null;
-        // TODO:REFACTOR (PluginConfiguration) XSTREAM.fromXML(url);
         if (config != null) {
             new PluginConfigurationValidator(config, url.toString()).validate();
             result = Optional.of(config);
@@ -91,14 +89,16 @@ public class PluginConfigurationLoader {
         return result;
     }
 
-    public Optional<ApplicationConfig> loadApplicationConfig(final URL url) throws TechnicalException {
+    public Optional<ApplicationConfig> loadApplicationConfig(final URL url) {
         //TODO: REFACTOR
         return Optional.empty();
     }
 
-    public Optional<ApplicationConfig> loadApplicationConfig(final File file) throws TechnicalException {
-        //TODO: REFACTOR
-        return Optional.empty();
+    public Optional<ApplicationConfig> loadApplicationConfig(final File file) {
+        final String content = readFile(file);
+        final ApplicationConfig result = YamlMarshaller.getInstance()
+                                                       .convertFromYaml(content, ApplicationConfig.class);
+        return Optional.ofNullable(result);
     }
 
     private <T> Optional<T> processLoadFromFile(final String file,
@@ -133,17 +133,15 @@ public class PluginConfigurationLoader {
      * @throws TechnicalException if exception is occurs
      */
     public Optional<EventConfig> loadEventConfigFromFile(final Gav gav, final File file) throws TechnicalException {
-        EventConfig  result  = null;
-        final String content = readFile(file);
-        result = YamlMarshaller.getInstance().convertFromYaml(content, EventConfig.class);
-
-
+        final String      content = readFile(file);
+        final EventConfig result  = YamlMarshaller.getInstance().convertFromYaml(content, EventConfig.class);
+        result.setGav(gav);
         return Optional.ofNullable(result);
     }
 
     public Optional<EventConfig> loadEventConfigFromUrl(final URL url,
                                                         final Gav gav,
-                                                        final EventsFileModel eventFile) throws TechnicalException {
+                                                        final String eventFile) throws TechnicalException {
         //TODO: REFACTOR
         return Optional.empty();
     }

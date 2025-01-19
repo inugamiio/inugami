@@ -19,12 +19,10 @@ package io.inugami.framework.interfaces.processors;
 
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.models.ClonableObject;
-import io.inugami.framework.interfaces.models.Config;
 import io.inugami.framework.interfaces.models.maven.ManifestInfo;
 import lombok.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 /**
  * PostProcessorModel
@@ -45,12 +43,12 @@ public class ProcessorModel implements ClonableObject<ProcessorModel>, ClassBeha
 
     @ToString.Include
     @EqualsAndHashCode.Include
-    private String       name;
+    private String              name;
     @ToString.Include
-    private String       className;
+    private String              className;
     @Singular("configs")
-    private List<Config> configs;
-    private ManifestInfo manifest;
+    private Map<String, String> configs;
+    private ManifestInfo        manifest;
 
 
     @Override
@@ -60,12 +58,8 @@ public class ProcessorModel implements ClonableObject<ProcessorModel>, ClassBeha
 
     @Override
     public ProcessorModel build(final ClassBehavior behavior, final ConfigHandler<String, String> config) {
-        final var builder = toBuilder();
-        builder.configs(Optional.ofNullable(configs)
-                                .orElse(List.of())
-                                .stream()
-                                .map(Config::cloneObj)
-                                .toList());
-        return builder.build();
+        return toBuilder()
+                .configs(cloneConfig())
+                .build();
     }
 }

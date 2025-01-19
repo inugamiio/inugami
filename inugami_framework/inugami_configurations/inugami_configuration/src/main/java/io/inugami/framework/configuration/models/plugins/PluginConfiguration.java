@@ -29,6 +29,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * PluginConfiguration
@@ -70,13 +71,13 @@ public class PluginConfiguration implements Serializable {
     @Singular("processors")
     private              List<ProcessorModel>        processors;
     @Singular("properties")
-    private              List<PropertyModel>         properties;
+    private              Map<String, String>         properties;
     @Singular("frontProperties")
     private              List<PropertyModel>         frontProperties;
     @Singular("alertings")
     private              List<AlertingProviderModel> alertings;
     @Singular("eventsFiles")
-    private              List<EventsFileModel>       eventsFiles;
+    private              List<String>                eventsFiles;
     @Singular("dependencies")
     private              List<Gav>                   dependencies;
     @Singular("security")

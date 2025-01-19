@@ -19,11 +19,11 @@ package io.inugami.framework.configuration.models.app;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.exceptions.TechnicalException;
 import io.inugami.framework.interfaces.functionnals.PostProcessing;
-import io.inugami.framework.interfaces.models.Config;
 import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * SecurityConfiguration
@@ -48,7 +48,7 @@ public class SecurityConfiguration implements Serializable, PostProcessing<Confi
     @EqualsAndHashCode.Include
     private              String                  name;
     @Singular("configs")
-    private              List<Config>            configs;
+    private              Map<String, String>     configs;
     @Singular("users")
     private              List<UserConfig>        users;
     @Singular("roles")

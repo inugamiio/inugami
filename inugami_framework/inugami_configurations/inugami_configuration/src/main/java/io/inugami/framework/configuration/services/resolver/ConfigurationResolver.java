@@ -19,7 +19,6 @@ package io.inugami.framework.configuration.services.resolver;
 import io.inugami.framework.configuration.models.EventConfig;
 import io.inugami.framework.configuration.models.app.ApplicationConfig;
 import io.inugami.framework.configuration.models.components.Components;
-import io.inugami.framework.configuration.models.plugins.EventsFileModel;
 import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
 import io.inugami.framework.configuration.services.PluginConfigurationLoader;
 import io.inugami.framework.configuration.services.resolver.strategies.ClassLoaderPluginConfigStrategy;
@@ -106,12 +105,7 @@ public class ConfigurationResolver {
     // METHODS
     // =========================================================================
     public ApplicationConfig loadApplicationConfig(final URL url) {
-        Optional<ApplicationConfig> result = Optional.empty();
-        try {
-            result = PLUGIN_LOADER.loadApplicationConfig(url);
-        } catch (final TechnicalException e) {
-            throw new FatalException("Can't load application configuration", e);
-        }
+        final Optional<ApplicationConfig> result = PLUGIN_LOADER.loadApplicationConfig(url);
 
         if (!result.isPresent()) {
             throw new FatalException("Can't load application configuration");
@@ -120,18 +114,11 @@ public class ConfigurationResolver {
     }
 
     public ApplicationConfig loadApplicationConfig(final File file) {
-        try {
-            final Optional<ApplicationConfig> result;
-            result = PLUGIN_LOADER.loadApplicationConfig(file);
-            if (!result.isPresent()) {
-                throw new FatalException("Can't load application configuration : {0}", file.getAbsolutePath());
-            }
-            return result.get();
-        } catch (final TechnicalException e) {
-            log.error(e.getMessage(), e);
-            throw new FatalException("Can't load application configuration : {0} : {1}", file.getAbsolutePath(),
-                                     e.getMessage());
+        final Optional<ApplicationConfig> result = PLUGIN_LOADER.loadApplicationConfig(file);
+        if (!result.isPresent()) {
+            throw new FatalException("Can't load application configuration : {0}", file.getAbsolutePath());
         }
+        return result.get();
     }
 
     public Optional<List<PluginConfiguration>> resolvePluginsConfigurations() throws TechnicalException {
@@ -193,7 +180,7 @@ public class ConfigurationResolver {
 
         if ((config.getEventsFiles() != null) && !config.getEventsFiles().isEmpty()) {
             result = new ArrayList<>();
-            for (final EventsFileModel eventFile : config.getEventsFiles()) {
+            for (final String eventFile : config.getEventsFiles()) {
                 final EventConfig eventConfig = resolveEventFile(config, eventFile);
                 LOGGER.debug("found event file : {}", eventConfig.getConfigFile());
                 result.add(eventConfig);
@@ -205,7 +192,7 @@ public class ConfigurationResolver {
     }
 
     private EventConfig resolveEventFile(final PluginConfiguration config,
-                                         final EventsFileModel eventFile) throws TechnicalException {
+                                         final String eventFile) throws TechnicalException {
         Asserts.assertNotNull("plugin configuration mustn't be null!", config);
         Asserts.assertNotNull("event file mustn't be null!", eventFile);
         EventConfig result = null;
@@ -220,7 +207,7 @@ public class ConfigurationResolver {
         if (result == null) {
             // @formatter:off
             throw new ConfigurationResolverDependecyUnresolvedException(
-                    "can't found event file \"{0}\" define in  plugin {1}", eventFile.getName(),
+                    "can't found event file \"{0}\" define in  plugin {1}", eventFile,
                     config.getGav().getHash());
             // @formatter:on
         }

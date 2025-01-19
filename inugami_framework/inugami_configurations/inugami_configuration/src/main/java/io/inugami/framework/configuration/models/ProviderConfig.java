@@ -17,12 +17,11 @@
 package io.inugami.framework.configuration.models;
 
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
-import io.inugami.framework.interfaces.models.Config;
 import io.inugami.framework.interfaces.models.maven.ManifestInfo;
 import io.inugami.framework.interfaces.processors.ClassBehavior;
 import lombok.*;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Caller
@@ -45,12 +44,12 @@ public class ProviderConfig implements ClassBehavior<Object> {
     /**
      * The Constant serialVersionUID.
      */
-    private static final long         serialVersionUID = -3725988814035334991L;
-    private              String       type;
-    private              String       name;
-    private              List<Config> configs;
-    private              String       className;
-    private              ManifestInfo manifest;
+    private static final long                serialVersionUID = -3725988814035334991L;
+    private              String              type;
+    private              String              name;
+    private              Map<String, String> configs;
+    private              String              className;
+    private              ManifestInfo        manifest;
 
 
     @Override

@@ -17,7 +17,6 @@
 package io.inugami.framework.configuration.services.resolver.strategies;
 
 import io.inugami.framework.configuration.models.EventConfig;
-import io.inugami.framework.configuration.models.plugins.EventsFileModel;
 import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
 import io.inugami.framework.configuration.services.resolver.ConfigurationResolverException;
 import io.inugami.framework.interfaces.exceptions.TechnicalException;
@@ -37,6 +36,6 @@ public interface PluginConfigResolverStrategy {
 
 
     Optional<EventConfig> resolveEventFile(final PluginConfiguration config,
-                                           final EventsFileModel eventFile) throws TechnicalException;
+                                           final String eventFile) throws TechnicalException;
 
 }

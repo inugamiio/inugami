@@ -16,15 +16,13 @@
  */
 package io.inugami.framework.interfaces.alertings;
 
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.models.ClonableObject;
-import io.inugami.framework.interfaces.models.Config;
 import io.inugami.framework.interfaces.models.maven.ManifestInfo;
 import io.inugami.framework.interfaces.processors.ClassBehavior;
-import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import lombok.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 /**
  * AlertingModel
@@ -41,14 +39,14 @@ import java.util.Optional;
 @NoArgsConstructor
 public class AlertingProviderModel implements ClassBehavior<AlertingProviderModel>, ClonableObject<AlertingProviderModel> {
 
-    private static final long         serialVersionUID = 6084938077729235541L;
+    private static final long                serialVersionUID = 6084938077729235541L;
     @ToString.Include
     @EqualsAndHashCode.Include
-    private              String       name;
+    private              String              name;
     @ToString.Include
-    private              String       className;
-    private              List<Config> configs;
-    private              ManifestInfo manifest;
+    private              String              className;
+    private              Map<String, String> configs;
+    private              ManifestInfo        manifest;
 
 
     @Override
@@ -64,12 +62,8 @@ public class AlertingProviderModel implements ClassBehavior<AlertingProviderMode
 
     @Override
     public AlertingProviderModel cloneObj() {
-        final var builder = toBuilder();
-        builder.configs(Optional.ofNullable(configs)
-                                .orElse(List.of())
-                                .stream()
-                                .map(Config::cloneObj)
-                                .toList());
-        return builder.build();
+        return toBuilder()
+                .configs(cloneConfig())
+                .build();
     }
 }

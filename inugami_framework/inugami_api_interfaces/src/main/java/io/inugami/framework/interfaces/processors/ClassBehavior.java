@@ -17,13 +17,10 @@
 package io.inugami.framework.interfaces.processors;
 
 
-import io.inugami.framework.interfaces.models.Config;
 import io.inugami.framework.interfaces.models.maven.ManifestInfo;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * ClassBehavior
@@ -34,15 +31,15 @@ import java.util.Optional;
 public interface ClassBehavior<T> extends Serializable, ClassBehaviorParametersSPI<T> {
 
 
-    List<Config> getConfigs();
+    Map<String, String> getConfigs();
 
-    void setConfigs(final List<Config> configs);
+    void setConfigs(final Map<String, String> configs);
 
     default Optional<String> getConfig(final String key) {
         Objects.requireNonNull(key);
         Optional<String> result = Optional.empty();
         if (getConfigs() != null) {
-            for (final Config conf : getConfigs()) {
+            for (final Map.Entry<String, String> conf : Optional.ofNullable(getConfigs()).orElse(Map.of()).entrySet()) {
                 if (key.equals(conf.getKey())) {
                     result = Optional.of(conf.getValue());
                     break;
@@ -69,4 +66,16 @@ public interface ClassBehavior<T> extends Serializable, ClassBehaviorParametersS
         return clazz.isAssignableFrom(this.getClass());
     }
 
+    default Map<String, String> cloneConfig() {
+
+        final Map<String, String> newConfiguration = new LinkedHashMap<>();
+        final Map<String, String> currentConfig    = Optional.ofNullable(getConfigs()).orElse(Map.of());
+        final List<String>        keys             = new ArrayList<>(currentConfig.keySet());
+        Collections.sort(keys);
+
+        for (String key : keys) {
+            newConfiguration.put(key, currentConfig.get(key));
+        }
+        return newConfiguration;
+    }
 }

@@ -18,7 +18,6 @@ package io.inugami.framework.configuration.services.resolver.strategies;
 
 import io.inugami.framework.configuration.models.EventConfig;
 import io.inugami.framework.configuration.models.components.Components;
-import io.inugami.framework.configuration.models.plugins.EventsFileModel;
 import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
 import io.inugami.framework.configuration.services.PluginConfigurationLoader;
 import io.inugami.framework.configuration.services.resolver.ConfigurationResolverException;
@@ -76,7 +75,7 @@ public class ClassLoaderPluginConfigStrategy implements PluginConfigResolverStra
 
     @Override
     public Optional<EventConfig> resolveEventFile(final PluginConfiguration config,
-                                                  final EventsFileModel eventFile) throws TechnicalException {
+                                                  final String eventFile) throws TechnicalException {
 
         Optional<EventConfig> result = Optional.empty();
 
@@ -126,9 +125,9 @@ public class ClassLoaderPluginConfigStrategy implements PluginConfigResolverStra
     }
 
     private EventConfig processResolveEventFile(final PluginConfiguration pluginConfig,
-                                                final EventsFileModel eventFile) throws TechnicalException {
+                                                final String eventFile) throws TechnicalException {
         EventConfig           result    = null;
-        final List<URL>       files     = processResolveFile("META-INF/" + eventFile.getName());
+        final List<URL>       files     = processResolveFile("META-INF/" + eventFile);
         Optional<EventConfig> configOpt = Optional.empty();
         if (!files.isEmpty()) {
             final URL url = files.get(0);

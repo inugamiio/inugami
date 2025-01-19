@@ -17,7 +17,6 @@
 package io.inugami.framework.configuration.services.resolver.strategies;
 
 import io.inugami.framework.configuration.models.EventConfig;
-import io.inugami.framework.configuration.models.plugins.EventsFileModel;
 import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
 import io.inugami.framework.configuration.services.PluginConfigurationLoader;
 import io.inugami.framework.configuration.services.resolver.ConfigurationResolverException;
@@ -54,7 +53,7 @@ public class JvmPluginConfigStrategy implements PluginConfigResolverStrategy {
     }
 
     @Override
-    public Optional<EventConfig> resolveEventFile(final PluginConfiguration config, final EventsFileModel eventFile) {
+    public Optional<EventConfig> resolveEventFile(final PluginConfiguration config, final String eventFile) {
         // mustn't load event file from JVM properties
         return Optional.empty();
     }

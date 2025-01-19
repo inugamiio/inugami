@@ -18,7 +18,6 @@ package io.inugami.framework.configuration.services.resolver.strategies;
 
 import io.inugami.framework.configuration.exceptions.NotPluginConfigurationException;
 import io.inugami.framework.configuration.models.EventConfig;
-import io.inugami.framework.configuration.models.plugins.EventsFileModel;
 import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
 import io.inugami.framework.configuration.services.PluginConfigurationLoader;
 import io.inugami.framework.configuration.services.resolver.ConfigurationResolverException;
@@ -75,7 +74,7 @@ public class HomePluginConfigStrategy implements PluginConfigResolverStrategy {
 
     @Override
     public Optional<EventConfig> resolveEventFile(final PluginConfiguration config,
-                                                  final EventsFileModel eventFile) throws ConfigurationResolverException {
+                                                  final String eventFile) throws ConfigurationResolverException {
         Optional<EventConfig> result = Optional.empty();
 
         final Optional<File> eventConfigFile = resolveEventConfigFile(eventFile);
@@ -90,9 +89,9 @@ public class HomePluginConfigStrategy implements PluginConfigResolverStrategy {
         return result;
     }
 
-    private Optional<File> resolveEventConfigFile(final EventsFileModel eventFile) {
+    private Optional<File> resolveEventConfigFile(final String eventFile) {
         Optional<File> result = Optional.empty();
-        final String[] files  = homePath.list((dir, name) -> name.equals(eventFile.getName()));
+        final String[] files  = homePath.list((dir, name) -> name.equals(eventFile));
         if ((files != null) && (files.length > 0)) {
             result = Optional.of(new File(homePath.getAbsolutePath() + File.separator + files[0]));
         }
