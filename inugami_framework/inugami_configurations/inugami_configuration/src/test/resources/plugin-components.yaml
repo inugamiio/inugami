@@ -1,0 +1,46 @@
+enable: true
+gav:
+  groupId: foo
+  artifactId: bar
+  version: 0.0.1
+
+components:
+  gav:
+    groupId: foo
+    artifactId: bar
+    version: 0.0.1
+  components:
+    - name: rich.text
+      views:
+        - type: display
+          selector: r-rich-text
+        - type: form
+          selector: r-rich-text-form
+      descriptions:
+        descriptions:
+          - type: default
+            path: /js/app/plugins/rastackware-front-plugins-commons/components/rich_text/rich.text.description.html
+          - type: pl
+            path: /js/app/plugins/rastackware-front-plugins-commons/components/rich_text/rich.text.description_pl.html
+        screenshots:
+          - /js/app/plugins/rastackware-front-plugins-commons/components/rich_text/rich.text.screenshot_1.png
+          - /js/app/plugins/rastackware-front-plugins-commons/components/rich_text/rich.text.screenshot_2.png
+      models:
+        - name: styleClass
+          type: string
+          defaultValue: foo
+          description: _rich.text.fields.styleClass.description
+
+        - name: style
+          type: string
+          defaultValue: bar
+          description: _rich.text.fields.style.description
+
+      events:
+        - name: onChange
+          type: emit
+          description: _rich.text.fields.events.onChange.description
+
+        - name: refresh
+          type: listener
+          description: _rich.text.fields.events.refresh.description

@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -75,7 +76,7 @@ public class PluginConfigurationLoader {
         Optional<PluginConfiguration> result = Optional.empty();
 
 
-        final PluginConfiguration config = null;
+        final PluginConfiguration config = loadPluginConfiguration(url);
         if (config != null) {
             new PluginConfigurationValidator(config, url.toString()).validate();
             result = Optional.of(config);
@@ -89,15 +90,35 @@ public class PluginConfigurationLoader {
         return result;
     }
 
+    private PluginConfiguration loadPluginConfiguration(final URL url) {
+        try {
+            final String content = FilesUtils.readContent(url);
+            return YamlMarshaller.getInstance().convertFromYaml(content, PluginConfiguration.class);
+        } catch (IOException e) {
+            if (log.isDebugEnabled()) {
+                log.error(e.getMessage(), e);
+            }
+            return null;
+        }
+    }
+
     public Optional<ApplicationConfig> loadApplicationConfig(final URL url) {
-        //TODO: REFACTOR
-        return Optional.empty();
+        try {
+            final String content = FilesUtils.readContent(url);
+            final ApplicationConfig result = YamlMarshaller.getInstance()
+                                                           .convertFromYaml(content, ApplicationConfig.class);
+            return Optional.ofNullable(result);
+        } catch (IOException e) {
+            if (log.isDebugEnabled()) {
+                log.error(e.getMessage(), e);
+            }
+            return Optional.empty();
+        }
     }
 
     public Optional<ApplicationConfig> loadApplicationConfig(final File file) {
         final String content = readFile(file);
-        final ApplicationConfig result = YamlMarshaller.getInstance()
-                                                       .convertFromYaml(content, ApplicationConfig.class);
+        final ApplicationConfig result = YamlMarshaller.getInstance().convertFromYaml(content, ApplicationConfig.class);
         return Optional.ofNullable(result);
     }
 
@@ -165,8 +186,15 @@ public class PluginConfigurationLoader {
     // LOAD COMPOENTS CONFIGS
     // =========================================================================
     public Components loadComponentsConfiguration(final URL url) throws ConfigurationResolverException {
-        //TODO: REFACTOR
-        return null;
+        final String content;
+        try {
+            log.debug("loading Components : {}", url);
+            content = FilesUtils.readContent(url);
+            return YamlMarshaller.getInstance().convertFromYaml(content, Components.class);
+        } catch (IOException e) {
+            log.warn(e.getMessage(), e);
+            return null;
+        }
     }
 
 

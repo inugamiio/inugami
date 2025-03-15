@@ -132,9 +132,7 @@ class ClassLoaderPluginConfigStrategyTest {
         assertNotNull(localConfig.getListeners());
         assertEquals(1, localConfig.getListeners().size());
         assertEquals("testListener", localConfig.getListeners().get(0).getName());
-        //@formatter:off
         assertEquals("io.inugami.configuration.listener.Listener", localConfig.getListeners().get(0).getClassName());
-        //@formatter:on
         assertNotNull(localConfig.getListeners().get(0).getConfigs());
         assertEquals(2, localConfig.getListeners().get(0).getConfigs().size());
         assertEquals("FoobarData", localConfig.getListeners().get(0).getConfig("data").get());
@@ -184,7 +182,7 @@ class ClassLoaderPluginConfigStrategyTest {
         //
         assertNotNull(artifactTest.getEventsFiles());
         assertEquals(1, artifactTest.getEventsFiles().size());
-        assertEquals("event-config.xml", artifactTest.getEventsFiles().get(0).getName());
+        assertEquals("event-config.yaml", artifactTest.getEventsFiles().get(0));
 
     }
 

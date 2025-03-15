@@ -46,7 +46,7 @@ public class Components implements Serializable {
     @EqualsAndHashCode.Include
     private              Gav                  gav;
     private              List<ComponentModel> components;
-    
+
     // =================================================================================================================
     // OVERRIDES
     // =================================================================================================================

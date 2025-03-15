@@ -176,7 +176,7 @@ class PluginConfigurationLoaderTest implements TestUnitResources {
     @Test
     void testLoadComponentsConfiguration() throws Exception {
         final PluginConfigurationLoader loader = new PluginConfigurationLoader();
-        final URL path = FilesUtils.buildFile(RESOURCES_PATH, "plugin-components.xml")
+        final URL path = FilesUtils.buildFile(RESOURCES_PATH, "plugin-components.yaml")
                                    .toURI()
                                    .toURL();
         final Components config = loader.loadComponentsConfiguration(path);

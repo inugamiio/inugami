@@ -28,10 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * ClassLoaderPluginConfigStrategy
@@ -46,8 +43,8 @@ public class ClassLoaderPluginConfigStrategy implements PluginConfigResolverStra
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final String CONFIG_FILE_NAME            = "META-INF/plugin-configuration.xml";
-    private static final String COMPONENTS_CONFIG_FILE_NAME = "META-INF/plugin-components.xml";
+    private static final String CONFIG_FILE_NAME            = "META-INF/plugin-configuration.yaml";
+    private static final String COMPONENTS_CONFIG_FILE_NAME = "META-INF/plugin-components.yaml";
 
     private static final int MAX_CLASSLOADER_PARENT = 4;
 
@@ -158,7 +155,7 @@ public class ClassLoaderPluginConfigStrategy implements PluginConfigResolverStra
                 && !classLoader.equals(System.class.getClassLoader())) {
             //@formatter:on
 
-            final List<URL> urls = resolveUrls(classLoader, fileName);
+            final Set<URL> urls = resolveUrls(classLoader, fileName);
             if (urls != null) {
                 result.addAll(urls);
                 urls.forEach(url -> log.debug("found configuration : {}", url));
@@ -171,10 +168,10 @@ public class ClassLoaderPluginConfigStrategy implements PluginConfigResolverStra
         return result;
     }
 
-    private List<URL> resolveUrls(final ClassLoader classLoader,
-                                  final String fileName) throws ConfigurationResolverException {
+    private Set<URL> resolveUrls(final ClassLoader classLoader,
+                                 final String fileName) throws ConfigurationResolverException {
         Asserts.assertNotNull(classLoader);
-        List<URL>        result = null;
+        Set<URL>         result = new LinkedHashSet<>();
         Enumeration<URL> urls   = null;
         try {
             urls = classLoader.getResources(fileName);
@@ -183,7 +180,6 @@ public class ClassLoaderPluginConfigStrategy implements PluginConfigResolverStra
         }
 
         if (urls != null) {
-            result = new ArrayList<>();
             while (urls.hasMoreElements()) {
                 result.add(urls.nextElement());
             }

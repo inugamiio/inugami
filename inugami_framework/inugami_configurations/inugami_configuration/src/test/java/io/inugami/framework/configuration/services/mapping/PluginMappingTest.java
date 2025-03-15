@@ -24,12 +24,14 @@ import io.inugami.framework.configuration.models.front.MenuLink;
 import io.inugami.framework.configuration.models.front.PluginComponent;
 import io.inugami.framework.configuration.models.front.PluginFrontConfig;
 import io.inugami.framework.configuration.models.front.Route;
-import io.inugami.framework.configuration.models.plugins.*;
+import io.inugami.framework.configuration.models.plugins.Plugin;
+import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
+import io.inugami.framework.configuration.models.plugins.Resource;
+import io.inugami.framework.configuration.models.plugins.RessourceType;
 import io.inugami.framework.configuration.tools.TestEngineListener;
 import io.inugami.framework.configuration.tools.TestHandler;
 import io.inugami.framework.configuration.tools.TestProcessor;
 import io.inugami.framework.configuration.tools.TestProvider;
-import io.inugami.framework.interfaces.models.Config;
 import io.inugami.framework.interfaces.models.event.Event;
 import io.inugami.framework.interfaces.models.event.SimpleEvent;
 import io.inugami.framework.interfaces.models.maven.Gav;
@@ -40,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static io.inugami.commons.test.UnitTestHelper.assertText;
 
@@ -115,7 +118,7 @@ class PluginMappingTest {
                                                             .className(TestProcessor.class.getSimpleName())
                                                             .name(TestProcessor.class.getName())
                                                             .build())
-                                  .eventsFiles(EventsFileModel.builder().name("plugin-test-events.xml").build())
+                                  .eventsFiles("plugin-test-events.yaml")
                                   .dependencies(Gav.builder()
                                                    .groupId("io.inugami.dashboard")
                                                    .artifactId("test-plugin-dependency")
@@ -153,7 +156,7 @@ class PluginMappingTest {
                     .processors(ProcessorModel.builder()
                                               .name(TestProcessor.class.getSimpleName())
                                               .className(TestProcessor.class.getName())
-                                              .configs(new Config("foo", "bar"))
+                                              .configs(Map.of("foo", "bar"))
                                               .build())
                     .build();
 
@@ -168,7 +171,7 @@ class PluginMappingTest {
                           .processors(ProcessorModel.builder()
                                                     .name(TestProcessor.class.getSimpleName())
                                                     .className(TestProcessor.class.getName())
-                                                    .configs(new Config("foo", "bar"))
+                                                    .configs(Map.of("foo", "bar"))
                                                     .build())
                           .build();
     }

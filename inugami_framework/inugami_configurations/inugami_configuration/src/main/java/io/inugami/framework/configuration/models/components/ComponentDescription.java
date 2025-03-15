@@ -46,5 +46,5 @@ public class ComponentDescription implements Serializable {
     @Singular("descriptions")
     private              List<ComponentDescriptionContentModel> descriptions;
     @Singular("screenshots")
-    private              List<ComponentScreenshot>              screenshots;
+    private              List<String>                           screenshots;
 }

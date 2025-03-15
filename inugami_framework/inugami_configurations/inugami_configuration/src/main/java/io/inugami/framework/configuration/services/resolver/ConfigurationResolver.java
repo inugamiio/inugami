@@ -154,7 +154,7 @@ public class ConfigurationResolver {
         for (final PluginConfigResolverStrategy strategy : pluginStrategies) {
             Optional<List<PluginConfiguration>> optConfig = Optional.empty();
 
-            LOGGER.info("resolve from strategy :{}", strategy.getClass().getSimpleName());
+            log.info("resolve from strategy :{}", strategy.getClass().getSimpleName());
             try {
                 optConfig = strategy.resolve();
             } catch (final ConfigurationResolverException e) {
@@ -232,7 +232,7 @@ public class ConfigurationResolver {
     private void addComponents(final PluginConfiguration plugin, final List<Components> componentsConfigs) {
         for (final Components compo : componentsConfigs) {
             if (compo.isSameGav(plugin.getGav())) {
-                plugin.setComponents(compo);
+                plugin.setComponents(compo.getComponents());
                 break;
             }
         }

@@ -1,0 +1,12 @@
+enable: true
+gav:
+  groupId: io.inugami
+  artifactId: inugami_configuration
+  version: .y.z
+
+listeners:
+  - name: testListener
+    className: io.inugami.configuration.listener.Listener
+    config:
+      data: FoobarData
+      title: Hello the world

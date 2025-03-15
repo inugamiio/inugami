@@ -20,7 +20,7 @@ import io.inugami.framework.configuration.models.HandlerConfig;
 import io.inugami.framework.configuration.models.ListenerModel;
 import io.inugami.framework.configuration.models.ProviderConfig;
 import io.inugami.framework.configuration.models.app.SecurityConfiguration;
-import io.inugami.framework.configuration.models.components.Components;
+import io.inugami.framework.configuration.models.components.ComponentModel;
 import io.inugami.framework.configuration.models.front.PluginFrontConfig;
 import io.inugami.framework.interfaces.alertings.AlertingProviderModel;
 import io.inugami.framework.interfaces.models.maven.Gav;
@@ -82,6 +82,7 @@ public class PluginConfiguration implements Serializable {
     private              List<Gav>                   dependencies;
     @Singular("security")
     private              List<SecurityConfiguration> security;
-    private              Components                  components;
+    @Singular("security")
+    private              List<ComponentModel>        components;
 
 }

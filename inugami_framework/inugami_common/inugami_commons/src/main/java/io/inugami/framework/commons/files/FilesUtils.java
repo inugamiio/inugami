@@ -53,7 +53,8 @@ public class FilesUtils {
     private static final Charset             ISO_8859_1           = StandardCharsets.ISO_8859_1;
     private static final Pattern             WINDOWS_PATH         = Pattern.compile("^[a-zA-z]+[:][\\\\]");
     private static final Map<String, String> FILES_MAPPING        = initFilesMapping();
-    public static final  int                 MEGA                 = 1024 * 1024;
+    public static final  int                 BUFFER_SIZE          = 1024;
+    public static final  int                 MEGA                 = BUFFER_SIZE * BUFFER_SIZE;
     public static final  int                 DEFAULT_BUFFER_SIZE  = 10 * MEGA;
     private static final String              UTF8                 = "UTF-8";
     private static final Unzip               UNZIP                = new Unzip();
@@ -244,8 +245,7 @@ public class FilesUtils {
             if (line != null) {
                 consumer.accept(line);
             }
-        }
-        while (line != null);
+        } while (line != null);
         br.close();
     }
 
@@ -265,12 +265,13 @@ public class FilesUtils {
         }
 
         final Map<String, String> result = new HashMap<>();
-        properties.entrySet().forEach(entry -> result.put(String.valueOf(entry.getKey()),
-                                                          String.valueOf(entry.getValue())));
+        properties.entrySet()
+                  .forEach(entry -> result.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue())));
         return result;
     }
 
-    private StringBuilder processReading(final File file, final int bufferSize,
+    private StringBuilder processReading(final File file,
+                                         final int bufferSize,
                                          final String encoding) throws IOException {
         RandomAccessFile aFile = null;
         try {
@@ -312,7 +313,9 @@ public class FilesUtils {
         return data;
     }
 
-    private ReadPartResult readPart(final ByteBuffer buffer, final int oldCursor, final int bufferSize,
+    private ReadPartResult readPart(final ByteBuffer buffer,
+                                    final int oldCursor,
+                                    final int bufferSize,
                                     final String encoding) throws UnsupportedEncodingException {
         int cursor = oldCursor;
 
@@ -417,7 +420,8 @@ public class FilesUtils {
     }
 
     @SuppressWarnings({"java:S3776"})
-    public static List<File> scanFilesystem(final File path, final FilenameFilter filter,
+    public static List<File> scanFilesystem(final File path,
+                                            final FilenameFilter filter,
                                             final Predicate<File> directoryFilter) {
         final List<File> result = new ArrayList<>();
         if (path == null) {
@@ -536,6 +540,31 @@ public class FilesUtils {
 
     public static String readContent(final File file) throws IOException {
         return new String(readBytes(file));
+    }
+
+    public static String readContent(final URL url) throws IOException {
+        final byte[] content = readBytes(url);
+        return content == null ? null : new String(content, StandardCharsets.UTF_8);
+    }
+
+    public static byte[] readBytes(final URL url) throws IOException {
+        if (url == null) {
+            return null;
+        }
+
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try (BufferedInputStream in = new BufferedInputStream(url.openStream())) {
+            byte dataBuffer[] = new byte[BUFFER_SIZE];
+            int  bytesRead;
+            while ((bytesRead = in.read(dataBuffer, 0, BUFFER_SIZE)) != -1) {
+                output.write(dataBuffer, 0, bytesRead);
+            }
+        } catch (IOException e) {
+            if (log.isDebugEnabled()) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        return output.toByteArray().length == 0 ? null : output.toByteArray();
     }
 
     public static byte[] readBytes(final File file) throws IOException {

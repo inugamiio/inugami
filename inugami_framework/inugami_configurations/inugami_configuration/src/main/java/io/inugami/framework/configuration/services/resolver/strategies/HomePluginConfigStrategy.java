@@ -44,7 +44,7 @@ public class HomePluginConfigStrategy implements PluginConfigResolverStrategy {
     // =========================================================================
     private static final Logger LOGGER = LoggerFactory.getLogger(HomePluginConfigStrategy.class);
 
-    private static final Pattern FILE_PATTERN = Pattern.compile("^plugin_.*.xml$");
+    private static final Pattern FILE_PATTERN = Pattern.compile("^plugin_.*.yaml$");
 
     public final File homePath;
 
