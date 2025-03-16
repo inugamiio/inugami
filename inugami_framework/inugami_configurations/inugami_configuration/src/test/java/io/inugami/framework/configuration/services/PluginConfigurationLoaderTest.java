@@ -19,7 +19,6 @@ package io.inugami.framework.configuration.services;
 import io.inugami.framework.commons.files.FilesUtils;
 import io.inugami.framework.commons.tools.TestUnitResources;
 import io.inugami.framework.configuration.models.app.ApplicationConfig;
-import io.inugami.framework.configuration.models.components.Components;
 import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -160,10 +159,24 @@ class PluginConfigurationLoaderTest implements TestUnitResources {
 
         LOGGER.info("load plugin-configuration.yaml");
         final Optional<PluginConfiguration> configOpt = loader.loadFromFile(new File(
-                RESOURCES_PATH + "META-INF/plugin-configuration.yaml"));
+                RESOURCES_PATH + "/META-INF/plugin-configuration.yaml"));
 
-        assertText(configOpt.orElse(null), """
-                """);
+        assertText(configOpt.orElse(null),
+                   """
+                           {
+                             "enable" : true,
+                             "gav" : {
+                               "artifactId" : "inugami_configuration",
+                               "groupId" : "io.inugami",
+                               "hash" : "io.inugami:inugami_configuration:x.y.z",
+                               "version" : "x.y.z"
+                             },
+                             "listeners" : [ {
+                               "className" : "io.inugami.configuration.listener.Listener",
+                               "name" : "testListener"
+                             } ]
+                           }
+                           """);
     }
 
     // =========================================================================
@@ -172,12 +185,61 @@ class PluginConfigurationLoaderTest implements TestUnitResources {
     @Test
     void testLoadComponentsConfiguration() throws Exception {
         final PluginConfigurationLoader loader = new PluginConfigurationLoader();
-        final URL path = FilesUtils.buildFile(RESOURCES_PATH, "plugin-components.yaml")
+        final URL path = FilesUtils.buildFile(RESOURCES_PATH, "/META-INF/plugin-components.yaml")
                                    .toURI()
                                    .toURL();
-        final Components config = loader.loadComponentsConfiguration(path);
-        assertText(config, """
-                """);
+
+        assertText(loader.loadComponentsConfiguration(path),
+                   """
+                                   {
+                                     "components" : [ {
+                                       "descriptions" : {
+                                         "descriptions" : [ {
+                                           "path" : "/js/app/plugins/rastackware-front-plugins-commons/components/rich_text/rich.text.description.html",
+                                           "type" : "default"
+                                         }, {
+                                           "path" : "/js/app/plugins/rastackware-front-plugins-commons/components/rich_text/rich.text.description_pl.html",
+                                           "type" : "pl"
+                                         } ],
+                                         "screenshots" : [ "/js/app/plugins/rastackware-front-plugins-commons/components/rich_text/rich.text.screenshot_1.png", "/js/app/plugins/rastackware-front-plugins-commons/components/rich_text/rich.text.screenshot_2.png" ]
+                                       },
+                                       "events" : [ {
+                                         "description" : "_rich.text.fields.events.onChange.description",
+                                         "name" : "onChange",
+                                         "type" : "emit"
+                                       }, {
+                                         "description" : "_rich.text.fields.events.refresh.description",
+                                         "name" : "refresh",
+                                         "type" : "listener"
+                                       } ],
+                                       "models" : [ {
+                                         "defaultValue" : "foo",
+                                         "description" : "_rich.text.fields.styleClass.description",
+                                         "name" : "styleClass",
+                                         "type" : "string"
+                                       }, {
+                                         "defaultValue" : "bar",
+                                         "description" : "_rich.text.fields.style.description",
+                                         "name" : "style",
+                                         "type" : "string"
+                                       } ],
+                                       "name" : "rich.text",
+                                       "views" : [ {
+                                         "selector" : "r-rich-text",
+                                         "type" : "display"
+                                       }, {
+                                         "selector" : "r-rich-text-form",
+                                         "type" : "form"
+                                       } ]
+                                     } ],
+                                     "gav" : {
+                                       "artifactId" : "bar",
+                                       "groupId" : "foo",
+                                       "hash" : "foo:bar:0.0.1",
+                                       "version" : "0.0.1"
+                                     }
+                                   }
+                           """);
 
     }
 

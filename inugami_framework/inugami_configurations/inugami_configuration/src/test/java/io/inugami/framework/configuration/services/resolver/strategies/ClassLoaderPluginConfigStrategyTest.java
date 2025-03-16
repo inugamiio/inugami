@@ -16,8 +16,7 @@
  */
 package io.inugami.framework.configuration.services.resolver.strategies;
 
-import io.inugami.framework.configuration.models.EventConfig;
-import io.inugami.framework.configuration.models.ProviderConfig;
+import io.inugami.commons.test.api.SkipLineMatcher;
 import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
 import io.inugami.framework.configuration.services.PluginConfigurationLoader;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static io.inugami.commons.test.UnitTestHelper.assertText;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * ClassLoaderPluginConfigStrategyTest
@@ -66,20 +66,25 @@ class ClassLoaderPluginConfigStrategyTest {
 
         final List<PluginConfiguration> configs = resolver.load(urls);
         assertNotNull(configs, "resolved configurations mustn't be null!");
-        assertEquals(2, configs.size());
 
-        PluginConfiguration artifactTest = null;
-        PluginConfiguration localConfig  = null;
-        if ("dashboard_tv_configuration_test".equals(configs.get(0).getGav().getArtifactId())) {
-            artifactTest = configs.get(0);
-            localConfig = configs.get(1);
-        } else {
-            artifactTest = configs.get(1);
-            localConfig = configs.get(0);
-        }
 
-        validateArtifactTest(artifactTest);
-        validateLocalArtifact(localConfig);
+        assertText(configs,
+                   """
+                           [ {
+                             "configFile" : "/META-INF/plugin-configuration.yaml",
+                             "enable" : true,
+                             "gav" : {
+                               "artifactId" : "inugami_configuration",
+                               "groupId" : "io.inugami",
+                               "hash" : "io.inugami:inugami_configuration:x.y.z",
+                               "version" : "x.y.z"
+                             },
+                             "listeners" : [ {
+                               "className" : "io.inugami.configuration.listener.Listener",
+                               "name" : "testListener"
+                             } ]
+                           } ]
+                           """, SkipLineMatcher.of(1));
     }
 
     @Test
@@ -88,102 +93,24 @@ class ClassLoaderPluginConfigStrategyTest {
                 new PluginConfigurationLoader());
 
         final Optional<List<PluginConfiguration>> configs = resolver.resolve();
-        assertTrue(configs.isPresent());
-
-        final List<PluginConfiguration> pluginsConfigs = configs.get();
-        assertEquals(2, pluginsConfigs.size());
-        PluginConfiguration artifactTest = null;
-
-        if ("dashboard_tv_configuration_test".equals(pluginsConfigs.get(0).getGav().getArtifactId())) {
-            artifactTest = pluginsConfigs.get(0);
-        } else {
-            artifactTest = pluginsConfigs.get(1);
-        }
-
-        assertNotNull(artifactTest.getEventsFiles());
-        assertEquals(1, artifactTest.getEventsFiles().size());
-        //@formatter:off
-        final Optional<EventConfig> eventConfigOpt = resolver.resolveEventFile(artifactTest,artifactTest.getEventsFiles().get(0));
-        //@formatter:on
-        assertNotNull(eventConfigOpt, "event configuration mustn't be null!");
-        assertTrue(eventConfigOpt.isPresent(), "event configuration must be found!");
-
-        final EventConfig eventConfig = eventConfigOpt.get();
-        assertNotNull(eventConfig.getSimpleEvents());
-        assertEquals(1, eventConfig.getSimpleEvents().size());
-        assertEquals("joe-pourcentage", eventConfig.getSimpleEvents().get(0).getName());
+        assertText(configs.orElse(null),
+                   """
+                           [ {
+                             "configFile" : "/META-INF/plugin-configuration.yaml",
+                             "enable" : true,
+                             "gav" : {
+                               "artifactId" : "inugami_configuration",
+                               "groupId" : "io.inugami",
+                               "hash" : "io.inugami:inugami_configuration:x.y.z",
+                               "version" : "x.y.z"
+                             },
+                             "listeners" : [ {
+                               "className" : "io.inugami.configuration.listener.Listener",
+                               "name" : "testListener"
+                             } ]
+                           } ]
+                           """, SkipLineMatcher.of(1));
     }
 
-    // =========================================================================
-    // VALIDATE
-    // =========================================================================
-    private void validateLocalArtifact(final PluginConfiguration localConfig) {
-        assertNotNull(localConfig);
-        assertNotNull(localConfig.getGav());
-
-        assertEquals("inugami_configuration", localConfig.getGav().getArtifactId());
-        assertEquals("io.inugami", localConfig.getGav().getGroupId());
-        assertEquals("x.y.z", localConfig.getGav().getVersion());
-
-        assertNotNull(localConfig.getResources());
-        assertTrue(localConfig.getResources().isEmpty());
-        assertNull(localConfig.getProviders());
-        //
-        assertNotNull(localConfig.getListeners());
-        assertEquals(1, localConfig.getListeners().size());
-        assertEquals("testListener", localConfig.getListeners().get(0).getName());
-        assertEquals("io.inugami.configuration.listener.Listener", localConfig.getListeners().get(0).getClassName());
-        assertNotNull(localConfig.getListeners().get(0).getConfigs());
-        assertEquals(2, localConfig.getListeners().get(0).getConfigs().size());
-        assertEquals("FoobarData", localConfig.getListeners().get(0).getConfig("data").get());
-        assertEquals("Hello the world", localConfig.getListeners().get(0).getConfig("title").get());
-        //
-        assertNull(localConfig.getProcessors());
-        assertNull(localConfig.getEventsFiles());
-
-        assertTrue(localConfig.getFrontConfig() != null, "no front config found!");
-
-    }
-
-    private void validateArtifactTest(final PluginConfiguration artifactTest) {
-        assertNotNull(artifactTest);
-        assertNotNull(artifactTest.getGav());
-
-        //
-        assertNotNull(artifactTest.getResources());
-        assertEquals(3, artifactTest.getResources().size());
-        assertEquals("inugami_configuration_test/css/", artifactTest.getResources().get(0).getPath());
-        assertEquals("theme.css", artifactTest.getResources().get(0).getName());
-        assertEquals("inugami_configuration_test/css/theme.css", artifactTest.getResources().get(0).getFullPath());
-        //
-        assertEquals("inugami_configuration_test/js/", artifactTest.getResources().get(1).getPath());
-        assertEquals("main.js", artifactTest.getResources().get(1).getName());
-        assertEquals("inugami_configuration_test/js/main.js", artifactTest.getResources().get(1).getFullPath());
-        //
-        assertEquals("inugami_configuration_test/", artifactTest.getResources().get(2).getPath());
-        assertEquals("index.html", artifactTest.getResources().get(2).getName());
-        assertEquals("inugami_configuration_test/index.html", artifactTest.getResources().get(2).getFullPath());
-        //
-        assertNotNull(artifactTest.getProviders());
-        assertEquals(1, artifactTest.getProviders().size());
-        final ProviderConfig provider = artifactTest.getProviders().get(0);
-        assertEquals("io.inugami.configuration.test.MockCaller", provider.getClassName());
-        assertEquals("foobar.system", provider.getName());
-        assertEquals("FoobarData", provider.getConfig("data").get());
-        //
-        assertNotNull(artifactTest.getProviders());
-        assertNotNull(artifactTest.getListeners());
-        //
-        assertNotNull(artifactTest.getProcessors());
-        assertEquals(1, artifactTest.getProcessors().size());
-        assertEquals("foo", artifactTest.getProcessors().get(0).getName());
-        assertEquals("io.inugami.configuration.test.PluginProcessor",
-                     artifactTest.getProcessors().get(0).getClassName());
-        //
-        assertNotNull(artifactTest.getEventsFiles());
-        assertEquals(1, artifactTest.getEventsFiles().size());
-        assertEquals("event-config.yaml", artifactTest.getEventsFiles().get(0));
-
-    }
 
 }
