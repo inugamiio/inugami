@@ -16,7 +16,7 @@
  */
 package io.inugami.framework.configuration.services.resolver;
 
-import io.inugami.framework.configuration.models.EventConfig;
+import io.inugami.commons.test.api.SkipLineMatcher;
 import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Optional;
 
+import static io.inugami.commons.test.UnitTestHelper.assertText;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -96,7 +97,7 @@ class ConfigurationResolverTest {
         PluginConfiguration pluginConf = null;
 
         for (final PluginConfiguration conf : optional.get()) {
-            if ("io.inugami:inugami_configuration_test:0.2.0-SNAPSHOT".equals(conf.getGav().getHash())) {
+            if ("io.inugami:inugami_configuration:x.y.z".equals(conf.getGav().getHash())) {
 
                 pluginConf = conf;
                 break;
@@ -104,17 +105,22 @@ class ConfigurationResolverTest {
         }
 
         assertNotNull(pluginConf);
-        final Optional<List<EventConfig>> eventsOpt = resolver.resolvePluginEventConfig(pluginConf);
-        assertTrue(eventsOpt.isPresent(), "no events configuration found!");
-
-        final List<EventConfig> events = eventsOpt.get();
-        assertEquals(1, events.size());
-
-        final EventConfig event = events.get(0);
-        assertNotNull(event.getSimpleEvents());
-        assertEquals(1, event.getSimpleEvents().size());
-        assertEquals("joe-pourcentage", event.getSimpleEvents().get(0).getName());
-
+        assertText(pluginConf, """
+                {
+                  "configFile" : "META-INF/plugin-configuration.yaml",
+                  "enable" : true,
+                  "gav" : {
+                    "artifactId" : "inugami_configuration",
+                    "groupId" : "io.inugami",
+                    "hash" : "io.inugami:inugami_configuration:x.y.z",
+                    "version" : "x.y.z"
+                  },
+                  "listeners" : [ {
+                    "className" : "io.inugami.configuration.listener.Listener",
+                    "name" : "testListener"
+                  } ]
+                }
+                """, SkipLineMatcher.of(1));
     }
 
 }

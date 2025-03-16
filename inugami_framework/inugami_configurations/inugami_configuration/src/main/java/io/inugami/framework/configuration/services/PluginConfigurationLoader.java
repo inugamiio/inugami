@@ -24,13 +24,10 @@ import io.inugami.framework.configuration.models.app.ApplicationConfig;
 import io.inugami.framework.configuration.models.components.Components;
 import io.inugami.framework.configuration.models.front.PluginFrontConfig;
 import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
-import io.inugami.framework.configuration.services.functions.ConfigLoaderTranstypeFunction;
 import io.inugami.framework.configuration.services.resolver.ConfigurationResolverException;
 import io.inugami.framework.configuration.services.validators.PluginConfigurationValidator;
 import io.inugami.framework.interfaces.exceptions.Asserts;
 import io.inugami.framework.interfaces.exceptions.TechnicalException;
-import io.inugami.framework.interfaces.functionnals.FilterFunction;
-import io.inugami.framework.interfaces.functionnals.ValidatorFunction;
 import io.inugami.framework.interfaces.models.maven.Gav;
 import io.inugami.framework.interfaces.tools.StringTools;
 import lombok.NoArgsConstructor;
@@ -42,7 +39,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 /**
  * PluginConfigurationLoader
@@ -117,19 +113,12 @@ public class PluginConfigurationLoader {
     }
 
     public Optional<ApplicationConfig> loadApplicationConfig(final File file) {
-        final String content = readFile(file);
-        final ApplicationConfig result = YamlMarshaller.getInstance().convertFromYaml(content, ApplicationConfig.class);
+        final String            content = readFile(file);
+        final ApplicationConfig result  = YamlMarshaller.getInstance()
+                                                        .convertFromYaml(content, ApplicationConfig.class);
         return Optional.ofNullable(result);
     }
 
-    private <T> Optional<T> processLoadFromFile(final String file,
-                                                final Supplier<Object> reader,
-                                                final FilterFunction<Object> filter,
-                                                final ConfigLoaderTranstypeFunction<T> transtype,
-                                                final ValidatorFunction<T, TechnicalException> validator) throws TechnicalException {
-        //TODO: REFACTOR
-        return Optional.empty();
-    }
 
     /**
      * Allow to load XML plugin configuration file
@@ -141,8 +130,13 @@ public class PluginConfigurationLoader {
      * @throws TechnicalException              if other exception is occurs
      */
     public Optional<PluginConfiguration> loadFromFile(final File file) throws TechnicalException {
-        //TODO: REFACTOR
-        return Optional.empty();
+        if (file == null || !file.isFile() || !file.canRead()) {
+            return Optional.empty();
+        }
+        final String              content = readFile(file);
+        final PluginConfiguration result  = YamlMarshaller.getInstance()
+                                                          .convertFromYaml(content, PluginConfiguration.class);
+        return Optional.ofNullable(result);
     }
 
     /**

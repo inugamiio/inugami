@@ -2,7 +2,7 @@ enable: true
 gav:
   groupId: io.inugami
   artifactId: inugami_configuration
-  version: .y.z
+  version: x.y.z
 
 listeners:
   - name: testListener
