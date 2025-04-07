@@ -1,0 +1,15 @@
+gav:
+  groupId: plugin-group-id
+  artifactId: plugin-foo
+  version: 0.1
+
+resources:
+  - path: "inugami_plugin/css/"
+    name: theme.css
+    type: CSS
+  - path: "inugami_plugin/js/"
+    name: formatter.js
+    type: JAVASCRIPT
+  - path: "inugami_plugin/"
+    name: index.html
+    type: PAGE

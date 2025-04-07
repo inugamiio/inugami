@@ -16,7 +16,7 @@
  */
 package io.inugami.framework.commons.spring;
 
-import io.inugami.commons.spring.mapstruct.mappers.OtherMapStructMapper;
+import io.inugami.framework.commons.spring.mapstruct.mappers.OtherMapStructMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

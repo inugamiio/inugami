@@ -16,8 +16,8 @@
  */
 package io.inugami.framework.commons.spring.mapstruct;
 
-import io.inugami.api.mapping.MapStructMapper;
 import io.inugami.commons.test.dto.UserDataDTO;
+import io.inugami.framework.interfaces.mapping.MapStructMapper;
 import org.mapstruct.Mapper;
 
 @MapStructMapper

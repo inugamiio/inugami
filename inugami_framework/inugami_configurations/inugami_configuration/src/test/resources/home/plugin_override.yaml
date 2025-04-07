@@ -1,0 +1,15 @@
+gav:
+  groupId: io.inugami
+  artifactId: inugami_configuration
+  version: x.y.z
+
+resources:
+  - path: "inugami_plugin/css/"
+    name: theme2.css
+    type: CSS
+  - path: "inugami_plugin/js/"
+    name: loader2.js
+    type: JAVASCRIPT
+  - path: "inugami_plugin/"
+    name: index2.html
+    type: PAGE

@@ -16,13 +16,14 @@
  */
 package io.inugami.framework.commons.spring.feature.interceptors;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.exceptions.UncheckedException;
-import io.inugami.api.feature.FeatureContext;
-import io.inugami.api.feature.FeatureInterceptor;
-import io.inugami.api.listeners.ApplicationLifecycleSPI;
-import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
+import io.inugami.framework.api.listeners.DefaultApplicationLifecycleSPI;
+import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.exceptions.UncheckedException;
+import io.inugami.framework.interfaces.feature.FeatureContext;
+import io.inugami.framework.interfaces.feature.FeatureInterceptor;
+import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
+import jakarta.annotation.PostConstruct;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +32,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

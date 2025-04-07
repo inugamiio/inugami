@@ -1,9 +1,9 @@
 package io.inugami.framework.commons.spring.feature.interceptors;
 
-import io.inugami.api.feature.Feature;
-import io.inugami.api.feature.FeatureContext;
-import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
-import io.inugami.api.tools.ReflectionUtils;
+import io.inugami.framework.api.listeners.DefaultApplicationLifecycleSPI;
+import io.inugami.framework.api.tools.ReflectionUtils;
+import io.inugami.framework.interfaces.feature.Feature;
+import io.inugami.framework.interfaces.feature.FeatureContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

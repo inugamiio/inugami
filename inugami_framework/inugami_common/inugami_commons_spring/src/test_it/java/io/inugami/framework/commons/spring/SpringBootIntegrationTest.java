@@ -16,7 +16,8 @@
  */
 package io.inugami.framework.commons.spring;
 
-import io.inugami.commons.spring.configuration.ConfigConfiguration;
+
+import io.inugami.framework.commons.spring.configuration.ConfigConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;

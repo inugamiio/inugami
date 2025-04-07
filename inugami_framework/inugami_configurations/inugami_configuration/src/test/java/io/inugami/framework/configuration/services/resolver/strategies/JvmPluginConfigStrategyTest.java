@@ -59,7 +59,7 @@ class JvmPluginConfigStrategyTest {
     @Test
     void testResolveFiles() throws Exception {
         SystemProperties.setJvmParam("pluginA", RESOURCES + "/META-INF/plugin-configuration.yaml");
-        SystemProperties.setJvmParam("pluginB", RESOURCES + "/home/plugin_override.xml");
+        SystemProperties.setJvmParam("pluginB", RESOURCES + "/home/plugin_override.yaml");
 
         final JvmPluginConfigStrategy strategy = new JvmPluginConfigStrategy(null);
         final List<File>              files    = strategy.resolveFiles();
@@ -75,7 +75,7 @@ class JvmPluginConfigStrategyTest {
     @Test
     void testResolve() throws Exception {
         SystemProperties.setJvmParam("pluginA", RESOURCES + "/META-INF/plugin-configuration.yaml");
-        SystemProperties.setJvmParam("pluginB", RESOURCES + "/home/plugin_foobar.xml");
+        SystemProperties.setJvmParam("pluginB", RESOURCES + "/home/plugin_foobar.yaml");
 
         final JvmPluginConfigStrategy strategy = new JvmPluginConfigStrategy(
                 new PluginConfigurationLoader());

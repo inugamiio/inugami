@@ -16,10 +16,10 @@
  */
 package io.inugami.framework.commons.spring.feature;
 
-import io.inugami.api.feature.Feature;
-import io.inugami.api.feature.FeatureContext;
-import io.inugami.api.feature.IFeatureService;
-import io.inugami.api.tools.ReflectionUtils;
+import io.inugami.framework.api.tools.ReflectionUtils;
+import io.inugami.framework.interfaces.feature.Feature;
+import io.inugami.framework.interfaces.feature.FeatureContext;
+import io.inugami.framework.interfaces.feature.IFeatureService;
 import lombok.Getter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -28,9 +28,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
-import static io.inugami.commons.spring.feature.FeatureUtils.buildFeatureContext;
+import static io.inugami.framework.commons.spring.feature.FeatureUtils.buildFeatureContext;
+
 
 @Getter
 @Service
@@ -55,7 +55,7 @@ public class FeatureService implements BeanPostProcessor, IFeatureService {
                               .filter(method -> ReflectionUtils.hasAnnotation(method, Feature.class))
                               .map(method -> buildFeatureContext(method, bean.getClass(), null, bean))
                               .filter(Objects::nonNull)
-                              .collect(Collectors.toList());
+                              .toList();
     }
 
 

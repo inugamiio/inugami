@@ -16,8 +16,8 @@
  */
 package io.inugami.framework.commons.spring.mapstruct;
 
-import io.inugami.commons.spring.SpringBootIntegrationTest;
-import io.inugami.commons.spring.mapstruct.mappers.OtherMapStructMapper;
+import io.inugami.framework.commons.spring.SpringBootIntegrationTest;
+import io.inugami.framework.commons.spring.mapstruct.mappers.OtherMapStructMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -42,13 +42,10 @@ public class ResponseData implements Serializable, ClonableObject<ResponseData> 
 
     private static final long serialVersionUID = 2949186095649126700L;
 
-    private final long duration;
-
-    private final long datetime;
-
+    private final long   duration;
+    private final long   datetime;
     @ToString.Include
-    private final int code;
-
+    private final int    code;
     private final String content;
     @ToString.Include
     private final String contentType;

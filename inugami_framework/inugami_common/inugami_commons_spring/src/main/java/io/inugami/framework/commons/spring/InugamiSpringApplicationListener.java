@@ -1,8 +1,8 @@
 package io.inugami.framework.commons.spring;
 
-import io.inugami.api.listeners.ApplicationLifecycleSPI;
-import io.inugami.api.spi.SpiLoader;
-import io.inugami.commons.spring.configuration.ConfigConfiguration;
+import io.inugami.framework.commons.spring.configuration.ConfigConfiguration;
+import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
+import io.inugami.framework.interfaces.spi.SpiLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.availability.AvailabilityChangeEvent;
 import org.springframework.boot.context.event.*;

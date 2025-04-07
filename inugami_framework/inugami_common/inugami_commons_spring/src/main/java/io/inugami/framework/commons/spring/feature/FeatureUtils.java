@@ -16,8 +16,8 @@
  */
 package io.inugami.framework.commons.spring.feature;
 
-import io.inugami.api.feature.Feature;
-import io.inugami.api.feature.FeatureContext;
+import io.inugami.framework.interfaces.feature.Feature;
+import io.inugami.framework.interfaces.feature.FeatureContext;
 import lombok.experimental.UtilityClass;
 
 import java.lang.reflect.Method;

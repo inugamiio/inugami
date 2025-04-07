@@ -65,18 +65,57 @@ class PluginMappingTest {
     // =========================================================================
     @Test
     void testMarshalling() throws Exception {
-
-        final Plugin plugin = Plugin.builder()
-                                    .config(initConfig())
-                                    .events(initEventConfig())
-                                    .listeners(new TestEngineListener())
-                                    .processors(new TestProcessor())
-                                    .handlers(new TestHandler())
-                                    .providers(new TestProvider())
-                                    .build();
-
-        assertText(YamlMarshaller.getInstance().convertToYaml(plugin),
+        assertText(YamlMarshaller.getInstance().convertToYaml(initConfig()),
                    """
+                           ---
+                           alertings: []
+                           components: []
+                           configFile: "file://foo/bar/config.xml"
+                           dependencies:
+                           - artifactId: "test-plugin-dependency"
+                             groupId: "io.inugami.dashboard"
+                             hash: "io.inugami.dashboard:test-plugin-dependency:0.0.1"
+                             version: "0.0.1"
+                           eventsFiles:
+                           - "plugin-test-events.yaml"
+                           frontConfig:
+                             menuLinks:
+                             - path: "home"
+                               styleClass: "component-style-class"
+                               title: "Hello the world"
+                             module:
+                               className: "PluignComponentModule"
+                               file: "plugin.component.module.ts"
+                             pluginBaseName: "foobarModule"
+                             router:
+                             - component: "foobarComponent"
+                               path: "home"
+                             routerModuleName: "RouterFoobarModule"
+                           frontProperties: []
+                           gav:
+                             artifactId: "test-plugin"
+                             groupId: "io.inugami.dashboard"
+                             hash: "io.inugami.dashboard:test-plugin:0.0.1:test"
+                             qualifier: "test"
+                             version: "0.0.1"
+                           handlers: []
+                           listeners:
+                           - className: "TestEngineListener"
+                             name: "io.inugami.framework.configuration.tools.TestEngineListener"
+                           processors:
+                           - className: "TestProcessor"
+                             configs: {}
+                             name: "io.inugami.framework.configuration.tools.TestProcessor"
+                           properties: {}
+                           providers:
+                           - className: "TestProvider"
+                             name: "io.inugami.framework.configuration.tools.TestProvider"
+                           resources:
+                           - fullPath: "resources/path/application.css"
+                             name: "application.css"
+                             path: "resources/path"
+                             type: "CSS"
+                           security: []
                            """);
     }
     // =========================================================================

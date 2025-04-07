@@ -24,10 +24,17 @@ module io.inugami.framework.commons.spring {
     requires spring.core;
     requires spring.context;
     requires spring.boot.autoconfigure;
+    requires spring.web;
+    requires org.mapstruct;
+    requires org.aspectj.weaver;
+    requires com.google.gson;
 
     requires io.inugami.framework.interfaces;
     requires io.inugami.framework.api;
     requires io.inugami.framework.commons;
     requires io.inugami.framework.configurations.configuration;
+    requires org.zalando.problem;
+    requires jakarta.annotation;
+    requires spring.boot;
 
 }

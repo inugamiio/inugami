@@ -1,10 +1,10 @@
 package io.inugami.framework.commons.spring.feature;
 
-import io.inugami.api.exceptions.UncheckedException;
-import io.inugami.api.feature.Feature;
-import io.inugami.api.feature.FeatureContext;
-import io.inugami.api.feature.FeatureInterceptor;
-import io.inugami.api.tools.ReflectionUtils;
+import io.inugami.framework.api.tools.ReflectionUtils;
+import io.inugami.framework.interfaces.exceptions.UncheckedException;
+import io.inugami.framework.interfaces.feature.Feature;
+import io.inugami.framework.interfaces.feature.FeatureContext;
+import io.inugami.framework.interfaces.feature.FeatureInterceptor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static io.inugami.commons.test.UnitTestHelper.assertTextRelative;
 import static io.inugami.commons.test.UnitTestHelper.assertThrows;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,9 +31,9 @@ class FeatureAopAspectTest {
     @Mock
     private ProceedingJoinPoint joinPoint;
     @Mock
-    private MethodSignature     methodSignature;
+    private MethodSignature    methodSignature;
     @Mock
-    private FeatureInterceptor  featureInterceptor;
+    private FeatureInterceptor featureInterceptor;
 
     @Captor
     private ArgumentCaptor<FeatureContext> featureContext;

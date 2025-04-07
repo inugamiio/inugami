@@ -125,8 +125,6 @@ public class PluginConfigurationLoader {
      *
      * @param file the file to load
      * @return probable Plugin configuration
-     * @throws NotPluginConfigurationException if file loaded isn't a plugin
-     *                                         configuration file
      * @throws TechnicalException              if other exception is occurs
      */
     public Optional<PluginConfiguration> loadFromFile(final File file) throws TechnicalException {
@@ -150,6 +148,7 @@ public class PluginConfigurationLoader {
     public Optional<EventConfig> loadEventConfigFromFile(final Gav gav, final File file) throws TechnicalException {
         final String      content = readFile(file);
         final EventConfig result  = YamlMarshaller.getInstance().convertFromYaml(content, EventConfig.class);
+
         result.setGav(gav);
         return Optional.ofNullable(result);
     }

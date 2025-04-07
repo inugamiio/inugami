@@ -1,8 +1,8 @@
 package io.inugami.framework.commons.spring;
 
-import io.inugami.api.spi.JavaSpiLoaderServiceSPI;
-import io.inugami.api.spi.SpiLoader;
-import io.inugami.api.spi.SpiLoaderServiceSPI;
+import io.inugami.framework.interfaces.spi.JavaSpiLoaderServiceSPI;
+import io.inugami.framework.interfaces.spi.SpiLoader;
+import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 

@@ -16,8 +16,9 @@
  */
 package io.inugami.framework.commons.spring.mapstruct;
 
-import io.inugami.api.mapping.MapStructMapper;
-import io.inugami.api.tools.ReflectionUtils;
+
+import io.inugami.framework.api.tools.ReflectionUtils;
+import io.inugami.framework.interfaces.mapping.MapStructMapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +30,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @SuppressWarnings({"java:S3740"})
-
-
 @Slf4j
 @Builder
 @AllArgsConstructor

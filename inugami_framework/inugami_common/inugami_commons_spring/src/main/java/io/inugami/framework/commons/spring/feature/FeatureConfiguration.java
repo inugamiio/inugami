@@ -16,7 +16,7 @@
  */
 package io.inugami.framework.commons.spring.feature;
 
-import io.inugami.commons.spring.feature.interceptors.PropertyFeatureInterceptor;
+import io.inugami.framework.commons.spring.feature.interceptors.PropertyFeatureInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 

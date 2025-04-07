@@ -61,8 +61,14 @@ class EventFileConfigurationLoaderTest {
         final PluginConfigurationLoader loader = new PluginConfigurationLoader();
 
         LOGGER.info("load events-test-configuration.yaml");
-        final File                  file      = new File(RESOURCES_PATH + "/events-test-configuration.yaml");
-        final Optional<EventConfig> configOpt = loader.loadEventConfigFromFile(new Gav(), file);
+        final File file = new File(RESOURCES_PATH + "/events-test-configuration.yaml");
+        final Optional<EventConfig> configOpt = loader.loadEventConfigFromFile(Gav.builder()
+                                                                                  .groupId("io.inugami.test")
+                                                                                  .artifactId("configuration-testing")
+                                                                                  .version("4.0.0")
+                                                                                  .qualifier("for-test")
+                                                                                  .build(),
+                                                                               file);
 
         assertTrue(configOpt.isPresent());
         assertText(configOpt.get(), """
