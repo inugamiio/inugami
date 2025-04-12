@@ -13,7 +13,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.util.Map;
 
-import static io.inugami.commons.test.UnitTestHelper.assertTextRelative;
+import static io.inugami.commons.test.UnitTestHelper.assertText;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -54,15 +54,17 @@ class MapStructScannerTest {
         final MapStructScanner scanner = scanner();
         final Map<String, String> config = Map.ofEntries(
                 Map.entry(MapStructScanner.PROPERTY, "true"),
-                Map.entry(MapStructScanner.PROPERTY_BASE_PACKAGE, "io.inugami.commons.spring.mapstruct")
+                Map.entry(MapStructScanner.PROPERTY_BASE_PACKAGE, "io.inugami.framework.commons.spring.mapstruct")
         );
 
         when(configurableEnvironment.getProperty(any())).thenAnswer(answer -> config.get(answer.getArgument(0)));
 
 
         scanner.processScan();
-        assertTextRelative(scanner.getMappers(),
-                           "common/spring/mapstruct/mapStructScanner/onEnvironmentPrepared_nominal.json");
+        assertText(scanner.getMappers(),
+                   """
+                           [ "io.inugami.framework.commons.spring.mapstruct.SomeMapStructMapper" ]
+                           """);
     }
 
 
@@ -76,8 +78,10 @@ class MapStructScannerTest {
         when(configurableEnvironment.getProperty(any())).thenAnswer(answer -> config.get(answer.getArgument(0)));
 
         scanner.processScan();
-        assertTextRelative(scanner.getMappers(),
-                           "common/spring/mapstruct/mapStructScanner/onEnvironmentPrepared_nominal.json");
+        assertText(scanner.getMappers(),
+                   """
+                           [ "io.inugami.framework.commons.spring.mapstruct.SomeMapStructMapper" ]
+                           """);
     }
 
     @Test
@@ -104,7 +108,7 @@ class MapStructScannerTest {
         final MapStructScanner scanner = scanner();
         final Map<String, String> config = Map.ofEntries(
                 Map.entry(MapStructScanner.PROPERTY, "true"),
-                Map.entry(MapStructScanner.PROPERTY_BASE_PACKAGE, "io.inugami.commons.spring")
+                Map.entry(MapStructScanner.PROPERTY_BASE_PACKAGE, "io.inugami.framework.commons.spring")
         );
 
         when(configurableEnvironment.getProperty(any())).thenAnswer(answer -> config.get(answer.getArgument(0)));
@@ -115,8 +119,10 @@ class MapStructScannerTest {
 
         verify(beanFactory).registerSingleton(classNameCaptor.capture(), instanceCaptor.capture());
 
-        assertTextRelative(classNameCaptor.getAllValues(),
-                           "common/spring/mapstruct/mapStructScanner/onApplicationContextInitialized_nominal.json");
+        assertText(classNameCaptor.getAllValues(),
+                   """
+                           [ "io.inugami.framework.commons.spring.mapstruct.SomeMapStructMapper" ]
+                           """);
     }
 
 

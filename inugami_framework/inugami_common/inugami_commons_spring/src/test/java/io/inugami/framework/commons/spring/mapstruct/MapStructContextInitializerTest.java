@@ -12,6 +12,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.util.Map;
 
+import static io.inugami.commons.test.UnitTestHelper.assertText;
 import static io.inugami.commons.test.UnitTestHelper.assertTextRelative;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -43,7 +44,7 @@ class MapStructContextInitializerTest {
     void initialize_nominal() {
         final Map<String, String> config = Map.ofEntries(
                 Map.entry(MapStructScanner.PROPERTY, "true"),
-                Map.entry(MapStructScanner.PROPERTY_BASE_PACKAGE, "io.inugami.commons.spring.mapstruct")
+                Map.entry(MapStructScanner.PROPERTY_BASE_PACKAGE, "io.inugami.framework.commons.spring.mapstruct")
         );
 
         when(configurableEnvironment.getProperty(any())).thenAnswer(answer -> config.get(answer.getArgument(0)));
@@ -54,8 +55,10 @@ class MapStructContextInitializerTest {
         new MapStructContextInitializer().initialize(context);
 
         verify(beanFactory).registerSingleton(classNameCaptor.capture(), instanceCaptor.capture());
-        assertTextRelative(classNameCaptor.getAllValues(),
-                           "common/spring/mapstruct/mapStructContextInitializerTest/initialize_nominal.json");
+        assertText(classNameCaptor.getAllValues(),
+                   """
+                           [ "io.inugami.framework.commons.spring.mapstruct.SomeMapStructMapper" ]
+                           """);
     }
 
 }

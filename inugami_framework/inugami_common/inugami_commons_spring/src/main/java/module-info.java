@@ -14,7 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.framework.commons.spring {
+open module io.inugami.framework.commons.spring {
+    exports io.inugami.framework.commons.spring.mapstruct;
+    exports io.inugami.framework.commons.spring.feature.interceptors;
+    exports io.inugami.framework.commons.spring to spring.core;
     requires jakarta.servlet;
 
     requires lombok;
@@ -37,4 +40,5 @@ module io.inugami.framework.commons.spring {
     requires jakarta.annotation;
     requires spring.boot;
 
+    uses io.inugami.framework.configuration.services.functions.ProviderAttributFunction;
 }

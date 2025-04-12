@@ -64,6 +64,7 @@
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PROJECT
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+        <spring-boot.version>3.4.1</spring-boot.version>
         <super.jdk>17</super.jdk>
         <java.version>${super.jdk}</java.version>
         <super.jdk.arg>-parameters</super.jdk.arg>
@@ -128,6 +129,8 @@
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.language>java</sonar.language>
+
+
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: ARQUILLIAN
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -580,7 +583,18 @@
                 <version>${org.zalando.problem.version}</version>
             </dependency>
 
-
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring-boot.version}</version>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.skyscreamer</groupId>
+                        <artifactId>jsonassert</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

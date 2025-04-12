@@ -55,7 +55,7 @@ public class PropertyFeatureInterceptor implements FeatureInterceptor, Applicati
     private final        ConfigurableEnvironment resolver;
     private static final Map<String, Boolean>    CACHE = new ConcurrentHashMap<>();
 
-    protected static Map<String, Boolean> getCache() {
+    public static Map<String, Boolean> getCache() {
         return CACHE;
     }
 

@@ -96,4 +96,5 @@ module io.inugami.framework.interfaces {
     uses io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
     uses io.inugami.framework.interfaces.tools.TemplateProviderSPI;
     uses io.inugami.framework.interfaces.configurtation.ConfigurationSpi;
+    uses io.inugami.framework.interfaces.marshalling.XmlJaxbMarshallerSpi;
 }

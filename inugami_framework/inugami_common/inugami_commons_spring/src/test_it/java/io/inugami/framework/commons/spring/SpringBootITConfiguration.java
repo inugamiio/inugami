@@ -16,6 +16,7 @@
  */
 package io.inugami.framework.commons.spring;
 
+import io.inugami.framework.commons.spring.mapstruct.SomeMapStructMapper;
 import io.inugami.framework.commons.spring.mapstruct.mappers.OtherMapStructMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
@@ -30,4 +31,10 @@ public class SpringBootITConfiguration {
     public OtherMapStructMapper otherMapStructMapper() {
         return Mappers.getMapper(OtherMapStructMapper.class);
     }
+
+    @Bean
+    public SomeMapStructMapper someMapStructMapper(){
+        return Mappers.getMapper(SomeMapStructMapper.class);
+    }
+
 }

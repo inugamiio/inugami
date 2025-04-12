@@ -3,6 +3,7 @@ package io.inugami.framework.commons.spring;
 import io.inugami.framework.commons.spring.configuration.ConfigConfiguration;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
 import io.inugami.framework.interfaces.spi.SpiLoader;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.availability.AvailabilityChangeEvent;
 import org.springframework.boot.context.event.*;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @SuppressWarnings({"java:S1905", "java:S1862"})
 @Slf4j
+@NoArgsConstructor
 public class InugamiSpringApplicationListener implements ApplicationListener<ApplicationEvent> {
 
     // =========================================================================
