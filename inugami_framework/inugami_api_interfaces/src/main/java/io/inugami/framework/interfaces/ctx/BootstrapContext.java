@@ -24,7 +24,7 @@ package io.inugami.framework.interfaces.ctx;
  */
 @SuppressWarnings({"java:S1116"})
 public interface BootstrapContext<T> {
-    default void bootrap(final T ctx) {
+    default void initialize(final T ctx) {
     }
 
 

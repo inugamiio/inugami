@@ -44,7 +44,6 @@ public class Monitoring {
     private String                            instanceName;
     private String                            instanceNumber;
     private String                            applicationVersion;
-    private Headers                           headers;
     private int                               maxSensorsTasksThreads;
     private ConfigHandler<String, String>     properties;
     private List<MonitoringSender>            senders;

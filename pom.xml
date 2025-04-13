@@ -342,6 +342,48 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.inugami.monitoring</groupId>
+                <artifactId>inugami_monitoring_api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami.monitoring</groupId>
+                <artifactId>inugami_monitoring_config</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami.monitoring</groupId>
+                <artifactId>inugami_monitoring_core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami.monitoring</groupId>
+                <artifactId>inugami_monitoring_springboot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.inugami.monitoring.providers</groupId>
+                <artifactId>inugami_monitoring_providers_els</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>io.inugami.monitoring.providers</groupId>
+                <artifactId>inugami_monitoring_providers_graphite</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>io.inugami.monitoring.providers</groupId>
+                <artifactId>inugami_monitoring_providers_log</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>io.inugami.monitoring.sensors</groupId>
+                <artifactId>inugami_monitoring_sensors_default</artifactId>
+            </dependency>
+
+
             <!--*** inugami_dashboard *******************************************************************************-->
             <dependency>
                 <groupId>io.inugami.dashboard</groupId>

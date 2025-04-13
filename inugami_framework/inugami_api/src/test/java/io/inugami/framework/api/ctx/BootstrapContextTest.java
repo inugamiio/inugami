@@ -12,7 +12,7 @@ class BootstrapContextTest {
         BootstrapContext<String> bootstrapContext = new BootstrapContext<>() {
         };
 
-        bootstrapContext.bootrap("hello");
+        bootstrapContext.initialize("hello");
         bootstrapContext.shutdown("hello");
         assertThat(bootstrapContext).isNotNull();
     }
