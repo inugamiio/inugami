@@ -16,8 +16,9 @@
  */
 package io.inugami.monitoring.core.interceptors.mdc;
 
-import io.inugami.api.monitoring.MdcCleanerSPI;
-import io.inugami.api.monitoring.MdcService;
+
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.interfaces.monitoring.MdcCleanerSPI;
 
 public class DefaultMdcCleaner implements MdcCleanerSPI {
     @Override

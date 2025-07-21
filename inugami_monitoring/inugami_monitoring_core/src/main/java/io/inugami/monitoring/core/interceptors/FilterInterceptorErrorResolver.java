@@ -16,10 +16,10 @@
  */
 package io.inugami.monitoring.core.interceptors;
 
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.monitoring.exceptions.ErrorResult;
-import io.inugami.api.spi.SpiLoader;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.monitoring.ErrorResult;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.monitoring.api.exceptions.ExceptionHandlerMapper;
 import io.inugami.monitoring.api.exceptions.ExceptionResolver;
 
@@ -30,7 +30,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static io.inugami.api.exceptions.DefaultErrorCode.newBuilder;
+import static io.inugami.framework.interfaces.exceptions.DefaultErrorCode.newBuilder;
+
 
 /**
  * FilterInterceptorErrorResolver

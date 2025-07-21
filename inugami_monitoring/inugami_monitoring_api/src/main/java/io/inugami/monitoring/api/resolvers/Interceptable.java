@@ -16,7 +16,7 @@
  */
 package io.inugami.monitoring.api.resolvers;
 
-import io.inugami.monitoring.api.dto.InterceptorContextDto;
+import io.inugami.framework.interfaces.monitoring.data.ResquestData;
 
 /**
  * ResourceIdentifierResolver
@@ -25,5 +25,5 @@ import io.inugami.monitoring.api.dto.InterceptorContextDto;
  */
 @FunctionalInterface
 public interface Interceptable {
-    boolean isInterceptable(final InterceptorContextDto context);
+    boolean isInterceptable(final ResquestData request);
 }

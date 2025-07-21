@@ -16,17 +16,18 @@
  */
 package io.inugami.monitoring.core.spi;
 
-import io.inugami.api.exceptions.Warning;
-import io.inugami.api.exceptions.WarningContext;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.models.JsonBuilder;
-import io.inugami.api.monitoring.MdcService;
-import io.inugami.api.monitoring.data.ResponseData;
-import io.inugami.api.monitoring.data.ResquestData;
-import io.inugami.api.monitoring.exceptions.ErrorResult;
-import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.processors.ConfigHandler;
+
+import io.inugami.framework.api.exceptions.WarningContext;
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.exceptions.Warning;
+import io.inugami.framework.interfaces.models.JsonBuilder;
+import io.inugami.framework.interfaces.monitoring.ErrorResult;
+import io.inugami.framework.interfaces.monitoring.data.ResponseData;
+import io.inugami.framework.interfaces.monitoring.data.ResquestData;
+import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 
 import java.util.List;

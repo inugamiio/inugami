@@ -15,21 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.monitoring.springboot.filter;
-
-import io.inugami.api.exceptions.WarningContext;
-import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
+m
+import io.inugami.framework.api.listeners.DefaultApplicationLifecycleSPI;
 import io.inugami.monitoring.core.interceptors.FilterInterceptor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.util.List;
 

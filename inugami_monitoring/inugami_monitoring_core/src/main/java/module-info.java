@@ -16,9 +16,21 @@
  */
 module io.inugami.monitoring.core {
     requires io.inugami.framework.commons;
+    requires io.inugami.monitoring.api;
     requires io.inugami.framework.api;
     requires io.inugami.framework.interfaces;
-    requires static lombok;
+    requires lombok;
     requires jakarta.servlet;
+
+    exports io.inugami.monitoring.core.context;
+    exports io.inugami.monitoring.core.context.sensors;
+    exports io.inugami.monitoring.core.interceptable;
+    exports io.inugami.monitoring.core.interceptors;
+    exports io.inugami.monitoring.core.interceptors.exceptions;
+    exports io.inugami.monitoring.core.interceptors.mdc;
+    exports io.inugami.monitoring.core.obfuscators;
+    exports io.inugami.monitoring.core.sensors;
+    exports io.inugami.monitoring.core.sensors.aggregators;
+    exports io.inugami.monitoring.core.spi;
 
 }

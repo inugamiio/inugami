@@ -16,8 +16,8 @@
  */
 package io.inugami.monitoring.core.interceptors.exceptions;
 
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.loggers.Loggers;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.monitoring.api.exceptions.ExceptionHandlerMapper;
 
 import java.util.LinkedHashMap;
@@ -25,22 +25,23 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
-import static io.inugami.api.exceptions.DefaultErrorCode.newBuilder;
+import static io.inugami.framework.interfaces.exceptions.DefaultErrorCode.newBuilder;
+
 
 public class DefaultExceptionMapper implements ExceptionHandlerMapper {
 
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
+    // =================================================================================================================
     private static final String SECURITY_TYPE   = "security";
     private static final String TECHNICAL_TYPE  = "technical";
     private static final String FONCTIONAL_TYPE = "functional";
     private static final String TECHNICAL_ERROR = "Technical error";
 
-    // =========================================================================
+    // =================================================================================================================
     // METHODS
-    // =========================================================================
+    // =================================================================================================================
     @Override
     public Map<Pattern, ErrorCode> produceMapping() {
         final Map<Pattern, ErrorCode> errors = new LinkedHashMap<>();

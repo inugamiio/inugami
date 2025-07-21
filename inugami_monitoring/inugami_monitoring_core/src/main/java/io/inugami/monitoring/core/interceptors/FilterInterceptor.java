@@ -16,44 +16,33 @@
  */
 package io.inugami.monitoring.core.interceptors;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.exceptions.UncheckedException;
-import io.inugami.api.listeners.ApplicationLifecycleSPI;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.models.tools.Chrono;
-import io.inugami.api.monitoring.*;
-import io.inugami.api.monitoring.data.ResponseData;
-import io.inugami.api.monitoring.data.ResquestData;
-import io.inugami.api.monitoring.exceptions.ErrorResult;
-import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
-import io.inugami.api.monitoring.models.Headers;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.spi.SpiLoader;
-import io.inugami.api.tools.CalendarTools;
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
+import io.inugami.framework.interfaces.monitoring.ErrorResult;
+import io.inugami.framework.interfaces.monitoring.data.ResquestData;
+import io.inugami.framework.interfaces.monitoring.logger.MDCKeys;
 import io.inugami.monitoring.api.exceptions.ExceptionResolver;
-import io.inugami.monitoring.api.interceptors.RequestInformationInitializer;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 import io.inugami.monitoring.api.resolvers.Interceptable;
 import io.inugami.monitoring.core.context.MonitoringBootstrapService;
 import io.inugami.monitoring.core.interceptors.mdc.DefaultMdcCleaner;
 import io.inugami.monitoring.core.interceptors.mdc.MdcCleaner;
+import jakarta.servlet.Filter;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
 
 /**
  * FilterInterceptor
@@ -382,7 +371,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         final MdcService mdc = MdcService.getInstance();
         try {
             mdc.duration(duration);
-            mdc.setMdc(MdcService.MDCKeys.httpStatus, httpResponse.getStatus());
+            mdc.setMdc(MDCKeys.httpStatus, httpResponse.getStatus());
 
             if (error != null && error.getCurrentErrorCode() != null) {
                 mdc.errorCode(error.getCurrentErrorCode());

@@ -16,7 +16,7 @@
  */
 package io.inugami.monitoring.core.interceptors.mdc;
 
-import io.inugami.api.monitoring.MdcCleanerSPI;
+import io.inugami.framework.interfaces.monitoring.MdcCleanerSPI;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

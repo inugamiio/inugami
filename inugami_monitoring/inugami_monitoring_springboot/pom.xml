@@ -41,6 +41,11 @@
         </dependency>
 
         <dependency>
+            <groupId>io.inugami.monitoring</groupId>
+            <artifactId>inugami_monitoring_core</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
         </dependency>

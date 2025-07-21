@@ -65,7 +65,7 @@
         :: PROJECT
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <spring-boot.version>3.4.1</spring-boot.version>
-        <super.jdk>17</super.jdk>
+        <super.jdk>21</super.jdk>
         <java.version>${super.jdk}</java.version>
         <super.jdk.arg>-parameters</super.jdk.arg>
         <maven-gpg-plugin.enabled/>

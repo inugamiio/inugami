@@ -16,7 +16,9 @@
  */
 package io.inugami.monitoring.core.interceptable;
 
-import io.inugami.api.spi.SpiPriority;
+import io.inugami.framework.interfaces.monitoring.data.ResquestData;
+import io.inugami.framework.interfaces.spi.SpiPriority;
+import io.inugami.monitoring.api.dto.InterceptorContextDto;
 import io.inugami.monitoring.api.resolvers.Interceptable;
 
 /**
@@ -28,9 +30,9 @@ import io.inugami.monitoring.api.resolvers.Interceptable;
 @SpiPriority(10000)
 public class DefaultInterceptableIdentifier implements Interceptable {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
+    // =================================================================================================================
     //@formatter:off
     private static final  String[] RESOURCES_EXT = {".js", ".ts",
             ".jpg", ".png", ".gif", ".svg", ".ico",
@@ -39,13 +41,14 @@ public class DefaultInterceptableIdentifier implements Interceptable {
             ".jsp", ".html", ".xhtml"};
     //@formatter:on
 
-    // =========================================================================
+    // =================================================================================================================
     // OVERRIDES
-    // =========================================================================
+    // =================================================================================================================
     @Override
-    public boolean isInterceptable(final String uri) {
-        return !isResource(uri);
+    public boolean isInterceptable(final ResquestData request) {
+        return !isResource(request.getUri());
     }
+
 
     protected boolean isResource(final String uri) {
         boolean result = false;
@@ -67,4 +70,7 @@ public class DefaultInterceptableIdentifier implements Interceptable {
 
         return result;
     }
+
+
+
 }

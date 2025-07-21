@@ -15,14 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 module io.inugami.monitoring.springboot {
-    requires lombok;
-    requires org.slf4j;
     requires spring.beans;
     requires spring.core;
     requires spring.context;
     requires spring.boot.autoconfigure;
     requires spring.web;
     requires org.mapstruct;
+    requires io.inugami.monitoring.core;
+    requires io.inugami.framework.api;
 
 
     exports io.inugami.monitoring.springboot.actuator;

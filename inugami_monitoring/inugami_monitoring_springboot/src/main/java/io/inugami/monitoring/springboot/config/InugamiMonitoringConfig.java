@@ -17,10 +17,18 @@
 package io.inugami.monitoring.springboot.config;
 
 
+import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
+import io.inugami.monitoring.springboot.filter.IoLogFilter;
+import io.inugami.monitoring.springboot.request.SpringRestMethodResolver;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
+
 
 @SuppressWarnings({"java:S1450"})
 @Import({

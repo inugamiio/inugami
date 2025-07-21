@@ -16,7 +16,8 @@
  */
 package io.inugami.monitoring.core.interceptors;
 
-import io.inugami.api.monitoring.FilterInterceptorCachePurgeStrategy;
+
+import io.inugami.framework.interfaces.monitoring.FilterInterceptorCachePurgeStrategy;
 
 import java.util.Map;
 

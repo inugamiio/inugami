@@ -16,17 +16,19 @@
  */
 package io.inugami.monitoring.core.interceptors;
 
-import io.inugami.api.exceptions.FatalException;
-import io.inugami.api.spi.SpiLoader;
+import io.inugami.framework.interfaces.exceptions.FatalException;
+import io.inugami.framework.interfaces.spi.SpiLoader;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * ResponseWrapper
@@ -36,25 +38,30 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @SuppressWarnings({"java:S6355", "java:S1123", "java:S3824", "java:S1133", "java:S1133"})
 final class ResponseWrapper implements ServletResponse, HttpServletResponse {
-
-
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    public static final String              HEADER_SEP = ",";
-    private final       HttpServletResponse response;
+    // =================================================================================================================
+    public static final String                    HEADER_SEP = ",";
+    private final       HttpServletResponse       response;
+    private final       OutputWriterWrapper       outputWrapper;
+    private final       Map<String, List<String>> localHeaders;
+    private final       List<ResponseListener>    responseListeners;
 
-    private final OutputWriterWrapper       outputWrapper;
-    private final Map<String, List<String>> localHeaders      = new ConcurrentHashMap<>();
-    private final List<ResponseListener>    responseListeners = SpiLoader.getInstance()
-                                                                         .loadSpiService(ResponseListener.class);
+    /*
+    = SpiLoader.getInstance()
+                                                                               .loadSpiService(ResponseListener.class);
+     */
 
-    // =========================================================================
+    // =================================================================================================================
     // CONSTRUCTORS
-    // =========================================================================
-    ResponseWrapper(final ServletResponse response) {
-        this.response = (HttpServletResponse) response;
-
+    // =================================================================================================================
+    @Builder
+    public ResponseWrapper(final HttpServletResponse response,
+                           final Map<String, List<String>> localHeaders,
+                           final List<ResponseListener> responseListeners) {
+        this.response = response;
+        this.localHeaders = localHeaders;
+        this.responseListeners = responseListeners;
         try {
             this.outputWrapper = new OutputWriterWrapper(response.getOutputStream());
         } catch (final IOException e) {
@@ -62,16 +69,16 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
         }
     }
 
-    // =========================================================================
-    // METHODES
-    // =========================================================================
+    // =================================================================================================================
+    // METHODS
+    // =================================================================================================================
     String getData() {
         return outputWrapper.getData();
     }
 
-    // =========================================================================
+    // =================================================================================================================
     // OVERRIDES
-    // =========================================================================
+    // =================================================================================================================
     @Override
     public String getCharacterEncoding() {
         return response.getCharacterEncoding();
@@ -172,18 +179,6 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     @Override
     public String encodeRedirectURL(final String url) {
         return response.encodeRedirectURL(url);
-    }
-
-    @Deprecated
-    @Override
-    public String encodeUrl(final String url) {
-        return response.encodeUrl(url);
-    }
-
-    @Deprecated
-    @Override
-    public String encodeRedirectUrl(final String url) {
-        return response.encodeRedirectUrl(url);
     }
 
     @Override

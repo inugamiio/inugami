@@ -16,12 +16,13 @@
  */
 package io.inugami.monitoring.core.spi;
 
-import io.inugami.api.exceptions.WarningContext;
-import io.inugami.api.monitoring.MdcService;
-import io.inugami.api.monitoring.data.ResquestData;
-import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.processors.ConfigHandler;
+
+import io.inugami.framework.api.exceptions.WarningContext;
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.monitoring.data.ResquestData;
+import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 
 import java.util.List;
 

@@ -46,6 +46,7 @@ module io.inugami.framework.api {
     exports io.inugami.framework.api.spi;
     exports io.inugami.framework.api.tools;
     exports io.inugami.framework.api.connectors;
+    exports io.inugami.framework.api.exceptions;
 
     uses io.inugami.framework.interfaces.configurtation.ConfigurationSpi;
     uses io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
