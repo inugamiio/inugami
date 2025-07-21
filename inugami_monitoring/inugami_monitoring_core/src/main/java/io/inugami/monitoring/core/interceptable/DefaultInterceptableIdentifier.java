@@ -18,7 +18,6 @@ package io.inugami.monitoring.core.interceptable;
 
 import io.inugami.framework.interfaces.monitoring.data.ResquestData;
 import io.inugami.framework.interfaces.spi.SpiPriority;
-import io.inugami.monitoring.api.dto.InterceptorContextDto;
 import io.inugami.monitoring.api.resolvers.Interceptable;
 
 /**

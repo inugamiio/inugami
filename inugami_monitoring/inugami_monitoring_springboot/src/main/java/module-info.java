@@ -23,6 +23,8 @@ module io.inugami.monitoring.springboot {
     requires org.mapstruct;
     requires io.inugami.monitoring.core;
     requires io.inugami.framework.api;
+    requires jakarta.annotation;
+    requires jakarta.servlet;
 
 
     exports io.inugami.monitoring.springboot.actuator;
