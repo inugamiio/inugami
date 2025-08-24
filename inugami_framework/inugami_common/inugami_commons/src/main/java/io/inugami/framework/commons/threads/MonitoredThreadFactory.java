@@ -2,7 +2,7 @@ package io.inugami.framework.commons.threads;
 
 import io.inugami.framework.api.monitoring.RequestContext;
 import io.inugami.framework.interfaces.monitoring.MonitoringInitializer;
-import io.inugami.framework.interfaces.monitoring.RequestInformation;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 
 import java.util.Collections;
@@ -20,8 +20,8 @@ public class MonitoredThreadFactory implements ThreadFactory {
     private final        AtomicLong                  threadIndex           = new AtomicLong();
     private final        String                      threadsName;
     private final        boolean                     deamon;
-    private final        ThreadGroup                 threadGroup;
-    private final        RequestInformation          requestContext;
+    private final ThreadGroup threadGroup;
+    private final RequestData requestContext;
 
     // =================================================================================================================
     // CONSTRUCTORS

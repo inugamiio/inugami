@@ -21,7 +21,7 @@ import io.inugami.framework.api.monitoring.RequestContext;
 import io.inugami.framework.interfaces.exceptions.Asserts;
 import io.inugami.framework.interfaces.models.tools.Chrono;
 import io.inugami.framework.interfaces.monitoring.MonitoringInitializer;
-import io.inugami.framework.interfaces.monitoring.RequestInformation;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.threads.CallableWithErrorResult;
 import lombok.Builder;
@@ -58,8 +58,8 @@ public class RunAndCloseService<T> implements ThreadFactory {
     private final        CompletionService<T>                  completion;
     private final        ThreadGroup                           threadGroup;
     private final        AtomicInteger                         threadIndex           = new AtomicInteger();
-    private final        List<T>                               data                  = new ArrayList<>();
-    private final        RequestInformation                    requestContext;
+    private final List<T>     data                  = new ArrayList<>();
+    private final RequestData requestContext;
 
 
     // =================================================================================================================

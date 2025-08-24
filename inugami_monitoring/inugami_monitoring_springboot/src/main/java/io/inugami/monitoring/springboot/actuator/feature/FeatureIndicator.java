@@ -16,8 +16,8 @@
  */
 package io.inugami.monitoring.springboot.actuator.feature;
 
-import io.inugami.api.feature.FeatureContext;
-import io.inugami.api.feature.IFeatureService;
+import io.inugami.framework.interfaces.feature.FeatureContext;
+import io.inugami.framework.interfaces.feature.IFeatureService;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.actuate.health.Health;

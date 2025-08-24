@@ -16,9 +16,10 @@
  */
 package io.inugami.monitoring.core.sensors;
 
-import io.inugami.api.models.data.graphite.number.GraphiteNumber;
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.processors.ConfigHandler;
+
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.models.number.GraphiteNumber;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 
 import java.util.List;
 

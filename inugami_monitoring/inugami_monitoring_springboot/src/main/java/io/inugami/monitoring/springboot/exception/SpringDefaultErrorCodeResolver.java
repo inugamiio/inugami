@@ -1,10 +1,11 @@
 package io.inugami.monitoring.springboot.exception;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.exceptions.ErrorCodeResolver;
-import io.inugami.api.exceptions.ExceptionWithErrorCode;
-import io.inugami.api.spi.SpiPriority;
+
+import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.exceptions.ErrorCodeResolver;
+import io.inugami.framework.interfaces.exceptions.ExceptionWithErrorCode;
+import io.inugami.framework.interfaces.spi.SpiPriority;
 
 import java.util.Map;
 import java.util.regex.Pattern;

@@ -16,9 +16,10 @@
  */
 package io.inugami.monitoring.core.spi;
 
-import io.inugami.api.monitoring.JavaRestMethodDTO;
-import io.inugami.api.monitoring.JavaRestMethodTracker;
-import io.inugami.api.monitoring.MdcService;
+
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.interfaces.monitoring.JavaRestMethodDTO;
+import io.inugami.framework.interfaces.monitoring.JavaRestMethodTracker;
 
 public class DefaultJavaRestMethodTracker implements JavaRestMethodTracker {
 

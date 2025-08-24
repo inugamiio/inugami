@@ -47,10 +47,7 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     private final       Map<String, List<String>> localHeaders;
     private final       List<ResponseListener>    responseListeners;
 
-    /*
-    = SpiLoader.getInstance()
-                                                                               .loadSpiService(ResponseListener.class);
-     */
+
 
     // =================================================================================================================
     // CONSTRUCTORS
@@ -244,11 +241,6 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
         response.setStatus(sc);
     }
 
-    @Deprecated
-    @Override
-    public void setStatus(final int sc, final String sm) {
-        response.setStatus(sc, sm);
-    }
 
     @Override
     public int getStatus() {

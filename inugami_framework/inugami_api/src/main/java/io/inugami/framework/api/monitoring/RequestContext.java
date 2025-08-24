@@ -17,7 +17,7 @@
 package io.inugami.framework.api.monitoring;
 
 import io.inugami.framework.interfaces.monitoring.MonitoringLoaderSpi;
-import io.inugami.framework.interfaces.monitoring.RequestInformation;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.models.Monitoring;
 import lombok.experimental.UtilityClass;
 
@@ -40,7 +40,7 @@ public final class RequestContext {
     // =========================================================================
     private static Monitoring config = loadConfig();
 
-    private static final ThreadLocal<RequestInformation> INSTANCE = new ThreadLocal<>();
+    private static final ThreadLocal<RequestData> INSTANCE = new ThreadLocal<>();
 
 
     // =========================================================================
@@ -64,24 +64,23 @@ public final class RequestContext {
         return config;
     }
 
-    public static synchronized RequestInformation getInstance() {
-        RequestInformation result = INSTANCE.get();
+    public static synchronized RequestData getInstance() {
+        RequestData result = INSTANCE.get();
         if (result == null) {
             result = initializeTechnicalRequest();
         }
         return result;
     }
 
-    public static synchronized void setInstance(final RequestInformation instance) {
+    public static synchronized void setInstance(final RequestData instance) {
         INSTANCE.set(instance);
     }
 
     // =========================================================================
     // INIT
     // =========================================================================
-    public static RequestInformation initializeTechnicalRequest() {
-        final RequestInformation.RequestInformationBuilder builder = RequestInformation.builder();
-
+    public static RequestData initializeTechnicalRequest() {
+        final var builder = RequestData.builder();
 
         if (config != null) {
             builder.env(config.getEnv());
@@ -98,7 +97,7 @@ public final class RequestContext {
         builder.traceId(traceId);
         builder.service(String.join("_", "technical", Thread.currentThread().getName()));
 
-        final RequestInformation result = builder.build();
+        final RequestData result = builder.build();
         RequestContext.setInstance(result);
         return result;
     }

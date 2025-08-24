@@ -20,7 +20,7 @@ package io.inugami.monitoring.core.spi;
 import io.inugami.framework.api.exceptions.WarningContext;
 import io.inugami.framework.api.monitoring.MdcService;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
-import io.inugami.framework.interfaces.monitoring.data.ResquestData;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 
@@ -38,7 +38,7 @@ public class MdcInterceptor implements MonitoringFilterInterceptor {
     }
 
     @Override
-    public List<GenericMonitoringModel> onBegin(final ResquestData request) {
+    public List<GenericMonitoringModel> onBegin(final RequestData request) {
         MdcService.getInstance().initialize();
         WarningContext.clean();
         return null;

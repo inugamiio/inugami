@@ -21,8 +21,8 @@ import io.inugami.framework.api.exceptions.WarningContext;
 import io.inugami.framework.api.monitoring.MdcService;
 import io.inugami.framework.interfaces.exceptions.DefaultWarning;
 import io.inugami.framework.interfaces.monitoring.ErrorResult;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.data.ResponseData;
-import io.inugami.framework.interfaces.monitoring.data.ResquestData;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.monitoring.core.spi.IoLogInterceptor;
 import org.junit.jupiter.api.AfterEach;
@@ -56,20 +56,20 @@ class IoLogInterceptorTest {
     // =================================================================================================================
     @Test
     void onBegin_nominal() {
-        final ResquestData request = ResquestData.builder()
-                                                 .method("POST")
-                                                 .uri("/my/service")
-                                                 .contextPath("/application")
-                                                 .addHeader("app", "myApplication")
-                                                 .content("{\"name\":\"John Smith\"}")
-                                                 .build();
+        final RequestData request = RequestData.builder()
+                                               .verb("POST")
+                                               .requestURI("/my/service")
+                                               .contextPath("/application")
+                                               .addHeader("app", "myApplication")
+                                               .content("{\"name\":\"John Smith\"}")
+                                               .build();
         processOnBegin(request, "monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_nominal.json");
     }
 
 
     @Test
     void onBegin_withoutContextPath() {
-        final ResquestData request = ResquestData.builder()
+        final RequestData request = RequestData.builder()
                                                  .method("POST")
                                                  .uri("/my/service")
                                                  .addHeader("app", "myApplication")
@@ -81,7 +81,7 @@ class IoLogInterceptorTest {
 
     @Test
     void onBegin_withContextPathInUri() {
-        final ResquestData request = ResquestData.builder()
+        final RequestData request = RequestData.builder()
                                                  .method("POST")
                                                  .uri("/application/my/service")
                                                  .contextPath("/application")
@@ -97,7 +97,7 @@ class IoLogInterceptorTest {
     // =================================================================================================================
     @Test
     void onDone_nominal() {
-        final ResquestData request = ResquestData.builder()
+        final RequestData request = RequestData.builder()
                                                  .method("POST")
                                                  .uri("/my/service")
                                                  .contextPath("/application")
@@ -123,7 +123,7 @@ class IoLogInterceptorTest {
 
     @Test
     void onDone_withError() {
-        final ResquestData request = ResquestData.builder()
+        final RequestData request = RequestData.builder()
                                                  .method("POST")
                                                  .uri("/my/service")
                                                  .addHeader("app", "myApplication")
@@ -157,7 +157,7 @@ class IoLogInterceptorTest {
         return new IoLogInterceptor();
     }
 
-    private void processOnBegin(final ResquestData request, final String path) {
+    private void processOnBegin(final RequestData request, final String path) {
         assertLogs(AssertLogContext.builder()
                                    .process(() -> buildInterceptor().onBegin(request))
                                    .addPattern(Loggers.IOLOG_NAME)
@@ -166,7 +166,7 @@ class IoLogInterceptorTest {
 
     }
 
-    private void processOnDone(final ResquestData request,
+    private void processOnDone(final RequestData request,
                                final ResponseData responseData,
                                final ErrorResult error,
                                final String path) {

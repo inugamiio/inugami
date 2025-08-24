@@ -16,17 +16,17 @@
  */
 package io.inugami.monitoring.core.spi;
 
-import io.inugami.api.models.data.graphite.number.LongNumber;
-import io.inugami.api.monitoring.data.ResponseData;
-import io.inugami.api.monitoring.data.ResquestData;
-import io.inugami.api.monitoring.exceptions.ErrorResult;
-import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.models.GenericMonitoringModelDTO;
-import io.inugami.api.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.metrics.dto.GenericMonitoringModelDto;
+import io.inugami.framework.interfaces.models.number.LongNumber;
+import io.inugami.framework.interfaces.monitoring.ErrorResult;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
+import io.inugami.framework.interfaces.monitoring.data.ResponseData;
+import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.monitoring.api.tools.GenericMonitoringModelTools;
-import io.inugami.monitoring.core.sensors.services.ServiceValueTypes;
-import io.inugami.monitoring.core.sensors.services.ServicesSensor;
+import io.inugami.monitoring.core.sensors.ServiceValueTypes;
+import io.inugami.monitoring.core.sensors.ServicesSensor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -68,9 +68,9 @@ public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
     // =========================================================================
 
     @Override
-    public List<GenericMonitoringModel> onBegin(final ResquestData request) {
+    public List<GenericMonitoringModel> onBegin(final RequestData request) {
         if (enabled) {
-            final GenericMonitoringModelDTO.GenericMonitoringModelDTOBuilder builder = GenericMonitoringModelTools.initResultBuilder();
+            final var builder = GenericMonitoringModelTools.initResultBuilder().toBuilder();
 
             ServicesSensor.addData(List.of(
                     builder.value(LongNumber.of(1L))
@@ -84,13 +84,14 @@ public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
     }
 
     @Override
-    public List<GenericMonitoringModel> onDone(final ResquestData request, final ResponseData response,
+    public List<GenericMonitoringModel> onDone(final RequestData request,
+                                               final ResponseData response,
                                                final ErrorResult error) {
         if (enabled) {
             try {
-                final List<GenericMonitoringModelDTO> result = new ArrayList<>();
+                final List<GenericMonitoringModelDto> result = new ArrayList<>();
 
-                final GenericMonitoringModelDTO.GenericMonitoringModelDTOBuilder builder = GenericMonitoringModelTools.initResultBuilder();
+                final var builder = GenericMonitoringModelTools.initResultBuilder().toBuilder();
                 final ServiceValueTypes doneType =
                         error == null ? ServiceValueTypes.DONE : ServiceValueTypes.ERROR;
 
@@ -100,11 +101,11 @@ public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
                 }
 
                 builder.counterType(doneType.getKeywork());
-                builder.addValue(response.getDuration());
+                builder.value(LongNumber.of(response.getDuration()));
                 builder.counterType(ServiceValueTypes.RESPONSE_TIME.getKeywork());
                 result.add(builder.build());
 
-                builder.addValue(1);
+                builder.value(LongNumber.of(1));
                 builder.counterType(ServiceValueTypes.HITS.getKeywork());
                 builder.valueType("count");
                 result.add(builder.build());
@@ -116,8 +117,6 @@ public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
                 }
             }
         }
-
-
         return null;
     }
 

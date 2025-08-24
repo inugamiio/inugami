@@ -1,6 +1,6 @@
 package io.inugami.monitoring.core.spi;
 
-import io.inugami.framework.interfaces.monitoring.data.ResquestData;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.monitoring.api.resolvers.Interceptable;
 
 public class H2Interceptable implements Interceptable {
@@ -9,7 +9,7 @@ public class H2Interceptable implements Interceptable {
 
 
     @Override
-    public boolean isInterceptable(final ResquestData request) {
-        return !request.getUri().contains(H2_CONSOLE);
+    public boolean isInterceptable(final RequestData request) {
+        return !request.getRequestURI().contains(H2_CONSOLE);
     }
 }

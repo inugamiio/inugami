@@ -16,14 +16,14 @@
  */
 package io.inugami.monitoring.core.sensors;
 
-import io.inugami.api.models.Tuple;
-import io.inugami.api.models.data.graphite.number.GraphiteNumber;
-import io.inugami.api.models.tools.BlockingQueue;
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.models.GenericMonitoringModelDTO;
-import io.inugami.api.monitoring.sensors.MonitoringSensor;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.spi.SpiLoader;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.metrics.dto.GenericMonitoringModelDto;
+import io.inugami.framework.interfaces.models.Tuple;
+import io.inugami.framework.interfaces.models.number.GraphiteNumber;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
+import io.inugami.framework.interfaces.spi.SpiLoader;
+import io.inugami.framework.interfaces.tools.BlockingQueue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +41,7 @@ public class ServicesSensor implements MonitoringSensor {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final BlockingQueue<GenericMonitoringModel> BUFFER = new BlockingQueue<>();
+    private static final BlockingQueue<GenericMonitoringModelDto> BUFFER = new BlockingQueue<>();
 
     private static final List<ServicesSensorAggregator> AGGREGATORS = SpiLoader.getInstance()
                                                                                .loadSpiServicesByPriority(ServicesSensorAggregator.class);
@@ -131,7 +131,7 @@ public class ServicesSensor implements MonitoringSensor {
     // =========================================================================
     // ADD DATA
     // =========================================================================
-    public static synchronized void addData(final List<GenericMonitoringModelDTO> data) {
+    public static synchronized void addData(final List<GenericMonitoringModelDto> data) {
         if (data != null) {
             BUFFER.addAll(data);
         }

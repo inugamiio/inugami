@@ -29,6 +29,7 @@ public class Headers {
     public static final String X_DEVICE_IDENTIFIER            = "x-device-identifier";
     public static final String X_CORRELATION_ID               = "x-correlation-id";
     public static final String X_CONVERSATION_ID              = "x-conversation-id";
+    public static final String X_AUTHORIZATION_TOKEN          = "x-authorization-token";
     public static final String X_B_3_TRACEID                  = "x-b3-traceid";
     public static final String AUTHORIZATION                  = "Authorization";
     public static final String X_DEVICE_TYPE                  = "x-device-type";

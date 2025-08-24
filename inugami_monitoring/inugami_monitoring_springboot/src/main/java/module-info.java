@@ -24,8 +24,10 @@ module io.inugami.monitoring.springboot {
     requires io.inugami.monitoring.core;
     requires io.inugami.framework.api;
     requires jakarta.annotation;
-    requires jakarta.servlet;
-
+    requires io.inugami.framework.commons.spring;
+    requires io.inugami.framework.interfaces;
+    requires spring.boot.actuator;
+    requires static lombok;
 
     exports io.inugami.monitoring.springboot.actuator;
     exports io.inugami.monitoring.springboot.actuator.feature;

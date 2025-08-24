@@ -23,13 +23,14 @@ import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.exceptions.Warning;
 import io.inugami.framework.interfaces.models.JsonBuilder;
 import io.inugami.framework.interfaces.monitoring.ErrorResult;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.data.ResponseData;
-import io.inugami.framework.interfaces.monitoring.data.ResquestData;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -80,7 +81,7 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     // METHODS
     // =========================================================================
     @Override
-    public List<GenericMonitoringModel> onBegin(final ResquestData request) {
+    public List<GenericMonitoringModel> onBegin(final RequestData request) {
         final JsonBuilder msg = buildIologIn(request);
         MdcService.getInstance().lifecycleIn();
         Loggers.IOLOG.info(
@@ -89,14 +90,20 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         return null;
     }
 
-    protected JsonBuilder buildIologIn(final ResquestData request) {
+    protected JsonBuilder buildIologIn(final RequestData request) {
         final JsonBuilder result   = new JsonBuilder();
         final String      fullPath = resolveFullPath(request);
-        result.openList().write(request.getMethod()).closeList();
+        result.openList().write(request.getVerb()).closeList();
         result.writeSpace().write(fullPath).line();
         result.write("headers :").line();
-        for (final Map.Entry<String, String> entry : request.getHearder().entrySet()) {
-            result.tab().write(entry.getKey().trim()).write(":").writeSpace().write(entry.getValue().trim()).line();
+        final Iterator<String> headerNames = request.getRequest().getHeaderNames().asIterator();
+        while (headerNames.hasNext()) {
+            final String headerName = headerNames.next();
+            final String headerValue = request.getRequest().getHeader(headerName);
+            if(headerValue==null){
+                continue;
+            }
+            result.tab().write(headerName.trim()).write(":").writeSpace().write(headerValue.trim()).line();
         }
 
         result.write("payload :").line();
@@ -104,21 +111,21 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         return result;
     }
 
-    protected String resolveFullPath(final ResquestData request) {
+    protected String resolveFullPath(final RequestData request) {
         final StringBuilder result = new StringBuilder();
-        if (request.getContextPath() != null && !request.getUri().startsWith(request.getContextPath())) {
+        if (request.getContextPath() != null && !request.getRequestURI().startsWith(request.getContextPath())) {
             result.append(request.getContextPath());
-            if (!request.getUri().startsWith(URL_SEPARATOR)) {
+            if (!request.getRequestURI().startsWith(URL_SEPARATOR)) {
                 result.append(URL_SEPARATOR);
             }
         }
-        result.append(request.getUri());
+        result.append(request.getRequestURI());
         return result.toString();
     }
 
     @SuppressWarnings({"java:S3776"})
     @Override
-    public List<GenericMonitoringModel> onDone(final ResquestData request,
+    public List<GenericMonitoringModel> onDone(final RequestData request,
                                                final ResponseData httpResponse,
                                                final ErrorResult error) {
         final JsonBuilder msg = buildIologIn(request);

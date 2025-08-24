@@ -17,8 +17,8 @@
 package io.inugami.framework.interfaces.monitoring.interceptors;
 
 import io.inugami.framework.interfaces.monitoring.MonitoringInitializer;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.data.ResponseData;
-import io.inugami.framework.interfaces.monitoring.data.ResquestData;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.spi.NamedSpi;
@@ -37,11 +37,11 @@ import java.util.List;
 public interface MonitoringFilterInterceptor extends NamedSpi, MonitoringInitializer {
     MonitoringFilterInterceptor buildInstance(ConfigHandler<String, String> configuration);
 
-    default List<GenericMonitoringModel> onBegin(final ResquestData request) {
+    default List<GenericMonitoringModel> onBegin(final RequestData request) {
         return null;
     }
 
-    default List<GenericMonitoringModel> onDone(final ResquestData request, final ResponseData response,
+    default List<GenericMonitoringModel> onDone(final RequestData request, final ResponseData response,
                                                 final ErrorResult error) {
         return null;
     }

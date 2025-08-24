@@ -7,7 +7,7 @@ import io.inugami.framework.interfaces.functionnals.VoidFunctionWithException;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
 import io.inugami.framework.interfaces.models.Tuple;
 import io.inugami.framework.interfaces.monitoring.MdcServiceSpi;
-import io.inugami.framework.interfaces.monitoring.RequestInformation;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.logger.MDCKeys;
 import io.inugami.framework.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI;
 import io.inugami.framework.interfaces.monitoring.models.Headers;
@@ -81,7 +81,7 @@ public class MdcService implements MdcServiceSpi {
     // METHODS
     // =========================================================================
     public void initialize() {
-        final RequestInformation requestContext = RequestContext.getInstance();
+        final RequestData requestContext = RequestContext.getInstance();
 
         setMdc(MDCKeys.env, requestContext.getEnv());
         setMdc(MDCKeys.asset, requestContext.getAsset());
@@ -310,7 +310,8 @@ public class MdcService implements MdcServiceSpi {
     }
 
     public Map<String, String> getAllMdc() {
-        return MDC.getCopyOfContextMap();
+        final var result = MDC.getCopyOfContextMap();
+        return result == null ? new LinkedHashMap<>() : result;
     }
 
     public Map<String, Serializable> getAllMdcExtended() {

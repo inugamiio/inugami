@@ -16,7 +16,7 @@
  */
 package io.inugami.monitoring.core.interceptable;
 
-import io.inugami.framework.interfaces.monitoring.data.ResquestData;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.spi.SpiPriority;
 import io.inugami.monitoring.api.resolvers.Interceptable;
 
@@ -44,8 +44,8 @@ public class DefaultInterceptableIdentifier implements Interceptable {
     // OVERRIDES
     // =================================================================================================================
     @Override
-    public boolean isInterceptable(final ResquestData request) {
-        return !isResource(request.getUri());
+    public boolean isInterceptable(final RequestData request) {
+        return !isResource(request.getRequestURI());
     }
 
 

@@ -18,7 +18,7 @@ package io.inugami.monitoring.api.tools;
 
 
 import io.inugami.framework.api.monitoring.RequestContext;
-import io.inugami.framework.interfaces.monitoring.RequestInformation;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.metrics.dto.*;
 import io.inugami.framework.interfaces.tools.CalendarTools;
 
@@ -44,7 +44,7 @@ public final class GenericMonitoringModelTools {
     // METHODS
     // =========================================================================
     public static GenericMonitoringModelDto initResultBuilder() {
-        final RequestInformation infos = RequestContext.getInstance();
+        final RequestData infos = RequestContext.getInstance();
 
         final var data = GenericMonitoringModelDto.builder();
         data.environment(infos.getEnv());

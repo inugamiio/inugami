@@ -16,7 +16,8 @@
  */
 package io.inugami.monitoring.core.interceptors;
 
-import javax.servlet.http.HttpServletResponse;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface ResponseListener {
 

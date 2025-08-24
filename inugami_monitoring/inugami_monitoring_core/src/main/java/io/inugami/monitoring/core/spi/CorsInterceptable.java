@@ -1,16 +1,15 @@
 package io.inugami.monitoring.core.spi;
 
-import io.inugami.api.configurtation.ConfigurationSpiFactory;
-import io.inugami.api.monitoring.cors.CorsHeadersSpi;
-import io.inugami.api.monitoring.data.ResquestData;
-import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.models.Headers;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.spi.SpiLoader;
+import io.inugami.framework.api.configurtation.ConfigurationSpiFactory;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.monitoring.core.CorsHeadersSpi;
+import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.models.Headers;
+import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.monitoring.core.context.MonitoringBootstrapService;
 import lombok.NoArgsConstructor;
-
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -24,9 +23,8 @@ public class CorsInterceptable implements MonitoringFilterInterceptor {
     // ATTRIBUTES
     // =========================================================================
     private              ConfigHandler<String, String> configuration;
-    private              List<CorsHeadersSpi>          corsHeaders;
-    private              Headers                       headers;
-    private              Boolean                       enabled;
+    private List<CorsHeadersSpi> corsHeaders;
+    private Boolean              enabled;
 
     // =========================================================================
     // CONSTRUCTOR
@@ -43,10 +41,9 @@ public class CorsInterceptable implements MonitoringFilterInterceptor {
     // API
     // =========================================================================
     @Override
-    public List<GenericMonitoringModel> onBegin(final ResquestData request) {
+    public List<GenericMonitoringModel> onBegin(final RequestData request) {
         if (enabled == null) {
             corsHeaders = SpiLoader.getInstance().loadSpiServicesByPriority(CorsHeadersSpi.class);
-            headers = MonitoringBootstrapService.getContext().getConfig().getHeaders();
             enabled = ConfigurationSpiFactory.INSTANCE.getBooleanProperty("inugami.monitoring.cors.enabled", true);
         }
 
@@ -54,22 +51,22 @@ public class CorsInterceptable implements MonitoringFilterInterceptor {
             final List<String> currentHeaders = resolveHeaders(request);
             final String       headerStr      = String.join(SEP, currentHeaders);
 
-            request.getHttpResponse().setHeader("Access-Control-Allow-Origin", "*");
-            request.getHttpResponse()
+            request.getResponse().setHeader("Access-Control-Allow-Origin", "*");
+            request.getResponse()
                    .setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
-            request.getHttpResponse().setHeader("Access-Control-Allow-Headers", headerStr);
-            request.getHttpResponse().setHeader("Access-Control-Expose-Headers", headerStr);
-            request.getHttpResponse().setHeader("Access-Control-Allow-Credentials", "true");
+            request.getResponse().setHeader("Access-Control-Allow-Headers", headerStr);
+            request.getResponse().setHeader("Access-Control-Expose-Headers", headerStr);
+            request.getResponse().setHeader("Access-Control-Allow-Credentials", "true");
         }
         return null;
     }
 
-    private List<String> resolveHeaders(final ResquestData request) {
+    private List<String> resolveHeaders(final RequestData request) {
         final Set<String> result = new LinkedHashSet<>();
 
-        if (corsHeaders != null && headers != null) {
+        if (corsHeaders != null && request.getSpecific() != null) {
             for (final CorsHeadersSpi resolver : corsHeaders) {
-                final List<String> resultSet = resolver.buildCorsHeaders(request, headers, configuration);
+                final List<String> resultSet = resolver.buildCorsHeaders(request,  configuration);
                 if (resultSet != null) {
                     result.addAll(resultSet);
                 }
