@@ -26,5 +26,5 @@ module io.inugami.monitoring.api {
     exports io.inugami.monitoring.api.obfuscators;
     exports io.inugami.monitoring.api.resolvers;
     exports io.inugami.monitoring.api.tools;
-
+    uses io.inugami.monitoring.api.obfuscators.Obfuscator;
 }

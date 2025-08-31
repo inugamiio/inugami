@@ -15,5 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 module io.inugami.monitoring.sensors.defaults {
-   
+    requires java.management;
+    requires io.inugami.monitoring.api;
+    requires io.inugami.framework.api;
+    requires io.inugami.framework.interfaces;
+    requires org.slf4j;
+    requires com.fasterxml.jackson.databind;
+    requires static lombok;
+
 }

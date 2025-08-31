@@ -19,6 +19,7 @@ open module io.inugami.framework.commons.spring {
     exports io.inugami.framework.commons.spring.feature.interceptors;
     exports io.inugami.framework.commons.spring to spring.core;
     exports io.inugami.framework.commons.spring.configuration;
+    exports io.inugami.framework.commons.spring.exception;
     requires jakarta.servlet;
 
     requires lombok;

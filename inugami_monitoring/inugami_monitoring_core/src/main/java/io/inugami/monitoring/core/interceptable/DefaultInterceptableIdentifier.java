@@ -45,7 +45,7 @@ public class DefaultInterceptableIdentifier implements Interceptable {
     // =================================================================================================================
     @Override
     public boolean isInterceptable(final RequestData request) {
-        return !isResource(request.getRequestURI());
+        return !isResource(request.getUri());
     }
 
 

@@ -1,8 +1,9 @@
 package io.inugami.monitoring.springboot.activemq.config;
 
-import io.inugami.commons.marshaling.jaxb.JaxbAdapterSpi;
-import io.inugami.commons.marshaling.jaxb.JaxbClassRegister;
+import io.inugami.framework.interfaces.marshalling.jaxb.JaxbAdapterSpi;
+import io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister;
 import io.inugami.monitoring.springboot.activemq.iolog.MonitoredJmsListenerContainerFactory;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +20,6 @@ import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;

@@ -3,8 +3,8 @@ package io.inugami.monitoring.springboot.partnerlog.feign;
 import feign.Request;
 import feign.RequestTemplate;
 import feign.Response;
-import io.inugami.api.monitoring.models.IoInfoDTO;
-import io.inugami.api.monitoring.partner.Partner;
+import io.inugami.framework.interfaces.monitoring.models.IoInfoDTO;
+import io.inugami.framework.interfaces.monitoring.partner.Partner;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.util.Collection;
 
-import static io.inugami.api.functionnals.FunctionalUtils.orNull;
-import static io.inugami.api.tools.ReflectionUtils.getAnnotation;
+import static io.inugami.framework.api.tools.ReflectionUtils.getAnnotation;
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.orNull;
+
 
 @SuppressWarnings({"java:S1181", "java:S108"})
 @Slf4j

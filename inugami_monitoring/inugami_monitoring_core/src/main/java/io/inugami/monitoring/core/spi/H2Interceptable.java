@@ -10,6 +10,6 @@ public class H2Interceptable implements Interceptable {
 
     @Override
     public boolean isInterceptable(final RequestData request) {
-        return !request.getRequestURI().contains(H2_CONSOLE);
+        return !request.getUri().contains(H2_CONSOLE);
     }
 }

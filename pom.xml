@@ -204,7 +204,8 @@
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <ch.qos.logback.version>1.4.14</ch.qos.logback.version>
         <com.jackson.version>2.18.2</com.jackson.version>
-        <io.github.openfeign.version>12.3</io.github.openfeign.version>
+        <io.github.openfeign.version>13.6</io.github.openfeign.version>
+        <io.dropwizard.metrics.version>4.0.5</io.dropwizard.metrics.version>
         <org-mockito.mockito-core>2.0.31-beta</org-mockito.mockito-core>
         <org.apache.commons.cli.version>1.4</org.apache.commons.cli.version>
         <org.apache.commons.codec.version>1.16.0</org.apache.commons.codec.version>
@@ -464,12 +465,6 @@
             </dependency>
 
             <dependency>
-                <groupId>com.fasterxml.jackson.module</groupId>
-                <artifactId>jackson-module-parameter-names</artifactId>
-                <version>${com.jackson.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.fasterxml.jackson.dataformat</groupId>
                 <artifactId>jackson-dataformat-yaml</artifactId>
                 <version>${com.jackson.version}</version>
@@ -520,13 +515,35 @@
                 <version>${com.squareup.okhttp3.version}</version>
             </dependency>
 
+
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-core</artifactId>
+                <version>${io.github.openfeign.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-jackson</artifactId>
+                <version>${io.github.openfeign.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>io.github.openfeign</groupId>
                 <artifactId>feign-okhttp</artifactId>
                 <version>${io.github.openfeign.version}</version>
             </dependency>
 
-
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-graphite</artifactId>
+                <version>${io.dropwizard.metrics.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.rabbitmq</groupId>
+                        <artifactId>amqp-client</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
             <dependency>
                 <groupId>jakarta.servlet</groupId>
                 <artifactId>jakarta.servlet-api</artifactId>

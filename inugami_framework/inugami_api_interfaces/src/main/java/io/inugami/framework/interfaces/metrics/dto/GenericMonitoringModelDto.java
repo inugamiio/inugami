@@ -18,10 +18,13 @@ package io.inugami.framework.interfaces.metrics.dto;
 
 import io.inugami.framework.interfaces.dao.Identifiable;
 import io.inugami.framework.interfaces.models.number.GraphiteNumber;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.crypto.NullCipher;
 import java.util.Date;
+import java.util.List;
 
 /**
  * GenericMonitoringModel
@@ -37,12 +40,14 @@ import java.util.Date;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Setter
 @Getter
-public final class GenericMonitoringModelDto implements Identifiable<String> {
+public final class GenericMonitoringModelDto implements GenericMonitoringModel, Identifiable<String> {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
     private static final long serialVersionUID = 4735410638475899702L;
+    public static final String EMPTY = "";
+    public static final String SEPARATOR = ":";
 
     private String uid;
 
@@ -67,7 +72,7 @@ public final class GenericMonitoringModelDto implements Identifiable<String> {
     private String valueType;
 
     private String timeUnit;
-    
+
     private Date date;
 
     private long time;
@@ -94,4 +99,59 @@ public final class GenericMonitoringModelDto implements Identifiable<String> {
         return uid != null;
     }
 
+    @Override
+    public String getNonTemporalHash() {
+        return String.join(SEPARATOR, List.of(
+                orEmpty(asset),
+                orEmpty(environment),
+                orEmpty(instanceName),
+                orEmpty(instanceNumber),
+                orEmpty(counterType),
+                orEmpty(device),
+                orEmpty(callType),
+                orEmpty(service),
+                orEmpty(subService),
+                orEmpty(valueType),
+                orEmpty(timeUnit)
+        ));
+    }
+
+    private String orEmpty(final String inputValue) {
+        return inputValue == null ? EMPTY :inputValue;
+    }
+
+    @Override
+    public Object cloneObj() {
+        return toBuilder().build();
+    }
+
+    public static class GenericMonitoringModelDtoBuilder {
+
+        public GenericMonitoringModelDtoBuilder init(final GenericMonitoringModel inputValue) {
+            if (inputValue != null) {
+                uid = inputValue.getUid();
+                asset = inputValue.getAsset();
+                environment = inputValue.getEnvironment();
+                instanceName = inputValue.getInstanceName();
+                instanceNumber = inputValue.getInstanceNumber();
+                counterType = inputValue.getCounterType();
+                device = inputValue.getDevice();
+                callType = inputValue.getCallType();
+                service = inputValue.getSubService();
+                subService = inputValue.getSubService();
+                valueType = inputValue.getValueType();
+                timeUnit = inputValue.getTimeUnit();
+                date = inputValue.getDate();
+                time = inputValue.getTime();
+                errorCode = inputValue.getErrorCode();
+                errorType = inputValue.getErrorType();
+                value = inputValue.getValue();
+                path = inputValue.getPath();
+                data = inputValue.getData();
+                timestamp = inputValue.getTimestamp();
+            }
+
+            return this;
+        }
+    }
 }

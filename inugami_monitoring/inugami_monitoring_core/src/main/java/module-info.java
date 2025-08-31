@@ -21,6 +21,7 @@ module io.inugami.monitoring.core {
     requires io.inugami.framework.interfaces;
     requires lombok;
     requires jakarta.servlet;
+    requires org.slf4j;
 
     exports io.inugami.monitoring.core.context;
     exports io.inugami.monitoring.core.context.sensors;

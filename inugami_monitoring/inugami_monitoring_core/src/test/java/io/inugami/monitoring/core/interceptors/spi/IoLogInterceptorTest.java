@@ -57,13 +57,13 @@ class IoLogInterceptorTest {
     @Test
     void onBegin_nominal() {
         final RequestData request = RequestData.builder()
-                                               .verb("POST")
-                                               .requestURI("/my/service")
+                                               .method("POST")
+                                               .uri("/my/service")
                                                .contextPath("/application")
                                                .addHeader("app", "myApplication")
                                                .content("{\"name\":\"John Smith\"}")
                                                .build();
-        processOnBegin(request, "monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_nominal.json");
+        processOnBegin(request, "io/inugami/monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_nominal.json");
     }
 
 

@@ -41,7 +41,7 @@ public class ServicesSensor implements MonitoringSensor {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final BlockingQueue<GenericMonitoringModelDto> BUFFER = new BlockingQueue<>();
+    private static final BlockingQueue<GenericMonitoringModel> BUFFER = new BlockingQueue<>();
 
     private static final List<ServicesSensorAggregator> AGGREGATORS = SpiLoader.getInstance()
                                                                                .loadSpiServicesByPriority(ServicesSensorAggregator.class);

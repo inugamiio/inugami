@@ -1,11 +1,11 @@
 package io.inugami.monitoring.core.interceptors;
 
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.monitoring.JavaRestMethodResolver;
-import io.inugami.api.monitoring.JavaRestMethodTracker;
-import io.inugami.api.monitoring.MdcService;
-import io.inugami.api.monitoring.exceptions.ErrorResult;
-import io.inugami.api.processors.DefaultConfigHandler;
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.api.processors.DefaultConfigHandler;
+import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.framework.interfaces.monitoring.ErrorResult;
+import io.inugami.framework.interfaces.monitoring.JavaRestMethodResolver;
+import io.inugami.framework.interfaces.monitoring.JavaRestMethodTracker;
 import io.inugami.monitoring.api.exceptions.ExceptionResolver;
 import io.inugami.monitoring.api.resolvers.Interceptable;
 import org.junit.jupiter.api.Test;

@@ -16,19 +16,17 @@
  */
 package io.inugami.monitoring.sensors.defaults.mbean;
 
-import flexjson.JSON;
-import io.inugami.api.models.data.basic.JsonObject;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@EqualsAndHashCode
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Setter
 @Getter
+@Builder(toBuilder = true)
+@AllArgsConstructor
 @NoArgsConstructor
 @SuppressWarnings({"java:S5361"})
-public final class JmxBeanSensorQuery implements JsonObject {
+public final class JmxBeanSensorQuery  {
 
     // =========================================================================
     // ATTRIBUTES
@@ -36,26 +34,10 @@ public final class JmxBeanSensorQuery implements JsonObject {
     private static final long serialVersionUID = -1555887276893630060L;
 
     private String path;
-
-    @JSON(name = "attribute")
-    private String mbeanAttibute;
-
-    @JSON(name = "method")
-    private String mbeanMethod;
+    private String attribute;
+    private String method;
 
 
-    public JmxBeanSensorQuery(final String path, final String attibute, final String method) {
-        super();
-        this.path = path;
-        this.mbeanAttibute = attibute;
-        this.mbeanMethod = method;
-    }
-
-    public JmxBeanSensorQuery(final JmxBeanSensorQuery query) {
-        this.path = query.getPath().replaceAll("'", "\"");
-        this.mbeanAttibute = query.getMbeanAttibute();
-        this.mbeanMethod = query.getMbeanMethod();
-    }
 
 
 }

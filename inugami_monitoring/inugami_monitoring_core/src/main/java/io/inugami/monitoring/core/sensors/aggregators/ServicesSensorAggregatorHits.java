@@ -16,14 +16,14 @@
  */
 package io.inugami.monitoring.core.sensors.aggregators;
 
-import io.inugami.api.models.data.graphite.number.GraphiteNumber;
-import io.inugami.api.models.data.graphite.number.LongNumber;
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.models.GenericMonitoringModelDTO;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.spi.SpiPriority;
-import io.inugami.monitoring.core.sensors.services.ServiceValueTypes;
-import io.inugami.monitoring.core.sensors.services.ServicesSensorAggregator;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.metrics.dto.GenericMonitoringModelDto;
+import io.inugami.framework.interfaces.models.number.GraphiteNumber;
+import io.inugami.framework.interfaces.models.number.LongNumber;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.spi.SpiPriority;
+import io.inugami.monitoring.core.sensors.ServiceValueTypes;
+import io.inugami.monitoring.core.sensors.ServicesSensorAggregator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class ServicesSensorAggregatorHits implements ServicesSensorAggregator {
 
 
         final String timeUnit = configuration.grabOrDefault("timeUnit", "min");
-        final GenericMonitoringModelDTO.GenericMonitoringModelDTOBuilder builder = GenericMonitoringModelDTO.builder()
+        final var builder = GenericMonitoringModelDto.builder()
                                                                                                             .init(data);
 
         builder.timeUnit(timeUnit);

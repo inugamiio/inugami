@@ -1,7 +1,8 @@
 package io.inugami.monitoring.springboot.exception;
 
 import feign.FeignException;
-import io.inugami.api.spi.SpiPriority;
+
+import io.inugami.framework.interfaces.spi.SpiPriority;
 import io.inugami.monitoring.springboot.api.FeignErrorCodeBuilderSpi;
 
 @SpiPriority(Integer.MIN_VALUE)

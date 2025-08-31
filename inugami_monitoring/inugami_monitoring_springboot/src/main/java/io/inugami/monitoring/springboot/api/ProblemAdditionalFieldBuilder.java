@@ -1,6 +1,7 @@
 package io.inugami.monitoring.springboot.api;
 
-import io.inugami.api.exceptions.ErrorCode;
+
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import org.zalando.problem.ProblemBuilder;
 
 public interface ProblemAdditionalFieldBuilder {

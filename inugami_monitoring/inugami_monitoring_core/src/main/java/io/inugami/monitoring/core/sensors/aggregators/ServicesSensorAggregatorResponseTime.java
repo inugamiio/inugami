@@ -16,13 +16,16 @@
  */
 package io.inugami.monitoring.core.sensors.aggregators;
 
-import io.inugami.api.models.data.graphite.number.GraphiteNumber;
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.models.GenericMonitoringModelDTO;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.spi.SpiPriority;
-import io.inugami.monitoring.core.sensors.services.ServiceValueTypes;
-import io.inugami.monitoring.core.sensors.services.ServicesSensorAggregator;
+
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.metrics.dto.GenericMonitoringModelDto;
+import io.inugami.framework.interfaces.models.number.FloatNumber;
+import io.inugami.framework.interfaces.models.number.GraphiteNumber;
+import io.inugami.framework.interfaces.models.number.LongNumber;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.spi.SpiPriority;
+import io.inugami.monitoring.core.sensors.ServiceValueTypes;
+import io.inugami.monitoring.core.sensors.ServicesSensorAggregator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +54,8 @@ public class ServicesSensorAggregatorResponseTime implements ServicesSensorAggre
                                                 final ConfigHandler<String, String> configuration) {
         final String                       timeUnit = configuration.grabOrDefault("timeUnit", "min");
         final List<GenericMonitoringModel> result   = new ArrayList<>();
-        final GenericMonitoringModelDTO.GenericMonitoringModelDTOBuilder builder = GenericMonitoringModelDTO.builder()
-                                                                                                            .init(data);
+        final var builder = GenericMonitoringModelDto.builder()
+                                                     .init(data);
 
         final List<Long> sortedValues = sortsValues(values);
 
@@ -61,35 +64,35 @@ public class ServicesSensorAggregatorResponseTime implements ServicesSensorAggre
             builder.timeUnit(timeUnit);
 
             builder.valueType("min");
-            builder.addValue(values.get(percentil(0, size)).toLong());
+            builder.value(LongNumber.of(values.get(percentil(0, size)).toLong()));
             result.add(builder.build());
 
             builder.valueType("max");
-            builder.addValue(values.get(percentil(1, size)).toLong());
+            builder.value(LongNumber.of(values.get(percentil(1, size)).toLong()));
             result.add(builder.build());
 
             builder.valueType("p99");
-            builder.addValue(values.get(percentil(0.99, size)).toLong());
+            builder.value(LongNumber.of(values.get(percentil(0.99, size)).toLong()));
             result.add(builder.build());
 
             builder.valueType("p95");
-            builder.addValue(values.get(percentil(0.95, size)).toLong());
+            builder.value(LongNumber.of(values.get(percentil(0.95, size)).toLong()));
             result.add(builder.build());
 
             builder.valueType("p90");
-            builder.addValue(values.get(percentil(0.90, size)).toLong());
+            builder.value(LongNumber.of(values.get(percentil(0.90, size)).toLong()));
             result.add(builder.build());
 
             builder.valueType("p75");
-            builder.addValue(values.get(percentil(0.75, size)).toLong());
+            builder.value(LongNumber.of(values.get(percentil(0.75, size)).toLong()));
             result.add(builder.build());
 
             builder.valueType("p50");
-            builder.addValue(values.get(percentil(0.5, size)).toLong());
+            builder.value(LongNumber.of(values.get(percentil(0.5, size)).toLong()));
             result.add(builder.build());
 
             builder.valueType("avg");
-            builder.addValue(average(sortedValues));
+            builder.value(FloatNumber.of(average(sortedValues)));
             result.add(builder.build());
         }
 

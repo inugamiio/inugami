@@ -1,14 +1,14 @@
 package io.inugami.monitoring.springboot.exception;
 
 import feign.FeignException;
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.exceptions.ErrorCodeResolver;
-import io.inugami.api.exceptions.ExceptionUtils;
-import io.inugami.api.listeners.ApplicationLifecycleSPI;
-import io.inugami.api.listeners.DefaultApplicationLifecycleSPI;
-import io.inugami.api.monitoring.MdcService;
-import io.inugami.api.spi.SpiLoader;
+import io.inugami.framework.api.exceptions.ExceptionUtils;
+import io.inugami.framework.api.listeners.DefaultApplicationLifecycleSPI;
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.exceptions.ErrorCodeResolver;
+import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
+import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.monitoring.springboot.api.FeignErrorCodeBuilderSpi;
 
 import java.util.List;

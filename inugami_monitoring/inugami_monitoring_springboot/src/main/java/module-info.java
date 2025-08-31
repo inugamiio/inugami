@@ -27,7 +27,15 @@ module io.inugami.monitoring.springboot {
     requires io.inugami.framework.commons.spring;
     requires io.inugami.framework.interfaces;
     requires spring.boot.actuator;
+    requires feign.core;
+    requires feign.jackson;
+    requires feign.okhttp;
     requires static lombok;
+    requires jakarta.servlet;
+    requires spring.boot;
+    requires org.zalando.problem;
+    requires org.slf4j;
+    requires com.fasterxml.jackson.databind;
 
     exports io.inugami.monitoring.springboot.actuator;
     exports io.inugami.monitoring.springboot.actuator.feature;

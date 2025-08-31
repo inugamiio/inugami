@@ -16,20 +16,24 @@
  */
 package io.inugami.monitoring.sensors.defaults.mbean;
 
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.models.data.basic.JsonObject;
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.models.GenericMonitoringModelDTO;
-import io.inugami.api.monitoring.sensors.MonitoringSensor;
-import io.inugami.api.processors.ConfigHandler;
+import io.inugami.framework.api.marshalling.JsonMarshaller;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.models.number.FloatNumber;
+import io.inugami.framework.interfaces.models.number.LongNumber;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.monitoring.api.tools.GenericMonitoringModelTools;
+import lombok.extern.slf4j.Slf4j;
 
-import javax.management.*;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @SuppressWarnings({"java:S5361"})
 public class JmxBeanSensor implements MonitoringSensor {
     // =========================================================================
@@ -80,9 +84,9 @@ public class JmxBeanSensor implements MonitoringSensor {
         final List<GenericMonitoringModel> result = new ArrayList<>();
         if (query != null) {
 
-            final String localQuery = configuration == null ? query : configuration.applyProperties(query);
-            final JmxBeanSensorQuery queryData = new JmxBeanSensorQuery().convertToObject(localQuery.getBytes(),
-                                                                                          StandardCharsets.UTF_8);
+            final String       localQuery = configuration == null ? query : configuration.applyProperties(query);
+            JmxBeanSensorQuery queryData  = convertFromJson(new String(localQuery.getBytes(), StandardCharsets.UTF_8));
+
 
             //@formatter:off
             final String normalizePath = queryData.getPath()
@@ -92,7 +96,7 @@ public class JmxBeanSensor implements MonitoringSensor {
             //@formatter:on
 
             Loggers.METRICS.debug("processing mbean sensor for : {}", normalizePath);
-            if (queryData.getMbeanAttibute() != null) {
+            if (queryData.getAttribute() != null) {
                 result.addAll(processAttribute(normalizePath, queryData));
             }
 
@@ -101,18 +105,28 @@ public class JmxBeanSensor implements MonitoringSensor {
         return result;
     }
 
+    private JmxBeanSensorQuery convertFromJson(final String jsonValue) {
+        try {
+            return JsonMarshaller.getInstance().getDefaultObjectMapper().readValue(jsonValue, JmxBeanSensorQuery.class);
+        } catch (Throwable e) {
+            if (log.isDebugEnabled()) {
+                log.error(e.getMessage(), e);
+            }
+            return null;
+        }
+    }
+
     private List<GenericMonitoringModel> processAttribute(final String normalizePath,
                                                           final JmxBeanSensorQuery queryData) {
         Object value = null;
         try {
-            value = jmx.getAttribute(new ObjectName(queryData.getPath()), queryData.getMbeanAttibute());
-        } catch (InstanceNotFoundException | AttributeNotFoundException | MalformedObjectNameException
-                 | ReflectionException | MBeanException e) {
+            value = jmx.getAttribute(new ObjectName(queryData.getPath()), queryData.getAttribute());
+        } catch (Throwable e) {
             Loggers.DEBUG.error(e.getMessage(), e);
         }
 
         return value == null ? new ArrayList<>()
-                : convertToMonitoringModel(normalizePath, value, queryData.getMbeanAttibute());
+                : convertToMonitoringModel(normalizePath, value, queryData.getAttribute());
     }
 
     // =========================================================================
@@ -121,7 +135,7 @@ public class JmxBeanSensor implements MonitoringSensor {
     private List<GenericMonitoringModel> convertToMonitoringModel(final String normalizePath, final Object value,
                                                                   final String valueComeFrom) {
 
-        final GenericMonitoringModelDTO.GenericMonitoringModelDTOBuilder builder = GenericMonitoringModelTools.initResultBuilder();
+        final var builder = GenericMonitoringModelTools.initResultBuilder().toBuilder();
 
         builder.counterType("system");
         builder.service("jmx");
@@ -131,15 +145,30 @@ public class JmxBeanSensor implements MonitoringSensor {
 
         if ((value instanceof Byte) || (value instanceof Short) || (value instanceof Integer)
             || (value instanceof Long)) {
-            builder.addValue((long) value);
+            builder.value(LongNumber.of((long) value));
         } else if ((value instanceof Float) || (value instanceof Double)) {
-            builder.addValue((double) value);
-        } else if (value instanceof JsonObject) {
-            builder.data(((JsonObject) value).convertToJson());
+            builder.value(FloatNumber.of((long) value));
+        } else if (value instanceof String valueStr) {
+            builder.data(valueStr);
         } else {
-            builder.data(String.valueOf(value));
+            final var json = convertToJson(value);
+            if (json != null) {
+                builder.data(json);
+            }
         }
         return List.of(builder.build());
+    }
+
+    private String convertToJson(final Object value) {
+        try {
+            return JsonMarshaller.getInstance().getDefaultObjectMapper().writeValueAsString(value);
+        } catch (Throwable e) {
+            if (log.isDebugEnabled()) {
+                log.error(e.getMessage(), e);
+            }
+            return null;
+        }
+
     }
 
     // =========================================================================

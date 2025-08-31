@@ -68,9 +68,9 @@ public class RequestInformationInitializer {
             return builder.build();
         }
         //REQUEST ------------------------------------------------------------------------------------------------------
-        builder.requestURI(httpRequest.getRequestURI());
+        builder.uri(httpRequest.getRequestURI());
         builder.contextPath(httpRequest.getContextPath());
-        builder.verb(httpRequest.getMethod());
+        builder.method(httpRequest.getMethod());
         builder.contentType(httpRequest.getContentType());
         builder.characterEncoding(httpRequest.getCharacterEncoding());
         builder.options(httpRequest.getParameterMap());
@@ -146,7 +146,7 @@ public class RequestInformationInitializer {
         builder.language(mdc.country());
 
         // specific
-        builder.specific(extractOtherHeaders(httpRequest));
+        builder.headers(extractOtherHeaders(httpRequest));
         return builder
                 .build();
     }

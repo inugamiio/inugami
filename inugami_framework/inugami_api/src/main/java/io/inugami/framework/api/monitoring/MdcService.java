@@ -112,8 +112,8 @@ public class MdcService implements MdcServiceSpi {
         setMdc(MDCKeys.country, requestContext.getCountry());
         setMdc(MDCKeys.service, requestContext.getService());
 
-        if (requestContext.getSpecific() != null) {
-            for (final Map.Entry<String, String> entry : requestContext.getSpecific().entrySet()) {
+        if (requestContext.getHeaders() != null) {
+            for (final Map.Entry<String, String> entry : requestContext.getHeaders().entrySet()) {
                 if (entry.getKey() != null) {
                     MDC.put(entry.getKey(), entry.getValue());
                 }
@@ -355,7 +355,7 @@ public class MdcService implements MdcServiceSpi {
         return this;
     }
 
-    public MdcServiceSpi clear() {
+    public MdcService clear() {
         MDC.clear();
         return this;
     }

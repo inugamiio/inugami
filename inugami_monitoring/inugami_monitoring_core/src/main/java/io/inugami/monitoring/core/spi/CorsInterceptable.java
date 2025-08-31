@@ -5,9 +5,7 @@ import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.monitoring.core.CorsHeadersSpi;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
-import io.inugami.framework.interfaces.monitoring.models.Headers;
 import io.inugami.framework.interfaces.spi.SpiLoader;
-import io.inugami.monitoring.core.context.MonitoringBootstrapService;
 import lombok.NoArgsConstructor;
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import java.util.ArrayList;
@@ -64,7 +62,7 @@ public class CorsInterceptable implements MonitoringFilterInterceptor {
     private List<String> resolveHeaders(final RequestData request) {
         final Set<String> result = new LinkedHashSet<>();
 
-        if (corsHeaders != null && request.getSpecific() != null) {
+        if (corsHeaders != null && request.getHeaders() != null) {
             for (final CorsHeadersSpi resolver : corsHeaders) {
                 final List<String> resultSet = resolver.buildCorsHeaders(request,  configuration);
                 if (resultSet != null) {

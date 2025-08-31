@@ -1,8 +1,9 @@
 package io.inugami.monitoring.core.spi;
 
-import io.inugami.api.exceptions.Warning;
-import io.inugami.api.exceptions.WarningTracker;
-import io.inugami.api.monitoring.MdcService;
+
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.interfaces.exceptions.Warning;
+import io.inugami.framework.interfaces.exceptions.WarningTracker;
 
 import java.io.Serializable;
 import java.util.ArrayList;

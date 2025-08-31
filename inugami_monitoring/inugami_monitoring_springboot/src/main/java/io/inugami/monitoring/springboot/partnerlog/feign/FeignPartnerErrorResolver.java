@@ -1,9 +1,9 @@
 package io.inugami.monitoring.springboot.partnerlog.feign;
 
 import feign.Response;
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.exceptions.UncheckedException;
-import io.inugami.api.monitoring.AuthenticationErrorNotXLError;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.exceptions.UncheckedException;
+import io.inugami.framework.interfaces.monitoring.AuthenticationErrorNotXLError;
 
 import java.util.List;
 

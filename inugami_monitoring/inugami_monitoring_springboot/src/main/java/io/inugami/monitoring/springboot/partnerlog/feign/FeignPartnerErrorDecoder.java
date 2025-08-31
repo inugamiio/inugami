@@ -2,12 +2,12 @@ package io.inugami.monitoring.springboot.partnerlog.feign;
 
 import feign.Response;
 import feign.codec.ErrorDecoder;
-import io.inugami.api.exceptions.DefaultErrorCode;
-import io.inugami.api.exceptions.ErrorCode;
-import io.inugami.api.exceptions.MessagesFormatter;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.monitoring.MdcService;
-import io.inugami.api.monitoring.models.IoInfoDTO;
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.exceptions.MessagesFormatter;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import io.inugami.framework.interfaces.monitoring.models.IoInfoDTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

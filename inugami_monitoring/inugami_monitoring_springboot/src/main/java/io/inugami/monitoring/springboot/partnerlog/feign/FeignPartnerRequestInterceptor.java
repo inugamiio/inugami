@@ -2,9 +2,9 @@ package io.inugami.monitoring.springboot.partnerlog.feign;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.monitoring.MdcService;
-import io.inugami.api.monitoring.models.IoInfoDTO;
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import io.inugami.framework.interfaces.monitoring.models.IoInfoDTO;
 import io.inugami.monitoring.core.context.MonitoringContext;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

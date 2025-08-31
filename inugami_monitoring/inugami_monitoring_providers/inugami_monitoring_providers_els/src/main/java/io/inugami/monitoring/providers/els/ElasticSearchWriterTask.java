@@ -16,12 +16,18 @@
  */
 package io.inugami.monitoring.providers.els;
 
-import io.inugami.api.dao.Identifiable;
-import io.inugami.api.exceptions.services.ConnectorException;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.models.JsonBuilder;
-import io.inugami.api.models.data.basic.JsonObject;
-import io.inugami.commons.connectors.HttpBasicConnector;
+
+import io.inugami.framework.api.connectors.HttpBasicConnector;
+import io.inugami.framework.api.marshalling.JsonMarshaller;
+import io.inugami.framework.interfaces.connectors.HttpRequest;
+import io.inugami.framework.interfaces.dao.Identifiable;
+import io.inugami.framework.interfaces.exceptions.services.ConnectorException;
+import io.inugami.framework.interfaces.models.JsonBuilder;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import lombok.Singular;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.util.List;
@@ -33,6 +39,9 @@ import java.util.concurrent.Callable;
  * @author patrick_guillerm
  * @since 3 oct. 2018
  */
+@Slf4j
+@Builder
+@RequiredArgsConstructor
 @SuppressWarnings({"java:S1874"})
 public class ElasticSearchWriterTask implements Callable<Void> {
 
@@ -41,30 +50,15 @@ public class ElasticSearchWriterTask implements Callable<Void> {
     // =========================================================================
     private final HttpBasicConnector httpConnector;
 
-    private final String url;
-
-    private final List<JsonObject> values;
+    private final String       url;
+    @Singular("values")
+    private final List<Object> values;
 
     private final ElsData data;
+    @Builder.Default
+    private final String  bulkCommand = "index";
 
-    private String bulkCommand;
 
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public ElasticSearchWriterTask(final HttpBasicConnector httpConnector, final String url, final ElsData data,
-                                   final List<JsonObject> values) {
-        this(httpConnector, url, data, values, "index");
-    }
-
-    public ElasticSearchWriterTask(final HttpBasicConnector httpConnector, final String url, final ElsData data,
-                                   final List<JsonObject> values, String bulkCommand) {
-        this.httpConnector = httpConnector;
-        this.url = url;
-        this.values = values;
-        this.data = data;
-        this.bulkCommand = bulkCommand;
-    }
     // =========================================================================
     // METHODS
     // =========================================================================
@@ -76,7 +70,10 @@ public class ElasticSearchWriterTask implements Callable<Void> {
 
         try {
             if (jsonBulk != null && !jsonBulk.isEmpty()) {
-                httpConnector.post(url, jsonBulk);
+                httpConnector.post(HttpRequest.builder()
+                                              .url(url)
+                                              .body(jsonBulk)
+                                              .build());
                 Loggers.PROVIDER.info("send {} documents to ELS {} : {}", values.size(), data.getIndex(),
                                       data.getType());
             }
@@ -91,21 +88,24 @@ public class ElasticSearchWriterTask implements Callable<Void> {
     // =========================================================================
     // RENDER BULK
     // =========================================================================
-    private String renderBulk(ElsData data, List<JsonObject> values) {
+    private String renderBulk(ElsData data, List<Object> values) {
         String result = null;
 
         if (data.getValues() != null) {
             final JsonBuilder json = new JsonBuilder();
 
-            for (JsonObject value : values) {
+            for (Object value : values) {
                 json.write(encodeBulkAction(data, value)).addLine();
-
+                final String jsonValue = convertToJson(value);
+                if (jsonValue == null) {
+                    continue;
+                }
                 switch (bulkCommand) {
                     case "index":
-                        json.write(value.convertToJson()).addLine();
+                        json.write(jsonValue).addLine();
                         break;
                     case "update":
-                        json.openObject().addField("doc").write(value.convertToJson()).closeObject().addLine();
+                        json.openObject().addField("doc").write(jsonValue).closeObject().addLine();
                         break;
                     default:
                         break;
@@ -118,7 +118,18 @@ public class ElasticSearchWriterTask implements Callable<Void> {
         return result;
     }
 
-    private String encodeBulkAction(ElsData data, JsonObject value) {
+    private String convertToJson(final Object value) {
+        try {
+            return JsonMarshaller.getInstance().getDefaultObjectMapper().writeValueAsString(value);
+        } catch (Throwable e) {
+            if (log.isDebugEnabled()) {
+                log.error(e.getMessage(), e);
+            }
+            return null;
+        }
+    }
+
+    private String encodeBulkAction(ElsData data, Object value) {
         final JsonBuilder json = new JsonBuilder();
         json.openObject();
         json.addField(bulkCommand);
@@ -144,7 +155,7 @@ public class ElasticSearchWriterTask implements Callable<Void> {
     // =========================================================================
     // UPDATE DATE
     // =========================================================================
-    public void updateData(List<? extends JsonObject> data) {
+    public void updateData(List<? extends Object> data) {
         this.values.clear();
         if (data != null) {
             this.values.addAll(data);

@@ -9,7 +9,6 @@ import feign.jackson.JacksonDecoder;
 import feign.okhttp.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -41,10 +40,6 @@ public class InugamiFeignConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public Decoder inugamiFeignDecoder(final ObjectMapper objectMapper) {
-        return new FeignPartnerResponseDecoder(
-                new ResponseEntityDecoder(
-                        new JacksonDecoder(objectMapper)
-                )
-        );
+        return FeignPartnerResponseDecoder.builder().decoder(new JacksonDecoder(objectMapper)).build();
     }
 }

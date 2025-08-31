@@ -15,5 +15,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 module io.inugami.monitoring.providers.logs {
-   
+    requires io.inugami.monitoring.api;
+    requires io.inugami.framework.commons;
+    requires io.inugami.framework.api;
+    requires io.inugami.framework.interfaces;
+    requires com.fasterxml.jackson.databind;
+    requires org.slf4j;
+    requires static lombok;
 }

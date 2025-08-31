@@ -30,9 +30,7 @@ import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * LogInterceptor
@@ -93,17 +91,12 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     protected JsonBuilder buildIologIn(final RequestData request) {
         final JsonBuilder result   = new JsonBuilder();
         final String      fullPath = resolveFullPath(request);
-        result.openList().write(request.getVerb()).closeList();
+        result.openList().write(request.getMethod()).closeList();
         result.writeSpace().write(fullPath).line();
         result.write("headers :").line();
-        final Iterator<String> headerNames = request.getRequest().getHeaderNames().asIterator();
-        while (headerNames.hasNext()) {
-            final String headerName = headerNames.next();
-            final String headerValue = request.getRequest().getHeader(headerName);
-            if(headerValue==null){
-                continue;
-            }
-            result.tab().write(headerName.trim()).write(":").writeSpace().write(headerValue.trim()).line();
+
+        for(Map.Entry<String,String> header : Optional.ofNullable(request.getHeaders()).orElse(new LinkedHashMap<>()).entrySet()){
+            result.tab().write(header.getKey()).write(":").writeSpace().write(header.getValue()).line();
         }
 
         result.write("payload :").line();
@@ -113,13 +106,13 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
 
     protected String resolveFullPath(final RequestData request) {
         final StringBuilder result = new StringBuilder();
-        if (request.getContextPath() != null && !request.getRequestURI().startsWith(request.getContextPath())) {
+        if (request.getContextPath() != null && !request.getUri().startsWith(request.getContextPath())) {
             result.append(request.getContextPath());
-            if (!request.getRequestURI().startsWith(URL_SEPARATOR)) {
+            if (!request.getUri().startsWith(URL_SEPARATOR)) {
                 result.append(URL_SEPARATOR);
             }
         }
-        result.append(request.getRequestURI());
+        result.append(request.getUri());
         return result.toString();
     }
 
@@ -137,7 +130,7 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         msg.tab().write("duration:").write(httpResponse.getDuration()).line();
         msg.tab().write("contentType:").write(httpResponse.getContentType()).line();
         msg.tab().write("headers:").line();
-        for (final Map.Entry<String, String> entry : httpResponse.getHearder().entrySet()) {
+        for (final Map.Entry<String, String> entry : Optional.ofNullable(httpResponse.getHearder()).orElse(new LinkedHashMap<>()).entrySet()) {
             msg.tab().tab().write(entry.getKey()).write(":").writeSpace().write(entry.getValue()).line();
         }
 

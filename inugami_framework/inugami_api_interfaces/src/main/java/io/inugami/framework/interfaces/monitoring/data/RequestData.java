@@ -16,12 +16,12 @@
  */
 package io.inugami.framework.interfaces.monitoring.data;
 
-import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -41,10 +41,10 @@ public class RequestData implements Serializable {
     // ATTRIBUTES
     // =========================================================================
     private static final long                  serialVersionUID = -7805638130853062376L;
-    private              String                requestURI;
+    private              String                uri;
     private              String                contextPath;
     private              String                contentType;
-    private              String                verb;
+    private              String                method;
     private              String                characterEncoding;
     private              String                content;
     private              Map<String, String[]> options;
@@ -107,14 +107,33 @@ public class RequestData implements Serializable {
     private String userAgent;
 
     // language
-    private String language;
+    private String              language;
+    private String              country;
+    private Map<String, String> headers;
+    private String              callFrom;
 
-    private String country;
+    public static class RequestDataBuilder {
 
+        public RequestData.RequestDataBuilder addHeader(final String key,
+                                                        final String value) {
+            if (headers == null) {
+                headers = new LinkedHashMap<>();
+            }
+            if (key != null && value != null) {
+                headers.put(key.trim(), value);
+            }
+            return this;
+        }
 
-    private Map<String, String> specific;
-
-
-    private String callFrom;
-
+        public RequestData.RequestDataBuilder addOption(final String key,
+                                                        final String... value) {
+            if (options == null) {
+                options = new LinkedHashMap<>();
+            }
+            if (key != null && value != null) {
+                options.put(key.trim(), value);
+            }
+            return this;
+        }
+    }
 }

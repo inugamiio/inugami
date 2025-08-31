@@ -16,11 +16,11 @@
  */
 package io.inugami.monitoring.sensors.defaults.system;
 
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.models.GenericMonitoringModelDTO;
-import io.inugami.api.monitoring.sensors.MonitoringSensor;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.tools.Comparators;
+import io.inugami.framework.api.tools.Comparators;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.models.number.FloatNumber;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 import io.inugami.monitoring.api.tools.IntervalValues;
 
@@ -56,7 +56,11 @@ public class MemorySensor implements MonitoringSensor {
     public MemorySensor(final long interval, final String query, final ConfigHandler<String, String> configuration) {
         super();
         this.interval = interval;
-        values = new IntervalValues<>(this::extractMemoryUsage, configuration.grab("intervalValuesDelais", 1000));
+        values = IntervalValues.<Long>builder()
+                               .handler(this::extractMemoryUsage)
+                               .interval(configuration.grab("intervalValuesDelais", 1000))
+                               .build();
+
         timeUnit = configuration.grabOrDefault("timeUnit", "");
     }
 
@@ -82,39 +86,39 @@ public class MemorySensor implements MonitoringSensor {
     }
 
     private List<GenericMonitoringModel> buildGenericMonitoringModel(final List<Long> data) {
-        final List<GenericMonitoringModel>                               result  = new ArrayList<>();
-        final GenericMonitoringModelDTO.GenericMonitoringModelDTOBuilder builder = GenericMonitoringModelTools.initResultBuilder();
+        final List<GenericMonitoringModel> result  = new ArrayList<>();
+        final var                          builder = GenericMonitoringModelTools.initResultBuilder().toBuilder();
 
         builder.counterType("system");
         builder.service("memory");
 
         builder.timeUnit(GenericMonitoringModelTools.buildTimeUnit(timeUnit, interval));
 
-        builder.addValue(GenericMonitoringModelTools.getPercentilValues(data, 0));
+        builder.value(FloatNumber.of(GenericMonitoringModelTools.getPercentilValues(data, 0)));
         builder.valueType("min");
         result.add(builder.build());
 
-        builder.addValue(GenericMonitoringModelTools.getPercentilValues(data, 1));
+        builder.value(FloatNumber.of(GenericMonitoringModelTools.getPercentilValues(data, 1)));
         builder.valueType("max");
         result.add(builder.build());
 
-        builder.addValue(GenericMonitoringModelTools.getPercentilValues(data, 0.95));
+        builder.value(FloatNumber.of(GenericMonitoringModelTools.getPercentilValues(data, 0.95)));
         builder.valueType("p95");
         result.add(builder.build());
 
-        builder.addValue(GenericMonitoringModelTools.getPercentilValues(data, 0.90));
+        builder.value(FloatNumber.of(GenericMonitoringModelTools.getPercentilValues(data, 0.90)));
         builder.valueType("p90");
         result.add(builder.build());
 
-        builder.addValue(GenericMonitoringModelTools.getPercentilValues(data, 0.75));
+        builder.value(FloatNumber.of(GenericMonitoringModelTools.getPercentilValues(data, 0.75)));
         builder.valueType("p75");
         result.add(builder.build());
 
-        builder.addValue(GenericMonitoringModelTools.getPercentilValues(data, 0.5));
+        builder.value(FloatNumber.of(GenericMonitoringModelTools.getPercentilValues(data, 0.5)));
         builder.valueType("p50");
         result.add(builder.build());
 
-        builder.addValue(data.stream().mapToLong(item -> item).average().orElse(0));
+        builder.value(FloatNumber.of(GenericMonitoringModelTools.getPercentilValues(data, 0)));
         builder.valueType("avg");
         result.add(builder.build());
 

@@ -1,14 +1,16 @@
 package io.inugami.monitoring.springboot.exception;
 
-import io.inugami.api.exceptions.*;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.marshalling.JsonMarshaller;
-import io.inugami.api.monitoring.MdcService;
-import io.inugami.api.monitoring.RequestContext;
-import io.inugami.api.monitoring.RequestInformation;
-import io.inugami.api.spi.SpiLoader;
-import io.inugami.commons.spring.exception.ExceptionHandlerService;
+import io.inugami.framework.api.marshalling.JsonMarshaller;
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.api.monitoring.RequestContext;
+import io.inugami.framework.commons.spring.exception.ExceptionHandlerService;
+import io.inugami.framework.interfaces.exceptions.*;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.monitoring.springboot.api.ProblemAdditionalFieldBuilder;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -22,14 +24,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.zalando.problem.*;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.inugami.api.exceptions.ErrorCode.*;
+import static io.inugami.framework.interfaces.exceptions.ErrorCode.*;
 
 @SuppressWarnings({"java:S1181", "java:S108"})
 @Slf4j
@@ -111,7 +112,7 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
                                                      .with(ERROR_CODE, errorCode.getErrorCode())
                                                      .with(FIELDS, resolveField(errorCode, exception))
                                                      .withStatus(currentStatus);
-        final RequestInformation requestContext = RequestContext.getInstance();
+        final RequestData requestContext = RequestContext.getInstance();
 
         if (showAllDetail) {
             problemBuilder.withTitle(errorCode.getMessage())

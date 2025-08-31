@@ -340,7 +340,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
 
     private boolean mustIntercept(final RequestData requestData) {
-        Boolean result = INTERCEPTABLE_URI_RESOLVED.get(requestData.getRequestURI());
+        Boolean result = INTERCEPTABLE_URI_RESOLVED.get(requestData.getUri());
         if (result == null) {
             for (final Interceptable resolver : interceptableResolver) {
                 result = resolver.isInterceptable(requestData);
@@ -348,7 +348,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
                     break;
                 }
             }
-            INTERCEPTABLE_URI_RESOLVED.put(requestData.getRequestURI(), result);
+            INTERCEPTABLE_URI_RESOLVED.put(requestData.getUri(), result);
         }
         purgeCacheIfRequired();
 
@@ -370,7 +370,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         final MdcService mdc = MdcService.getInstance();
         try {
             mdc.setMdc(MDCKeys.callType, MdcService.CALL_TYPE_REST);
-            mdc.setMdc(MDCKeys.uri, requestData.getRequestURI());
+            mdc.setMdc(MDCKeys.uri, requestData.getUri());
             mdc.setMdc(MDCKeys.verb, httpRequest.getMethod());
             mdc.setMdc(MDCKeys.authProtocol, httpRequest.getAuthType());
 
