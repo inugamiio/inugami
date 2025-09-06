@@ -35,5 +35,4 @@ module io.inugami.framework.configurations.configuration {
     exports io.inugami.framework.configuration.services.resolver.strategies;
     exports io.inugami.framework.configuration.services.validators;
 
-    uses io.inugami.framework.configuration.services.functions.ProviderAttributFunction;
 }

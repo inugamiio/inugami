@@ -18,7 +18,7 @@ package io.inugami.monitoring.core.interceptors.exceptions;
 
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
-import io.inugami.monitoring.api.exceptions.ExceptionHandlerMapper;
+import io.inugami.framework.interfaces.exceptions.ExceptionHandlerMapper;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

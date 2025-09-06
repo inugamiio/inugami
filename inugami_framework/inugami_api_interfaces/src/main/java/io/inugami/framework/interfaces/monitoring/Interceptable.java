@@ -14,16 +14,16 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.monitoring.api.obfuscators;
+package io.inugami.framework.interfaces.monitoring;
 
-import io.inugami.framework.interfaces.tools.StringDataCleaner;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
 
 /**
- * Obfuscator
- * 
+ * ResourceIdentifierResolver
  * @author patrickguillerm
  * @since Jan 8, 2019
  */
-public interface Obfuscator extends StringDataCleaner {
-    
+@FunctionalInterface
+public interface Interceptable {
+    boolean isInterceptable(final RequestData request);
 }

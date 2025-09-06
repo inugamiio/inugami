@@ -14,12 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.dashboard.interfaces.api {
+open module io.inugami.dashboard.interfaces.api {
     requires com.fasterxml.jackson.annotation;
     requires lombok;
     requires org.slf4j;
 
     requires io.inugami.framework.interfaces;
+    requires spring.web;
 
     exports io.inugami.dashboard.interfaces.event;
+    exports io.inugami.dashboard.interfaces.administration;
+    exports io.inugami.dashboard.interfaces.administration.dto;
 }

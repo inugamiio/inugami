@@ -42,5 +42,5 @@ open module io.inugami.framework.commons.spring {
     requires jakarta.annotation;
     requires spring.boot;
 
-    uses io.inugami.framework.configuration.services.functions.ProviderAttributFunction;
+    uses io.inugami.framework.interfaces.configurtation.ProviderAttributFunction;
 }

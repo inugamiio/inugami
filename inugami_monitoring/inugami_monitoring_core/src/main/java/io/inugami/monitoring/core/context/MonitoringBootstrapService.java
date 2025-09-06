@@ -45,6 +45,7 @@ public class MonitoringBootstrapService {
     // =================================================================================================================
     public MonitoringBootstrapService initialize() {
         final Monitoring monitoring = loader.load();
+
         final MonitoringContext monitoringContext = MonitoringContext.builder()
                                                                      .config(monitoring)
                                                                      .build();

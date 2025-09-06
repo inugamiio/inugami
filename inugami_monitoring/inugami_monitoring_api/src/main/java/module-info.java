@@ -1,3 +1,5 @@
+import io.inugami.framework.interfaces.monitoring.Obfuscator;
+
 /* --------------------------------------------------------------------
  *  Inugami
  * --------------------------------------------------------------------
@@ -21,10 +23,8 @@ module io.inugami.monitoring.api {
     requires lombok;
     requires org.slf4j;
 
-    exports io.inugami.monitoring.api.dto;
-    exports io.inugami.monitoring.api.exceptions;
     exports io.inugami.monitoring.api.obfuscators;
     exports io.inugami.monitoring.api.resolvers;
     exports io.inugami.monitoring.api.tools;
-    uses io.inugami.monitoring.api.obfuscators.Obfuscator;
+    uses Obfuscator;
 }

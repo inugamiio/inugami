@@ -16,7 +16,8 @@
  */
 package io.inugami.monitoring.api.resolvers;
 
-import io.inugami.monitoring.api.dto.InterceptorContextDto;
+import io.inugami.framework.interfaces.monitoring.ServiceNameResolver;
+import io.inugami.framework.interfaces.monitoring.dto.InterceptorContextDto;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

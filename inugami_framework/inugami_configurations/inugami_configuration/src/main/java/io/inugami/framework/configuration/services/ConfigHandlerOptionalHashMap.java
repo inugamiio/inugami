@@ -18,8 +18,8 @@ package io.inugami.framework.configuration.services;
 
 import io.inugami.framework.api.tools.ConfigTemplateValues;
 import io.inugami.framework.configuration.services.functions.FunctionsServices;
-import io.inugami.framework.configuration.services.functions.ProviderAttributFunction;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ProviderAttributFunction;
 import io.inugami.framework.interfaces.exceptions.Asserts;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.tools.TemplateProviderSPI;

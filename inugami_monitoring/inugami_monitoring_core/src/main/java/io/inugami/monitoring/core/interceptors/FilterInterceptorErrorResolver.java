@@ -20,8 +20,8 @@ import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.monitoring.ErrorResult;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.spi.SpiLoader;
-import io.inugami.monitoring.api.exceptions.ExceptionHandlerMapper;
-import io.inugami.monitoring.api.exceptions.ExceptionResolver;
+import io.inugami.framework.interfaces.exceptions.ExceptionHandlerMapper;
+import io.inugami.framework.interfaces.exceptions.ExceptionResolver;
 
 import java.util.LinkedHashMap;
 import java.util.List;

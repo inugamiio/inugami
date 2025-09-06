@@ -1,7 +1,7 @@
 package io.inugami.monitoring.core.spi;
 
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
-import io.inugami.monitoring.api.resolvers.Interceptable;
+import io.inugami.framework.interfaces.monitoring.Interceptable;
 
 public class H2Interceptable implements Interceptable {
 

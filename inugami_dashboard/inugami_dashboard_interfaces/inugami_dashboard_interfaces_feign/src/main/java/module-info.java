@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.dashboard.interfaces.feign {
+open module io.inugami.dashboard.interfaces.feign {
     requires com.fasterxml.jackson.annotation;
     requires lombok;
     requires org.slf4j;

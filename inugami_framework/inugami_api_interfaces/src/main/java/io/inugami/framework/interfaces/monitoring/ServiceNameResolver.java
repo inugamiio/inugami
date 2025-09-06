@@ -14,16 +14,18 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.monitoring.api.resolvers;
+package io.inugami.framework.interfaces.monitoring;
 
-import io.inugami.framework.interfaces.monitoring.data.RequestData;
+
+import io.inugami.framework.interfaces.monitoring.dto.InterceptorContextDto;
 
 /**
- * ResourceIdentifierResolver
+ * ServiceNameResolver
+ * 
  * @author patrickguillerm
- * @since Jan 8, 2019
+ * @since Jan 7, 2019
  */
 @FunctionalInterface
-public interface Interceptable {
-    boolean isInterceptable(final RequestData request);
+public interface ServiceNameResolver {
+    String resolve(final InterceptorContextDto context);
 }

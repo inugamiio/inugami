@@ -17,6 +17,9 @@
 package io.inugami.framework.configuration.services.functions;
 
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.FunctionData;
+import io.inugami.framework.interfaces.configurtation.FunctionResultPart;
+import io.inugami.framework.interfaces.configurtation.ProviderAttributFunction;
 
 import java.util.ArrayList;
 import java.util.Arrays;

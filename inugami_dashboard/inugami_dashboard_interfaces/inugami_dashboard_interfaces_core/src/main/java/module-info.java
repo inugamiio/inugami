@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.dashboard.interfaces.core {
+open module io.inugami.dashboard.interfaces.core {
     requires com.fasterxml.jackson.annotation;
     requires lombok;
     requires org.slf4j;
@@ -23,4 +23,5 @@ module io.inugami.dashboard.interfaces.core {
     requires io.inugami.framework.api;
     requires io.inugami.dashboard.api;
     requires io.inugami.dashboard.interfaces.api;
+    requires spring.web;
 }

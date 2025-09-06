@@ -16,8 +16,6 @@
  */
 module io.inugami.framework.interfaces {
     requires jakarta.servlet;
-    requires lombok;
-    requires org.slf4j;
     requires java.desktop;
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
@@ -28,6 +26,11 @@ module io.inugami.framework.interfaces {
     requires okhttp3;
     requires java.xml;
     requires jakarta.xml.bind;
+    requires java.naming;
+    requires spring.web;
+    requires org.zalando.problem;
+    requires static lombok;
+    requires org.slf4j;
 
     exports io.inugami.framework.interfaces.alertings;
     exports io.inugami.framework.interfaces.concurrent;
@@ -85,6 +88,7 @@ module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.tools.strategy;
     exports io.inugami.framework.interfaces.task;
     exports io.inugami.framework.interfaces.exceptions.asserts;
+    exports io.inugami.framework.interfaces.monitoring.dto;
 
     uses io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
     uses io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
@@ -97,5 +101,22 @@ module io.inugami.framework.interfaces {
     uses io.inugami.framework.interfaces.tools.TemplateProviderSPI;
     uses io.inugami.framework.interfaces.configurtation.ConfigurationSpi;
     uses io.inugami.framework.interfaces.marshalling.XmlJaxbMarshallerSpi;
-
+    uses io.inugami.framework.interfaces.configurtation.ProviderAttributFunction;
+    uses org.springframework.web.multipart.MultipartResolver;
+    uses io.inugami.framework.interfaces.exceptions.ErrorCodeResolver;
+    uses io.inugami.framework.interfaces.exceptions.ProblemAdditionalFieldBuilder;
+    uses io.inugami.framework.interfaces.monitoring.JavaRestMethodTracker;
+    uses io.inugami.framework.interfaces.monitoring.MdcCleanerSPI;
+    uses io.inugami.framework.interfaces.monitoring.FilterInterceptorCachePurgeStrategy;
+    uses io.inugami.framework.interfaces.exceptions.ExceptionResolver;
+    uses io.inugami.framework.interfaces.exceptions.ExceptionHandlerMapper;
+    uses io.inugami.framework.interfaces.monitoring.Interceptable;
+    uses io.inugami.framework.interfaces.monitoring.ServiceNameResolver;
+    uses io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
+    uses io.inugami.framework.interfaces.monitoring.ResponseListener;
+    uses io.inugami.framework.interfaces.monitoring.JavaRestMethodResolver;
+    uses io.inugami.framework.interfaces.exceptions.WarningTracker;
+    uses io.inugami.framework.interfaces.monitoring.core.CorsHeadersSpi;
+    uses io.inugami.framework.interfaces.tools.StringDataCleaner;
+    uses io.inugami.framework.interfaces.monitoring.Obfuscator;
 }

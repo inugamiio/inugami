@@ -14,21 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.webapp;
+package io.inugami.dashboard.interfaces.administration.dto;
 
-import io.inugami.framework.commons.spring.configuration.ConfigConfiguration;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import lombok.*;
 
-@ComponentScan(basePackages={
-        ConfigConfiguration.INUGAMI
-})
-@SpringBootApplication
-public class InugamiDashboardApplication {
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
-    public static void main(String[] args) {
-        SpringApplication.run(InugamiDashboardApplication.class, args);
-    }
-
+@Getter
+@Setter
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode
+public class PingDTO implements Serializable {
+    private LocalDateTime now;
+    private String        applicationName;
 }

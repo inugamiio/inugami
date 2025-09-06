@@ -14,18 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.configuration.services.functions;
+package io.inugami.monitoring.springboot.config;
 
+import io.inugami.monitoring.core.interceptors.DefaultFilterInterceptorCachePurgeStrategy;
+import io.inugami.monitoring.core.interceptors.WarningResponseListener;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-import io.inugami.framework.configuration.exceptions.ConfigurationException;
+@Configuration
+public class InugamiMonitoringPurgeStrategyConfig {
+    @ConditionalOnMissingBean
+    @Bean
+    public DefaultFilterInterceptorCachePurgeStrategy defaultFilterInterceptorCachePurgeStrategy(){
+        return new DefaultFilterInterceptorCachePurgeStrategy();
+    }
 
-/**
- * ConfigLoaderTranstypeFunction
- *
- * @author patrick_guillerm
- * @since 15 déc. 2017
- */
-@FunctionalInterface
-public interface ConfigLoaderTranstypeFunction<T> {
-    T process(Object input) throws ConfigurationException;
 }

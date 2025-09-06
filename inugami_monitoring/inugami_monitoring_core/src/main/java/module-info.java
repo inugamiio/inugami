@@ -1,3 +1,8 @@
+import io.inugami.framework.interfaces.exceptions.ExceptionHandlerMapper;
+import io.inugami.framework.interfaces.exceptions.ExceptionResolver;
+import io.inugami.framework.interfaces.monitoring.Interceptable;
+import io.inugami.framework.interfaces.monitoring.ResponseListener;
+
 /* --------------------------------------------------------------------
  *  Inugami
  * --------------------------------------------------------------------
@@ -34,4 +39,20 @@ module io.inugami.monitoring.core {
     exports io.inugami.monitoring.core.sensors.aggregators;
     exports io.inugami.monitoring.core.spi;
 
+    uses io.inugami.framework.interfaces.monitoring.JavaRestMethodResolver;
+    uses io.inugami.framework.interfaces.monitoring.JavaRestMethodTracker;
+    uses ExceptionResolver;
+    uses ExceptionHandlerMapper;
+    uses io.inugami.framework.interfaces.monitoring.FilterInterceptorCachePurgeStrategy;
+    uses io.inugami.framework.interfaces.monitoring.MdcCleanerSPI;
+    uses Interceptable;
+    uses ResponseListener;
+    uses io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
+    uses io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
+    uses io.inugami.framework.interfaces.exceptions.WarningTracker;
+
+    provides io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI with io.inugami.monitoring.core.interceptors.FilterInterceptor;
+    provides io.inugami.framework.interfaces.monitoring.Interceptable with io.inugami.monitoring.core.spi.H2Interceptable;
+    provides io.inugami.framework.interfaces.exceptions.WarningTracker with io.inugami.monitoring.core.spi.DefaultWarningTracker;
+    provides io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor with io.inugami.monitoring.core.spi.IoLogInterceptor, io.inugami.monitoring.core.spi.ServiceCounterInterceptor, io.inugami.monitoring.core.spi.MdcInterceptor, io.inugami.monitoring.core.spi.CorsInterceptable;
 }

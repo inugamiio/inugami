@@ -16,12 +16,29 @@ import java.util.Map;
 
 @SuppressWarnings({"java:S108", "java:S1450"})
 public class LogstashWriter implements AppenderWriterStrategy, ConnectorListener {
-
+    /**
+     * LOGSTASH=logstash
+     */
     public static final String                         LOGSTASH                   = "logstash";
+    /**
+     * DEFAULT_TIMEOUT=2000
+     */
     public static final int                            DEFAULT_TIMEOUT            = 2000;
+    /**
+     * DEFAULT_TIME_TO_LIVE=10000
+     */
     public static final int                            DEFAULT_TIME_TO_LIVE       = 10000;
+    /**
+     * DEFAULT_MAX_CONNECTIONS=50
+     */
     public static final int                            DEFAULT_MAX_CONNECTIONS    = 50;
+    /**
+     * DEFAULT_MAX_SOCKET_TIMEOUT=1000
+     */
     public static final int                            DEFAULT_MAX_SOCKET_TIMEOUT = 1000;
+    /**
+     * DEFAULT_HOST=http://localhost:5054
+     */
     public static final String                         DEFAULT_HOST               = "http://localhost:5054";
     private             AppenderConfiguration          configuration              = null;
     private             Encoder<ILoggingEvent>         encoder;

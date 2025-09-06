@@ -33,9 +33,9 @@ import io.inugami.framework.interfaces.monitoring.logger.MDCKeys;
 import io.inugami.framework.interfaces.monitoring.models.Headers;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.tools.CalendarTools;
-import io.inugami.monitoring.api.exceptions.ExceptionResolver;
+import io.inugami.framework.interfaces.exceptions.ExceptionResolver;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
-import io.inugami.monitoring.api.resolvers.Interceptable;
+import io.inugami.framework.interfaces.monitoring.Interceptable;
 import io.inugami.monitoring.core.context.MonitoringBootstrapService;
 import io.inugami.monitoring.core.interceptors.mdc.DefaultMdcCleaner;
 import io.inugami.monitoring.core.interceptors.mdc.MdcCleaner;
@@ -53,6 +53,8 @@ import java.io.IOException;
 import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
@@ -64,37 +66,41 @@ import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.apply
  * @since 28 déc. 2018
  */
 @SuppressWarnings({"java:S112", "java:S1181", "java:S108"})
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Slf4j
 @WebFilter(urlPatterns = "*", asyncSupported = true)
 public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
-    public static final String DEFAULT_ERROR_CODE = "ERR-0000";
+    public static final  String                            DEFAULT_ERROR_CODE             = "ERR-0000";
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
+    private static final AtomicBoolean                     INITIALIZED                    = new AtomicBoolean();
+    private static final List<JavaRestMethodResolver>      JAVA_REST_METHOD_RESOLVERS     = new ArrayList<>();
+    private static final List<JavaRestMethodTracker>       JAVA_REST_METHOD_TRACKERS      = new ArrayList<>();
+    private static final List<Interceptable>               INTERCEPTABLE_RESOLVER         = new ArrayList<>();
+    private static final List<ExceptionResolver>           EXCEPTION_RESOLVER             = new ArrayList<>();
+    private static final List<ResponseListener>            RESPONSE_LISTENERS             = new ArrayList<>();
+    private static final List<MonitoringFilterInterceptor> MONITORING_FILTER_INTERCEPTORS = new ArrayList<>();
 
-    private              List<JavaRestMethodResolver>        javaRestMethodResolvers      = null;
-    private              List<JavaRestMethodTracker>         javaRestMethodTrackers       = null;
-    private              List<Interceptable>                 interceptableResolver        = null;
-    private              FilterInterceptorCachePurgeStrategy purgeCacheStrategy           = null;
-    private              MdcCleaner                          mdcCleaner                   = null;
-    private              List<ExceptionResolver>             exceptionResolver            = null;
-    private              List<ResponseListener>              responseListeners            = null;
-    private              List<MonitoringFilterInterceptor>   monitoringFilterInterceptors = new ArrayList<>();
-    private              ConfigHandler<String, String>       configuration;
-    private static final Map<String, Boolean>                INTERCEPTABLE_URI_RESOLVED   = new ConcurrentHashMap<>();
-    private static final int                                 KILO                         = 1024;
+
+    private static final AtomicReference<FilterInterceptorCachePurgeStrategy> PURGECACHE_STRATEGY = new AtomicReference<>();
+    private static final AtomicReference<MdcCleaner>                          MDC_CLEANER         = new AtomicReference<>();
+
+    private              ConfigHandler<String, String> configuration;
+    private static final Map<String, Boolean>          INTERCEPTABLE_URI_RESOLVED = new ConcurrentHashMap<>();
+    private static final int                           KILO                       = 1024;
 
     // =================================================================================================================
     // LIFECYCLE
     // =================================================================================================================
+
     @Override
-    public void init(final FilterConfig filterConfig) throws ServletException {
+    public void onApplicationStarted(final Object event) {
+        log.info("initialize FilterInterceptor");
         initAttributes();
     }
+
+
 
     @Override
     public void destroy() {
@@ -102,36 +108,43 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     }
 
 
-    @Override
-    public void onConfigurationReady(final ConfigHandler<String, String> configuration) {
-        initAttributes();
-    }
+
 
     public void initAttributes() {
-        javaRestMethodResolvers = SpiLoader.getInstance().loadSpiServicesByPriority(JavaRestMethodResolver.class);
-        javaRestMethodTrackers = SpiLoader.getInstance().loadSpiServicesByPriority(JavaRestMethodTracker.class);
-        interceptableResolver = SpiLoader.getInstance().loadSpiServicesByPriority(Interceptable.class);
-        exceptionResolver = SpiLoader.getInstance()
-                                     .loadSpiServicesByPriority(ExceptionResolver.class, new FilterInterceptorErrorResolver());
-        purgeCacheStrategy = SpiLoader.getInstance()
-                                      .loadSpiServiceByPriority(FilterInterceptorCachePurgeStrategy.class, new DefaultFilterInterceptorCachePurgeStrategy());
-        mdcCleaner = new MdcCleaner(SpiLoader.getInstance()
-                                             .loadSpiServicesWithDefault(MdcCleanerSPI.class, new DefaultMdcCleaner()));
-        responseListeners = SpiLoader.getInstance().loadSpiServicesByPriority(ResponseListener.class);
-        monitoringFilterInterceptors = new ArrayList<>();
+        final var spi = SpiLoader.getInstance();
+
+        resolveSpi(JavaRestMethodResolver.class, JAVA_REST_METHOD_RESOLVERS, spi);
+        resolveSpi(JavaRestMethodTracker.class, JAVA_REST_METHOD_TRACKERS, spi);
+        resolveSpi(Interceptable.class, INTERCEPTABLE_RESOLVER, spi);
+        resolveSpi(ResponseListener.class, RESPONSE_LISTENERS, spi);
+
+        resolveSpi(ExceptionResolver.class, EXCEPTION_RESOLVER, spi, new FilterInterceptorErrorResolver());
+
+        List<FilterInterceptorCachePurgeStrategy> cachePurgeStrategies = new ArrayList<>();
+        resolveSpi(FilterInterceptorCachePurgeStrategy.class, cachePurgeStrategies, spi, new DefaultFilterInterceptorCachePurgeStrategy());
+
+
+        PURGECACHE_STRATEGY.set(cachePurgeStrategies.stream().findFirst().orElse(values -> false));
+
+        MDC_CLEANER.set(new MdcCleaner(SpiLoader.getInstance()
+                                                .loadSpiServicesWithDefault(MdcCleanerSPI.class, new DefaultMdcCleaner())));
+
+        final List<MonitoringFilterInterceptor> monitoringFilterInterceptorsBuffer = new ArrayList<>();
         for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrapService.getContext()
                                                                                        .getInterceptors()) {
-            monitoringFilterInterceptors.add(interceptor);
+            MONITORING_FILTER_INTERCEPTORS.add(interceptor);
         }
 
         final List<MonitoringFilterInterceptor> monitoringFilterInterceptorsSpi = SpiLoader.getInstance()
                                                                                            .loadSpiServicesByPriority(MonitoringFilterInterceptor.class);
         for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptorsSpi) {
             if (isNotContains(interceptor, MonitoringBootstrapService.getContext().getInterceptors())) {
-                monitoringFilterInterceptors.add(interceptor);
+                MONITORING_FILTER_INTERCEPTORS.add(interceptor);
             }
         }
+        MONITORING_FILTER_INTERCEPTORS.addAll(monitoringFilterInterceptorsBuffer);
     }
+
 
     private boolean isNotContains(final MonitoringFilterInterceptor interceptor,
                                   final List<MonitoringFilterInterceptor> monitoringFilterInterceptors) {
@@ -207,7 +220,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         addTrackingInformation(response, javaRestMethod);
 
         Exception                error           = null;
-        final ResponseWrapper    responseWrapper = new ResponseWrapper(response, extractHeaders(httpRequest), responseListeners);
+        final ResponseWrapper    responseWrapper = new ResponseWrapper(response, extractHeaders(httpRequest), RESPONSE_LISTENERS);
         final HttpServletRequest currentRequest  = buildRequestProxy((HttpServletRequest) request, data);
         requestData.setRequest(currentRequest);
         requestData.setResponse(responseWrapper);
@@ -234,7 +247,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
         onBeginInitMdcFields(requestData, httpRequest);
 
-        for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptors) {
+        for (final MonitoringFilterInterceptor interceptor : MONITORING_FILTER_INTERCEPTORS) {
             try {
                 interceptor.onBegin(requestData);
             } catch (final Throwable e) {
@@ -261,7 +274,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
         final ResponseData responseData = convertToResponseData(httpRequest, httpResponse, duration);
 
-        for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptors) {
+        for (final MonitoringFilterInterceptor interceptor : MONITORING_FILTER_INTERCEPTORS) {
             try {
                 interceptor.onDone(requestData, responseData, error);
             } catch (final Throwable e) {
@@ -304,7 +317,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     private JavaRestMethodDTO resolveJavaRestMethod(final ServletRequest request) {
         JavaRestMethodDTO        result      = null;
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
-        for (final JavaRestMethodResolver resolver : javaRestMethodResolvers) {
+        for (final JavaRestMethodResolver resolver : JAVA_REST_METHOD_RESOLVERS) {
             try {
                 result = resolver.resolve(httpRequest);
                 if (result != null) {
@@ -321,7 +334,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     private void addTrackingInformation(final HttpServletResponse response,
                                         final JavaRestMethodDTO javaRestMethod) {
         if (javaRestMethod != null) {
-            for (final JavaRestMethodTracker tracker : javaRestMethodTrackers) {
+            for (final JavaRestMethodTracker tracker : JAVA_REST_METHOD_TRACKERS) {
                 if (tracker.accept(javaRestMethod)) {
                     tracker.track(javaRestMethod);
                 }
@@ -342,7 +355,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     private boolean mustIntercept(final RequestData requestData) {
         Boolean result = INTERCEPTABLE_URI_RESOLVED.get(requestData.getUri());
         if (result == null) {
-            for (final Interceptable resolver : interceptableResolver) {
+            for (final Interceptable resolver : INTERCEPTABLE_RESOLVER) {
                 result = resolver.isInterceptable(requestData);
                 if (!result) {
                     break;
@@ -357,7 +370,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
 
     private void purgeCacheIfRequired() {
-        if (purgeCacheStrategy != null && purgeCacheStrategy.shouldPurge(INTERCEPTABLE_URI_RESOLVED)) {
+        if (PURGECACHE_STRATEGY.get().shouldPurge(INTERCEPTABLE_URI_RESOLVED)) {
             INTERCEPTABLE_URI_RESOLVED.clear();
         }
     }
@@ -458,7 +471,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         ErrorResult.ErrorResultBuilder result = null;
 
         ErrorResult resolvedError = null;
-        for (final ExceptionResolver resolver : exceptionResolver) {
+        for (final ExceptionResolver resolver : EXCEPTION_RESOLVER) {
             try {
                 resolvedError = resolver.resolve(error);
                 if (resolvedError != null) {
@@ -503,7 +516,23 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     // TOOLS
     // =================================================================================================================
     private boolean isAttributesNotInitialized() {
-        return javaRestMethodResolvers == null || javaRestMethodTrackers == null || interceptableResolver == null ||
-               exceptionResolver == null;
+        return JAVA_REST_METHOD_RESOLVERS == null || JAVA_REST_METHOD_TRACKERS == null ||
+               INTERCEPTABLE_RESOLVER == null ||
+               EXCEPTION_RESOLVER == null;
+    }
+
+    private <U, T extends U> void resolveSpi(final Class<U> spiClass,
+                                             final List<T> values,
+                                             final SpiLoader spi,
+                                             final T... defaultValues) {
+
+
+        List<U> instances = spi.loadSpiServicesByPriority(spiClass);
+        for (U instance : Optional.ofNullable(instances).orElse(List.of())) {
+            values.add((T) instance);
+        }
+        for (T instance : defaultValues) {
+            values.add(instance);
+        }
     }
 }

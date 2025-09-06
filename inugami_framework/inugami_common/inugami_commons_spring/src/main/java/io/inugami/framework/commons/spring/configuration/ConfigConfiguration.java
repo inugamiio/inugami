@@ -37,6 +37,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 })
 @Configuration
 public class ConfigConfiguration {
+    public static final String INUGAMI = "io.inugami";
 
     public static final ConfigHandler<String, String> CONFIGURATION = new ConfigHandlerHashMap();
 

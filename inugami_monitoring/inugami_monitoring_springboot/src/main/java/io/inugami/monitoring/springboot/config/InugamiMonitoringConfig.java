@@ -17,15 +17,17 @@
 package io.inugami.monitoring.springboot.config;
 
 
-
 import io.inugami.framework.commons.spring.configuration.ConfigConfiguration;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.exceptions.ErrorCodeResolver;
 import io.inugami.framework.interfaces.feature.IFeatureService;
+import io.inugami.framework.interfaces.monitoring.MonitoringLoaderSpi;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.framework.interfaces.monitoring.models.Monitoring;
 import io.inugami.monitoring.core.context.MonitoringBootstrapService;
 import io.inugami.monitoring.core.context.MonitoringContext;
+import io.inugami.monitoring.core.interceptable.DefaultInterceptableIdentifier;
+import io.inugami.monitoring.core.spi.H2Interceptable;
 import io.inugami.monitoring.core.spi.IoLogInterceptor;
 import io.inugami.monitoring.core.spi.MdcInterceptor;
 import io.inugami.monitoring.springboot.actuator.FailSafeStatusAggregator;
@@ -39,11 +41,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.StatusAggregator;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -54,43 +58,59 @@ import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.apply
 @Import({
         IoLogFilter.class,
         SpringRestMethodResolver.class,
-        ConfigConfiguration.class
+        ConfigConfiguration.class,
+        InugamiMonitoringInterceptableConfig.class,
+        InugamiMonitoringJavaRestMethodTrackerConfig.class,
+        InugamiMonitoringExceptionResolverConfig.class,
+        InugamiMonitoringResponseListenerConfig.class,
+        InugamiMonitoringFilterInterceptorConfig.class,
+        InugamiMonitoringPurgeStrategyConfig.class,
+        InugamiMonitoringMdcCleanerConfig.class
 })
 @Slf4j
 @Configuration
 public class InugamiMonitoringConfig {
+    // =================================================================================================================
+    // ATTRIBUTES
+    // =================================================================================================================
     public static final String INUGAMI_MONITORING_CONFIG = "io.inugami.monitoring.springboot";
     public static final String INUGAMI                   = "io.inugami";
-    MonitoringContext monitoringContext;
-    private Monitoring monitoring;
 
-
-    // ========================================================================
+    // =================================================================================================================
     // BEANS
-    // ========================================================================
+    // =================================================================================================================
     @Bean
-    public Monitoring initMonitoringContext(final ConfigHandler<String, String> springConfig) {
-        Monitoring config = MonitoringBootstrapService.CONTEXT.get().getConfig();
-        MonitoringContext monitoringContext = MonitoringBootstrapService.CONTEXT.get();
+    public MonitoringBootstrapService monitoringBootstrapService(final List<MonitoringLoaderSpi> loaders) {
+        return MonitoringBootstrapService.builder()
+                                         .loader(loaders.stream()
+                                                        .findFirst()
+                                                        .orElse(() -> Monitoring.builder().build()))
+                                         .build()
+                                         .initialize();
+    }
+
+    @Bean
+    public Monitoring initMonitoringContext(final ConfigHandler<String, String> springConfig,
+                                            final MonitoringBootstrapService monitoringBootstrapService) {
+        final MonitoringContext             monitoringContext    = monitoringBootstrapService.getContext();
+        final Monitoring                    config               = monitoringContext.getConfig();
         final ConfigHandler<String, String> currentConfiguration = ConfigConfiguration.CONFIGURATION;
         applyIfNotNull(springConfig, currentConfiguration::putAll);
-        config.setProperties(mergeProperties(config.getProperties(),currentConfiguration));
-        initializeInterceptors();
+        config.setProperties(mergeProperties(config.getProperties(), currentConfiguration));
+        initializeInterceptors(monitoringContext,config);
         return config;
     }
 
     private ConfigHandler<String, String> mergeProperties(final ConfigHandler<String, String> properties,
                                                           final ConfigHandler<String, String> currentConfiguration) {
-        if(properties==null){
+        if (properties == null) {
             return currentConfiguration;
         }
-        if(currentConfiguration!=null){
+        if (currentConfiguration != null) {
             properties.putAll(currentConfiguration);
         }
         return properties;
     }
-
-
 
 
     @Bean
@@ -128,29 +148,41 @@ public class InugamiMonitoringConfig {
         return new FailSafeStatusAggregator();
     }
 
-    // ========================================================================
-    // TOOLS
-    // ========================================================================
-    private void initializeInterceptors() {
 
-        addInterceptorIfNoPresent(MdcInterceptor.class, ctx -> ctx.getInterceptors().add(new MdcInterceptor()));
+
+
+    // =================================================================================================================
+    // TOOLS
+    // =================================================================================================================
+    private void initializeInterceptors(final MonitoringContext monitoringContext,
+                                        final Monitoring monitoring) {
+
+        addInterceptorIfNoPresent(MdcInterceptor.class,
+                                  ctx -> ctx.getInterceptors().add(new MdcInterceptor()),
+                                  monitoringContext,
+                                  monitoring);
+
         addInterceptorIfNoPresent(IoLogInterceptor.class,
                                   ctx -> ctx.getInterceptors()
-                                            .add(new IoLogInterceptor(ConfigConfiguration.CONFIGURATION)));
+                                            .add(new IoLogInterceptor(ConfigConfiguration.CONFIGURATION)),
+                                  monitoringContext,
+                                  monitoring);
 
 
     }
 
 
     private <T extends MonitoringFilterInterceptor> void addInterceptorIfNoPresent(final Class<T> interceptorClass,
-                                                                                   final Consumer<MonitoringContext> appender) {
-
-        final Optional<MonitoringFilterInterceptor> interceptor = monitoring.getInterceptors()
-                                                                                             .stream()
-                                                                                             .filter(i -> i.getClass()
-                                                                                                           .isInstance(
-                                                                                                                   interceptorClass))
-                                                                                             .findFirst();
+                                                                                   final Consumer<MonitoringContext> appender,
+                                                                                   final MonitoringContext monitoringContext,
+                                                                                   final Monitoring monitoring) {
+        final Optional<MonitoringFilterInterceptor> interceptor = Optional.ofNullable(monitoring.getInterceptors())
+                                                                          .orElse(List.of())
+                                                                          .stream()
+                                                                          .filter(i -> i.getClass()
+                                                                                        .isInstance(
+                                                                                                interceptorClass))
+                                                                          .findFirst();
 
         if (!interceptor.isPresent()) {
             appender.accept(monitoringContext);

@@ -14,17 +14,15 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.monitoring.api.resolvers;
-
-import io.inugami.monitoring.api.dto.InterceptorContextDto;
+package io.inugami.framework.interfaces.exceptions;
+import io.inugami.framework.interfaces.monitoring.ErrorResult;
 
 /**
- * ServiceNameResolver
+ * ExceptionResolver
  * 
- * @author patrickguillerm
- * @since Jan 7, 2019
+ * @author patrick_guillerm
+ * @since 28 déc. 2018
  */
-@FunctionalInterface
-public interface ServiceNameResolver {
-    String resolve(final InterceptorContextDto context);
+public interface ExceptionResolver {
+    ErrorResult resolve(Exception error);
 }

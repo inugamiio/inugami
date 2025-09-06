@@ -8,7 +8,7 @@ import io.inugami.framework.interfaces.exceptions.*;
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.spi.SpiLoader;
-import io.inugami.monitoring.springboot.api.ProblemAdditionalFieldBuilder;
+import io.inugami.framework.interfaces.exceptions.ProblemAdditionalFieldBuilder;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;

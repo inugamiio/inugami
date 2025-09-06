@@ -16,6 +16,7 @@
  */
 package io.inugami.monitoring.core.context;
 
+import io.inugami.framework.api.processors.DefaultConfigHandler;
 import io.inugami.framework.interfaces.ctx.BootstrapContext;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.framework.interfaces.monitoring.models.Monitoring;
@@ -25,9 +26,9 @@ import io.inugami.monitoring.core.context.sensors.SensorsIntervalManagerTask;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNull;
 
 /**
  * MonitoringContext
@@ -42,7 +43,7 @@ public class MonitoringContext implements BootstrapContext<Void> {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private final Monitoring                            config;
+    private       Monitoring                            config;
     @Builder.Default
     private final Map<Long, SensorsIntervalManagerTask> managersTasks = new HashMap<>();
 
@@ -51,13 +52,20 @@ public class MonitoringContext implements BootstrapContext<Void> {
     // =========================================================================
     @Override
     public void initialize(final Void ctx) {
-        if (config != null) {
-            if (config.isEnable()) {
-                managersTasks.putAll(buildSensorsTasks(config.getSensors()));
-            }
-
-            managersTasks.entrySet().stream().map(Map.Entry::getValue).forEach(task -> task.initialize(this));
+        if (config == null) {
+            config = Monitoring.builder().build();
         }
+        config.setProperties(applyIfNull(config.getProperties(), () -> new DefaultConfigHandler()));
+        config.setSenders(applyIfNull(config.getSenders(), () -> new ArrayList<>()));
+        config.setSensors(applyIfNull(config.getSensors(), () -> new ArrayList<>()));
+        config.setInterceptors(applyIfNull(config.getInterceptors(), () -> new ArrayList<>()));
+
+        if (config.isEnable()) {
+            managersTasks.putAll(buildSensorsTasks(config.getSensors()));
+        }
+
+        managersTasks.entrySet().stream().map(Map.Entry::getValue).forEach(task -> task.initialize(this));
+
     }
 
 
@@ -113,25 +121,10 @@ public class MonitoringContext implements BootstrapContext<Void> {
     public Monitoring getConfig() {
         return config;
     }
-
-    public List<MonitoringSender> getSenders() {
-        return config.getSenders();
-    }
-
-    public List<MonitoringSensor> getSensors() {
-        return config.getSensors();
-    }
-
     public List<MonitoringFilterInterceptor> getInterceptors() {
-        return config.getInterceptors();
+        return Optional.ofNullable(config.getInterceptors()).orElse(List.of());
     }
 
-    public MonitoringContext addInterceptor(MonitoringFilterInterceptor interceptor) {
-        if (interceptor != null) {
-            config.getInterceptors().add(interceptor);
-        }
-        return this;
-    }
 
     // =========================================================================
     // UTILS

@@ -14,15 +14,16 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.monitoring.api.exceptions;
-import io.inugami.framework.interfaces.monitoring.ErrorResult;
+package io.inugami.framework.interfaces.monitoring;
+
+import io.inugami.framework.interfaces.tools.StringDataCleaner;
 
 /**
- * ExceptionResolver
+ * Obfuscator
  * 
- * @author patrick_guillerm
- * @since 28 déc. 2018
+ * @author patrickguillerm
+ * @since Jan 8, 2019
  */
-public interface ExceptionResolver {
-    ErrorResult resolve(Exception error);
+public interface Obfuscator extends StringDataCleaner {
+    
 }

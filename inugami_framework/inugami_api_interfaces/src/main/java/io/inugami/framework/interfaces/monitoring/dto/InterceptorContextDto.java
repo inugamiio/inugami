@@ -14,21 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.webapp;
+package io.inugami.framework.interfaces.monitoring.dto;
 
-import io.inugami.framework.commons.spring.configuration.ConfigConfiguration;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import lombok.*;
 
-@ComponentScan(basePackages={
-        ConfigConfiguration.INUGAMI
-})
-@SpringBootApplication
-public class InugamiDashboardApplication {
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
-    public static void main(String[] args) {
-        SpringApplication.run(InugamiDashboardApplication.class, args);
-    }
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Setter
+@Getter
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+public class InterceptorContextDto implements Serializable {
 
+    private String                    url;
+    private String                    verb;
+    private String                    contentType;
+    private Map<String, List<String>> parameters;
+    private Map<String, List<String>> headers;
 }

@@ -14,21 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.webapp;
+package io.inugami.framework.interfaces.configurtation;
 
-import io.inugami.framework.commons.spring.configuration.ConfigConfiguration;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+/**
+ * ProviderAttributFunction
+ *
+ * @author patrick_guillerm
+ * @since 17 août 2017
+ */
+@FunctionalInterface
+public interface ProviderAttributFunction {
 
-@ComponentScan(basePackages={
-        ConfigConfiguration.INUGAMI
-})
-@SpringBootApplication
-public class InugamiDashboardApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(InugamiDashboardApplication.class, args);
+    default String getName() {
+        return this.getClass().getSimpleName().substring(0, 1).toLowerCase()
+               + this.getClass().getSimpleName().substring(1);
     }
 
+    String apply(FunctionData data);
 }

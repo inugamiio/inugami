@@ -17,14 +17,12 @@
 package io.inugami.monitoring.core.interceptors;
 
 import io.inugami.framework.interfaces.exceptions.FatalException;
-import io.inugami.framework.interfaces.spi.SpiLoader;
+import io.inugami.framework.interfaces.monitoring.ResponseListener;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.io.PrintWriter;

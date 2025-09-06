@@ -14,22 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.monitoring.api.exceptions;
+package io.inugami.monitoring.springboot.config;
 
-import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.monitoring.core.interceptors.mdc.DefaultMdcCleaner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-import java.util.Map;
-import java.util.regex.Pattern;
-
-public interface ExceptionHandlerMapper {
-    Map<Pattern, ErrorCode> produceMapping();
-
-    String ERROR_TECHNICAL = "technical";
-
-    String ERROR_FUNCTIONAL = "functional";
-
-    default Pattern buildPattern(final String regex) {
-        return Pattern.compile(regex);
+@Configuration
+public class InugamiMonitoringMdcCleanerConfig {
+    @ConditionalOnMissingBean
+    @Bean
+    public DefaultMdcCleaner defaultMdcCleaner(){
+        return new DefaultMdcCleaner();
     }
 
 }

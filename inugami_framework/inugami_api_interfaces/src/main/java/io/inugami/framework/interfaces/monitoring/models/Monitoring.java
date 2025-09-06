@@ -22,6 +22,7 @@ import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,8 +37,8 @@ import java.util.List;
 @Setter
 @Getter
 public class Monitoring {
-
-    private boolean                           enable;
+    @Builder.Default
+    private boolean                           enable = true;
     private String                            env;
     private String                            asset;
     private String                            hostname;
@@ -46,9 +47,12 @@ public class Monitoring {
     private String                            applicationVersion;
     private int                               maxSensorsTasksThreads;
     private ConfigHandler<String, String>     properties;
-    private List<MonitoringSender>            senders;
-    private List<MonitoringSensor>            sensors;
-    private List<MonitoringFilterInterceptor> interceptors;
+    @Builder.Default
+    private List<MonitoringSender>            senders      = new ArrayList<>();
+    @Builder.Default
+    private List<MonitoringSensor>            sensors      = new ArrayList<>();
+    @Builder.Default
+    private List<MonitoringFilterInterceptor> interceptors = new ArrayList<>();
 
 
 }

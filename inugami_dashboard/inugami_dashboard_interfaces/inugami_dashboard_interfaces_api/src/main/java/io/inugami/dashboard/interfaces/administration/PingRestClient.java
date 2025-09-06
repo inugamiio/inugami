@@ -14,21 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.configuration.services.functions;
+package io.inugami.dashboard.interfaces.administration;
 
-/**
- * ProviderAttributFunction
- *
- * @author patrick_guillerm
- * @since 17 août 2017
- */
-@FunctionalInterface
-public interface ProviderAttributFunction {
+import io.inugami.dashboard.interfaces.administration.dto.PingDTO;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-    default String getName() {
-        return this.getClass().getSimpleName().substring(0, 1).toLowerCase()
-               + this.getClass().getSimpleName().substring(1);
-    }
-
-    String apply(FunctionData data);
+@RequestMapping(path = "administration/ping")
+public interface PingRestClient {
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    PingDTO ping();
 }

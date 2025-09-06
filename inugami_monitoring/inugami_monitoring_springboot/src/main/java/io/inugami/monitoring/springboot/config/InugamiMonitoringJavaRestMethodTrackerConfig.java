@@ -14,26 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.monitoring.api.dto;
+package io.inugami.monitoring.springboot.config;
 
-import lombok.*;
+import io.inugami.monitoring.core.interceptable.DefaultInterceptableIdentifier;
+import io.inugami.monitoring.core.spi.H2Interceptable;
+import io.inugami.monitoring.springboot.request.SpringRestMethodTracker;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
+@Configuration
+public class InugamiMonitoringJavaRestMethodTrackerConfig {
+    @ConditionalOnMissingBean
+    @Bean
+    public SpringRestMethodTracker springRestMethodTracker(){
+        return new SpringRestMethodTracker();
+    }
 
-@ToString(onlyExplicitlyIncluded = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Setter
-@Getter
-@Builder(toBuilder = true)
-@AllArgsConstructor
-@NoArgsConstructor
-public class InterceptorContextDto implements Serializable {
-
-    private String                    url;
-    private String                    verb;
-    private String                    contentType;
-    private Map<String, List<String>> parameters;
-    private Map<String, List<String>> headers;
 }

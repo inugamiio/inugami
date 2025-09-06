@@ -14,21 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.webapp;
+package io.inugami.framework.interfaces.exceptions;
 
-import io.inugami.framework.commons.spring.configuration.ConfigConfiguration;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import java.util.Map;
+import java.util.regex.Pattern;
 
-@ComponentScan(basePackages={
-        ConfigConfiguration.INUGAMI
-})
-@SpringBootApplication
-public class InugamiDashboardApplication {
+public interface ExceptionHandlerMapper {
+    Map<Pattern, ErrorCode> produceMapping();
 
-    public static void main(String[] args) {
-        SpringApplication.run(InugamiDashboardApplication.class, args);
+    String ERROR_TECHNICAL = "technical";
+
+    String ERROR_FUNCTIONAL = "functional";
+
+    default Pattern buildPattern(final String regex) {
+        return Pattern.compile(regex);
     }
 
 }

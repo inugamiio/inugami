@@ -1,3 +1,5 @@
+import io.inugami.framework.interfaces.exceptions.ProblemAdditionalFieldBuilder;
+
 /* --------------------------------------------------------------------
  *  Inugami
  * --------------------------------------------------------------------
@@ -45,4 +47,7 @@ module io.inugami.monitoring.springboot {
     exports io.inugami.monitoring.springboot.filter;
     exports io.inugami.monitoring.springboot.partnerlog.feign;
     exports io.inugami.monitoring.springboot.request;
+
+    uses org.springframework.web.multipart.MultipartResolver;
+    uses ProblemAdditionalFieldBuilder;
 }
