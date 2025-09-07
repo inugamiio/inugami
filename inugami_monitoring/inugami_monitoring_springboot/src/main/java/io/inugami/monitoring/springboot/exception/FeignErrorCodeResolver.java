@@ -9,7 +9,7 @@ import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.exceptions.ErrorCodeResolver;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
 import io.inugami.framework.interfaces.spi.SpiLoader;
-import io.inugami.monitoring.springboot.api.FeignErrorCodeBuilderSpi;
+import io.inugami.framework.interfaces.monitoring.spring.feign.FeignErrorCodeBuilderSpi;
 
 import java.util.List;
 

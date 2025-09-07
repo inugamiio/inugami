@@ -1,2 +1,0 @@
-io.inugami.monitoring.springboot.exception.SpringDefaultErrorCodeResolver
-io.inugami.monitoring.springboot.exception.FeignErrorCodeResolver

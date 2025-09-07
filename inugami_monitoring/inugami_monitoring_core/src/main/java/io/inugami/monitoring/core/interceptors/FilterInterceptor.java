@@ -100,15 +100,10 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         initAttributes();
     }
 
-
-
     @Override
     public void destroy() {
         // nothing to do
     }
-
-
-
 
     public void initAttributes() {
         final var spi = SpiLoader.getInstance();

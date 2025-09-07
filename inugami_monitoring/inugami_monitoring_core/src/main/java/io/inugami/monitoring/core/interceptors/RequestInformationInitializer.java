@@ -71,7 +71,7 @@ public class RequestInformationInitializer {
         builder.uri(httpRequest.getRequestURI());
         builder.contextPath(httpRequest.getContextPath());
         builder.method(httpRequest.getMethod());
-        builder.contentType(httpRequest.getContentType());
+        builder.contentType(httpRequest.getContentType() == null ? "application/json" : httpRequest.getContentType());
         builder.characterEncoding(httpRequest.getCharacterEncoding());
         builder.options(httpRequest.getParameterMap());
 

@@ -23,14 +23,18 @@ import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.exceptions.Warning;
 import io.inugami.framework.interfaces.models.JsonBuilder;
 import io.inugami.framework.interfaces.monitoring.ErrorResult;
+import io.inugami.framework.interfaces.monitoring.IoLogContentDisplayResolverSPI;
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.data.ResponseData;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
+import org.springframework.web.servlet.HandlerMapping;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * LogInterceptor
@@ -44,11 +48,12 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final String  EMPTY         = "";
-    public static final  String  URL_SEPARATOR = "/";
-    private final        String  inputDecorator;
-    private final        String  outputDecorator;
-    private final        boolean enableDecorator;
+    private static final AtomicReference<List<IoLogContentDisplayResolverSPI>> DISPLAY_RESOLVERS = new AtomicReference<>();
+    private static final String                                                EMPTY             = "";
+    public static final  String                                                URL_SEPARATOR     = "/";
+    private final        String                                                inputDecorator;
+    private final        String                                                outputDecorator;
+    private final        boolean                                               enableDecorator;
 
     // =========================================================================
     // CONSTRUCTORS
@@ -80,12 +85,21 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     // =========================================================================
     @Override
     public List<GenericMonitoringModel> onBegin(final RequestData request) {
+        initDisplayResolvers();
+
         final JsonBuilder msg = buildIologIn(request);
         MdcService.getInstance().lifecycleIn();
         Loggers.IOLOG.info(
                 (enableDecorator ? inputDecorator : EMPTY) + ObfuscatorTools.applyObfuscators(msg.toString()));
         MdcService.getInstance().lifecycleRemove();
         return null;
+    }
+
+    private void initDisplayResolvers() {
+        if (DISPLAY_RESOLVERS.get() == null) {
+            DISPLAY_RESOLVERS.set(SpiLoader.getInstance()
+                                           .loadSpiServicesByPriority(IoLogContentDisplayResolverSPI.class));
+        }
     }
 
     protected JsonBuilder buildIologIn(final RequestData request) {
@@ -95,13 +109,27 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         result.writeSpace().write(fullPath).line();
         result.write("headers :").line();
 
-        for(Map.Entry<String,String> header : Optional.ofNullable(request.getHeaders()).orElse(new LinkedHashMap<>()).entrySet()){
+        for (Map.Entry<String, String> header : Optional.ofNullable(request.getHeaders())
+                                                        .orElse(new LinkedHashMap<>())
+                                                        .entrySet()) {
             result.tab().write(header.getKey()).write(":").writeSpace().write(header.getValue()).line();
         }
 
         result.write("payload :").line();
-        result.write(request.getContent() == null ? JsonBuilder.VALUE_NULL : request.getContent());
+        if (shouldDisplayContent(request)) {
+            result.write(request.getContent() == null ? JsonBuilder.VALUE_NULL : request.getContent());
+        }
         return result;
+    }
+
+    private boolean shouldDisplayContent(final RequestData request) {
+        for (final IoLogContentDisplayResolverSPI resolver : Optional.ofNullable(DISPLAY_RESOLVERS.get())
+                                                                     .orElse(List.of())) {
+            if (!resolver.display(request)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     protected String resolveFullPath(final RequestData request) {
@@ -130,7 +158,9 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         msg.tab().write("duration:").write(httpResponse.getDuration()).line();
         msg.tab().write("contentType:").write(httpResponse.getContentType()).line();
         msg.tab().write("headers:").line();
-        for (final Map.Entry<String, String> entry : Optional.ofNullable(httpResponse.getHearder()).orElse(new LinkedHashMap<>()).entrySet()) {
+        for (final Map.Entry<String, String> entry : Optional.ofNullable(httpResponse.getHearder())
+                                                             .orElse(new LinkedHashMap<>())
+                                                             .entrySet()) {
             msg.tab().tab().write(entry.getKey()).write(":").writeSpace().write(entry.getValue()).line();
         }
 
@@ -147,8 +177,9 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
                 msg.line();
             }
         }
-        msg.tab().write("payload:").write(httpResponse.getContent());
-
+        if (shouldDisplayContent(request)) {
+            msg.tab().write("payload:").write(httpResponse.getContent());
+        }
 
         //@formatter:on
         MdcService.getInstance().lifecycleOut();

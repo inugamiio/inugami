@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.framework.interfaces {
+open module io.inugami.framework.interfaces {
     requires jakarta.servlet;
     requires java.desktop;
     requires com.fasterxml.jackson.annotation;
@@ -31,6 +31,7 @@ module io.inugami.framework.interfaces {
     requires org.zalando.problem;
     requires static lombok;
     requires org.slf4j;
+    requires spring.webmvc;
 
     exports io.inugami.framework.interfaces.alertings;
     exports io.inugami.framework.interfaces.concurrent;
@@ -89,6 +90,7 @@ module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.task;
     exports io.inugami.framework.interfaces.exceptions.asserts;
     exports io.inugami.framework.interfaces.monitoring.dto;
+    exports io.inugami.framework.interfaces.monitoring.spring.feign;
 
     uses io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
     uses io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
@@ -119,4 +121,7 @@ module io.inugami.framework.interfaces {
     uses io.inugami.framework.interfaces.monitoring.core.CorsHeadersSpi;
     uses io.inugami.framework.interfaces.tools.StringDataCleaner;
     uses io.inugami.framework.interfaces.monitoring.Obfuscator;
+    uses io.inugami.framework.interfaces.monitoring.spring.feign.FeignErrorCodeBuilderSpi;
+    uses org.springframework.web.servlet.HandlerMapping;
+    uses io.inugami.framework.interfaces.monitoring.IoLogContentDisplayResolverSPI;
 }

@@ -22,32 +22,41 @@ import io.inugami.framework.interfaces.spi.SpiLoader;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.servlet.DispatcherType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.servlet.HandlerExecutionChain;
+import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.util.ServletRequestPathUtils;
+import org.springframework.web.util.WebUtils;
+
+import java.util.List;
 
 @SuppressWarnings({"java:S1172"})
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class SpringRestMethodResolver implements JavaRestMethodResolver {
-    public static final String            PATH_ATTRIBUTE = ServletRequestPathUtils.class.getName() + ".PATH";
-    //private final       List<HandlerMapping> handlerMappings;
-    private final       MultipartResolver multipartResolver;
+    public static final String               PATH_ATTRIBUTE = ServletRequestPathUtils.class.getName() + ".PATH";
+    private final       List<HandlerMapping> handlerMappings;
+    private final       MultipartResolver    multipartResolver;
 
     public SpringRestMethodResolver() {
-        // handlerMappings = SpiLoader.getInstance().loadSpiServicesByPriority(HandlerMapping.class);
+        handlerMappings = SpiLoader.getInstance().loadSpiServicesByPriority(HandlerMapping.class);
         multipartResolver = SpiLoader.getInstance().loadSpiSingleServicesByPriority(MultipartResolver.class);
     }
 
     public JavaRestMethodDTO resolve(final HttpServletRequest request) {
-        //TODO
+
         log.info("TODO");
-        return null;
-        //final HandlerExecutionChain handler = resolveHandlerMethod(request);
-        // return handler == null ? null : buildJavaRestResolver(handler, request);
+
+        final HandlerExecutionChain handler = resolveHandlerMethod(request);
+        return handler == null ? null : buildJavaRestResolver(handler, request);
     }
-/*
+
     private JavaRestMethodDTO buildJavaRestResolver(final HandlerExecutionChain resolver,
                                                     final HttpServletRequest request) {
 
@@ -130,5 +139,4 @@ public class SpringRestMethodResolver implements JavaRestMethodResolver {
         return null;
     }
 
-*/
 }
