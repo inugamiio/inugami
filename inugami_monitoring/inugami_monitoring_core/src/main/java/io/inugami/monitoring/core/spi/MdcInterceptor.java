@@ -23,10 +23,12 @@ import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @SuppressWarnings({"java:S1168"})
+@NoArgsConstructor
 public class MdcInterceptor implements MonitoringFilterInterceptor {
 
     // =========================================================================

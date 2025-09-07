@@ -14,31 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.framework.commons {
-
-    requires io.inugami.framework.interfaces;
-    requires io.inugami.framework.api;
-
-    requires jakarta.servlet;
-    requires lombok;
-    requires org.slf4j;
+open module io.inugami.framework.commons {
+    requires cglib;
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.dataformat.yaml;
-    requires org.apache.commons.io;
-    requires commons.lang;
-    requires cglib;
-    requires java.xml;
-    requires jakarta.xml.bind;
     requires com.fasterxml.jackson.datatype.jdk8;
     requires com.fasterxml.jackson.datatype.jsr310;
     requires com.fasterxml.jackson.module.paramnames;
+    requires commons.lang;
+    requires io.inugami.framework.api;
+    requires io.inugami.framework.interfaces;
+    requires jakarta.servlet;
+    requires jakarta.xml.bind;
+    requires java.xml;
+    requires lombok;
+    requires org.apache.commons.io;
+    requires org.slf4j;
 
     exports io.inugami.framework.commons.data;
     exports io.inugami.framework.commons.files;
-    exports io.inugami.framework.commons.marshaling;
     exports io.inugami.framework.commons.marshaling.jaxb;
+    exports io.inugami.framework.commons.marshaling;
     exports io.inugami.framework.commons.messages;
     exports io.inugami.framework.commons.providers;
     exports io.inugami.framework.commons.security;
@@ -47,14 +45,12 @@ module io.inugami.framework.commons {
     exports io.inugami.framework.commons.tools;
     exports io.inugami.framework.commons.writer;
 
-    uses io.inugami.framework.interfaces.monitoring.MonitoringInitializer;
-    uses io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister;
-    uses io.inugami.framework.interfaces.marshalling.jaxb.JaxbAdapterSpi;
     uses io.inugami.framework.interfaces.marshalling.XmlJaxbMarshallerSpi;
+    uses io.inugami.framework.interfaces.marshalling.jaxb.JaxbAdapterSpi;
+    uses io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister;
+    uses io.inugami.framework.interfaces.monitoring.MonitoringInitializer;
 
-    provides io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister with io.inugami.framework.commons.marshaling.jaxb.DefaultJaxbClassRegister;
-    provides io.inugami.framework.interfaces.marshalling.jaxb.JaxbAdapterSpi with io.inugami.framework.commons.marshaling.jaxb.LocalDateTimeAdapter, io.inugami.framework.commons.marshaling.jaxb.LocalDateAdapter;
     provides io.inugami.framework.interfaces.marshalling.XmlJaxbMarshallerSpi with io.inugami.framework.commons.marshaling.DefaultXmlJaxbMarshallerSpi;
-
-
+    provides io.inugami.framework.interfaces.marshalling.jaxb.JaxbAdapterSpi with io.inugami.framework.commons.marshaling.jaxb.LocalDateTimeAdapter, io.inugami.framework.commons.marshaling.jaxb.LocalDateAdapter;
+    provides io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister with io.inugami.framework.commons.marshaling.jaxb.DefaultJaxbClassRegister;
 }

@@ -14,25 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.framework.configurations.configuration {
+open module io.inugami.framework.configurations.configuration {
+    requires io.inugami.framework.api;
+    requires io.inugami.framework.commons;
+    requires io.inugami.framework.interfaces;
     requires lombok;
     requires org.slf4j;
 
-    requires io.inugami.framework.interfaces;
-    requires io.inugami.framework.api;
-    requires io.inugami.framework.commons;
-
     exports io.inugami.framework.configuration.exceptions;
-    exports io.inugami.framework.configuration.models;
     exports io.inugami.framework.configuration.models.app;
     exports io.inugami.framework.configuration.models.components;
     exports io.inugami.framework.configuration.models.front;
     exports io.inugami.framework.configuration.models.plugins;
-    exports io.inugami.framework.configuration.services;
+    exports io.inugami.framework.configuration.models;
     exports io.inugami.framework.configuration.services.functions;
     exports io.inugami.framework.configuration.services.mapping;
-    exports io.inugami.framework.configuration.services.resolver;
     exports io.inugami.framework.configuration.services.resolver.strategies;
+    exports io.inugami.framework.configuration.services.resolver;
     exports io.inugami.framework.configuration.services.validators;
-
+    exports io.inugami.framework.configuration.services;
 }

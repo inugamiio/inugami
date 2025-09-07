@@ -15,32 +15,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 open module io.inugami.framework.commons.spring {
-    exports io.inugami.framework.commons.spring.mapstruct;
-    exports io.inugami.framework.commons.spring.feature.interceptors;
-    exports io.inugami.framework.commons.spring to spring.core;
-    exports io.inugami.framework.commons.spring.configuration;
-    exports io.inugami.framework.commons.spring.exception;
-    requires jakarta.servlet;
-
-    requires lombok;
-    requires org.slf4j;
-    requires spring.aop;
-    requires spring.beans;
-    requires spring.core;
-    requires spring.context;
-    requires spring.boot.autoconfigure;
-    requires spring.web;
-    requires org.mapstruct;
-    requires org.aspectj.weaver;
     requires com.google.gson;
-
-    requires io.inugami.framework.interfaces;
     requires io.inugami.framework.api;
     requires io.inugami.framework.commons;
     requires io.inugami.framework.configurations.configuration;
-    requires org.zalando.problem;
+    requires io.inugami.framework.interfaces;
     requires jakarta.annotation;
+    requires jakarta.servlet;
+    requires lombok;
+    requires org.aspectj.weaver;
+    requires org.mapstruct;
+    requires org.slf4j;
+    requires org.zalando.problem;
+    requires spring.aop;
+    requires spring.beans;
+    requires spring.boot.autoconfigure;
     requires spring.boot;
+    requires spring.context;
+    requires spring.core;
+    requires spring.web;
+
+    exports io.inugami.framework.commons.spring to spring.core;
+    exports io.inugami.framework.commons.spring.configuration;
+    exports io.inugami.framework.commons.spring.exception;
+    exports io.inugami.framework.commons.spring.feature.interceptors;
+    exports io.inugami.framework.commons.spring.mapstruct;
 
     uses io.inugami.framework.interfaces.configurtation.ProviderAttributFunction;
 }

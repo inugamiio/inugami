@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 @SuppressWarnings({"java:S5122", "java:S1168"})
-@NoArgsConstructor
 public class CorsInterceptable implements MonitoringFilterInterceptor {
     private static final String                        SEP = ", ";
     // =========================================================================
@@ -31,7 +30,9 @@ public class CorsInterceptable implements MonitoringFilterInterceptor {
     public MonitoringFilterInterceptor buildInstance(final ConfigHandler<String, String> configuration) {
         return new CorsInterceptable(configuration);
     }
-
+    public CorsInterceptable() {
+        enabled=true;
+    }
     public CorsInterceptable(final ConfigHandler<String, String> configuration) {
     }
 

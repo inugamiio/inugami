@@ -27,6 +27,7 @@ import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 import io.inugami.monitoring.core.sensors.ServiceValueTypes;
 import io.inugami.monitoring.core.sensors.ServicesSensor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
     // CONSTRUCTORS
     // =========================================================================
     public ServiceCounterInterceptor() {
+        this.enabled = true;
     }
 
     public ServiceCounterInterceptor(final ConfigHandler<String, String> configuration) {

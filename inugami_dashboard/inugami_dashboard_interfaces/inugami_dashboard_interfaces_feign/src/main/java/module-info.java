@@ -16,8 +16,7 @@
  */
 open module io.inugami.dashboard.interfaces.feign {
     requires com.fasterxml.jackson.annotation;
+    requires io.inugami.dashboard.interfaces.api;
     requires lombok;
     requires org.slf4j;
-
-    requires io.inugami.dashboard.interfaces.api;
 }

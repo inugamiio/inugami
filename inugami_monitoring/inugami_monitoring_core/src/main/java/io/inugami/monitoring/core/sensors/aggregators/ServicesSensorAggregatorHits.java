@@ -23,7 +23,7 @@ import io.inugami.framework.interfaces.models.number.LongNumber;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.framework.interfaces.spi.SpiPriority;
 import io.inugami.monitoring.core.sensors.ServiceValueTypes;
-import io.inugami.monitoring.core.sensors.ServicesSensorAggregator;
+import io.inugami.framework.interfaces.monitoring.ServicesSensorAggregator;
 
 import java.util.ArrayList;
 import java.util.List;

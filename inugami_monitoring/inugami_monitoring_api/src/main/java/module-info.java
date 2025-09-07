@@ -16,8 +16,7 @@ import io.inugami.framework.interfaces.monitoring.Obfuscator;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.monitoring.api {
-
+open module io.inugami.monitoring.api {
     requires io.inugami.framework.api;
     requires io.inugami.framework.interfaces;
     requires lombok;

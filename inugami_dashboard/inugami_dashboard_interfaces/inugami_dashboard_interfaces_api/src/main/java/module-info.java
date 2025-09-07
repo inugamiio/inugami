@@ -16,10 +16,9 @@
  */
 open module io.inugami.dashboard.interfaces.api {
     requires com.fasterxml.jackson.annotation;
+    requires io.inugami.framework.interfaces;
     requires lombok;
     requires org.slf4j;
-
-    requires io.inugami.framework.interfaces;
     requires spring.web;
 
     exports io.inugami.dashboard.interfaces.event;

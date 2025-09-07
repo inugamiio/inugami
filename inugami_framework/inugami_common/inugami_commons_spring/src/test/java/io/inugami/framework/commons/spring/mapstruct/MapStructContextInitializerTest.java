@@ -13,7 +13,6 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import java.util.Map;
 
 import static io.inugami.commons.test.UnitTestHelper.assertText;
-import static io.inugami.commons.test.UnitTestHelper.assertTextRelative;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

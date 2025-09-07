@@ -21,6 +21,7 @@ import io.inugami.framework.api.exceptions.WarningContext;
 import io.inugami.framework.api.monitoring.MdcService;
 import io.inugami.framework.interfaces.exceptions.DefaultWarning;
 import io.inugami.framework.interfaces.monitoring.ErrorResult;
+import io.inugami.framework.interfaces.monitoring.IoLogContentDisplayResolverSPI;
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.data.ResponseData;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
@@ -28,18 +29,28 @@ import io.inugami.monitoring.core.spi.IoLogInterceptor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 
 import static io.inugami.commons.test.UnitTestHelper.assertLogs;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
 
+@ExtendWith(MockitoExtension.class)
 class IoLogInterceptorTest {
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
     private static final Long   DATE_TIME = LocalDateTime.of(2023, 7, 1, 14, 54, 0).toEpochSecond(ZoneOffset.UTC);
     private static final String UID       = "fd508efe-9b7e-403f-b0bc-44e379d0171d";
+
+    @Mock
+    private IoLogContentDisplayResolverSPI resolver;
 
     // =================================================================================================================
     // INIT
@@ -49,7 +60,9 @@ class IoLogInterceptorTest {
     public void init() {
         MdcService.getInstance().clear();
         WarningContext.clean();
+        lenient().when(resolver.display(any())).thenReturn(true);
     }
+
 
     // =================================================================================================================
     // onBegin
@@ -154,7 +167,7 @@ class IoLogInterceptorTest {
     // TOOLS
     // =================================================================================================================
     IoLogInterceptor buildInterceptor() {
-        return new IoLogInterceptor();
+        return new IoLogInterceptor(List.of(resolver));
     }
 
     private void processOnBegin(final RequestData request, final String path) {

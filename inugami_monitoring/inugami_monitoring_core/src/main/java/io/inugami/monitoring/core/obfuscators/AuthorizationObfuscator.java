@@ -18,6 +18,7 @@ package io.inugami.monitoring.core.obfuscators;
 
 import io.inugami.framework.interfaces.monitoring.Obfuscator;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
+import lombok.NoArgsConstructor;
 
 import java.util.regex.Pattern;
 
@@ -27,6 +28,7 @@ import java.util.regex.Pattern;
  * @author patrickguillerm
  * @since Jan 8, 2019
  */
+@NoArgsConstructor
 public class AuthorizationObfuscator implements Obfuscator {
 
     // =========================================================================

@@ -14,10 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.monitoring.config {
-    requires io.inugami.monitoring.api;
+open module io.inugami.monitoring.config {
     requires io.inugami.framework.interfaces;
+    requires io.inugami.monitoring.api;
     requires static lombok;
-
     exports io.inugami.monitoring.config.models;
 }

@@ -63,6 +63,10 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
         inputDecorator = "[IN] ";
         outputDecorator = "[OUT] ";
     }
+    public IoLogInterceptor(final List<IoLogContentDisplayResolverSPI> resolvers) {
+        this();
+        DISPLAY_RESOLVERS.set(resolvers);
+    }
 
     public IoLogInterceptor(final ConfigHandler<String, String> configuration) {
         enableDecorator = configuration.grabBoolean("enableDecorator", true);

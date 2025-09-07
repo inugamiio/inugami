@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.monitoring.providers.graphite {
-    requires io.inugami.monitoring.api;
-    requires io.inugami.framework.commons;
-    requires io.inugami.framework.api;
-    requires io.inugami.framework.interfaces;
+open module io.inugami.monitoring.providers.graphite {
     requires com.fasterxml.jackson.databind;
+    requires io.inugami.framework.api;
+    requires io.inugami.framework.commons;
+    requires io.inugami.framework.interfaces;
+    requires io.inugami.monitoring.api;
+    requires metrics.graphite;
     requires org.slf4j;
     requires static lombok;
-    requires metrics.graphite;
 }

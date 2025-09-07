@@ -14,12 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.dashboard.api {
+open module io.inugami.dashboard.api {
     requires com.fasterxml.jackson.annotation;
+    requires io.inugami.framework.interfaces;
     requires lombok;
     requires org.slf4j;
-
-    requires io.inugami.framework.interfaces;
 
     exports io.inugami.dashboard.api.event;
 }

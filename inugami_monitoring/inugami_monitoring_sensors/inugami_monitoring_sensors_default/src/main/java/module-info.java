@@ -14,13 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.monitoring.sensors.defaults {
-    requires java.management;
-    requires io.inugami.monitoring.api;
+open module io.inugami.monitoring.sensors.defaults {
+    requires com.fasterxml.jackson.databind;
     requires io.inugami.framework.api;
     requires io.inugami.framework.interfaces;
+    requires io.inugami.monitoring.api;
+    requires java.management;
     requires org.slf4j;
-    requires com.fasterxml.jackson.databind;
     requires static lombok;
-
 }
