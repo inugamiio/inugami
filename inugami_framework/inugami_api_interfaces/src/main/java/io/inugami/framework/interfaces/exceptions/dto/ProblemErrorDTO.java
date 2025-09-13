@@ -14,14 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-open module io.inugami.dashboard.api {
-    requires com.fasterxml.jackson.annotation;
-    requires io.inugami.framework.interfaces;
-    requires lombok;
-    requires org.slf4j;
+package io.inugami.framework.interfaces.exceptions.dto;
 
-    exports io.inugami.dashboard.api.event;
-    exports io.inugami.dashboard.api.administration.exception;
-    exports io.inugami.dashboard.api.administration.dto;
-    exports io.inugami.dashboard.api.administration;
+import lombok.*;
+
+import java.io.Serializable;
+
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
+@Setter
+@Getter
+public class ProblemErrorDTO implements Serializable {
+    private static final long   serialVersionUID = 1365664225258493761L;
+    private              String name;
+    private              String reason;
 }

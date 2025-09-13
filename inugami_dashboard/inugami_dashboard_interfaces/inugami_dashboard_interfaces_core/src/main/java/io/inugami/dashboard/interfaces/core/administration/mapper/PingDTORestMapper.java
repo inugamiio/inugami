@@ -14,14 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-open module io.inugami.dashboard.api {
-    requires com.fasterxml.jackson.annotation;
-    requires io.inugami.framework.interfaces;
-    requires lombok;
-    requires org.slf4j;
+package io.inugami.dashboard.interfaces.core.administration.mapper;
 
-    exports io.inugami.dashboard.api.event;
-    exports io.inugami.dashboard.api.administration.exception;
-    exports io.inugami.dashboard.api.administration.dto;
-    exports io.inugami.dashboard.api.administration;
+import io.inugami.dashboard.interfaces.administration.dto.PingDTO;
+import org.mapstruct.Mapper;
+
+@Mapper
+public interface PingDTORestMapper {
+
+    PingDTO convertToRestDTO(final io.inugami.dashboard.api.administration.dto.PingDTO value);
 }

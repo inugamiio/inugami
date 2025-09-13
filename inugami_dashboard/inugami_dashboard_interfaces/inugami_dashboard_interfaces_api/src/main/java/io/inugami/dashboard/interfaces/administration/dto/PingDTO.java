@@ -18,6 +18,7 @@ package io.inugami.dashboard.interfaces.administration.dto;
 
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -29,6 +30,8 @@ import java.time.LocalDateTime;
 @ToString
 @EqualsAndHashCode
 public class PingDTO implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -9024047222459934763L;
     private LocalDateTime now;
     private String        applicationName;
 }

@@ -18,12 +18,14 @@ package io.inugami.dashboard.webapp;
 
 import io.inugami.framework.commons.spring.configuration.ConfigConfiguration;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackages={
         ConfigConfiguration.INUGAMI
 })
+@EnableAutoConfiguration
 @SpringBootApplication
 public class InugamiDashboardApplication {
 

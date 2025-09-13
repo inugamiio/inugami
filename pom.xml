@@ -222,7 +222,6 @@
         <org.quartz.version>2.3.2</org.quartz.version>
         <org.slf4j.version>2.0.9</org.slf4j.version>
         <org.yaml.version>2.2</org.yaml.version>
-        <org.zalando.problem.version>0.27.1</org.zalando.problem.version>
         <swagger-jaxrs2.version>2.0.0</swagger-jaxrs2.version>
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -636,12 +635,6 @@
                 <artifactId>slf4j-api</artifactId>
                 <version>${org.slf4j.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.zalando</groupId>
-                <artifactId>problem</artifactId>
-                <version>${org.zalando.problem.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>

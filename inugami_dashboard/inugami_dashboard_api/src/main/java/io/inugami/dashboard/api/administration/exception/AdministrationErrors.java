@@ -14,14 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-open module io.inugami.dashboard.api {
-    requires com.fasterxml.jackson.annotation;
-    requires io.inugami.framework.interfaces;
-    requires lombok;
-    requires org.slf4j;
+package io.inugami.dashboard.api.administration.exception;
 
-    exports io.inugami.dashboard.api.event;
-    exports io.inugami.dashboard.api.administration.exception;
-    exports io.inugami.dashboard.api.administration.dto;
-    exports io.inugami.dashboard.api.administration;
+import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
+
+import static io.inugami.framework.interfaces.exceptions.DefaultErrorCode.newBuilder;
+
+public enum AdministrationErrors implements ErrorCode {
+    UNDEFINED(newBuilder().message("Undefined error occurs"));
+
+    private final ErrorCode errorCode;
+
+    private AdministrationErrors(final DefaultErrorCode.DefaultErrorCodeBuilder errorBuilder) {
+        errorCode = errorBuilder.errorCode(this.name()).build();
+    }
+
+    @Override
+    public ErrorCode getCurrentErrorCode() {
+        return errorCode;
+    }
+
+
 }

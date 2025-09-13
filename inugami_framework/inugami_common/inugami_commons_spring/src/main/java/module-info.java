@@ -26,7 +26,6 @@ open module io.inugami.framework.commons.spring {
     requires org.aspectj.weaver;
     requires org.mapstruct;
     requires org.slf4j;
-    requires org.zalando.problem;
     requires spring.aop;
     requires spring.beans;
     requires spring.boot.autoconfigure;
@@ -34,10 +33,10 @@ open module io.inugami.framework.commons.spring {
     requires spring.context;
     requires spring.core;
     requires spring.web;
+    requires com.fasterxml.jackson.databind;
 
     exports io.inugami.framework.commons.spring to spring.core;
     exports io.inugami.framework.commons.spring.configuration;
-    exports io.inugami.framework.commons.spring.exception;
     exports io.inugami.framework.commons.spring.feature.interceptors;
     exports io.inugami.framework.commons.spring.mapstruct;
 

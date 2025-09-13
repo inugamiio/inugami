@@ -14,17 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.commons.spring.exception;
-
+package io.inugami.framework.interfaces.exceptions;
 
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.ResponseEntity;
-import org.zalando.problem.ThrowableProblem;
 
-public interface ExceptionHandlerService {
-
-    ResponseEntity<ThrowableProblem> manageException(final Throwable throwable);
-
+public interface IExceptionHandlerService {
     void manageException(final Throwable throwable, final HttpServletResponse response);
-
 }

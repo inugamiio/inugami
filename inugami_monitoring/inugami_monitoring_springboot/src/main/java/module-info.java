@@ -1,6 +1,3 @@
-import io.inugami.framework.interfaces.exceptions.ProblemAdditionalFieldBuilder;
-import io.inugami.framework.interfaces.monitoring.spring.feign.FeignErrorCodeBuilderSpi;
-
 /* --------------------------------------------------------------------
  *  Inugami
  * --------------------------------------------------------------------
@@ -30,7 +27,6 @@ open module io.inugami.monitoring.springboot {
     requires jakarta.servlet;
     requires org.mapstruct;
     requires org.slf4j;
-    requires org.zalando.problem;
     requires spring.beans;
     requires spring.boot.actuator;
     requires spring.boot.autoconfigure;
@@ -49,14 +45,14 @@ open module io.inugami.monitoring.springboot {
     exports io.inugami.monitoring.springboot.partnerlog.feign;
     exports io.inugami.monitoring.springboot.request;
 
-    uses FeignErrorCodeBuilderSpi;
-    uses ProblemAdditionalFieldBuilder;
+    uses io.inugami.framework.interfaces.monitoring.spring.feign.FeignErrorCodeBuilderSpi;
     uses io.inugami.framework.interfaces.exceptions.ErrorCodeResolver;
     uses io.inugami.framework.interfaces.monitoring.JavaRestMethodTracker;
     uses org.springframework.web.multipart.MultipartResolver;
     uses org.springframework.web.servlet.HandlerMapping;
 
-    provides FeignErrorCodeBuilderSpi with io.inugami.monitoring.springboot.exception.DefaultFeignErrorCodeBuilderSpi;
+    provides io.inugami.framework.interfaces.monitoring.spring.feign.FeignErrorCodeBuilderSpi with io.inugami.monitoring.springboot.exception.DefaultFeignErrorCodeBuilderSpi;
     provides io.inugami.framework.interfaces.exceptions.ErrorCodeResolver with io.inugami.monitoring.springboot.exception.SpringDefaultErrorCodeResolver, io.inugami.monitoring.springboot.exception.FeignErrorCodeResolver;
     provides io.inugami.framework.interfaces.monitoring.JavaRestMethodTracker with io.inugami.monitoring.springboot.request.SpringRestMethodTracker;
+
 }

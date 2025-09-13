@@ -14,14 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-open module io.inugami.dashboard.api {
-    requires com.fasterxml.jackson.annotation;
-    requires io.inugami.framework.interfaces;
-    requires lombok;
-    requires org.slf4j;
+package io.inugami.framework.interfaces.rest;
 
-    exports io.inugami.dashboard.api.event;
-    exports io.inugami.dashboard.api.administration.exception;
-    exports io.inugami.dashboard.api.administration.dto;
-    exports io.inugami.dashboard.api.administration;
+import java.lang.annotation.*;
+
+@Target({ElementType.METHOD,ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface RestService {
+
+    String value() default "";
+
 }

@@ -44,6 +44,10 @@
             <groupId>io.inugami.dashboard</groupId>
             <artifactId>inugami_dashboard_api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
 
     </dependencies>
 </project>

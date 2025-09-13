@@ -3,12 +3,11 @@ package io.inugami.monitoring.springboot.exception;
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.api.monitoring.MdcService;
 import io.inugami.framework.api.monitoring.RequestContext;
-import io.inugami.framework.commons.spring.exception.ExceptionHandlerService;
 import io.inugami.framework.interfaces.exceptions.*;
+import io.inugami.framework.interfaces.exceptions.dto.ProblemDTO;
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.spi.SpiLoader;
-import io.inugami.framework.interfaces.exceptions.ProblemAdditionalFieldBuilder;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -24,13 +23,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.zalando.problem.*;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import static io.inugami.framework.interfaces.exceptions.ErrorCode.*;
+import static io.inugami.framework.interfaces.exceptions.SafeUtils.grabSafe;
 
 @SuppressWarnings({"java:S1181", "java:S108"})
 @Slf4j
@@ -39,9 +38,7 @@ import static io.inugami.framework.interfaces.exceptions.ErrorCode.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ControllerAdvice
-public class DefaultExceptionHandlerService implements ExceptionHandlerService {
-
-
+public class DefaultExceptionHandlerService implements IExceptionHandlerService {
     // ========================================================================
     // ATTRIBUTES
     // ========================================================================
@@ -63,27 +60,24 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
     private String wikiPage;
 
     @Value("${inugami.monitoring.exception.show.detail.enabled:#{true}}")
-    private boolean showAllDetail;
-
-    private List<ProblemAdditionalFieldBuilder> problemAdditionalFieldBuilders;
+    private boolean                             showAllDetail;
     private List<ErrorCodeResolver>             errorCodeResolvers;
+    private List<ProblemAdditionalFieldBuilder> problemAdditionalFieldBuilders;
 
     @PostConstruct
     public DefaultExceptionHandlerService init() {
-        problemAdditionalFieldBuilders = SpiLoader.getInstance()
-                                                  .loadSpiServicesByPriority(ProblemAdditionalFieldBuilder.class);
-        errorCodeResolvers = SpiLoader.getInstance().loadSpiServicesByPriority(ErrorCodeResolver.class);
+        final var spi = SpiLoader.getInstance();
+        errorCodeResolvers = grabSafe(() -> spi.loadSpiServicesByPriority(ErrorCodeResolver.class), List.of());
+        problemAdditionalFieldBuilders = grabSafe(() -> spi.loadSpiServicesByPriority(ProblemAdditionalFieldBuilder.class), List.of());
+
         return this;
     }
 
     // ========================================================================
     // API
     // ========================================================================
-
-    @Override
     public void manageException(final Throwable throwable, final HttpServletResponse response) {
-        final ResponseEntity<ThrowableProblem> result = manageException(throwable);
-
+        final ResponseEntity<ProblemDTO> result = manageException(throwable);
         response.setStatus(result.getStatusCodeValue());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         try {
@@ -98,25 +92,27 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
         }
     }
 
-    @Override
+
+
     @ExceptionHandler(Throwable.class)
-    public ResponseEntity<ThrowableProblem> manageException(final Throwable throwable) {
+    public ResponseEntity<ProblemDTO> manageException(final Throwable throwable) {
         final Throwable exception = throwable == null ? new UncheckedException("undefined error") : throwable;
         final ErrorCode errorCode = resolveErrorCode(exception);
 
         MdcService.getInstance().errorCode(errorCode);
 
         log.error(exception.getMessage(), exception);
-        final StatusType currentStatus = resolveStatus(errorCode);
-        final ProblemBuilder problemBuilder = Problem.builder()
-                                                     .with(ERROR_CODE, errorCode.getErrorCode())
-                                                     .with(FIELDS, resolveField(errorCode, exception))
-                                                     .withStatus(currentStatus);
+        final var currentStatus = resolveStatus(errorCode);
+        final var problemBuilder = ProblemDTO.builder()
+                                             .with(ERROR_CODE, errorCode.getErrorCode())
+                                             .with(FIELDS, resolveField(errorCode, exception))
+                                             .status(currentStatus.value())
+                                             .reasonPhrase(currentStatus.getReasonPhrase());
         final RequestData requestContext = RequestContext.getInstance();
 
         if (showAllDetail) {
-            problemBuilder.withTitle(errorCode.getMessage())
-                          .withDetail(errorCode.getMessageDetail() == null ? EMPTY : errorCode.getMessageDetail())
+            problemBuilder.message(errorCode.getMessage())
+                          .detail(errorCode.getMessageDetail() == null ? EMPTY : errorCode.getMessageDetail())
                           .with(APPLICATION, applicationName)
                           .with(VERSION, applicationVersion)
                           .with(ERROR_TYPE, errorCode.getErrorType())
@@ -128,22 +124,12 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
                           .with(DOMAIN, errorCode.getDomain())
                           .with(SUB_DOMAIN, errorCode.getSubDomain())
                           .with(SERVICE, requestContext == null ? null : requestContext.getService())
-                          .withCause(Problem.builder().withTitle(exception.getMessage()).build());
+                          .cause(ProblemDTO.builder().message(exception.getMessage()).build());
         }
 
-        if (problemAdditionalFieldBuilders != null) {
-            for (final ProblemAdditionalFieldBuilder additionalBuilder : problemAdditionalFieldBuilders) {
-                additionalBuilder.addInformation(problemBuilder, exception, errorCode);
-            }
+        for (final ProblemAdditionalFieldBuilder additionalBuilder : problemAdditionalFieldBuilders) {
+            additionalBuilder.addInformation(problemBuilder, exception, errorCode);
         }
-
-        final ThrowableProblem problem = problemBuilder.build();
-        problem.setStackTrace(new StackTraceElement[]{});
-
-        if (problem.getCause() != null) {
-            problem.getCause().setStackTrace(new StackTraceElement[]{});
-        }
-
 
         if (errorCode.isExploitationError()) {
             MdcService.getInstance().errorUrl(buildWikiPage(errorCode));
@@ -156,7 +142,9 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
         final MultiValueMap<String, String> headers = new HttpHeaders();
         headers.add(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
-        return new ResponseEntity<>(problem, headers, HttpStatus.valueOf(currentStatus.getStatusCode()));
+        return new ResponseEntity<>(problemBuilder.build(),
+                                    headers,
+                                    HttpStatus.valueOf(currentStatus.value()));
     }
 
 
@@ -191,23 +179,14 @@ public class DefaultExceptionHandlerService implements ExceptionHandlerService {
         return result;
     }
 
-    StatusType resolveStatus(final ErrorCode errorCode) {
-        StatusType result = Status.INTERNAL_SERVER_ERROR;
-        int        status = errorCode == null ? 500 : errorCode.getStatusCode();
-        if (errorCode.getStatusCode() <= 200 || errorCode.getStatusCode() > 511) {
-            status = 500;
-        }
-
-        try {
-            result = Status.valueOf(status);
-        } catch (final Throwable e) {
-        }
-
-        return result;
+    protected HttpStatus resolveStatus(final ErrorCode errorCode) {
+        final int  status = errorCode == null ? 500 : errorCode.getStatusCode();
+        HttpStatus result = grabSafe(() -> HttpStatus.resolve(status), HttpStatus.INTERNAL_SERVER_ERROR);
+        return result == null ? HttpStatus.INTERNAL_SERVER_ERROR : result;
     }
 
 
-    List<FieldError> resolveField(final ErrorCode errorCode, final Throwable exception) {
+    protected List<FieldError> resolveField(final ErrorCode errorCode, final Throwable exception) {
         final List<FieldError> result = new ArrayList<>();
         List<ErrorCode>        errors = null;
 

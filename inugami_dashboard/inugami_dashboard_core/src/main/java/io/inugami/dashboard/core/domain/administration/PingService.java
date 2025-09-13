@@ -14,40 +14,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.interfaces.core.administration;
+package io.inugami.dashboard.core.domain.administration;
 
 import io.inugami.dashboard.api.administration.IPingService;
+import io.inugami.dashboard.api.administration.dto.PingDTO;
 import io.inugami.dashboard.api.administration.exception.AdministrationErrors;
-import io.inugami.dashboard.interfaces.administration.PingRestClient;
-import io.inugami.dashboard.interfaces.administration.dto.PingDTO;
-import io.inugami.dashboard.interfaces.core.administration.mapper.PingDTORestMapper;
+import io.inugami.dashboard.core.configuration.InugamiConfiguration;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 
 import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
 
 @RequiredArgsConstructor
-@RestController
-public class PingRestController implements PingRestClient {
+@Service
+public class PingService implements IPingService {
     //==================================================================================================================
     // ATTRIBUTES
     //==================================================================================================================
-    private final IPingService      pingService;
-    private final PingDTORestMapper pingDTORestMapper;
+    private final Clock clock;
+
+    private final InugamiConfiguration properties;
 
     //==================================================================================================================
-    // READ
+    // API
     //==================================================================================================================
     @Override
     public PingDTO ping() {
-        return pingDTORestMapper.convertToRestDTO(pingService.ping());
+        return PingDTO.builder()
+                      .now(LocalDateTime.now(clock))
+                      .applicationName(properties.getApplication().getName())
+                      .build();
     }
 
     @Override
-    public PingDTO pingTest() {
+    public void pingTest() {
         assertNotNull(AdministrationErrors.UNDEFINED, null);
-        return null;
     }
 }

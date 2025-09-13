@@ -28,7 +28,6 @@ open module io.inugami.framework.interfaces {
     requires java.xml;
     requires okhttp3;
     requires org.slf4j;
-    requires org.zalando.problem;
     requires spring.web;
     requires spring.webmvc;
     requires static lombok;
@@ -85,19 +84,20 @@ open module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.scan;
     exports io.inugami.framework.interfaces.spi;
     exports io.inugami.framework.interfaces.spring;
+    exports io.inugami.framework.interfaces.rest;
     exports io.inugami.framework.interfaces.task;
     exports io.inugami.framework.interfaces.threads;
     exports io.inugami.framework.interfaces.tools.fifo;
     exports io.inugami.framework.interfaces.tools.reflection;
     exports io.inugami.framework.interfaces.tools.strategy;
     exports io.inugami.framework.interfaces.tools;
+    exports io.inugami.framework.interfaces.exceptions.dto;
 
     uses io.inugami.framework.interfaces.configurtation.ConfigurationSpi;
     uses io.inugami.framework.interfaces.configurtation.ProviderAttributFunction;
     uses io.inugami.framework.interfaces.exceptions.ErrorCodeResolver;
     uses io.inugami.framework.interfaces.exceptions.ExceptionHandlerMapper;
     uses io.inugami.framework.interfaces.exceptions.ExceptionResolver;
-    uses io.inugami.framework.interfaces.exceptions.ProblemAdditionalFieldBuilder;
     uses io.inugami.framework.interfaces.exceptions.WarningTracker;
     uses io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
     uses io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
@@ -125,4 +125,5 @@ open module io.inugami.framework.interfaces {
     uses org.springframework.web.multipart.MultipartResolver;
     uses org.springframework.web.servlet.HandlerMapping;
     uses io.inugami.framework.interfaces.monitoring.ServicesSensorAggregator;
+    uses io.inugami.framework.interfaces.exceptions.ProblemAdditionalFieldBuilder;
 }

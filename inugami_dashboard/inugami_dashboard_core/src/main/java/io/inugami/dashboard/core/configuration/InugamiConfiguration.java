@@ -14,14 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-open module io.inugami.dashboard.api {
-    requires com.fasterxml.jackson.annotation;
-    requires io.inugami.framework.interfaces;
-    requires lombok;
-    requires org.slf4j;
+package io.inugami.dashboard.core.configuration;
 
-    exports io.inugami.dashboard.api.event;
-    exports io.inugami.dashboard.api.administration.exception;
-    exports io.inugami.dashboard.api.administration.dto;
-    exports io.inugami.dashboard.api.administration;
+import lombok.*;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@Getter
+@Setter
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@ConfigurationProperties
+public class InugamiConfiguration {
+    @Builder.Default
+    private InugamiConfigurationApplication application = InugamiConfigurationApplication.builder().build();
+
+    @Getter
+    @Setter
+    @Builder(toBuilder = true)
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class InugamiConfigurationApplication{
+        @Builder.Default
+        private String name = "inugami";
+    }
 }

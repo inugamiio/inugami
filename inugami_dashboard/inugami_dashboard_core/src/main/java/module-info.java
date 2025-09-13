@@ -21,6 +21,9 @@ open module io.inugami.dashboard.core {
     requires io.inugami.framework.interfaces;
     requires lombok;
     requires org.slf4j;
+    requires spring.context;
+    requires spring.beans;
+    requires spring.boot;
 
     exports io.inugami.dashboard.core.event;
 }

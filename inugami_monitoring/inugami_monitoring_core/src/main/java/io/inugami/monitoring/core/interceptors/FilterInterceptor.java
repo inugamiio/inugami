@@ -31,6 +31,7 @@ import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterI
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.monitoring.logger.MDCKeys;
 import io.inugami.framework.interfaces.monitoring.models.Headers;
+import io.inugami.framework.interfaces.rest.RestService;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.tools.CalendarTools;
 import io.inugami.framework.interfaces.exceptions.ExceptionResolver;
@@ -85,6 +86,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
     private static final AtomicReference<FilterInterceptorCachePurgeStrategy> PURGECACHE_STRATEGY = new AtomicReference<>();
     private static final AtomicReference<MdcCleaner>                          MDC_CLEANER         = new AtomicReference<>();
+    public static final  String                                               SERVICE_SEPARATOR   = "_";
 
     private              ConfigHandler<String, String> configuration;
     private static final Map<String, Boolean>          INTERCEPTABLE_URI_RESOLVED = new ConcurrentHashMap<>();
@@ -180,6 +182,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             }
         } else {
             try {
+                RequestContext.setInstance(requestData);
                 chain.doFilter(request, response);
             } finally {
                 MdcService.getInstance().clear();
@@ -219,6 +222,8 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         final HttpServletRequest currentRequest  = buildRequestProxy((HttpServletRequest) request, data);
         requestData.setRequest(currentRequest);
         requestData.setResponse(responseWrapper);
+        requestData.setService(resolveServiceName(javaRestMethod));
+        RequestContext.setInstance(requestData);
 
         onBegin(currentRequest, requestData);
         final Chrono chrono = Chrono.startChrono();
@@ -232,6 +237,31 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             final ErrorResult errorResult = resolveError(error, responseWrapper);
             onEnd(currentRequest, responseWrapper, errorResult, chrono.getDuration(), requestData);
         }
+    }
+
+    private String resolveServiceName(final JavaRestMethodDTO javaRestMethod) {
+        if (javaRestMethod == null) {
+            return null;
+        }
+
+        final List<String> values = new ArrayList<>();
+
+        if (javaRestMethod.getRestMethod() != null) {
+            final var annotation = javaRestMethod.getRestClass().getAnnotation(RestService.class);
+            String className = annotation == null
+                    ? javaRestMethod.getRestClass().getSimpleName()
+                    : annotation.value();
+            applyIfNotNull(className, values::add);
+        }
+        if (javaRestMethod.getRestMethod() != null) {
+            final var annotation = javaRestMethod.getRestMethod().getAnnotation(RestService.class);
+            String methodName = annotation == null
+                    ? javaRestMethod.getRestMethod().getName()
+                    : annotation.value();
+            applyIfNotNull(methodName, values::add);
+        }
+
+        return String.join(SERVICE_SEPARATOR, values);
     }
 
     // =========================================================================

@@ -16,6 +16,8 @@
  */
 package io.inugami.framework.commons.spring.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.commons.marshaling.XmlJaxbMarshallerSpiFactory;
 import io.inugami.framework.commons.spring.feature.FeatureConfiguration;
 import io.inugami.framework.configuration.services.ConfigHandlerHashMap;
@@ -29,6 +31,9 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.ConfigurableEnvironment;
 
+import java.time.Clock;
+import java.time.ZoneId;
+
 @SuppressWarnings({"java:S2386"})
 @Slf4j
 @EnableAspectJAutoProxy
@@ -40,6 +45,12 @@ public class ConfigConfiguration {
     public static final String INUGAMI = "io.inugami";
 
     public static final ConfigHandler<String, String> CONFIGURATION = new ConfigHandlerHashMap();
+
+    @ConditionalOnMissingBean
+    @Bean
+    public Clock clock() {
+        return Clock.systemUTC();
+    }
 
     @Bean
     public ConfigHandler<String, String> config() {
@@ -139,5 +150,11 @@ public class ConfigConfiguration {
     @Bean
     public XmlJaxbMarshallerSpi xmlJaxbMarshallerSpi() {
         return XmlJaxbMarshallerSpiFactory.getInstance();
+    }
+
+    @ConditionalOnMissingBean
+    @Bean
+    public ObjectMapper objectMapper(){
+        return JsonMarshaller.getInstance().getDefaultObjectMapper();
     }
 }

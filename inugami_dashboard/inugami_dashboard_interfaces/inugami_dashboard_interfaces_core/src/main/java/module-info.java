@@ -23,4 +23,6 @@ open module io.inugami.dashboard.interfaces.core {
     requires lombok;
     requires org.slf4j;
     requires spring.web;
+    requires spring.context;
+    requires org.mapstruct;
 }
