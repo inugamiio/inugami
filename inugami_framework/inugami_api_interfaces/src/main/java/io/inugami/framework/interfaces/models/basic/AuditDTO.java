@@ -14,19 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.interfaces.models.event;
+package io.inugami.framework.interfaces.models.basic;
 
-import io.inugami.framework.interfaces.models.ClonableObject;
 import lombok.*;
 
-import java.io.Serializable;
+import java.time.LocalDateTime;
 
-/**
- * AlertingModel
- *
- * @author patrick_guillerm
- * @since 20 déc. 2017
- */
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Setter
@@ -34,26 +27,10 @@ import java.io.Serializable;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public final class AlertingModel implements Serializable, ClonableObject<AlertingModel> {
-
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
-    private static final long serialVersionUID = 2557187994399108457L;
-    private String uid;
-
-    @EqualsAndHashCode.Include
-    private String name;
-    private String description;
-    private String provider;
-    private String message;
-    private String level;
-    private String condition;
-    private String function;
-
-
-    @Override
-    public AlertingModel cloneObj() {
-        return toBuilder().build();
-    }
+public class AuditDTO {
+    private String        createdBy;
+    private LocalDateTime createdDate;
+    private String        lastModifiedBy;
+    private LocalDateTime lastModifiedDate;
+    private Long          version;
 }

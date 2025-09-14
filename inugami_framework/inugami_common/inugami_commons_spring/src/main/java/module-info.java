@@ -34,6 +34,7 @@ open module io.inugami.framework.commons.spring {
     requires spring.core;
     requires spring.web;
     requires com.fasterxml.jackson.databind;
+    requires spring.expression;
 
     exports io.inugami.framework.commons.spring to spring.core;
     exports io.inugami.framework.commons.spring.configuration;

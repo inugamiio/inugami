@@ -30,6 +30,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import java.time.Clock;
 import java.time.ZoneId;
@@ -156,5 +158,17 @@ public class ConfigConfiguration {
     @Bean
     public ObjectMapper objectMapper(){
         return JsonMarshaller.getInstance().getDefaultObjectMapper();
+    }
+
+    @ConditionalOnMissingBean
+    @Bean
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(final ObjectMapper objectMapper){
+        return new MappingJackson2HttpMessageConverter(objectMapper);
+    }
+
+    @ConditionalOnMissingBean
+    @Bean
+    public SpelExpressionParser spelExpressionParser(){
+        return new SpelExpressionParser();
     }
 }

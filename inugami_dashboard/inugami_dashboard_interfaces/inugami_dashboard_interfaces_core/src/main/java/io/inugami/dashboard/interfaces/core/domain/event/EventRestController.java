@@ -14,43 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.core.domain.administration;
+package io.inugami.dashboard.interfaces.core.domain.event;
 
-import io.inugami.dashboard.api.domain.administration.IPingService;
-import io.inugami.dashboard.api.domain.administration.dto.PingDTO;
-import io.inugami.dashboard.api.domain.administration.exception.AdministrationErrors;
-import io.inugami.dashboard.core.configuration.InugamiConfiguration;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import io.inugami.dashboard.interfaces.domain.event.EventRestClient;
+import io.inugami.framework.interfaces.models.event.Event;
 
-import java.time.Clock;
-import java.time.LocalDateTime;
-
-import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
-
-@RequiredArgsConstructor
-@Service
-public class PingService implements IPingService {
+public class EventRestController implements EventRestClient {
     //==================================================================================================================
-    // ATTRIBUTES
+    // CREATE
     //==================================================================================================================
-    private final Clock clock;
 
-    private final InugamiConfiguration properties;
 
     //==================================================================================================================
-    // API
+    // READ
     //==================================================================================================================
     @Override
-    public PingDTO ping() {
-        return PingDTO.builder()
-                      .now(LocalDateTime.now(clock))
-                      .applicationName(properties.getApplication().getName())
-                      .build();
+    public Event getEvent(final String uid) {
+        return null;
     }
 
-    @Override
-    public void pingTest() {
-        assertNotNull(AdministrationErrors.UNDEFINED, null);
-    }
+    //==================================================================================================================
+    // UPDATE
+    //==================================================================================================================
+
+    //==================================================================================================================
+    // DELETE
+    //==================================================================================================================
 }

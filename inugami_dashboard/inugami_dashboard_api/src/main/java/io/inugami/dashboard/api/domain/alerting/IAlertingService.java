@@ -14,20 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-open module io.inugami.dashboard.interfaces.core {
-    requires com.fasterxml.jackson.annotation;
-    requires io.inugami.dashboard.api;
-    requires io.inugami.dashboard.interfaces.api;
-    requires io.inugami.framework.api;
-    requires io.inugami.framework.interfaces;
-    requires lombok;
-    requires org.slf4j;
-    requires spring.web;
-    requires spring.context;
-    requires org.mapstruct;
+package io.inugami.dashboard.api.domain.alerting;
 
-    exports io.inugami.dashboard.interfaces.core.domain.administration;
-    exports io.inugami.dashboard.interfaces.core.domain.administration.mapper;
-    exports io.inugami.dashboard.interfaces.core.domain.alerting;
-    exports io.inugami.dashboard.interfaces.core.domain.event;
+import io.inugami.dashboard.api.domain.alerting.dto.AlertingSearchRequestDTO;
+import io.inugami.framework.interfaces.models.crud.Crud;
+import io.inugami.framework.interfaces.models.event.AlertingModel;
+
+public interface IAlertingService extends Crud<AlertingModel,String, AlertingSearchRequestDTO> {
+
 }

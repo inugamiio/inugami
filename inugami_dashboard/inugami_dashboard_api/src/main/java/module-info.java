@@ -20,8 +20,11 @@ open module io.inugami.dashboard.api {
     requires lombok;
     requires org.slf4j;
 
-    exports io.inugami.dashboard.api.event;
-    exports io.inugami.dashboard.api.administration.exception;
-    exports io.inugami.dashboard.api.administration.dto;
-    exports io.inugami.dashboard.api.administration;
+    exports io.inugami.dashboard.api.domain.administration.exception;
+    exports io.inugami.dashboard.api.domain.administration.dto;
+    exports io.inugami.dashboard.api.domain.administration;
+    exports io.inugami.dashboard.api.domain.alerting;
+    exports io.inugami.dashboard.api.domain.alerting.dto;
+    exports io.inugami.dashboard.api.domain.alerting.exception;
+    exports io.inugami.dashboard.api.domain.event;
 }

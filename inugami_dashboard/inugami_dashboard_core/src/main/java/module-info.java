@@ -25,5 +25,7 @@ open module io.inugami.dashboard.core {
     requires spring.beans;
     requires spring.boot;
 
-    exports io.inugami.dashboard.core.event;
+    exports io.inugami.dashboard.core.domain.event;
+    exports io.inugami.dashboard.core.domain.alerting;
+    exports io.inugami.dashboard.core.domain.administration;
 }

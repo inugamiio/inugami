@@ -1,0 +1,49 @@
+[ {
+  "errorStatus" : 500,
+  "errorCode" : "UNDEFINED",
+  "message" : "Undefined error occurs",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "CREATE_INVALID_DATA",
+  "message" : "Alerting data are invalid",
+  "errorType" : "functional",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "READ_INVALID_DATA",
+  "message" : "Alerting data are invalid",
+  "errorType" : "functional",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 404,
+  "errorCode" : "READ_NOT_FOUND",
+  "message" : "Alerting not found",
+  "errorType" : "functional",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "UPDATE_INVALID_DATA",
+  "message" : "Alerting data are invalid",
+  "errorType" : "functional",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "DELETE_INVALID_DATA",
+  "message" : "Alerting data are invalid",
+  "errorType" : "functional",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+} ]

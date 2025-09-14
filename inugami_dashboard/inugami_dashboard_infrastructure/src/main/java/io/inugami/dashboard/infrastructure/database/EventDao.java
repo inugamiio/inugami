@@ -16,7 +16,7 @@
  */
 package io.inugami.dashboard.infrastructure.database;
 
-import io.inugami.dashboard.api.event.IEventDao;
+import io.inugami.dashboard.api.domain.event.IEventDao;
 import io.inugami.framework.interfaces.models.event.Event;
 
 public class EventDao implements IEventDao {

@@ -59,10 +59,12 @@ open module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.metrics.dto;
     exports io.inugami.framework.interfaces.metrics;
     exports io.inugami.framework.interfaces.models.basic;
+    exports io.inugami.framework.interfaces.models.crud;
     exports io.inugami.framework.interfaces.models.event;
     exports io.inugami.framework.interfaces.models.graphite;
     exports io.inugami.framework.interfaces.models.maven;
     exports io.inugami.framework.interfaces.models.number;
+    exports io.inugami.framework.interfaces.models.search;
     exports io.inugami.framework.interfaces.models.tools;
     exports io.inugami.framework.interfaces.models;
     exports io.inugami.framework.interfaces.monitoring.core;

@@ -14,20 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-open module io.inugami.dashboard.interfaces.core {
-    requires com.fasterxml.jackson.annotation;
-    requires io.inugami.dashboard.api;
-    requires io.inugami.dashboard.interfaces.api;
-    requires io.inugami.framework.api;
-    requires io.inugami.framework.interfaces;
-    requires lombok;
-    requires org.slf4j;
-    requires spring.web;
-    requires spring.context;
-    requires org.mapstruct;
+package io.inugami.dashboard.interfaces.domain.administration.dto;
 
-    exports io.inugami.dashboard.interfaces.core.domain.administration;
-    exports io.inugami.dashboard.interfaces.core.domain.administration.mapper;
-    exports io.inugami.dashboard.interfaces.core.domain.alerting;
-    exports io.inugami.dashboard.interfaces.core.domain.event;
+import lombok.*;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode
+public class PingDTO implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -9024047222459934763L;
+    private LocalDateTime now;
+    private String        applicationName;
 }
