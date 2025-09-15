@@ -16,21 +16,23 @@
  */
 package io.inugami.monitoring.providers.els;
 
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.models.data.basic.JsonObject;
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.senders.MonitoringSender;
-import io.inugami.api.monitoring.senders.MonitoringSenderException;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.providers.ProviderWithHttpConnector;
-import io.inugami.api.tools.CalendarTools;
-import io.inugami.commons.connectors.HttpBasicConnector;
-import io.inugami.commons.threads.RunAndCloseService;
+
+import io.inugami.framework.api.connectors.HttpBasicConnector;
+import io.inugami.framework.commons.threads.RunAndCloseService;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.connectors.config.HttpBasicConnectorConfiguration;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
+import io.inugami.framework.interfaces.monitoring.senders.MonitoringSenderException;
+import io.inugami.framework.interfaces.providers.ProviderWithHttpConnector;
+import io.inugami.framework.interfaces.tools.CalendarTools;
 import io.inugami.monitoring.api.tools.IntervalValues;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.Callable;
 
@@ -80,19 +82,23 @@ public class ElsSender implements MonitoringSender, ProviderWithHttpConnector {
 
     public ElsSender(final ConfigHandler<String, String> config) {
         //@formatter:off
-        timeout = getTimeout(config,       10000);
-        httpConnector =  new  HttpBasicConnector(timeout,
-                                                 getTTL(config,             500),
-                                                 getMaxPerRoute(config,      50),
-                                                 getMaxPerRoute(config,      50),
-                                                 getSocketTimeout(config,  9500));
+        timeout = getTimeout(config,       30000);
+        httpConnector =  new  HttpBasicConnector(HttpBasicConnectorConfiguration.builder()
+                                                         .timeoutConnecting(timeout)
+                                                                                .timeoutWriting(timeout)
+                                                                                .timeoutReading(timeout)
+                                                                                .build());
+
         //@formatter:on
         url = config.grab("url");
         elsType = config.grabOrDefault("elsType", "GenericServiceHitModel");
         elsIndex = config.grabOrDefault("elsIndex", "system");
         enableIndexTimestamped = config.grabBoolean("enableIndexTimestamped", true);
         indexTimestampFormat = config.grabOrDefault("indexTimestampFormat", "yyyy-MM");
-        this.intervalRunner = new IntervalValues<>(this::sendToEls, 500L);
+        this.intervalRunner = IntervalValues.<GenericMonitoringModel>builder()
+                                            .consumer(this::sendToEls)
+                                            .interval(500L)
+                                            .build();
         this.maxThreads = config.grabInt("maxThreads", 10);
     }
 
@@ -115,7 +121,7 @@ public class ElsSender implements MonitoringSender, ProviderWithHttpConnector {
     }
 
     public void sendToEls(final Queue<GenericMonitoringModel> data) {
-        final List<JsonObject> values = new ArrayList<>();
+        final List<Object> values = new ArrayList<>();
 
         while (!data.isEmpty()) {
             values.add(data.poll());
@@ -127,9 +133,12 @@ public class ElsSender implements MonitoringSender, ProviderWithHttpConnector {
 
     }
 
-    private void processSending(final List<JsonObject> values) {
-        final ElsData elsData = new ElsData(buildIndex(), elsType);
-        final int     nbItems = 500;
+    private void processSending(final List<Object> values) {
+        final ElsData elsData = ElsData.builder()
+                                       .index(buildIndex())
+                                       .type(elsType)
+                                       .build();
+        final int nbItems = 500;
 
         final List<Callable<Void>> tasks = new ArrayList<>();
         final int                  size  = values.size();
@@ -140,7 +149,12 @@ public class ElsSender implements MonitoringSender, ProviderWithHttpConnector {
             if (end > size) {
                 end = size;
             }
-            tasks.add(new ElasticSearchWriterTask(httpConnector, url, elsData, values.subList(begin, end)));
+            tasks.add(ElasticSearchWriterTask.builder()
+                                             .httpConnector(httpConnector)
+                                             .url(url)
+                                             .data(elsData)
+                                             .values(values.subList(begin, end))
+                                             .build());
         }
         final int nbThreads = tasks.size() < maxThreads ? tasks.size() : maxThreads;
         //@formatter:off
@@ -151,8 +165,7 @@ public class ElsSender implements MonitoringSender, ProviderWithHttpConnector {
                                                                              null);
         //@formatter:on
         treadsPool.run();
-        Loggers.PROVIDER.info("done sending data to ELS : {} documents, {} : {}", values.size(), elsData.getIndex(),
-                              elsData.getType());
+        Loggers.PROVIDER.info("done sending data to ELS : {} documents, {} : {}", values.size(), elsData.getIndex(), elsData.getType());
     }
 
     private String buildIndex() {

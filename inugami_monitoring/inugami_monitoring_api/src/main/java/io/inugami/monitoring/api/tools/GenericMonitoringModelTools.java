@@ -16,10 +16,11 @@
  */
 package io.inugami.monitoring.api.tools;
 
-import io.inugami.api.monitoring.RequestContext;
-import io.inugami.api.monitoring.RequestInformation;
-import io.inugami.api.monitoring.models.GenericMonitoringModelDTO;
-import io.inugami.api.tools.CalendarTools;
+
+import io.inugami.framework.api.monitoring.RequestContext;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
+import io.inugami.framework.interfaces.metrics.dto.*;
+import io.inugami.framework.interfaces.tools.CalendarTools;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -42,10 +43,10 @@ public final class GenericMonitoringModelTools {
     // =========================================================================
     // METHODS
     // =========================================================================
-    public static GenericMonitoringModelDTO.GenericMonitoringModelDTOBuilder initResultBuilder() {
-        final RequestInformation infos = RequestContext.getInstance();
+    public static GenericMonitoringModelDto initResultBuilder() {
+        final RequestData infos = RequestContext.getInstance();
 
-        final GenericMonitoringModelDTO.GenericMonitoringModelDTOBuilder data = GenericMonitoringModelDTO.builder();
+        final var data = GenericMonitoringModelDto.builder();
         data.environment(infos.getEnv());
         data.asset(infos.getAsset());
         data.instanceName(infos.getInstanceName());
@@ -54,13 +55,13 @@ public final class GenericMonitoringModelTools {
         data.service(infos.getService());
         data.device(infos.getDeviceType());
 
-        return data;
+        return data.build();
     }
 
-    public static List<GenericMonitoringModelDTO> buildSingleResult(final GenericMonitoringModelDTO.GenericMonitoringModelDTOBuilder builder) {
-        final List<GenericMonitoringModelDTO> result = new ArrayList<>();
-        if (builder != null) {
-            result.add(builder.build());
+    public static List<GenericMonitoringModelDto> buildSingleResult(final GenericMonitoringModelDto value) {
+        final List<GenericMonitoringModelDto> result = new ArrayList<>();
+        if (value != null) {
+            result.add(value);
         }
         return result;
     }

@@ -16,17 +16,18 @@
  */
 package io.inugami.monitoring.core.context.sensors;
 
-import io.inugami.api.ctx.BootstrapContext;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.models.tools.Chrono;
-import io.inugami.api.monitoring.MdcService;
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.senders.MonitoringSender;
-import io.inugami.api.monitoring.sensors.MonitoringSensor;
-import io.inugami.api.tools.CalendarTools;
-import io.inugami.commons.threads.MonitoredThreadFactory;
-import io.inugami.commons.threads.RunAndCloseService;
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.commons.threads.MonitoredThreadFactory;
+import io.inugami.framework.commons.threads.RunAndCloseService;
+import io.inugami.framework.interfaces.ctx.BootstrapContext;
+import io.inugami.framework.interfaces.models.tools.Chrono;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
+import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
+import io.inugami.framework.interfaces.tools.CalendarTools;
 import io.inugami.monitoring.core.context.MonitoringContext;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,6 +43,7 @@ import java.util.concurrent.TimeUnit;
  * @author patrickguillerm
  * @since Jan 17, 2019
  */
+@Slf4j
 @SuppressWarnings({"java:S2142", "java:S1181"})
 public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringContext> {
 
@@ -85,7 +87,7 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
     // LIFECYCLE
     // =========================================================================
     @Override
-    public void bootrap(final MonitoringContext ctx) {
+    public void initialize(final MonitoringContext ctx) {
         final Calendar calendar = CalendarTools.buildCalendarByMin();
         calendar.add(Calendar.MINUTE, 1);
 
@@ -101,7 +103,7 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
             try {
                 executor.awaitTermination(0, TimeUnit.MILLISECONDS);
             } catch (final Throwable e) {
-                Loggers.DEBUG.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
             }
         }
     }

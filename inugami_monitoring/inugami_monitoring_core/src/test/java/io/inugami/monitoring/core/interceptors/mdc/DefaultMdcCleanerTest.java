@@ -1,6 +1,7 @@
 package io.inugami.monitoring.core.interceptors.mdc;
 
-import io.inugami.api.monitoring.MdcService;
+
+import io.inugami.framework.api.monitoring.MdcService;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

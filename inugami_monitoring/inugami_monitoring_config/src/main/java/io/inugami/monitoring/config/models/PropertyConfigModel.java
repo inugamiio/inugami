@@ -16,8 +16,7 @@
  */
 package io.inugami.monitoring.config.models;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -27,81 +26,18 @@ import java.io.Serializable;
  * @author patrick_guillerm
  * @since 10 mai 2017
  */
-@XStreamAlias("property")
+@Getter
+@Setter
+@Builder(toBuilder = true)
+@ToString
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class PropertyConfigModel implements Serializable {
-
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
     private static final long serialVersionUID = 727894735907916729L;
 
-    @XStreamAsAttribute
     private String key;
-
-    @XStreamAsAttribute
     private String value;
 
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public PropertyConfigModel() {
-        super();
-    }
-
-    public PropertyConfigModel(String key, String value) {
-        super();
-        this.key = key;
-        this.value = value;
-    }
-
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    @Override
-    public int hashCode() {
-        return 31 + ((key == null) ? 0 : key.hashCode());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        boolean result = this == obj;
-        if (!result && obj != null && obj instanceof PropertyConfigModel) {
-            final PropertyConfigModel other = (PropertyConfigModel) obj;
-            result = key == null ? other.getKey() == null : key.equals(other.getKey());
-
-        }
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("PropertyModel [key=");
-        builder.append(key);
-        builder.append(", value=");
-        builder.append(value);
-        builder.append("]");
-        return builder.toString();
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
 
 }

@@ -4,15 +4,17 @@ import feign.FeignException;
 import feign.Response;
 import feign.codec.DecodeException;
 import feign.codec.Decoder;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.monitoring.MdcService;
-import io.inugami.api.monitoring.models.IoInfoDTO;
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import io.inugami.framework.interfaces.monitoring.models.IoInfoDTO;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 
 @SuppressWarnings({"java:S2629"})
+@Builder
 @RequiredArgsConstructor
 public class FeignPartnerResponseDecoder implements Decoder {
     private final Decoder decoder;

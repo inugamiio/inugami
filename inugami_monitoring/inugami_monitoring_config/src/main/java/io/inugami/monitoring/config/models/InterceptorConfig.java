@@ -16,11 +16,6 @@
  */
 package io.inugami.monitoring.config.models;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.functionnals.PostProcessing;
-import io.inugami.api.processors.ConfigHandler;
 import lombok.*;
 
 import java.io.Serializable;
@@ -31,27 +26,20 @@ import java.io.Serializable;
  * @author patrickguillerm
  * @since Jan 18, 2019
  */
-@EqualsAndHashCode
-@ToString
-@Builder(toBuilder = true)
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
 @Getter
-@XStreamAlias("interceptor")
-public final class InterceptorConfig implements PostProcessing<ConfigHandler<String, String>>, Serializable {
+@Setter
+@Builder(toBuilder = true)
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
+public final class InterceptorConfig implements Serializable {
 
     private static final long serialVersionUID = 1827622555337135611L;
 
-
-    @XStreamAsAttribute
     private String name;
+    @Builder.Default
+    private PropertiesConfig properties = PropertiesConfig.builder().build();
 
-    private PropertiesConfig properties;
 
-
-    @Override
-    public void postProcessing(ConfigHandler<String, String> context) throws TechnicalException {
-        // nothing to do
-    }
 }

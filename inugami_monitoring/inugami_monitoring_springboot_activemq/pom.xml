@@ -15,40 +15,29 @@
     <parent>
         <groupId>io.inugami.monitoring</groupId>
         <artifactId>inugami_monitoring</artifactId>
-        <version>3.3.6-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
+
 
     <!-- ======================================================================= 
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_monitoring_springboot_activemq</artifactId>
-    <url>http://inugami.io/inugami/inugami_monitoring_springboot_activemq</url>
+    <name>${project.groupId}:${project.artifactId}</name>
 
-    <!-- =======================================================================
+    <!-- ======================================================================= 
     = DEPENDENCIES
     ======================================================================== -->
     <dependencies>
 
         <dependency>
-            <groupId>io.inugami</groupId>
-            <artifactId>inugami_commons</artifactId>
+            <groupId>io.inugami.framework</groupId>
+            <artifactId>inugami_api_interfaces</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>io.inugami</groupId>
-            <artifactId>inugami_commons_spring</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>io.inugami.monitoring</groupId>
-            <artifactId>inugami_monitoring_core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.inugami.monitoring</groupId>
-            <artifactId>inugami_monitoring_springboot</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-activemq</artifactId>
@@ -57,18 +46,9 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-oxm</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>io.inugami</groupId>
-            <artifactId>inugami_commons_test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <scope>test</scope>
+            <groupId>io.inugami.framework</groupId>
+            <artifactId>inugami_api</artifactId>
         </dependency>
     </dependencies>
-
-
 </project>

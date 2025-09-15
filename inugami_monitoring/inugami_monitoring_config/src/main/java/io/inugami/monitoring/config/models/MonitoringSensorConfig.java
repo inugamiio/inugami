@@ -16,12 +16,6 @@
  */
 package io.inugami.monitoring.config.models;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.functionnals.ApplyIfNull;
-import io.inugami.api.functionnals.PostProcessing;
-import io.inugami.api.processors.ConfigHandler;
 import lombok.*;
 
 import java.io.Serializable;
@@ -32,31 +26,21 @@ import java.io.Serializable;
  * @author patrickguillerm
  * @since Jan 15, 2019
  */
-@EqualsAndHashCode
-@ToString
+@Getter
+@Setter
 @Builder(toBuilder = true)
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
-@XStreamAlias("sensor")
-public final class MonitoringSensorConfig implements PostProcessing<ConfigHandler<String, String>>, ApplyIfNull, Serializable {
+public final class MonitoringSensorConfig implements Serializable{
 
     private static final long serialVersionUID = -774495566963928169L;
 
-    @XStreamAsAttribute
     private String           name;
-    @XStreamAsAttribute
     private String           interval;
-    @XStreamAsAttribute
     private String           query;
-    private PropertiesConfig properties;
+    @Builder.Default
+    private PropertiesConfig properties = PropertiesConfig.builder().build();
 
-    // =========================================================================
-    // INIT
-    // =========================================================================
-    @Override
-    public void postProcessing(final ConfigHandler<String, String> context) throws TechnicalException {
-        interval = applyIfNull(interval, () -> "60000");
-    }
 }

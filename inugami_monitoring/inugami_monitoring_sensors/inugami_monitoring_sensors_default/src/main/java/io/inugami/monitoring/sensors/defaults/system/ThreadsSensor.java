@@ -16,10 +16,10 @@
  */
 package io.inugami.monitoring.sensors.defaults.system;
 
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.models.GenericMonitoringModelDTO;
-import io.inugami.api.monitoring.sensors.MonitoringSensor;
-import io.inugami.api.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.models.number.LongNumber;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 
 import java.lang.management.ManagementFactory;
@@ -78,8 +78,8 @@ public class ThreadsSensor implements MonitoringSensor {
 
     @Override
     public List<GenericMonitoringModel> process() {
-        final List<GenericMonitoringModel>                               result  = new ArrayList<>();
-        final GenericMonitoringModelDTO.GenericMonitoringModelDTOBuilder builder = GenericMonitoringModelTools.initResultBuilder();
+        final List<GenericMonitoringModel> result  = new ArrayList<>();
+        final var                          builder = GenericMonitoringModelTools.initResultBuilder().toBuilder();
         builder.counterType("system");
         builder.service("threads");
         if ((timeUnit == null) || timeUnit.isEmpty()) {
@@ -97,7 +97,7 @@ public class ThreadsSensor implements MonitoringSensor {
         final ThreadsCounter data = extractThreadsUsage(rawThreadsInfos);
         // ALL //--------------------------------------------------------------
         builder.subService("all");
-        builder.addValue(data.count());
+        builder.value(LongNumber.of(data.count()));
         if (enableThreadsDump) {
             builder.data(buildStackTrace(rawThreadsInfos, null));
         }
@@ -105,7 +105,7 @@ public class ThreadsSensor implements MonitoringSensor {
 
         // NEW //--------------------------------------------------------------
         builder.subService("newThreads");
-        builder.addValue(data.getNewThreads());
+        builder.value(LongNumber.of(data.getNewThreads()));
         if (enableThreadsDump) {
             builder.data(buildStackTrace(rawThreadsInfos, Thread.State.NEW));
         }
@@ -113,7 +113,7 @@ public class ThreadsSensor implements MonitoringSensor {
 
         // RUNNABLE //---------------------------------------------------------
         builder.subService("runable");
-        builder.addValue(data.getRunnable());
+        builder.value(LongNumber.of(data.getRunnable()));
         if (enableThreadsDump) {
             builder.data(buildStackTrace(rawThreadsInfos, Thread.State.RUNNABLE));
         }
@@ -121,7 +121,7 @@ public class ThreadsSensor implements MonitoringSensor {
 
         // BLOCKED //----------------------------------------------------------
         builder.subService("blocked");
-        builder.addValue(data.getBlocked());
+        builder.value(LongNumber.of(data.getBlocked()));
         if (enableThreadsDump) {
             builder.data(buildStackTrace(rawThreadsInfos, Thread.State.BLOCKED));
         }
@@ -129,7 +129,7 @@ public class ThreadsSensor implements MonitoringSensor {
 
         // WAITING //----------------------------------------------------------
         builder.subService("waiting");
-        builder.addValue(data.getWaitting());
+        builder.value(LongNumber.of(data.getWaitting()));
         if (enableThreadsDump) {
             builder.data(buildStackTrace(rawThreadsInfos, Thread.State.WAITING));
         }
@@ -137,7 +137,7 @@ public class ThreadsSensor implements MonitoringSensor {
 
         // TIMED_WAITING //----------------------------------------------------
         builder.subService("timedWaiting");
-        builder.addValue(data.getTimedWaiting());
+        builder.value(LongNumber.of(data.getTimedWaiting()));
         if (enableThreadsDump) {
             builder.data(buildStackTrace(rawThreadsInfos, Thread.State.TIMED_WAITING));
         }
@@ -145,7 +145,7 @@ public class ThreadsSensor implements MonitoringSensor {
 
         // TERMINATED //-------------------------------------------------------
         builder.subService("terminated");
-        builder.addValue(data.getTerminated());
+        builder.value(LongNumber.of(data.getTerminated()));
         if (enableThreadsDump) {
             builder.data(buildStackTrace(rawThreadsInfos, Thread.State.TERMINATED));
         }

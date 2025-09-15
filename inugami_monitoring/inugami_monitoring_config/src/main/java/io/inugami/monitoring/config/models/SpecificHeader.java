@@ -16,8 +16,6 @@
  */
 package io.inugami.monitoring.config.models;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import lombok.*;
 
 import java.io.Serializable;
@@ -28,19 +26,15 @@ import java.io.Serializable;
  * @author patrickguillerm
  * @since Jan 16, 2019
  */
-@EqualsAndHashCode
-@ToString
-@Builder(toBuilder = true)
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-@XStreamAlias("specific")
+@Builder(toBuilder = true)
+@ToString
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public final class SpecificHeader implements Serializable {
 
-    private static final long serialVersionUID = -6329175872517017427L;
-
-    @XStreamAsAttribute
-    private String name;
-
+    private static final long   serialVersionUID = -6329175872517017427L;
+    private              String name;
 }

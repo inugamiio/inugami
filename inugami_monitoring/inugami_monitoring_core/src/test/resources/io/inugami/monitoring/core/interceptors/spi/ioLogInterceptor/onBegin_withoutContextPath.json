@@ -1,0 +1,16 @@
+[
+  {
+    "loggerName":"IOLOG",
+    "level":"INFO",
+    "mdc":{
+      "lifecycle":"in"
+    },
+    "message":[
+      "[IN] [POST] /my/service",
+      "headers :",
+      "	app: myApplication",
+      "payload :",
+      "{\"name\":\"John Smith\"}"
+    ]
+  }
+]

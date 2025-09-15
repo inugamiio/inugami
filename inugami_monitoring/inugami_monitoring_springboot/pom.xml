@@ -15,32 +15,28 @@
     <parent>
         <groupId>io.inugami.monitoring</groupId>
         <artifactId>inugami_monitoring</artifactId>
-        <version>3.3.6-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
+
 
     <!-- ======================================================================= 
     = PROJECT
     ======================================================================== -->
     <artifactId>inugami_monitoring_springboot</artifactId>
-    <url>http://inugami.io/inugami/inugami_monitoring_spingboot</url>
+    <name>${project.groupId}:${project.artifactId}</name>
 
-    <!-- =======================================================================
+    <!-- ======================================================================= 
     = DEPENDENCIES
     ======================================================================== -->
     <dependencies>
+
         <dependency>
-            <groupId>io.inugami</groupId>
+            <groupId>io.inugami.framework</groupId>
             <artifactId>inugami_api_interfaces</artifactId>
         </dependency>
 
-
         <dependency>
-            <artifactId>inugami_api</artifactId>
-            <groupId>io.inugami</groupId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.inugami</groupId>
+            <groupId>io.inugami.framework.commons</groupId>
             <artifactId>inugami_commons_spring</artifactId>
         </dependency>
 
@@ -50,15 +46,31 @@
         </dependency>
 
         <dependency>
-            <groupId>io.inugami.monitoring.providers</groupId>
-            <artifactId>inugami_monitoring_providers_log</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>io.inugami</groupId>
-            <artifactId>inugami_logs_obfuscator</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-core</artifactId>
@@ -75,61 +87,8 @@
 
 
         <dependency>
-            <groupId>org.zalando</groupId>
-            <artifactId>problem</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>io.inugami</groupId>
-            <artifactId>inugami_commons_test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <version>3.3.0</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
-
 </project>

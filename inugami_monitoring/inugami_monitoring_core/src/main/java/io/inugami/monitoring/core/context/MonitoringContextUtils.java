@@ -1,8 +1,8 @@
 package io.inugami.monitoring.core.context;
 
-import io.inugami.api.monitoring.TrackingInformationSPI;
-import io.inugami.api.monitoring.models.Monitoring;
-import io.inugami.api.spi.SpiLoader;
+import io.inugami.framework.interfaces.monitoring.TrackingInformationSPI;
+import io.inugami.framework.interfaces.monitoring.models.Monitoring;
+import io.inugami.framework.interfaces.spi.SpiLoader;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +18,7 @@ final class MonitoringContextUtils {
     public static Map<String, String> getTrackingInformation(final Monitoring config) {
         Map<String, String> result = new LinkedHashMap<>();
         for (TrackingInformationSPI tracker : TRACKERS) {
-            final Map<String, String> trackerInfo = tracker.getInformation(config.getHeaders());
+            final Map<String, String> trackerInfo = tracker.getInformation();
 
             if (trackerInfo != null) {
                 result.putAll(trackerInfo);

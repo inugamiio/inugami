@@ -16,14 +16,15 @@
  */
 package io.inugami.monitoring.providers.graphite;
 
+
 import com.codahale.metrics.graphite.PickledGraphite;
-import io.inugami.api.exceptions.FatalException;
-import io.inugami.api.functionnals.ApplyIfNotNull;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.senders.MonitoringSender;
-import io.inugami.api.monitoring.senders.MonitoringSenderException;
-import io.inugami.api.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.exceptions.FatalException;
+import io.inugami.framework.interfaces.functionnals.ApplyIfNotNull;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
+import io.inugami.framework.interfaces.monitoring.senders.MonitoringSenderException;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

@@ -16,10 +16,10 @@
  */
 package io.inugami.monitoring.core.obfuscators;
 
-import java.util.regex.Pattern;
-
-import io.inugami.monitoring.api.obfuscators.Obfuscator;
+import io.inugami.framework.interfaces.monitoring.Obfuscator;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
+
+import java.util.regex.Pattern;
 
 /**
  * TokenObfuscator

@@ -1,0 +1,306 @@
+{
+	"info": {
+		"_postman_id": "d9adbb1d-f070-4bcc-9a17-2b8e14b2ed20",
+		"name": "INUGAMI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6890148"
+	},
+	"item": [
+		{
+			"name": "expose",
+			"item": [
+				{
+					"name": "administration",
+					"item": [
+						{
+							"name": "ping",
+							"item": [
+								{
+									"name": "/administration/ping",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8080/administration/ping",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"administration",
+												"ping"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "/administration/ping/test",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8080/administration/ping/test",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"administration",
+												"ping",
+												"test"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "alerting",
+					"item": [
+						{
+							"name": "/alerting",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/alerting",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"alerting"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/alerting",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"name\":\"simpleAlert\",\n        \"description\":\"Some simple alert for testing\",\n        \"message\":\"sorry\",\n        \"level\":\"ERROR\"\n    }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/alerting",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"alerting"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/alerting",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/alerting",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"alerting"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "nominal",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8080/alerting",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"alerting"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "x-correlation-id",
+											"value": "9dfa8ef5-5879-4642-aa39-232468cf3476"
+										},
+										{
+											"key": "x-b3-traceid",
+											"value": "702bb84e-842a-47d8-a5b1-c3819f9ce250"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+										},
+										{
+											"key": "Access-Control-Allow-Headers",
+											"value": ""
+										},
+										{
+											"key": "Access-Control-Expose-Headers",
+											"value": ""
+										},
+										{
+											"key": "Access-Control-Allow-Credentials",
+											"value": "true"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "242"
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 14 Sep 2025 13:06:09 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"description\": \"Some simple alert for testing\",\n            \"level\": \"ERROR\",\n            \"message\": \"sorry\",\n            \"name\": \"simpleAlert\",\n            \"uid\": \"42b57c28-eaf6-4fcf-afeb-08e72a090f88\"\n        }\n    ],\n    \"nbFoundItems\": 1,\n    \"next\": false,\n    \"page\": 0,\n    \"pageSize\": 0,\n    \"previous\": false,\n    \"totalPages\": 1\n}"
+								}
+							]
+						},
+						{
+							"name": "/alerting/{id}",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/alerting/42b57c28-eaf6-4fcf-afeb-08e72a090f88",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"alerting",
+										"42b57c28-eaf6-4fcf-afeb-08e72a090f88"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "nominal",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8080/alerting/42b57c28-eaf6-4fcf-afeb-08e72a090f88",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"alerting",
+												"42b57c28-eaf6-4fcf-afeb-08e72a090f88"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "x-correlation-id",
+											"value": "a56b27e1-1c1b-4c8b-b2af-a616f6508b39"
+										},
+										{
+											"key": "x-b3-traceid",
+											"value": "7bd9949b-0eae-459d-ba26-11fb1f68131d"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+										},
+										{
+											"key": "Access-Control-Allow-Headers",
+											"value": ""
+										},
+										{
+											"key": "Access-Control-Expose-Headers",
+											"value": ""
+										},
+										{
+											"key": "Access-Control-Allow-Credentials",
+											"value": "true"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "147"
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 14 Sep 2025 13:07:15 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"description\": \"Some simple alert for testing\",\n    \"level\": \"ERROR\",\n    \"message\": \"sorry\",\n    \"name\": \"simpleAlert\",\n    \"uid\": \"42b57c28-eaf6-4fcf-afeb-08e72a090f88\"\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

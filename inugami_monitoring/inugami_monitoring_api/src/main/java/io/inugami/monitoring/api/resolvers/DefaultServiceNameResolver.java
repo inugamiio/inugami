@@ -16,6 +16,9 @@
  */
 package io.inugami.monitoring.api.resolvers;
 
+import io.inugami.framework.interfaces.monitoring.ServiceNameResolver;
+import io.inugami.framework.interfaces.monitoring.dto.InterceptorContextDto;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,9 +40,9 @@ public class DefaultServiceNameResolver implements ServiceNameResolver {
     // METHODS
     // =========================================================================
     @Override
-    public String resolve(String uri) {
+    public String resolve(final InterceptorContextDto context) {
         String        result  = null;
-        final Matcher matcher = uri == null ? null : REGEX.matcher(uri);
+        final Matcher matcher = context.getUrl() == null ? null : REGEX.matcher(context.getUrl());
 
         if (matcher != null && matcher.matches()) {
             final String group = matcher.group(1);
@@ -52,5 +55,4 @@ public class DefaultServiceNameResolver implements ServiceNameResolver {
         }
         return result;
     }
-
 }

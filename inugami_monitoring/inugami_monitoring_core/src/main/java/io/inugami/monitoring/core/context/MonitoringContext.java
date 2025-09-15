@@ -16,19 +16,19 @@
  */
 package io.inugami.monitoring.core.context;
 
-import io.inugami.api.ctx.BootstrapContext;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.monitoring.MonitoringLoaderSpi;
-import io.inugami.api.monitoring.interceptors.MonitoringFilterInterceptor;
-import io.inugami.api.monitoring.models.Monitoring;
-import io.inugami.api.monitoring.senders.MonitoringSender;
-import io.inugami.api.monitoring.sensors.MonitoringSensor;
-import io.inugami.api.spi.SpiLoader;
+import io.inugami.framework.api.processors.DefaultConfigHandler;
+import io.inugami.framework.interfaces.ctx.BootstrapContext;
+import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
+import io.inugami.framework.interfaces.monitoring.models.Monitoring;
+import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
+import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.monitoring.core.context.sensors.SensorsIntervalManagerTask;
+import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNull;
 
 /**
  * MonitoringContext
@@ -36,34 +36,38 @@ import java.util.Map;
  * @author patrick_guillerm
  * @since 27 déc. 2018
  */
+@Slf4j
+@Builder
 public class MonitoringContext implements BootstrapContext<Void> {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final Monitoring CONFIG = loadConfiguration();
-
+    private       Monitoring                            config;
+    @Builder.Default
     private final Map<Long, SensorsIntervalManagerTask> managersTasks = new HashMap<>();
 
     // =========================================================================
     // BOOSTRAP
     // =========================================================================
     @Override
-    public void bootrap(final Void ctx) {
-        if (CONFIG != null) {
-            if (CONFIG.isEnable()) {
-                managersTasks.putAll(buildSensorsTasks(CONFIG.getSensors()));
-            }
-
-            managersTasks.entrySet().stream().map(Map.Entry::getValue).forEach(task -> task.bootrap(this));
+    public void initialize(final Void ctx) {
+        if (config == null) {
+            config = Monitoring.builder().build();
         }
+        config.setProperties(applyIfNull(config.getProperties(), () -> new DefaultConfigHandler()));
+        config.setSenders(applyIfNull(config.getSenders(), () -> new ArrayList<>()));
+        config.setSensors(applyIfNull(config.getSensors(), () -> new ArrayList<>()));
+        config.setInterceptors(applyIfNull(config.getInterceptors(), () -> new ArrayList<>()));
+
+        if (config.isEnable()) {
+            managersTasks.putAll(buildSensorsTasks(config.getSensors()));
+        }
+
+        managersTasks.entrySet().stream().map(Map.Entry::getValue).forEach(task -> task.initialize(this));
+
     }
 
-
-    private static Monitoring loadConfiguration() {
-        return ((MonitoringLoaderSpi) SpiLoader.getInstance()
-                                               .loadSpiSingleServicesByPriority(MonitoringLoaderSpi.class)).load();
-    }
 
     // =========================================================================
     // SHUTDOWN
@@ -71,13 +75,13 @@ public class MonitoringContext implements BootstrapContext<Void> {
     @Override
     public void shutdown(final Void ctx) {
         //@formatter:off
-        if(CONFIG != null) {
+        if(config != null) {
             managersTasks.entrySet()
                          .stream()
                          .map(Map.Entry::getValue)
                          .forEach(task -> task.shutdown(this));
 
-            CONFIG.getSenders().forEach(MonitoringSender::shutdown);
+            config.getSenders().forEach(MonitoringSender::shutdown);
         }
         //@formatter:on
     }
@@ -96,10 +100,10 @@ public class MonitoringContext implements BootstrapContext<Void> {
             SensorsIntervalManagerTask task = result.get(sensor.getInterval());
             if (task == null) {
                 if (sensor.getInterval() > 100) {
-                    task = new SensorsIntervalManagerTask(CONFIG.getMaxSensorsTasksThreads(), sensor.getInterval(), CONFIG.getSenders());
+                    task = new SensorsIntervalManagerTask(config.getMaxSensorsTasksThreads(), sensor.getInterval(), config.getSenders());
                     result.put(sensor.getInterval(), task);
                 } else {
-                    Loggers.CONFIG.error("sensor interval must be higher or equals than 100ms!({})", sensor.getName());
+                    log.error("sensor interval must be higher or equals than 100ms!({})", sensor.getName());
                 }
 
             }
@@ -115,32 +119,17 @@ public class MonitoringContext implements BootstrapContext<Void> {
     // BUILDER
     // =========================================================================
     public Monitoring getConfig() {
-        return CONFIG;
+        return config;
     }
-
-    public List<MonitoringSender> getSenders() {
-        return CONFIG.getSenders();
-    }
-
-    public List<MonitoringSensor> getSensors() {
-        return CONFIG.getSensors();
-    }
-
     public List<MonitoringFilterInterceptor> getInterceptors() {
-        return CONFIG.getInterceptors();
+        return Optional.ofNullable(config.getInterceptors()).orElse(List.of());
     }
 
-    public MonitoringContext addInterceptor(MonitoringFilterInterceptor interceptor) {
-        if (interceptor != null) {
-            CONFIG.getInterceptors().add(interceptor);
-        }
-        return this;
-    }
 
     // =========================================================================
     // UTILS
     // =========================================================================
     public Map<String, String> getTrackingInformation() {
-        return MonitoringContextUtils.getTrackingInformation(CONFIG);
+        return MonitoringContextUtils.getTrackingInformation(config);
     }
 }

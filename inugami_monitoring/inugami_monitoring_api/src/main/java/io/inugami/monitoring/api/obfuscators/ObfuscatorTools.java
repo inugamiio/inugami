@@ -16,7 +16,9 @@
  */
 package io.inugami.monitoring.api.obfuscators;
 
-import io.inugami.api.spi.SpiLoader;
+
+import io.inugami.framework.interfaces.monitoring.Obfuscator;
+import io.inugami.framework.interfaces.spi.SpiLoader;
 
 import java.util.List;
 import java.util.regex.Pattern;

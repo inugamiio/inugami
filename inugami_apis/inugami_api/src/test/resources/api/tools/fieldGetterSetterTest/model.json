@@ -1,6 +1,0 @@
-{
-  "field" : "io.inugami.api.tools.FieldGetterSetterTest$SomeDTO.name(java.lang.String)",
-  "getter" : "java.lang.String io.inugami.api.tools.FieldGetterSetterTest$SomeDTOgetName()",
-  "setter" : "void io.inugami.api.tools.FieldGetterSetterTest$SomeDTOsetName(java.lang.reflect.Parameter)",
-  "value" : "Joe"
-}

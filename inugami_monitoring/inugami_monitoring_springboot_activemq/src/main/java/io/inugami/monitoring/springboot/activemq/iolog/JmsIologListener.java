@@ -1,21 +1,23 @@
 package io.inugami.monitoring.springboot.activemq.iolog;
 
-import io.inugami.api.exceptions.*;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.models.tools.Chrono;
-import io.inugami.api.monitoring.MdcService;
-import io.inugami.api.monitoring.models.IoInfoDTO;
-import io.inugami.api.spi.SpiLoader;
+
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.interfaces.exceptions.*;
+import io.inugami.framework.interfaces.models.tools.Chrono;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import io.inugami.framework.interfaces.monitoring.logger.MDCKeys;
+import io.inugami.framework.interfaces.monitoring.models.IoInfoDTO;
+import io.inugami.framework.interfaces.spi.SpiLoader;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.Session;
+import jakarta.jms.TextMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
-import javax.jms.TextMessage;
 import java.util.*;
 
-import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 import static io.inugami.monitoring.springboot.activemq.config.InugamiActiveMqConstants.*;
 
 @SuppressWarnings({"java:S1181", "java:S108"})
@@ -79,12 +81,12 @@ public class JmsIologListener extends DefaultMessageListenerContainer {
                                           .headers(headers)
                                           .build();
 
-        final MdcService mdc = MdcService.getInstance()
+        final var mdc = MdcService.getInstance()
                                          .ioinfoIoLog(result)
                                          .callType(JMS);
 
         applyIfNotNull(extractProperty(APPLICATION, message), mdc::callFrom);
-        applyIfNotNull(extractProperty(MdcService.MDCKeys.messageId, message), mdc::messageId);
+        applyIfNotNull(extractProperty(MDCKeys.messageId, message), mdc::messageId);
         applyIfNotNull(extractProperty(DEVICE_IDENTIFIER, message), mdc::deviceIdentifier);
         applyIfNotNull(extractProperty(CORRELATION_ID, message), mdc::correlationId);
         applyIfNotNull(extractProperty(CONVERSATION_ID, message), mdc::conversationId);
@@ -172,7 +174,7 @@ public class JmsIologListener extends DefaultMessageListenerContainer {
     }
 
 
-    private String extractProperty(final MdcService.MDCKeys key, final Message message) {
+    private String extractProperty(final MDCKeys key, final Message message) {
         return extractProperty(key.name(), message);
     }
 

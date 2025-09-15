@@ -1,0 +1,12 @@
+{
+  "activationDelay" : 5,
+  "component" : "app",
+  "duration" : 1,
+  "inverse" : true,
+  "level" : "ERROR",
+  "name" : "alert1",
+  "nominal" : "1.0",
+  "service" : "search",
+  "threshold" : 10.0,
+  "unit" : "HIT"
+}

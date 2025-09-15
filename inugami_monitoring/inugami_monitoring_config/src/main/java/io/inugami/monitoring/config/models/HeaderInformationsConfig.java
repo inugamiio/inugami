@@ -16,9 +16,9 @@
  */
 package io.inugami.monitoring.config.models;
 
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.functionnals.PostProcessing;
-import io.inugami.api.processors.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.exceptions.TechnicalException;
+import io.inugami.framework.interfaces.functionnals.PostProcessing;
 import lombok.*;
 
 import java.io.Serializable;
@@ -29,31 +29,20 @@ import java.io.Serializable;
  * @author patrickguillerm
  * @since Jan 14, 2019
  */
-@ToString
+@Getter
+@Setter
 @Builder(toBuilder = true)
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
-public class HeaderInformationsConfig implements PostProcessing<ConfigHandler<String, String>>, Serializable {
+public class HeaderInformationsConfig implements Serializable {
 
     private static final long serialVersionUID = 2054051980881230614L;
+    @Builder.Default
+    private DefaultHeaderInformation defaultHeader = DefaultHeaderInformation.builder().build();
+    @Builder.Default
+    private SpecificHeaders          specificHeader = SpecificHeaders.builder().build();
 
-    private DefaultHeaderInformation defaultHeader;
-    private SpecificHeaders          specificHeader;
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    @Override
-    public void postProcessing(ConfigHandler<String, String> context) throws TechnicalException {
-        if (defaultHeader == null) {
-            defaultHeader = new DefaultHeaderInformation();
-        }
-        defaultHeader.postProcessing(context);
-        if (specificHeader == null) {
-            specificHeader = new SpecificHeaders();
-        }
-    }
 
 }

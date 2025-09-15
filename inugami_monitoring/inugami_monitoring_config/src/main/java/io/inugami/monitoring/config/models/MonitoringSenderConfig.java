@@ -16,8 +16,6 @@
  */
 package io.inugami.monitoring.config.models;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import lombok.*;
 
 import java.io.Serializable;
@@ -28,21 +26,18 @@ import java.io.Serializable;
  * @author patrickguillerm
  * @since Jan 15, 2019
  */
-@EqualsAndHashCode
-@ToString
+@Getter
+@Setter
 @Builder(toBuilder = true)
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
-@XStreamAlias("sender")
 public final class MonitoringSenderConfig implements Serializable {
-
-
     private static final long serialVersionUID = -3140915351172636117L;
 
-    @XStreamAsAttribute
     private String           name;
-    private PropertiesConfig properties;
+    @Builder.Default
+    private PropertiesConfig properties = PropertiesConfig.builder().build();
 
 }

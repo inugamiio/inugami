@@ -16,7 +16,6 @@
  */
 package io.inugami.monitoring.config.models;
 
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import lombok.*;
 
 import java.io.Serializable;
@@ -28,17 +27,18 @@ import java.util.List;
  * @author patrickguillerm
  * @since Jan 16, 2019
  */
-@ToString
+@Getter
+@Setter
 @Builder(toBuilder = true)
+@ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
 public class PropertiesConfig implements Serializable {
 
     private static final long serialVersionUID = -8811481879980059114L;
 
-    @XStreamImplicit
+    @Singular("properties")
     private List<PropertyConfigModel> properties;
 
 }

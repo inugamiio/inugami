@@ -16,13 +16,10 @@
  */
 package io.inugami.monitoring.config.models;
 
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * SendersConfig
@@ -30,24 +27,16 @@ import java.util.Optional;
  * @author patrickguillerm
  * @since Jan 16, 2019
  */
-@ToString
+@Getter
+@Setter
 @Builder(toBuilder = true)
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
 public class MonitoringSendersConfig implements Serializable {
-
-
     private static final long serialVersionUID = 1553608492775168744L;
 
-    @XStreamImplicit
+    @Singular("senders")
     private List<MonitoringSenderConfig> senders;
-
-
-    public static class MonitoringSendersConfigBuilder {
-        public MonitoringSendersConfig build() {
-            return new MonitoringSendersConfig(Optional.ofNullable(senders).orElse(new ArrayList<>()));
-        }
-    }
 }

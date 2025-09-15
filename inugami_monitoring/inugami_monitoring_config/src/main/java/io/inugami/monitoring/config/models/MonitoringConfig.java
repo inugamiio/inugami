@@ -16,19 +16,9 @@
  */
 package io.inugami.monitoring.config.models;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import io.inugami.api.constants.JvmKeyValues;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.functionnals.ApplyIfNull;
-import io.inugami.api.functionnals.PostProcessing;
-import io.inugami.api.models.data.basic.JsonObject;
-import io.inugami.api.processors.ConfigHandler;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import static io.inugami.monitoring.config.tools.ApplyStrategy.applyStrategy;
-import static io.inugami.monitoring.config.tools.ApplyStrategy.applyStrategyBoolean;
+import java.io.Serializable;
 
 /**
  * MonitoringConfig
@@ -36,83 +26,36 @@ import static io.inugami.monitoring.config.tools.ApplyStrategy.applyStrategyBool
  * @author patrickguillerm
  * @since Jan 14, 2019
  */
-@Setter
 @Getter
-@XStreamAlias("monitoring")
-public class MonitoringConfig implements PostProcessing<ConfigHandler<String, String>>, JsonObject, ApplyIfNull {
+@Setter
+@Builder(toBuilder = true)
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
+public class MonitoringConfig implements Serializable {
 
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
-    private static final long serialVersionUID = -8578418466667776898L;
+    private static final long    serialVersionUID = -8578418466667776898L;
+    @Builder.Default
+    private              Boolean enable           = Boolean.TRUE;
+    private              String  env;
+    private              String  asset;
+    private              String  hostname;
+    private              String  instanceName;
+    private              String  instanceNumber;
+    private              String  maxSensorsTasksThreads;
+    private              String  applicationVersion;
 
-    @XStreamAsAttribute
-    private Boolean enable;
+    @Builder.Default
+    private HeaderInformationsConfig header       = HeaderInformationsConfig.builder().build();
+    @Builder.Default
+    private PropertiesConfig         properties   = PropertiesConfig.builder().build();
+    @Builder.Default
+    private MonitoringSendersConfig  senders      = MonitoringSendersConfig.builder().build();
+    @Builder.Default
+    private SensorsConfig            sensors      = SensorsConfig.builder().build();
+    @Builder.Default
+    private InterceptorsConfig       interceptors = InterceptorsConfig.builder().build();
 
-    @XStreamAsAttribute
-    private String env;
-
-    @XStreamAsAttribute
-    private String asset;
-
-    @XStreamAsAttribute
-    private String hostname;
-
-    @XStreamAsAttribute
-    private String instanceName;
-
-    @XStreamAsAttribute
-    private String instanceNumber;
-
-    @XStreamAsAttribute
-    private String maxSensorsTasksThreads;
-
-    @XStreamAsAttribute
-    private String applicationVersion;
-
-    private HeaderInformationsConfig header;
-
-    private PropertiesConfig properties;
-
-    private MonitoringSendersConfig senders;
-
-    private SensorsConfig sensors;
-
-    private InterceptorsConfig interceptors;
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    @Override
-    public void postProcessing(final ConfigHandler<String, String> context) throws TechnicalException {
-
-        if (header == null) {
-            header = new HeaderInformationsConfig();
-        }
-
-        senders = senders == null ? new MonitoringSendersConfig() : senders;
-        sensors = sensors == null ? new SensorsConfig() : sensors;
-
-        //@formatter:off
-        enable                 = applyStrategyBoolean(JvmKeyValues.MONITORING_ENABLE, enable, true);
-        env                    = applyStrategy(JvmKeyValues.ENVIRONMENT,env,"prod");
-        asset                  = applyStrategy(JvmKeyValues.ASSET,asset,context.grabOrDefault("application.artifactId",null));
-        hostname               = applyStrategy(JvmKeyValues.APPLICATION_HOST_NAME,hostname);
-        instanceName           = applyStrategy(JvmKeyValues.INSTANCE,instanceName);
-        instanceNumber         = applyStrategy(JvmKeyValues.INSTANCE_NUMBER,instanceNumber); 
-        maxSensorsTasksThreads = applyIfNull(maxSensorsTasksThreads , () -> "20");
-        //@formatter:on
-
-        header.postProcessing(context);
-
-    }
-
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    @Override
-    public String toString() {
-        return convertToJson();
-    }
 
 }

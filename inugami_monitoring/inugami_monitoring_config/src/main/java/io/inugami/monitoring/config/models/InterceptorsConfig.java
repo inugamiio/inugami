@@ -16,10 +16,6 @@
  */
 package io.inugami.monitoring.config.models;
 
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.functionnals.PostProcessing;
-import io.inugami.api.processors.ConfigHandler;
 import lombok.*;
 
 import java.io.Serializable;
@@ -31,26 +27,19 @@ import java.util.List;
  * @author patrickguillerm
  * @since Jan 16, 2019
  */
-@ToString
+@Getter
+@Setter
 @Builder(toBuilder = true)
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
-public class InterceptorsConfig implements PostProcessing<ConfigHandler<String, String>>, Serializable {
+public class InterceptorsConfig implements  Serializable {
 
     private static final long serialVersionUID = 3499116437168204061L;
 
-    @XStreamImplicit
+    @Singular("interceptors")
     private List<InterceptorConfig> interceptors;
 
-    @Override
-    public void postProcessing(ConfigHandler<String, String> context) throws TechnicalException {
-        if (interceptors != null) {
-            for (InterceptorConfig interceptor : interceptors) {
-                interceptor.postProcessing(context);
-            }
-        }
-    }
 
 }

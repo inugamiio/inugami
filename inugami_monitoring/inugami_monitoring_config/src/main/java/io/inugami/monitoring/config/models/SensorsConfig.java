@@ -16,10 +16,6 @@
  */
 package io.inugami.monitoring.config.models;
 
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import io.inugami.api.exceptions.TechnicalException;
-import io.inugami.api.functionnals.PostProcessing;
-import io.inugami.api.processors.ConfigHandler;
 import lombok.*;
 
 import java.io.Serializable;
@@ -31,29 +27,16 @@ import java.util.List;
  * @author patrickguillerm
  * @since Jan 16, 2019
  */
-@EqualsAndHashCode
-@ToString
+@Getter
+@Setter
 @Builder(toBuilder = true)
+@ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
-public final class SensorsConfig implements PostProcessing<ConfigHandler<String, String>>, Serializable {
-
-
-    private static final long serialVersionUID = -7619627153181833149L;
-
-    @XStreamImplicit
-    private List<MonitoringSensorConfig> sensors;
-
-
-    @Override
-    public void postProcessing(ConfigHandler<String, String> context) throws TechnicalException {
-        if (sensors != null) {
-            for (MonitoringSensorConfig sensor : sensors) {
-                sensor.postProcessing(context);
-            }
-        }
-    }
+public final class SensorsConfig implements Serializable {
+    private static final long                         serialVersionUID = -7619627153181833149L;
+    @Singular("sensors")
+    private              List<MonitoringSensorConfig> sensors;
 
 }

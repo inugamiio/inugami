@@ -1,0 +1,270 @@
+/* --------------------------------------------------------------------
+ *  Inugami
+ * --------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package io.inugami.framework.commons.threads;
+
+
+import io.inugami.framework.api.monitoring.RequestContext;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.models.tools.Chrono;
+import io.inugami.framework.interfaces.monitoring.MonitoringInitializer;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
+import io.inugami.framework.interfaces.spi.SpiLoader;
+import io.inugami.framework.interfaces.threads.CallableWithErrorResult;
+import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
+
+/**
+ * ThreadsExecutor
+ *
+ * @author patrickguillerm
+ * @since 24 mars 2018
+ */
+@Slf4j
+@SuppressWarnings({"java:S3014", "java:S2142", "java:S1874"})
+public class RunAndCloseService<T> implements ThreadFactory {
+
+    // =================================================================================================================
+    // ATTRIBUTES
+    // =================================================================================================================
+    private static final Logger                                LOGGER                = LoggerFactory.getLogger(RunAndCloseService.class);
+    private static final List<MonitoringInitializer>           monitoringInitializer = initMonitoringInitializers();
+    private final        String                                threadsName;
+    private final        List<Callable<T>>                     tasks;
+    private final        Map<Future<T>, Callable<T>>           tasksAndFutures;
+    private final        long                                  timeout;
+    private final        BiFunction<Exception, Callable<T>, T> onError;
+    private final        ExecutorService                       executor;
+    private final        CompletionService<T>                  completion;
+    private final        ThreadGroup                           threadGroup;
+    private final        AtomicInteger                         threadIndex           = new AtomicInteger();
+    private final List<T>     data                  = new ArrayList<>();
+    private final RequestData requestContext;
+
+
+    // =================================================================================================================
+    // CONSTRUCTORS
+    // =================================================================================================================
+    private static List<MonitoringInitializer> initMonitoringInitializers() {
+        final List<MonitoringInitializer> spiServices = SpiLoader.getInstance()
+                                                                 .loadSpiService(MonitoringInitializer.class);
+        return spiServices == null ? Collections.emptyList() : spiServices;
+    }
+
+    @SafeVarargs
+    public RunAndCloseService(final String threadsName, final long timeout, final int nbThreads,
+                              final BiFunction<Exception, Callable<T>, T> onError, final Callable<T>... tasks) {
+        this(threadsName, timeout, nbThreads, Arrays.asList(tasks), onError);
+    }
+
+    @SafeVarargs
+    public RunAndCloseService(final String threadsName, final long timeout, final int nbThreads,
+                              final Callable<T>... tasks) {
+        this(threadsName, timeout, nbThreads, Arrays.asList(tasks), null);
+    }
+
+    public RunAndCloseService(final String threadsName, final long timeout, final int nbThreads,
+                              final List<Callable<T>> tasks) {
+        this(threadsName, timeout, nbThreads, tasks, null);
+    }
+
+    public RunAndCloseService(final String threadsName, final long timeout, final int nbThreads,
+                              final List<Callable<T>> tasks, final BiFunction<Exception, Callable<T>, T> onError) {
+        this(threadsName, timeout, nbThreads, null, tasks, onError);
+    }
+
+    @Builder
+    public RunAndCloseService(final String threadsName,
+                              final long timeout,
+                              final int nbThreads,
+                              final ExecutorService executor,
+                              final List<Callable<T>> tasks,
+                              final BiFunction<Exception, Callable<T>, T> onError) {
+        super();
+        Asserts.assertNotNull(tasks);
+
+        this.tasks = tasks;
+
+        ExecutorService currentExecutor = executor;
+        if (executor == null) {
+            int howManyThreads = tasks.size() < nbThreads ? tasks.size() : nbThreads;
+            if (howManyThreads <= 0) {
+                howManyThreads = 1;
+            }
+
+            currentExecutor = Executors.newFixedThreadPool(howManyThreads, this);
+        }
+        this.executor = currentExecutor;
+        this.threadsName = threadsName;
+        this.timeout = timeout;
+        this.onError = onError;
+        tasksAndFutures = new HashMap<>();
+        threadGroup = Thread.currentThread().getThreadGroup();
+
+        completion = new ExecutorCompletionService<>(currentExecutor);
+        this.requestContext = RequestContext.getInstance();
+
+    }
+
+
+    // =================================================================================================================
+    // METHODS
+    // =================================================================================================================
+    public List<T> run() {
+        final List<Future<T>> futures   = sumitTask();
+        int                   tasksLeft = futures.size();
+        long                  timeLeft  = timeout;
+        final Chrono          chrono    = Chrono.startChrono();
+
+        while ((tasksLeft > 0) && (chrono.snapshot().getDuration() < timeout)) {
+            timeLeft = computeTimeLeft(timeLeft, chrono);
+            Future<T> itemFuture = null;
+            T         taskData   = null;
+            try {
+                itemFuture = completion.poll(timeLeft, TimeUnit.MILLISECONDS);
+                if (itemFuture != null) {
+                    taskData = itemFuture.get();
+                    tasksLeft = tasksLeft - 1;
+                }
+            } catch (final ExecutionException | InterruptedException error) {
+                tasksLeft = tasksLeft - 1;
+            }
+
+            if (taskData != null) {
+                data.add(taskData);
+            }
+        }
+        executor.shutdown();
+
+        data.addAll(handlerTimeoutTask());
+        return data;
+    }
+
+    private long computeTimeLeft(final long timeLeft, final Chrono chrono) {
+        final long result = timeLeft - chrono.snapshot().getDuration();
+        return result < 0 ? 0 : result;
+    }
+
+    // =================================================================================================================
+    // PRIVATE
+    // =================================================================================================================
+    private List<Future<T>> sumitTask() {
+        final List<Future<T>> result = new ArrayList<>();
+        for (final Callable<T> task : tasks) {
+            final Future<T> future = completion.submit(new CallableTask<>(task, this));
+            result.add(future);
+            tasksAndFutures.put(future, task);
+        }
+        return result;
+    }
+
+    private class CallableTask<U> implements Callable<U> {
+        private final Callable<U> task;
+
+        private final RunAndCloseService<U> runAndCloseService;
+
+        public CallableTask(final Callable<U> task, final RunAndCloseService<U> runAndCloseService) {
+            this.task = task;
+            this.runAndCloseService = runAndCloseService;
+        }
+
+        @Override
+        public U call() throws Exception {
+            U result = null;
+            try {
+                result = task.call();
+            } catch (final Exception e) {
+                LOGGER.error(e.getMessage(), e);
+                result = runAndCloseService.processHandlerError(e, task);
+            }
+
+            return result;
+        }
+
+    }
+
+    // =================================================================================================================
+    // NEW THREAD
+    // =================================================================================================================
+    @Override
+    public Thread newThread(final Runnable runnable) {
+        final String name = String.join(".", threadsName, String.valueOf(threadIndex.getAndIncrement()));
+        final Thread result = new MonitoredThread(threadGroup, runnable, name, 10, requestContext,
+                                                  monitoringInitializer);
+        result.setDaemon(false);
+        return result;
+    }
+
+    // =================================================================================================================
+    // ERRORS
+    // =================================================================================================================
+    private List<T> handlerTimeoutTask() {
+        final List<T> result = new ArrayList<>();
+        for (final Map.Entry<Future<T>, Callable<T>> entry : tasksAndFutures.entrySet()) {
+            if (!entry.getKey().isDone()) {
+                final Callable<T> task     = entry.getValue();
+                final T           taskData = processHandlerError(null, task);
+                if (taskData != null) {
+                    result.add(taskData);
+                }
+            }
+        }
+        return result;
+    }
+
+    private synchronized T processHandlerError(final Exception error, final Callable<T> task) {
+        T result = null;
+        if (onError == null) {
+            result = handlerError(error, task);
+        } else {
+            result = onError.apply(error, task);
+        }
+        return result;
+    }
+
+    private T handlerError(final Exception error, final Callable<T> task) {
+        T result = null;
+        if (task instanceof CallableWithErrorResult) {
+            if (error == null) {
+                result = ((CallableWithErrorResult<T>) task).getTimeoutResult();
+            } else {
+                result = ((CallableWithErrorResult<T>) task).getErrorResult(error);
+            }
+        }
+
+        return result;
+    }
+
+    public void forceShutdown() {
+        if (!executor.isShutdown()) {
+            if (!executor.isTerminated()) {
+                try {
+                    executor.awaitTermination(0, TimeUnit.MILLISECONDS);
+                } catch (final InterruptedException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            executor.shutdown();
+        }
+    }
+}

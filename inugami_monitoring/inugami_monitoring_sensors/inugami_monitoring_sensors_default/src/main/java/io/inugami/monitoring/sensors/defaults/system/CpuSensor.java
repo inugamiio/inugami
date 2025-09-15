@@ -16,13 +16,14 @@
  */
 package io.inugami.monitoring.sensors.defaults.system;
 
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.sensors.MonitoringSensor;
-import io.inugami.api.processors.ConfigHandler;
-import io.inugami.api.tools.Comparators;
+import io.inugami.framework.api.tools.Comparators;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.models.number.FloatNumber;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 import io.inugami.monitoring.api.tools.IntervalValues;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
@@ -36,6 +37,7 @@ import java.util.List;
  * @author patrickguillerm
  * @since Jan 17, 2019
  */
+@Slf4j
 @SuppressWarnings({"java:S1172", "java:S3011"})
 public class CpuSensor implements MonitoringSensor {
 
@@ -69,7 +71,10 @@ public class CpuSensor implements MonitoringSensor {
         super();
         this.interval = interval;
         this.percentil = configuration.grab("percentil", 0.95);
-        values = new IntervalValues<>(this::extractCpuUsage, configuration.grab("intervalValuesDelais", 1000));
+        values = IntervalValues.<Double>builder()
+                               .handler(this::extractCpuUsage)
+                               .interval(configuration.grab("intervalValuesDelais", 1000))
+                               .build();
         timeUnit = configuration.grabOrDefault("timeUnit", "");
 
         Method cpuloadMethod = null;
@@ -100,7 +105,7 @@ public class CpuSensor implements MonitoringSensor {
             try {
                 result = (Double) getProcessCpuLoad.invoke(jmx);
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                Loggers.DEBUG.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
             }
         }
 
@@ -119,9 +124,10 @@ public class CpuSensor implements MonitoringSensor {
 
     private List<GenericMonitoringModel> buildGenericMonitoringModel(final Double resultValue) {
         return List.of(GenericMonitoringModelTools.initResultBuilder()
+                                                  .toBuilder()
                                                   .counterType("system")
                                                   .service("cpu")
-                                                  .addValue(resultValue)
+                                                  .value(FloatNumber.of(resultValue))
                                                   .timeUnit(GenericMonitoringModelTools.buildTimeUnit(timeUnit, interval))
                                                   .valueType("percent")
                                                   .build());

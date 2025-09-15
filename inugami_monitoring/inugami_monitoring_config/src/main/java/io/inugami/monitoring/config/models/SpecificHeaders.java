@@ -16,14 +16,9 @@
  */
 package io.inugami.monitoring.config.models;
 
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,24 +27,17 @@ import java.util.List;
  * @author patrickguillerm
  * @since Jan 16, 2019
  */
+@Getter
+@Setter
 @Builder(toBuilder = true)
+@ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 public class SpecificHeaders implements Serializable {
-
     private static final long serialVersionUID = 5978552740744597100L;
 
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
-    @XStreamImplicit
+    @Singular("specificHeader")
     private List<SpecificHeader> specificHeader;
 
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-    public List<SpecificHeader> getSpecificHeader() {
-        return specificHeader == null ? new ArrayList<>() : specificHeader;
-    }
 }

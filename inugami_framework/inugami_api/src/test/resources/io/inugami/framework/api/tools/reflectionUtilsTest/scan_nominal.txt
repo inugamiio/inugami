@@ -1,0 +1,5 @@
+io.inugami.framework.api.tools.ConfigTemplateValuesTest
+io.inugami.framework.api.tools.FieldGetterSetterTest
+io.inugami.framework.api.tools.PathUtilsTest
+io.inugami.framework.api.tools.ReflectionUtilsTest
+io.inugami.framework.api.tools.StringToolsTest

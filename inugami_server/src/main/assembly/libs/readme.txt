@@ -1,1 +1,0 @@
-Les librairies externalisées sont présentes dans ce dossier

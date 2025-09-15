@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ======================================================================= 
+    = MAVEN
+    ======================================================================== -->
+    <prerequisites>
+        <maven>3.2.3</maven>
+    </prerequisites>
+
+    <!-- ======================================================================= 
+    = PARENT
+    ======================================================================== -->
+    <parent>
+        <groupId>io.inugami</groupId>
+        <artifactId>inugami</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
+
+
+    <!-- ======================================================================= 
+    = PROJECT
+    ======================================================================== -->
+    <artifactId>inugami_framework</artifactId>
+    <groupId>io.inugami.framework</groupId>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <packaging>pom</packaging>
+
+
+    <!-- =======================================================================
+    = MODULES
+    ======================================================================== -->
+    <modules>
+        <module>inugami_api_interfaces</module>
+        <module>inugami_api</module>
+        <module>inugami_configurations</module>
+        <module>inugami_common</module>
+    </modules>
+
+</project>

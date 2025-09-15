@@ -1,65 +1,100 @@
+/* --------------------------------------------------------------------
+ *  Inugami
+ * --------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package io.inugami.monitoring.core.interceptors.spi;
 
-import io.inugami.api.exceptions.DefaultWarning;
-import io.inugami.api.exceptions.WarningContext;
-import io.inugami.api.loggers.Loggers;
-import io.inugami.api.monitoring.MdcService;
-import io.inugami.api.monitoring.data.ResponseData;
-import io.inugami.api.monitoring.data.ResquestData;
-import io.inugami.api.monitoring.exceptions.ErrorResult;
 import io.inugami.commons.test.dto.AssertLogContext;
+import io.inugami.framework.api.exceptions.WarningContext;
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.interfaces.exceptions.DefaultWarning;
+import io.inugami.framework.interfaces.monitoring.ErrorResult;
+import io.inugami.framework.interfaces.monitoring.IoLogContentDisplayResolverSPI;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
+import io.inugami.framework.interfaces.monitoring.data.ResponseData;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import io.inugami.monitoring.core.spi.IoLogInterceptor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 
 import static io.inugami.commons.test.UnitTestHelper.assertLogs;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
 
+@ExtendWith(MockitoExtension.class)
 class IoLogInterceptorTest {
-
+    // =================================================================================================================
+    // ATTRIBUTES
+    // =================================================================================================================
     private static final Long   DATE_TIME = LocalDateTime.of(2023, 7, 1, 14, 54, 0).toEpochSecond(ZoneOffset.UTC);
     private static final String UID       = "fd508efe-9b7e-403f-b0bc-44e379d0171d";
 
+    @Mock
+    private IoLogContentDisplayResolverSPI resolver;
+
+    // =================================================================================================================
+    // INIT
+    // =================================================================================================================
     @AfterEach
     @BeforeEach
     public void init() {
         MdcService.getInstance().clear();
         WarningContext.clean();
+        lenient().when(resolver.display(any())).thenReturn(true);
     }
+
 
     // =================================================================================================================
     // onBegin
     // =================================================================================================================
     @Test
     void onBegin_nominal() {
-        final ResquestData request = ResquestData.builder()
-                                                 .method("POST")
-                                                 .uri("/my/service")
-                                                 .contextPath("/application")
-                                                 .addHeader("app", "myApplication")
-                                                 .content("{\"name\":\"John Smith\"}")
-                                                 .build();
-        processOnBegin(request, "monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_nominal.json");
+        final RequestData request = RequestData.builder()
+                                               .method("POST")
+                                               .uri("/my/service")
+                                               .contextPath("/application")
+                                               .addHeader("app", "myApplication")
+                                               .content("{\"name\":\"John Smith\"}")
+                                               .build();
+        processOnBegin(request, "io/inugami/monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_nominal.json");
     }
 
 
     @Test
     void onBegin_withoutContextPath() {
-        final ResquestData request = ResquestData.builder()
+        final RequestData request = RequestData.builder()
                                                  .method("POST")
                                                  .uri("/my/service")
                                                  .addHeader("app", "myApplication")
                                                  .content("{\"name\":\"John Smith\"}")
                                                  .build();
 
-        processOnBegin(request, "monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_withoutContextPath.json");
+        processOnBegin(request, "io/inugami/monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_withoutContextPath.json");
     }
 
     @Test
     void onBegin_withContextPathInUri() {
-        final ResquestData request = ResquestData.builder()
+        final RequestData request = RequestData.builder()
                                                  .method("POST")
                                                  .uri("/application/my/service")
                                                  .contextPath("/application")
@@ -67,7 +102,7 @@ class IoLogInterceptorTest {
                                                  .content("{\"name\":\"John Smith\"}")
                                                  .build();
 
-        processOnBegin(request, "monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_withContextPathInUri.json");
+        processOnBegin(request, "io/inugami/monitoring/core/interceptors/spi/ioLogInterceptor/onBegin_withContextPathInUri.json");
     }
 
     // =================================================================================================================
@@ -75,7 +110,7 @@ class IoLogInterceptorTest {
     // =================================================================================================================
     @Test
     void onDone_nominal() {
-        final ResquestData request = ResquestData.builder()
+        final RequestData request = RequestData.builder()
                                                  .method("POST")
                                                  .uri("/my/service")
                                                  .contextPath("/application")
@@ -96,12 +131,12 @@ class IoLogInterceptorTest {
                                                                .message("account need to be confirmed ")
                                                                .messageDetail("some detail")
                                                                .build());
-        processOnDone(request, responseData, null, "monitoring/core/interceptors/spi/ioLogInterceptor/onDone_nominal.json");
+        processOnDone(request, responseData, null, "io/inugami/monitoring/core/interceptors/spi/ioLogInterceptor/onDone_nominal.json");
     }
 
     @Test
     void onDone_withError() {
-        final ResquestData request = ResquestData.builder()
+        final RequestData request = RequestData.builder()
                                                  .method("POST")
                                                  .uri("/my/service")
                                                  .addHeader("app", "myApplication")
@@ -124,7 +159,7 @@ class IoLogInterceptorTest {
                                                         .fallBack("{}")
                                                         .stack("io.inugami....")
                                                         .build(),
-                      "monitoring/core/interceptors/spi/ioLogInterceptor/onDone_withError.json");
+                      "io/inugami/monitoring/core/interceptors/spi/ioLogInterceptor/onDone_withError.json");
     }
 
 
@@ -132,10 +167,10 @@ class IoLogInterceptorTest {
     // TOOLS
     // =================================================================================================================
     IoLogInterceptor buildInterceptor() {
-        return new IoLogInterceptor();
+        return new IoLogInterceptor(List.of(resolver));
     }
 
-    private void processOnBegin(final ResquestData request, final String path) {
+    private void processOnBegin(final RequestData request, final String path) {
         assertLogs(AssertLogContext.builder()
                                    .process(() -> buildInterceptor().onBegin(request))
                                    .addPattern(Loggers.IOLOG_NAME)
@@ -144,7 +179,7 @@ class IoLogInterceptorTest {
 
     }
 
-    private void processOnDone(final ResquestData request,
+    private void processOnDone(final RequestData request,
                                final ResponseData responseData,
                                final ErrorResult error,
                                final String path) {

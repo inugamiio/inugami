@@ -29,7 +29,7 @@ public class RequestTemplateBuilder {
 
 
     public static class RequestTemplateBuilderBuilder {
-        public RequestTemplateBuilder.RequestTemplateBuilderBuilder addHeader(final String key, final String value) {
+        public RequestTemplateBuilderBuilder addHeader(final String key, final String value) {
             if (headers == null) {
                 headers = new LinkedHashMap<>();
             }
@@ -44,7 +44,7 @@ public class RequestTemplateBuilder {
             return this;
         }
 
-        public RequestTemplateBuilder.RequestTemplateBuilderBuilder addQuery(final String key, final String value) {
+        public RequestTemplateBuilderBuilder addQuery(final String key, final String value) {
             if (queries == null) {
                 queries = new LinkedHashMap<>();
             }

@@ -1,0 +1,10 @@
+{
+  "args" : [ ],
+  "bean" : "io.inugami.framework.commons.spring.feature.FeatureAopAspectTest$SimpleService",
+  "enabledByDefault" : true,
+  "fallback" : "",
+  "featureName" : "nominal",
+  "method" : "java.lang.String io.inugami.framework.commons.spring.feature.FeatureAopAspectTest$SimpleServicenominal()",
+  "monitored" : true,
+  "propertyPrefix" : "io.inugami.framework.commons.spring.feature.FeatureAopAspectTest$SimpleService"
+}

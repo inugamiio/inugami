@@ -1,0 +1,93 @@
+########################################################################################################################
+# ApplicationConfig
+########################################################################################################################
+
+#=======================================================================================================================
+# APPLICATION
+#=======================================================================================================================
+alertingDynamicMaxThreads: 50
+alertingEnable: true
+applicationName: inugami-tv
+enableTechnicalsUsers: true
+maxPluginRunning: 5
+maxPluginRunningStandalone: 20
+maxRunningEvents: 5
+maxThreads: 1000
+scriptTimeout: 60000
+timeout: 1200000
+
+#=======================================================================================================================
+# PROPERTIES
+#=======================================================================================================================
+properties:
+  - key: foo
+    value: bar
+  - key: security.max.level
+    value: 1000
+
+#=======================================================================================================================
+# httpDefaultConfig
+#=======================================================================================================================
+httpDefaultConfig:
+  timeout: 65000
+  socketTimeout: 60000
+  ttl: 30000
+  maxConnections: 300
+  maxPerRoute: 50
+  headerFields:
+    - name: APPLICATION-NAME
+      value: inugami
+    - name: APPLICATION-HOSTNAME
+      value: instanceName
+
+#=======================================================================================================================
+# dataStorage
+#=======================================================================================================================
+dataStorage:
+  driver: org.h2.Driver
+  dialect: org.hibernate.dialect.H2Dialect
+  url: jdbc:h2:mem:inugami
+  user: sa
+  password: ""
+
+#=======================================================================================================================
+# security
+#=======================================================================================================================
+security:
+  - name: ldap
+    configs:
+      "security.ldap.domain": FOOBAR
+      "security.ldap.rootDn": "dc=joegroup,dc=org"
+      "security.ldap.url": ldaps://1.2.3.4:1234
+      "security.ldap.referral": follow
+      "security.ldap.searchFilter": (name={0})
+      "security.ldap.roleBase": "dc=joegroup,dc=org"
+      "security.ldap.roleSearch": (member={0})
+      "security.ldap.timeout": 5000
+    roles:
+      - name: admin
+        level: 1000
+        matchers:
+          - expr: CN=joe-admin
+            type: EXACT
+          - expr: ".*JOE.*"
+
+      - name: user
+        level: 1
+        matchers:
+          - expr: CN=foobar
+          - expr: OU=foobarService
+
+  - name: technical
+    users:
+      - login: admin
+        password: ada76c3861a84664b172
+        token: ada76c38-61a8-4664-b172
+        firstName: Joe
+        lastName: Administrator
+
+      - login: user
+        password: da3b40659e3b7ff9f4d2ccfe
+        token: a3b-4065-9e3b-7ff9f4d2-ccfe
+        firstName: Joe
+        lastName: User

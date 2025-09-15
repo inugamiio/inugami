@@ -16,10 +16,12 @@
  */
 package io.inugami.monitoring.providers.log;
 
-import io.inugami.api.monitoring.models.GenericMonitoringModel;
-import io.inugami.api.monitoring.senders.MonitoringSender;
-import io.inugami.api.monitoring.senders.MonitoringSenderException;
-import io.inugami.api.processors.ConfigHandler;
+
+import io.inugami.framework.api.marshalling.JsonMarshaller;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
+import io.inugami.framework.interfaces.monitoring.senders.MonitoringSenderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,8 +63,25 @@ public class LogSender implements MonitoringSender {
     @Override
     public void process(final List<GenericMonitoringModel> data) throws MonitoringSenderException {
         for (final GenericMonitoringModel item : data) {
-            logger.info(item.convertToJson());
+            final String json = convertToJson(item);
+            if (json == null) {
+                continue;
+            }
+            logger.info(json);
         }
+    }
+
+    private String convertToJson(final GenericMonitoringModel value) {
+        try {
+            return JsonMarshaller.getInstance().getDefaultObjectMapper().writeValueAsString(value);
+        } catch (Throwable e) {
+            if (logger.isDebugEnabled()) {
+                logger.error(e.getMessage(), e);
+            }
+            return null;
+        }
+
+
     }
 
     // =========================================================================

@@ -1,0 +1,134 @@
+########################################################################################################################
+# PluginConfiguration
+########################################################################################################################
+enable: true
+
+
+#=======================================================================================================================
+# gav
+#=======================================================================================================================
+gav:
+  groupId: plugin-group-id
+  artifactId: plugin-artifact-id
+  version: 0.1
+
+#=======================================================================================================================
+# resources
+#=======================================================================================================================
+resources:
+  - name: theme.css
+    path: inugami_plugin/css/
+    type: CSS
+
+  - name: formatter.js
+    path: inugami_plugin/js/
+    type: JAVASCRIPT
+
+  - name: loader.js
+    path: inugami_plugin/js/
+    type: JAVASCRIPT
+
+  - name: index.html
+    path: inugami_plugin/
+    type: PAGE
+
+#=======================================================================================================================
+# properties
+#=======================================================================================================================
+properties:
+  data: FoobarData
+  joe: "Joe {{data}}"
+
+#=======================================================================================================================
+# PROVIDERS
+#=======================================================================================================================
+providers:
+  - name: "foobar.system"
+    className: io.inugami.plugins.callers.SystemCaller
+    type: system
+    configs:
+      data: FoobarData
+
+#=======================================================================================================================
+# processors
+#=======================================================================================================================
+processors:
+  - name: foo
+    className: io.inugami.plugins.processors.Foo
+
+#=======================================================================================================================
+# listeners
+#=======================================================================================================================
+listeners:
+  - name: customListener
+    className: io.inugami.plugins.listeners.CustomListerner
+
+#=======================================================================================================================
+# processors
+#=======================================================================================================================
+eventsFiles:
+  - foobar.yaml
+  - titi.yaml
+
+#=======================================================================================================================
+# security
+#=======================================================================================================================
+security:
+  - name: ldap
+    configs:
+      "security.ldap.domain": FOOBAR
+      "security.ldap.rootDn": "dc=joegroup,dc=org"
+      "security.ldap.url": ldaps://1.2.3.4:1234
+      "security.ldap.referral": follow
+      "security.ldap.searchFilter": (name={0})
+      "security.ldap.roleBase": "dc=joegroup,dc=org"
+      "security.ldap.roleSearch": (member={0})
+      "security.ldap.timeout": 5000
+    roles:
+      - name: admin
+        level: 1000
+        matchers:
+          - expr: CN=joe-admin
+            type: EXACT
+          - expr: ".*JOE.*"
+
+      - name: user
+        level: 1
+        matchers:
+          - expr: CN=foobar
+          - expr: OU=foobarService
+
+      - name: technical
+        users:
+          - login: admin
+            password: ada76c3861a84664b172
+            token: ada76c38-61a8-4664-b172
+            firstName: Joe
+            lastName: Administrator
+
+          - login: user
+            password: da3b40659e3b7ff9f4d2ccfe
+            token: a3b-4065-9e3b-7ff9f4d2-ccfe
+            firstName: Joe
+            lastName: User
+#=======================================================================================================================
+# alertings
+#=======================================================================================================================
+alertings:
+  - name: simpleGraphiteAlerting
+    className: "{{simpleGraphiteAlerting}}"
+
+  - name: withOptionAlerting
+    className: org.foo.bar.Alerting
+    configs:
+      "sender.sse": SseAlertingSenderService
+      "min-level": warn
+
+dependencies:
+  - groupId: plugin-group-id-foobar
+    artifactId: other-plugin
+    version: 0.15
+
+  - groupId: org.foo.bar
+    artifactId: plugin-joe
+    version: 0.2

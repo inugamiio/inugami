@@ -1,12 +1,13 @@
 package io.inugami.monitoring.springboot.request;
 
-import io.inugami.api.monitoring.JavaRestMethodDTO;
-import io.inugami.api.monitoring.JavaRestMethodTracker;
-import io.inugami.api.monitoring.MdcService;
+
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.interfaces.monitoring.JavaRestMethodDTO;
+import io.inugami.framework.interfaces.monitoring.JavaRestMethodTracker;
 import org.springframework.web.bind.annotation.*;
 
-import static io.inugami.api.functionnals.FunctionalUtils.applyIfNotNull;
-import static io.inugami.api.tools.ReflectionUtils.getAnnotation;
+import static io.inugami.framework.api.tools.ReflectionUtils.getAnnotation;
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
 @SuppressWarnings({"java:S1172"})
 public class SpringRestMethodTracker implements JavaRestMethodTracker {

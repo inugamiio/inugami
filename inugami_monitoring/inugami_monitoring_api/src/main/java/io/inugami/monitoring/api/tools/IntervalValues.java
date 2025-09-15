@@ -16,9 +16,11 @@
  */
 package io.inugami.monitoring.api.tools;
 
-import io.inugami.api.ctx.BootstrapContext;
-import io.inugami.api.exceptions.Asserts;
-import io.inugami.api.loggers.Loggers;
+import io.inugami.framework.interfaces.ctx.BootstrapContext;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,7 @@ import java.util.function.Supplier;
  * @author patrickguillerm
  * @since Jan 17, 2019
  */
+@Slf4j
 @SuppressWarnings({"java:S2142", "java:S1181"})
 public class IntervalValues<T> implements BootstrapContext<Void> {
 
@@ -53,14 +56,7 @@ public class IntervalValues<T> implements BootstrapContext<Void> {
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    public IntervalValues(final Supplier<T> handler, final long interval) {
-        this(handler, null, interval);
-    }
-
-    public IntervalValues(final Consumer<Queue<T>> consumer, final long interval) {
-        this(null, consumer, interval);
-    }
-
+    @Builder
     public IntervalValues(final Supplier<T> handler, final Consumer<Queue<T>> consumer, final long interval) {
         super();
         Asserts.assertTrue("interval delais must be equals or bigger than 100ms!", interval >= 100);
@@ -80,7 +76,7 @@ public class IntervalValues<T> implements BootstrapContext<Void> {
             try {
                 executor.awaitTermination(0, TimeUnit.MILLISECONDS);
             } catch (final Throwable e) {
-                Loggers.DEBUG.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
             }
         }
     }

@@ -16,17 +16,18 @@
  */
 package io.inugami.monitoring.core.interceptors;
 
-import io.inugami.api.exceptions.CurrentWarningContext;
-import io.inugami.api.exceptions.Warning;
-import io.inugami.api.exceptions.WarningContext;
-import io.inugami.api.exceptions.WarningTracker;
-import io.inugami.api.monitoring.MdcCleanerSPI;
-import io.inugami.api.spi.SpiLoader;
+import io.inugami.framework.api.exceptions.CurrentWarningContext;
+import io.inugami.framework.api.exceptions.WarningContext;
+import io.inugami.framework.interfaces.exceptions.Warning;
+import io.inugami.framework.interfaces.exceptions.WarningTracker;
+import io.inugami.framework.interfaces.monitoring.MdcCleanerSPI;
+import io.inugami.framework.interfaces.monitoring.ResponseListener;
+import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.monitoring.core.interceptors.mdc.DefaultMdcCleaner;
 import io.inugami.monitoring.core.interceptors.mdc.MdcCleaner;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;

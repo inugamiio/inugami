@@ -1,0 +1,266 @@
+/* --------------------------------------------------------------------
+ *  Inugami
+ * --------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package io.inugami.framework.configuration.services;
+
+import io.inugami.framework.api.tools.ConfigTemplateValues;
+import io.inugami.framework.configuration.services.functions.FunctionsServices;
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.ProviderAttributFunction;
+import io.inugami.framework.interfaces.exceptions.Asserts;
+import io.inugami.framework.interfaces.spi.SpiLoader;
+import io.inugami.framework.interfaces.tools.TemplateProviderSPI;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+
+/**
+ * ConfigHandlerService
+ *
+ * @author patrick_guillerm
+ * @since 5 janv. 2017
+ */
+@SuppressWarnings({"java:S1068", "java:S1172", "java:S2160"})
+@Slf4j
+public class ConfigHandlerOptionalHashMap extends HashMap<String, String> implements ConfigHandler<String, String> {
+
+    // =========================================================================
+    // ATTRIBUTES
+    // =========================================================================
+    /**
+     * The Constant serialVersionUID.
+     */
+    private static final    long                serialVersionUID   = -6282728615557622361L;
+    private static final    Pattern             BOOLEAN_MATCH      = Pattern.compile("^(true|false|yes|no|y|n)$",
+                                                                                     Pattern.CASE_INSENSITIVE);
+    private static final    Pattern             BOOLEAN_TRUE_MATCH = Pattern.compile("^(true|yes|y)$", Pattern.CASE_INSENSITIVE);
+    private transient       TemplateProviderSPI template;
+    private final transient FunctionsServices   functions;
+
+    // =========================================================================
+    // CONSTRUCTOR
+    // =========================================================================
+    public ConfigHandlerOptionalHashMap() {
+        super();
+        final List<ProviderAttributFunction> attributFunctions = SpiLoader.getInstance()
+                                                                          .loadSpiService(ProviderAttributFunction.class);
+        template = SpiLoader.getInstance()
+                            .loadSpiServiceByPriority(TemplateProviderSPI.class, new ConfigTemplateValues());
+        functions = new FunctionsServices(attributFunctions, this);
+    }
+
+    public ConfigHandlerOptionalHashMap(final boolean enableFunction) {
+        super();
+        final List<ProviderAttributFunction> attributFunctions = new ArrayList<>();
+        template = SpiLoader.getInstance()
+                            .loadSpiServiceByPriority(TemplateProviderSPI.class, new ConfigTemplateValues());
+        if (enableFunction) {
+            SpiLoader.getInstance().loadSpiService(ProviderAttributFunction.class);
+        }
+
+        functions = new FunctionsServices(attributFunctions, this);
+    }
+
+    public ConfigHandlerOptionalHashMap(final Map<String, String> map, final ProviderAttributFunction[] functions) {
+        super();
+        this.functions = new FunctionsServices(functions, this);
+    }
+
+    // =========================================================================
+    // METHODS
+    // =========================================================================
+    @Override
+    public String applyProperties(final String value) {
+        final String valueWithValues = new ConfigTemplateValues().applyProperties(value, this);
+        return functions.applyFunctions(valueWithValues);
+    }
+
+    // -------------------------------------------------------------------------
+    // STRING
+    // -------------------------------------------------------------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String grabOrDefault(final String key, final String defaultValue) {
+        final String value = getValue(key);
+        return value == null ? defaultValue : value;
+    }
+
+    @Override
+    public String grab(final String key) {
+        return grab(null, key);
+    }
+
+    @Override
+    public String grab(final String message, final String key) {
+        final String value = get(key);
+        return value == null ? null : applyProperties(value);
+    }
+
+    // -------------------------------------------------------------------------
+    // INTEGER
+    // -------------------------------------------------------------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Integer grab(final String key, final int defaultValue) {
+        Integer      result = defaultValue;
+        final Object value  = getValue(key);
+        if (value != null) {
+            final String valueStr = convertToString(value);
+            result = convertToInt(key, valueStr);
+        }
+        return result;
+    }
+
+    @Override
+    public Integer grabInt(final String key) {
+        return convertToInt(key, grab(key));
+    }
+
+    @Override
+    public Integer grabInt(final String key, final Integer defaultValue) {
+        final Integer value = grabInt(key);
+        return value == null ? defaultValue : value;
+    }
+
+    // -------------------------------------------------------------------------
+    // BOOLEAN
+    // -------------------------------------------------------------------------
+    @Override
+    public boolean grabBoolean(final String key) {
+        return convertToBoolean(key, grab(key));
+    }
+
+    @Override
+    public boolean grabBoolean(final String key, final boolean defaultValue) {
+        boolean      result = defaultValue;
+        final Object value  = getValue(key);
+        if (value != null) {
+            result = convertToBoolean(key, value);
+        }
+        return result;
+    }
+
+    // -------------------------------------------------------------------------
+    // DOUBLE
+    // -------------------------------------------------------------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Double grab(final String key, final double defaultValue) {
+        Double       result = defaultValue;
+        final Object value  = getValue(key);
+        if (value != null) {
+            final String valueStr = convertToString(value);
+            result = convertToDouble(key, valueStr);
+        }
+        return result;
+    }
+
+    @Override
+    public Double grabDouble(final String key) {
+        return convertToDouble(key, grab(key));
+    }
+
+    // -------------------------------------------------------------------------
+    // LONG
+    // -------------------------------------------------------------------------
+    @Override
+    public long grabLong(final String key, final long defaultValue) {
+        final String value = get(key);
+        return value == null ? defaultValue : Long.parseLong(value);
+    }
+
+
+    // =========================================================================
+    // TOOLS
+    // =========================================================================
+    protected String getValue(final String key) {
+        Asserts.assertNotNull("Key mustn't be null!", key);
+        return get(key);
+    }
+
+    /* package */ Integer convertToInt(final String key, final String valueStr) {
+        Integer result = null;
+        if (valueStr != null) {
+            try {
+                result = Integer.parseInt(valueStr);
+            } catch (final NumberFormatException e) {
+                log.error("defined key configuration isn't number : {}={}", key, valueStr);
+            }
+        }
+        return result;
+    }
+
+    /* package */ Double convertToDouble(final String key, final String valueStr) {
+        Double result = null;
+        try {
+            result = Double.parseDouble(valueStr);
+        } catch (final NumberFormatException e) {
+            log.error("defined key configuration isn't double number : {}={}", key, valueStr);
+        }
+        return result;
+    }
+
+    /* package */ boolean convertToBoolean(final String key, final Object value) {
+        boolean result = false;
+        if (value != null) {
+            final String strValue = convertToString(value);
+
+            if (BOOLEAN_MATCH.matcher(strValue).matches()) {
+                result = BOOLEAN_TRUE_MATCH.matcher(strValue).matches();
+            } else {
+                log.error("defined key configuration isn't boolean value : {}={}", key, strValue);
+            }
+        }
+
+        return result;
+    }
+
+    /* package */ String convertToString(final Object value) {
+        return value == null ? null : String.valueOf(value).trim();
+    }
+
+    @Override
+    public ConfigHandler<String, String> optionnal() {
+        return this;
+    }
+
+    @Override
+    public List<String> grabValues(final String prefix) {
+        Asserts.assertNotNull("property prefix is mandatory!", prefix);
+        final List<String> result = new ArrayList<>();
+        final Pattern      regex  = Pattern.compile("^" + prefix + "[.][0-9]+$");
+
+        for (final Map.Entry<String, String> entry : entrySet()) {
+            if (regex.matcher(entry.getKey()).matches()) {
+                result.add(applyProperties(entry.getValue()));
+            }
+        }
+        return result;
+    }
+}

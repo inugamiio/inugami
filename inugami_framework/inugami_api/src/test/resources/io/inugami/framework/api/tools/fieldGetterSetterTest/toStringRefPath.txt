@@ -1,0 +1,1 @@
+FieldGetterSetter(field=private java.lang.String io.inugami.framework.api.tools.FieldGetterSetterTest$SomeDTO.name, value=Joe, getter=public java.lang.String io.inugami.framework.api.tools.FieldGetterSetterTest$SomeDTO.getName(), setter=public void io.inugami.framework.api.tools.FieldGetterSetterTest$SomeDTO.setName(java.lang.String))
