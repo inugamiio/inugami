@@ -15,7 +15,7 @@
     <parent>
         <groupId>io.inugami.monitoring</groupId>
         <artifactId>inugami_monitoring</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>4.0.0</version>
     </parent>
 
 
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>io.inugami.monitoring</groupId>
             <artifactId>inugami_monitoring_api</artifactId>
-            <version>4.0.0-SNAPSHOT</version>
+            <version>4.0.0</version>
             <scope>compile</scope>
         </dependency>
 
