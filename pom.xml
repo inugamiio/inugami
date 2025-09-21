@@ -368,18 +368,22 @@
             <dependency>
                 <groupId>io.inugami.monitoring.providers</groupId>
                 <artifactId>inugami_monitoring_providers_els</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring.providers</groupId>
                 <artifactId>inugami_monitoring_providers_graphite</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring.providers</groupId>
                 <artifactId>inugami_monitoring_providers_log</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring.sensors</groupId>
                 <artifactId>inugami_monitoring_sensors_default</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
 
