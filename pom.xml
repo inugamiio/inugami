@@ -264,7 +264,6 @@
         <url>https://github.com/inugamiio/inugami-maven-plugin</url>
         <connection>scm:git:git@github.com:inugamiio/inugami.git</connection>
         <developerConnection>scm:git:git@github.com:inugamiio/inugami.git</developerConnection>
-        <tag>inugami-2.2.0</tag>
     </scm>
 
 
@@ -369,18 +368,22 @@
             <dependency>
                 <groupId>io.inugami.monitoring.providers</groupId>
                 <artifactId>inugami_monitoring_providers_els</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring.providers</groupId>
                 <artifactId>inugami_monitoring_providers_graphite</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring.providers</groupId>
                 <artifactId>inugami_monitoring_providers_log</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring.sensors</groupId>
                 <artifactId>inugami_monitoring_sensors_default</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
 
@@ -975,14 +978,13 @@
             </plugin>
 
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.7</version>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.8.0</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <publishingServerId>central</publishingServerId>
+                    <autoPublish>true</autoPublish>
                 </configuration>
             </plugin>
 

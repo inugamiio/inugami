@@ -18,6 +18,8 @@ target
 *.log
 *.old
 *.orig
+release.properties
+*.releaseBackup
 *.prefs
 *.rej
 *.ser
