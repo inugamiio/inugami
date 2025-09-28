@@ -14,20 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-open module io.inugami.dashboard.api {
-    requires com.fasterxml.jackson.annotation;
-    requires io.inugami.framework.interfaces;
-    requires lombok;
-    requires org.slf4j;
-    requires annotations;
+package io.inugami.dashboard.api.domain.engine;
 
-    exports io.inugami.dashboard.api.domain.administration.exception;
-    exports io.inugami.dashboard.api.domain.administration.dto;
-    exports io.inugami.dashboard.api.domain.administration;
-    exports io.inugami.dashboard.api.domain.alerting;
-    exports io.inugami.dashboard.api.domain.alerting.dto;
-    exports io.inugami.dashboard.api.domain.alerting.exception;
-    exports io.inugami.dashboard.api.domain.event;
-    exports io.inugami.dashboard.api.domain.engine;
-    exports io.inugami.dashboard.api.domain.engine.dto;
+import io.inugami.dashboard.api.domain.engine.dto.EngineResultDTO;
+
+public interface EngineListener {
+
+    void onDone(final EngineResultDTO engineResult);
 }

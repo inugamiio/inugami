@@ -28,6 +28,7 @@ import java.util.Map;
  * @author patrick_guillerm
  * @since 15 déc. 2016
  */
+@Deprecated
 public interface EngineListener {
 
     // =========================================================================

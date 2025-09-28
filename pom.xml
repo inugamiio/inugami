@@ -33,6 +33,13 @@
     =================================================================================================================-->
     <developers>
         <developer>
+            <name>Alexandru Georgescu</name>
+            <email>alexandru.georgescu@inugami.io</email>
+            <organization>Inugami.io</organization>
+            <organizationUrl>http://inugami.io</organizationUrl>
+        </developer>
+
+        <developer>
             <name>Mikhaïl Sadovnikov</name>
             <email>mis.strator@inugami.io</email>
             <organization>Inugami.io</organization>

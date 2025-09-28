@@ -60,6 +60,7 @@ open module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.metrics;
     exports io.inugami.framework.interfaces.models.basic;
     exports io.inugami.framework.interfaces.models.crud;
+    exports io.inugami.framework.interfaces.models.engine;
     exports io.inugami.framework.interfaces.models.event;
     exports io.inugami.framework.interfaces.models.graphite;
     exports io.inugami.framework.interfaces.models.maven;

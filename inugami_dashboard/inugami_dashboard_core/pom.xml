@@ -49,5 +49,11 @@
             <artifactId>spring-boot</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.inugami.framework.commons</groupId>
+            <artifactId>inugami_commons_test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 </project>
