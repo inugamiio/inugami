@@ -18,12 +18,20 @@ package io.inugami.dashboard.infrastructure.internal.schduler;
 
 import io.inugami.dashboard.api.domain.engine.IEngineService;
 import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Builder
-public class SchedulerProducer {
+@Service
+public class SchedulerProducer implements ApplicationListener<ApplicationEvent> {
 
     //==================================================================================================================
     // ATTRIBUTES
@@ -34,11 +42,13 @@ public class SchedulerProducer {
     //==================================================================================================================
     // LIGECYCLE
     //==================================================================================================================
-    public SchedulerProducer init() {
-        executor.schedule(this::run, 1000, TimeUnit.MILLISECONDS);
-        return this;
-    }
 
+    @Override
+    public void onApplicationEvent(final ApplicationEvent event) {
+        if (event instanceof ApplicationStartedEvent) {
+            executor.scheduleAtFixedRate(() -> run(), computeDelay(), 1000, TimeUnit.MILLISECONDS);
+        }
+    }
 
     //==================================================================================================================
     // PRODUCER
@@ -46,5 +56,18 @@ public class SchedulerProducer {
     void run() {
         engineService.run();
     }
+
+
+    //==================================================================================================================
+    // TOOLS
+    //==================================================================================================================
+    protected long computeDelay() {
+        final var now      = Calendar.getInstance().getTimeInMillis();
+        final var calendar = Calendar.getInstance();
+        calendar.set(Calendar.MILLISECOND, 0);
+        final long future = calendar.getTimeInMillis() + 1000;
+        return future - now;
+    }
+
 
 }

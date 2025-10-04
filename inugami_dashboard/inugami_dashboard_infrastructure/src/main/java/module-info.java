@@ -25,4 +25,7 @@ open module io.inugami.dashboard.infrastructure {
     requires io.inugami.framework.commons;
     requires io.inugami.framework.interfaces;
     requires lombok;
+    requires org.slf4j;
+    requires java.sql;
+    requires spring.boot;
 }

@@ -129,4 +129,5 @@ open module io.inugami.framework.interfaces {
     uses org.springframework.web.servlet.HandlerMapping;
     uses io.inugami.framework.interfaces.monitoring.ServicesSensorAggregator;
     uses io.inugami.framework.interfaces.exceptions.ProblemAdditionalFieldBuilder;
+    uses io.inugami.framework.interfaces.monitoring.MonitoringInitializer;
 }

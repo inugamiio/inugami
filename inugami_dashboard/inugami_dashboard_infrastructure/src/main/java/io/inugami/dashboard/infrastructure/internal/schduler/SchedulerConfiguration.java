@@ -31,20 +31,8 @@ public class SchedulerConfiguration {
 
     @Bean
     public ScheduledThreadPoolExecutor engineScheduledThreadPoolExecutor() {
-        this.engineScheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(5, new MonitoredThreadFactory("engine_scheduled_threadPool", false));
-        return this.engineScheduledThreadPoolExecutor;
-
-    }
-
-    @Bean
-    public SchedulerProducer schedulerProducer(final IEngineService engineService,
-                                               final ScheduledThreadPoolExecutor engineScheduledThreadPoolExecutor) {
-
-        return SchedulerProducer.builder()
-                                .engineService(engineService)
-                                .executor(engineScheduledThreadPoolExecutor)
-                                .build()
-                                .init();
+        engineScheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(5, new MonitoredThreadFactory("engine_scheduled_threadPool", false));
+        return engineScheduledThreadPoolExecutor;
     }
 
     @PreDestroy
