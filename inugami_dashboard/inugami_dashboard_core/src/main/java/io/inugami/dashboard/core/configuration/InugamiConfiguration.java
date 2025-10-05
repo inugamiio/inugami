@@ -16,8 +16,12 @@
  */
 package io.inugami.dashboard.core.configuration;
 
+import io.inugami.framework.interfaces.configurtation.JvmKeyValues;
 import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.io.File;
+import java.io.IOException;
 
 @Getter
 @Setter
@@ -26,16 +30,51 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @AllArgsConstructor
 @ConfigurationProperties
 public class InugamiConfiguration {
+    public static final String USER_HOME = "user.home";
+
     @Builder.Default
     private InugamiConfigurationApplication application = InugamiConfigurationApplication.builder().build();
+    @Builder.Default
+    private InugamiConfigurationEngine      engine      = InugamiConfigurationEngine.builder().build();
+
 
     @Getter
     @Setter
     @Builder(toBuilder = true)
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class InugamiConfigurationApplication{
+    public static class InugamiConfigurationApplication {
+
         @Builder.Default
-        private String name = "inugami";
+        private String name      = "inugami";
+        @Builder.Default
+        private String workspace = getWorkspacePath();
+
+        private static String getWorkspacePath() {
+            String folder = JvmKeyValues.JVM_HOME_PATH.get();
+            if (folder == null) {
+                folder = System.getenv(JvmKeyValues.JVM_HOME_PATH.getKey());
+            }
+            if (folder == null) {
+                folder = System.getProperty(USER_HOME) + File.separator + ".inugami";
+            }
+            final File folderFile = new File(folder);
+            try {
+                return folderFile.getCanonicalPath().toString();
+            } catch (IOException e) {
+                return null;
+            }
+        }
+    }
+
+    @Getter
+    @Setter
+    @Builder(toBuilder = true)
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class InugamiConfigurationEngine {
+        @Builder.Default
+        private int  maxThreads = 100;
+        private long timeout    = 60000L;
     }
 }

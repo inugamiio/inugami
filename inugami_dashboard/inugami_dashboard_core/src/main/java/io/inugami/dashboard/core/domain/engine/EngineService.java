@@ -16,28 +16,37 @@
  */
 package io.inugami.dashboard.core.domain.engine;
 
+import com.sun.source.util.Plugin;
 import io.inugami.dashboard.api.domain.engine.EngineListener;
 import io.inugami.dashboard.api.domain.engine.IEngineService;
 import io.inugami.dashboard.api.domain.engine.dto.EngineResultDTO;
 import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.commons.threads.ThreadsExecutorService;
 import io.inugami.framework.interfaces.models.engine.Status;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@Service
+@Builder
 public class EngineService implements IEngineService {
 
     //==================================================================================================================
     // ATTRIBUTES
     //==================================================================================================================
+    private final List<Plugin>               plugins;
     private final Collection<EngineListener> listeners;
+    private final ThreadsExecutorService     threadsExecutor;
     private final Clock                      clock;
+
+    //==================================================================================================================
+    // INIT
+    //==================================================================================================================
 
 
     //==================================================================================================================
@@ -52,6 +61,7 @@ public class EngineService implements IEngineService {
                                           .traceId(mdc.traceId())
                                           .processId(mdc.processId())
                                           .start(LocalDateTime.now(clock));
+
 
 
         result.end(LocalDateTime.now(clock));

@@ -16,13 +16,14 @@
  */
 package io.inugami.dashboard.infrastructure.internal.schduler;
 
-import io.inugami.dashboard.api.domain.engine.IEngineService;
 import io.inugami.framework.commons.threads.MonitoredThreadFactory;
 import jakarta.annotation.PreDestroy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
 @Configuration
 public class SchedulerConfiguration {
@@ -37,8 +38,6 @@ public class SchedulerConfiguration {
 
     @PreDestroy
     public void shutdown() {
-        if (engineScheduledThreadPoolExecutor != null) {
-            engineScheduledThreadPoolExecutor.shutdown();
-        }
+        applyIfNotNull(engineScheduledThreadPoolExecutor, ScheduledThreadPoolExecutor::shutdown);
     }
 }

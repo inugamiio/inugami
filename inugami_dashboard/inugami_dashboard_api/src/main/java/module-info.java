@@ -30,4 +30,5 @@ open module io.inugami.dashboard.api {
     exports io.inugami.dashboard.api.domain.event;
     exports io.inugami.dashboard.api.domain.engine;
     exports io.inugami.dashboard.api.domain.engine.dto;
+    exports io.inugami.dashboard.api.domain.engine.exception;
 }
