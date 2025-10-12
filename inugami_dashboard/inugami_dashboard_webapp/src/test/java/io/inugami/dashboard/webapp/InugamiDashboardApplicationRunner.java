@@ -16,7 +16,6 @@
  */
 package io.inugami.dashboard.webapp;
 
-import io.inugami.dashboard.core.configuration.InugamiConfiguration;
 import io.inugami.framework.interfaces.configurtation.JvmKeyValues;
 
 import java.io.File;

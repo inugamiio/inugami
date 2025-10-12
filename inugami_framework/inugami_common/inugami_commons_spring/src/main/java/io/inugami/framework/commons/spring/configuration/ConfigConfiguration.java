@@ -19,10 +19,12 @@ package io.inugami.framework.commons.spring.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.commons.marshaling.XmlJaxbMarshallerSpiFactory;
+import io.inugami.framework.commons.spring.SpringSpiLoaderServiceSPI;
 import io.inugami.framework.commons.spring.feature.FeatureConfiguration;
 import io.inugami.framework.configuration.services.ConfigHandlerHashMap;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.marshalling.XmlJaxbMarshallerSpi;
+import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -170,5 +172,11 @@ public class ConfigConfiguration {
     @Bean
     public SpelExpressionParser spelExpressionParser(){
         return new SpelExpressionParser();
+    }
+
+    @ConditionalOnMissingBean
+    @Bean
+    public SpiLoaderServiceSPI spiLoaderServiceSPI() {
+        return new SpringSpiLoaderServiceSPI();
     }
 }

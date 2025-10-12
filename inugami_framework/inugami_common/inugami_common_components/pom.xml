@@ -3,29 +3,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!--================================================================================================================
-    = MAVEN
-    =================================================================================================================-->
-    <prerequisites>
-        <maven>3.2.3</maven>
-    </prerequisites>
 
     <!--================================================================================================================
     = PARENT
     =================================================================================================================-->
     <parent>
-        <artifactId>inugami_dashboard</artifactId>
-        <groupId>io.inugami.dashboard</groupId>
+        <artifactId>inugami_common</artifactId>
+        <groupId>io.inugami.framework.commons</groupId>
         <version>4.1.0-SNAPSHOT</version>
     </parent>
-
 
     <!--================================================================================================================
     = PROJECT
     =================================================================================================================-->
-    <artifactId>inugami_dashboard_infrastructure</artifactId>
+    <artifactId>inugami_common_components</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
-    <url>http://inugami.io/inugami/inugami_api</url>
+    <url>http://inugami.io/inugami/inugami_common_components</url>
 
     <!--================================================================================================================
     = DEPENDENCIES
@@ -42,33 +35,19 @@
         </dependency>
 
         <dependency>
-            <groupId>io.inugami.dashboard</groupId>
-            <artifactId>inugami_dashboard_api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>jakarta.annotation</groupId>
-            <artifactId>jakarta.annotation-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.inugami.framework.commons</groupId>
             <artifactId>inugami_commons</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>io.inugami.framework.commons</groupId>
-            <artifactId>inugami_common_components</artifactId>
-        </dependency>
 
-
+        <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        + TEST
+        +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <dependency>
             <groupId>io.inugami.framework.commons</groupId>
             <artifactId>inugami_commons_test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
-        </dependency>
     </dependencies>
+
 </project>

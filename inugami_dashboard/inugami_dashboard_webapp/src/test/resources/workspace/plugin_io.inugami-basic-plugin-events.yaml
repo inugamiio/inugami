@@ -15,14 +15,8 @@ enable: true
 #=======================================================================================================================
 simpleEvents:
   - name: foobar-quality
-    provider: graphite.bigdata
+    provider: system.cpu
     scheduler: 0 0/2 * * * ?
-    mapper: oo.bar.Mapper
-    query: scale(summarize(avg(org.foobar.joe.*.count), '24h', 'avg', true),100)
-    processors:
-      - name: foo
-      - name: bar
-
 
 #=======================================================================================================================
 # Events

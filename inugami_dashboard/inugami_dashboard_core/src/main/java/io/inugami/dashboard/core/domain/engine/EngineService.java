@@ -16,12 +16,12 @@
  */
 package io.inugami.dashboard.core.domain.engine;
 
-import com.sun.source.util.Plugin;
 import io.inugami.dashboard.api.domain.engine.EngineListener;
 import io.inugami.dashboard.api.domain.engine.IEngineService;
 import io.inugami.dashboard.api.domain.engine.dto.EngineResultDTO;
 import io.inugami.framework.api.monitoring.MdcService;
 import io.inugami.framework.commons.threads.ThreadsExecutorService;
+import io.inugami.framework.configuration.models.plugins.Plugin;
 import io.inugami.framework.interfaces.models.engine.Status;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;

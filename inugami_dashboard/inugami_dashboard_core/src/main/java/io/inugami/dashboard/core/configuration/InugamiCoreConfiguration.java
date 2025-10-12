@@ -16,16 +16,14 @@
  */
 package io.inugami.dashboard.core.configuration;
 
-import com.sun.source.util.Plugin;
 import io.inugami.dashboard.api.domain.engine.EngineListener;
+import io.inugami.dashboard.api.domain.plugin.IPluginService;
 import io.inugami.dashboard.core.domain.engine.EngineService;
 import io.inugami.framework.commons.threads.ThreadsExecutorService;
 import io.inugami.framework.configuration.models.app.ApplicationConfig;
-import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
+import io.inugami.framework.configuration.models.plugins.Plugin;
 import io.inugami.framework.configuration.services.PluginConfigurationLoader;
 import io.inugami.framework.configuration.services.resolver.ConfigurationResolver;
-import io.inugami.framework.interfaces.exceptions.TechnicalException;
-import io.inugami.framework.interfaces.exceptions.UncheckedException;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -34,13 +32,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
 import java.time.Clock;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import static io.inugami.dashboard.api.domain.engine.exception.EngineErrors.*;
-import static io.inugami.framework.api.tools.ReflectionUtils.runSafe;
 import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
 import static io.inugami.framework.interfaces.exceptions.Asserts.assertTrue;
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
@@ -96,14 +91,8 @@ public class InugamiCoreConfiguration {
     }
 
     @Bean
-    public List<Plugin> plugins(final ConfigurationResolver configurationResolver) {
-        final List<PluginConfiguration> pluginConfigurations = new ArrayList<>();
-        try {
-            pluginConfigurations.addAll(configurationResolver.resolvePluginsConfigurations().orElse(List.of()));
-        } catch (TechnicalException e) {
-        }
-        //TODO: load plugin from configurations
-        return List.of();
+    public List<Plugin> plugins(final IPluginService pluginService) {
+        return pluginService.loadPlugins();
     }
 
     @Bean

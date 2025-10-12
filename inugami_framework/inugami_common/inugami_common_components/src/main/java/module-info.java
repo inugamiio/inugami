@@ -14,23 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-open module io.inugami.dashboard.core {
+open module io.inugami.framework.commons.components {
+
     requires com.fasterxml.jackson.annotation;
-    requires io.inugami.dashboard.api;
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.dataformat.yaml;
+    requires com.fasterxml.jackson.datatype.jdk8;
+    requires com.fasterxml.jackson.datatype.jsr310;
+    requires com.fasterxml.jackson.module.paramnames;
     requires io.inugami.framework.api;
     requires io.inugami.framework.interfaces;
     requires io.inugami.framework.commons;
-    requires io.inugami.framework.configurations.configuration;
-    requires io.inugami.framework.commons.spring;
     requires lombok;
     requires org.slf4j;
-    requires spring.context;
-    requires spring.beans;
-    requires spring.boot;
-    requires jdk.compiler;
-    requires jakarta.annotation;
+    requires annotations;
 
-    exports io.inugami.dashboard.core.domain.event;
-    exports io.inugami.dashboard.core.domain.alerting;
-    exports io.inugami.dashboard.core.domain.administration;
+    exports io.inugami.framework.commons.components.providers.system;
+
 }

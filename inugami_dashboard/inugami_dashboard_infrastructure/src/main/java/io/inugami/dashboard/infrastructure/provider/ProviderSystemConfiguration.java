@@ -14,23 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-open module io.inugami.dashboard.core {
-    requires com.fasterxml.jackson.annotation;
-    requires io.inugami.dashboard.api;
-    requires io.inugami.framework.api;
-    requires io.inugami.framework.interfaces;
-    requires io.inugami.framework.commons;
-    requires io.inugami.framework.configurations.configuration;
-    requires io.inugami.framework.commons.spring;
-    requires lombok;
-    requires org.slf4j;
-    requires spring.context;
-    requires spring.beans;
-    requires spring.boot;
-    requires jdk.compiler;
-    requires jakarta.annotation;
+package io.inugami.dashboard.infrastructure.provider;
 
-    exports io.inugami.dashboard.core.domain.event;
-    exports io.inugami.dashboard.core.domain.alerting;
-    exports io.inugami.dashboard.core.domain.administration;
+import io.inugami.framework.commons.components.providers.system.SystemCpuProvider;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class ProviderSystemConfiguration {
+
+    @Bean
+    public SystemCpuProvider systemCpuProvider() {
+        return new SystemCpuProvider();
+    }
 }

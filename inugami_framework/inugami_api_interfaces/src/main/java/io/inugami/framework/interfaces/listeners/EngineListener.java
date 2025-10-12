@@ -19,6 +19,8 @@ package io.inugami.framework.interfaces.listeners;
 import io.inugami.framework.interfaces.models.event.GenericEvent;
 import io.inugami.framework.interfaces.models.sse.ClientSendData;
 import io.inugami.framework.interfaces.models.tools.Chrono;
+import io.inugami.framework.interfaces.tools.NamedComponent;
+import io.inugami.framework.interfaces.tools.PostConstructConfig;
 
 import java.util.Map;
 
@@ -29,7 +31,7 @@ import java.util.Map;
  * @since 15 déc. 2016
  */
 @Deprecated
-public interface EngineListener {
+public interface EngineListener extends PostConstructConfig , NamedComponent {
 
     // =========================================================================
     // Change

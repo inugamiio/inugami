@@ -1,5 +1,9 @@
+# io.inugami.framework.configuration.models.plugins.PluginConfiguration
 enable: true
 gav:
   groupId: io.inugami
   artifactId: basic-plugin
   version: 4.0.0
+
+eventsFiles:
+  - plugin_io.inugami-basic-plugin-events.yaml

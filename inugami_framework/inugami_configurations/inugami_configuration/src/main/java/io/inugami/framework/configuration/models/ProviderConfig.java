@@ -16,6 +16,7 @@
  */
 package io.inugami.framework.configuration.models;
 
+import io.inugami.framework.interfaces.configurtation.BehaviourComponents;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.models.maven.ManifestInfo;
 import io.inugami.framework.interfaces.processors.ClassBehavior;
@@ -37,7 +38,7 @@ import java.util.Map;
 @Getter
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class ProviderConfig implements ClassBehavior<Object> {
+public class ProviderConfig implements ClassBehavior<Object> , BehaviourComponents {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================

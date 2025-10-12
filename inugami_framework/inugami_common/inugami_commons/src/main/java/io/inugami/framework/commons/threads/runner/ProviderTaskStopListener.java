@@ -14,51 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.interfaces.models.maven;
+package io.inugami.framework.commons.threads.runner;
 
-import lombok.*;
+import io.inugami.framework.interfaces.listeners.TaskFinishListener;
+import io.inugami.framework.interfaces.models.event.GenericEvent;
+import io.inugami.framework.interfaces.models.event.MetricsEvents;
+import io.inugami.framework.interfaces.models.maven.Gav;
 
-import java.io.File;
-import java.io.Serializable;
-import java.net.URL;
-
-/**
- * Manifest
- *
- * @author patrickguillerm
- * @since 26 nov. 2017
- */
-@ToString(onlyExplicitlyIncluded = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Setter
-@Getter
-@Builder(toBuilder = true)
-@NoArgsConstructor
-@AllArgsConstructor
-public class ManifestInfo implements Serializable {
+public class ProviderTaskStopListener implements TaskFinishListener {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final long serialVersionUID = -7900064144760028719L;
+    private final GenericEvent event;
 
-    private File workspace;
-
-    private URL manifestUrl;
-
+    private final Gav pluginGav;
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    public ManifestInfo(final String workspace) {
-        super();
-        this.workspace = workspace == null ? null : new File(workspace);
-        manifestUrl = null;
+
+    public ProviderTaskStopListener(final GenericEvent event, final Gav pluginGav) {
+        this.event = event;
+        this.pluginGav = pluginGav;
     }
 
-    public ManifestInfo(final ManifestInfo manifest, final URL manifestUrl) {
-        workspace = manifest.getWorkspace();
-        this.manifestUrl = manifestUrl;
+    // =========================================================================
+    // METHODS
+    // =========================================================================
+    @Override
+    public void onFinish(final long time, final long delais, final String name, final Object result,
+                         final Exception error) {
+        MetricsEvents.onStop(pluginGav, event.getName());
+
     }
-
-
 }
