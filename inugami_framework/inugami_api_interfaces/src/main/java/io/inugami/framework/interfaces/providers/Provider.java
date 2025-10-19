@@ -23,6 +23,7 @@ import io.inugami.framework.interfaces.models.event.SimpleEvent;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.task.ProviderFutureResult;
 import io.inugami.framework.interfaces.tools.NamedComponent;
+import io.inugami.framework.interfaces.tools.PostConstructConfig;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ import java.util.List;
  * @since 3 janv. 2017
  */
 @SuppressWarnings({"java:S1168"})
-public interface Provider extends NamedComponent {
+public interface Provider extends NamedComponent , PostConstructConfig {
     String CONFIG_TIMEOUT = "timeout";
 
     <T extends SimpleEvent> FutureData<ProviderFutureResult> callEvent(final T event, final Gav pluginGav);

@@ -17,6 +17,7 @@
 package io.inugami.framework.interfaces.processors;
 
 
+import io.inugami.framework.interfaces.configurtation.BehaviourComponents;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.models.ClonableObject;
 import io.inugami.framework.interfaces.models.maven.ManifestInfo;
@@ -38,7 +39,7 @@ import java.util.Map;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProcessorModel implements ClonableObject<ProcessorModel>, ClassBehavior<ProcessorModel> {
+public class ProcessorModel implements ClonableObject<ProcessorModel>, ClassBehavior<ProcessorModel>, BehaviourComponents {
     private static final long serialVersionUID = 8318093792064035460L;
 
     @ToString.Include

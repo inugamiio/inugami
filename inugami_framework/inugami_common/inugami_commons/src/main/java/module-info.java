@@ -32,6 +32,7 @@ open module io.inugami.framework.commons {
     requires lombok;
     requires org.apache.commons.io;
     requires org.slf4j;
+    requires annotations;
 
     exports io.inugami.framework.commons.data;
     exports io.inugami.framework.commons.files;
@@ -44,6 +45,7 @@ open module io.inugami.framework.commons {
     exports io.inugami.framework.commons.threads;
     exports io.inugami.framework.commons.tools;
     exports io.inugami.framework.commons.writer;
+    exports io.inugami.framework.commons.threads.runner;
 
     uses io.inugami.framework.interfaces.marshalling.XmlJaxbMarshallerSpi;
     uses io.inugami.framework.interfaces.marshalling.jaxb.JaxbAdapterSpi;

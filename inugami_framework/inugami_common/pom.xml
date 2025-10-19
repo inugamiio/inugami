@@ -16,7 +16,7 @@
     <parent>
         <groupId>io.inugami.framework</groupId>
         <artifactId>inugami_framework</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>4.1.0-SNAPSHOT</version>
     </parent>
 
 
@@ -36,5 +36,6 @@
         <module>inugami_commons_test</module>
         <module>inugami_commons</module>
         <module>inugami_commons_spring</module>
+        <module>inugami_common_components</module>
     </modules>
 </project>

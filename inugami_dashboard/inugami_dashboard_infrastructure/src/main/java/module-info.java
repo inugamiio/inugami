@@ -16,11 +16,18 @@
  */
 open module io.inugami.dashboard.infrastructure {
 
-    requires com.fasterxml.jackson.annotation;
+    exports io.inugami.dashboard.infrastructure.database;
+    exports io.inugami.dashboard.infrastructure.internal.schduler;
+
     requires io.inugami.dashboard.api;
+    requires spring.context;
+    requires jakarta.annotation;
+    requires io.inugami.framework.commons;
+    requires java.sql;
+    requires org.slf4j;
+    requires spring.boot;
     requires io.inugami.framework.api;
     requires io.inugami.framework.interfaces;
-    requires lombok;
-    requires org.slf4j;
-    requires spring.context;
+    requires io.inugami.framework.commons.components;
+    requires static lombok;
 }

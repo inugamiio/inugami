@@ -3,14 +3,18 @@ package io.inugami.framework.interfaces.monitoring.logger;
 
 import io.inugami.framework.interfaces.models.JsonBuilder;
 import lombok.Builder;
+import lombok.Getter;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-
+@Getter
 @Builder(toBuilder = true)
-public class LogInfoDTO {
+public class LogInfoDTO implements Serializable {
+
+    private static final long serialVersionUID = -944786653698946455L;
+
     private Map<String, Serializable> data = new LinkedHashMap<>();
 
     public static class LogInfoDTOBuilder {

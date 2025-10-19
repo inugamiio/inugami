@@ -20,8 +20,8 @@ public class MonitoredThreadFactory implements ThreadFactory {
     private final        AtomicLong                  threadIndex           = new AtomicLong();
     private final        String                      threadsName;
     private final        boolean                     deamon;
-    private final ThreadGroup threadGroup;
-    private final RequestData requestContext;
+    private final        ThreadGroup                 threadGroup;
+    private final        RequestData                 requestContext;
 
     // =================================================================================================================
     // CONSTRUCTORS
@@ -46,7 +46,11 @@ public class MonitoredThreadFactory implements ThreadFactory {
     @Override
     public Thread newThread(final Runnable runnable) {
         final String name = String.join(".", threadsName, String.valueOf(threadIndex.getAndIncrement()));
-        final Thread result = new MonitoredThread(threadGroup, runnable, name, 10, requestContext,
+        final Thread result = new MonitoredThread(threadGroup,
+                                                  runnable,
+                                                  name,
+                                                  0,
+                                                  requestContext,
                                                   monitoringInitializer);
         result.setDaemon(deamon);
         return result;

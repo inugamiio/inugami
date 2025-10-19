@@ -17,6 +17,7 @@
 package io.inugami.framework.interfaces.alertings;
 
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.configurtation.BehaviourComponents;
 import io.inugami.framework.interfaces.models.ClonableObject;
 import io.inugami.framework.interfaces.models.maven.ManifestInfo;
 import io.inugami.framework.interfaces.processors.ClassBehavior;
@@ -37,7 +38,7 @@ import java.util.Map;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class AlertingProviderModel implements ClassBehavior<AlertingProviderModel>, ClonableObject<AlertingProviderModel> {
+public class AlertingProviderModel implements ClassBehavior<AlertingProviderModel>, ClonableObject<AlertingProviderModel>, BehaviourComponents {
 
     private static final long                serialVersionUID = 6084938077729235541L;
     @ToString.Include

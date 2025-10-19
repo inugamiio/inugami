@@ -16,9 +16,11 @@
  */
 package io.inugami.framework.configuration.models;
 
+import io.inugami.framework.interfaces.configurtation.BehaviourComponents;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.Map;
 
 @SuppressWarnings({"java:S2160"})
 @Builder(toBuilder = true)
@@ -28,13 +30,14 @@ import java.io.Serializable;
 @Getter
 @ToString
 @EqualsAndHashCode
-public class HandlerConfig implements Serializable {
+public class HandlerConfig implements Serializable , BehaviourComponents {
 
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
-    private static final long serialVersionUID = -717509522684920613L;
-
-    private String type;
-
+    private static final long                serialVersionUID = -717509522684920613L;
+    private              Map<String, String> configs;
+    private              String              type;
+    private              String              name;
+    private              String              className;
 }

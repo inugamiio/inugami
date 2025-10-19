@@ -35,7 +35,7 @@ import java.net.URL;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public final class ManifestInfo implements Serializable {
+public class ManifestInfo implements Serializable {
 
     // =========================================================================
     // ATTRIBUTES

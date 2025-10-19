@@ -17,8 +17,11 @@
 open module io.inugami.dashboard.api {
     requires com.fasterxml.jackson.annotation;
     requires io.inugami.framework.interfaces;
+    requires io.inugami.framework.configurations.configuration;
     requires lombok;
     requires org.slf4j;
+    requires annotations;
+    requires jdk.compiler;
 
     exports io.inugami.dashboard.api.domain.administration.exception;
     exports io.inugami.dashboard.api.domain.administration.dto;
@@ -27,4 +30,8 @@ open module io.inugami.dashboard.api {
     exports io.inugami.dashboard.api.domain.alerting.dto;
     exports io.inugami.dashboard.api.domain.alerting.exception;
     exports io.inugami.dashboard.api.domain.event;
+    exports io.inugami.dashboard.api.domain.engine;
+    exports io.inugami.dashboard.api.domain.engine.dto;
+    exports io.inugami.dashboard.api.domain.engine.exception;
+    exports io.inugami.dashboard.api.domain.plugin;
 }

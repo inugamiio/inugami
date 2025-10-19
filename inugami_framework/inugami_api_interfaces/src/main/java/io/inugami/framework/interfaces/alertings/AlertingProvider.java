@@ -22,8 +22,11 @@ import io.inugami.framework.interfaces.models.event.SimpleEvent;
 import io.inugami.framework.interfaces.models.maven.Gav;
 import io.inugami.framework.interfaces.task.ProviderFutureResult;
 import io.inugami.framework.interfaces.tools.NamedComponent;
+import io.inugami.framework.interfaces.tools.PostConstructConfig;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * AlertingProvider
@@ -32,9 +35,7 @@ import java.util.List;
  * @since 21 déc. 2017
  */
 @SuppressWarnings({"java:S107"})
-public interface AlertingProvider extends NamedComponent {
-
-    void postConstruct();
+public interface AlertingProvider extends NamedComponent, PostConstructConfig {
 
     AlertingResult process(final Gav gav, final GenericEvent event, final ProviderFutureResult data,
                            final AlertingModel alert, String preload);

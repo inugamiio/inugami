@@ -22,7 +22,7 @@
     =================================================================================================================-->
     <groupId>io.inugami</groupId>
     <artifactId>inugami</artifactId>
-    <version>4.0.0-SNAPSHOT</version>
+    <version>4.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Specifics maven lifecycle to package and run inugami project</description>
@@ -32,6 +32,13 @@
     = DEVELOPERS
     =================================================================================================================-->
     <developers>
+        <developer>
+            <name>Alexandru Georgescu</name>
+            <email>alexandru.georgescu@inugami.io</email>
+            <organization>Inugami.io</organization>
+            <organizationUrl>http://inugami.io</organizationUrl>
+        </developer>
+
         <developer>
             <name>Mikhaïl Sadovnikov</name>
             <email>mis.strator@inugami.io</email>
@@ -327,7 +334,11 @@
                 <artifactId>inugami_commons_spring</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>io.inugami.framework.commons</groupId>
+                <artifactId>inugami_common_components</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.inugami.framework.commons</groupId>
                 <artifactId>inugami_commons_test</artifactId>
