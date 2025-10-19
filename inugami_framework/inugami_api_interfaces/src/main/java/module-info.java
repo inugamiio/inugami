@@ -41,8 +41,13 @@ open module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.ctx;
     exports io.inugami.framework.interfaces.dao.event;
     exports io.inugami.framework.interfaces.dao;
+    exports io.inugami.framework.interfaces.database;
+    exports io.inugami.framework.interfaces.database.dto;
+    exports io.inugami.framework.interfaces.dependency;
+    exports io.inugami.framework.interfaces.dependency.dto;
     exports io.inugami.framework.interfaces.documentation;
     exports io.inugami.framework.interfaces.engine;
+    exports io.inugami.framework.interfaces.event;
     exports io.inugami.framework.interfaces.exceptions.asserts;
     exports io.inugami.framework.interfaces.exceptions.connector;
     exports io.inugami.framework.interfaces.exceptions.services;
@@ -82,6 +87,7 @@ open module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.monitoring.spring.feign;
     exports io.inugami.framework.interfaces.monitoring.threads;
     exports io.inugami.framework.interfaces.monitoring;
+    exports io.inugami.framework.interfaces.plugin;
     exports io.inugami.framework.interfaces.processors;
     exports io.inugami.framework.interfaces.providers;
     exports io.inugami.framework.interfaces.scan;
@@ -130,4 +136,7 @@ open module io.inugami.framework.interfaces {
     uses io.inugami.framework.interfaces.monitoring.ServicesSensorAggregator;
     uses io.inugami.framework.interfaces.exceptions.ProblemAdditionalFieldBuilder;
     uses io.inugami.framework.interfaces.monitoring.MonitoringInitializer;
+    uses io.inugami.framework.interfaces.database.PropertiesConvertorSpi;
+    uses io.inugami.framework.interfaces.plugin.FrontPluginSpi;
+    uses io.inugami.framework.interfaces.plugin.IndexHtmlLoadingContentSpi;
 }
