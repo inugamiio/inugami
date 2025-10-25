@@ -28,8 +28,11 @@ import java.io.Serializable;
 @Setter
 @Getter
 public class ProblemParameterFieldsDTO implements Serializable {
-    private static final long   serialVersionUID = 1958097800187036733L;
+    private static final long         serialVersionUID = 1958097800187036733L;
     @EqualsAndHashCode.Include
-    private              String errorCode;
-    private              String name;
+    private              String       errorCode;
+    private              String       errorType;
+    private              String       name;
+    private              String       detail;
+    private              Serializable value;
 }

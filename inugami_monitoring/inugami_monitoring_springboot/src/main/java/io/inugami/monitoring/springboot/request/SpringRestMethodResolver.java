@@ -50,9 +50,6 @@ public class SpringRestMethodResolver implements JavaRestMethodResolver {
     }
 
     public JavaRestMethodDTO resolve(final HttpServletRequest request) {
-
-        log.info("TODO");
-
         final HandlerExecutionChain handler = resolveHandlerMethod(request);
         return handler == null ? null : buildJavaRestResolver(handler, request);
     }
