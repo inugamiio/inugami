@@ -1,5 +1,3 @@
-import io.inugami.framework.interfaces.monitoring.Obfuscator;
-
 /* --------------------------------------------------------------------
  *  Inugami
  * --------------------------------------------------------------------
@@ -25,5 +23,6 @@ open module io.inugami.monitoring.api {
     exports io.inugami.monitoring.api.obfuscators;
     exports io.inugami.monitoring.api.resolvers;
     exports io.inugami.monitoring.api.tools;
-    uses Obfuscator;
+
+    uses io.inugami.framework.interfaces.monitoring.Obfuscator;
 }

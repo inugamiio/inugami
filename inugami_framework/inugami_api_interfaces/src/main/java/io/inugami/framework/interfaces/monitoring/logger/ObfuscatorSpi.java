@@ -14,19 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.logs.obfuscator.api;
+package io.inugami.framework.interfaces.monitoring.logger;
 
 
-import io.inugami.framework.api.configurtation.ConfigurationSpiFactory;
-import io.inugami.logs.obfuscator.tools.ObfuscatorUtils;
+import io.inugami.framework.interfaces.configurtation.ConfigurationSpi;
+import io.inugami.framework.interfaces.spi.SpiLoader;
 
 /**
  * the <strong>ObfuscatorSpi</strong> interface allows creating logs obfuscator implementation.
- * Each obfuscator should be defined as SPI implementation in file <strong>/META-INF/services/io.inugami.logs.obfuscator.api.ObfuscatorSpi</strong>
+ * Each obfuscator should be defined as SPI implementation in file <strong>/META-INF/services/io.inugami.framework.interfaces.monitoring.logger.ObfuscatorSpi</strong>
  */
 public interface ObfuscatorSpi {
 
-    String DEFAULT_DELIMITERS = "=|:";
+    String           DEFAULT_DELIMITERS = "=|:";
+    ConfigurationSpi CONFIG             = SpiLoader.getInstance()
+                                                   .loadSpiServiceByPriority(ConfigurationSpi.class,
+                                                                             new DefaultConfigurationSpi());
 
     /**
      * By default, this method retrieve Obfuscator enabled configuration.
@@ -35,7 +38,7 @@ public interface ObfuscatorSpi {
      * @return true is obfuscator is enabled
      */
     default boolean enabled() {
-        return ConfigurationSpiFactory.INSTANCE.getBooleanProperty(this.getClass().getName() + ".enabled", true);
+        return CONFIG.getBooleanProperty(this.getClass().getName() + ".enabled", true);
     }
 
     boolean isEnabled();

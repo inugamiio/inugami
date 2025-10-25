@@ -1,6 +1,6 @@
 package io.inugami.logs.obfuscator.obfuscators;
 
-import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
+import io.inugami.framework.interfaces.monitoring.logger.ObfuscatorSpi;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

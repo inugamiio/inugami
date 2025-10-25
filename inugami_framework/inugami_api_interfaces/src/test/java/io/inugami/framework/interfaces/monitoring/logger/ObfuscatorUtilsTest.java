@@ -1,4 +1,4 @@
-package io.inugami.logs.obfuscator.tools;
+package io.inugami.framework.interfaces.monitoring.logger;
 
 import org.junit.jupiter.api.Test;
 
@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ObfuscatorUtilsTest {
 
     public static final String HELLO_THE_WORLD = "hello the world";
-    public static final String JOE = "joe";
+    public static final String JOE             = "joe";
 
     // =========================================================================
     // CONTAINS
@@ -19,19 +19,18 @@ class ObfuscatorUtilsTest {
     }
 
 
-
     // =========================================================================
     // keepLastChars / keepFirstChars
     // =========================================================================
     @Test
-    void keepLastChars_nominal(){
+    void keepLastChars_nominal() {
         assertThat(ObfuscatorUtils.keepLastChars(HELLO_THE_WORLD, 3)).isEqualTo("xxxxxorld");
         assertThat(ObfuscatorUtils.keepLastChars(JOE, 3)).isEqualTo("xxxxx");
         assertThat(ObfuscatorUtils.keepLastChars(null, 3)).isEqualTo("xxxxx");
     }
 
     @Test
-    void keepFirstChars_nominal(){
+    void keepFirstChars_nominal() {
         assertThat(ObfuscatorUtils.keepFirstChars(HELLO_THE_WORLD, 3)).isEqualTo("helxxxxx");
         assertThat(ObfuscatorUtils.keepFirstChars(JOE, 3)).isEqualTo("xxxxx");
         assertThat(ObfuscatorUtils.keepFirstChars(null, 3)).isEqualTo("xxxxx");

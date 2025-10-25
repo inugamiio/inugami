@@ -17,6 +17,7 @@
 package io.inugami.framework.api.configurtation;
 
 import io.inugami.framework.interfaces.configurtation.ConfigurationSpi;
+import io.inugami.framework.interfaces.monitoring.logger.DefaultConfigurationSpi;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import lombok.experimental.UtilityClass;
 

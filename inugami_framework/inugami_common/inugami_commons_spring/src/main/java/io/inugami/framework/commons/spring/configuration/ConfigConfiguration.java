@@ -36,7 +36,6 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import java.time.Clock;
-import java.time.ZoneId;
 
 @SuppressWarnings({"java:S2386"})
 @Slf4j
