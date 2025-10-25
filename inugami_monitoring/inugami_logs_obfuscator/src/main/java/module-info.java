@@ -26,12 +26,11 @@ open module io.inugami.logs.obfuscator {
     requires lombok;
     requires org.slf4j;
 
-    exports io.inugami.logs.obfuscator.api;
     exports io.inugami.logs.obfuscator.appender.writer;
     exports io.inugami.logs.obfuscator.appender;
     exports io.inugami.logs.obfuscator.encoder;
     exports io.inugami.logs.obfuscator.obfuscators;
-    exports io.inugami.logs.obfuscator.tools;
+
 
     uses io.inugami.framework.interfaces.configurtation.ConfigurationSpi;
     uses io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
@@ -39,10 +38,10 @@ open module io.inugami.logs.obfuscator {
     uses io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
     uses io.inugami.framework.interfaces.monitoring.MdcServiceSpi;
     uses io.inugami.framework.interfaces.monitoring.MonitoringLoaderSpi;
+    uses io.inugami.framework.interfaces.monitoring.logger.ObfuscatorSpi;
     uses io.inugami.framework.interfaces.monitoring.logger.initializer.MdcInitializerSpi;
     uses io.inugami.framework.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI;
     uses io.inugami.framework.interfaces.tools.TemplateProviderSPI;
-    uses io.inugami.logs.obfuscator.api.ObfuscatorSpi;
 
-    provides io.inugami.logs.obfuscator.api.ObfuscatorSpi with io.inugami.logs.obfuscator.obfuscators.JsonPasswordObfuscator, io.inugami.logs.obfuscator.obfuscators.BasicPasswordObfuscator, io.inugami.logs.obfuscator.obfuscators.XMLPasswordObfuscator, io.inugami.logs.obfuscator.obfuscators.JsonAuthorizationObfuscator, io.inugami.logs.obfuscator.obfuscators.BasicAuthorizationObfuscator, io.inugami.logs.obfuscator.obfuscators.AccessControlAllowHeaderObfuscator, io.inugami.logs.obfuscator.obfuscators.AccessControlExposedHeaderObfuscator, io.inugami.logs.obfuscator.obfuscators.CookieObfuscator;
+    provides io.inugami.framework.interfaces.monitoring.logger.ObfuscatorSpi with io.inugami.logs.obfuscator.obfuscators.JsonPasswordObfuscator, io.inugami.logs.obfuscator.obfuscators.BasicPasswordObfuscator, io.inugami.logs.obfuscator.obfuscators.XMLPasswordObfuscator, io.inugami.logs.obfuscator.obfuscators.JsonAuthorizationObfuscator, io.inugami.logs.obfuscator.obfuscators.BasicAuthorizationObfuscator, io.inugami.logs.obfuscator.obfuscators.AccessControlAllowHeaderObfuscator, io.inugami.logs.obfuscator.obfuscators.AccessControlExposedHeaderObfuscator, io.inugami.logs.obfuscator.obfuscators.CookieObfuscator;
 }

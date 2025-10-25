@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
+
 /* --------------------------------------------------------------------
  *  Inugami
  * --------------------------------------------------------------------
@@ -146,20 +148,22 @@ public interface ErrorCode {
 
     default Map<String, Serializable> toMap() {
         final Map<String, Serializable> result = new LinkedHashMap<>();
+
         result.put(STATUS_CODE, getStatusCode());
-        result.put(ERROR_CODE, getErrorCode());
-        result.put(MESSAGE, getMessage());
-        result.put(MESSAGE_DETAIL, getMessageDetail());
-        result.put(ERROR_TYPE, getErrorType());
-        result.put(PAYLOAD, getPayload());
+        applyIfNotNull(getErrorCode(), v -> result.put(ERROR_CODE, v));
+        applyIfNotNull(getMessage(), v -> result.put(MESSAGE, v));
+        applyIfNotNull(getMessageDetail(), v -> result.put(MESSAGE_DETAIL, v));
+        applyIfNotNull(getErrorType(), v -> result.put(ERROR_TYPE, v));
+        applyIfNotNull(getPayload(), v -> result.put(PAYLOAD, v));
+        applyIfNotNull(getField(), v -> result.put(FIELD, v));
+        applyIfNotNull(getUrl(), v -> result.put(URL, v));
+        applyIfNotNull(getCategory(), v -> result.put(CATEGORY, v));
+        applyIfNotNull(getDomain(), v -> result.put(DOMAIN, v));
+        applyIfNotNull(getSubDomain(), v -> result.put(SUB_DOMAIN, v));
+
         result.put(EXPLOITATION_ERROR, isExploitationError());
         result.put(ROLLBACK, isRollbackRequire());
         result.put(RETRYABLE, isRetryable());
-        result.put(FIELD, getField());
-        result.put(URL, getUrl());
-        result.put(CATEGORY, getCategory());
-        result.put(DOMAIN, getDomain());
-        result.put(SUB_DOMAIN, getSubDomain());
         return result;
     }
 

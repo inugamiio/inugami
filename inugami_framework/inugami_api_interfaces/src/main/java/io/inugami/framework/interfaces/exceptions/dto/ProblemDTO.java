@@ -72,7 +72,6 @@ public class ProblemDTO implements Serializable {
             if (key != null && value != null) {
                 details.put(key, value);
             }
-
             return this;
         }
 

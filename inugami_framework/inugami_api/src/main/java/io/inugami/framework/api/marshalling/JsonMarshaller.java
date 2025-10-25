@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.exceptions.Warning;
 import io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
 import io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
 import io.inugami.framework.interfaces.spi.SpiLoader;
@@ -66,6 +68,12 @@ public class JsonMarshaller {
         module.addSerializer(Method.class, new MethodSerializer(Method.class));
         module.addSerializer(Class.class, new ClassSerializer(Class.class));
         module.addSerializer(Field.class, new FieldSerializer(Field.class));
+        module.addSerializer(ErrorCode.class, new ErrorCodeSerializer(ErrorCode.class));
+        module.addDeserializer(ErrorCode.class, new ErrorCodeDeserializer(ErrorCode.class));
+
+        module.addSerializer(Warning.class, new WarningSerializer(Warning.class));
+        module.addDeserializer(Warning.class, new WarningDeserializer(Warning.class));
+
         return module;
     }
 

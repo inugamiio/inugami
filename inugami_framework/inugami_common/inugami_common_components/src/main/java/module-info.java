@@ -16,6 +16,7 @@
  */
 open module io.inugami.framework.commons.components {
 
+    requires annotations;
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
@@ -24,11 +25,10 @@ open module io.inugami.framework.commons.components {
     requires com.fasterxml.jackson.datatype.jsr310;
     requires com.fasterxml.jackson.module.paramnames;
     requires io.inugami.framework.api;
-    requires io.inugami.framework.interfaces;
     requires io.inugami.framework.commons;
+    requires io.inugami.framework.interfaces;
     requires lombok;
     requires org.slf4j;
-    requires annotations;
 
     exports io.inugami.framework.commons.components.providers.system;
 

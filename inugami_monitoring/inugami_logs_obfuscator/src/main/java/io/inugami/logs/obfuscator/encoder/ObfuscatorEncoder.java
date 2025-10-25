@@ -34,8 +34,8 @@ import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI;
 import io.inugami.framework.interfaces.monitoring.logger.mapper.MdcDynamicFieldSPI;
 import io.inugami.framework.interfaces.spi.SpiLoader;
-import io.inugami.logs.obfuscator.api.LogEventDto;
-import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
+import io.inugami.framework.interfaces.monitoring.logger.LogEventDto;
+import io.inugami.framework.interfaces.monitoring.logger.ObfuscatorSpi;
 import io.inugami.logs.obfuscator.appender.AppenderConfiguration;
 
 import java.io.Serializable;

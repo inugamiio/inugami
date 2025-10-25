@@ -15,6 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 open module io.inugami.framework.commons.spring {
+    requires com.fasterxml.jackson.databind;
     requires com.google.gson;
     requires io.inugami.framework.api;
     requires io.inugami.framework.commons;
@@ -32,9 +33,8 @@ open module io.inugami.framework.commons.spring {
     requires spring.boot;
     requires spring.context;
     requires spring.core;
-    requires spring.web;
-    requires com.fasterxml.jackson.databind;
     requires spring.expression;
+    requires spring.web;
 
     exports io.inugami.framework.commons.spring to spring.core;
     exports io.inugami.framework.commons.spring.configuration;

@@ -15,6 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 open module io.inugami.framework.commons {
+    requires annotations;
     requires cglib;
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
@@ -32,7 +33,6 @@ open module io.inugami.framework.commons {
     requires lombok;
     requires org.apache.commons.io;
     requires org.slf4j;
-    requires annotations;
 
     exports io.inugami.framework.commons.data;
     exports io.inugami.framework.commons.files;
@@ -42,10 +42,10 @@ open module io.inugami.framework.commons {
     exports io.inugami.framework.commons.providers;
     exports io.inugami.framework.commons.security;
     exports io.inugami.framework.commons.spi;
+    exports io.inugami.framework.commons.threads.runner;
     exports io.inugami.framework.commons.threads;
     exports io.inugami.framework.commons.tools;
     exports io.inugami.framework.commons.writer;
-    exports io.inugami.framework.commons.threads.runner;
 
     uses io.inugami.framework.interfaces.marshalling.XmlJaxbMarshallerSpi;
     uses io.inugami.framework.interfaces.marshalling.jaxb.JaxbAdapterSpi;

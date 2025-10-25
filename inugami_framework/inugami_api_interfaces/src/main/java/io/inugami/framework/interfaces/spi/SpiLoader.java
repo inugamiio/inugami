@@ -19,6 +19,7 @@ package io.inugami.framework.interfaces.spi;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -33,6 +34,7 @@ import java.util.Objects;
  * @since 6 juin 2017
  */
 @SuppressWarnings({"java:S1181"})
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SpiLoader {
 
@@ -64,8 +66,8 @@ public class SpiLoader {
     // =========================================================================
     public synchronized <T> List<T> loadSpiService(final Class<?> type) {
         final List<T> result = loaderService.loadServices(type);
-        if (result.isEmpty()) {
-            Loggers.CONFIG.warn("no SPI implementation of {} found! please check your dependencies!", type.getName());
+        if (result.isEmpty() && log.isDebugEnabled()) {
+            log.warn("no SPI implementation of {} found! please check your dependencies!", type.getName());
         }
         return result;
     }
@@ -184,7 +186,9 @@ public class SpiLoader {
         try {
             result = annotation.annotationType().getDeclaredMethod(method, paramsTypes);
         } catch (final NoSuchMethodException | SecurityException e) {
-            Loggers.DEBUG.debug(e.getMessage(), e);
+            if(log.isDebugEnabled()){
+                log.error(e.getMessage(), e);
+            }
         }
 
         return result;
@@ -197,7 +201,9 @@ public class SpiLoader {
             try {
                 result = (T) method.invoke(object, params);
             } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                Loggers.DEBUG.error(e.getMessage(), e);
+                if(log.isDebugEnabled()){
+                    log.error(e.getMessage(), e);
+                }
             }
         }
 

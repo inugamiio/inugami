@@ -5,12 +5,12 @@
   "messageDetail" : "hello joe",
   "errorType" : "functional",
   "payload" : "{}",
-  "exploitationError" : true,
-  "rollback" : true,
-  "retryable" : true,
   "field" : "user.id",
   "url" : "http://localhost",
   "category" : "user",
   "errorDomain" : "creation",
-  "errorSubDomain" : "address"
+  "errorSubDomain" : "address",
+  "exploitationError" : true,
+  "rollback" : true,
+  "retryable" : true
 }
