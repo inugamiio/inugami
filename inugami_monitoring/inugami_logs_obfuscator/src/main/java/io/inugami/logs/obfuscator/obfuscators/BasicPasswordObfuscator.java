@@ -16,12 +16,12 @@
  */
 package io.inugami.logs.obfuscator.obfuscators;
 
-import io.inugami.logs.obfuscator.api.LogEventDto;
-import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
+import io.inugami.framework.interfaces.monitoring.logger.LogEventDto;
+import io.inugami.framework.interfaces.monitoring.logger.ObfuscatorSpi;
 
 import java.util.regex.Pattern;
 
-import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.*;
+import static io.inugami.framework.interfaces.monitoring.logger.ObfuscatorUtils.*;
 
 @SuppressWarnings({"java:S2068"})
 public class BasicPasswordObfuscator implements ObfuscatorSpi {

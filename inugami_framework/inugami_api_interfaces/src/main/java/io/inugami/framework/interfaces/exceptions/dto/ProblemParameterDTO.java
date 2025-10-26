@@ -32,6 +32,7 @@ import java.util.Collection;
 public class ProblemParameterDTO implements Serializable {
     private static final long                                  serialVersionUID = 3716810796001488797L;
     private              String                                errorCode;
+    private              String                                errorType;
     @Singular("fields")
     private              Collection<ProblemParameterFieldsDTO> fields;
 }

@@ -14,14 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.logs.obfuscator.api;
+package io.inugami.framework.interfaces.monitoring.logger;
 
-import io.inugami.logs.obfuscator.tools.ObfuscatorUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @SuppressWarnings({"java:S6355", "java:S1123", "java:S1133"})
-@Deprecated
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Constants {
     public static final String PASSWORD  = ObfuscatorUtils.PASSWORD;

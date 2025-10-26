@@ -16,7 +16,7 @@
  */
 package io.inugami.logs.obfuscator.obfuscators;
 
-import io.inugami.logs.obfuscator.api.LogEventDto;
+import io.inugami.framework.interfaces.monitoring.logger.LogEventDto;
 
 public interface ObfuscatorTestUtils {
 

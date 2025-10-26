@@ -18,7 +18,7 @@ package io.inugami.logs.obfuscator.obfuscators;
 
 import java.util.regex.Pattern;
 
-import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.keepLastChars;
+import static io.inugami.framework.interfaces.monitoring.logger.ObfuscatorUtils.keepLastChars;
 
 public class BasicAuthorizationObfuscator extends AbstractTermObfuscator {
 

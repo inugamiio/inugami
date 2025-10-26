@@ -1,3 +1,5 @@
+import io.inugami.framework.interfaces.monitoring.logger.DefaultConfigurationSpi;
+
 /* --------------------------------------------------------------------
  *  Inugami
  * --------------------------------------------------------------------
@@ -57,7 +59,7 @@ open module io.inugami.framework.api {
     uses io.inugami.framework.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI;
     uses io.inugami.framework.interfaces.tools.TemplateProviderSPI;
 
-    provides io.inugami.framework.interfaces.configurtation.ConfigurationSpi with io.inugami.framework.api.configurtation.DefaultConfigurationSpi;
+
     provides io.inugami.framework.interfaces.connectors.ConnectorListener with io.inugami.framework.api.connectors.listeners.PartnerLogListener;
     provides io.inugami.framework.interfaces.monitoring.MdcServiceSpi with io.inugami.framework.api.monitoring.MdcService;
     provides io.inugami.framework.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI with io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefaultBooleanValue, io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefaultDoubleValue, io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefaultIntValue, io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefaultLongValue, io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefault;

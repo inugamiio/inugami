@@ -22,7 +22,7 @@
     =================================================================================================================-->
     <groupId>io.inugami</groupId>
     <artifactId>inugami</artifactId>
-    <version>4.1.0-SNAPSHOT</version>
+    <version>4.1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Specifics maven lifecycle to package and run inugami project</description>
@@ -117,7 +117,6 @@
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: JDK
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-        <jdk>17</jdk>
         <jdk.env.java.home/>
         <jdk.env.property.name/>
         <jdk.test.executable/>
@@ -733,9 +732,9 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>${plugins.org-apache-maven-plugins.maven-javadoc-plugin}</version>
                     <configuration>
-                        <source>${jdk}</source>
-                        <target>${jdk}</target>
-                        <javadocVersion>${jdk}</javadocVersion>
+                        <source>${super.jdk}</source>
+                        <target>${super.jdk}</target>
+                        <javadocVersion>${super.jdk}</javadocVersion>
                         <quiet>true</quiet>
                         <charset>${project.build.sourceEncoding}</charset>
                         <encoding>${project.build.sourceEncoding}</encoding>
@@ -781,7 +780,7 @@
                                     ${os.arch})
                                 </Built-On-OS>
                                 <Built-On-Host>${git.build.host}</Built-On-Host>
-                                <Build-Jdk-Details>${jdk}
+                                <Build-Jdk-Details>${super.jdk}
                                     (${java.vendor})
                                 </Build-Jdk-Details>
                                 <Build-Job-Name>${env.BUILD_TAG}(${env.BUILD_URL})</Build-Job-Name>

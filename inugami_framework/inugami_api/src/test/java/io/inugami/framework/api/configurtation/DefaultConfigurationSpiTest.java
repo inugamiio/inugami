@@ -1,5 +1,6 @@
 package io.inugami.framework.api.configurtation;
 
+import io.inugami.framework.interfaces.monitoring.logger.DefaultConfigurationSpi;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

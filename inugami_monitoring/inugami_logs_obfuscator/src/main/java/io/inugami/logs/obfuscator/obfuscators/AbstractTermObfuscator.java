@@ -16,13 +16,13 @@
  */
 package io.inugami.logs.obfuscator.obfuscators;
 
-import io.inugami.logs.obfuscator.api.LogEventDto;
-import io.inugami.logs.obfuscator.api.ObfuscatorSpi;
+import io.inugami.framework.interfaces.monitoring.logger.LogEventDto;
+import io.inugami.framework.interfaces.monitoring.logger.ObfuscatorSpi;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.regex.Pattern;
 
-import static io.inugami.logs.obfuscator.tools.ObfuscatorUtils.*;
+import static io.inugami.framework.interfaces.monitoring.logger.ObfuscatorUtils.*;
 
 @Slf4j
 public abstract class AbstractTermObfuscator implements ObfuscatorSpi {
