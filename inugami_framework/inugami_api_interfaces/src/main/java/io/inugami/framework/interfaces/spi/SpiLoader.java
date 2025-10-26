@@ -26,6 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * SpiLoader
@@ -41,13 +42,9 @@ public class SpiLoader {
     // =========================================================================
     // METHODS
     // =========================================================================
-    private static final String              JAVAX_BEAN_NAMED = "javax.inject.Named";
-    private              SpiLoaderServiceSPI loaderService    = loadSpiLoader();
-    private static final SpiLoader           INSTANCE         = new SpiLoader();
-
-    public static SpiLoader getInstance() {
-        return INSTANCE;
-    }
+    private static final AtomicReference<SpiLoader> INSTANCE         = new AtomicReference<>();
+    private static final String                     JAVAX_BEAN_NAMED = "javax.inject.Named";
+    private              SpiLoaderServiceSPI        loaderService    = loadSpiLoader();
 
 
     private SpiLoaderServiceSPI loadSpiLoader() {
@@ -59,6 +56,20 @@ public class SpiLoader {
         if (loaderService != null) {
             this.loaderService = loaderService;
         }
+    }
+
+    public static SpiLoader getInstance() {
+        return initSpiLoader();
+    }
+
+    private synchronized static SpiLoader initSpiLoader() {
+        if (INSTANCE == null) {
+            return new SpiLoader();
+        }
+        if (INSTANCE.get() == null) {
+            INSTANCE.set(new SpiLoader());
+        }
+        return INSTANCE.get();
     }
 
     // =========================================================================
@@ -186,7 +197,7 @@ public class SpiLoader {
         try {
             result = annotation.annotationType().getDeclaredMethod(method, paramsTypes);
         } catch (final NoSuchMethodException | SecurityException e) {
-            if(log.isDebugEnabled()){
+            if (log.isDebugEnabled()) {
                 log.error(e.getMessage(), e);
             }
         }
@@ -201,7 +212,7 @@ public class SpiLoader {
             try {
                 result = (T) method.invoke(object, params);
             } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                if(log.isDebugEnabled()){
+                if (log.isDebugEnabled()) {
                     log.error(e.getMessage(), e);
                 }
             }
