@@ -19,19 +19,20 @@ import java.util.regex.Pattern;
 
 @SuppressWarnings({"java:S5852", "java:S899", "java:S6395", "java:S108", "java:S1125"})
 public class FileWriter implements AppenderWriterStrategy {
-    public static final  String                        DATE_REGEX       = "(?:[{])(yyyy[^}]+)(\\})";
-    private static final AtomicReference<Pattern>      DATE_PATTERN     = new AtomicReference<>();
-    public static final  String                        LINE             = "\n";
-    public static final  String                        EMPTY            = "";
-    private static final AtomicReference<String>       FILE_PATH        = new AtomicReference<>();
-    private static final AtomicReference<Calendar>     LAST_PATH_CHANGE = new AtomicReference<>();
-    private static final long                          MINUTE           = 60000;
-    private static final ConfigHandler<String, String> CONFIG           = refreshConfig();
+    public static final  String                    DATE_REGEX       = "(?:[{])(yyyy[^}]+)(\\})";
+    private static final AtomicReference<Pattern>  DATE_PATTERN     = new AtomicReference<>();
+    public static final  String                    LINE             = "\n";
+    public static final  String                    EMPTY            = "";
+    private static final AtomicReference<String>   FILE_PATH        = new AtomicReference<>();
+    private static final AtomicReference<Calendar> LAST_PATH_CHANGE = new AtomicReference<>();
+    private static final long                      MINUTE           = 60000;
 
-    private AppenderConfiguration  configuration = null;
-    private boolean                forceNewLine;
-    private Encoder<ILoggingEvent> encoder;
-    private java.io.FileWriter     writer;
+    private ConfigHandler<String, String> config        = refreshConfig();
+    private AppenderConfiguration         configuration = null;
+    private boolean                       forceNewLine;
+    private Encoder<ILoggingEvent>        encoder;
+    private java.io.FileWriter            writer;
+
 
 
     @Override
@@ -107,7 +108,10 @@ public class FileWriter implements AppenderWriterStrategy {
             filePath = replaceDate(filePath, currentDate);
         }
 
-        return CONFIG.applyProperties(filePath);
+        if(config==null){
+            config = refreshConfig();
+        }
+        return config.applyProperties(filePath);
     }
 
     protected static String replaceDate(final String filePath, final String currentDate) {
