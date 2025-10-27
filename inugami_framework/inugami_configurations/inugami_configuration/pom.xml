@@ -9,7 +9,7 @@
     <parent>
         <groupId>io.inugami.framework.configuration</groupId>
         <artifactId>inugami_configurations</artifactId>
-        <version>4.1.2</version>
+        <version>4.1.3-SNAPSHOT</version>
     </parent>
 
     <!--================================================================================================================
