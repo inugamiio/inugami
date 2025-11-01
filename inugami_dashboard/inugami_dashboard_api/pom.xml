@@ -39,6 +39,12 @@
             <groupId>io.inugami.framework.configuration</groupId>
             <artifactId>inugami_configuration</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.jspecify</groupId>
+            <artifactId>jspecify</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>io.inugami.framework.commons</groupId>
             <artifactId>inugami_commons_test</artifactId>

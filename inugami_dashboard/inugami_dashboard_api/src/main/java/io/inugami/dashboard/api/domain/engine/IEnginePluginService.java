@@ -14,12 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.interfaces.models.engine;
+package io.inugami.dashboard.api.domain.engine;
 
-public enum Status {
-    RUNNING,
-    SUCCESS,
-    WARN,
-    ERROR,
-    FATAL
+import io.inugami.dashboard.api.domain.engine.dto.EnginePluginResultDTO;
+import io.inugami.framework.commons.threads.ThreadsExecutorService;
+import org.jspecify.annotations.NonNull;
+
+import java.util.Collection;
+
+public interface IEnginePluginService {
+    EnginePluginResultDTO run(@NonNull final Collection<EngineListener> currentListeners);
+
+    ThreadsExecutorService getThreadsExecutorService();
 }

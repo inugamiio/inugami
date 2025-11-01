@@ -20,7 +20,8 @@ import io.inugami.framework.interfaces.models.engine.Status;
 import io.inugami.framework.interfaces.models.maven.Gav;
 import io.inugami.framework.interfaces.tools.StringComparator;
 import lombok.*;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -43,7 +44,7 @@ public class EnginePluginResultDTO implements Serializable, Comparable<EnginePlu
     private Status                                 status;
 
     @Override
-    public int compareTo(@NotNull final EnginePluginResultDTO other) {
+    public int compareTo(@NonNull final EnginePluginResultDTO other) {
         final String currentGav = gav == null ? null : gav.getHash();
         final String otherGav   = other == null || other.getGav() == null ? null : other.getGav().getHash();
         return StringComparator.compareTo(currentGav, otherGav);

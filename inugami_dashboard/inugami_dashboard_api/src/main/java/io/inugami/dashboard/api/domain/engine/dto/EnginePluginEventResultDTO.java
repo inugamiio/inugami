@@ -20,7 +20,7 @@ import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.models.engine.Status;
 import io.inugami.framework.interfaces.tools.StringComparator;
 import lombok.*;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.Serializable;
 
@@ -42,7 +42,7 @@ public class EnginePluginEventResultDTO implements Serializable, Comparable<Engi
     private Status    status;
 
     @Override
-    public int compareTo(@NotNull final EnginePluginEventResultDTO other) {
+    public int compareTo(@NonNull final EnginePluginEventResultDTO other) {
         return StringComparator.compareTo(name, other == null ? null : other.getName());
     }
 }

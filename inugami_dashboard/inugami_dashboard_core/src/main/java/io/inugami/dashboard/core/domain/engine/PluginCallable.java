@@ -14,12 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.interfaces.models.engine;
+package io.inugami.dashboard.core.domain.engine;
 
-public enum Status {
-    RUNNING,
-    SUCCESS,
-    WARN,
-    ERROR,
-    FATAL
+import io.inugami.dashboard.api.domain.engine.dto.EnginePluginResultDTO;
+import io.inugami.framework.configuration.models.plugins.Plugin;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import java.util.concurrent.Callable;
+
+@Getter
+@Builder
+@RequiredArgsConstructor
+public class PluginCallable implements Callable<EnginePluginResultDTO> {
+    private final Callable<EnginePluginResultDTO> callable;
+    private final Plugin      plugin;
+
+    @Override
+    public EnginePluginResultDTO call() throws Exception {
+        return callable.call();
+    }
 }

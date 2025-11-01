@@ -220,6 +220,7 @@
         <org.ehcache.version>3.3.1</org.ehcache.version>
         <org.jboss.async-http-servlet.version>3.1.0.Beta2</org.jboss.async-http-servlet.version>
         <org.jsoup.version>1.15.3</org.jsoup.version>
+        <org.jspecify.version>1.0.0</org.jspecify.version>
         <org.junit.jupiter>5.11.4</org.junit.jupiter>
         <org.junit.platform.version>1.11.4</org.junit.platform.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
@@ -590,6 +591,12 @@
                 <artifactId>common-java5</artifactId>
                 <version>${plugins.org-apache-maven-plugins.maven-surefire-plugin}</version>
             </dependency>
+            <dependency>
+                <groupId>org.jspecify</groupId>
+                <artifactId>jspecify</artifactId>
+                <version>${org.jspecify.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
