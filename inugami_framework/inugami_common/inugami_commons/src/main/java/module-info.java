@@ -15,6 +15,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 open module io.inugami.framework.commons {
+
+    exports io.inugami.framework.commons.cron;
+    exports io.inugami.framework.commons.data;
+    exports io.inugami.framework.commons.files;
+    exports io.inugami.framework.commons.marshaling.jaxb;
+    exports io.inugami.framework.commons.marshaling;
+    exports io.inugami.framework.commons.messages;
+    exports io.inugami.framework.commons.providers;
+    exports io.inugami.framework.commons.security;
+    exports io.inugami.framework.commons.spi;
+    exports io.inugami.framework.commons.threads.runner;
+    exports io.inugami.framework.commons.threads;
+    exports io.inugami.framework.commons.tools;
+    exports io.inugami.framework.commons.writer;
+
     requires annotations;
     requires cglib;
     requires com.fasterxml.jackson.annotation;
@@ -32,20 +47,9 @@ open module io.inugami.framework.commons {
     requires java.xml;
     requires lombok;
     requires org.apache.commons.io;
+    requires org.jspecify;
+    requires org.quartz;
     requires org.slf4j;
-
-    exports io.inugami.framework.commons.data;
-    exports io.inugami.framework.commons.files;
-    exports io.inugami.framework.commons.marshaling.jaxb;
-    exports io.inugami.framework.commons.marshaling;
-    exports io.inugami.framework.commons.messages;
-    exports io.inugami.framework.commons.providers;
-    exports io.inugami.framework.commons.security;
-    exports io.inugami.framework.commons.spi;
-    exports io.inugami.framework.commons.threads.runner;
-    exports io.inugami.framework.commons.threads;
-    exports io.inugami.framework.commons.tools;
-    exports io.inugami.framework.commons.writer;
 
     uses io.inugami.framework.interfaces.marshalling.XmlJaxbMarshallerSpi;
     uses io.inugami.framework.interfaces.marshalling.jaxb.JaxbAdapterSpi;

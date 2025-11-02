@@ -18,6 +18,7 @@ package io.inugami.framework.interfaces.models.engine;
 
 public enum Status {
     RUNNING,
+    NOTHING_TO_DO,
     SUCCESS,
     WARN,
     ERROR,

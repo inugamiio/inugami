@@ -36,6 +36,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import java.time.Clock;
+import java.time.ZoneOffset;
 
 @SuppressWarnings({"java:S2386"})
 @Slf4j
@@ -53,6 +54,12 @@ public class ConfigConfiguration {
     @Bean
     public Clock clock() {
         return Clock.systemUTC();
+    }
+
+    @ConditionalOnMissingBean
+    @Bean
+    public ZoneOffset zoneOffset() {
+        return ZoneOffset.UTC;
     }
 
     @Bean
@@ -157,19 +164,19 @@ public class ConfigConfiguration {
 
     @ConditionalOnMissingBean
     @Bean
-    public ObjectMapper objectMapper(){
+    public ObjectMapper objectMapper() {
         return JsonMarshaller.getInstance().getDefaultObjectMapper();
     }
 
     @ConditionalOnMissingBean
     @Bean
-    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(final ObjectMapper objectMapper){
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(final ObjectMapper objectMapper) {
         return new MappingJackson2HttpMessageConverter(objectMapper);
     }
 
     @ConditionalOnMissingBean
     @Bean
-    public SpelExpressionParser spelExpressionParser(){
+    public SpelExpressionParser spelExpressionParser() {
         return new SpelExpressionParser();
     }
 

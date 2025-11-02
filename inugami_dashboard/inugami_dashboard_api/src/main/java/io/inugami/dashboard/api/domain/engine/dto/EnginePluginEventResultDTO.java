@@ -18,6 +18,7 @@ package io.inugami.dashboard.api.domain.engine.dto;
 
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.models.engine.Status;
+import io.inugami.framework.interfaces.task.ProviderFutureResult;
 import io.inugami.framework.interfaces.tools.StringComparator;
 import lombok.*;
 import org.jspecify.annotations.NonNull;
@@ -33,13 +34,16 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class EnginePluginEventResultDTO implements Serializable, Comparable<EnginePluginEventResultDTO> {
     @EqualsAndHashCode.Include
-    private String    name;
+    private String               name;
     @ToString.Include
     @EqualsAndHashCode.Include
-    private ErrorCode errorCode;
+    private ErrorCode            errorCode;
     @ToString.Include
     @EqualsAndHashCode.Include
-    private Status    status;
+    private Status               status;
+    private String               message;
+    private Throwable            error;
+    private ProviderFutureResult data;
 
     @Override
     public int compareTo(@NonNull final EnginePluginEventResultDTO other) {

@@ -141,6 +141,7 @@ public class PluginService implements IPluginService {
 
 
         Map<String, Map<String, String>> properties = new LinkedHashMap<>();
+        //TODO : clean
         /*
         if (manifest != null) {
             if (alertsResourcesLoaderZip.isJarResources(manifest.getManifestUrl())) {

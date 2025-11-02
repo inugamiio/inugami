@@ -17,7 +17,6 @@
 package io.inugami.dashboard.core.configuration;
 
 import io.inugami.dashboard.api.domain.engine.EngineListener;
-import io.inugami.dashboard.api.domain.engine.IEnginePluginService;
 import io.inugami.dashboard.api.domain.plugin.IPluginService;
 import io.inugami.dashboard.core.domain.engine.EngineService;
 import io.inugami.framework.commons.threads.ThreadsExecutorService;
@@ -33,6 +32,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
 import java.time.Clock;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -104,16 +104,17 @@ public class InugamiCoreConfiguration {
     public EngineService engineService(final InugamiConfiguration configuration,
                                        final List<Plugin> plugins,
                                        final Collection<EngineListener> listeners,
-                                       final Clock clock) {
+                                       final Clock clock,
+                                       final ZoneOffset zoneOffset) {
         long timeout = configuration.getEngine().getTimeout();
         if (timeout < 1000L) {
             timeout = InugamiConfiguration.InugamiConfigurationEngine.DEFAULT_TIMEOUT;
         }
         int maxThreads = configuration.getEngine().getMaxThreads();
-        if(maxThreads<1){
+        if (maxThreads < 1) {
             maxThreads = 1;
         }
-        if(maxThreads>InugamiConfiguration.InugamiConfigurationEngine.DEFAULT_MAX_THREAD){
+        if (maxThreads > InugamiConfiguration.InugamiConfigurationEngine.DEFAULT_MAX_THREAD) {
             maxThreads = InugamiConfiguration.InugamiConfigurationEngine.DEFAULT_MAX_THREAD;
         }
 
@@ -134,6 +135,7 @@ public class InugamiCoreConfiguration {
                                         .threadsExecutor(engineThreadsExecutorService)
                                         .threadsExecutorInternal(internalThreadPool)
                                         .clock(clock)
+                                        .zoneOffset(zoneOffset)
                                         .timeout(configuration.getEngine().getTimeout())
                                         .build()
                                         .init();

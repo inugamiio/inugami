@@ -36,6 +36,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -75,6 +77,8 @@ public class SystemCpuProvider implements Provider {
     @Override
     public <T extends SimpleEvent> FutureData<ProviderFutureResult> callEvent(final T event, final Gav pluginGav) {
         final var task = SystemCpuProviderTask.builder()
+                                              .event(event)
+                                              .pluginGav(pluginGav)
                                               .build();
         final Future<ProviderFutureResult> future = providerRunner.run(getName(), task);
         return FutureDataModel.<ProviderFutureResult>builder()
@@ -111,10 +115,13 @@ public class SystemCpuProvider implements Provider {
 
         @Override
         public ProviderFutureResult callProvider() {
+            final OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+
+            final double value = osBean.getSystemLoadAverage() / osBean.getAvailableProcessors();
             return ProviderFutureResult.builder()
                                        .data(TimeValue.builder()
                                                       .path(SYSTEM_CPU)
-                                                      .value(FloatNumber.of(10.0))
+                                                      .value(FloatNumber.of(value))
                                                       .time(System.currentTimeMillis())
                                                       .build())
                                        .build();

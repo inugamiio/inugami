@@ -26,6 +26,8 @@ import io.inugami.framework.commons.threads.ThreadsExecutorService;
 import io.inugami.framework.configuration.models.plugins.Plugin;
 import io.inugami.framework.interfaces.exceptions.TechnicalException;
 import io.inugami.framework.interfaces.models.engine.Status;
+import io.inugami.framework.interfaces.processors.Processor;
+import io.inugami.framework.interfaces.providers.Provider;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,9 +36,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -53,7 +55,10 @@ public class EngineService implements IEngineService {
     public static final int                               DEFAULT_TIMEOUT      = 60_000;
     public static final int                               MIN_TIMEOUT          = 1000;
     private final       Map<String, IEnginePluginService> enginePluginServices = new LinkedHashMap<>();
+    private final       List<Provider>                    providers            = new ArrayList<>();
+    private final       List<Processor>                   processors           = new ArrayList<>();
     private final       Clock                             clock;
+    private final       ZoneOffset                        zoneOffset;
     private final       Collection<EngineListener>        listeners;
     private final       List<Plugin>                      plugins;
     private final       ThreadsExecutorService            threadsExecutorInternal;
@@ -66,6 +71,11 @@ public class EngineService implements IEngineService {
     //==================================================================================================================
     public EngineService init() {
         for (Plugin plugin : getPlugins()) {
+            providers.addAll(Optional.ofNullable(plugin.getProviders()).orElse(List.of()));
+            processors.addAll(Optional.ofNullable(plugin.getProcessors()).orElse(List.of()));
+        }
+
+        for (Plugin plugin : getPlugins()) {
             final var timeout    = getPluginTimeout(plugin.getConfig().getProperties());
             final var maxThreads = getPluginMaxThread(plugin.getConfig().getProperties());
             final var threadPool = new ThreadsExecutorService("ENGINE_PLUGIN_" + plugin.getGav().getHash(),
@@ -77,6 +87,10 @@ public class EngineService implements IEngineService {
                                      EnginePluginService.builder()
                                                         .plugin(plugin)
                                                         .threadsExecutorService(threadPool)
+                                                        .zoneOffset(zoneOffset)
+                                                        .providers(providers)
+                                                        .processors(processors)
+                                                        .timeout(timeout)
                                                         .build());
         }
         return this;
@@ -97,20 +111,27 @@ public class EngineService implements IEngineService {
         final Collection<EngineListener>            currentListeners = getListeners();
         final List<Callable<EnginePluginResultDTO>> tasks            = new ArrayList<>();
         final Map<String, EnginePluginResultDTO>    pluginStatus     = new ConcurrentHashMap<>();
-
+        final LocalDateTime                         now              = LocalDateTime.now(clock);
 
         for (Plugin plugin : getPlugins()) {
             final IEnginePluginService enginePluginService = getPluginEngine(plugin);
-            tasks.add(PluginCallable.builder()
-                                    .plugin(plugin)
-                                    .callable(() -> enginePluginService.run(currentListeners))
-                                    .build());
+            if (enginePluginService.hasEventsToRun(now)) {
+                tasks.add(PluginCallable.builder()
+                                        .plugin(plugin)
+                                        .callable(() -> enginePluginService.run(currentListeners, now))
+                                        .build());
 
-            pluginStatus.put(plugin.getGav().getHash(),
-                             EnginePluginResultDTO.builder()
-                                                  .gav(plugin.getGav())
-                                                  .status(Status.RUNNING)
-                                                  .build());
+                pluginStatus.put(plugin.getGav().getHash(),
+                                 EnginePluginResultDTO.builder()
+                                                      .gav(plugin.getGav())
+                                                      .status(Status.RUNNING)
+                                                      .build());
+            }
+        }
+
+        if (tasks.isEmpty()) {
+            log.debug("no task to run");
+            return EngineResultDTO.builder().status(Status.NOTHING_TO_DO).build();
         }
 
         try {

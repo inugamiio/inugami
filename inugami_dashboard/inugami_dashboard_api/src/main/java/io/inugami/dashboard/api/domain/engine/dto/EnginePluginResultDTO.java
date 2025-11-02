@@ -42,6 +42,7 @@ public class EnginePluginResultDTO implements Serializable, Comparable<EnginePlu
     @ToString.Include
     @EqualsAndHashCode.Include
     private Status                                 status;
+    private String                                 message;
 
     @Override
     public int compareTo(@NonNull final EnginePluginResultDTO other) {

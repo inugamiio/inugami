@@ -14,20 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.api.domain.engine;
+package io.inugami.dashboard.core.domain.engine.plugin;
 
-import io.inugami.dashboard.api.domain.engine.dto.EnginePluginResultDTO;
-import io.inugami.framework.commons.threads.ThreadsExecutorService;
-import org.jspecify.annotations.NonNull;
+import io.inugami.framework.commons.cron.CronResolver;
+import io.inugami.framework.configuration.models.EventConfig;
+import io.inugami.framework.interfaces.models.event.Event;
+import io.inugami.framework.interfaces.models.event.SimpleEvent;
+import lombok.*;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
-
-public interface IEnginePluginService {
-    boolean hasEventsToRun(final LocalDateTime now);
-
-    EnginePluginResultDTO run(@NonNull final Collection<EngineListener> currentListeners,
-                              @NonNull final LocalDateTime now);
-
-    ThreadsExecutorService getThreadsExecutorService();
+@ToString
+@EqualsAndHashCode
+@Setter
+@Getter
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+public class PluginEventCron {
+    private Event        event;
+    private SimpleEvent  simpleEvent;
+    private CronResolver cron;
+    private EventConfig  eventConfig;
 }

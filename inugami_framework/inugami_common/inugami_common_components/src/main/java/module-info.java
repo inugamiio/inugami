@@ -29,6 +29,7 @@ open module io.inugami.framework.commons.components {
     requires io.inugami.framework.interfaces;
     requires lombok;
     requires org.slf4j;
+    requires java.management;
 
     exports io.inugami.framework.commons.components.providers.system;
 

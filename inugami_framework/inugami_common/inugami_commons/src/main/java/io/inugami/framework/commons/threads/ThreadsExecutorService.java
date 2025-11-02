@@ -24,6 +24,7 @@ import io.inugami.framework.interfaces.listeners.TaskFinishListener;
 import io.inugami.framework.interfaces.listeners.TaskStartListener;
 import io.inugami.framework.interfaces.models.tools.Chrono;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ import java.util.function.BiConsumer;
  * @since 13 janv. 2017
  */
 @SuppressWarnings({"java:S1186", "java:S2142", "java:S2139"})
+@Slf4j
 public class ThreadsExecutorService implements LifecycleBootstrap {
 
     // =================================================================================================================
@@ -139,26 +141,31 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
     // WAIT
     // =================================================================================================================
     public <T> void waitting(final List<CompletableFuture<T>> futures, final long timeout) throws TechnicalException {
-        if ((futures != null) && !futures.isEmpty()) {
+        if (futures == null || futures.isEmpty()) {
+            log.debug("empty or null futures");
+            return;
+        }
+        final List<CompletableFuture<T>> currentFutures = new ArrayList<>(futures);
+        final long                       now            = System.currentTimeMillis();
+        final long                       doneMax        = now + timeout;
+        long                             delta          = doneMax - now;
 
-            final Chrono chrono = Chrono.startChrono();
-
-
-            for (final CompletableFuture<T> future : futures) {
-                chrono.snapshot();
-                long localTimeout = timeout - chrono.getDuration();
-
-                if (localTimeout > 0) {
-                    try {
-                        future.get(localTimeout, TimeUnit.MILLISECONDS);
-                    } catch (final InterruptedException | ExecutionException | TimeoutException e) {
-                        Loggers.PLUGINS.error(e.getMessage());
-                        throw new TechnicalException(e.getMessage(), e);
+        do {
+            int       index    = -1;
+            for(CompletableFuture<T> future : new ArrayList<>(currentFutures)){
+                index++;
+                try {
+                    future.get(delta, TimeUnit.MILLISECONDS);
+                    if(index>currentFutures.size()){
+                        currentFutures.remove(index);
                     }
+                } catch (final InterruptedException | ExecutionException | TimeoutException e) {
+                    Loggers.PLUGINS.error(e.getMessage());
                 }
             }
 
-        }
+            delta = delta - (System.currentTimeMillis() - now);
+        } while (currentFutures.size() > 0 || delta >= 0);
     }
 
 

@@ -226,7 +226,7 @@
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <org.projectlombok.lombok-mapstruct-binding.version>0.2.0</org.projectlombok.lombok-mapstruct-binding.version>
         <org.projectlombok.version>1.18.30</org.projectlombok.version>
-        <org.quartz.version>2.3.2</org.quartz.version>
+        <org.quartz.version>2.5.1</org.quartz.version>
         <org.slf4j.version>2.0.9</org.slf4j.version>
         <org.yaml.version>2.2</org.yaml.version>
         <swagger-jaxrs2.version>2.0.0</swagger-jaxrs2.version>
