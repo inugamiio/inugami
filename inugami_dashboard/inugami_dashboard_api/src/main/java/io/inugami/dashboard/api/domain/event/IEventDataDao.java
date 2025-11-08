@@ -14,22 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-open module io.inugami.dashboard.infrastructure {
+package io.inugami.dashboard.api.domain.event;
 
-    exports io.inugami.dashboard.infrastructure.database;
-    exports io.inugami.dashboard.infrastructure.internal.schduler;
-    exports io.inugami.dashboard.infrastructure.sender;
+import io.inugami.dashboard.api.domain.engine.dto.EventDoneDTO;
 
-    requires io.inugami.dashboard.api;
-    requires io.inugami.framework.commons.components;
-    requires io.inugami.framework.commons;
-    requires io.inugami.framework.configurations.configuration;
-    requires io.inugami.framework.interfaces;
-    requires jakarta.annotation;
-    requires java.sql;
-    requires lombok;
-    requires org.mapstruct;
-    requires org.slf4j;
-    requires spring.boot;
-    requires spring.context;
+import java.util.Collection;
+
+public interface IEventDataDao {
+    void updateEventsData(final Collection<EventDoneDTO> eventsResult);
 }

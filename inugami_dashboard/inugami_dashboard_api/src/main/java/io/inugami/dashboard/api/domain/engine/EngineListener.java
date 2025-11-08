@@ -16,9 +16,16 @@
  */
 package io.inugami.dashboard.api.domain.engine;
 
+import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
 import io.inugami.dashboard.api.domain.engine.dto.EngineResultDTO;
+import io.inugami.framework.configuration.models.plugins.Plugin;
+import io.inugami.framework.interfaces.models.event.GenericEvent;
 
 public interface EngineListener {
 
-    void onDone(final EngineResultDTO engineResult);
+    default void onDone(final EngineResultDTO engineResult) {
+    }
+
+    default void onEventDone(final Plugin plugin, final GenericEvent<?> event, final EnginePluginEventResultDTO data) {
+    }
 }

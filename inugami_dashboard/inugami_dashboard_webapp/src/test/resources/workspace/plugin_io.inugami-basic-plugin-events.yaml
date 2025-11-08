@@ -13,10 +13,10 @@ enable: true
 #=======================================================================================================================
 # SimpleEvents
 #=======================================================================================================================
-simpleEvents:
-  - name: foobar-quality
-    provider: SystemCpuProvider
-    scheduler: 0/10 * * * * ?
+#simpleEvents:
+#  - name: cpu
+#    provider: SystemCpuProvider
+#    scheduler: 0/10 * * * * ?
 
 #=======================================================================================================================
 # Events
@@ -25,13 +25,13 @@ events:
   #---------------------------------------------------------------------------------------------------------------------
   # foobar-api-pourcentrage
   #---------------------------------------------------------------------------------------------------------------------
-  - name: foobar-api-pourcentrage
-    provider: graphite.bigdata
-    scheduler: 0 0/3 * * * ?
+  - name: cpu-multi
+    provider: SystemCpuProvider
+    scheduler: 0/15 * * * * ?
     targets:
-      - name: foobar-sys
-        query: summarize(asPercent(sumSeries(org.foo.bar.jmx.joe.sessions),sumSeries(org.foo.bar.jmx.*.session)), "24h", "avg",true)
+      - name: cpu-multi-target1
+      - name: cpu-multi-target2
 
-      - name: gravida-pourcentrage
-        query: >
-          summarize(asPercent(sumSeries(org.foo.bar.jmx.gravida.sessions),sumSeries(org.foo.bar.jmx.*.session)), "24h", "avg",true)
+      #- name: gravida-pourcentrage
+      #  query: >
+      #   summarize(asPercent(sumSeries(org.foo.bar.jmx.gravida.sessions),sumSeries(org.foo.bar.jmx.*.session)), "24h", "avg",true)

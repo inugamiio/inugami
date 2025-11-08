@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder">
+            <configuration>
+                <forceNewLine>true</forceNewLine>
+            </configuration>
+            <pattern>%d{dd/MM HH:mm:ss} %5p [%c:%L] - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="ch.qos.logback">
+        <level value="WARN"/>
+    </logger>
+    <logger name="org.springframework">
+        <level value="INFO"/>
+    </logger>
+
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>

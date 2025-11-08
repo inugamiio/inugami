@@ -26,9 +26,7 @@ import io.inugami.framework.interfaces.models.tools.Chrono;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.BiConsumer;
 
@@ -84,7 +82,8 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
         return run(tasks, onDone, null);
     }
 
-    public <T> List<CompletableFuture<T>> run(final List<Callable<T>> tasks, final BiConsumer<T, Callable<T>> onDone,
+    public <T> List<CompletableFuture<T>> run(final List<Callable<T>> tasks,
+                                              final BiConsumer<T, Callable<T>> onDone,
                                               final BiConsumer<Exception, Callable<T>> onError) {
         final List<CompletableFuture<T>> result = new ArrayList<>();
 
@@ -116,13 +115,15 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
         return runAndGrab(tasks, null, null, timeout);
     }
 
-    public <T> List<T> runAndGrab(final List<Callable<T>> tasks, final BiConsumer<T, Callable<T>> onDone,
+    public <T> List<T> runAndGrab(final List<Callable<T>> tasks,
+                                  final BiConsumer<T, Callable<T>> onDone,
                                   final long timeout) throws TechnicalException {
         return runAndGrab(tasks, onDone, null, timeout);
     }
 
 
-    public <T> List<T> runAndGrab(final List<Callable<T>> tasks, final BiConsumer<T, Callable<T>> onDone,
+    public <T> List<T> runAndGrab(final List<Callable<T>> tasks,
+                                  final BiConsumer<T, Callable<T>> onDone,
                                   final BiConsumer<Exception, Callable<T>> onError,
                                   final long timeout) throws TechnicalException {
         final List<T> result = new ArrayList<>();
@@ -150,22 +151,21 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
         final long                       doneMax        = now + timeout;
         long                             delta          = doneMax - now;
 
-        do {
-            int       index    = -1;
-            for(CompletableFuture<T> future : new ArrayList<>(currentFutures)){
-                index++;
-                try {
-                    future.get(delta, TimeUnit.MILLISECONDS);
-                    if(index>currentFutures.size()){
-                        currentFutures.remove(index);
-                    }
-                } catch (final InterruptedException | ExecutionException | TimeoutException e) {
-                    Loggers.PLUGINS.error(e.getMessage());
-                }
-            }
 
-            delta = delta - (System.currentTimeMillis() - now);
-        } while (currentFutures.size() > 0 || delta >= 0);
+        for (CompletableFuture<T> future : new ArrayList<>(currentFutures)) {
+            try {
+                final long start = System.currentTimeMillis();
+                future.get(delta, TimeUnit.MILLISECONDS);
+                final long done = System.currentTimeMillis();
+                delta = delta - (done - start);
+                if (delta <= 0) {
+                    break;
+                }
+
+            } catch (final InterruptedException | ExecutionException | TimeoutException e) {
+                Loggers.PLUGINS.error(e.getMessage());
+            }
+        }
     }
 
 
@@ -227,7 +227,9 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
         return submit(name, task, listener, null);
     }
 
-    public <T> Future<T> submit(final String name, final Callable<T> task, final TaskFinishListener finishListner,
+    public <T> Future<T> submit(final String name,
+                                final Callable<T> task,
+                                final TaskFinishListener finishListner,
                                 final TaskStartListener startListner) {
         return executor.submit(new ThreadsExecutorTask<T>(name, task, startListner, finishListner));
     }
@@ -271,7 +273,9 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
 
         private final TaskFinishListener finishListner;
 
-        public ThreadsExecutorTask(final String name, final Callable<T> task, final TaskStartListener startListner,
+        public ThreadsExecutorTask(final String name,
+                                   final Callable<T> task,
+                                   final TaskStartListener startListner,
                                    final TaskFinishListener finishListner) {
             Asserts.assertNotNull(NAME_MUSTN_T_BE_NULL, name);
             Asserts.assertNotNull(NAME_MUSTN_T_BE_NULL, task);

@@ -17,7 +17,9 @@
 package io.inugami.dashboard.core.configuration;
 
 import io.inugami.dashboard.api.domain.engine.EngineListener;
+import io.inugami.dashboard.api.domain.event.IEventDataDao;
 import io.inugami.dashboard.api.domain.plugin.IPluginService;
+import io.inugami.dashboard.api.domain.sender.ISSESender;
 import io.inugami.dashboard.core.domain.engine.EngineService;
 import io.inugami.framework.commons.threads.ThreadsExecutorService;
 import io.inugami.framework.configuration.models.app.ApplicationConfig;
@@ -105,7 +107,9 @@ public class InugamiCoreConfiguration {
                                        final List<Plugin> plugins,
                                        final Collection<EngineListener> listeners,
                                        final Clock clock,
-                                       final ZoneOffset zoneOffset) {
+                                       final ZoneOffset zoneOffset,
+                                       final ISSESender sseSender,
+                                       final IEventDataDao eventDataDao) {
         long timeout = configuration.getEngine().getTimeout();
         if (timeout < 1000L) {
             timeout = InugamiConfiguration.InugamiConfigurationEngine.DEFAULT_TIMEOUT;
@@ -130,13 +134,15 @@ public class InugamiCoreConfiguration {
         THREAD_POOLS.addAll(List.of(engineThreadsExecutorService, internalThreadPool));
 
         final var result = EngineService.builder()
+                                        .clock(clock)
+                                        .eventDataDao(eventDataDao)
+                                        .listeners(new ArrayList<>(listeners))
                                         .plugins(plugins)
-                                        .listeners(listeners)
+                                        .sseSender(sseSender)
                                         .threadsExecutor(engineThreadsExecutorService)
                                         .threadsExecutorInternal(internalThreadPool)
-                                        .clock(clock)
-                                        .zoneOffset(zoneOffset)
                                         .timeout(configuration.getEngine().getTimeout())
+                                        .zoneOffset(zoneOffset)
                                         .build()
                                         .init();
         THREAD_POOLS.addAll(result.getPluginsThreadPool());

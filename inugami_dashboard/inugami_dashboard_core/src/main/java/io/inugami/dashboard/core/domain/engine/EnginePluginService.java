@@ -20,6 +20,7 @@ import io.inugami.dashboard.api.domain.engine.EngineListener;
 import io.inugami.dashboard.api.domain.engine.IEnginePluginService;
 import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
 import io.inugami.dashboard.api.domain.engine.dto.EnginePluginResultDTO;
+import io.inugami.dashboard.api.domain.sender.ISSESender;
 import io.inugami.dashboard.core.domain.engine.events.EventRunner;
 import io.inugami.dashboard.core.domain.engine.events.SimpleEventRunner;
 import io.inugami.dashboard.core.domain.engine.plugin.PluginEventCron;
@@ -46,7 +47,6 @@ import java.util.*;
 import java.util.concurrent.Callable;
 
 @Slf4j
-
 public class EnginePluginService implements IEnginePluginService {
     // =================================================================================================================
     // ATTRIBUTES
@@ -65,6 +65,7 @@ public class EnginePluginService implements IEnginePluginService {
     private final       List<Provider>                       providers;
     private final       List<Processor>                      processors;
     private final       long                                 timeout;
+    private final       Collection<EngineListener>           listeners;
 
     // =================================================================================================================
     // INIT
@@ -75,13 +76,15 @@ public class EnginePluginService implements IEnginePluginService {
                                final List<Processor> processors,
                                final ZoneOffset zoneOffset,
                                final long timeout,
-                               final ThreadsExecutorService threadsExecutorService) {
+                               final ThreadsExecutorService threadsExecutorService,
+                               final Collection<EngineListener> listeners) {
         this.providers = providers;
         this.processors = processors;
         this.plugin = plugin;
         this.zoneOffset = zoneOffset;
         this.threadsExecutorService = threadsExecutorService;
         this.timeout = timeout < 1000 ? Double.valueOf(EngineService.DEFAULT_TIMEOUT * 0.9).longValue() : timeout;
+        this.listeners = listeners;
         initializeEvents();
     }
 
@@ -187,11 +190,12 @@ public class EnginePluginService implements IEnginePluginService {
         return SimpleEventRunner.builder()
                                 .event(simpleEvent)
                                 .now(now)
-                                .provider(provider.get())
                                 .plugin(plugin)
                                 .processors(getProcessors(simpleEvent.getProcessors()))
-                                .zoneOffset(zoneOffset)
+                                .provider(provider.get())
+                                .listeners(listeners)
                                 .timeout(Double.valueOf(timeout * 0.9).longValue())
+                                .zoneOffset(zoneOffset)
                                 .build()
                                 .run();
     }
@@ -221,7 +225,10 @@ public class EnginePluginService implements IEnginePluginService {
 
         return EventRunner.builder()
                           .event(event)
+                          .listeners(listeners)
                           .now(now)
+                          .timeout(Double.valueOf(timeout * 0.9).longValue())
+                          .threadsExecutorService(threadsExecutorService)
                           .providers(providers.stream()
                                               .map(this::getProvider)
                                               .filter(Optional::isPresent)

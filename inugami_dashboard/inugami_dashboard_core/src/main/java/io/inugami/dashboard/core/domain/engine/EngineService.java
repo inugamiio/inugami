@@ -19,15 +19,21 @@ package io.inugami.dashboard.core.domain.engine;
 import io.inugami.dashboard.api.domain.engine.EngineListener;
 import io.inugami.dashboard.api.domain.engine.IEnginePluginService;
 import io.inugami.dashboard.api.domain.engine.IEngineService;
+import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
 import io.inugami.dashboard.api.domain.engine.dto.EnginePluginResultDTO;
 import io.inugami.dashboard.api.domain.engine.dto.EngineResultDTO;
+import io.inugami.dashboard.api.domain.engine.dto.EventDoneDTO;
+import io.inugami.dashboard.api.domain.event.IEventDataDao;
+import io.inugami.dashboard.api.domain.sender.ISSESender;
 import io.inugami.framework.api.monitoring.MdcService;
 import io.inugami.framework.commons.threads.ThreadsExecutorService;
 import io.inugami.framework.configuration.models.plugins.Plugin;
 import io.inugami.framework.interfaces.exceptions.TechnicalException;
 import io.inugami.framework.interfaces.models.engine.Status;
+import io.inugami.framework.interfaces.models.event.GenericEvent;
 import io.inugami.framework.interfaces.processors.Processor;
 import io.inugami.framework.interfaces.providers.Provider;
+import io.inugami.framework.interfaces.tools.BlockingQueue;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +50,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @RequiredArgsConstructor
 @Builder
-public class EngineService implements IEngineService {
+public class EngineService implements IEngineService, EngineListener {
 
 
     //==================================================================================================================
@@ -54,15 +60,18 @@ public class EngineService implements IEngineService {
     public static final String                            TIMEOUT              = "timeout";
     public static final int                               DEFAULT_TIMEOUT      = 60_000;
     public static final int                               MIN_TIMEOUT          = 1000;
+    private final       BlockingQueue<EventDoneDTO>       EVENTS_DONE          = new BlockingQueue<>();
     private final       Map<String, IEnginePluginService> enginePluginServices = new LinkedHashMap<>();
     private final       List<Provider>                    providers            = new ArrayList<>();
     private final       List<Processor>                   processors           = new ArrayList<>();
     private final       Clock                             clock;
     private final       ZoneOffset                        zoneOffset;
-    private final       Collection<EngineListener>        listeners;
+    private final       List<EngineListener>              listeners;
     private final       List<Plugin>                      plugins;
     private final       ThreadsExecutorService            threadsExecutorInternal;
     private final       ThreadsExecutorService            threadsExecutor;
+    private final       IEventDataDao                     eventDataDao;
+    private final       ISSESender                        sseSender;
     private final       long                              timeout;
 
 
@@ -70,6 +79,7 @@ public class EngineService implements IEngineService {
     // INIT
     //==================================================================================================================
     public EngineService init() {
+        listeners.addFirst(this);
         for (Plugin plugin : getPlugins()) {
             providers.addAll(Optional.ofNullable(plugin.getProviders()).orElse(List.of()));
             processors.addAll(Optional.ofNullable(plugin.getProcessors()).orElse(List.of()));
@@ -91,6 +101,7 @@ public class EngineService implements IEngineService {
                                                         .providers(providers)
                                                         .processors(processors)
                                                         .timeout(timeout)
+                                                        .listeners(listeners)
                                                         .build());
         }
         return this;
@@ -102,8 +113,13 @@ public class EngineService implements IEngineService {
     //==================================================================================================================
     @Override
     public void run() {
+        final List<EventDoneDTO> previousEventsDone = EVENTS_DONE.pollAll();
+        if (!previousEventsDone.isEmpty()) {
+            threadsExecutorInternal.submit(UUID.randomUUID().toString(), () -> sendEvents(previousEventsDone));
+        }
         threadsExecutorInternal.submit(UUID.randomUUID().toString(), () -> processRun());
     }
+
 
     protected EngineResultDTO processRun() {
         final var mdc = MdcService.getInstance();
@@ -130,7 +146,7 @@ public class EngineService implements IEngineService {
         }
 
         if (tasks.isEmpty()) {
-            log.debug("no task to run");
+            log.trace("no task to run");
             return EngineResultDTO.builder().status(Status.NOTHING_TO_DO).build();
         }
 
@@ -216,6 +232,25 @@ public class EngineService implements IEngineService {
         listeners.forEach(listener -> listener.onDone(engineResult));
     }
 
+    public void onEventDone(final Plugin plugin, final GenericEvent<?> event, final EnginePluginEventResultDTO data) {
+        EVENTS_DONE.add(EventDoneDTO.builder()
+                                    .plugin(plugin)
+                                    .event(event)
+                                    .data(data)
+                                    .date(LocalDateTime.now(clock))
+                                    .build());
+    }
+
+    protected Object sendEvents(final List<EventDoneDTO> previousEventsDone) {
+        final List<EventDoneDTO> successEvents = previousEventsDone.stream()
+                                                                   .filter(e -> Status.ERROR != e.getData().getStatus())
+                                                                   .toList();
+        if (!successEvents.isEmpty()) {
+            eventDataDao.updateEventsData(successEvents);
+            sseSender.onEventDone(successEvents);
+        }
+        return null;
+    }
 
     //==================================================================================================================
     // GETTERS
