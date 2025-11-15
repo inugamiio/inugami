@@ -16,10 +16,16 @@
  */
 package io.inugami.dashboard.api.domain.event;
 
+import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
 import io.inugami.dashboard.api.domain.engine.dto.EventDoneDTO;
+import io.inugami.framework.interfaces.models.maven.Gav;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface IEventDataDao {
     void updateEventsData(final Collection<EventDoneDTO> eventsResult);
+
+    Map<String, EnginePluginEventResultDTO> findPluginDataByGav(@NonNull final Gav gav);
 }

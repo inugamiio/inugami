@@ -1,6 +1,7 @@
 package io.inugami.framework.commons.spring;
 
 import io.inugami.framework.interfaces.spi.JavaSpiLoaderServiceSPI;
+import io.inugami.framework.interfaces.spi.PriorityComparator;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ public class SpringSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
     private static final AtomicReference<ConfigurableListableBeanFactory> SPRING_CONTEXT = new AtomicReference<>();
     private final        JavaSpiLoaderServiceSPI                          javaSpiLoader  = new JavaSpiLoaderServiceSPI();
 
-    static synchronized void initSpringContext(final ConfigurableListableBeanFactory context) {
+    public static synchronized void initSpringContext(final ConfigurableListableBeanFactory context) {
         SPRING_CONTEXT.set(context);
         SpiLoader.getInstance().reloadLoaderService(new SpringSpiLoaderServiceSPI());
     }
@@ -26,6 +27,17 @@ public class SpringSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
         final List<T> result = new ArrayList<>();
         result.addAll(searchSpringBeans(type));
         result.addAll(javaSpiLoader.loadServices(type));
+        return result;
+    }
+
+    @Override
+    public <T> List<T> loadSpiServicesByPriority(final Class<?> type, final T defaultImplementation) {
+        final List<T> result = loadServices(type);
+        if (defaultImplementation != null) {
+            result.add(defaultImplementation);
+        }
+
+        result.sort(new PriorityComparator<>());
         return result;
     }
 

@@ -14,23 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.api.domain.plugin;
+package io.inugami.dashboard.interfaces.core.domain.plugin.mapper;
 
 import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
-import io.inugami.framework.configuration.models.plugins.Plugin;
-import org.jspecify.annotations.NonNull;
+import lombok.experimental.UtilityClass;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+@UtilityClass
+public class EnginePluginEventResultAPIMapperUtils {
 
-public interface IPluginService {
-    List<Plugin> loadPlugins();
-
-    Collection<Plugin> findAllPlugin();
-
-    Map<String, EnginePluginEventResultDTO> findPluginDataByGav(@NonNull final String groupId,
-                                                                @NonNull final String artifactId);
-
-
+    public static Throwable convertException(final EnginePluginEventResultDTO value) {
+        if (value == null || value.getError() == null) {
+            return null;
+        }
+        return new Exception(value.getError().getMessage());
+    }
 }

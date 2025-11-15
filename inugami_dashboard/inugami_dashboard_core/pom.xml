@@ -76,6 +76,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>io.inugami.framework.commons</groupId>
             <artifactId>inugami_commons_test</artifactId>
             <scope>test</scope>

@@ -39,7 +39,7 @@ public interface AlertingRestClient {
     SearchResponse<AlertingModel> search(final AlertingSearchRequestAPI searchRequest);
 
     @GetMapping(path = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    AlertingModel getById(@PathVariable final String id,
+    AlertingModel getById(@PathVariable(required = true) final String id,
                           @RequestParam(name = "full", defaultValue = "false", required = false) final boolean full);
 
     // =================================================================================================================

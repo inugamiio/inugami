@@ -20,11 +20,13 @@ open module io.inugami.dashboard.interfaces.api {
     requires lombok;
     requires org.slf4j;
     requires spring.web;
-
+    requires io.inugami.framework.configurations.configuration;
 
     exports io.inugami.dashboard.interfaces.domain.administration;
     exports io.inugami.dashboard.interfaces.domain.administration.dto;
     exports io.inugami.dashboard.interfaces.domain.alerting;
     exports io.inugami.dashboard.interfaces.domain.alerting.dto;
     exports io.inugami.dashboard.interfaces.domain.event;
+    exports io.inugami.dashboard.interfaces.domain.plugin;
+    exports io.inugami.dashboard.interfaces.domain.plugin.dto;
 }

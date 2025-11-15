@@ -16,6 +16,8 @@
  */
 package io.inugami.dashboard.core.domain.plugin;
 
+import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
+import io.inugami.dashboard.api.domain.event.IEventDataDao;
 import io.inugami.dashboard.api.domain.plugin.IPluginLoaderService;
 import io.inugami.dashboard.api.domain.plugin.IPluginService;
 import io.inugami.framework.commons.messages.MessagesServices;
@@ -35,14 +37,17 @@ import io.inugami.framework.interfaces.handlers.Handler;
 import io.inugami.framework.interfaces.listeners.EngineListener;
 import io.inugami.framework.interfaces.models.event.Event;
 import io.inugami.framework.interfaces.models.event.SimpleEvent;
+import io.inugami.framework.interfaces.models.maven.Gav;
 import io.inugami.framework.interfaces.models.maven.ManifestInfo;
 import io.inugami.framework.interfaces.processors.Processor;
 import io.inugami.framework.interfaces.providers.Provider;
 import io.inugami.framework.interfaces.spi.PropertiesProducerSpi;
 import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
 import jakarta.annotation.Priority;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -53,6 +58,7 @@ import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.apply
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@Builder
 public class PluginService implements IPluginService {
     //==================================================================================================================
     // ATTRIBUTES
@@ -62,6 +68,25 @@ public class PluginService implements IPluginService {
     private final       ConfigurationResolver configurationResolver;
     private final       IPluginLoaderService  pluginLoaderService;
     private final       SpiLoaderServiceSPI   spiLoaderService;
+    private final       IEventDataDao         eventDataDao;
+    private final       List<Plugin>          plugins           = new ArrayList<>();
+
+    //==================================================================================================================
+    // READ
+    //==================================================================================================================
+    @Override
+    public Collection<Plugin> findAllPlugin() {
+        return Collections.unmodifiableList(plugins);
+    }
+
+    @Override
+    public Map<String, EnginePluginEventResultDTO> findPluginDataByGav(final @NonNull String groupId,
+                                                                       final @NonNull String artifactId) {
+        return eventDataDao.findPluginDataByGav(Gav.builder()
+                                                   .groupId(groupId)
+                                                   .artifactId(artifactId)
+                                                   .build());
+    }
 
 
     //==================================================================================================================
@@ -73,6 +98,52 @@ public class PluginService implements IPluginService {
         final List<Plugin> result = createPlugins(configuration);
         for (Plugin plugin : result) {
             log.info("using plugin : {}", plugin.getGav().getHash());
+        }
+        plugins.addAll(cleanPlugins(result));
+        return result;
+    }
+
+    private Collection<Plugin> cleanPlugins(final List<Plugin> plugins) {
+        final List<Plugin> result = new ArrayList<>();
+        for (Plugin plugin : plugins) {
+            result.add(Plugin.builder()
+                             .gav(plugin.getGav().toBuilder().build())
+                             .frontConfig(Optional.ofNullable(plugin.getFrontConfig())
+                                                  .map(item -> item.toBuilder().build())
+                                                  .orElse(null))
+                             .events(Optional.ofNullable(plugin.getEvents())
+                                             .orElse(List.of())
+                                             .stream()
+                                             .map(event -> EventConfig.builder()
+                                                                      .name(event.getName())
+                                                                      .enable(event.getEnable())
+                                                                      .events(Optional.ofNullable(event.getEvents())
+                                                                                      .orElse(List.of())
+                                                                                      .stream()
+                                                                                      .map(e -> Event.builder()
+                                                                                                     .name(e.getName())
+                                                                                                     .from(e.getFrom())
+                                                                                                     .fromFirstTime(e.getFromFirstTime())
+                                                                                                     .until(e.getUntil())
+                                                                                                     .scheduler(e.getScheduler())
+                                                                                                     .build())
+
+                                                                                      .toList())
+                                                                      .simpleEvents(Optional.ofNullable(event.getSimpleEvents())
+                                                                                            .orElse(List.of())
+                                                                                            .stream()
+                                                                                            .map(e -> SimpleEvent.builder()
+                                                                                                                 .name(e.getName())
+                                                                                                                 .from(e.getFrom())
+                                                                                                                 .fromFirstTime(e.getFromFirstTime())
+                                                                                                                 .until(e.getUntil())
+                                                                                                                 .scheduler(e.getScheduler())
+                                                                                                                 .build())
+                                                                                            .toList())
+                                                                      .build())
+                                             .toList()
+                             )
+                             .build());
         }
         return result;
     }
@@ -140,25 +211,13 @@ public class PluginService implements IPluginService {
         final ManifestInfo                manifest  = configurationResolver.resolvePluginManifest(config);
 
 
-        Map<String, Map<String, String>> properties = new LinkedHashMap<>();
-        //TODO : clean
-        /*
-        if (manifest != null) {
-            if (alertsResourcesLoaderZip.isJarResources(manifest.getManifestUrl())) {
-                final File zip = FilesUtils.resolveJarFile(manifest.getManifestUrl());
-                alertsResourcesLoaderZip.loadAlertingsResources(manifest.getManifestUrl());
-                properties = propertiesResourcesLoaderZip.loadResources(zip);
-            } else {
-                alertsResourcesLoaderFileSystem.loadAlertingsResources(manifest.getManifestUrl());
-            }
-        }
-        */
-        final var                    frontConfig = registerFrontProperties(config);
-        final List<AlertingProvider> alertings   = pluginLoaderService.loadAlertings(config.getAlertings(), globalProperties, manifest);
-        final List<EngineListener>   listeners   = pluginLoaderService.loadListeners(config.getListeners(), globalProperties, manifest);
-        final List<Processor>        processors  = pluginLoaderService.loadProcessors(config.getProcessors(), globalProperties, manifest);
-        final List<Provider>         providers   = pluginLoaderService.loadProviders(config.getProviders(), globalProperties, manifest);
-        final List<Handler>          handlers    = pluginLoaderService.loadHandlers(config.getHandlers(), globalProperties, manifest);
+        Map<String, Map<String, String>> properties  = new LinkedHashMap<>();
+        final var                        frontConfig = registerFrontProperties(config);
+        final List<AlertingProvider>     alertings   = pluginLoaderService.loadAlertings(config.getAlertings(), globalProperties, manifest);
+        final List<EngineListener>       listeners   = pluginLoaderService.loadListeners(config.getListeners(), globalProperties, manifest);
+        final List<Processor>            processors  = pluginLoaderService.loadProcessors(config.getProcessors(), globalProperties, manifest);
+        final List<Provider>             providers   = pluginLoaderService.loadProviders(config.getProviders(), globalProperties, manifest);
+        final List<Handler>              handlers    = pluginLoaderService.loadHandlers(config.getHandlers(), globalProperties, manifest);
 
 
         if (properties != null) {

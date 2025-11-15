@@ -30,6 +30,7 @@ open module io.inugami.dashboard.core {
     requires spring.beans;
     requires spring.boot;
     requires spring.context;
+    requires spring.boot.starter.cache;
 
     exports io.inugami.dashboard.core.domain.event;
     exports io.inugami.dashboard.core.domain.alerting;

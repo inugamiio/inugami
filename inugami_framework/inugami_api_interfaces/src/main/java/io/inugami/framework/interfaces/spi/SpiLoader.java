@@ -16,7 +16,6 @@
  */
 package io.inugami.framework.interfaces.spi;
 
-import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

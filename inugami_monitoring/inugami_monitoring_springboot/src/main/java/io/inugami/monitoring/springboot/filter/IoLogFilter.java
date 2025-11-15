@@ -15,6 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.monitoring.springboot.filter;
+
 import io.inugami.framework.api.exceptions.WarningContext;
 import io.inugami.framework.api.listeners.DefaultApplicationLifecycleSPI;
 import io.inugami.monitoring.core.interceptors.FilterInterceptor;
@@ -23,6 +24,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -34,31 +36,25 @@ import java.util.List;
 
 @Order(Ordered.LOWEST_PRECEDENCE)
 @Component
+@RequiredArgsConstructor
 public class IoLogFilter extends GenericFilterBean {
 
     @Value("${inugami.monitoring.iolog.enabled:true}")
-    private boolean enabled;
-
-    private FilterInterceptor filter = null;
-
-    @PostConstruct
-    public void init(){
-        filter = new FilterInterceptor();
-        DefaultApplicationLifecycleSPI.register(filter);
-    }
+    private       boolean           enabled;
+    private final FilterInterceptor filter;
 
 
     // =========================================================================
     // API
     // =========================================================================
     @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response,
+    public void doFilter(final ServletRequest request,
+                         final ServletResponse response,
                          final FilterChain chain) throws IOException, ServletException {
         WarningContext.getInstance().setWarnings(List.of());
         if (enabled) {
             filter.doFilter(request, response, chain);
-        }
-        else {
+        } else {
             chain.doFilter(request, response);
         }
     }

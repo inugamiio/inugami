@@ -35,6 +35,18 @@ public class JavaSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
         return result;
     }
 
+
+    @Override
+    public <T> List<T> loadSpiServicesByPriority(final Class<?> type, final T defaultImplementation) {
+        final List<T> result = loadServices(type);
+        if (defaultImplementation != null) {
+            result.add(defaultImplementation);
+        }
+
+        result.sort(new PriorityComparator<>());
+        return result;
+    }
+
     private void traceExcetion(final Throwable e) {
         System.err.println(e.getMessage());
         e.printStackTrace();

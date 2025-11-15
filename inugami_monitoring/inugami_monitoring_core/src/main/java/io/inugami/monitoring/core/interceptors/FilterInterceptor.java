@@ -33,6 +33,7 @@ import io.inugami.framework.interfaces.monitoring.logger.MDCKeys;
 import io.inugami.framework.interfaces.monitoring.models.Headers;
 import io.inugami.framework.interfaces.rest.RestService;
 import io.inugami.framework.interfaces.spi.SpiLoader;
+import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
 import io.inugami.framework.interfaces.tools.CalendarTools;
 import io.inugami.framework.interfaces.exceptions.ExceptionResolver;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
@@ -47,6 +48,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayOutputStream;
@@ -68,6 +70,7 @@ import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.apply
  */
 @SuppressWarnings({"java:S112", "java:S1181", "java:S108"})
 @Slf4j
+@RequiredArgsConstructor
 @WebFilter(urlPatterns = "*", asyncSupported = true)
 public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
@@ -84,13 +87,13 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     private static final List<MonitoringFilterInterceptor> MONITORING_FILTER_INTERCEPTORS = new ArrayList<>();
 
 
-    private static final AtomicReference<FilterInterceptorCachePurgeStrategy> PURGECACHE_STRATEGY = new AtomicReference<>();
-    private static final AtomicReference<MdcCleaner>                          MDC_CLEANER         = new AtomicReference<>();
-    public static final  String                                               SERVICE_SEPARATOR   = "_";
-
-    private              ConfigHandler<String, String> configuration;
-    private static final Map<String, Boolean>          INTERCEPTABLE_URI_RESOLVED = new ConcurrentHashMap<>();
-    private static final int                           KILO                       = 1024;
+    private static final AtomicReference<FilterInterceptorCachePurgeStrategy> PURGECACHE_STRATEGY        = new AtomicReference<>();
+    private static final AtomicReference<MdcCleaner>                          MDC_CLEANER                = new AtomicReference<>();
+    public static final  String                                               SERVICE_SEPARATOR          = "_";
+    private final        SpiLoaderServiceSPI                                  spiLoaderServiceSPI;
+    private              ConfigHandler<String, String>                        configuration;
+    private static final Map<String, Boolean>                                 INTERCEPTABLE_URI_RESOLVED = new ConcurrentHashMap<>();
+    private static final int                                                  KILO                       = 1024;
 
     // =================================================================================================================
     // LIFECYCLE
@@ -110,15 +113,15 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     public void initAttributes() {
         final var spi = SpiLoader.getInstance();
 
-        resolveSpi(JavaRestMethodResolver.class, JAVA_REST_METHOD_RESOLVERS, spi);
-        resolveSpi(JavaRestMethodTracker.class, JAVA_REST_METHOD_TRACKERS, spi);
-        resolveSpi(Interceptable.class, INTERCEPTABLE_RESOLVER, spi);
-        resolveSpi(ResponseListener.class, RESPONSE_LISTENERS, spi);
+        resolveSpi(JavaRestMethodResolver.class, JAVA_REST_METHOD_RESOLVERS);
+        resolveSpi(JavaRestMethodTracker.class, JAVA_REST_METHOD_TRACKERS);
+        resolveSpi(Interceptable.class, INTERCEPTABLE_RESOLVER);
+        resolveSpi(ResponseListener.class, RESPONSE_LISTENERS);
 
-        resolveSpi(ExceptionResolver.class, EXCEPTION_RESOLVER, spi, new FilterInterceptorErrorResolver());
+        resolveSpi(ExceptionResolver.class, EXCEPTION_RESOLVER, new FilterInterceptorErrorResolver());
 
         List<FilterInterceptorCachePurgeStrategy> cachePurgeStrategies = new ArrayList<>();
-        resolveSpi(FilterInterceptorCachePurgeStrategy.class, cachePurgeStrategies, spi, new DefaultFilterInterceptorCachePurgeStrategy());
+        resolveSpi(FilterInterceptorCachePurgeStrategy.class, cachePurgeStrategies,  new DefaultFilterInterceptorCachePurgeStrategy());
 
 
         PURGECACHE_STRATEGY.set(cachePurgeStrategies.stream().findFirst().orElse(values -> false));
@@ -386,7 +389,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
                     break;
                 }
             }
-            INTERCEPTABLE_URI_RESOLVED.put(requestData.getUri(), result);
+            applyIfNotNull(result, r -> INTERCEPTABLE_URI_RESOLVED.put(requestData.getUri(), r));
         }
         purgeCacheIfRequired();
 
@@ -548,11 +551,10 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
     private <U, T extends U> void resolveSpi(final Class<U> spiClass,
                                              final List<T> values,
-                                             final SpiLoader spi,
                                              final T... defaultValues) {
 
 
-        List<U> instances = spi.loadSpiServicesByPriority(spiClass);
+        List<U> instances = spiLoaderServiceSPI.loadSpiServicesByPriority(spiClass);
         for (U instance : Optional.ofNullable(instances).orElse(List.of())) {
             values.add((T) instance);
         }

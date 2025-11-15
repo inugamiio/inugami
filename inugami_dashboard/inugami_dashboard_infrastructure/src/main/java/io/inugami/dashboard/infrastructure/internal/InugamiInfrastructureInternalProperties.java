@@ -14,23 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.api.domain.plugin;
+package io.inugami.dashboard.infrastructure.internal;
 
-import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
-import io.inugami.framework.configuration.models.plugins.Plugin;
-import org.jspecify.annotations.NonNull;
+import lombok.*;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+@Getter
+@Setter
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@ConfigurationProperties(prefix ="inugami.infrastructure.internal")
+public class InugamiInfrastructureInternalProperties {
+    @Builder.Default
+    private InugamiHazelCastProperties hazelcast = InugamiHazelCastProperties.builder().build();
 
-public interface IPluginService {
-    List<Plugin> loadPlugins();
-
-    Collection<Plugin> findAllPlugin();
-
-    Map<String, EnginePluginEventResultDTO> findPluginDataByGav(@NonNull final String groupId,
-                                                                @NonNull final String artifactId);
-
-
+    @Getter
+    @Setter
+    @Builder(toBuilder = true)
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class InugamiHazelCastProperties{
+        @Builder.Default
+        private String cluster ="inugami";
+    }
 }

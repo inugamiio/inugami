@@ -14,23 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.api.domain.plugin;
+package io.inugami.dashboard.interfaces.domain.plugin;
 
-import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
+import io.inugami.dashboard.interfaces.domain.plugin.dto.PluginDataAPI;
 import io.inugami.framework.configuration.models.plugins.Plugin;
-import org.jspecify.annotations.NonNull;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
-public interface IPluginService {
-    List<Plugin> loadPlugins();
+@RequestMapping(path = "plugin")
+public interface PluginRestClient {
 
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     Collection<Plugin> findAllPlugin();
 
-    Map<String, EnginePluginEventResultDTO> findPluginDataByGav(@NonNull final String groupId,
-                                                                @NonNull final String artifactId);
-
-
+    @GetMapping(path = "{groupId}/{artifactId}/data", produces = MediaType.APPLICATION_JSON_VALUE)
+    PluginDataAPI findPluginDataByGav(@PathVariable(required = true) final String groupId,
+                                      @PathVariable(required = true) final String artifactId);
 }

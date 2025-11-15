@@ -14,23 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.api.domain.plugin;
+package io.inugami.dashboard.interfaces.domain.plugin.dto;
 
-import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
-import io.inugami.framework.configuration.models.plugins.Plugin;
-import org.jspecify.annotations.NonNull;
+import io.inugami.framework.interfaces.models.maven.Gav;
+import lombok.*;
 
+import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
-public interface IPluginService {
-    List<Plugin> loadPlugins();
-
-    Collection<Plugin> findAllPlugin();
-
-    Map<String, EnginePluginEventResultDTO> findPluginDataByGav(@NonNull final String groupId,
-                                                                @NonNull final String artifactId);
-
-
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Setter
+@Getter
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+public class PluginDataAPI implements Serializable {
+    private static final long                                   serialVersionUID = 9199904682395878001L;
+    private              Gav                                    gav;
+    private              Collection<EnginePluginEventResultAPI> events;
 }

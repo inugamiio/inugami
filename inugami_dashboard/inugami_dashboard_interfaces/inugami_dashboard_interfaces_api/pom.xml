@@ -34,5 +34,9 @@
             <groupId>io.inugami.framework</groupId>
             <artifactId>inugami_api_interfaces</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.inugami.framework.configuration</groupId>
+            <artifactId>inugami_configuration</artifactId>
+        </dependency>
     </dependencies>
 </project>

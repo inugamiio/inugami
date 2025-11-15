@@ -49,5 +49,9 @@
             <groupId>io.inugami.dashboard.interfaces</groupId>
             <artifactId>inugami_dashboard_interfaces_api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.inugami.framework.configuration</groupId>
+            <artifactId>inugami_configuration</artifactId>
+        </dependency>
     </dependencies>
 </project>

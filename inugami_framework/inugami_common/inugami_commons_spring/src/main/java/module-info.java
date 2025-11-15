@@ -1,3 +1,5 @@
+import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
+
 /* --------------------------------------------------------------------
  *  Inugami
  * --------------------------------------------------------------------
@@ -42,4 +44,5 @@ open module io.inugami.framework.commons.spring {
     exports io.inugami.framework.commons.spring.mapstruct;
 
     uses io.inugami.framework.interfaces.configurtation.ProviderAttributFunction;
+    uses io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
 }

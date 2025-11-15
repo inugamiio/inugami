@@ -24,13 +24,11 @@ import io.inugami.framework.commons.spring.feature.FeatureConfiguration;
 import io.inugami.framework.configuration.services.ConfigHandlerHashMap;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.marshalling.XmlJaxbMarshallerSpi;
+import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -49,6 +47,7 @@ public class ConfigConfiguration {
     public static final String INUGAMI = "io.inugami";
 
     public static final ConfigHandler<String, String> CONFIGURATION = new ConfigHandlerHashMap();
+
 
     @ConditionalOnMissingBean
     @Bean
@@ -180,9 +179,11 @@ public class ConfigConfiguration {
         return new SpelExpressionParser();
     }
 
-    @ConditionalOnMissingBean
+    @Primary
     @Bean
     public SpiLoaderServiceSPI spiLoaderServiceSPI() {
-        return new SpringSpiLoaderServiceSPI();
+        final var result = new SpringSpiLoaderServiceSPI();
+        SpiLoader.getInstance().reloadLoaderService(result);
+        return result;
     }
 }

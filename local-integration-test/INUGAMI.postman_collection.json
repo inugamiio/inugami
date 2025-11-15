@@ -299,6 +299,211 @@
 							]
 						}
 					]
+				},
+				{
+					"name": "plugin",
+					"item": [
+						{
+							"name": "/plugin",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/plugin",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"plugin"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "nominal",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8080/plugin",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"plugin"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Set-Cookie",
+											"value": "JSESSIONID=2B015F33120E5CA4C1C5E8EA215E832B; Path=/; HttpOnly"
+										},
+										{
+											"key": "x-correlation-id",
+											"value": "54ef05b0-e37d-4cbc-8648-6c73182884c4"
+										},
+										{
+											"key": "x-b3-traceid",
+											"value": "f34a7c0b-052c-4768-9302-a27e0712640e"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+										},
+										{
+											"key": "Access-Control-Allow-Headers",
+											"value": ""
+										},
+										{
+											"key": "Access-Control-Expose-Headers",
+											"value": ""
+										},
+										{
+											"key": "Access-Control-Allow-Credentials",
+											"value": "true"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "459"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 15 Nov 2025 14:20:35 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"alertingProviders\": [],\n        \"enabled\": false,\n        \"eventConfigPresent\": false,\n        \"events\": [\n            {\n                \"enable\": true,\n                \"events\": [\n                    {\n                        \"alertings\": [],\n                        \"name\": \"cpu-multi\",\n                        \"processors\": [],\n                        \"scheduler\": \"0/15 * * * * ?\",\n                        \"targets\": []\n                    }\n                ],\n                \"name\": \"events-test\",\n                \"simpleEvents\": []\n            }\n        ],\n        \"frontConfig\": {\n            \"menuLinks\": [],\n            \"router\": []\n        },\n        \"gav\": {\n            \"artifactId\": \"basic-plugin\",\n            \"groupId\": \"io.inugami\",\n            \"hash\": \"io.inugami:basic-plugin:4.0.0\",\n            \"version\": \"4.0.0\"\n        },\n        \"handlers\": [],\n        \"listeners\": [],\n        \"processors\": [],\n        \"providers\": []\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "/plugin//{groupId}/{artifactId}/data",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/plugin/io.inugami/basic-plugin/data",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"plugin",
+										"io.inugami",
+										"basic-plugin",
+										"data"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "nominal",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8080/plugin/io.inugami/basic-plugin/data",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"plugin",
+												"io.inugami",
+												"basic-plugin",
+												"data"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Set-Cookie",
+											"value": "JSESSIONID=22F19F9E71E2C53129FE81659EFFC413; Path=/; HttpOnly"
+										},
+										{
+											"key": "x-correlation-id",
+											"value": "14b5c9f6-b7aa-450d-88c1-3b38e0af9df5"
+										},
+										{
+											"key": "x-b3-traceid",
+											"value": "e5202f87-e39c-4cb7-8325-5d52f8817e83"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+										},
+										{
+											"key": "Access-Control-Allow-Headers",
+											"value": ""
+										},
+										{
+											"key": "Access-Control-Expose-Headers",
+											"value": ""
+										},
+										{
+											"key": "Access-Control-Allow-Credentials",
+											"value": "true"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "272"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 15 Nov 2025 14:28:33 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"events\": [\n        {\n            \"data\": {\n                \"alerts\": [],\n                \"data\": [\n                    {\n                        \"path\": \"system.cpu\",\n                        \"time\": 1763216910006,\n                        \"value\": {\n                            \"decimal\": true,\n                            \"value\": 0.47601318359375\n                        }\n                    }\n                ]\n            },\n            \"name\": \"cpu-multi\",\n            \"status\": \"SUCCESS\"\n        }\n    ],\n    \"gav\": {\n        \"artifactId\": \"basic-plugin\",\n        \"groupId\": \"io.inugami\",\n        \"hash\": \"io.inugami:basic-plugin:null\"\n    }\n}"
+								}
+							]
+						}
+					]
 				}
 			]
 		}

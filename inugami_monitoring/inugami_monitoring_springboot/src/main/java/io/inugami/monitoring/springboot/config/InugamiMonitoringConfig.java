@@ -17,6 +17,7 @@
 package io.inugami.monitoring.springboot.config;
 
 
+import io.inugami.framework.api.listeners.DefaultApplicationLifecycleSPI;
 import io.inugami.framework.commons.spring.configuration.ConfigConfiguration;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.exceptions.ErrorCodeResolver;
@@ -24,9 +25,11 @@ import io.inugami.framework.interfaces.feature.IFeatureService;
 import io.inugami.framework.interfaces.monitoring.MonitoringLoaderSpi;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.framework.interfaces.monitoring.models.Monitoring;
+import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
 import io.inugami.monitoring.core.context.MonitoringBootstrapService;
 import io.inugami.monitoring.core.context.MonitoringContext;
 import io.inugami.monitoring.core.interceptable.DefaultInterceptableIdentifier;
+import io.inugami.monitoring.core.interceptors.FilterInterceptor;
 import io.inugami.monitoring.core.spi.H2Interceptable;
 import io.inugami.monitoring.core.spi.IoLogInterceptor;
 import io.inugami.monitoring.core.spi.MdcInterceptor;
@@ -80,7 +83,9 @@ public class InugamiMonitoringConfig {
     // BEANS
     // =================================================================================================================
     @Bean
-    public MonitoringBootstrapService monitoringBootstrapService(final List<MonitoringLoaderSpi> loaders) {
+    public MonitoringBootstrapService monitoringBootstrapService(final SpiLoaderServiceSPI spiLoaderServiceSPI,
+                                                                 final List<MonitoringLoaderSpi> loaders) {
+        // spiLoaderServiceSPI must be initialized before MonitoringBootstrapService
         return MonitoringBootstrapService.builder()
                                          .loader(loaders.stream()
                                                         .findFirst()
@@ -98,7 +103,18 @@ public class InugamiMonitoringConfig {
         applyIfNotNull(springConfig, currentConfiguration::putAll);
         config.setProperties(mergeProperties(config.getProperties(), currentConfiguration));
         initializeInterceptors(monitoringContext,config);
+
         return config;
+    }
+
+    @Bean
+    public FilterInterceptor filterInterceptor(final SpiLoaderServiceSPI spiLoaderServiceSPI,
+                                               final Monitoring monitoring){
+        // monitoring must be initialized before FilterInterceptor
+        final FilterInterceptor filter = new FilterInterceptor(spiLoaderServiceSPI);
+        DefaultApplicationLifecycleSPI.register(filter);
+        filter.onApplicationStarted(null);
+        return filter;
     }
 
     private ConfigHandler<String, String> mergeProperties(final ConfigHandler<String, String> properties,

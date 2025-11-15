@@ -32,4 +32,6 @@ open module io.inugami.dashboard.infrastructure {
     requires org.slf4j;
     requires spring.boot;
     requires spring.context;
+    requires com.hazelcast.core;
+    requires org.jspecify;
 }

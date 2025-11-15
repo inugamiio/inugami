@@ -1,0 +1,4 @@
+inugami:
+  infrastructure:
+    internal:
+      hazelcast:

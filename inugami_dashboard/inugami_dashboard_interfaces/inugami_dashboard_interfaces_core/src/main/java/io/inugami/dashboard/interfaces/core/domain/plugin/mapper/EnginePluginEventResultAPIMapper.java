@@ -14,23 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.api.domain.plugin;
+package io.inugami.dashboard.interfaces.core.domain.plugin.mapper;
 
 import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
-import io.inugami.framework.configuration.models.plugins.Plugin;
-import org.jspecify.annotations.NonNull;
+import io.inugami.dashboard.interfaces.domain.plugin.dto.EnginePluginEventResultAPI;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
-public interface IPluginService {
-    List<Plugin> loadPlugins();
+@Mapper
+public interface EnginePluginEventResultAPIMapper {
+@Mapping(target = "error" , expression = "java(EnginePluginEventResultAPIMapperUtils.convertException(value))")
+    EnginePluginEventResultAPI convertToApi(EnginePluginEventResultDTO value);
 
-    Collection<Plugin> findAllPlugin();
-
-    Map<String, EnginePluginEventResultDTO> findPluginDataByGav(@NonNull final String groupId,
-                                                                @NonNull final String artifactId);
-
-
+    default Collection<EnginePluginEventResultAPI> convertToApi(Collection<EnginePluginEventResultDTO> values) {
+        return Optional.ofNullable(values)
+                       .orElse(List.of())
+                       .stream()
+                       .map(this::convertToApi)
+                       .toList();
+    }
 }

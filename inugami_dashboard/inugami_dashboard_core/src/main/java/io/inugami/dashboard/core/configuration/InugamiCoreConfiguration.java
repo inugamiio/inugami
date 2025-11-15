@@ -29,6 +29,7 @@ import io.inugami.framework.configuration.services.resolver.ConfigurationResolve
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -44,6 +45,7 @@ import static io.inugami.dashboard.api.domain.engine.exception.EngineErrors.*;
 import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
 import static io.inugami.framework.interfaces.exceptions.Asserts.assertTrue;
 
+@EnableCaching
 @Slf4j
 @EnableConfigurationProperties(InugamiConfiguration.class)
 @Configuration
