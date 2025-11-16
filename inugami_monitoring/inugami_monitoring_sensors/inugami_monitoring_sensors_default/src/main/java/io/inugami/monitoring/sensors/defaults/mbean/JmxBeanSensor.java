@@ -81,13 +81,13 @@ public class JmxBeanSensor implements MonitoringSensor {
     // =========================================================================
     @Override
     public List<GenericMonitoringModel> process() {
-        final List<GenericMonitoringModel> result = new ArrayList<>();
+        final List<GenericMonitoringModel> result    = new ArrayList<>();
+        JmxBeanSensorQuery                 queryData = null;
         if (query != null) {
-
-            final String       localQuery = configuration == null ? query : configuration.applyProperties(query);
-            JmxBeanSensorQuery queryData  = convertFromJson(new String(localQuery.getBytes(), StandardCharsets.UTF_8));
-
-
+            final String localQuery = configuration == null ? query : configuration.applyProperties(query);
+            queryData = convertFromJson(new String(localQuery.getBytes(), StandardCharsets.UTF_8));
+        }
+        if (queryData != null) {
             //@formatter:off
             final String normalizePath = queryData.getPath()
                                                   .replaceAll("[\\W]", "_")
@@ -99,7 +99,6 @@ public class JmxBeanSensor implements MonitoringSensor {
             if (queryData.getAttribute() != null) {
                 result.addAll(processAttribute(normalizePath, queryData));
             }
-
         }
 
         return result;

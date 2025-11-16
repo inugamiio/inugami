@@ -20,7 +20,6 @@ import io.inugami.dashboard.api.domain.engine.EngineListener;
 import io.inugami.dashboard.api.domain.engine.IEnginePluginService;
 import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
 import io.inugami.dashboard.api.domain.engine.dto.EnginePluginResultDTO;
-import io.inugami.dashboard.api.domain.sender.ISSESender;
 import io.inugami.dashboard.core.domain.engine.events.EventRunner;
 import io.inugami.dashboard.core.domain.engine.events.SimpleEventRunner;
 import io.inugami.dashboard.core.domain.engine.plugin.PluginEventCron;
@@ -45,7 +44,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.Callable;
-
+@SuppressWarnings({"java:S2153"})
 @Slf4j
 public class EnginePluginService implements IEnginePluginService {
     // =================================================================================================================

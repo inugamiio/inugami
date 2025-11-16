@@ -28,6 +28,9 @@
     <name>${project.groupId}:${project.artifactId}</name>
     <packaging>pom</packaging>
 
+    <properties>
+        <sonar.coverage.jacoco.xmlReportPaths.relative>${project.basedir}/../../../target/</sonar.coverage.jacoco.xmlReportPaths.relative>
+    </properties>
     <!-- ======================================================================= 
     = DEPENDENCIES
     ======================================================================== -->

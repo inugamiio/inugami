@@ -1,10 +1,15 @@
 package io.inugami.framework.interfaces.spi;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
 
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
+
 @SuppressWarnings({"java:S1181", "java:S1141"})
+@Slf4j
 public class JavaSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
     @Override
     public <T> List<T> loadServices(final Class<?> type) {
@@ -14,7 +19,7 @@ public class JavaSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
         try {
             servicesLoaders = (ServiceLoader<T>) ServiceLoader.load(type);
         } catch (Throwable e) {
-            traceExcetion(e);
+            traceException(e);
         }
         if (servicesLoaders == null) {
             return result;
@@ -22,14 +27,10 @@ public class JavaSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
 
         try {
             for (T service : servicesLoaders) {
-                try {
-                    result.add(service);
-                } catch (Throwable e) {
-                    traceExcetion(e);
-                }
+                applyIfNotNull(service, result::add);
             }
         } catch (Throwable e) {
-            traceExcetion(e);
+            traceException(e);
         }
 
         return result;
@@ -47,8 +48,7 @@ public class JavaSpiLoaderServiceSPI implements SpiLoaderServiceSPI {
         return result;
     }
 
-    private void traceExcetion(final Throwable e) {
-        System.err.println(e.getMessage());
-        e.printStackTrace();
+    private void traceException(final Throwable e) {
+        log.error(e.getMessage(), e);
     }
 }

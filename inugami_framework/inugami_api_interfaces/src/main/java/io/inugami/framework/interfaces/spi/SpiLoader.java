@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
@@ -50,6 +51,12 @@ public class SpiLoader {
         return loadSpiServiceByPriority(SpiLoaderServiceSPI.class, new JavaSpiLoaderServiceSPI());
     }
 
+    private SpiLoaderServiceSPI getLoaderService() {
+        if (loaderService == null) {
+            loaderService = new JavaSpiLoaderServiceSPI();
+        }
+        return loaderService;
+    }
 
     public void reloadLoaderService(SpiLoaderServiceSPI loaderService) {
         if (loaderService != null) {
@@ -61,6 +68,7 @@ public class SpiLoader {
         return initSpiLoader();
     }
 
+    @SuppressWarnings({"java:S2583"})
     private synchronized static SpiLoader initSpiLoader() {
         if (INSTANCE == null) {
             return new SpiLoader();
@@ -75,12 +83,21 @@ public class SpiLoader {
     // METHODS
     // =========================================================================
     public synchronized <T> List<T> loadSpiService(final Class<?> type) {
-        final List<T> result = loaderService.loadServices(type);
-        if (result.isEmpty() && log.isDebugEnabled()) {
-            log.warn("no SPI implementation of {} found! please check your dependencies!", type.getName());
+        List<T> result = getLoaderService().loadServices(type);
+        if(result==null){
+            return new ArrayList<>();
         }
+        try{
+            if (result.isEmpty() && log.isDebugEnabled()) {
+                log.warn("no SPI implementation of {} found! please check your dependencies!", type.getName());
+            }
+        }catch (Throwable e){
+            //noting to do
+        }
+
         return result;
     }
+
 
     public synchronized <T> T loadSpiSingleService(final Class<?> type) {
         final List<T> services = loadSpiService(type);
@@ -88,7 +105,7 @@ public class SpiLoader {
     }
 
     public synchronized <T> List<T> loadSpiService(final Class<?> type, final T defaultImplementation) {
-        final List<T> result = loaderService.loadServices(type);
+        final List<T> result = getLoaderService().loadServices(type);
 
         result.sort(new PriorityComparator<>());
         if (result.isEmpty() && (defaultImplementation != null)) {
@@ -98,7 +115,7 @@ public class SpiLoader {
     }
 
     public synchronized <T> List<T> loadSpiServicesWithDefault(final Class<?> type, final T defaultImplementation) {
-        final List<T> result = loaderService.loadServices(type);
+        final List<T> result = getLoaderService().loadServices(type);
         if (defaultImplementation != null) {
             result.add(defaultImplementation);
         }
@@ -124,7 +141,7 @@ public class SpiLoader {
     }
 
     public synchronized <T> List<T> loadSpiServicesByPriority(final Class<?> type, final T defaultImplementation) {
-        final List<T> result = loaderService.loadServices(type);
+        final List<T> result = getLoaderService().loadServices(type);
         if (defaultImplementation != null) {
             result.add(defaultImplementation);
         }

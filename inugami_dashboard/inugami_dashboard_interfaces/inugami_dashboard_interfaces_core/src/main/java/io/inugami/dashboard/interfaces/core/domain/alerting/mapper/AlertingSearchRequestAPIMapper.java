@@ -25,6 +25,6 @@ import org.mapstruct.Mapping;
 public interface AlertingSearchRequestAPIMapper {
 
     @Mapping(target = "createdDate", expression = "java(io.inugami.framework.interfaces.models.search.SearchFiltersUtils.convertToLocalDateTime(value, value::getCreatedDate))")
-    @Mapping(target = "LastModifiedDate", expression = "java(io.inugami.framework.interfaces.models.search.SearchFiltersUtils.convertToLocalDateTime(value, value::getLastModifiedDate))")
+    @Mapping(target = "lastModifiedDate", expression = "java(io.inugami.framework.interfaces.models.search.SearchFiltersUtils.convertToLocalDateTime(value, value::getLastModifiedDate))")
     AlertingSearchRequestDTO convertToRestDTO(final AlertingSearchRequestAPI value);
 }

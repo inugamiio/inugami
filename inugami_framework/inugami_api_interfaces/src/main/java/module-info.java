@@ -142,6 +142,7 @@ open module io.inugami.framework.interfaces {
     uses io.inugami.framework.interfaces.tools.TemplateProviderSPI;
     uses org.springframework.web.multipart.MultipartResolver;
     uses org.springframework.web.servlet.HandlerMapping;
+    uses io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
 
     provides io.inugami.framework.interfaces.configurtation.ConfigurationSpi with io.inugami.framework.interfaces.monitoring.logger.DefaultConfigurationSpi;
 }

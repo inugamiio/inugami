@@ -130,6 +130,13 @@ public class EventRunner {
             return result;
         }
 
+        if (mainProvider == null) {
+            return EnginePluginEventResultDTO.builder()
+                                             .name(event.getName())
+                                             .message("no provider defined")
+                                             .status(Status.ERROR)
+                                             .build();
+        }
 
         try {
             final var result = EnginePluginEventResultDTO.builder()
@@ -151,7 +158,7 @@ public class EventRunner {
         }
     }
 
-
+    @SuppressWarnings({"java:S2142"})
     protected EnginePluginEventResultDTO processRunTarget(final TargetConfig target,
                                                           final Provider provider,
                                                           final LocalDateTime now) {

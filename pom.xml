@@ -131,9 +131,11 @@
         <ci.view/>
 
         <jacoco.version>0.8.6</jacoco.version>
+        <jacoco.report.aggregate.enabled>false</jacoco.report.aggregate.enabled>
+
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-        <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+        <sonar.coverage.jacoco.xmlReportPaths.relative>${project.basedir}/../../target/</sonar.coverage.jacoco.xmlReportPaths.relative>
         <sonar.language>java</sonar.language>
 
 
@@ -252,8 +254,16 @@
             **/js/vendors.js,
             **/generated-sources/**/*,
             **/generated-test-sources/**/*,
-            **/FeatureInterceptor
+            **/FeatureInterceptor,
+            **/*Application.java
         </sonar.coverage.exclusions>
+        <sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
+        <sonar.issue.ignore.multicriteria.e1.ruleKey>java:S1192</sonar.issue.ignore.multicriteria.e1.ruleKey>
+        <sonar.issue.ignore.multicriteria.e1.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e2.ruleKey>java:S1874</sonar.issue.ignore.multicriteria.e2.ruleKey>
+        <sonar.issue.ignore.multicriteria.e2.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e2.resourceKey>
+
     </properties>
 
     <!--================================================================================================================
@@ -909,6 +919,7 @@
                         -Xmx1024M
                         --add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
                         --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
+                        ${maven.plugins.surfire.argLine}
                     </argLine>
                     <includes>
                         <include>**/*Test.java</include>
@@ -946,6 +957,9 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.10</version>
                 <configuration>
+                    <formats>
+                        <format>XML</format>
+                    </formats>
                     <excludes>
                         <exclude>**/*DTOBuilder*</exclude>
                         <exclude>**/*EntityBuilder*</exclude>
@@ -953,9 +967,6 @@
                         <exclude>**/engine/js/*</exclude>
                         <exclude>**/FeatureInterceptor</exclude>
                     </excludes>
-                    <formats>
-                        <format>XML</format>
-                    </formats>
                 </configuration>
                 <executions>
                     <execution>
@@ -964,13 +975,37 @@
                             <goal>prepare-agent</goal>
                         </goals>
                         <phase>compile</phase>
+                        <configuration>
+                            <append>true</append>
+                            <propertyName>maven.plugins.surfire.argLine</propertyName>
+                        </configuration>
                     </execution>
+                    <execution>
+                        <id>prepare-agent-integration-test</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <append>true</append>
+                            <propertyName>maven.plugins.failsafe.argLine</propertyName>
+                        </configuration>
+                    </execution>
+
+
                     <execution>
                         <id>report</id>
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <phase>verify</phase>
+                        <phase>package</phase>
+                    </execution>
+                    <execution>
+                        <id>report-integration</id>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -994,6 +1029,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <argLine>-Dfile.encoding=UTF-8 ${maven.plugins.failsafe.argLine}</argLine>
                     <includes>
                         <include>**/*IT.java</include>
                     </includes>

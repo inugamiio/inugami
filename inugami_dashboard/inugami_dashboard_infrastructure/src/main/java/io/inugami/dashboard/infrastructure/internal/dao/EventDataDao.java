@@ -20,7 +20,6 @@ import com.hazelcast.core.HazelcastInstance;
 import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
 import io.inugami.dashboard.api.domain.engine.dto.EventDoneDTO;
 import io.inugami.dashboard.api.domain.event.IEventDataDao;
-import io.inugami.framework.interfaces.models.basic.Dto;
 import io.inugami.framework.interfaces.models.engine.Status;
 import io.inugami.framework.interfaces.models.maven.Gav;
 import lombok.RequiredArgsConstructor;

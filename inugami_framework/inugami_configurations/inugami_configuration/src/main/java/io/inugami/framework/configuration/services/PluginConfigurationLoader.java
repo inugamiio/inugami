@@ -77,10 +77,6 @@ public class PluginConfigurationLoader {
             new PluginConfigurationValidator(config, url.toString()).validate();
             result = Optional.of(config);
             config.setConfigFile(url.toString());
-            final PluginFrontConfig frontConfig = loadFrontConfig(url);
-            if (frontConfig != null) {
-                config.setFrontConfig(frontConfig);
-            }
         }
 
         return result;
@@ -113,9 +109,9 @@ public class PluginConfigurationLoader {
     }
 
     public Optional<ApplicationConfig> loadApplicationConfig(final File file) {
-        final String            content = readFile(file);
-        final ApplicationConfig result  = YamlMarshaller.getInstance()
-                                                        .convertFromYaml(content, ApplicationConfig.class);
+        final String content = readFile(file);
+        final ApplicationConfig result = YamlMarshaller.getInstance()
+                                                       .convertFromYaml(content, ApplicationConfig.class);
         return Optional.ofNullable(result);
     }
 
@@ -125,15 +121,15 @@ public class PluginConfigurationLoader {
      *
      * @param file the file to load
      * @return probable Plugin configuration
-     * @throws TechnicalException              if other exception is occurs
+     * @throws TechnicalException if other exception is occurs
      */
     public Optional<PluginConfiguration> loadFromFile(final File file) throws TechnicalException {
         if (file == null || !file.isFile() || !file.canRead()) {
             return Optional.empty();
         }
-        final String              content = readFile(file);
-        final PluginConfiguration result  = YamlMarshaller.getInstance()
-                                                          .convertFromYaml(content, PluginConfiguration.class);
+        final String content = readFile(file);
+        final PluginConfiguration result = YamlMarshaller.getInstance()
+                                                         .convertFromYaml(content, PluginConfiguration.class);
         return Optional.ofNullable(result);
     }
 
@@ -153,27 +149,6 @@ public class PluginConfigurationLoader {
         return Optional.ofNullable(result);
     }
 
-    public Optional<EventConfig> loadEventConfigFromUrl(final URL url,
-                                                        final Gav gav,
-                                                        final String eventFile) throws TechnicalException {
-        //TODO: REFACTOR
-        return Optional.empty();
-    }
-
-    private Optional<EventConfig> loadingEventFile(final Gav gav,
-                                                   final String file,
-                                                   final String fileNameFull,
-                                                   final Object xmlLoaded) throws TechnicalException {
-
-        //TODO: REFACTOR
-        return Optional.empty();
-    }
-
-    private PluginFrontConfig loadFrontConfig(final URL url) throws ConfigurationResolverException {
-
-        //TODO: REFACTOR
-        return null;
-    }
 
     // =========================================================================
     // LOAD COMPOENTS CONFIGS
@@ -213,5 +188,19 @@ public class PluginConfigurationLoader {
         final String errorMessage = StringTools.format(message, values);
         log.error(errorMessage);
         return new FatalConfigurationException(errorMessage);
+    }
+
+    public Optional<EventConfig> loadEventConfigFromUrl(final URL url,
+                                                        final Gav gav,
+                                                        final String eventFile) {
+        final String content;
+        try {
+            log.debug("loading Components : {}", url);
+            content = FilesUtils.readContent(url);
+            return Optional.ofNullable(YamlMarshaller.getInstance().convertFromYaml(content, EventConfig.class));
+        } catch (IOException e) {
+            log.warn(e.getMessage(), e);
+            return Optional.empty();
+        }
     }
 }

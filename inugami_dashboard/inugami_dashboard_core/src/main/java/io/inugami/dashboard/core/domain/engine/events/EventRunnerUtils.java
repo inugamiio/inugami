@@ -19,7 +19,6 @@ package io.inugami.dashboard.core.domain.engine.events;
 import io.inugami.dashboard.api.domain.event.EventErrors;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.exceptions.ExceptionWithErrorCode;
-import io.inugami.framework.interfaces.models.event.SimpleEvent;
 import io.inugami.framework.interfaces.processors.Processor;
 import io.inugami.framework.interfaces.processors.ProcessorModel;
 import lombok.experimental.UtilityClass;
@@ -36,7 +35,7 @@ public class EventRunnerUtils {
     public static @NonNull Collection<Processor> selectProcessor(@Nullable final List<ProcessorModel> eventProcessors,
                                                                  @Nullable final List<Processor> processors) {
         final List<Processor> result = new ArrayList<>();
-        if (processors == null || processors.isEmpty() || processors == null || processors.isEmpty()) {
+        if (processors == null || processors.isEmpty()) {
             return result;
         }
 
