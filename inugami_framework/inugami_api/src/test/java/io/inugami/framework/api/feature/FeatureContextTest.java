@@ -1,3 +1,19 @@
+/* --------------------------------------------------------------------
+ *  Inugami
+ * --------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package io.inugami.framework.api.feature;
 
 import io.inugami.framework.api.tools.ReflectionUtils;
@@ -5,6 +21,7 @@ import io.inugami.framework.api.tools.unit.test.UnitTestData;
 import io.inugami.framework.api.tools.unit.test.UnitTestHelper;
 import io.inugami.framework.api.tools.unit.test.dto.AssertDtoContext;
 import io.inugami.framework.api.tools.unit.test.dto.UserDataDTO;
+import io.inugami.framework.interfaces.dependency.dto.RuleType;
 import io.inugami.framework.interfaces.feature.Feature;
 import io.inugami.framework.interfaces.feature.FeatureContext;
 import org.junit.jupiter.api.Test;
@@ -12,7 +29,19 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FeatureContextTest {
-
+    @Test
+    void assertEnum() {
+        UnitTestHelper.assertEnum(FeatureContext.Status.class,
+                                  """
+                                          {
+                                            "UNKNOWN" : { },
+                                            "UP" : { },
+                                            "RESTRICTED" : { },
+                                            "ERROR" : { },
+                                            "OUT_OF_SERVICE" : { }
+                                          }
+                                          """);
+    }
 
     @Test
     void featureContext() {

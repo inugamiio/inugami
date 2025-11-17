@@ -246,7 +246,9 @@
             **/webapp/mock/**/*,
             **/webapp/js/app/core/*.js
             **org/jboss/resteasy/logging/*,
-            **/engine/js/*
+            **/engine/js/*,
+            **/test/*,
+            **/test_it/*,
         </sonar.exclusions>
         <sonar.coverage.exclusions>
             **/test/*,
@@ -257,12 +259,15 @@
             **/FeatureInterceptor,
             **/*Application.java
         </sonar.coverage.exclusions>
-        <sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
+        <sonar.issue.ignore.multicriteria>e1,e2,e3</sonar.issue.ignore.multicriteria>
         <sonar.issue.ignore.multicriteria.e1.ruleKey>java:S1192</sonar.issue.ignore.multicriteria.e1.ruleKey>
         <sonar.issue.ignore.multicriteria.e1.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
 
         <sonar.issue.ignore.multicriteria.e2.ruleKey>java:S1874</sonar.issue.ignore.multicriteria.e2.ruleKey>
         <sonar.issue.ignore.multicriteria.e2.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e2.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e3.ruleKey>java:S1845</sonar.issue.ignore.multicriteria.e3.ruleKey>
+        <sonar.issue.ignore.multicriteria.e3.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e3.resourceKey>
 
     </properties>
 

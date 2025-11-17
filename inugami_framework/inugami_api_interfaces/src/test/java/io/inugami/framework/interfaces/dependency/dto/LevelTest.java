@@ -14,17 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.interfaces.models.search;
+package io.inugami.framework.interfaces.dependency.dto;
 
-public enum SortOrder {
-    ASC,
-    DESC;
+import io.inugami.framework.interfaces.testing.commons.UnitTestHelper;
+import org.junit.jupiter.api.Test;
 
-    public static SortOrder getEnum(final String value) {
-        if (value == null) {
-            return SortOrder.ASC;
-        }
+class LevelTest {
 
-        return value.toUpperCase().equals(SortOrder.DESC.name()) ? SortOrder.DESC : SortOrder.ASC;
+    @Test
+    void assertEnum() {
+        UnitTestHelper.assertEnum(Level.class,
+                                  """
+                                          {
+                                            "none" : { },
+                                            "low" : { },
+                                            "medium" : { },
+                                            "high" : { },
+                                            "critical" : { }
+                                          }
+                                          """);
     }
 }
