@@ -237,6 +237,7 @@
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PLUGINS CONFIGURATION
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+        <custom.sonar.coverage.exclusions></custom.sonar.coverage.exclusions>
         <sonar.exclusions>
             **/js/vendors.js,
             **/*Exception*,
@@ -258,6 +259,7 @@
             **/generated-test-sources/**/*,
             **/FeatureInterceptor,
             **/*Application.java
+            ${custom.sonar.coverage.exclusions}
         </sonar.coverage.exclusions>
         <sonar.issue.ignore.multicriteria>e1,e2,e3</sonar.issue.ignore.multicriteria>
         <sonar.issue.ignore.multicriteria.e1.ruleKey>java:S1192</sonar.issue.ignore.multicriteria.e1.ruleKey>

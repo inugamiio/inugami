@@ -1,0 +1,57 @@
+[ {
+  "errorStatus" : 500,
+  "errorCode" : "WORKSPACE_UNDEFINED",
+  "message" : "workspace not defined",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "WORKSPACE_NOT_EXISTS",
+  "message" : "workspace isn't folder",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "WORKSPACE_NOT_FOLDER",
+  "message" : "workspace isn't folder",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "WORKSPACE_CAN_READ",
+  "message" : "workspace can't be read",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "APPLICATION_CONFIG_NOT_EXISTS",
+  "message" : "application configuration doesn't exists",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "APPLICATION_CONFIG_NOT_READABLE",
+  "message" : "application configuration can't be read",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "APPLICATION_CONFIG_ERROR",
+  "message" : "error on read application configuration",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+} ]

@@ -25,6 +25,25 @@
     <artifactId>inugami_api_interfaces</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
     <url>http://inugami.io/inugami/inugami_api</url>
+    <properties>
+        <custom.sonar.coverage.exclusions>
+            ,**/*Model.java
+            ,**/*Data.java
+            ,**/MonitoredCallable.java
+            ,**/*Function.java
+            ,**/*Spi.java
+            ,**/*Event.java
+            ,**/*DTO.java
+            ,**/*Dto.java
+            ,**/*Configuration.java
+            ,**/*Config.java
+            ,**/FunctionResultPart.java
+            ,**/*HttpHeaderField.java
+            ,**/*Listener.java
+            ,**/Record.java
+            ,**/number/*.java
+        </custom.sonar.coverage.exclusions>
+    </properties>
 
     <dependencies>
         <dependency>

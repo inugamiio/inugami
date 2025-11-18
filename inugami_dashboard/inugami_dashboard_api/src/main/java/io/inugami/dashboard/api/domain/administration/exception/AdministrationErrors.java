@@ -26,7 +26,7 @@ public enum AdministrationErrors implements ErrorCode {
 
     private final ErrorCode errorCode;
 
-    private AdministrationErrors(final DefaultErrorCode.DefaultErrorCodeBuilder errorBuilder) {
+    AdministrationErrors(final DefaultErrorCode.DefaultErrorCodeBuilder errorBuilder) {
         errorCode = errorBuilder.errorCode(this.name()).build();
     }
 
