@@ -1,0 +1,15 @@
+{
+  "getExcludes" : [ {
+    "exclude" : "*.txt"
+  } ],
+  "getGav" : "inugami.io:plugin:4.0.0",
+  "getIncludes" : [ {
+    "include" : "all"
+  } ],
+  "getPath" : "/some/path",
+  "getProperties" : {
+    "date" : "2025-11-20"
+  },
+  "getTarget" : "2940bf84-22ed-4dca-baa8-c10111847c9e",
+  "isFiltering" : false
+}

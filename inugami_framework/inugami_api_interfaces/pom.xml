@@ -42,6 +42,7 @@
             ,**/*Listener.java
             ,**/Record.java
             ,**/number/*.java
+            ,**/CredentialsProvider.java
         </custom.sonar.coverage.exclusions>
     </properties>
 

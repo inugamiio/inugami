@@ -28,8 +28,8 @@ import java.util.Collection;
 @NoArgsConstructor
 @Setter
 @Getter
-@ToString
-@EqualsAndHashCode
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class EngineResultDTO implements Serializable {
     private static final long                              serialVersionUID = -2891977091971159911L;
     private              String                            traceId;

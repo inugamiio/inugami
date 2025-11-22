@@ -17,34 +17,47 @@
 package io.inugami.framework.interfaces.connectors;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@JsonIgnoreProperties(value = {"listener", "marshaller"})
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder(toBuilder = true)
-public final class HttpRequest {
-
+public final class HttpRequest implements Serializable {
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
-    private String                  verb;
-    private String                  url;
-    private Map<String, String>     headers;
-    private Map<String, String>     options;
-    private String                  token;
-    private Object                  body;
-    private boolean                 throwable = true;
-    private String                  partner;
-    private String                  partnerService;
+    private static final long serialVersionUID = -7915238183192597988L;
+
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private           String                  verb;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private           String                  url;
+    private           Map<String, String>     headers;
+    private           Map<String, String>     options;
+    private           String                  token;
+    private           Object                  body;
+    @Builder.Default
+    private           boolean                 throwable = true;
+    private           String                  partner;
+    private           String                  partnerService;
     @Singular("listener")
-    private List<ConnectorListener> listener;
-    private boolean                 disableListener;
-    private HttpPayloadMarshaller   marshaller;
+    private transient List<ConnectorListener> listener;
+    private           boolean                 disableListener;
+    private transient HttpPayloadMarshaller   marshaller;
 
     // =================================================================================================================
     // BUILDER
@@ -62,12 +75,12 @@ public final class HttpRequest {
             return this;
         }
 
-        public HttpRequestBuilder addOption(final String key, final String value) {
+        public HttpRequestBuilder addOption(final String key, final Serializable value) {
             if (options == null) {
                 options = new LinkedHashMap<>();
             }
             if (key != null && value != null) {
-                options.put(key, value);
+                options.put(key, String.valueOf(value));
             }
             return this;
         }

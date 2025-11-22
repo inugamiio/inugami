@@ -34,6 +34,7 @@ import static io.inugami.framework.interfaces.database.NodeUtils.sortProperties;
 public final class Node implements  Comparable<Node>, Serializable {
 
     private static final long                      serialVersionUID = 7519867544798392684L;
+    @EqualsAndHashCode.Include
     private              String                    type;
     private              String                    name;
     @EqualsAndHashCode.Include

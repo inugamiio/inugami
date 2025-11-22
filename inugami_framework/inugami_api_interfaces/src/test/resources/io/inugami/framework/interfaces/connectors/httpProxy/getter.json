@@ -1,0 +1,7 @@
+{
+  "getHost" : "127.0.1",
+  "getPassword" : "password",
+  "getPort" : 1598,
+  "getProtocol" : "http",
+  "getUser" : "user"
+}

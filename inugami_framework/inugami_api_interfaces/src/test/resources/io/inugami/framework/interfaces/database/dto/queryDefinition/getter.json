@@ -1,0 +1,7 @@
+{
+  "getDescription" : "lorem ipsum",
+  "getName" : "simple",
+  "getParameters" : [ "params" ],
+  "getPath" : "some/path",
+  "getType" : "nodes"
+}

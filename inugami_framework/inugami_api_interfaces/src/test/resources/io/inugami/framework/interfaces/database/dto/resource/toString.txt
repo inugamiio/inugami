@@ -1,0 +1,1 @@
+Resource(target=2940bf84-22ed-4dca-baa8-c10111847c9e, path=/some/path, gav=inugami.io:plugin:4.0.0)

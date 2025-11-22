@@ -1,0 +1,11 @@
+{
+  "getEncoding" : "UTF-8",
+  "getProperties" : {
+    "color" : "blue",
+    "date" : "2023-05-21"
+  },
+  "getPropertiesPath" : "property/path",
+  "getPropertiesUrl" : "http://property/path",
+  "getPropertiesUrlAuthorization" : "admin:admin",
+  "getType" : "Version"
+}

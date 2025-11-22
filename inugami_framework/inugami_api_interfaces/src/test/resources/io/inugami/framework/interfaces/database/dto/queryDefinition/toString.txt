@@ -1,0 +1,1 @@
+QueryDefinition(name=simple, type=nodes, path=some/path)

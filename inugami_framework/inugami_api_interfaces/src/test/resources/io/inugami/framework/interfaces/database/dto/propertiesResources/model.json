@@ -1,0 +1,11 @@
+{
+  "encoding" : "UTF-8",
+  "properties" : {
+    "color" : "blue",
+    "date" : "2023-05-21"
+  },
+  "propertiesPath" : "property/path",
+  "propertiesUrl" : "http://property/path",
+  "propertiesUrlAuthorization" : "admin:admin",
+  "type" : "Version"
+}
