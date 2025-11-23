@@ -16,21 +16,22 @@
  */
 package io.inugami.framework.interfaces.dependency.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
-@ToString
 @Builder(toBuilder = true)
+@EqualsAndHashCode
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
-public class DependenciesCheck {
-
-    private List<DependencyRule> deprecated;
-    private List<DependencyRule> ban;
-    private List<DependencyRule> securityIssue;
-
+public class DependenciesCheck implements Serializable {
+    private static final long                 serialVersionUID = 8158071804342403202L;
+    private              List<DependencyRule> deprecated;
+    private              List<DependencyRule> ban;
+    private              List<DependencyRule> securityIssue;
 }

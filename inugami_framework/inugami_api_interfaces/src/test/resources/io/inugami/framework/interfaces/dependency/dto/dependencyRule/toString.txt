@@ -1,0 +1,1 @@
+DependencyRule(groupId=inugami.io, artifactId=plugin, rules=VersionRules(major=Rule(version=4, ruleType=HIGHER_EQUALS), minor=Rule(version=1, ruleType=HIGHER_EQUALS), patch=Rule(version=0, ruleType=HIGHER_EQUALS)))

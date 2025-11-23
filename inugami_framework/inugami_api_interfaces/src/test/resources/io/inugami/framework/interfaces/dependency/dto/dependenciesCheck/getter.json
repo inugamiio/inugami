@@ -1,0 +1,65 @@
+{
+  "getBan" : [ {
+    "artifactId" : "plugin",
+    "comment" : "lorem ipsum",
+    "groupId" : "inugami.io",
+    "level" : "medium",
+    "link" : "http://mock.url",
+    "rules" : {
+      "major" : {
+        "ruleType" : ">=",
+        "version" : 4
+      },
+      "minor" : {
+        "ruleType" : ">=",
+        "version" : 1
+      },
+      "patch" : {
+        "ruleType" : ">=",
+        "version" : 0
+      }
+    }
+  } ],
+  "getDeprecated" : [ {
+    "artifactId" : "plugin",
+    "comment" : "lorem ipsum",
+    "groupId" : "inugami.io",
+    "level" : "medium",
+    "link" : "http://mock.url",
+    "rules" : {
+      "major" : {
+        "ruleType" : ">=",
+        "version" : 4
+      },
+      "minor" : {
+        "ruleType" : ">=",
+        "version" : 1
+      },
+      "patch" : {
+        "ruleType" : ">=",
+        "version" : 0
+      }
+    }
+  } ],
+  "getSecurityIssue" : [ {
+    "artifactId" : "plugin",
+    "comment" : "lorem ipsum",
+    "groupId" : "inugami.io",
+    "level" : "medium",
+    "link" : "http://mock.url",
+    "rules" : {
+      "major" : {
+        "ruleType" : ">=",
+        "version" : 4
+      },
+      "minor" : {
+        "ruleType" : ">=",
+        "version" : 1
+      },
+      "patch" : {
+        "ruleType" : ">=",
+        "version" : 0
+      }
+    }
+  } ]
+}

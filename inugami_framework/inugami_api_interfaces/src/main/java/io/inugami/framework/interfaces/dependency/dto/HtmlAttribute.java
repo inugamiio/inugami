@@ -16,21 +16,20 @@
  */
 package io.inugami.framework.interfaces.dependency.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 @Builder(toBuilder = true)
-@Getter
+@EqualsAndHashCode
 @ToString
 @AllArgsConstructor
-public class HtmlAttribute {
-
-    private final String name;
-    private final String value;
-
-    public static HtmlAttribute build(final String name, final String value){
-        return new HtmlAttribute(name, value);
-    }
+@NoArgsConstructor
+@Setter
+@Getter
+public class HtmlAttribute implements Serializable {
+    private static final long   serialVersionUID = 742269412680118590L;
+    private              String name;
+    private              String value;
 }
