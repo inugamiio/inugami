@@ -101,22 +101,22 @@ class HttpBasicConnectorTest {
         assertText(requestCaptor.getValue().headers(), HEADERS);
         assertText(result, """
                  {
-                   "bodyData" : "eyJzdGF0dXMiOiJzdWNjZXNzIn0K",
-                   "charset" : "UTF-8",
-                   "delay" : 0,
-                   "encoding" : "UTF-8",
-                   "hashHumanReadable" : "[GET]http://localhost:8080/mock/my/endpoint?full=true",
-                   "length" : 0,
-                   "message" : "success",
-                   "responseAt" : 1534694562,
-                   "responseHeaders" : {
-                     "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
-                   },
-                   "statusCode" : 200,
-                   "url" : "http://localhost:8080/mock/my/endpoint?full=true",
-                   "verb" : "GET",
-                   "errorCode" : null
-                 }                 
+                        "bodyData" : "eyJzdGF0dXMiOiJzdWNjZXNzIn0K",
+                        "charset" : "UTF-8",
+                        "delay" : 0,
+                        "encoding" : "UTF-8",
+                        "errorCode" : null,
+                        "hashHumanReadable" : "[GET]http://localhost:8080/mock/my/endpoint?full=true",
+                        "length" : 0,
+                        "message" : "success",
+                        "responseAt" : 1534694562,
+                        "responseHeaders" : {
+                          "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
+                        },
+                        "statusCode" : 200,
+                        "url" : "http://localhost:8080/mock/my/endpoint?full=true",
+                        "verb" : "GET"
+                      }             
                 """);
         assertText(result.getBodyFromJson(EndpointDTO.class), """
                 {
@@ -157,23 +157,23 @@ class HttpBasicConnectorTest {
         assertText(requestCaptor.getValue().headers(), HEADERS);
         assertText(result, """
                 {
-                    "bodyData" : "WyB7CiAgInN0YXR1cyIgOiAic3VjY2VzcyIKfSBd",
-                    "charset" : "UTF-8",
-                    "delay" : 0,
-                    "encoding" : "UTF-8",
-                    "hashHumanReadable" : "[POST]http://localhost:8080/mock/my/endpoint?full=true?data=[{\\"status\\":\\"success\\"}]",
-                    "length" : 0,
-                    "message" : "success",
-                    "requestData" : "[{\\"status\\":\\"success\\"}]",
-                    "responseAt" : 1534694562,
-                    "responseHeaders" : {
-                      "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
-                    },
-                    "statusCode" : 200,
-                    "url" : "http://localhost:8080/mock/my/endpoint?full=true",
-                    "verb" : "POST",
-                    "errorCode" : null
-                  }                 
+                                       "bodyData" : "WyB7CiAgInN0YXR1cyIgOiAic3VjY2VzcyIKfSBd",
+                                       "charset" : "UTF-8",
+                                       "delay" : 0,
+                                       "encoding" : "UTF-8",
+                                       "errorCode" : null,
+                                       "hashHumanReadable" : "[POST]http://localhost:8080/mock/my/endpoint?full=true?data=[{\\"status\\":\\"success\\"}]",
+                                       "length" : 0,
+                                       "message" : "success",
+                                       "requestData" : "[{\\"status\\":\\"success\\"}]",
+                                       "responseAt" : 1534694562,
+                                       "responseHeaders" : {
+                                         "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
+                                       },
+                                       "statusCode" : 200,
+                                       "url" : "http://localhost:8080/mock/my/endpoint?full=true",
+                                       "verb" : "POST"
+                                     }
                 """);
         assertText(result.getBodyFromJson(TYPE), RESPONSE_LIST);
 
@@ -211,23 +211,23 @@ class HttpBasicConnectorTest {
         assertText(requestCaptor.getValue().headers(), HEADERS);
         assertText(result, """
                 {
-                  "bodyData" : "WyB7CiAgInN0YXR1cyIgOiAic3VjY2VzcyIKfSBd",
-                  "charset" : "UTF-8",
-                  "delay" : 0,
-                  "encoding" : "UTF-8",
-                  "hashHumanReadable" : "[PATCH]http://localhost:8080/mock/my/endpoint?full=true?data=[{\\"status\\":\\"success\\"}]",
-                  "length" : 0,
-                  "message" : "success",
-                  "requestData" : "[{\\"status\\":\\"success\\"}]",
-                  "responseAt" : 1534694562,
-                  "responseHeaders" : {
-                    "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
-                  },
-                  "statusCode" : 200,
-                  "url" : "http://localhost:8080/mock/my/endpoint?full=true",
-                  "verb" : "PATCH",
-                  "errorCode" : null
-                }
+                   "bodyData" : "WyB7CiAgInN0YXR1cyIgOiAic3VjY2VzcyIKfSBd",
+                   "charset" : "UTF-8",
+                   "delay" : 0,
+                   "encoding" : "UTF-8",
+                   "errorCode" : null,
+                   "hashHumanReadable" : "[PATCH]http://localhost:8080/mock/my/endpoint?full=true?data=[{\\"status\\":\\"success\\"}]",
+                   "length" : 0,
+                   "message" : "success",
+                   "requestData" : "[{\\"status\\":\\"success\\"}]",
+                   "responseAt" : 1534694562,
+                   "responseHeaders" : {
+                     "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
+                   },
+                   "statusCode" : 200,
+                   "url" : "http://localhost:8080/mock/my/endpoint?full=true",
+                   "verb" : "PATCH"
+                 }
                 """);
         assertText(result.getBodyFromJson(TYPE), RESPONSE_LIST);
     }
@@ -263,23 +263,23 @@ class HttpBasicConnectorTest {
         assertText(requestCaptor.getValue().headers(), HEADERS);
         assertText(result, """
                 {
-                  "bodyData" : "WyB7CiAgInN0YXR1cyIgOiAic3VjY2VzcyIKfSBd",
-                  "charset" : "UTF-8",
-                  "delay" : 0,
-                  "encoding" : "UTF-8",
-                  "hashHumanReadable" : "[PUT]http://localhost:8080/mock/my/endpoint?full=true?data=[{\\"status\\":\\"success\\"}]",
-                  "length" : 0,
-                  "message" : "success",
-                  "requestData" : "[{\\"status\\":\\"success\\"}]",
-                  "responseAt" : 1534694562,
-                  "responseHeaders" : {
-                    "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
-                  },
-                  "statusCode" : 200,
-                  "url" : "http://localhost:8080/mock/my/endpoint?full=true",
-                  "verb" : "PUT",
-                  "errorCode" : null
-                }
+                   "bodyData" : "WyB7CiAgInN0YXR1cyIgOiAic3VjY2VzcyIKfSBd",
+                   "charset" : "UTF-8",
+                   "delay" : 0,
+                   "encoding" : "UTF-8",
+                   "errorCode" : null,
+                   "hashHumanReadable" : "[PUT]http://localhost:8080/mock/my/endpoint?full=true?data=[{\\"status\\":\\"success\\"}]",
+                   "length" : 0,
+                   "message" : "success",
+                   "requestData" : "[{\\"status\\":\\"success\\"}]",
+                   "responseAt" : 1534694562,
+                   "responseHeaders" : {
+                     "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
+                   },
+                   "statusCode" : 200,
+                   "url" : "http://localhost:8080/mock/my/endpoint?full=true",
+                   "verb" : "PUT"
+                 }
                 """);
         assertText(result.getBodyFromJson(TYPE), RESPONSE_LIST);
     }
@@ -317,6 +317,7 @@ class HttpBasicConnectorTest {
                              "charset" : "UTF-8",
                              "delay" : 0,
                              "encoding" : "UTF-8",
+                             "errorCode" : null,
                              "hashHumanReadable" : "[DELETE]http://localhost:8080/mock/my/endpoint?full=true",
                              "length" : 0,
                              "message" : "success",
@@ -326,9 +327,8 @@ class HttpBasicConnectorTest {
                              },
                              "statusCode" : 200,
                              "url" : "http://localhost:8080/mock/my/endpoint?full=true",
-                             "verb" : "DELETE",
-                             "errorCode" : null
-                           }         
+                             "verb" : "DELETE"
+                           }        
                            """);
     }
 
@@ -364,6 +364,7 @@ class HttpBasicConnectorTest {
                              "charset" : "UTF-8",
                              "delay" : 0,
                              "encoding" : "UTF-8",
+                             "errorCode" : null,
                              "hashHumanReadable" : "[OPTION]http://localhost:8080/mock/my/endpoint?full=true",
                              "length" : 0,
                              "message" : "success",
@@ -373,9 +374,8 @@ class HttpBasicConnectorTest {
                              },
                              "statusCode" : 200,
                              "url" : "http://localhost:8080/mock/my/endpoint?full=true",
-                             "verb" : "OPTION",
-                             "errorCode" : null
-                           }    
+                             "verb" : "OPTION"
+                           }   
                            """);
     }
 

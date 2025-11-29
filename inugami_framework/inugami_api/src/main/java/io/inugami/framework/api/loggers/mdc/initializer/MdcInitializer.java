@@ -17,6 +17,11 @@ import java.util.Map;
 public final class MdcInitializer {
 
     public static void initialize() {
+        final MdcServiceSpi mdcService = processInitialization();
+        mdcService.clear();
+    }
+
+    protected static MdcServiceSpi processInitialization() {
         final List<MdcInitializerSpi> initializers = SpiLoader.getInstance()
                                                               .loadSpiServicesByPriority(MdcInitializerSpi.class);
 
@@ -27,7 +32,7 @@ public final class MdcInitializer {
             mdcService.setMdc(entry.getKey(), entry.getValue());
         }
         Loggers.LOG_INITIALIZER.info("initialize log MDC");
-        mdcService.clear();
+        return mdcService;
     }
 
     private static Map<String, Serializable> loadValues(final List<MdcInitializerSpi> initializers) {

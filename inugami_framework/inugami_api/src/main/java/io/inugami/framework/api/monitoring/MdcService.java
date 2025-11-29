@@ -310,8 +310,17 @@ public class MdcService implements MdcServiceSpi {
     }
 
     public Map<String, String> getAllMdc() {
-        final var result = MDC.getCopyOfContextMap();
-        return result == null ? new LinkedHashMap<>() : result;
+        final var mdcResult = MDC.getCopyOfContextMap();
+        if (mdcResult == null) {
+            return Map.of();
+        }
+        final Map<String, String> result = new LinkedHashMap<>();
+        final List<String>        keys   = new ArrayList<>(mdcResult.keySet());
+        Collections.sort(keys);
+        for (String key : keys) {
+            result.put(key, mdcResult.get(key));
+        }
+        return result;
     }
 
     public Map<String, Serializable> getAllMdcExtended() {

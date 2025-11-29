@@ -3,18 +3,22 @@ package io.inugami.framework.api.tools.unit.test.api;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import java.util.List;
+
+import static io.inugami.framework.interfaces.tools.ListUtils.toList;
+
 @Builder(toBuilder = true)
 @AllArgsConstructor
 public class SkipLineMatcher implements LineMatcher {
-    private final int line;
+    private final List<Integer> line;
 
-    public static SkipLineMatcher of(final int line) {
-        return SkipLineMatcher.builder().line(line).build();
+    public static SkipLineMatcher of(final Integer... lines) {
+        return SkipLineMatcher.builder().line(toList(lines)).build();
     }
 
     @Override
     public boolean accept(final int index, final String value, final String reference) {
-        return index == line;
+        return line.contains(index);
     }
 
     @Override
