@@ -51,6 +51,17 @@ class FunctionalUtilsTest {
     // APPLY IF NOT NULL
     // =================================================================================================================
     @Test
+    void applyIfNotNull_basic() {
+        final List<String> values = new ArrayList<>();
+        assertThat(applyIfNotNull(HELLO, values::add)).isTrue();
+        assertThat(values.get(0)).isEqualTo(HELLO);
+
+        String nullValue = null;
+        assertThat(applyIfNotNull(nullValue, values::add)).isFalse();
+        assertThat(values).hasSize(1);
+    }
+
+    @Test
     void applyIfNotNull_nominal() {
         final List<String> values = new ArrayList<>();
         assertThat(applyIfNotNull(HELLO, null, values::add)).isTrue();
@@ -259,5 +270,17 @@ class FunctionalUtilsTest {
     @Test
     void hasChange_withNullValue() {
         assertThat(hasChange(null, null)).isFalse();
+    }
+
+    // =================================================================================================================
+    // OR NULL
+    // =================================================================================================================
+    @Test
+    void orNull_nominal() {
+        assertThat(orNull("some value")).isEqualTo("some value");
+        assertThat(orNull("   ")).isNull();
+        assertThat(orNull("")).isNull();
+        assertThat(orNull(null)).isNull();
+
     }
 }

@@ -29,7 +29,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <sonar.coverage.jacoco.xmlReportPaths.relative>${project.basedir}/../../../target/</sonar.coverage.jacoco.xmlReportPaths.relative>
+        <jacoco.report.path.relative>../../../</jacoco.report.path.relative>
     </properties>
 
     <!-- ======================================================================= 
