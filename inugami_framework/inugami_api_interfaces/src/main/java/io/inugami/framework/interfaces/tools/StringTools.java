@@ -1,8 +1,7 @@
 package io.inugami.framework.interfaces.tools;
 
 import io.inugami.framework.interfaces.exceptions.MessagesFormatter;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
@@ -13,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SuppressWarnings({"java:S5361", "java:S3776", "java:S1125"})
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class StringTools {
     // =========================================================================
     // ATTRIBUTES

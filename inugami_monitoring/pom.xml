@@ -29,7 +29,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <sonar.jacoco.reportPath>${project.basedir}/../../target/jacoco.exec</sonar.jacoco.reportPath>
+        <jacoco.report.path.relative>../../</jacoco.report.path.relative>
     </properties>
     <!-- =======================================================================
     = MODULES

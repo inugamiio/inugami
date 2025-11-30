@@ -77,7 +77,8 @@
         <super.jdk.arg>-parameters</super.jdk.arg>
         <maven-gpg-plugin.enabled/>
 
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <encoding>UTF-8</encoding>
+        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
         <project.build.datePattern>yyyy-MM-dd'T'HH:mm:ss.SSSZ</project.build.datePattern>
         <project.build.sourceProperties.path>${project.build.directory}/source.properties
         </project.build.sourceProperties.path>
@@ -232,14 +233,14 @@
         :: PLUGINS CONFIGURATION
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <jacoco.version>0.8.14</jacoco.version>
-        <jacoco.report.aggregate.enabled>true</jacoco.report.aggregate.enabled>
-        <jacoco.report.path.relative>../../</jacoco.report.path.relative>
-        <jacoco.report.path.base>${project.basedir}/${jacoco.report.path.relative}target/jacoco</jacoco.report.path.base>
-        <jacoco.report.path>${jacoco.report.path.base}/</jacoco.report.path>
+
+        <jacoco.report.aggregate.enabled>false</jacoco.report.aggregate.enabled>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <jacoco.report.path.relative/>
         <sonar.coverage.jacoco.xmlReportPaths.relative>${project.basedir}/${jacoco.report.path.relative}target</sonar.coverage.jacoco.xmlReportPaths.relative>
         <sonar.language>java</sonar.language>
+
         <custom.sonar.coverage.exclusions></custom.sonar.coverage.exclusions>
         <sonar.exclusions>
             **/js/vendors.js,
@@ -932,12 +933,11 @@
                 <version>${plugins.org-apache-maven-plugins.maven-surefire-plugin}</version>
                 <configuration>
                     <argLine>
-                        -Xmx1024M
-                        -Dfile.encoding=UTF-8
-                        --add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
-                        --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
-                        ${maven.plugins.surfire.argLine}
+                        -Xmx1024M -Dfile.encoding=${encoding} ${maven.plugins.surfire.argLine} --add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
                     </argLine>
+                    <systemPropertyVariables>
+                        <mock.generator.path>${mock.generator.path}</mock.generator.path>
+                    </systemPropertyVariables>
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
@@ -988,7 +988,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <argLine>-Dfile.encoding=UTF-8 ${maven.plugins.failsafe.argLine}</argLine>
+                    <argLine>-Dfile.encoding=${encoding} ${maven.plugins.failsafe.argLine}</argLine>
                     <includes>
                         <include>**/*IT.java</include>
                     </includes>
@@ -1006,6 +1006,7 @@
                     <excludes>
                         <exclude>**/*DTOBuilder*</exclude>
                         <exclude>**/*EntityBuilder*</exclude>
+                        <exclude>**/*Properties</exclude>
                         <exclude>**org/jboss/resteasy/logging/*</exclude>
                         <exclude>**/engine/js/*</exclude>
                         <exclude>**/FeatureInterceptor</exclude>
@@ -1048,12 +1049,10 @@
                         <goals>
                             <goal>report-integration</goal>
                         </goals>
-                        <phase>verify</phase>
+                        <phase>post-integration-test</phase>
                     </execution>
                 </executions>
             </plugin>
-
-
 
             <plugin>
                 <groupId>org.sonatype.central</groupId>
