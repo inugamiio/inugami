@@ -1,17 +1,15 @@
-package io.inugami.framework.api.tools;
+package io.inugami.framework.interfaces.tools;
 
-import io.inugami.framework.api.tools.unit.test.UnitTestHelper;
-import io.inugami.framework.interfaces.tools.StringTools;
+import io.inugami.framework.interfaces.testing.commons.UnitTestHelper;
 import org.junit.jupiter.api.Test;
 
 import java.util.regex.Pattern;
 
 import static io.inugami.framework.interfaces.tools.StringTools.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class StringToolsTest {
-
     // =========================================================================
     // METHODS
     // =========================================================================

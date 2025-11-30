@@ -238,7 +238,7 @@
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <jacoco.report.path.relative/>
-        <sonar.coverage.jacoco.xmlReportPaths.relative>${project.basedir}/${jacoco.report.path.relative}target</sonar.coverage.jacoco.xmlReportPaths.relative>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/${jacoco.report.path.relative}/target/</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.language>java</sonar.language>
 
         <custom.sonar.coverage.exclusions></custom.sonar.coverage.exclusions>
