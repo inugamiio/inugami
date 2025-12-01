@@ -32,14 +32,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Json implements Dto<Json> {
-
-
     private static final long serialVersionUID = -5645613967034802896L;
 
     private String value;
 
     @Override
     public Json cloneObj() {
-        return new Json(value);
+        return toBuilder().build();
     }
 }

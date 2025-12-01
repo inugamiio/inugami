@@ -11,7 +11,6 @@ io.inugami.framework.api.tools.ReflectionUtilsTest$ParentClient
 io.inugami.framework.api.tools.ReflectionUtilsTest$ParentService
 io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService
 io.inugami.framework.api.tools.ReflectionUtilsTest$SomeService$SomeServiceBuilder
-io.inugami.framework.api.tools.StringToolsTest
 io.inugami.framework.api.tools.unit.test.ExecutableFunction
 io.inugami.framework.api.tools.unit.test.TestHelpersErrorCodes
 io.inugami.framework.api.tools.unit.test.UnitTestData

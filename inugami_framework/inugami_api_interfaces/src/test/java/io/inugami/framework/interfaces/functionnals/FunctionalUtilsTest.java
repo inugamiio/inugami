@@ -1,5 +1,6 @@
-package io.inugami.framework.api.functionnals;
+package io.inugami.framework.interfaces.functionnals;
 
+import io.inugami.framework.interfaces.testing.commons.UnitTestHelper;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,11 +13,21 @@ import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FunctionalUtilsTest {
-
+    // =================================================================================================================
+    // ATTRIBUTES
+    // =================================================================================================================
     public static final String HELLO      = "hello";
     public static final String THE_WORLD  = "the world";
     public static final String LIST_HELLO = "[hello]";
     public static final String MAP_HELLO  = "{key=hello}";
+
+    // =================================================================================================================
+    // UTILITY
+    // =================================================================================================================
+    @Test
+    void assertUtilityClass() {
+        UnitTestHelper.assertUtilityClassLombok(FunctionalUtils.class);
+    }
 
     // =================================================================================================================
     // PROCESS

@@ -19,6 +19,8 @@ package io.inugami.framework.interfaces.models;
 import io.inugami.framework.interfaces.testing.commons.UnitTestHelper;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class NumberTypeTest {
@@ -39,10 +41,14 @@ class NumberTypeTest {
     }
 
     @Test
-    void getType_nominal(){
+    void getType_nominal() {
+        assertThat(NumberType.getType(null)).isNull();
+        assertThat(NumberType.getType((byte) 5)).isEqualTo(NumberType.BYTE);
+        assertThat(NumberType.getType((short) 10)).isEqualTo(NumberType.SHORT);
         assertThat(NumberType.getType(10)).isEqualTo(NumberType.INTEGER);
         assertThat(NumberType.getType(10L)).isEqualTo(NumberType.LONG);
         assertThat(NumberType.getType(10.0)).isEqualTo(NumberType.DOUBLE);
         assertThat(NumberType.getType(10.0f)).isEqualTo(NumberType.FLOAT);
+        assertThat(NumberType.getType(BigDecimal.valueOf(10.0))).isEqualTo(NumberType.BIG_DECIMAL);
     }
 }

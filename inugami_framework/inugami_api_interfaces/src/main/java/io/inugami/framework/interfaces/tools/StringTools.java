@@ -24,7 +24,7 @@ public final class StringTools {
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    private static List<UnaryOperator<String>> initializeStrategies() {
+    protected static List<UnaryOperator<String>> initializeStrategies() {
         final List<UnaryOperator<String>> result = new ArrayList<>();
 
         result.add(value -> StringTools.containsChars(value, "Ł") ? value.replaceAll("Ł", "L") : value);

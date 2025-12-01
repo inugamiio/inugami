@@ -7,12 +7,16 @@ import java.util.regex.Pattern;
 
 import static io.inugami.framework.interfaces.tools.StringTools.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class StringToolsTest {
     // =========================================================================
     // METHODS
     // =========================================================================
+    @Test
+    void initializeStrategies_nominal() {
+        assertThat(StringTools.initializeStrategies()).isNotEmpty();
+    }
+
     @Test
     void assertUtilityClass() throws Exception {
         UnitTestHelper.assertUtilityClassLombok(StringTools.class);
@@ -20,12 +24,15 @@ class StringToolsTest {
 
     @Test
     void testConvertToAscii() throws Exception {
-        assertEquals("aAONzYSCLlssOoAEOE", StringTools.convertToAscii("àÁÒÑžÝŠÇŁłßØøÆŒ"));
+        assertThat(StringTools.convertToAscii("àÁÒÑžÝŠÇŁłßØøÆŒ")).isEqualTo("aAONzYSCLlssOoAEOE");
+        assertThat(StringTools.convertToAscii(null)).isNull();
     }
 
     @Test
     void replaceAll_nominal() throws Exception {
         assertThat(replaceAll(Pattern.compile("[a-zA-Z]+"), "abcd", "1")).isEqualTo("1");
+
+        assertThat(replaceAll(Pattern.compile("[0-9]+"), "abcd", "X")).isEqualTo("abcd");
     }
 
     @Test
