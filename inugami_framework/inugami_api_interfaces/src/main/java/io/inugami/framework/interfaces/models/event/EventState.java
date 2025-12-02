@@ -25,27 +25,24 @@ import lombok.*;
  * @author patrick_guillerm
  * @since 8 août 2017
  */
-@ToString
-@EqualsAndHashCode
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Setter
 @Getter
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventState implements Dto<EventState> {
-
-
-    private static final long serialVersionUID = -5004046074596299588L;
-
-    private String eventName;
-
-    private long start;
-
-    private long end;
-
-    private boolean running;
-
-    private long delais;
+    private static final long    serialVersionUID = -5004046074596299588L;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private              String  eventName;
+    @ToString.Include
+    private              long    start;
+    @ToString.Include
+    private              long    end;
+    private              boolean running;
+    private              long    delais;
 
 
     @Override

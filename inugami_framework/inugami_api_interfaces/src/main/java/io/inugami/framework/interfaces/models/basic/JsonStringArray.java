@@ -47,6 +47,9 @@ public class JsonStringArray implements Dto<JsonStringArray> {
     // =========================================================================
 
     public String[] getData() {
+        if(data==null){
+            return new String[]{};
+        }
         final String[] result = new String[data.length];
         System.arraycopy(data, 0, result, 0, data.length);
         return result;

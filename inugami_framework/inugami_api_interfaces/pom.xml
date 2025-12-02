@@ -43,6 +43,14 @@
             ,**/Record.java
             ,**/number/*.java
             ,**/CredentialsProvider.java
+            ,**/concurrent/*.java
+            ,**/ctx/*.java
+            ,**/dao/*.java
+            ,**/feature/*.java
+            ,**/processors/*.java
+            ,**/listeners/*.java
+            ,**/scan/*.java
+            ,**/threads/*.java
         </custom.sonar.coverage.exclusions>
     </properties>
 

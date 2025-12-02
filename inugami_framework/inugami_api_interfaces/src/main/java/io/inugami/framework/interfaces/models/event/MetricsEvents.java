@@ -18,6 +18,9 @@ package io.inugami.framework.interfaces.models.event;
 
 import io.inugami.framework.interfaces.models.maven.Gav;
 import io.inugami.framework.interfaces.models.tools.Chrono;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -31,24 +34,22 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author patrick_guillerm
  * @since 27 sept. 2017
  */
+@UtilityClass
 public final class MetricsEvents {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final String SEPARATOR = "_";
-
+    private static final String              SEPARATOR     = "_";
     private static final Map<String, Chrono> EVENTS_STATES = new ConcurrentHashMap<>();
-
-    // =========================================================================
-    // CONSTRUCTOR
-    // =========================================================================
-    private MetricsEvents() {
-    }
 
     // =========================================================================
     // METHODS
     // =========================================================================
+    public static void clear() {
+        EVENTS_STATES.clear();
+    }
+
     public static void onStart(final Gav gav, final String eventName) {
         final String key    = validatePluginGavEvent(gav, eventName);
         Chrono       chrono = EVENTS_STATES.get(key);
