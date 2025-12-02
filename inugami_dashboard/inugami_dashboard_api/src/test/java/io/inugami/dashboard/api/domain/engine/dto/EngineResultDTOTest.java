@@ -1,7 +1,22 @@
+/* --------------------------------------------------------------------
+ *  Inugami
+ * --------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package io.inugami.dashboard.api.domain.engine.dto;
 
 import io.inugami.commons.test.UnitTestData;
-import io.inugami.commons.test.UnitTestHelper;
 import io.inugami.commons.test.dto.AssertDtoContext;
 import io.inugami.framework.interfaces.models.engine.Status;
 import io.inugami.framework.interfaces.models.maven.Gav;
@@ -21,9 +36,9 @@ class EngineResultDTOTest {
                                   .cloneFunction(i -> i.toBuilder().build())
                                   .noArgConstructor(EngineResultDTO::new)
                                   .fullArgConstructor(this::buildEngineResultDTO)
-                                  .fullArgConstructorRefPath("domain/engine/dto/engineResultDTO/model.json")
-                                  .getterRefPath("domain/engine/dto/engineResultDTO/getter.json")
-                                  .toStringRefPath("domain/engine/dto/engineResultDTO/toString.txt")
+                                  .fullArgConstructorRefPath("io/inugami/dashboard/api/domain/engine/dto/engineResultDTO/model.json")
+                                  .getterRefPath("io/inugami/dashboard/api/domain/engine/dto/engineResultDTO/getter.json")
+                                  .toStringRefPath("io/inugami/dashboard/api/domain/engine/dto/engineResultDTO/toString.txt")
                                   .noEqualsFunction(this::notEquals)
                                   .checkSetters(true)
                                   .build());
@@ -38,14 +53,20 @@ class EngineResultDTOTest {
         assertThat(instance).isNotEqualTo(instance.toBuilder().start(UnitTestData.DATE_TIME).build());
         assertThat(instance.toBuilder().start(UnitTestData.DATE_TIME).build()).isNotEqualTo(instance);
         assertThat(instance.hashCode()).isNotEqualTo(instance.toBuilder().start(null).build().hashCode());
-        assertThat(instance.hashCode()).isNotEqualTo(instance.toBuilder().start(UnitTestData.DATE_TIME).build().hashCode());
+        assertThat(instance.hashCode()).isNotEqualTo(instance.toBuilder()
+                                                             .start(UnitTestData.DATE_TIME)
+                                                             .build()
+                                                             .hashCode());
         //
         assertThat(instance).isNotEqualTo(instance.toBuilder().end(null).build());
         assertThat(instance.toBuilder().end(null).build()).isNotEqualTo(instance);
         assertThat(instance).isNotEqualTo(instance.toBuilder().end(UnitTestData.DATE_TIME).build());
         assertThat(instance.toBuilder().end(UnitTestData.DATE_TIME).build()).isNotEqualTo(instance);
         assertThat(instance.hashCode()).isNotEqualTo(instance.toBuilder().end(null).build().hashCode());
-        assertThat(instance.hashCode()).isNotEqualTo(instance.toBuilder().end(UnitTestData.DATE_TIME).build().hashCode());
+        assertThat(instance.hashCode()).isNotEqualTo(instance.toBuilder()
+                                                             .end(UnitTestData.DATE_TIME)
+                                                             .build()
+                                                             .hashCode());
         //
         assertThat(instance).isNotEqualTo(instance.toBuilder().status(null).build());
         assertThat(instance.toBuilder().status(null).build()).isNotEqualTo(instance);
@@ -62,20 +83,26 @@ class EngineResultDTOTest {
                               .start(LocalDateTime.of(2020, 11, 22, 13, 50, 12))
                               .end(LocalDateTime.of(2020, 11, 22, 13, 52, 12))
                               .status(Status.SUCCESS)
-                              .plugins(List.of(EnginePluginResultDTO.builder()
-                                                                    .events(List.of(EnginePluginEventResultDTO.builder()
-                                                                                                              .build()))
-                                                                    .gav(Gav.builder()
-                                                                            .groupId("io.inugami")
-                                                                            .artifactId("plugin")
-                                                                            .version("1.0.0")
-                                                                            .build())
-                                                                    .status(Status.SUCCESS)
-                                                                    .message("done")
-                                                                    .build()))
+                              .plugins(buildPlugin())
+                              .clearPlugins()
+                              .plugins(List.of(buildPlugin()))
                               .build()
                               .toBuilder()
                               .build();
+    }
+
+    private static EnginePluginResultDTO buildPlugin() {
+        return EnginePluginResultDTO.builder()
+                                    .events(List.of(EnginePluginEventResultDTO.builder()
+                                                                              .build()))
+                                    .gav(Gav.builder()
+                                            .groupId("io.inugami")
+                                            .artifactId("plugin")
+                                            .version("1.0.0")
+                                            .build())
+                                    .status(Status.SUCCESS)
+                                    .message("done")
+                                    .build();
     }
 
 }

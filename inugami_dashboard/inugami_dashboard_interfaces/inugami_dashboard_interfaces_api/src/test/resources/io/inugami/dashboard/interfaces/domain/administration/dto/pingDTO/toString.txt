@@ -1,0 +1,1 @@
+PingDTO(now=2025-12-02T20:53:42, applicationName=inugami)

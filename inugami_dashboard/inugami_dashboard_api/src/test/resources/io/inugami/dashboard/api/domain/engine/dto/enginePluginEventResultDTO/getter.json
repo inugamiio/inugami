@@ -1,0 +1,21 @@
+{
+  "getData" : {
+    "alerts" : [ ],
+    "data" : [ ]
+  },
+  "getError" : {
+    "message" : "my bad"
+  },
+  "getErrorCode" : {
+    "statusCode" : 500,
+    "errorCode" : "APPLICATION_CONFIG_ERROR",
+    "errorType" : "technical",
+    "message" : "error on read application configuration",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "getMessage" : "sorry",
+  "getName" : "simple-event",
+  "getStatus" : "ERROR"
+}

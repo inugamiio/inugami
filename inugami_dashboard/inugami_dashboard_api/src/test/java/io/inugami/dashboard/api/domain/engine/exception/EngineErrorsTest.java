@@ -7,7 +7,7 @@ class EngineErrorsTest {
     @Test
     void assertEngineErrors() {
         UnitTestHelper.assertErrorCodeUnique(EngineErrors.values());
-        UnitTestHelper.assertErrorCode("domain/engine/exception/assertEngineErrors.json",
+        UnitTestHelper.assertErrorCode("io/inugami/dashboard/api/domain/engine/exception/assertEngineErrors.json",
                                        EngineErrors.values());
     }
 }

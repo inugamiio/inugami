@@ -25,6 +25,11 @@
     <artifactId>inugami_dashboard_api</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
     <url>http://inugami.io/inugami/inugami_api</url>
+    <properties>
+        <custom.sonar.coverage.exclusions>
+            ,**/EngineListener.java
+        </custom.sonar.coverage.exclusions>
+    </properties>
 
     <!--================================================================================================================
     = DEPENDENCIES

@@ -1,0 +1,16 @@
+{
+  "createdBy" : [ "system" ],
+  "createdDate" : [ "2023-05-27T12:00:00" ],
+  "description" : [ "Lorem ipsum dolor sit amet, consectetur adipiscing elit" ],
+  "lastModifiedBy" : [ "system2" ],
+  "lastModifiedDate" : [ "2023-06-01T12:00:00" ],
+  "level" : [ "ERROR" ],
+  "message" : [ "too many XLLOG !" ],
+  "name" : [ "basic-alert" ],
+  "page" : 0,
+  "pageSize" : 10,
+  "provider" : [ "elastic-search" ],
+  "sortFields" : "name",
+  "sortOrder" : "ASC",
+  "uid" : [ "bb895294-efe7-484b-b670-14d004eaf461" ]
+}

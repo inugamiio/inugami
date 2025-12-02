@@ -1,0 +1,20 @@
+{
+  "getData" : {
+    "alerts" : [ ],
+    "data" : [ ]
+  },
+  "getError" : {
+    "message" : "my bad"
+  },
+  "getErrorCode" : {
+    "statusCode" : 500,
+    "errorCode" : "err-undefine",
+    "errorType" : "technical",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "getMessage" : "sorry",
+  "getName" : "simple-event",
+  "getStatus" : "ERROR"
+}

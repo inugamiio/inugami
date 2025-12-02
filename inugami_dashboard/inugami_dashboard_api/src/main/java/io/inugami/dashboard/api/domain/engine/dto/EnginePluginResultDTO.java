@@ -22,7 +22,6 @@ import io.inugami.framework.interfaces.tools.StringComparator;
 import lombok.*;
 import org.jspecify.annotations.NonNull;
 
-
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -31,18 +30,19 @@ import java.util.Collection;
 @NoArgsConstructor
 @Setter
 @Getter
-@ToString
-@EqualsAndHashCode
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class EnginePluginResultDTO implements Serializable, Comparable<EnginePluginResultDTO> {
+    private static final long                                   serialVersionUID = -4426380938842629284L;
     @Singular("events")
-    private Collection<EnginePluginEventResultDTO> events;
+    private              Collection<EnginePluginEventResultDTO> events;
     @ToString.Include
     @EqualsAndHashCode.Include
-    private Gav                                    gav;
+    private              Gav                                    gav;
     @ToString.Include
     @EqualsAndHashCode.Include
-    private Status                                 status;
-    private String                                 message;
+    private              Status                                 status;
+    private              String                                 message;
 
     @Override
     public int compareTo(@NonNull final EnginePluginResultDTO other) {

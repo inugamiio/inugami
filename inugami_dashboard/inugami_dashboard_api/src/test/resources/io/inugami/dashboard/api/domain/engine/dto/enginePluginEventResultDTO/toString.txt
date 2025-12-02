@@ -1,0 +1,1 @@
+EnginePluginEventResultDTO(name=simple-event, errorCode=APPLICATION_CONFIG_ERROR, status=ERROR, message=sorry, error=io.inugami.framework.interfaces.exceptions.UncheckedException: my bad, data=ProviderFutureResult(event=null, channel=null, fieldData=null))

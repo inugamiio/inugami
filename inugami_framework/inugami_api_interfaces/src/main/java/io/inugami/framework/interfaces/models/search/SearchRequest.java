@@ -40,6 +40,4 @@ public interface SearchRequest {
     Collection<String> getLastModifiedBy();
 
     Collection<LocalDateTime> getLastModifiedDate();
-
-    Collection<Long> getVersion();
 }

@@ -22,17 +22,23 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
-@ToString
-@EqualsAndHashCode
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = false)
 public class EventDoneDTO implements Serializable {
-    private static final long serialVersionUID = 1549708365269970176L;
-    private Plugin plugin;
-    private GenericEvent<?>            event;
-    private EnginePluginEventResultDTO data;
-    private LocalDateTime              date;
+    private static final long                       serialVersionUID = 1549708365269970176L;
+    @EqualsAndHashCode.Include
+    private              Plugin                     plugin;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private              GenericEvent<?>            event;
+    private              EnginePluginEventResultDTO data;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private              LocalDateTime              date;
 }

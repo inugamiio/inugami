@@ -7,7 +7,7 @@ class AdministrationErrorsTest {
     @Test
     void administrationErrors() {
         UnitTestHelper.assertErrorCodeUnique(AdministrationErrors.values());
-        UnitTestHelper.assertErrorCode("domain/administration/exception/administrationErrors.json",
+        UnitTestHelper.assertErrorCode("io/inugami/dashboard/api/domain/administration/exception/administrationErrors.json",
                                        AdministrationErrors.values());
     }
 }

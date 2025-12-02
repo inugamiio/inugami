@@ -33,6 +33,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode
 public class EnginePluginEventResultDTO implements Serializable, Comparable<EnginePluginEventResultDTO> {
+    private static final long serialVersionUID = -750260212746447673L;
     @EqualsAndHashCode.Include
     private String               name;
     @ToString.Include

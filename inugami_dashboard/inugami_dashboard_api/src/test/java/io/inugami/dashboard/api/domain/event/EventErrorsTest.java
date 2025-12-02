@@ -7,7 +7,7 @@ class EventErrorsTest {
     @Test
     void assertEventErrors() {
         UnitTestHelper.assertErrorCodeUnique(EventErrors.values());
-        UnitTestHelper.assertErrorCode("domain/event/exception/assertEngineErrors.json",
+        UnitTestHelper.assertErrorCode("io/inugami/dashboard/api/domain/exception/assertEngineErrors.json",
                                        EventErrors.values());
     }
 }
