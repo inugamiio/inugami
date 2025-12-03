@@ -254,6 +254,7 @@
             **/engine/js/*,
             **/test/*,
             **/test_it/*,
+            **/*Configuration.java
         </sonar.exclusions>
         <sonar.coverage.exclusions>
             **/test/*,

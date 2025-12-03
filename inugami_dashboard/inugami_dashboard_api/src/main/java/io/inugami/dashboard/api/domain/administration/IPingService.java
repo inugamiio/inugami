@@ -21,6 +21,4 @@ import io.inugami.dashboard.api.domain.administration.dto.PingDTO;
 public interface IPingService {
 
     PingDTO ping();
-
-    void pingTest();
 }

@@ -24,6 +24,7 @@ import lombok.*;
 import org.jspecify.annotations.NonNull;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -33,21 +34,23 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode
 public class EnginePluginEventResultDTO implements Serializable, Comparable<EnginePluginEventResultDTO> {
-    private static final long serialVersionUID = -750260212746447673L;
+    private static final long                 serialVersionUID = -750260212746447673L;
     @EqualsAndHashCode.Include
-    private String               name;
+    private              String               name;
     @ToString.Include
     @EqualsAndHashCode.Include
-    private ErrorCode            errorCode;
+    private              ErrorCode            errorCode;
     @ToString.Include
     @EqualsAndHashCode.Include
-    private Status               status;
-    private String               message;
-    private Throwable            error;
-    private ProviderFutureResult data;
+    private              Status               status;
+    private              String               message;
+    private              Throwable            error;
+    private              ProviderFutureResult data;
 
     @Override
     public int compareTo(@NonNull final EnginePluginEventResultDTO other) {
-        return StringComparator.compareTo(name, other == null ? null : other.getName());
+        return StringComparator.compareTo(name, Optional.ofNullable(other)
+                                                        .map(EnginePluginEventResultDTO::getName)
+                                                        .orElse(null));
     }
 }

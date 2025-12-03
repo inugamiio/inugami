@@ -25,6 +25,7 @@ import io.inugami.framework.interfaces.models.event.AlertingModel;
 import io.inugami.framework.interfaces.models.search.SearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
@@ -44,6 +45,7 @@ public class AlertingService implements IAlertingService {
     // CREATE
     // =================================================================================================================
 
+    @Transactional
     @Override
     public Collection<AlertingModel> create(final Collection<AlertingModel> values) {
         assertNotEmpty(AlertingErrors.CREATE_INVALID_DATA, values);
@@ -81,6 +83,7 @@ public class AlertingService implements IAlertingService {
     // =================================================================================================================
     // UPDATE
     // =================================================================================================================
+    @Transactional
     @Override
     public Collection<AlertingModel> update(final Collection<AlertingModel> values, final boolean force) {
         assertNotEmpty(AlertingErrors.UPDATE_INVALID_DATA, values);
@@ -90,6 +93,7 @@ public class AlertingService implements IAlertingService {
     // =================================================================================================================
     // DELETE
     // =================================================================================================================
+    @Transactional
     @Override
     public void delete(final Collection<String> ids) {
         assertNotEmpty(AlertingErrors.DELETE_INVALID_DATA, ids);
