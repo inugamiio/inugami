@@ -33,8 +33,9 @@ open module io.inugami.commons.test {
     requires org.junit.jupiter.api;
     requires org.mockito;
     requires org.slf4j;
-
+    requires org.jspecify;
     exports io.inugami.commons.test.api;
+    exports io.inugami.commons.test.mock;
     exports io.inugami.commons.test.dto;
     exports io.inugami.commons.test.logs;
     exports io.inugami.commons.test;

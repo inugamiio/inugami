@@ -17,13 +17,18 @@
 package io.inugami.dashboard.interfaces.core.domain.administration;
 
 import io.inugami.commons.test.UnitTestData;
+import io.inugami.commons.test.mock.MockContext;
+import io.inugami.commons.test.mock.MockGenerator;
 import io.inugami.dashboard.api.domain.administration.IPingService;
 import io.inugami.dashboard.api.domain.administration.dto.PingDTO;
 import io.inugami.dashboard.interfaces.core.domain.administration.mapper.InugamiInterfaceAdministationConfiguration;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
 
 import static io.inugami.commons.test.UnitTestHelper.assertText;
 import static org.mockito.Mockito.when;
@@ -33,9 +38,16 @@ class PingRestControllerTest {
     //==================================================================================================================
     // ATTRIBUTES
     //==================================================================================================================
-    @Mock
-    private IPingService pingService;
+    private static final String       PING_FOLDER = "administration/pingRestClient/ping";
+    private static final List<String> FOLDERS = List.of(PING_FOLDER);
 
+    @Mock
+    private              IPingService pingService;
+
+    @BeforeAll
+    public static void generateOpenApi(){
+        FOLDERS.forEach(MockGenerator::generateOpenApiDocumentation);
+    }
     //==================================================================================================================
     // TEST
     //==================================================================================================================
@@ -53,6 +65,15 @@ class PingRestControllerTest {
                              "now" : "2023-06-01T12:00:00"
                            }
                            """);
+
+        MockGenerator.generate(MockContext.builder()
+                                          .folder(PING_FOLDER)
+                                          .get("/administration/ping")
+                                          .addRequestHeaderTracking()
+                                          .addResponseHeaderTracking()
+                                          .statusSuccess()
+                                          .response(response)
+                                          .build());
     }
 
     //==================================================================================================================
