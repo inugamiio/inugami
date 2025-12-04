@@ -21,6 +21,7 @@ import io.inugami.framework.api.monitoring.RequestContext;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.exceptions.ExceptionResolver;
 import io.inugami.framework.interfaces.exceptions.UncheckedException;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
 import io.inugami.framework.interfaces.models.tools.Chrono;
@@ -35,9 +36,7 @@ import io.inugami.framework.interfaces.rest.RestService;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
 import io.inugami.framework.interfaces.tools.CalendarTools;
-import io.inugami.framework.interfaces.exceptions.ExceptionResolver;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
-import io.inugami.framework.interfaces.monitoring.Interceptable;
 import io.inugami.monitoring.core.context.MonitoringBootstrapService;
 import io.inugami.monitoring.core.interceptors.mdc.DefaultMdcCleaner;
 import io.inugami.monitoring.core.interceptors.mdc.MdcCleaner;
@@ -45,9 +44,6 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -121,7 +117,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         resolveSpi(ExceptionResolver.class, EXCEPTION_RESOLVER, new FilterInterceptorErrorResolver());
 
         List<FilterInterceptorCachePurgeStrategy> cachePurgeStrategies = new ArrayList<>();
-        resolveSpi(FilterInterceptorCachePurgeStrategy.class, cachePurgeStrategies,  new DefaultFilterInterceptorCachePurgeStrategy());
+        resolveSpi(FilterInterceptorCachePurgeStrategy.class, cachePurgeStrategies, new DefaultFilterInterceptorCachePurgeStrategy());
 
 
         PURGECACHE_STRATEGY.set(cachePurgeStrategies.stream().findFirst().orElse(values -> false));

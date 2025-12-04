@@ -1,0 +1,18 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "request" : "null",
+  "requestHeaders" : {
+    "x-device-identifier" : "023678f9-1d10-468d-93bd-0be982ccc57c",
+    "x-correlation-id" : "6e6f1c15-611d-4210-bcc8-a37f06163389"
+  },
+  "response" : "\"{\\n  \\\"applicationName\\\" : \\\"inugami\\\",\\n  \\\"now\\\" : \\\"2023-06-01T12:00:00\\\"\\n}\"",
+  "responseHeaders" : {
+    "x-device-identifier" : "023678f9-1d10-468d-93bd-0be982ccc57c",
+    "x-correlation-id" : "6e6f1c15-611d-4210-bcc8-a37f06163389",
+    "x-b3-traceid" : "9f16aae3-c678-4465-a447-1e590bc32c7c"
+  },
+  "status" : 200,
+  "url" : "/administration/ping",
+  "verb" : "GET"
+}

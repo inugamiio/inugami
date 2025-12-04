@@ -26,6 +26,9 @@
     <name>${project.groupId}:${project.artifactId}</name>
     <url>http://inugami.io/inugami/inugami_api</url>
 
+    <properties>
+        <mock.generator.path>../inugami_dashboard_interfaces_api/src/test/resources/io/inugami/dashboard/interfaces/domain/</mock.generator.path>
+    </properties>
     <!--================================================================================================================
     = DEPENDENCIES
     =================================================================================================================-->

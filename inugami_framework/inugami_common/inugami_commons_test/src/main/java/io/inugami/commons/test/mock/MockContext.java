@@ -28,10 +28,7 @@ import org.jspecify.annotations.Nullable;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -55,6 +52,7 @@ public class MockContext implements Serializable {
     private String                          folder;
     private String                          verb;
     private String                          url;
+    private Map<String, Serializable>       requestParams;
     private Map<String, List<Serializable>> requestOptions;
     private Map<String, Serializable>       requestHeaders;
     private String                          request;
@@ -73,6 +71,14 @@ public class MockContext implements Serializable {
                 requestOptions = new LinkedHashMap<>();
             }
             requestOptions.put(name, ListUtils.toList(values));
+            return this;
+        }
+
+        public MockContextBuilder addRequestParam(@NonNull final String id, @NonNull final Serializable value) {
+            if (requestParams == null) {
+                requestParams = new LinkedHashMap<>();
+            }
+            requestParams.put(id, value);
             return this;
         }
 
@@ -170,7 +176,7 @@ public class MockContext implements Serializable {
         }
 
         public MockContextBuilder errorCode(@NonNull final ErrorCode value) {
-            status = value.getStatusCode();
+            status = Optional.ofNullable(value).map(ErrorCode::getStatusCode).orElse(200);
             errorCode = value;
             return this;
         }
@@ -179,7 +185,6 @@ public class MockContext implements Serializable {
             initRequestHeaders();
             requestHeaders.put(Headers.X_DEVICE_IDENTIFIER, UUID.randomUUID().toString());
             requestHeaders.put(Headers.X_CORRELATION_ID, UUID.randomUUID().toString());
-            requestHeaders.put(Headers.X_B_3_TRACEID, UUID.randomUUID().toString());
             return this;
         }
 
@@ -215,5 +220,7 @@ public class MockContext implements Serializable {
                 requestHeaders = new LinkedHashMap<>();
             }
         }
+
+
     }
 }
