@@ -208,5 +208,134 @@ public class AlertingRestClientDOC  {
      @Inherited
      public @interface DocGetById  {}
 
+     @ApiResponses({
+         @ApiResponse(
+         	responseCode="200",
+         	description="Successful operation",
+         	content={
+                      @Content(
+                      	mediaType="application/json",
+                      	examples={                 
+                                       @ExampleObject(
+                                       	name="Nominal",
+                                       	value="""
+                                                {
+                                                  "data" : [ {
+                                                    "condition" : "value > 5",
+                                                    "description" : "lorem ipsum",
+                                                    "function" : "handlerFunction",
+                                                    "message" : "sorry",
+                                                    "name" : "simple-alert",
+                                                    "provider" : "graphite",
+                                                    "uid" : "bb895294-efe7-484b-b670-14d004eaf461"
+                                                  } ],
+                                                  "nbFoundItems" : 1,
+                                                  "next" : false,
+                                                  "page" : 0,
+                                                  "pageSize" : 10,
+                                                  "previous" : false,
+                                                  "totalPages" : 1
+                                                }
+                                       """
+                                       )
+                      
+                      	}
+                      )
+         		}
+         	)
+     })
+     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+     @Retention(RetentionPolicy.RUNTIME)
+     @Inherited
+     public @interface DocSearch  {}
+
+     @ApiResponses({
+         @ApiResponse(
+         	responseCode="200",
+         	description="Successful operation",
+         	content={
+                      @Content(
+                      	mediaType="application/json",
+                      	examples={                 
+                                       @ExampleObject(
+                                       	name="Nominal",
+                                       	value="""
+                                                [ {
+                                                  "condition" : "value > 5",
+                                                  "description" : "lorem ipsum",
+                                                  "function" : "handlerFunction",
+                                                  "message" : "sorry",
+                                                  "name" : "simple-alert",
+                                                  "provider" : "graphite",
+                                                  "uid" : "bb895294-efe7-484b-b670-14d004eaf461"
+                                                } ]
+                                       """
+                                       )
+                      
+                      	}
+                      )
+         		}
+         	)
+     })
+     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+     @Retention(RetentionPolicy.RUNTIME)
+     @Inherited
+     public @interface DocUpdateForce  {}
+
+     @ApiResponses({
+         @ApiResponse(
+         	responseCode="200",
+         	description="Successful operation",
+         	content={
+                      @Content(
+                      	mediaType="application/json",
+                      	examples={                 
+                                       @ExampleObject(
+                                       	name="Nominal",
+                                       	value="""
+                                                [ {
+                                                  "condition" : "value > 5",
+                                                  "description" : "lorem ipsum",
+                                                  "function" : "handlerFunction",
+                                                  "message" : "sorry",
+                                                  "name" : "simple-alert",
+                                                  "provider" : "graphite",
+                                                  "uid" : "bb895294-efe7-484b-b670-14d004eaf461"
+                                                } ]
+                                       """
+                                       )
+                      
+                      	}
+                      )
+         		}
+         	)
+     })
+     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+     @Retention(RetentionPolicy.RUNTIME)
+     @Inherited
+     public @interface DocUpdate  {}
+
+     @ApiResponses({
+         @ApiResponse(
+         	responseCode="200",
+         	description="Successful operation",
+         	content={
+                      @Content(
+                      	mediaType="application/json",
+                      	examples={                 
+                                       @ExampleObject(
+                                       	name="Nominal"
+                                       )
+                      
+                      	}
+                      )
+         		}
+         	)
+     })
+     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+     @Retention(RetentionPolicy.RUNTIME)
+     @Inherited
+     public @interface DocDelete  {}
+
 
 }

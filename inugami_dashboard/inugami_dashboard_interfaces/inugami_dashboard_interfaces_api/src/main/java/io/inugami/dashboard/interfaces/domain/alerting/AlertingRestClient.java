@@ -37,6 +37,7 @@ public interface AlertingRestClient {
     // =================================================================================================================
     // READ
     // =================================================================================================================
+    @AlertingRestClientDOC.DocSearch
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     SearchResponse<AlertingModel> search(final AlertingSearchRequestAPI searchRequest);
 
@@ -49,15 +50,18 @@ public interface AlertingRestClient {
     // =================================================================================================================
     // UPDATE
     // =================================================================================================================
+    @AlertingRestClientDOC.DocUpdateForce
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     Collection<AlertingModel> updateForce(@RequestBody final Collection<AlertingModel> values);
 
+    @AlertingRestClientDOC.DocUpdate
     @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     Collection<AlertingModel> update(@RequestBody final Collection<AlertingModel> values);
 
     // =================================================================================================================
     // DELETE
     // =================================================================================================================
+    @AlertingRestClientDOC.DocDelete
     @DeleteMapping()
     void delete(@RequestParam(name = "ids") final Collection<String> ids);
 

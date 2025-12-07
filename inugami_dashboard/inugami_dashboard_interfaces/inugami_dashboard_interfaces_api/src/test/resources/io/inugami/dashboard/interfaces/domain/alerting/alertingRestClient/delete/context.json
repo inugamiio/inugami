@@ -1,0 +1,19 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "requestHeaders" : {
+    "x-device-identifier" : "6c82d851-de4a-458f-9316-f800cfa4551e",
+    "x-correlation-id" : "89c48602-76a7-4582-b1cb-73c06bf45f68"
+  },
+  "requestOptions" : {
+    "id" : [ "bb895294-efe7-484b-b670-14d004eaf461" ]
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "6c82d851-de4a-458f-9316-f800cfa4551e",
+    "x-correlation-id" : "89c48602-76a7-4582-b1cb-73c06bf45f68",
+    "x-b3-traceid" : "75f3b832-d591-46d2-8277-96445517fffd"
+  },
+  "status" : 200,
+  "url" : "/alerting",
+  "verb" : "DELETE"
+}
