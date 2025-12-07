@@ -44,6 +44,16 @@ public final class StringTools {
     // =========================================================================
     // METHODS
     // =========================================================================
+    public static boolean fistCharUpperCase(final String value) {
+        if (value == null || value.isBlank()) {
+            return false;
+        }
+        final String firstChar          = value.substring(0, 1);
+        final String firstCharUpperCase = firstChar.toUpperCase();
+        return firstChar.equals(firstCharUpperCase);
+    }
+
+
     public static String replaceAll(final Pattern regex, final String data, final String replacement) {
         String        result  = data;
         final Matcher matcher = regex.matcher(data);

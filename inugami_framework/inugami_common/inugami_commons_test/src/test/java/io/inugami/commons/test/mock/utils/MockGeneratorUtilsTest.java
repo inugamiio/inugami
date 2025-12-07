@@ -27,13 +27,13 @@ class MockGeneratorUtilsTest {
     void buildMockFilePath_nominal() {
         final File folder = new File("../../");
         assertThat(splitPath(buildMockFilePath(folder, "/domain/user/userClient/getById", "context.json")))
-                .hasToString("/inugami_framework/domain/user/userClient/getById/context.json");
+                .hasToString("/inugami_framework/src/test/resources/domain/user/userClient/getById/context.json");
 
         assertThat(splitPath(buildMockFilePath(folder, "domain/user/userClient/getById/", "context.json")))
-                .hasToString("/inugami_framework/domain/user/userClient/getById/context.json");
+                .hasToString("/inugami_framework/src/test/resources/domain/user/userClient/getById/context.json");
 
         assertThat(splitPath(buildMockFilePath(folder, null, "context.json")))
-                .hasToString("/inugami_framework/context.json");
+                .hasToString("/inugami_framework/src/test/resources/context.json");
     }
 
     @Test
@@ -53,4 +53,8 @@ class MockGeneratorUtilsTest {
         return path.substring(start);
     }
 
+    @Test
+    void packagePath_nominal() {
+        assertThat(resolvePackagePath(this.getClass())).isEqualTo("io/inugami/commons/test/mock/utils/");
+    }
 }

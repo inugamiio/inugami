@@ -29,6 +29,18 @@ class StringToolsTest {
     }
 
     @Test
+    void fistCharUpperCase_nominal() {
+        assertThat(fistCharUpperCase(null)).isFalse();
+        assertThat(fistCharUpperCase("")).isFalse();
+        assertThat(fistCharUpperCase("a")).isFalse();
+        assertThat(fistCharUpperCase("aBc")).isFalse();
+
+        assertThat(fistCharUpperCase("A")).isTrue();
+        assertThat(fistCharUpperCase("Aaa")).isTrue();
+
+    }
+
+    @Test
     void replaceAll_nominal() throws Exception {
         assertThat(replaceAll(Pattern.compile("[a-zA-Z]+"), "abcd", "1")).isEqualTo("1");
 

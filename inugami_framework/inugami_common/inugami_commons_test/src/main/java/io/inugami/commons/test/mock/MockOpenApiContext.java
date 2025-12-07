@@ -18,6 +18,7 @@ package io.inugami.commons.test.mock;
 
 import lombok.*;
 import org.jspecify.annotations.NonNull;
+import org.junit.jupiter.api.AssertionFailureBuilder;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -31,11 +32,11 @@ import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.apply
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode
 public class MockOpenApiContext implements Serializable {
+    private List<String> classToImport;
     private List<String> customAnnotations;
-
+    private Class<?>     restClientClass;
+    private List<String> folders;
 
     public static class MockOpenApiContextBuilder {
         public MockOpenApiContextBuilder addCustomAnnotation(@NonNull final String value) {
@@ -55,6 +56,7 @@ public class MockOpenApiContext implements Serializable {
                 customAnnotations = new ArrayList<>();
             }
         }
+
     }
 
 }

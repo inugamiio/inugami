@@ -54,7 +54,7 @@ public enum AlertingErrors implements ErrorCode {
     private final ErrorCode errorCode;
 
     private AlertingErrors(final DefaultErrorCode.DefaultErrorCodeBuilder errorBuilder) {
-        errorCode = errorBuilder.errorCode(this.name()).build();
+        errorCode = errorBuilder.build();
     }
 
     @Override

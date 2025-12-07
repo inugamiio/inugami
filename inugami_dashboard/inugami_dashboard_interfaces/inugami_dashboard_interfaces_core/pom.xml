@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!--================================================================================================================
@@ -26,9 +27,7 @@
     <name>${project.groupId}:${project.artifactId}</name>
     <url>http://inugami.io/inugami/inugami_api</url>
 
-    <properties>
-        <mock.generator.path>../inugami_dashboard_interfaces_api/src/test/resources/io/inugami/dashboard/interfaces/domain/</mock.generator.path>
-    </properties>
+
     <!--================================================================================================================
     = DEPENDENCIES
     =================================================================================================================-->
@@ -63,4 +62,14 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+
+    <profiles>
+        <profile>
+            <id>mock-generator</id>
+            <properties>
+                <mock.generator.path>../inugami_dashboard_interfaces_api/</mock.generator.path>
+            </properties>
+        </profile>
+    </profiles>
 </project>

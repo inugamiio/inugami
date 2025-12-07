@@ -49,21 +49,23 @@ public class MockContext implements Serializable {
     public static final  String PUT              = "PUT";
     public static final  String TRACE            = "TRACE";
 
-    private String                          folder;
-    private String                          verb;
-    private String                          url;
-    private Map<String, Serializable>       requestParams;
-    private Map<String, List<Serializable>> requestOptions;
-    private Map<String, Serializable>       requestHeaders;
-    private String                          request;
-    private Map<String, Serializable>       responseHeaders;
-    private String                          response;
+    private           String                          name;
+    private           String                          folder;
+    private           String                          verb;
+    private           String                          url;
+    private           String                          description;
+    private           Map<String, Serializable>       requestParams;
+    private           Map<String, List<Serializable>> requestOptions;
+    private           Map<String, Serializable>       requestHeaders;
+    private           String                          request;
+    private           Map<String, Serializable>       responseHeaders;
+    private           String                          response;
     @Builder.Default
-    private String                          contentType = "application/json";
+    private           String                          contentType = "application/json";
     @Builder.Default
-    private Charset                         encoding    = StandardCharsets.UTF_8;
-    private int                             status;
-    private ErrorCode                       errorCode;
+    private transient Charset                         encoding    = StandardCharsets.UTF_8;
+    private           int                             status;
+    private transient ErrorCode                       errorCode;
 
     public static class MockContextBuilder {
         public MockContextBuilder addRequestOptions(@NonNull final String name, final Serializable... values) {
@@ -151,9 +153,9 @@ public class MockContext implements Serializable {
             return this;
         }
 
-        public MockContextBuilder request(@Nullable final Object value) {
+        public MockContextBuilder requestPayload(@Nullable final Object value) {
             if (value == null) {
-                request = "null";
+                request = null;
             } else {
                 try {
                     request = JsonMarshaller.getInstance().getIndentedObjectMapper().writeValueAsString(value);
@@ -163,11 +165,12 @@ public class MockContext implements Serializable {
             return this;
         }
 
-        public MockContextBuilder response(@Nullable final Object value) {
+        public MockContextBuilder responsePayload(@Nullable final Object value) {
             if (value == null) {
-                response = "null";
+                response = null;
             } else {
                 try {
+
                     response = JsonMarshaller.getInstance().getIndentedObjectMapper().writeValueAsString(value);
                 } catch (JsonProcessingException e) {
                 }

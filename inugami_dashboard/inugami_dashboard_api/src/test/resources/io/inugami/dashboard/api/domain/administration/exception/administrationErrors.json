@@ -1,6 +1,6 @@
 [ {
   "errorStatus" : 500,
-  "errorCode" : "UNDEFINED",
+  "errorCode" : "ERR-0_0",
   "message" : "Undefined error occurs",
   "exploitationError" : false,
   "rollback" : false,

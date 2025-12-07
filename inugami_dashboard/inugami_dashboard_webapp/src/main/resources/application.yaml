@@ -1,4 +1,8 @@
 inugami:
-  infrastructure:
-    internal:
-      hazelcast:
+  monitoring:
+    interceptor:
+      url:
+        skip: .*api-docs.*;.*swagger-ui.*
+springdoc:
+  api-docs:
+    path: /api-docs

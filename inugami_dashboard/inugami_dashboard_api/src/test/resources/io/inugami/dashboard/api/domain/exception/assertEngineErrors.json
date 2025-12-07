@@ -1,6 +1,6 @@
 [ {
   "errorStatus" : 500,
-  "errorCode" : "UNDEFINED",
+  "errorCode" : "EVENT-0_0",
   "message" : "undefined error",
   "errorType" : "technical",
   "exploitationError" : false,

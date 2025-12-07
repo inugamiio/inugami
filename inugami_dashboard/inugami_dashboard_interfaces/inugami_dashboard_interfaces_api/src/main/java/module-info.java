@@ -21,6 +21,7 @@ open module io.inugami.dashboard.interfaces.api {
     requires org.slf4j;
     requires spring.web;
     requires io.inugami.framework.configurations.configuration;
+    requires io.swagger.v3.oas.annotations;
 
     exports io.inugami.dashboard.interfaces.domain.administration;
     exports io.inugami.dashboard.interfaces.domain.administration.dto;

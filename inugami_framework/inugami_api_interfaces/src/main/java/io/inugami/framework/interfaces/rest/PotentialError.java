@@ -27,6 +27,8 @@ public @interface PotentialError {
     String description() default "";
 
     String example() default "";
+    String domain() default "";
+    String subDomain() default "";
 
     String url() default "";
 

@@ -31,7 +31,7 @@ public enum EventErrors implements ErrorCode {
     private final ErrorCode errorCode;
 
     private EventErrors(final DefaultErrorCode.DefaultErrorCodeBuilder errorBuilder) {
-        errorCode = errorBuilder.errorCode(this.name()).build();
+        errorCode = errorBuilder.build();
     }
 
     @Override

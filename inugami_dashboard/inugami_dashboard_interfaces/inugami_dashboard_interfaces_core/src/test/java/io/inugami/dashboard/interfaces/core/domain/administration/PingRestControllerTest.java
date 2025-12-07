@@ -19,10 +19,12 @@ package io.inugami.dashboard.interfaces.core.domain.administration;
 import io.inugami.commons.test.UnitTestData;
 import io.inugami.commons.test.mock.MockContext;
 import io.inugami.commons.test.mock.MockGenerator;
+import io.inugami.commons.test.mock.MockOpenApiContext;
 import io.inugami.dashboard.api.domain.administration.IPingService;
 import io.inugami.dashboard.api.domain.administration.dto.PingDTO;
 import io.inugami.dashboard.interfaces.core.domain.administration.mapper.InugamiInterfaceAdministationConfiguration;
-import org.junit.jupiter.api.BeforeAll;
+import io.inugami.dashboard.interfaces.domain.administration.PingRestClient;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -38,16 +40,19 @@ class PingRestControllerTest {
     //==================================================================================================================
     // ATTRIBUTES
     //==================================================================================================================
-    private static final String       PING_FOLDER = "administration/pingRestClient/ping";
-    private static final List<String> FOLDERS = List.of(PING_FOLDER);
+    private static final String       PING_FOLDER = "io/inugami/dashboard/interfaces/domain/administration/pingRestClient/ping";
 
     @Mock
-    private              IPingService pingService;
+    private IPingService pingService;
 
-    @BeforeAll
-    public static void generateOpenApi(){
-        FOLDERS.forEach(MockGenerator::generateOpenApiDocumentation);
+    @AfterAll
+    public static void generateOpenApi() {
+        MockGenerator.generateOpenApiDocumentation(MockOpenApiContext.builder()
+                                                                     .restClientClass(PingRestClient.class)
+                                                                     .folders(List.of(PING_FOLDER))
+                                                                     .build());
     }
+
     //==================================================================================================================
     // TEST
     //==================================================================================================================
@@ -72,7 +77,7 @@ class PingRestControllerTest {
                                           .addRequestHeaderTracking()
                                           .addResponseHeaderTracking()
                                           .statusSuccess()
-                                          .response(response)
+                                          .responsePayload(response)
                                           .build());
     }
 
