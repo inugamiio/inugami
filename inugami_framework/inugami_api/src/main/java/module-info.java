@@ -30,7 +30,9 @@ open module io.inugami.framework.api {
     requires kotlin.stdlib;
     requires lombok;
     requires okhttp3;
+    requires org.jspecify;
     requires org.slf4j;
+
 
     exports io.inugami.framework.api.configurtation;
     exports io.inugami.framework.api.connectors;

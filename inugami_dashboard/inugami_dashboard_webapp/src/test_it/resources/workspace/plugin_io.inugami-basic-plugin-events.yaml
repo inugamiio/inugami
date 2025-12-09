@@ -27,7 +27,7 @@ events:
   #---------------------------------------------------------------------------------------------------------------------
   - name: cpu-multi
     provider: SystemCpuProvider
-    scheduler: 0/15 * * * * ?
+    scheduler: 0/2 * * * * ?
     targets:
       - name: cpu-multi-target1
       - name: cpu-multi-target2

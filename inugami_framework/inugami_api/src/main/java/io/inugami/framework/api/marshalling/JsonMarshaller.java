@@ -24,6 +24,7 @@ import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.exceptions.Warning;
 import io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
 import io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
+import io.inugami.framework.interfaces.models.basic.Dto;
 import io.inugami.framework.interfaces.models.event.GenericEvent;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import lombok.Getter;

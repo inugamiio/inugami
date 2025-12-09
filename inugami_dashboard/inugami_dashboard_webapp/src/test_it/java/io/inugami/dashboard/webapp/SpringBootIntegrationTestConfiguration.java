@@ -16,6 +16,12 @@
  */
 package io.inugami.dashboard.webapp;
 
+import io.inugami.dashboard.api.domain.engine.EngineListener;
+import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
+import io.inugami.dashboard.api.domain.engine.dto.EngineResultDTO;
+import io.inugami.dashboard.webapp.tools.EngineListenerHandler;
+import io.inugami.framework.configuration.models.plugins.Plugin;
+import io.inugami.framework.interfaces.models.event.GenericEvent;
 import io.inugami.framework.interfaces.rest.PartnerConfigurationDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +34,12 @@ public class SpringBootIntegrationTestConfiguration {
     @Bean
     public PartnerConfigurationDTO inugamiPartnerConfiguration(@Value("${server.port}") int port) {
         return PartnerConfigurationDTO.builder()
-                                      .baseUrl("http://localhost:"+port)
+                                      .baseUrl("http://localhost:" + port)
                                       .build();
+    }
+
+    @Bean
+    public EngineListener testEngineListener() {
+        return new EngineListenerHandler();
     }
 }

@@ -14,29 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.webapp;
+package io.inugami.commons.test.internal;
 
+import io.inugami.commons.test.dto.WaitContext;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 @Slf4j
-@EnableConfigurationProperties
-@ActiveProfiles("test")
-@ContextConfiguration(
-        initializers = {
-                InugamiInitializer.class
-        })
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes ={
-                SpringBootIntegrationTestConfiguration.class,
-                InugamiDashboardApplication.class
-        } )
-public class SpringBootIntegrationTest {
 
+@UtilityClass
+public class UnitTestHelperWaitUtils {
+    public static <T> T waitForDone(final WaitContext context) throws TimeoutException {
+        if (context == null || context.getOnDone() == null) {
+            return null;
+        }
 
-
-
-
+        try {
+            T result = (T) context.getOnDone().get(context.getTimeout(), TimeUnit.MILLISECONDS);
+            return result;
+        } catch (Throwable e) {
+            throw new TimeoutException(e.getMessage());
+        }
+    }
 }

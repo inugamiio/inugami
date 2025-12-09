@@ -2,7 +2,7 @@
 enable: true
 gav:
   groupId: io.inugami
-  artifactId: basic-plugin
+  artifactId: it-basic-plugin
   version: 4.0.0
 
 eventsFiles:

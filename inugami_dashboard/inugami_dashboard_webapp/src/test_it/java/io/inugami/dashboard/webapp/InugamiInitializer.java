@@ -16,6 +16,7 @@
  */
 package io.inugami.dashboard.webapp;
 
+import io.inugami.framework.api.tools.PortGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -23,17 +24,17 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
 import java.io.IOException;
+
 @Slf4j
 @Configuration
 public class InugamiInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-
+    public static final int SERVER_PORT = PortGenerator.generateFor("server.port");
 
     @Override
     public void initialize(final ConfigurableApplicationContext applicationContext) {
         try {
             System.setProperty("inugami-home", new File("./src/test_it/resources/workspace").getCanonicalPath());
-            //TODO: generate random port
-            System.setProperty("server.port", "8080");
+            System.setProperty("server.port", String.valueOf(SERVER_PORT));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
