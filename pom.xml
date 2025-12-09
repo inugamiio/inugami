@@ -210,6 +210,7 @@
         <com.jackson.version>2.18.2</com.jackson.version>
         <io.dropwizard.metrics.version>4.0.5</io.dropwizard.metrics.version>
         <io.github.openfeign.version>13.6</io.github.openfeign.version>
+        <spring-cloud-starter-openfeign.version>4.3.0</spring-cloud-starter-openfeign.version>
         <io.swagger.core.v3.version>2.2.41</io.swagger.core.v3.version>
         <org-mockito.mockito-core>2.0.31-beta</org-mockito.mockito-core>
         <org.apache.commons.cli.version>1.4</org.apache.commons.cli.version>
@@ -565,6 +566,11 @@
                 <version>${com.hazelcast.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${spring-cloud-starter-openfeign.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.github.openfeign</groupId>
                 <artifactId>feign-core</artifactId>

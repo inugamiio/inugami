@@ -6,3 +6,8 @@ inugami:
 springdoc:
   api-docs:
     path: /api-docs
+
+spring:
+  cloud:
+    compatibility-verifier:
+      enabled: false

@@ -37,11 +37,16 @@ open module io.inugami.framework.commons.spring {
     requires spring.core;
     requires spring.expression;
     requires spring.web;
+    requires feign.core;
+    requires feign.okhttp;
+    requires feign.jackson;
+    requires spring.cloud.openfeign.core;
 
     exports io.inugami.framework.commons.spring to spring.core;
     exports io.inugami.framework.commons.spring.configuration;
     exports io.inugami.framework.commons.spring.feature.interceptors;
     exports io.inugami.framework.commons.spring.mapstruct;
+    exports io.inugami.framework.commons.spring.feign;
 
     uses io.inugami.framework.interfaces.configurtation.ProviderAttributFunction;
     uses io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
