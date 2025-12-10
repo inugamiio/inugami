@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.webapp;
+package io.inugami.dashboard.webapp.runner;
 
+import io.inugami.dashboard.webapp.InugamiDashboardApplication;
 import io.inugami.framework.interfaces.configurtation.JvmKeyValues;
 
 import java.io.File;

@@ -25,6 +25,9 @@
     <artifactId>inugami_dashboard_webapp</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
     <url>http://inugami.io/inugami/inugami_api</url>
+    <properties>
+
+    </properties>
 
 
     <!--================================================================================================================
@@ -153,11 +156,6 @@
             <artifactId>feign-okhttp</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>io.inugami.dashboard.interfaces</groupId>
-            <artifactId>inugami_dashboard_interfaces_feign</artifactId>
-            <scope>test</scope>
-        </dependency>
 
         <dependency>
             <groupId>io.inugami.framework.commons</groupId>

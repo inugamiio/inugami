@@ -88,6 +88,10 @@
         <_super.plugin.inugami_plugin_lifecycle.version>2.0.0</_super.plugin.inugami_plugin_lifecycle.version>
         <_super.plugin.inugami-plugin-maven.version>2.0.0</_super.plugin.inugami-plugin-maven.version>
 
+        <failsafe-custom-args>
+            --add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
+            --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
+        </failsafe-custom-args>
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: MAVEN SITE
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -479,7 +483,11 @@
                 <version>${project.version}</version>
             </dependency>
 
-
+            <dependency>
+                <groupId>inugami_dashboard</groupId>
+                <artifactId>inugami_dashboard_webapp</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             + OTHER
             +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
@@ -1009,7 +1017,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <argLine>-Dfile.encoding=${encoding} ${maven.plugins.failsafe.argLine}</argLine>
+                    <argLine>-Dfile.encoding=${encoding} ${failsafe-custom-args} ${maven.plugins.failsafe.argLine}</argLine>
                     <includes>
                         <include>**/*IT.java</include>
                     </includes>

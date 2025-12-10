@@ -38,6 +38,7 @@ import java.util.List;
 @EnableFeignClients
 @Configuration
 public class InugamiDashboardInterfacesFeignConfiguration {
+    public static final String PACKAGE = "io.inugami.dashboard.interfaces.feign";
 
     @ConditionalOnMissingBean
     @Bean

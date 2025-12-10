@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.dashboard.webapp;
+package io.inugami.framework.commons.spring.configuration;
 
-import org.springframework.context.annotation.Configuration;
+import lombok.experimental.UtilityClass;
 
-@Configuration
-public class SpringBootIntegrationConfiguration {
+@UtilityClass
+public class Inugami {
+    public static final String BASE_PACKAGE = "io.inugami";
 }
