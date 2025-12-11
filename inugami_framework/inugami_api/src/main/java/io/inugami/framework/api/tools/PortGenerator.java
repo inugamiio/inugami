@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotEmpty;
 import static io.inugami.framework.interfaces.exceptions.Asserts.assertTrue;
-@SuppressWarnings({"ejava:S2245"})
+@SuppressWarnings({"java:S2245"})
 @UtilityClass
 public class PortGenerator {
     //==================================================================================================================
