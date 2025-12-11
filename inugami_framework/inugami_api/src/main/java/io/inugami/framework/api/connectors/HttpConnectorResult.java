@@ -39,12 +39,13 @@ import java.util.Optional;
  * @author patrick_guillerm
  * @since 12 janv. 2017
  */
+@Builder(toBuilder = true)
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
+@NoArgsConstructor
 @Setter
 @Getter
-@Builder(toBuilder = true)
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public final class HttpConnectorResult implements Serializable, IHttpConnectorResult {
 
     // =========================================================================
@@ -57,12 +58,14 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
     public static final  int    HTTP_ERROR       = 400;
     public static final  String PARAMETERS       = "parameters";
     public static final  String ERROR_CODE       = "errorCode";
-
+    @ToString.Include
     private           String    verb;
+    @ToString.Include
     private           String    url;
     @EqualsAndHashCode.Include
     private           String    hashHumanReadable;
     private           String    requestData;
+    @ToString.Include
     private           int       statusCode;
     private           String    message;
     private           byte[]    data;

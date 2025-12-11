@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.dashboard.webapp {
+open module io.inugami.dashboard.webapp {
     exports io.inugami.dashboard.webapp;
 
     requires com.fasterxml.jackson.annotation;
@@ -28,6 +28,11 @@ module io.inugami.dashboard.webapp {
     requires io.inugami.framework.api;
     requires io.inugami.framework.commons;
     requires io.inugami.framework.configurations.configuration;
+    requires feign.core;
+    requires feign.okhttp;
+    requires feign.jackson;
+    requires spring.cloud.openfeign.core;
+    requires spring.boot.starter.tomcat;
 
     requires spring.context;
     requires spring.boot.autoconfigure;
@@ -42,5 +47,4 @@ module io.inugami.dashboard.webapp {
     requires org.mapstruct;
     requires org.aspectj.weaver;
     requires java.sql;
-    opens io.inugami.dashboard.webapp to spring.core;
 }

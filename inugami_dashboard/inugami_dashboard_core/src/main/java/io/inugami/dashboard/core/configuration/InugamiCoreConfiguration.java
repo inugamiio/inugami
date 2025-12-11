@@ -17,7 +17,9 @@
 package io.inugami.dashboard.core.configuration;
 
 import io.inugami.dashboard.api.domain.engine.EngineListener;
+import io.inugami.dashboard.api.domain.event.IEventDataDao;
 import io.inugami.dashboard.api.domain.plugin.IPluginService;
+import io.inugami.dashboard.api.domain.sender.ISSESender;
 import io.inugami.dashboard.core.domain.engine.EngineService;
 import io.inugami.framework.commons.threads.ThreadsExecutorService;
 import io.inugami.framework.configuration.models.app.ApplicationConfig;
@@ -27,19 +29,23 @@ import io.inugami.framework.configuration.services.resolver.ConfigurationResolve
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
 import java.time.Clock;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static io.inugami.dashboard.api.domain.engine.exception.EngineErrors.*;
 import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
 import static io.inugami.framework.interfaces.exceptions.Asserts.assertTrue;
-import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
+@EnableCaching
 @Slf4j
 @EnableConfigurationProperties(InugamiConfiguration.class)
 @Configuration
@@ -47,8 +53,10 @@ public class InugamiCoreConfiguration {
     //==================================================================================================================
     // ATTRIBUTES
     //==================================================================================================================
-    public static final String                 ENGINE_THREADS_EXECUTOR_SERVICE = "engineThreadsExecutorService";
-    private             ThreadsExecutorService engineThreadsExecutorService;
+    public static final  String                       ENGINE_THREADS_EXECUTOR_SERVICE          = "engineThreadsExecutorService";
+    public static final  String                       ENGINE_THREADS_EXECUTOR_SERVICE_INTERNAL = "engineThreadsExecutorServiceInternal";
+    private static final List<ThreadsExecutorService> THREAD_POOLS                             = new ArrayList<>();
+
 
     //==================================================================================================================
     // BEANS
@@ -95,27 +103,52 @@ public class InugamiCoreConfiguration {
         return pluginService.loadPlugins();
     }
 
-    @Bean
-    public ThreadsExecutorService engineThreadsExecutorService(final InugamiConfiguration configuration) {
-        engineThreadsExecutorService = new ThreadsExecutorService(ENGINE_THREADS_EXECUTOR_SERVICE,
-                                                                  configuration.getEngine().getMaxThreads(),
-                                                                  false,
-                                                                  configuration.getEngine().getTimeout());
-
-        return engineThreadsExecutorService;
-    }
 
     @Bean
-    public EngineService engineService(final List<Plugin> plugins,
+    public EngineService engineService(final InugamiConfiguration configuration,
+                                       final List<Plugin> plugins,
                                        final Collection<EngineListener> listeners,
-                                       final ThreadsExecutorService engineThreadsExecutorService,
-                                       final Clock clock) {
-        return EngineService.builder()
-                            .plugins(plugins)
-                            .listeners(listeners)
-                            .threadsExecutor(engineThreadsExecutorService)
-                            .clock(clock)
-                            .build();
+                                       final Clock clock,
+                                       final ZoneOffset zoneOffset,
+                                       final ISSESender sseSender,
+                                       final IEventDataDao eventDataDao) {
+        long timeout = configuration.getEngine().getTimeout();
+        if (timeout < 1000L) {
+            timeout = InugamiConfiguration.InugamiConfigurationEngine.DEFAULT_TIMEOUT;
+        }
+        int maxThreads = configuration.getEngine().getMaxThreads();
+        if (maxThreads < 1) {
+            maxThreads = 1;
+        }
+        if (maxThreads > InugamiConfiguration.InugamiConfigurationEngine.DEFAULT_MAX_THREAD) {
+            maxThreads = InugamiConfiguration.InugamiConfigurationEngine.DEFAULT_MAX_THREAD;
+        }
+
+        final var engineThreadsExecutorService = new ThreadsExecutorService(ENGINE_THREADS_EXECUTOR_SERVICE,
+                                                                            maxThreads,
+                                                                            false,
+                                                                            timeout);
+
+        final var internalThreadPool = new ThreadsExecutorService(ENGINE_THREADS_EXECUTOR_SERVICE_INTERNAL,
+                                                                  5,
+                                                                  false,
+                                                                  timeout);
+        THREAD_POOLS.addAll(List.of(engineThreadsExecutorService, internalThreadPool));
+
+        final var result = EngineService.builder()
+                                        .clock(clock)
+                                        .eventDataDao(eventDataDao)
+                                        .listeners(new ArrayList<>(listeners))
+                                        .plugins(plugins)
+                                        .sseSender(sseSender)
+                                        .threadsExecutor(engineThreadsExecutorService)
+                                        .threadsExecutorInternal(internalThreadPool)
+                                        .timeout(configuration.getEngine().getTimeout())
+                                        .zoneOffset(zoneOffset)
+                                        .build()
+                                        .init();
+        THREAD_POOLS.addAll(result.getPluginsThreadPool());
+        return result;
     }
 
     //==================================================================================================================
@@ -123,6 +156,8 @@ public class InugamiCoreConfiguration {
     //==================================================================================================================
     @PreDestroy
     public void shutdown() {
-        applyIfNotNull(engineThreadsExecutorService, ThreadsExecutorService::shutdown);
+        final List<ThreadsExecutorService> threadsPools = new ArrayList<>(THREAD_POOLS);
+        Collections.reverse(threadsPools);
+        threadsPools.forEach(ThreadsExecutorService::shutdown);
     }
 }

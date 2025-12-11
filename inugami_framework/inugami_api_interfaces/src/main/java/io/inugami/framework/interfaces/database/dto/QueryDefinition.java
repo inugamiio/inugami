@@ -18,6 +18,7 @@ public final class QueryDefinition implements Serializable {
     private static final long serialVersionUID = -2782752420710082646L;
     
     @ToString.Include
+    @EqualsAndHashCode.Include
     private String       name;
     @ToString.Include
     @EqualsAndHashCode.Include

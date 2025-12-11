@@ -42,10 +42,8 @@ public class AlertingSearchRequestDTO implements SearchRequest {
     private Collection<LocalDateTime> createdDate;
     @Singular("lastModifiedBy")
     private Collection<String>        lastModifiedBy;
-    @Singular("LastModifiedDate")
-    private Collection<LocalDateTime> LastModifiedDate;
-    @Singular("version")
-    private Collection<Long>          version;
+    @Singular("lastModifiedDate")
+    private Collection<LocalDateTime> lastModifiedDate;
 
     // AlertingSearchRequest
     @Singular("uid")

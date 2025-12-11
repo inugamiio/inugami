@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping(path = "administration/ping")
 public interface PingRestClient {
+    @PingRestClientDOC.DocPing
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     PingDTO ping();
-
-    @GetMapping(path = "test", produces = MediaType.APPLICATION_JSON_VALUE)
-    PingDTO pingTest();
 }

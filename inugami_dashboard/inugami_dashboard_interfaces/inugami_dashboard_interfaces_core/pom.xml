@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!--================================================================================================================
@@ -15,7 +16,7 @@
     <parent>
         <groupId>io.inugami.dashboard.interfaces</groupId>
         <artifactId>inugami_dashboard_interfaces</artifactId>
-        <version>4.1.2-SNAPSHOT</version>
+        <version>4.2.0-SNAPSHOT</version>
     </parent>
 
 
@@ -25,6 +26,7 @@
     <artifactId>inugami_dashboard_interfaces_core</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
     <url>http://inugami.io/inugami/inugami_api</url>
+
 
     <!--================================================================================================================
     = DEPENDENCIES
@@ -49,5 +51,25 @@
             <groupId>io.inugami.dashboard.interfaces</groupId>
             <artifactId>inugami_dashboard_interfaces_api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.inugami.framework.configuration</groupId>
+            <artifactId>inugami_configuration</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.inugami.framework.commons</groupId>
+            <artifactId>inugami_commons_test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+
+    <profiles>
+        <profile>
+            <id>mock-generator</id>
+            <properties>
+                <mock.generator.path>../inugami_dashboard_interfaces_api/</mock.generator.path>
+            </properties>
+        </profile>
+    </profiles>
 </project>

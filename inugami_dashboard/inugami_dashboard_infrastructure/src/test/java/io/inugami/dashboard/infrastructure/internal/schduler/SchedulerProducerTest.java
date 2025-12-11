@@ -30,7 +30,7 @@ class SchedulerProducerTest {
     //==================================================================================================================
     @Test
     void schedulerProducer_nominal() {
-        assertThat(schedulerProducer.computeDelay()).isNotNull();
+        assertThat(schedulerProducer.computeDelay()).isGreaterThan(0);
     }
 
     @Test

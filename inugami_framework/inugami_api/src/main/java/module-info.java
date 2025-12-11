@@ -30,7 +30,9 @@ open module io.inugami.framework.api {
     requires kotlin.stdlib;
     requires lombok;
     requires okhttp3;
+    requires org.jspecify;
     requires org.slf4j;
+
 
     exports io.inugami.framework.api.configurtation;
     exports io.inugami.framework.api.connectors;
@@ -63,4 +65,5 @@ open module io.inugami.framework.api {
     provides io.inugami.framework.interfaces.connectors.ConnectorListener with io.inugami.framework.api.connectors.listeners.PartnerLogListener;
     provides io.inugami.framework.interfaces.monitoring.MdcServiceSpi with io.inugami.framework.api.monitoring.MdcService;
     provides io.inugami.framework.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI with io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefaultBooleanValue, io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefaultDoubleValue, io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefaultIntValue, io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefaultLongValue, io.inugami.framework.api.loggers.mdc.mapper.MdcMapperDefault;
+    provides io.inugami.framework.interfaces.monitoring.logger.initializer.MdcInitializerSpi with io.inugami.framework.api.loggers.mdc.initializer.DefaultMdcInitializer;
 }

@@ -1,0 +1,29 @@
+[ {
+  "errorStatus" : 500,
+  "errorCode" : "YAML-0_0",
+  "message" : "class is required to unmarshalling yaml to object",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "YAML-0_1",
+  "message" : "Yaml can's unmarshall current yaml",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "YAML-0_2",
+  "message" : "object required to serialize as Yaml",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "YAML-0_3",
+  "message" : "can't convert object to Yaml",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+} ]

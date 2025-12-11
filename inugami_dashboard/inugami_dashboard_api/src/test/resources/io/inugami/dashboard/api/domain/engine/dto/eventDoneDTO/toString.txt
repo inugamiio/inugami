@@ -1,0 +1,1 @@
+EventDoneDTO(event=SimpleEvent(name=simple-event, fromFirstTime=null, from=null, until=null, provider=null, mapper=null), date=2023-06-01T12:00)

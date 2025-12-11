@@ -92,7 +92,7 @@ public class SpringRestMethodResolver implements JavaRestMethodResolver {
         }
 
         if (WebUtils.getNativeRequest(request, MultipartHttpServletRequest.class) != null) {
-            if (DispatcherType.REQUEST.equals(request.getDispatcherType())) {
+            if (jakarta.servlet.DispatcherType.REQUEST == request.getDispatcherType()) {
                 log.trace("Request already resolved to MultipartHttpServletRequest, e.g. by MultipartFilter");
             }
         } else if (hasMultipartException(request)) {

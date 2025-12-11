@@ -1,0 +1,17 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "requestHeaders" : {
+    "x-device-identifier" : "7f0d4d18-4596-4618-a134-d1ace71ee333",
+    "x-correlation-id" : "c7a2a7ef-0d99-4242-8429-57e2bf3d6c66"
+  },
+  "response" : "[ {\n  \"condition\" : \"value > 5\",\n  \"description\" : \"lorem ipsum\",\n  \"function\" : \"handlerFunction\",\n  \"message\" : \"sorry\",\n  \"name\" : \"simple-alert\",\n  \"provider\" : \"graphite\",\n  \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n} ]",
+  "responseHeaders" : {
+    "x-device-identifier" : "7f0d4d18-4596-4618-a134-d1ace71ee333",
+    "x-correlation-id" : "c7a2a7ef-0d99-4242-8429-57e2bf3d6c66",
+    "x-b3-traceid" : "0398b08d-cfa2-49e7-a256-2bc544c2001e"
+  },
+  "status" : 200,
+  "url" : "/alerting",
+  "verb" : "PATCH"
+}

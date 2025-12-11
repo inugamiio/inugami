@@ -1,0 +1,57 @@
+[ {
+  "errorStatus" : 500,
+  "errorCode" : "ENGINE-0_0",
+  "message" : "workspace not defined",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "ENGINE-0_1",
+  "message" : "workspace isn't folder",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "ENGINE-0_2",
+  "message" : "workspace isn't folder",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "ENGINE-0_3",
+  "message" : "workspace can't be read",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "ENGINE-0_4",
+  "message" : "application configuration doesn't exists",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "ENGINE-0_5",
+  "message" : "application configuration can't be read",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "ENGINE-0_6",
+  "message" : "error on read application configuration",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+} ]

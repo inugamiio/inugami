@@ -17,16 +17,19 @@
 package io.inugami.dashboard.core.domain.engine;
 
 import io.inugami.dashboard.api.domain.engine.EngineListener;
+import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
 import io.inugami.dashboard.api.domain.engine.dto.EnginePluginResultDTO;
 import io.inugami.dashboard.api.domain.engine.dto.EngineResultDTO;
+import io.inugami.framework.configuration.models.plugins.Plugin;
 import io.inugami.framework.interfaces.models.engine.Status;
+import io.inugami.framework.interfaces.models.event.GenericEvent;
 import io.inugami.framework.interfaces.monitoring.logger.LogInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-
+@SuppressWarnings({"java:S1186"})
 @Slf4j
 @Component
 public class DefaultEngineListener implements EngineListener {
@@ -49,6 +52,13 @@ public class DefaultEngineListener implements EngineListener {
             log.error("error on engine running (starting:{} |finish : {}) \n{}", engineResult.getStart(), engineResult.getEnd(), info);
         }
     }
+    @Override
+    public void onEventDone(final Plugin plugin,
+                            final GenericEvent<?> event,
+                            final EnginePluginEventResultDTO data) {
+
+    }
+
 
     protected static LogInfoDTO buildErrorInfo(final EngineResultDTO engineResult) {
         final var result = LogInfoDTO.builder();

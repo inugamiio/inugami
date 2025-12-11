@@ -1,0 +1,1 @@
+PropertiesResources(type=Version, encoding=UTF-8, propertiesPath=property/path, propertiesUrl=http://property/path)

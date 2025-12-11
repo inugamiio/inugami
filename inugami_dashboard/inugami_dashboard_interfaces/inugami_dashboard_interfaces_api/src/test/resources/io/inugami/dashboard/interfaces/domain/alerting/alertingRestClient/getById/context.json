@@ -1,0 +1,20 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "requestHeaders" : {
+    "x-device-identifier" : "215d78af-cc1d-46c3-9835-36fbb6dd8c57",
+    "x-correlation-id" : "081f3d95-6670-493e-9294-ef543415b5f7"
+  },
+  "requestParams" : {
+    "id" : "bb895294-efe7-484b-b670-14d004eaf461"
+  },
+  "response" : "{\n  \"condition\" : \"value > 5\",\n  \"description\" : \"lorem ipsum\",\n  \"function\" : \"handlerFunction\",\n  \"message\" : \"sorry\",\n  \"name\" : \"simple-alert\",\n  \"provider\" : \"graphite\",\n  \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n}",
+  "responseHeaders" : {
+    "x-device-identifier" : "215d78af-cc1d-46c3-9835-36fbb6dd8c57",
+    "x-correlation-id" : "081f3d95-6670-493e-9294-ef543415b5f7",
+    "x-b3-traceid" : "258a974b-d497-43bf-b212-d879a1e310e9"
+  },
+  "status" : 200,
+  "url" : "/alerting/{id}",
+  "verb" : "GET"
+}

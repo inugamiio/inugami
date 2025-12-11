@@ -26,7 +26,7 @@ import lombok.*;
  * @since 26 mars 2018
  */
 @ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 @Setter
 @Getter
 @Builder(toBuilder = true)
@@ -36,6 +36,7 @@ public class HttpProxy {
 
     private String host;
     private int    port;
+    @Builder.Default
     private String protocol = "http";
     private String user;
     private String password;

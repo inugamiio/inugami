@@ -1,0 +1,17 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "requestHeaders" : {
+    "x-device-identifier" : "49476c6b-ce88-4b5d-84bc-bee0e3ba575d",
+    "x-correlation-id" : "aa8ad502-db19-4b75-bf10-e6ccac892ca8"
+  },
+  "response" : "[ {\n  \"condition\" : \"value > 5\",\n  \"description\" : \"lorem ipsum\",\n  \"function\" : \"handlerFunction\",\n  \"message\" : \"sorry\",\n  \"name\" : \"simple-alert\",\n  \"provider\" : \"graphite\",\n  \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n} ]",
+  "responseHeaders" : {
+    "x-device-identifier" : "49476c6b-ce88-4b5d-84bc-bee0e3ba575d",
+    "x-correlation-id" : "aa8ad502-db19-4b75-bf10-e6ccac892ca8",
+    "x-b3-traceid" : "81fd4094-5128-4eb7-a6f5-9ebbd79ce916"
+  },
+  "status" : 200,
+  "url" : "/alerting",
+  "verb" : "PUT"
+}

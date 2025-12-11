@@ -17,7 +17,12 @@
 package io.inugami.dashboard.interfaces.domain.event;
 
 import io.inugami.framework.interfaces.models.event.Event;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+@RequestMapping(path = "event")
 public interface EventRestClient {
+    @GetMapping(path = "{uid}", produces = MediaType.APPLICATION_JSON_VALUE)
     Event getEvent(final String uid);
 }

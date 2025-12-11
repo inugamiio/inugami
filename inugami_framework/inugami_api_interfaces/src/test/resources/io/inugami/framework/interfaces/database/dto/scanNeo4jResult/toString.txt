@@ -1,0 +1,1 @@
+ScanNeo4jResult(type=USER, nodes=[Node(type=node, name=MyNode, uid=bb895294-efe7-484b-b670-14d004eaf461, properties={size=15})], relationships=[Relationship(from=2940bf84-22ed-4dca-baa8-c10111847c9e, to=3aa93701-dbf6-4554-9148-fccf24354f30, type=USER_PLACE, properties={date=2023-06-01})])

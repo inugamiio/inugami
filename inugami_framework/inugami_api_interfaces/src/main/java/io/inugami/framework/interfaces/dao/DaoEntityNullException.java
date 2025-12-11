@@ -66,6 +66,7 @@ public class DaoEntityNullException extends DaoException {
         }
     }
 
+    @Deprecated
     public static void assertNotNull(final String message, final Object values) throws DaoEntityNullException {
         if (values == null) {
             throw new DaoEntityNullException(message);

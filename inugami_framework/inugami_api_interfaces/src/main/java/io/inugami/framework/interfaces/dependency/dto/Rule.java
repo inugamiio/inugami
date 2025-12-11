@@ -18,12 +18,17 @@ package io.inugami.framework.interfaces.dependency.dto;
 
 import lombok.*;
 
-@ToString
+import java.io.Serializable;
+
 @Builder(toBuilder = true)
 @EqualsAndHashCode
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
-public class Rule {
-    private int      version;
-    private RuleType ruleType;
+public class Rule implements Serializable {
+    private static final long     serialVersionUID = 6011983899938575280L;
+    private              int      version;
+    private              RuleType ruleType;
 }

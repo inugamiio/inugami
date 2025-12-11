@@ -16,7 +16,7 @@
     <parent>
         <groupId>io.inugami.framework</groupId>
         <artifactId>inugami_framework</artifactId>
-        <version>4.1.2-SNAPSHOT</version>
+        <version>4.2.0-SNAPSHOT</version>
     </parent>
 
 
@@ -29,6 +29,9 @@
     <packaging>pom</packaging>
     <url>http://inugami.io/inugami/inugami_api</url>
 
+    <properties>
+        <jacoco.report.path.relative>../../../</jacoco.report.path.relative>
+    </properties>
     <!--================================================================================================================
     = MODULES
     =================================================================================================================-->

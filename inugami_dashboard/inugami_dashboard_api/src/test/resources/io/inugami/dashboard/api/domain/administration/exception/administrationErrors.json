@@ -1,0 +1,8 @@
+[ {
+  "errorStatus" : 500,
+  "errorCode" : "ERR-0_0",
+  "message" : "Undefined error occurs",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+} ]

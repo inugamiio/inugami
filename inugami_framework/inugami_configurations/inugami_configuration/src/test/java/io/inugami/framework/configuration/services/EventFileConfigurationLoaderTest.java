@@ -75,6 +75,15 @@ class EventFileConfigurationLoaderTest {
                 {
                   "enable" : true,
                   "events" : [ {
+                    "type" : "Event",
+                    "name" : "foobar-api-pourcentrage",
+                    "fromFirstTime" : null,
+                    "until" : null,
+                    "provider" : "graphite.bigdata",
+                    "mapper" : "foo.bar.MapperOnEvent",
+                    "processors" : [ {
+                      "name" : "foo"
+                    } ],
                     "alertings" : [ {
                       "condition" : "var level=null; var message=null;\\nif(value>0.8){\\n  level=\\"error\\";\\n  message=\\"Erreur le seuil sur les sessions client est trop élevé\\";\\n}else if(value>0.6){\\n  level=\\"warning\\";\\n  message=\\"Attention le seuil sur les sessions client est haut\\";\\n}\\nreturn {\\n  \\"level\\"   :level,\\n  \\"message\\" :message\\n}\\n",
                       "level" : "error",
@@ -82,14 +91,14 @@ class EventFileConfigurationLoaderTest {
                       "name" : "prd-prod-002",
                       "provider" : "{{myAlertingProvider}}"
                     } ],
-                    "mapper" : "foo.bar.MapperOnEvent",
-                    "name" : "foobar-api-pourcentrage",
-                    "processors" : [ {
-                      "name" : "foo"
-                    } ],
-                    "provider" : "graphite.bigdata",
                     "scheduler" : "0 0/3 * * * ?",
                     "targets" : [ {
+                      "name" : "foobar-sys",
+                      "fromFirstTime" : null,
+                      "until" : null,
+                      "provider" : null,
+                      "mapper" : "foo.bar.MapperOnTarget",
+                      "processors" : null,
                       "alertings" : [ {
                         "condition" : "value > 0.7",
                         "level" : "info",
@@ -97,26 +106,64 @@ class EventFileConfigurationLoaderTest {
                         "name" : "prd-prod-003",
                         "provider" : "{{myAlertingProvider}}"
                       } ],
-                      "mapper" : "foo.bar.MapperOnTarget",
-                      "name" : "foobar-sys",
-                      "query" : "summarize(asPercent(sumSeries(org.foo.bar.jmx.joe.sessions),sumSeries(org.foo.bar.jmx.*.session)), \\"24h\\", \\"avg\\",true)"
+                      "query" : "summarize(asPercent(sumSeries(org.foo.bar.jmx.joe.sessions),sumSeries(org.foo.bar.jmx.*.session)), \\"24h\\", \\"avg\\",true)",
+                      "parent" : null,
+                      "scheduler" : null
                     }, {
                       "name" : "gravida-pourcentrage",
-                      "query" : "summarize(asPercent(sumSeries(org.foo.bar.jmx.gravida.sessions),sumSeries(org.foo.bar.jmx.*.session)), \\"24h\\", \\"avg\\",true)\\n"
+                      "fromFirstTime" : null,
+                      "until" : null,
+                      "provider" : null,
+                      "mapper" : null,
+                      "processors" : null,
+                      "alertings" : null,
+                      "query" : "summarize(asPercent(sumSeries(org.foo.bar.jmx.gravida.sessions),sumSeries(org.foo.bar.jmx.*.session)), \\"24h\\", \\"avg\\",true)\\n",
+                      "parent" : null,
+                      "scheduler" : null
                     }, {
                       "name" : "sapien-pourcentrage",
-                      "query" : "summarize(asPercent(sumSeries(org.foo.bar.jmx.sapien.sessions),sumSeries(org.foo.bar.jmx.*.session)), \\"24h\\", \\"avg\\",true)\\n"
+                      "fromFirstTime" : null,
+                      "until" : null,
+                      "provider" : null,
+                      "mapper" : null,
+                      "processors" : null,
+                      "alertings" : null,
+                      "query" : "summarize(asPercent(sumSeries(org.foo.bar.jmx.sapien.sessions),sumSeries(org.foo.bar.jmx.*.session)), \\"24h\\", \\"avg\\",true)\\n",
+                      "parent" : null,
+                      "scheduler" : null
                     } ]
                   }, {
+                    "type" : "Event",
                     "name" : "foobar-paiement",
+                    "fromFirstTime" : null,
+                    "until" : null,
+                    "provider" : null,
+                    "mapper" : null,
+                    "processors" : null,
+                    "alertings" : null,
+                    "scheduler" : null,
                     "targets" : [ {
                       "name" : "current-paiement-cumul",
+                      "fromFirstTime" : null,
+                      "until" : null,
                       "provider" : "graphite.bigdata",
-                      "query" : "summarize(sumSeries(org.foo.bar.paiement.*.count),\\"24h\\", true)"
+                      "mapper" : null,
+                      "processors" : null,
+                      "alertings" : null,
+                      "query" : "summarize(sumSeries(org.foo.bar.paiement.*.count),\\"24h\\", true)",
+                      "parent" : null,
+                      "scheduler" : null
                     }, {
                       "name" : "lastyear-paiement-cumul",
+                      "fromFirstTime" : null,
+                      "until" : null,
                       "provider" : "jdbc.provider",
-                      "query" : "select max(dateTime), sum(OBJ) from FOOBAR"
+                      "mapper" : null,
+                      "processors" : null,
+                      "alertings" : null,
+                      "query" : "select max(dateTime), sum(OBJ) from FOOBAR",
+                      "parent" : null,
+                      "scheduler" : null
                     } ]
                   } ],
                   "gav" : {
@@ -129,6 +176,17 @@ class EventFileConfigurationLoaderTest {
                   "name" : "events-test",
                   "scheduler" : "0 0/5 * * * ?",
                   "simpleEvents" : [ {
+                    "type" : "SimpleEvent",
+                    "name" : "foobar-quality",
+                    "fromFirstTime" : null,
+                    "until" : null,
+                    "provider" : "graphite.bigdata",
+                    "mapper" : "oo.bar.Mapper",
+                    "processors" : [ {
+                      "name" : "foo"
+                    }, {
+                      "name" : "bar"
+                    } ],
                     "alertings" : [ {
                       "condition" : "value > 5",
                       "level" : "warn",
@@ -136,35 +194,49 @@ class EventFileConfigurationLoaderTest {
                       "name" : "prd-prod-001",
                       "provider" : "{{myAlertingProvider}}"
                     } ],
-                    "mapper" : "oo.bar.Mapper",
-                    "name" : "foobar-quality",
-                    "processors" : [ {
-                      "name" : "foo"
-                    }, {
-                      "name" : "bar"
-                    } ],
-                    "provider" : "graphite.bigdata",
                     "query" : "scale(summarize(avg(org.foobar.joe.*.count), '24h', 'avg', true),100)",
+                    "parent" : null,
                     "scheduler" : "0 0/2 * * * ?"
                   }, {
+                    "type" : "SimpleEvent",
+                    "name" : "foobar-pourcentage",
+                    "fromFirstTime" : null,
+                    "until" : null,
+                    "provider" : "graphite.bigdata",
+                    "mapper" : null,
+                    "processors" : null,
                     "alertings" : [ {
                       "function" : "mySupraFaboulousJavaScriptFunctionInMyPlugin",
                       "name" : "prd-prod-0011",
                       "provider" : "{{myAlertingProvider}}"
                     } ],
-                    "name" : "foobar-pourcentage",
-                    "provider" : "graphite.bigdata",
-                    "query" : "scale(summarize(avg(org.foo.bar.joe.percent), '24h', 'avg', true),100)"
+                    "query" : "scale(summarize(avg(org.foo.bar.joe.percent), '24h', 'avg', true),100)",
+                    "parent" : null,
+                    "scheduler" : null
                   }, {
-                    "from" : "-10min",
+                    "type" : "SimpleEvent",
                     "name" : "foobar-views-10mn",
+                    "fromFirstTime" : null,
+                    "until" : null,
                     "provider" : "graphite.bigdata",
-                    "query" : "sumSeries(summarize(org.foo.bar.view,\\"10min\\",\\"avg\\",true))"
+                    "mapper" : null,
+                    "processors" : null,
+                    "alertings" : null,
+                    "query" : "sumSeries(summarize(org.foo.bar.view,\\"10min\\",\\"avg\\",true))",
+                    "parent" : null,
+                    "scheduler" : null
                   }, {
-                    "from" : "-30min",
+                    "type" : "SimpleEvent",
                     "name" : "foobar-views-30mn",
+                    "fromFirstTime" : null,
+                    "until" : null,
                     "provider" : "graphite.bigdata",
-                    "query" : "sumSeries(summarize(org.foo.bar.view,\\"10min\\",\\"avg\\",true))"
+                    "mapper" : null,
+                    "processors" : null,
+                    "alertings" : null,
+                    "query" : "sumSeries(summarize(org.foo.bar.view,\\"10min\\",\\"avg\\",true))",
+                    "parent" : null,
+                    "scheduler" : null
                   } ]
                 }
                 """);

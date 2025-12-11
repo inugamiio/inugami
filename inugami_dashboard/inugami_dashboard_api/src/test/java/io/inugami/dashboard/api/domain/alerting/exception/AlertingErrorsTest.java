@@ -8,7 +8,7 @@ class AlertingErrorsTest {
     @Test
     void assertAlertingErrors() {
         UnitTestHelper.assertErrorCodeUnique(AlertingErrors.values());
-        UnitTestHelper.assertErrorCode("domain/alerting/exception/assertAlertingErrors.json",
+        UnitTestHelper.assertErrorCode("io/inugami/dashboard/api/domain/alerting/exception/assertAlertingErrors.json",
                                        AlertingErrors.values());
     }
 }

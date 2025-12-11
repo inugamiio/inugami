@@ -16,10 +16,9 @@
  */
 package io.inugami.framework.interfaces.monitoring.logger;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class ConsoleColors {
 
     // =========================================================================

@@ -9,7 +9,9 @@ import java.util.Map;
 
 @UtilityClass
 public class WarningEmpty {
-
+    //==================================================================================================================
+    // STRING
+    //==================================================================================================================
     public static void warningEmpty(final Warning warning,
                                     final String value,
                                     final String messageDetail,
@@ -28,31 +30,14 @@ public class WarningEmpty {
         }
     }
 
-
+    //==================================================================================================================
+    // COLLECTION
+    //==================================================================================================================
     public static void warningEmpty(final Warning warning,
                                     final Collection<?> values,
                                     final String messageDetail,
                                     final Object... msgArgs) {
         if (values == null || values.isEmpty()) {
-            WarningCommons.addWarningInContext(warning, messageDetail, msgArgs);
-        }
-    }
-
-    public static <T> void warningNotEmpty(final Warning warning,
-                                           final T[] values,
-                                           final String messageDetail,
-                                           final Object... msgArgs) {
-        if (values != null && values.length == 0) {
-            WarningCommons.addWarningInContext(warning, messageDetail, msgArgs);
-        }
-    }
-
-
-    public static <T> void warningEmpty(final Warning warning,
-                                        final T[] values,
-                                        final String messageDetail,
-                                        final Object... msgArgs) {
-        if (values == null || values.length == 0) {
             WarningCommons.addWarningInContext(warning, messageDetail, msgArgs);
         }
     }
@@ -66,6 +51,31 @@ public class WarningEmpty {
         }
     }
 
+    //==================================================================================================================
+    // ARRAY
+    //==================================================================================================================
+    public static <T> void warningEmpty(final Warning warning,
+                                        final T[] values,
+                                        final String messageDetail,
+                                        final Object... msgArgs) {
+        if (values == null || values.length == 0) {
+            WarningCommons.addWarningInContext(warning, messageDetail, msgArgs);
+        }
+    }
+
+    public static <T> void warningNotEmpty(final Warning warning,
+                                           final T[] values,
+                                           final String messageDetail,
+                                           final Object... msgArgs) {
+        if (values != null && values.length > 0) {
+            WarningCommons.addWarningInContext(warning, messageDetail, msgArgs);
+        }
+    }
+
+
+    //==================================================================================================================
+    // MAP
+    //==================================================================================================================
     public static void warningEmpty(final Warning warning,
                                     final Map<?, ?> values,
                                     final String messageDetail,

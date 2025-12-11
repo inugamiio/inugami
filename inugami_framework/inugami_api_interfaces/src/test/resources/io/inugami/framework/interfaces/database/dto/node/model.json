@@ -1,0 +1,8 @@
+{
+  "name" : "MyNode",
+  "properties" : {
+    "size" : 15
+  },
+  "type" : "node",
+  "uid" : "bb895294-efe7-484b-b670-14d004eaf461"
+}

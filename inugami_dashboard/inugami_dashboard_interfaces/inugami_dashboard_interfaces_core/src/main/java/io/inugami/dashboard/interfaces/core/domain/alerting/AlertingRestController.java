@@ -22,12 +22,14 @@ import io.inugami.dashboard.interfaces.domain.alerting.dto.AlertingSearchRequest
 import io.inugami.dashboard.interfaces.core.domain.alerting.mapper.AlertingSearchRequestAPIMapper;
 import io.inugami.framework.interfaces.models.event.AlertingModel;
 import io.inugami.framework.interfaces.models.search.SearchResponse;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
 @RequiredArgsConstructor
+@Builder
 @RestController
 public class AlertingRestController implements AlertingRestClient {
 

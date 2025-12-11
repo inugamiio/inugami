@@ -16,7 +16,7 @@
     <parent>
         <groupId>io.inugami.monitoring</groupId>
         <artifactId>inugami_monitoring</artifactId>
-        <version>4.1.2-SNAPSHOT</version>
+        <version>4.2.0-SNAPSHOT</version>
     </parent>
 
 
@@ -28,6 +28,9 @@
     <name>${project.groupId}:${project.artifactId}</name>
     <packaging>pom</packaging>
 
+    <properties>
+        <jacoco.report.path.relative>../../../</jacoco.report.path.relative>
+    </properties>
 
     <!-- ======================================================================= 
     = DEPENDENCIES

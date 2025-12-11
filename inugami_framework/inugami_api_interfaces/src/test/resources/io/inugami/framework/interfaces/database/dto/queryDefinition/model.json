@@ -1,0 +1,7 @@
+{
+  "description" : "lorem ipsum",
+  "name" : "simple",
+  "parameters" : [ "params" ],
+  "path" : "some/path",
+  "type" : "nodes"
+}

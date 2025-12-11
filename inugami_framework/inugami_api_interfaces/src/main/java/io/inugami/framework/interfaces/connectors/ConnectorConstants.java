@@ -19,8 +19,9 @@ package io.inugami.framework.interfaces.connectors;
 import io.inugami.framework.interfaces.configurtation.JvmKeyValues;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class ConnectorConstants {
 
     public static final String HTTP_GET  = "GET";

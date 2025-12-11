@@ -1,0 +1,13 @@
+inugami:
+  monitoring:
+    interceptor:
+      url:
+        skip: .*api-docs.*;.*swagger-ui.*
+springdoc:
+  api-docs:
+    path: /api-docs
+
+spring:
+  cloud:
+    compatibility-verifier:
+      enabled: false

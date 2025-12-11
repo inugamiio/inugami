@@ -73,8 +73,11 @@ public class InugamiConfiguration {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class InugamiConfigurationEngine {
+        public static final int DEFAULT_MAX_THREAD = 50;
+        public static final long DEFAULT_TIMEOUT = 60000L;
         @Builder.Default
-        private int  maxThreads = 100;
-        private long timeout    = 60000L;
+        private int             maxThreads         = 20;
+        @Builder.Default
+        private long            timeout            = DEFAULT_TIMEOUT;
     }
 }

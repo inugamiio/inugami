@@ -17,18 +17,21 @@
 open module io.inugami.dashboard.core {
     requires com.fasterxml.jackson.annotation;
     requires io.inugami.dashboard.api;
-    requires io.inugami.framework.api;
-    requires io.inugami.framework.interfaces;
+    requires io.inugami.framework.commons.spring;
     requires io.inugami.framework.commons;
     requires io.inugami.framework.configurations.configuration;
-    requires io.inugami.framework.commons.spring;
+    requires io.inugami.framework.api;
+    requires io.inugami.framework.interfaces;
+    requires jakarta.annotation;
+    requires jdk.compiler;
     requires lombok;
+    requires org.jspecify;
     requires org.slf4j;
-    requires spring.context;
     requires spring.beans;
     requires spring.boot;
-    requires jdk.compiler;
-    requires jakarta.annotation;
+    requires spring.context;
+    requires spring.tx;
+    requires spring.boot.starter.cache;
 
     exports io.inugami.dashboard.core.domain.event;
     exports io.inugami.dashboard.core.domain.alerting;

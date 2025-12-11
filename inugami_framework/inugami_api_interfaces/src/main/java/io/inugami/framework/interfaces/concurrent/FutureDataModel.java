@@ -41,19 +41,19 @@ public class FutureDataModel<T> implements FutureData<T> {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private Future<T>                future;
-    private T            data;
-    private ProviderTask task;
+    private           Future<T>                future;
+    private           T                        data;
+    private           ProviderTask             task;
     @ToString.Include
-    private GenericEvent event;
+    private           GenericEvent             event;
     @ToString.Include
-    private String       channel;
+    private           String                   channel;
     @ToString.Include
-    private long                     timeout;
+    private           long                     timeout;
     @ToString.Include
-    private TimeUnit                 timeUnit;
-    private List<OnErrorFunction<T>> onError;
-    private List<OnDoneFunction<T>>  onDone;
+    private           TimeUnit                 timeUnit;
+    private transient List<OnErrorFunction<T>> onError;
+    private transient List<OnDoneFunction<T>>  onDone;
 
 
     // =========================================================================

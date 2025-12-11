@@ -1,0 +1,1 @@
+Node(type=node, name=MyNode, uid=bb895294-efe7-484b-b670-14d004eaf461, properties={size=15})

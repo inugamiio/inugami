@@ -1,4 +1,7 @@
-/* --------------------------------------------------------------------
+/* --------------------------------------------------------------------    requires feign.core;
+    requires feign.okhttp;
+    requires feign.jackson;
+    requires spring.cloud.openfeign.core;
  *  Inugami
  * --------------------------------------------------------------------
  *
@@ -15,8 +18,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 open module io.inugami.dashboard.interfaces.feign {
-    requires com.fasterxml.jackson.annotation;
     requires io.inugami.dashboard.interfaces.api;
-    requires lombok;
-    requires org.slf4j;
+    requires spring.context;
+    requires io.inugami.framework.interfaces;
+    requires io.inugami.framework.commons.spring;
+    requires io.inugami.monitoring.springboot;
+    requires spring.beans;
+    requires feign.core;
+    requires feign.okhttp;
+    requires feign.jackson;
+    requires spring.cloud.openfeign.core;
+    requires spring.boot.autoconfigure;
+
+    exports io.inugami.dashboard.interfaces.feign;
 }

@@ -1,0 +1,30 @@
+{
+  "createScripts" : [ "script" ],
+  "deleteScripts" : [ "script" ],
+  "nodes" : [ {
+    "name" : "MyNode",
+    "properties" : {
+      "size" : 15
+    },
+    "type" : "node",
+    "uid" : "bb895294-efe7-484b-b670-14d004eaf461"
+  } ],
+  "nodesToDeletes" : [ "a3a7c61d-8ed3-4f33-9d26-aff3dc3a5631" ],
+  "relationships" : [ {
+    "from" : "2940bf84-22ed-4dca-baa8-c10111847c9e",
+    "properties" : {
+      "date" : "2023-06-01"
+    },
+    "to" : "3aa93701-dbf6-4554-9148-fccf24354f30",
+    "type" : "USER_PLACE"
+  } ],
+  "relationshipsToDeletes" : [ {
+    "from" : "2940bf84-22ed-4dca-baa8-c10111847c9e",
+    "properties" : {
+      "date" : "2023-06-01"
+    },
+    "to" : "3aa93701-dbf6-4554-9148-fccf24354f30",
+    "type" : "USER_PLACE"
+  } ],
+  "type" : "USER"
+}

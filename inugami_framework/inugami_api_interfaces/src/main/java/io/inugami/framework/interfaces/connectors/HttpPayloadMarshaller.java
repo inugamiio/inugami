@@ -17,7 +17,7 @@
 package io.inugami.framework.interfaces.connectors;
 
 import io.inugami.framework.interfaces.exceptions.connector.ConnectorMarshallingException;
-
+@FunctionalInterface
 public interface HttpPayloadMarshaller {
 
     String convertToPayload(final Object object) throws ConnectorMarshallingException;

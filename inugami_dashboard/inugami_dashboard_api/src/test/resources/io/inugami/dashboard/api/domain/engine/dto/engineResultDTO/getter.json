@@ -1,0 +1,18 @@
+{
+  "getEnd" : "2020-11-22T13:52:12",
+  "getPlugins" : [ {
+    "events" : [ { } ],
+    "gav" : {
+      "artifactId" : "plugin",
+      "groupId" : "io.inugami",
+      "hash" : "io.inugami:plugin:1.0.0",
+      "version" : "1.0.0"
+    },
+    "message" : "done",
+    "status" : "SUCCESS"
+  } ],
+  "getProcessId" : "27c01f44-fe12-4c38-9bf1-25f50ea1c1a9",
+  "getStart" : "2020-11-22T13:50:12",
+  "getStatus" : "SUCCESS",
+  "getTraceId" : "ceb417ed-4330-4df2-83c8-438274edee7c"
+}

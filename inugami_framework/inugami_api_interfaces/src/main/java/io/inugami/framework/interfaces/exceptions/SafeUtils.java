@@ -16,11 +16,12 @@
  */
 package io.inugami.framework.interfaces.exceptions;
 
-import io.inugami.framework.interfaces.functionnals.SupplierWithException;
 import io.inugami.framework.interfaces.functionnals.SupplierWithThrowable;
 import io.inugami.framework.interfaces.functionnals.VoidFunctionWithException;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
+@UtilityClass
 @Slf4j
 public class SafeUtils {
 

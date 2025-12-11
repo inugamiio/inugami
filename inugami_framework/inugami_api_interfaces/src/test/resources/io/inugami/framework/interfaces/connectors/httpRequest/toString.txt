@@ -1,0 +1,1 @@
+HttpRequest(verb=GET, url=http://localhost/user)

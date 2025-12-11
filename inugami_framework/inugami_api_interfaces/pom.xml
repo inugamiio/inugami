@@ -15,7 +15,7 @@
     <parent>
         <groupId>io.inugami.framework</groupId>
         <artifactId>inugami_framework</artifactId>
-        <version>4.1.2-SNAPSHOT</version>
+        <version>4.2.0-SNAPSHOT</version>
     </parent>
 
 
@@ -25,6 +25,34 @@
     <artifactId>inugami_api_interfaces</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
     <url>http://inugami.io/inugami/inugami_api</url>
+    <properties>
+        <custom.sonar.coverage.exclusions>
+            ,**/*Model.java
+            ,**/*Data.java
+            ,**/MonitoredCallable.java
+            ,**/*Function.java
+            ,**/*Spi.java
+            ,**/*Event.java
+            ,**/*DTO.java
+            ,**/*Dto.java
+            ,**/*Configuration.java
+            ,**/*Config.java
+            ,**/FunctionResultPart.java
+            ,**/*HttpHeaderField.java
+            ,**/*Listener.java
+            ,**/Record.java
+            ,**/number/*.java
+            ,**/CredentialsProvider.java
+            ,**/concurrent/*.java
+            ,**/ctx/*.java
+            ,**/dao/*.java
+            ,**/feature/*.java
+            ,**/processors/*.java
+            ,**/listeners/*.java
+            ,**/scan/*.java
+            ,**/threads/*.java
+        </custom.sonar.coverage.exclusions>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -86,7 +114,10 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+        </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

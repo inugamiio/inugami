@@ -50,8 +50,7 @@ open module io.inugami.monitoring.core {
 
     provides io.inugami.framework.interfaces.exceptions.ExceptionHandlerMapper with io.inugami.monitoring.core.interceptors.exceptions.DefaultExceptionMapper;
     provides io.inugami.framework.interfaces.exceptions.WarningTracker with io.inugami.monitoring.core.spi.DefaultWarningTracker;
-    provides io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI with io.inugami.monitoring.core.interceptors.FilterInterceptor;
-    provides io.inugami.framework.interfaces.monitoring.Interceptable with io.inugami.monitoring.core.spi.H2Interceptable;
+    provides io.inugami.framework.interfaces.monitoring.Interceptable with io.inugami.monitoring.core.spi.H2Interceptable,io.inugami.monitoring.core.interceptable.DefaultInterceptableIdentifier;
     provides io.inugami.framework.interfaces.monitoring.IoLogContentDisplayResolverSPI with io.inugami.monitoring.core.spi.DefaultIoLogContentDisplayResolverSPI;
     provides io.inugami.framework.interfaces.monitoring.JavaRestMethodTracker with io.inugami.monitoring.core.spi.DefaultJavaRestMethodTracker;
     provides io.inugami.framework.interfaces.monitoring.MdcCleanerSPI with io.inugami.monitoring.core.interceptors.mdc.DefaultMdcCleaner;

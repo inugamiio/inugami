@@ -18,16 +18,20 @@ open module io.inugami.dashboard.infrastructure {
 
     exports io.inugami.dashboard.infrastructure.database;
     exports io.inugami.dashboard.infrastructure.internal.schduler;
+    exports io.inugami.dashboard.infrastructure.sender;
 
     requires io.inugami.dashboard.api;
-    requires spring.context;
-    requires jakarta.annotation;
+    requires io.inugami.framework.commons.components;
     requires io.inugami.framework.commons;
+    requires io.inugami.framework.configurations.configuration;
+    requires io.inugami.framework.interfaces;
+    requires jakarta.annotation;
     requires java.sql;
+    requires lombok;
+    requires org.mapstruct;
     requires org.slf4j;
     requires spring.boot;
-    requires io.inugami.framework.api;
-    requires io.inugami.framework.interfaces;
-    requires io.inugami.framework.commons.components;
-    requires static lombok;
+    requires spring.context;
+    requires com.hazelcast.core;
+    requires org.jspecify;
 }
