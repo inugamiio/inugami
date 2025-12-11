@@ -39,10 +39,10 @@ class MockGeneratorUtilsTest {
     @Test
     void getFolder_nominal() {
         final var file = getFolder("./target/test/mock");
-        assertThat(file.exists());
+        assertThat(file.exists()).isFalse();
 
         final var sameFile = getFolder("./target/test/mock");
-        assertThat(sameFile.exists());
+        assertThat(sameFile.exists()).isFalse();
 
         assertThat(getFolder(null)).isNull();
     }

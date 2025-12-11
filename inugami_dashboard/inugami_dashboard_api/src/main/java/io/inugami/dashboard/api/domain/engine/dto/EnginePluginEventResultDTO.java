@@ -25,7 +25,7 @@ import org.jspecify.annotations.NonNull;
 
 import java.io.Serializable;
 import java.util.Optional;
-
+@SuppressWarnings({"java:S1948"})
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor

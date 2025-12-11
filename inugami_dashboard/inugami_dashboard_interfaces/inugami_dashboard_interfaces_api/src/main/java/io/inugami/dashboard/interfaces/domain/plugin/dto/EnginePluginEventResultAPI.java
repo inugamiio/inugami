@@ -22,7 +22,7 @@ import io.inugami.framework.interfaces.task.ProviderFutureResult;
 import lombok.*;
 
 import java.io.Serializable;
-
+@SuppressWarnings({"java:S1948"})
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor

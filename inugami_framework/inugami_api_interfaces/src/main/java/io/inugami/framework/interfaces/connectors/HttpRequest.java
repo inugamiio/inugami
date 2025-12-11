@@ -25,7 +25,7 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
+@SuppressWarnings({"java:S1948"})
 @JsonIgnoreProperties(value = {"listener", "marshaller"})
 @NoArgsConstructor
 @AllArgsConstructor

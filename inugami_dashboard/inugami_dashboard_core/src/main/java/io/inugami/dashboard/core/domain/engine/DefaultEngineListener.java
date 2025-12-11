@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-
+@SuppressWarnings({"java:S1186"})
 @Slf4j
 @Component
 public class DefaultEngineListener implements EngineListener {
