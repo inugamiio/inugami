@@ -1,0 +1,20 @@
+{
+  "getBodyData" : "ewogICJiaXJ0aGRheSIgOiAiMTk4OC0wNC0xMiIsCiAgImNhbnRvbiIgOiAiVkQiLAogICJjaXR5IiA6ICJDaGVzZWF1eC1zdXItTGF1c2FubmUiLAogICJkZXZpY2VJZGVudGlmaWVyIiA6ICI0MDFmMDQ5OC1jNDNmLTQzYWQtYTNmNC0yODg4ODM4MzMyYWQiLAogICJlbWFpbCIgOiAiZW1pbGllLmxhbG9uZGVAbW9jay5vcmciLAogICJmaXJzdE5hbWUiIDogIsOJbWlsaWUiLAogICJpZCIgOiAxLAogICJsYXN0TmFtZSIgOiAiTGFsb25kZSIsCiAgIm5hdGlvbmFsaXR5IiA6ICJDSCIsCiAgIm9sZCIgOiAzNSwKICAicGhvbmVOdW1iZXIiIDogIjA2MTUwMzE1MjIiLAogICJzZXgiIDogIkZFTUFMRSIsCiAgInNvY2lhbElkIiA6ICI3NTY0OTcxMjQ3NzMyIiwKICAic3RyZWV0TmFtZSIgOiAiZHUgQ2jDonRlYXUiLAogICJzdHJlZXROdW1iZXIiIDogIjEwIiwKICAic3RyZWV0VHlwZSIgOiAiQ2hlbS4iLAogICJ6aXBDb2RlIiA6ICIxMDMzIgp9",
+  "getCharset" : "UTF-8",
+  "getContentType" : "application/json",
+  "getDelay" : 15,
+  "getEncoding" : "UTF-8",
+  "getHashHumanReadable" : "[POST]http://some.mock.url?data={  \"birthday\" : \"1988-04-12\",  \"canton\" : \"VD\",  \"city\" : \"Cheseaux-sur-Lausanne\",  \"deviceIdentifier\" : \"401f0498-c43f-43ad-a3f4-2888838332ad\",  \"email\" : \"emilie.lalonde@mock.org\",  \"firstName\" : \"Émilie\",  \"id\" : 1,  \"lastName\" : \"Lalonde\",  \"nationality\" : \"CH\",  \"old\" : 35,  \"phoneNumber\" : \"0615031522\",  \"sex\" : \"FEMALE\",  \"socialId\" : \"7564971247732\",  \"streetName\" : \"du Château\",  \"streetNumber\" : \"10\",  \"streetType\" : \"Chem.\",  \"zipCode\" : \"1033\"}",
+  "getLength" : 0,
+  "getRequestData" : "{\n  \"birthday\" : \"1988-04-12\",\n  \"canton\" : \"VD\",\n  \"city\" : \"Cheseaux-sur-Lausanne\",\n  \"deviceIdentifier\" : \"401f0498-c43f-43ad-a3f4-2888838332ad\",\n  \"email\" : \"emilie.lalonde@mock.org\",\n  \"firstName\" : \"Émilie\",\n  \"id\" : 1,\n  \"lastName\" : \"Lalonde\",\n  \"nationality\" : \"CH\",\n  \"old\" : 35,\n  \"phoneNumber\" : \"0615031522\",\n  \"sex\" : \"FEMALE\",\n  \"socialId\" : \"7564971247732\",\n  \"streetName\" : \"du Château\",\n  \"streetNumber\" : \"10\",\n  \"streetType\" : \"Chem.\",\n  \"zipCode\" : \"1033\"\n}",
+  "getRequestHeaders" : {
+    "source" : "main"
+  },
+  "getResponseAt" : 1764418571272,
+  "getResponseHeaders" : {
+    "warn-1" : "some warning"
+  },
+  "getStatusCode" : 500,
+  "getUrl" : "http://some.mock.url",
+  "getVerb" : "POST"
+}

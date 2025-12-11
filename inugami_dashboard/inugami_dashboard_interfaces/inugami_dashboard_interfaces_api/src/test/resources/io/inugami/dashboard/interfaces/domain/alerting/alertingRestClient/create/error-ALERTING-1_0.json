@@ -1,0 +1,26 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 400,
+    "errorCode" : "ALERTING-1_0",
+    "errorType" : "functional",
+    "message" : "Alerting data are invalid",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "request" : "[ {\n  \"condition\" : \"value > 5\",\n  \"description\" : \"lorem ipsum\",\n  \"function\" : \"handlerFunction\",\n  \"message\" : \"sorry\",\n  \"name\" : \"simple-alert\",\n  \"provider\" : \"graphite\"\n} ]",
+  "requestHeaders" : {
+    "x-device-identifier" : "e832daad-a65a-4c39-93ad-0c8312cfb10c",
+    "x-correlation-id" : "40cfdf6e-aaf7-42c6-90e8-86a7d6a6283f"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "e832daad-a65a-4c39-93ad-0c8312cfb10c",
+    "x-correlation-id" : "40cfdf6e-aaf7-42c6-90e8-86a7d6a6283f",
+    "x-b3-traceid" : "1cb1ec20-979d-48b5-9af4-213d582283b9"
+  },
+  "status" : 400,
+  "url" : "/alerting",
+  "verb" : "POST"
+}

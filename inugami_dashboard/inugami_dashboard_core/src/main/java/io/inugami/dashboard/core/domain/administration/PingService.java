@@ -20,6 +20,7 @@ import io.inugami.dashboard.api.domain.administration.IPingService;
 import io.inugami.dashboard.api.domain.administration.dto.PingDTO;
 import io.inugami.dashboard.api.domain.administration.exception.AdministrationErrors;
 import io.inugami.dashboard.core.configuration.InugamiConfiguration;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
 import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
 
 @RequiredArgsConstructor
+@Builder
 @Service
 public class PingService implements IPingService {
     //==================================================================================================================
@@ -49,8 +51,4 @@ public class PingService implements IPingService {
                       .build();
     }
 
-    @Override
-    public void pingTest() {
-        assertNotNull(AdministrationErrors.UNDEFINED, null);
-    }
 }

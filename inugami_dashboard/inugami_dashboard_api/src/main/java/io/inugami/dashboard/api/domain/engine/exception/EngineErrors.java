@@ -46,7 +46,7 @@ public enum EngineErrors implements ErrorCode {
                                                 .message("application configuration can't be read")
                                                 .statusCode(500)
                                                 .errorTypeTechnical()),
-    APPLICATION_CONFIG_ERROR(newBuilder().errorCode("ENGINE-0_5")
+    APPLICATION_CONFIG_ERROR(newBuilder().errorCode("ENGINE-0_6")
                                                 .message("error on read application configuration")
                                                 .statusCode(500)
                                                 .errorTypeTechnical());
@@ -55,7 +55,7 @@ public enum EngineErrors implements ErrorCode {
     private final ErrorCode errorCode;
 
     private EngineErrors(final DefaultErrorCode.DefaultErrorCodeBuilder errorBuilder) {
-        errorCode = errorBuilder.errorCode(this.name()).build();
+        errorCode = errorBuilder.build();
     }
 
     @Override

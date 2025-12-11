@@ -1,0 +1,9 @@
+[ {
+  "errorStatus" : 500,
+  "errorCode" : "EVENT-0_0",
+  "message" : "undefined error",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+} ]

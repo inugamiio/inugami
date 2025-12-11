@@ -1,0 +1,29 @@
+{
+  "data" : {
+    "alerts" : [ ],
+    "data" : [ ]
+  },
+  "error" : {
+    "message" : "my bad",
+    "errorCode" : {
+      "statusCode" : 500,
+      "errorCode" : "err-undefine",
+      "errorType" : "technical",
+      "exploitationError" : false,
+      "rollbackRequire" : false,
+      "retryable" : false
+    }
+  },
+  "errorCode" : {
+    "statusCode" : 500,
+    "errorCode" : "ENGINE-0_6",
+    "errorType" : "technical",
+    "message" : "error on read application configuration",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "message" : "sorry",
+  "name" : "simple-event",
+  "status" : "ERROR"
+}

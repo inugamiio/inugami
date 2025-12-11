@@ -19,16 +19,21 @@ package io.inugami.framework.interfaces.dependency.dto;
 
 import lombok.*;
 
-@ToString
 @Builder(toBuilder = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 public class DependencyRule {
+    @ToString.Include
     @EqualsAndHashCode.Include
     private String       groupId;
+    @ToString.Include
     @EqualsAndHashCode.Include
     private String       artifactId;
+    @ToString.Include
     @EqualsAndHashCode.Include
     private VersionRules rules;
     private String       comment;

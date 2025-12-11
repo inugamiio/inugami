@@ -1,0 +1,28 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 404,
+    "errorCode" : "ALERTING-2_1",
+    "errorType" : "functional",
+    "message" : "Alerting not found",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "requestHeaders" : {
+    "x-device-identifier" : "0d170c30-fb97-45a9-82a6-1fa3ec5a7be4",
+    "x-correlation-id" : "d95b4b41-2f68-437b-b8a8-d6bfd55d2fb5"
+  },
+  "requestParams" : {
+    "id" : "bb895294-efe7-484b-b670-14d004eaf461"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "0d170c30-fb97-45a9-82a6-1fa3ec5a7be4",
+    "x-correlation-id" : "d95b4b41-2f68-437b-b8a8-d6bfd55d2fb5",
+    "x-b3-traceid" : "b5d557a4-ba8c-4d0a-b714-b7ea41131418"
+  },
+  "status" : 404,
+  "url" : "/alerting/{id}",
+  "verb" : "GET"
+}

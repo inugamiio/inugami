@@ -1,0 +1,8 @@
+{
+  "getName" : "MyNode",
+  "getProperties" : {
+    "size" : 15
+  },
+  "getType" : "node",
+  "getUid" : "bb895294-efe7-484b-b670-14d004eaf461"
+}

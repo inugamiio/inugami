@@ -15,13 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 open module io.inugami.dashboard.api {
-    requires com.fasterxml.jackson.annotation;
-    requires io.inugami.framework.interfaces;
-    requires io.inugami.framework.configurations.configuration;
     requires lombok;
-    requires org.slf4j;
-    requires annotations;
+    requires io.inugami.framework.configurations.configuration;
     requires jdk.compiler;
+    requires org.jspecify;
+    requires io.inugami.framework.commons;
+    requires io.inugami.framework.interfaces;
 
     exports io.inugami.dashboard.api.domain.administration.exception;
     exports io.inugami.dashboard.api.domain.administration.dto;
@@ -34,4 +33,5 @@ open module io.inugami.dashboard.api {
     exports io.inugami.dashboard.api.domain.engine.dto;
     exports io.inugami.dashboard.api.domain.engine.exception;
     exports io.inugami.dashboard.api.domain.plugin;
+    exports io.inugami.dashboard.api.domain.sender;
 }

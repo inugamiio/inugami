@@ -29,19 +29,16 @@ import java.util.Optional;
  * @since 15 mai 2017
  */
 @SuppressWarnings({"java:S119"})
-@ToString(onlyExplicitlyIncluded = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
+@EqualsAndHashCode
 @Setter
 @Getter
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class JsonObjects<TYPE extends Dto> implements Dto<JsonObjects<TYPE>> {
-
     private static final long serialVersionUID = 2669600647907300725L;
-
     private List<TYPE> data;
-
 
     @Override
     public JsonObjects<TYPE> cloneObj() {

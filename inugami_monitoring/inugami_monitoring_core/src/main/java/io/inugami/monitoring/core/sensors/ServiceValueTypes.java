@@ -16,23 +16,22 @@
  */
 package io.inugami.monitoring.core.sensors;
 
+import lombok.Getter;
+
 /**
  * ServiceValueTypes
  * 
  * @author patrickguillerm
  * @since Jan 18, 2019
  */
+@Getter
 public enum ServiceValueTypes {
     HITS("hits"), DONE("done"), ERROR("error"), RESPONSE_TIME("responseTime");
     
     private final String keywork;
     
-    private ServiceValueTypes(String keywork) {
+    ServiceValueTypes(String keywork) {
         this.keywork = keywork;
     }
-    
-    public String getKeywork() {
-        return keywork;
-    }
-    
+
 }

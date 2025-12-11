@@ -1,0 +1,1 @@
+Rule(version=4, ruleType=HIGHER_EQUALS)

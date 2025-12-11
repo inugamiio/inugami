@@ -18,12 +18,14 @@ package io.inugami.dashboard.api.domain.engine.dto;
 
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.models.engine.Status;
+import io.inugami.framework.interfaces.task.ProviderFutureResult;
 import io.inugami.framework.interfaces.tools.StringComparator;
 import lombok.*;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.Serializable;
-
+import java.util.Optional;
+@SuppressWarnings({"java:S1948"})
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,17 +34,23 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode
 public class EnginePluginEventResultDTO implements Serializable, Comparable<EnginePluginEventResultDTO> {
+    private static final long                 serialVersionUID = -750260212746447673L;
     @EqualsAndHashCode.Include
-    private String    name;
+    private              String               name;
     @ToString.Include
     @EqualsAndHashCode.Include
-    private ErrorCode errorCode;
+    private              ErrorCode            errorCode;
     @ToString.Include
     @EqualsAndHashCode.Include
-    private Status    status;
+    private              Status               status;
+    private              String               message;
+    private              Throwable            error;
+    private              ProviderFutureResult data;
 
     @Override
-    public int compareTo(@NotNull final EnginePluginEventResultDTO other) {
-        return StringComparator.compareTo(name, other == null ? null : other.getName());
+    public int compareTo(@NonNull final EnginePluginEventResultDTO other) {
+        return StringComparator.compareTo(name, Optional.ofNullable(other)
+                                                        .map(EnginePluginEventResultDTO::getName)
+                                                        .orElse(null));
     }
 }

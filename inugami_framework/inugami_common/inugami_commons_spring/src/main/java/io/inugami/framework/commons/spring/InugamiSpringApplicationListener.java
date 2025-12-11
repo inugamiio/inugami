@@ -74,6 +74,10 @@ public class InugamiSpringApplicationListener implements ApplicationListener<App
         }
     }
 
+    private void initSpiLoader() {
+
+    }
+
 
     // =========================================================================
     // EVENTS
@@ -96,6 +100,7 @@ public class InugamiSpringApplicationListener implements ApplicationListener<App
 
     private void onApplicationContextInitialized(final ApplicationContextInitializedEvent event) {
         SpringSpiLoaderServiceSPI.initSpringContext(event.getApplicationContext().getBeanFactory());
+        SpiLoader.getInstance().reloadLoaderService(new SpringSpiLoaderServiceSPI());
         loadListeners();
         for (ApplicationLifecycleSPI listener : listeners) {
             listener.onApplicationContextInitialized(event);

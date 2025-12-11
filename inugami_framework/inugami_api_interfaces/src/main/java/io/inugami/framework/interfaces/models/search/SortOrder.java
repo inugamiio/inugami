@@ -20,11 +20,11 @@ public enum SortOrder {
     ASC,
     DESC;
 
-    public static SortOrder SortOrder(final String value) {
+    public static SortOrder getEnum(final String value) {
         if (value == null) {
             return SortOrder.ASC;
         }
 
-        return value.toUpperCase().equals(SortOrder.ASC.name()) ? SortOrder.ASC : SortOrder.DESC;
+        return value.toUpperCase().equals(SortOrder.DESC.name()) ? SortOrder.DESC : SortOrder.ASC;
     }
 }

@@ -23,6 +23,7 @@ import io.inugami.framework.interfaces.models.maven.Gav;
 import io.inugami.framework.interfaces.providers.Provider;
 import io.inugami.framework.interfaces.task.ProviderFutureResult;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -54,7 +55,7 @@ public class TestProvider implements Provider {
     }
 
     @Override
-    public <T extends SimpleEvent> FutureData<ProviderFutureResult> callEvent(final T event, final Gav pluginGav) {
+    public <T extends SimpleEvent> FutureData<ProviderFutureResult> callEvent(final T event, final Gav pluginGav,final LocalDateTime now) {
         // TODO Auto-generated method stub
         return null;
     }

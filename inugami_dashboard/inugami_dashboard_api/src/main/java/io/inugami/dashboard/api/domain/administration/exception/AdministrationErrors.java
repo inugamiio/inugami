@@ -22,12 +22,12 @@ import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import static io.inugami.framework.interfaces.exceptions.DefaultErrorCode.newBuilder;
 
 public enum AdministrationErrors implements ErrorCode {
-    UNDEFINED(newBuilder().message("Undefined error occurs"));
+    UNDEFINED(newBuilder().errorCode("ERR-0_0").message("Undefined error occurs"));
 
     private final ErrorCode errorCode;
 
-    private AdministrationErrors(final DefaultErrorCode.DefaultErrorCodeBuilder errorBuilder) {
-        errorCode = errorBuilder.errorCode(this.name()).build();
+    AdministrationErrors(final DefaultErrorCode.DefaultErrorCodeBuilder errorBuilder) {
+        errorCode = errorBuilder.build();
     }
 
     @Override

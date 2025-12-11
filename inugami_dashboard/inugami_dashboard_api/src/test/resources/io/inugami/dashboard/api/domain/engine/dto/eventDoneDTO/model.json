@@ -1,0 +1,62 @@
+{
+  "data" : {
+    "data" : {
+      "alerts" : [ ],
+      "data" : [ ]
+    },
+    "error" : {
+      "message" : "my bad",
+      "errorCode" : {
+        "statusCode" : 500,
+        "errorCode" : "err-undefine",
+        "errorType" : "technical",
+        "exploitationError" : false,
+        "rollbackRequire" : false,
+        "retryable" : false
+      }
+    },
+    "errorCode" : {
+      "statusCode" : 500,
+      "errorCode" : "ENGINE-0_6",
+      "errorType" : "technical",
+      "message" : "error on read application configuration",
+      "exploitationError" : false,
+      "rollbackRequire" : false,
+      "retryable" : false
+    },
+    "message" : "sorry",
+    "name" : "simple-event",
+    "status" : "ERROR"
+  },
+  "date" : "2023-06-01T12:00:00",
+  "event" : {
+    "type" : "SimpleEvent",
+    "name" : "simple-event",
+    "fromFirstTime" : null,
+    "until" : null,
+    "provider" : null,
+    "mapper" : null,
+    "processors" : [ ],
+    "alertings" : [ ],
+    "query" : null,
+    "parent" : null,
+    "scheduler" : null
+  },
+  "plugin" : {
+    "alertingProviders" : [ ],
+    "enabled" : false,
+    "eventConfigPresent" : false,
+    "events" : [ ],
+    "gav" : {
+      "artifactId" : "inugami_api",
+      "groupId" : "io.inugami",
+      "hash" : "io.inugami:inugami_api:3.3.0:jar",
+      "qualifier" : "jar",
+      "version" : "3.3.0"
+    },
+    "handlers" : [ ],
+    "listeners" : [ ],
+    "processors" : [ ],
+    "providers" : [ ]
+  }
+}

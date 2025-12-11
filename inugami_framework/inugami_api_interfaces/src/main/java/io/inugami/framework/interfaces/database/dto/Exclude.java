@@ -18,6 +18,9 @@ package io.inugami.framework.interfaces.database.dto;
 
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @SuppressWarnings({"java:S1700"})
 @Builder(toBuilder = true)
 @EqualsAndHashCode
@@ -26,7 +29,7 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 @Getter
-public final class Exclude {
-
+public final class Exclude  implements Serializable {
+    private static final long serialVersionUID = 7303634435721132493L;
     private String exclude;
 }

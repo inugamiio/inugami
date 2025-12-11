@@ -96,8 +96,6 @@ public class YamlMarshaller {
 
     public <T> String convertToYaml(final T object) {
         Asserts.assertNotNull(YamlMarshallerError.YAML_OBJECT_REQUIRED, object);
-
-
         try {
             return objectMapper.writer().writeValueAsString(object);
         } catch (final JsonProcessingException e) {

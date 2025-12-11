@@ -21,6 +21,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.inugami.commons.test.api.LineMatcher;
 import io.inugami.commons.test.dto.AssertDtoContext;
 import io.inugami.commons.test.dto.AssertLogContext;
+import io.inugami.commons.test.dto.WaitContext;
+import io.inugami.commons.test.internal.UnitTestHelperWaitUtils;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.exceptions.Warning;
 import io.inugami.framework.interfaces.functionnals.VoidFunctionWithException;
@@ -30,6 +32,8 @@ import org.mockito.invocation.InvocationOnMock;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 
 @SuppressWarnings({"java:S6355", "java:S1123", "java:S3740", "java:S1133", "java:S119", "java:S1133"})
@@ -268,6 +272,16 @@ public class UnitTestHelper {
         UnitTestHelperDto.assertDto(context);
     }
 
+    public static <T> T waitForDone(final long timeout, final CompletableFuture<T> onDone)throws TimeoutException {
+       return waitForDone(WaitContext.<T>builder()
+                               .timeout(timeout)
+                               .onDone(onDone)
+                               .build());
+    }
+
+    public static  <T> T waitForDone(final WaitContext<T> context) throws TimeoutException {
+       return  UnitTestHelperWaitUtils.waitForDone(context);
+    }
 
     // =========================================================================
     // assertLogs

@@ -27,7 +27,9 @@
     <groupId>io.inugami.framework</groupId>
     <name>${project.groupId}:${project.artifactId}</name>
     <packaging>pom</packaging>
-
+    <properties>
+        <jacoco.report.path.relative>../../</jacoco.report.path.relative>
+    </properties>
 
     <!-- =======================================================================
     = MODULES

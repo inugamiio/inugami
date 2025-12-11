@@ -1,0 +1,1 @@
+HttpConnectorResult(verb=POST, url=http://some.mock.url, statusCode=500)

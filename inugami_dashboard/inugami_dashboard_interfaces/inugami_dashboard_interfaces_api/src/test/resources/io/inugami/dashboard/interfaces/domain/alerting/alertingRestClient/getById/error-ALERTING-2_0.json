@@ -1,0 +1,28 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 400,
+    "errorCode" : "ALERTING-2_0",
+    "errorType" : "functional",
+    "message" : "Alerting data are invalid",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "requestHeaders" : {
+    "x-device-identifier" : "033904fa-cf89-478d-b44e-0e41a7ee7adc",
+    "x-correlation-id" : "8481e6ad-080d-404b-a810-67649143c8e7"
+  },
+  "requestParams" : {
+    "id" : "bb895294-efe7-484b-b670-14d004eaf461"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "033904fa-cf89-478d-b44e-0e41a7ee7adc",
+    "x-correlation-id" : "8481e6ad-080d-404b-a810-67649143c8e7",
+    "x-b3-traceid" : "bb3de29b-f24b-4ec5-bfc1-3937315cdae8"
+  },
+  "status" : 400,
+  "url" : "/alerting/{id}",
+  "verb" : "GET"
+}

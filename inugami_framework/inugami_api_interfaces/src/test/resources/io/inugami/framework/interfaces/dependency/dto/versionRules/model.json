@@ -1,0 +1,14 @@
+{
+  "major" : {
+    "ruleType" : ">=",
+    "version" : 4
+  },
+  "minor" : {
+    "ruleType" : ">=",
+    "version" : 1
+  },
+  "patch" : {
+    "ruleType" : ">=",
+    "version" : 0
+  }
+}

@@ -199,7 +199,17 @@ public class JsonBuilder {
         buffer.append(";\n");
         return returnInstance();
     }
+    public  <E extends JsonBuilder> E quot() {
+        buffer.append('"');
+        return returnInstance();
+    }
 
+    public  <E extends JsonBuilder> E  tripeQuot() {
+        buffer.append('"');
+        buffer.append('"');
+        buffer.append('"');
+        return returnInstance();
+    }
 
     public <E extends JsonBuilder> E writeListString(final List<String> values) {
         if (values == null) {
@@ -226,6 +236,10 @@ public class JsonBuilder {
 
     public <E extends JsonBuilder> E tab() {
         buffer.append('\t');
+        return returnInstance();
+    }
+    public  <E extends JsonBuilder> E eq() {
+        buffer.append('=');
         return returnInstance();
     }
 
@@ -287,6 +301,7 @@ public class JsonBuilder {
         return this;
     }
 
+
     public JsonBuilder doubleDot() {
         buffer.append(DOUBLE_DOT);
         return this;
@@ -320,6 +335,7 @@ public class JsonBuilder {
         buffer.trimToSize();
         return returnInstance();
     }
+
 
 
 }

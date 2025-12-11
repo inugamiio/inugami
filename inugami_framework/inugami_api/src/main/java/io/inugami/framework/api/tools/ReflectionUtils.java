@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 import static io.inugami.framework.interfaces.tools.PathUtils.toUnixPath;
 
 @SuppressWarnings({"java:S119", "java:S3011", "java:S1452", "java:S1181", "java:S1123", "java:S2326", "java:S1133", "java:S5042", "java:S5361"})
@@ -517,7 +518,7 @@ public final class ReflectionUtils {
             return null;
         }
         final Field currentField = getField(fieldName, instance);
-        setAccessible(currentField);
+        applyIfNotNull(currentField, ReflectionUtils::setAccessible);
         return runSafe(() -> currentField.get(instance));
     }
 
@@ -732,7 +733,10 @@ public final class ReflectionUtils {
     // =========================================================================
 
     public static void setAccessible(final Constructor<?> constructor) {
-        if (constructor != null || !Modifier.isPublic(constructor.getModifiers())) {
+        if (constructor == null) {
+            return;
+        }
+        if (!Modifier.isPublic(constructor.getModifiers())) {
             try {
                 constructor.setAccessible(true);
             } catch (final Throwable e) {
@@ -742,7 +746,10 @@ public final class ReflectionUtils {
     }
 
     public static void setAccessible(final Method method) {
-        if (method != null || !Modifier.isPublic(method.getModifiers())) {
+        if (method == null) {
+            return;
+        }
+        if (!Modifier.isPublic(method.getModifiers())) {
             try {
                 method.setAccessible(true);
             } catch (final Throwable e) {
@@ -752,7 +759,10 @@ public final class ReflectionUtils {
     }
 
     public static void setAccessible(final Field field) {
-        if (field != null || !Modifier.isPublic(field.getModifiers())) {
+        if (field == null) {
+            return;
+        }
+        if (!Modifier.isPublic(field.getModifiers())) {
             try {
                 field.setAccessible(true);
             } catch (final Throwable e) {

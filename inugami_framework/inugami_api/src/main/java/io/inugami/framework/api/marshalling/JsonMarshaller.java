@@ -24,6 +24,8 @@ import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.exceptions.Warning;
 import io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
 import io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
+import io.inugami.framework.interfaces.models.basic.Dto;
+import io.inugami.framework.interfaces.models.event.GenericEvent;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import lombok.Getter;
 
@@ -68,9 +70,11 @@ public class JsonMarshaller {
         module.addSerializer(Method.class, new MethodSerializer(Method.class));
         module.addSerializer(Class.class, new ClassSerializer(Class.class));
         module.addSerializer(Field.class, new FieldSerializer(Field.class));
+        module.addSerializer(GenericEvent.class, new GenericEventSerializer(GenericEvent.class));
         module.addSerializer(ErrorCode.class, new ErrorCodeSerializer(ErrorCode.class));
+        module.addSerializer(Throwable.class, new ThrowableSerializer(Throwable.class));
         module.addDeserializer(ErrorCode.class, new ErrorCodeDeserializer(ErrorCode.class));
-
+        module.addDeserializer(GenericEvent.class, new GenericEventDeserializer(GenericEvent.class));
         module.addSerializer(Warning.class, new WarningSerializer(Warning.class));
         module.addDeserializer(Warning.class, new WarningDeserializer(Warning.class));
 

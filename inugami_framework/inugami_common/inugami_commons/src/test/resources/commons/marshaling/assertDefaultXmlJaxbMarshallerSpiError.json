@@ -1,0 +1,19 @@
+[ {
+  "errorStatus" : 500,
+  "errorCode" : "INUGAMI_COMMONS_XML-0_0",
+  "message" : "unable to serialize to XML",
+  "errorType" : "technical",
+  "category" : "inugami",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 500,
+  "errorCode" : "INUGAMI_COMMONS_XML-0_1",
+  "message" : "unable to deserialize to XML",
+  "errorType" : "technical",
+  "category" : "inugami",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+} ]

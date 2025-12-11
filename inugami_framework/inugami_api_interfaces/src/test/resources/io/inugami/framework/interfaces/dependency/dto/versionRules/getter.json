@@ -1,0 +1,14 @@
+{
+  "getMajor" : {
+    "ruleType" : ">=",
+    "version" : 4
+  },
+  "getMinor" : {
+    "ruleType" : ">=",
+    "version" : 1
+  },
+  "getPatch" : {
+    "ruleType" : ">=",
+    "version" : 0
+  }
+}

@@ -77,7 +77,8 @@
         <super.jdk.arg>-parameters</super.jdk.arg>
         <maven-gpg-plugin.enabled/>
 
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <encoding>UTF-8</encoding>
+        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
         <project.build.datePattern>yyyy-MM-dd'T'HH:mm:ss.SSSZ</project.build.datePattern>
         <project.build.sourceProperties.path>${project.build.directory}/source.properties
         </project.build.sourceProperties.path>
@@ -87,6 +88,10 @@
         <_super.plugin.inugami_plugin_lifecycle.version>2.0.0</_super.plugin.inugami_plugin_lifecycle.version>
         <_super.plugin.inugami-plugin-maven.version>2.0.0</_super.plugin.inugami-plugin-maven.version>
 
+        <failsafe-custom-args>
+            --add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
+            --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
+        </failsafe-custom-args>
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: MAVEN SITE
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -130,11 +135,7 @@
         <ci.host.context>/jenkins</ci.host.context>
         <ci.view/>
 
-        <jacoco.version>0.8.6</jacoco.version>
-        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-        <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
-        <sonar.language>java</sonar.language>
+
 
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -209,9 +210,12 @@
         :: DEPENDENCIES VERSIONS
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <ch.qos.logback.version>1.4.14</ch.qos.logback.version>
+        <com.hazelcast.version>5.6.0</com.hazelcast.version>
         <com.jackson.version>2.18.2</com.jackson.version>
-        <io.github.openfeign.version>13.6</io.github.openfeign.version>
         <io.dropwizard.metrics.version>4.0.5</io.dropwizard.metrics.version>
+        <io.github.openfeign.version>13.6</io.github.openfeign.version>
+        <spring-cloud-starter-openfeign.version>4.3.0</spring-cloud-starter-openfeign.version>
+        <io.swagger.core.v3.version>2.2.41</io.swagger.core.v3.version>
         <org-mockito.mockito-core>2.0.31-beta</org-mockito.mockito-core>
         <org.apache.commons.cli.version>1.4</org.apache.commons.cli.version>
         <org.apache.commons.codec.version>1.16.0</org.apache.commons.codec.version>
@@ -220,19 +224,31 @@
         <org.ehcache.version>3.3.1</org.ehcache.version>
         <org.jboss.async-http-servlet.version>3.1.0.Beta2</org.jboss.async-http-servlet.version>
         <org.jsoup.version>1.15.3</org.jsoup.version>
+        <org.jspecify.version>1.0.0</org.jspecify.version>
         <org.junit.jupiter>5.11.4</org.junit.jupiter>
         <org.junit.platform.version>1.11.4</org.junit.platform.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <org.projectlombok.lombok-mapstruct-binding.version>0.2.0</org.projectlombok.lombok-mapstruct-binding.version>
         <org.projectlombok.version>1.18.30</org.projectlombok.version>
-        <org.quartz.version>2.3.2</org.quartz.version>
+        <org.quartz.version>2.5.1</org.quartz.version>
         <org.slf4j.version>2.0.9</org.slf4j.version>
+        <org.springdoc.version>2.8.13</org.springdoc.version>
         <org.yaml.version>2.2</org.yaml.version>
         <swagger-jaxrs2.version>2.0.0</swagger-jaxrs2.version>
 
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PLUGINS CONFIGURATION
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+        <jacoco.version>0.8.14</jacoco.version>
+
+        <jacoco.report.aggregate.enabled>false</jacoco.report.aggregate.enabled>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <jacoco.report.path.relative/>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/${jacoco.report.path.relative}/target/</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.language>java</sonar.language>
+
+        <custom.sonar.coverage.exclusions></custom.sonar.coverage.exclusions>
         <sonar.exclusions>
             **/js/vendors.js,
             **/*Exception*,
@@ -242,7 +258,10 @@
             **/webapp/mock/**/*,
             **/webapp/js/app/core/*.js
             **org/jboss/resteasy/logging/*,
-            **/engine/js/*
+            **/engine/js/*,
+            **/test/*,
+            **/test_it/*,
+            **/*Configuration.java
         </sonar.exclusions>
         <sonar.coverage.exclusions>
             **/test/*,
@@ -250,8 +269,26 @@
             **/js/vendors.js,
             **/generated-sources/**/*,
             **/generated-test-sources/**/*,
-            **/FeatureInterceptor
+            **/FeatureInterceptor,
+            **/*Application.java
+            ${custom.sonar.coverage.exclusions}
         </sonar.coverage.exclusions>
+        <sonar.cpd.exclusions>
+            **/*DTO.java,
+            **/*Dto.java,
+            **/*Entity.java,
+            **/api/**/I*.java
+        </sonar.cpd.exclusions>
+        <sonar.issue.ignore.multicriteria>e1,e2,e3</sonar.issue.ignore.multicriteria>
+        <sonar.issue.ignore.multicriteria.e1.ruleKey>java:S1192</sonar.issue.ignore.multicriteria.e1.ruleKey>
+        <sonar.issue.ignore.multicriteria.e1.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e2.ruleKey>java:S1874</sonar.issue.ignore.multicriteria.e2.ruleKey>
+        <sonar.issue.ignore.multicriteria.e2.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e2.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e3.ruleKey>java:S1845</sonar.issue.ignore.multicriteria.e3.ruleKey>
+        <sonar.issue.ignore.multicriteria.e3.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e3.resourceKey>
+
     </properties>
 
     <!--================================================================================================================
@@ -446,7 +483,11 @@
                 <version>${project.version}</version>
             </dependency>
 
-
+            <dependency>
+                <groupId>inugami_dashboard</groupId>
+                <artifactId>inugami_dashboard_webapp</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             + OTHER
             +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
@@ -527,7 +568,17 @@
                 <version>${com.squareup.okhttp3.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.hazelcast</groupId>
+                <artifactId>hazelcast-spring</artifactId>
+                <version>${com.hazelcast.version}</version>
+            </dependency>
 
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${spring-cloud-starter-openfeign.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.github.openfeign</groupId>
                 <artifactId>feign-core</artifactId>
@@ -590,6 +641,12 @@
                 <artifactId>common-java5</artifactId>
                 <version>${plugins.org-apache-maven-plugins.maven-surefire-plugin}</version>
             </dependency>
+            <dependency>
+                <groupId>org.jspecify</groupId>
+                <artifactId>jspecify</artifactId>
+                <version>${org.jspecify.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
@@ -659,6 +716,18 @@
                         <artifactId>jsonassert</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${io.swagger.core.v3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${org.springdoc.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -893,10 +962,11 @@
                 <version>${plugins.org-apache-maven-plugins.maven-surefire-plugin}</version>
                 <configuration>
                     <argLine>
-                        -Xmx1024M
-                        --add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
-                        --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
+                        -Xmx1024M -Dfile.encoding=${encoding} ${maven.plugins.surfire.argLine} --add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
                     </argLine>
+                    <systemPropertyVariables>
+                        <mock.generator.path>${mock.generator.path}</mock.generator.path>
+                    </systemPropertyVariables>
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
@@ -929,40 +999,6 @@
                 </dependencies>
             </plugin>
             <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.10</version>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*DTOBuilder*</exclude>
-                        <exclude>**/*EntityBuilder*</exclude>
-                        <exclude>**org/jboss/resteasy/logging/*</exclude>
-                        <exclude>**/engine/js/*</exclude>
-                        <exclude>**/FeatureInterceptor</exclude>
-                    </excludes>
-                    <formats>
-                        <format>XML</format>
-                    </formats>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                        <phase>compile</phase>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <phase>verify</phase>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${plugins.org-apache-maven-plugins.maven-failsafe-plugin}</version>
@@ -981,10 +1017,70 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <argLine>-Dfile.encoding=${encoding} ${failsafe-custom-args} ${maven.plugins.failsafe.argLine}</argLine>
                     <includes>
                         <include>**/*IT.java</include>
                     </includes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <configuration>
+                    <formats>
+                        <format>XML</format>
+                        <format>HTML</format>
+                    </formats>
+                    <excludes>
+                        <exclude>**/*DTOBuilder*</exclude>
+                        <exclude>**/*EntityBuilder*</exclude>
+                        <exclude>**/*Properties</exclude>
+                        <exclude>**org/jboss/resteasy/logging/*</exclude>
+                        <exclude>**/engine/js/*</exclude>
+                        <exclude>**/FeatureInterceptor</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <append>true</append>
+                            <propertyName>maven.plugins.surfire.argLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>prepare-agent-integration-test</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <append>true</append>
+                            <propertyName>maven.plugins.failsafe.argLine</propertyName>
+                        </configuration>
+                    </execution>
+
+
+                    <execution>
+                        <id>report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                    <execution>
+                        <id>report-integration</id>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>

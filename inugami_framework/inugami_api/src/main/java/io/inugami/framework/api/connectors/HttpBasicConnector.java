@@ -48,6 +48,7 @@ import static io.inugami.framework.interfaces.connectors.exceptions.HttpError.RE
  * @author patrick_guillerm
  * @since 26 oct. 2016
  */
+@SuppressWarnings({"java:S3776","java:S1186"})
 @Slf4j
 public class HttpBasicConnector implements IHttpBasicConnector {
     // =================================================================================================================

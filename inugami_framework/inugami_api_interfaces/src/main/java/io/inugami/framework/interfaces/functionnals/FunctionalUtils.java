@@ -16,14 +16,13 @@
  */
 package io.inugami.framework.interfaces.functionnals;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.*;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class FunctionalUtils {
 
     // =================================================================================================================

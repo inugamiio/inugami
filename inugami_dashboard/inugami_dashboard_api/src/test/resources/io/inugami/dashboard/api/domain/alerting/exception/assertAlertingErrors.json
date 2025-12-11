@@ -1,0 +1,49 @@
+[ {
+  "errorStatus" : 500,
+  "errorCode" : "ALERTING-0_0",
+  "message" : "Undefined error occurs",
+  "errorType" : "technical",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "ALERTING-1_0",
+  "message" : "Alerting data are invalid",
+  "errorType" : "functional",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "ALERTING-2_0",
+  "message" : "Alerting data are invalid",
+  "errorType" : "functional",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 404,
+  "errorCode" : "ALERTING-2_1",
+  "message" : "Alerting not found",
+  "errorType" : "functional",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "ALERTING-3_0",
+  "message" : "Alerting data are invalid",
+  "errorType" : "functional",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "ALERTING-4_0",
+  "message" : "Alerting data are invalid",
+  "errorType" : "functional",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+} ]

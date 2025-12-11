@@ -15,16 +15,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 open module io.inugami.dashboard.interfaces.core {
+    requires lombok;
     requires com.fasterxml.jackson.annotation;
     requires io.inugami.dashboard.api;
     requires io.inugami.dashboard.interfaces.api;
-    requires io.inugami.framework.api;
-    requires io.inugami.framework.interfaces;
-    requires lombok;
-    requires org.slf4j;
     requires spring.web;
     requires spring.context;
     requires org.mapstruct;
+    requires io.inugami.framework.interfaces;
+    requires io.inugami.framework.configurations.configuration;
 
     exports io.inugami.dashboard.interfaces.core.domain.administration;
     exports io.inugami.dashboard.interfaces.core.domain.administration.mapper;

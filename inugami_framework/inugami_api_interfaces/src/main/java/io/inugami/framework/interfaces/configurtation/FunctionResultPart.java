@@ -16,74 +16,23 @@
  */
 package io.inugami.framework.interfaces.configurtation;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  * FunctionResultPart
  *
  * @author patrick_guillerm
  * @since 20 sept. 2017
  */
+@Setter
+@Getter
+@ToString
+@AllArgsConstructor
 public class FunctionResultPart {
-
-    // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
-    private int start;
-
-    private int end;
-
+    private int    start;
+    private int    end;
     private String content;
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public FunctionResultPart(final int start, final int end, final String content) {
-        this.start = start;
-        this.end = end;
-        this.content = content;
-    }
-
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("FunctionResultPart [start=");
-        builder.append(start);
-        builder.append(", end=");
-        builder.append(end);
-        builder.append(", content=");
-        builder.append(content);
-        builder.append("]");
-        return builder.toString();
-    }
-
-    // =========================================================================
-    // GETTERS & SETTERS
-    // =========================================================================
-
-    public int getStart() {
-        return start;
-    }
-
-    public void setStart(final int start) {
-        this.start = start;
-    }
-
-    public int getEnd() {
-        return end;
-    }
-
-    public void setEnd(final int end) {
-        this.end = end;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(final String content) {
-        this.content = content;
-    }
-
 }

@@ -1,9 +1,6 @@
 package io.inugami.framework.interfaces.database.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.*;
@@ -13,48 +10,33 @@ import java.util.stream.Collectors;
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.processIfNotNull;
 
 
-@ToString(onlyExplicitlyIncluded = true)
 @Builder(toBuilder = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 public class ScanNeo4jResult implements Serializable {
     private static final long               serialVersionUID = -1885576008301619055L;
     @ToString.Include
+    @EqualsAndHashCode.Include
     private              String             type;
-    private              List<String>       nodesToDeletes;
+    @Builder.Default
+    private              List<String>       nodesToDeletes = new ArrayList<>();
     @ToString.Include
-    private              List<Node>         nodes;
-    private              List<String>       createScripts;
+    @Builder.Default
+    private              List<Node>         nodes = new ArrayList<>();
+    @Builder.Default
+    private              List<String>       createScripts= new ArrayList<>();
     @ToString.Include
-    private              List<Relationship> relationships;
-    private              List<Relationship> relationshipsToDeletes;
-    private              List<String>       deleteScripts;
+    @Builder.Default
+    private              List<Relationship> relationships= new ArrayList<>();
+    @Builder.Default
+    private              List<Relationship> relationshipsToDeletes= new ArrayList<>();
+    @Builder.Default
+    private              List<String>       deleteScripts= new ArrayList<>();
 
-    public ScanNeo4jResult() {
-        nodesToDeletes = new ArrayList<>();
-        nodes = new ArrayList<>();
-        createScripts = new ArrayList<>();
-        relationships = new ArrayList<>();
-        relationshipsToDeletes = new ArrayList<>();
-        deleteScripts = new ArrayList<>();
-    }
-
-    public ScanNeo4jResult(final String type,
-                           final List<String> nodesToDeletes,
-                           final List<Node> nodes,
-                           final List<String> createScripts,
-                           final List<Relationship> relationships,
-                           final List<Relationship> relationshipsToDeletes,
-                           final List<String> deleteScripts) {
-        this();
-        this.type = type;
-        processIfNotNull(nodesToDeletes, this.nodesToDeletes::addAll);
-        processIfNotNull(nodes, this.nodes::addAll);
-        processIfNotNull(createScripts, this.createScripts::addAll);
-        processIfNotNull(relationships, this.relationships::addAll);
-        processIfNotNull(relationshipsToDeletes, this.relationshipsToDeletes::addAll);
-        processIfNotNull(deleteScripts, this.deleteScripts::addAll);
-    }
 
     public ScanNeo4jResult sort() {
         Collections.sort(nodesToDeletes);
@@ -137,8 +119,8 @@ public class ScanNeo4jResult implements Serializable {
     }
 
     private <T> void appendIfNotNull(final List<T> values, final Consumer<List<T>> consumer) {
-        if (values != null) {
-            consumer.accept(values.stream().filter(Objects::nonNull).collect(Collectors.toList()));
+        if (values != null && !values.isEmpty() && consumer!=null) {
+            consumer.accept(values.stream().filter(Objects::nonNull).toList());
         }
     }
 

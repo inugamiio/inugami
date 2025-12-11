@@ -6,14 +6,18 @@ import io.inugami.framework.configuration.models.ProviderConfig;
 import io.inugami.framework.interfaces.alertings.AlertingProvider;
 import io.inugami.framework.interfaces.alertings.AlertingProviderModel;
 import io.inugami.framework.interfaces.exceptions.UncheckedException;
+import io.inugami.framework.interfaces.exceptions.services.ProcessorException;
 import io.inugami.framework.interfaces.handlers.Handler;
 import io.inugami.framework.interfaces.listeners.EngineListener;
+import io.inugami.framework.interfaces.models.event.GenericEvent;
 import io.inugami.framework.interfaces.models.maven.ManifestInfo;
 import io.inugami.framework.interfaces.processors.Processor;
 import io.inugami.framework.interfaces.processors.ProcessorModel;
 import io.inugami.framework.interfaces.providers.Provider;
 import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
+import io.inugami.framework.interfaces.task.ProviderFutureResult;
 import io.inugami.framework.interfaces.tools.NamedComponent;
+import io.inugami.framework.interfaces.tools.PostConstructConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -79,13 +83,21 @@ class PluginLoaderServiceTest {
 
     @Test
     void loadProcessors_nominal() {
-        when(processor.getName()).thenReturn(MY_COMPONENT);
-        when(spiLoaderService.loadServices(Processor.class)).thenReturn(List.of(processor));
+        when(spiLoaderService.loadServices(Processor.class)).thenReturn(List.of(new TestProcessor()));
         assertThat(service.loadProcessors(List.of(ProcessorModel.builder()
                                                                .name(MY_COMPONENT)
                                                                .build()), GLOBAL_PROPERTIES, manifest))
                 .isNotEmpty();
     }
+    @Test
+    void loadProcessors_withNotPostConstructConfig() {
+        when(spiLoaderService.loadServices(Processor.class)).thenReturn(List.of(processor));
+        assertThat(service.loadProcessors(List.of(ProcessorModel.builder()
+                                                                .name(MY_COMPONENT)
+                                                                .build()), GLOBAL_PROPERTIES, manifest))
+                .isNotEmpty();
+    }
+
 
     @Test
     void loadProviders_nominal() {
@@ -99,7 +111,6 @@ class PluginLoaderServiceTest {
 
     @Test
     void loadHandlers_nominal() {
-        when(handler.getName()).thenReturn(MY_COMPONENT);
         when(spiLoaderService.loadServices(Handler.class)).thenReturn(List.of(handler));
         assertThat(service.loadHandlers(List.of(HandlerConfig.builder()
                                                              .name(MY_COMPONENT)
@@ -143,5 +154,18 @@ class PluginLoaderServiceTest {
     //==================================================================================================================
     private static class MyComponent implements NamedComponent {
 
+    }
+
+    private static class TestProcessor implements Processor, PostConstructConfig{
+        @Override
+        public String getName() {
+            return MY_COMPONENT;
+        }
+
+        @Override
+        public ProviderFutureResult process(final GenericEvent event,
+                                            final ProviderFutureResult data) throws ProcessorException {
+            return null;
+        }
     }
 }

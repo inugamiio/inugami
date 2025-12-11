@@ -60,6 +60,10 @@
             <artifactId>inugami_common_components</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-spring</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>io.inugami.framework.commons</groupId>

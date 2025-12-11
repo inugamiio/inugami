@@ -16,10 +16,21 @@
  */
 package io.inugami.dashboard.api.domain.plugin;
 
+import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
 import io.inugami.framework.configuration.models.plugins.Plugin;
+import org.jspecify.annotations.NonNull;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public interface IPluginService {
     List<Plugin> loadPlugins();
+
+    Collection<Plugin> findAllPlugin();
+
+    Map<String, EnginePluginEventResultDTO> findPluginDataByGav(@NonNull final String groupId,
+                                                                @NonNull final String artifactId);
+
+
 }

@@ -1,0 +1,21 @@
+{
+  "getArtifactId" : "plugin",
+  "getComment" : "lorem ipsum",
+  "getGroupId" : "inugami.io",
+  "getLevel" : "medium",
+  "getLink" : "http://mock.url",
+  "getRules" : {
+    "major" : {
+      "ruleType" : ">=",
+      "version" : 4
+    },
+    "minor" : {
+      "ruleType" : ">=",
+      "version" : 1
+    },
+    "patch" : {
+      "ruleType" : ">=",
+      "version" : 0
+    }
+  }
+}

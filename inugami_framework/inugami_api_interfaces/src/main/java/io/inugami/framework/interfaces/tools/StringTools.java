@@ -1,8 +1,7 @@
 package io.inugami.framework.interfaces.tools;
 
 import io.inugami.framework.interfaces.exceptions.MessagesFormatter;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
@@ -13,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SuppressWarnings({"java:S5361", "java:S3776", "java:S1125"})
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class StringTools {
     // =========================================================================
     // ATTRIBUTES
@@ -25,7 +24,7 @@ public final class StringTools {
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    private static List<UnaryOperator<String>> initializeStrategies() {
+    protected static List<UnaryOperator<String>> initializeStrategies() {
         final List<UnaryOperator<String>> result = new ArrayList<>();
 
         result.add(value -> StringTools.containsChars(value, "Ł") ? value.replaceAll("Ł", "L") : value);
@@ -45,6 +44,16 @@ public final class StringTools {
     // =========================================================================
     // METHODS
     // =========================================================================
+    public static boolean fistCharUpperCase(final String value) {
+        if (value == null || value.isBlank()) {
+            return false;
+        }
+        final String firstChar          = value.substring(0, 1);
+        final String firstCharUpperCase = firstChar.toUpperCase();
+        return firstChar.equals(firstCharUpperCase);
+    }
+
+
     public static String replaceAll(final Pattern regex, final String data, final String replacement) {
         String        result  = data;
         final Matcher matcher = regex.matcher(data);

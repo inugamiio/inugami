@@ -19,7 +19,11 @@
     <artifactId>inugami_configuration</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
     <url>http://inugami.io/inugami/inugami_commons</url>
-
+    <properties>
+        <custom.sonar.coverage.exclusions>
+            ,**/models/*
+        </custom.sonar.coverage.exclusions>
+    </properties>
     <!--================================================================================================================
     = DEPENDENCIES
     =================================================================================================================-->

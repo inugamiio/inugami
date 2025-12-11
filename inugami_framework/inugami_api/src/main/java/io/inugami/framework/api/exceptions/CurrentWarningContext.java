@@ -51,4 +51,8 @@ public class CurrentWarningContext {
         }
         return this;
     }
+
+    public void clear() {
+        this.warnings.clear();
+    }
 }

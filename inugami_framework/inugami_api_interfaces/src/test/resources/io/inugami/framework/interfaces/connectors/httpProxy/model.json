@@ -1,0 +1,7 @@
+{
+  "host" : "127.0.1",
+  "password" : "password",
+  "port" : 1598,
+  "protocol" : "http",
+  "user" : "user"
+}

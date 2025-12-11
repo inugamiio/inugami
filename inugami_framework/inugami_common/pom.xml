@@ -29,6 +29,9 @@
     <packaging>pom</packaging>
     <url>http://inugami.io/inugami/inugami_api</url>
 
+    <properties>
+        <jacoco.report.path.relative>../../../</jacoco.report.path.relative>
+    </properties>
     <!--================================================================================================================
     = MODULES
     =================================================================================================================-->

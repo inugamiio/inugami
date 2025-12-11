@@ -1,0 +1,18 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "request" : "[ {\n  \"condition\" : \"value > 5\",\n  \"description\" : \"lorem ipsum\",\n  \"function\" : \"handlerFunction\",\n  \"message\" : \"sorry\",\n  \"name\" : \"simple-alert\",\n  \"provider\" : \"graphite\"\n} ]",
+  "requestHeaders" : {
+    "x-device-identifier" : "74a423aa-453c-4953-b5dc-d40646575ff4",
+    "x-correlation-id" : "cdfa018a-e70e-458d-b71c-9fffd7aef1e5"
+  },
+  "response" : "[ {\n  \"condition\" : \"value > 5\",\n  \"description\" : \"lorem ipsum\",\n  \"function\" : \"handlerFunction\",\n  \"message\" : \"sorry\",\n  \"name\" : \"simple-alert\",\n  \"provider\" : \"graphite\",\n  \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n} ]",
+  "responseHeaders" : {
+    "x-device-identifier" : "74a423aa-453c-4953-b5dc-d40646575ff4",
+    "x-correlation-id" : "cdfa018a-e70e-458d-b71c-9fffd7aef1e5",
+    "x-b3-traceid" : "3d7e7ca2-65ff-43dc-97b8-6c369dc57562"
+  },
+  "status" : 200,
+  "url" : "/alerting",
+  "verb" : "POST"
+}

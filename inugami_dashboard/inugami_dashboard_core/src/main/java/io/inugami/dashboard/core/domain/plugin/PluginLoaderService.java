@@ -110,18 +110,31 @@ public class PluginLoaderService implements IPluginLoaderService {
         final List<T> result    = new ArrayList<>();
         final List<T> providers = getLoadServices(serviceClass);
 
-        for (BehaviourComponents config : Optional.ofNullable(configurations).orElse(List.of())) {
-            T instance = chooseProvider(providers, config.getName(), config.getClassName());
-            if (instance != null) {
-                if (instance instanceof PostConstructConfig postConstructInstance) {
-                    final Map<String, String> instanceConfig = new LinkedHashMap<>(globalProperties);
-                    applyIfNotNull(config.getConfigs(), instanceConfig::putAll);
-                    postConstructInstance.postConstruct(new ConfigHandlerHashMap(instanceConfig), manifest);
-                }
+        for (T instance : providers) {
+            if (instance instanceof PostConstructConfig postConstructInstance) {
+                final C                   config         = chooseConfiguration(instance, configurations);
+                final Map<String, String> instanceConfig = new LinkedHashMap<>(globalProperties);
+                applyIfNotNull(config == null ? null : config.getConfigs(), instanceConfig::putAll);
+                postConstructInstance.postConstruct(new ConfigHandlerHashMap(instanceConfig), manifest);
+                result.add(instance);
+            } else {
                 result.add(instance);
             }
         }
+
         return result;
+    }
+
+    private <C extends BehaviourComponents, T extends NamedComponent> C chooseConfiguration(final T instance,
+                                                                                            final List<C> configurations) {
+        return Optional.ofNullable(configurations)
+                       .orElse(List.of())
+                       .stream()
+                       .filter(c -> Optional.ofNullable(instance.getName()).
+                                            orElse(instance.getClass().getName())
+                                            .equalsIgnoreCase(c.getName()))
+                       .findFirst()
+                       .orElse(null);
     }
 
     protected <T> List<T> getLoadServices(final Class<T> serviceClass) {
