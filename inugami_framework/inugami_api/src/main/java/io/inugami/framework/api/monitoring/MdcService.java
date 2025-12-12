@@ -312,7 +312,7 @@ public class MdcService implements MdcServiceSpi {
     public Map<String, String> getAllMdc() {
         final var mdcResult = MDC.getCopyOfContextMap();
         if (mdcResult == null) {
-            return Map.of();
+            return new LinkedHashMap<>();
         }
         final Map<String, String> result = new LinkedHashMap<>();
         final List<String>        keys   = new ArrayList<>(mdcResult.keySet());
@@ -324,20 +324,27 @@ public class MdcService implements MdcServiceSpi {
     }
 
     public Map<String, Serializable> getAllMdcExtended() {
-        final Map<String, Serializable> result = new LinkedHashMap<>();
+        final Map<String, Serializable> buffer = new LinkedHashMap<>();
 
         final Map<String, String> standardMdc = getAllMdc();
 
         if (mdcMappers == null) {
-            result.putAll(standardMdc);
+            buffer.putAll(standardMdc);
         } else {
             for (final Map.Entry<String, String> entry : standardMdc.entrySet()) {
                 for (final LoggerMdcMappingSPI mapper : mdcMappers) {
                     if (mapper.accept(entry.getKey())) {
-                        result.put(entry.getKey(), mapper.convert(entry.getValue()));
+                        buffer.put(entry.getKey(), mapper.convert(entry.getValue()));
                     }
                 }
             }
+        }
+
+        final Map<String, Serializable> result = new LinkedHashMap<>();
+        final List<String>              keys   = new ArrayList<>(buffer.keySet());
+        Collections.sort(keys);
+        for (String key : keys) {
+            result.put(key, buffer.get(key));
         }
         return result;
     }
@@ -954,13 +961,7 @@ public class MdcService implements MdcServiceSpi {
     }
 
     public MdcServiceSpi removeIoinfoIoLog() {
-        remove(MDCKeys.url,
-               MDCKeys.verb,
-               MDCKeys.service,
-               MDCKeys.appSubService,
-               MDCKeys.status,
-               MDCKeys.duration
-        );
+        remove(MDCKeys.url, MDCKeys.verb, MDCKeys.service, MDCKeys.appSubService, MDCKeys.status, MDCKeys.duration);
         return this;
     }
 
@@ -986,35 +987,7 @@ public class MdcService implements MdcServiceSpi {
     }
 
     public MdcServiceSpi removeIoinfoPartner() {
-        remove(
-                MDCKeys.errorCategory,
-                MDCKeys.errorCode,
-                MDCKeys.errorExploitationError,
-                MDCKeys.errorField,
-                MDCKeys.errorMessage,
-                MDCKeys.errorMessageDetail,
-                MDCKeys.errorRetryable,
-                MDCKeys.errorRollback,
-                MDCKeys.errorStatus,
-                MDCKeys.errorType,
-                MDCKeys.errorUrl,
-                MDCKeys.exceptionName,
-                MDCKeys.errorDomain,
-                MDCKeys.errorSubDomain,
-                MDCKeys.partner,
-                MDCKeys.partnerRequestCharset,
-                MDCKeys.partnerResponseCharset,
-                MDCKeys.partnerResponseDuration,
-                MDCKeys.partnerResponseMessage,
-                MDCKeys.partnerResponseStatus,
-                MDCKeys.partnerService,
-                MDCKeys.partnerSubService,
-                MDCKeys.partnerType,
-                MDCKeys.partnerUrl,
-                MDCKeys.partnerVerb,
-                MDCKeys.lifecycle,
-                MDCKeys.duration
-        );
+        remove(MDCKeys.errorCategory, MDCKeys.errorCode, MDCKeys.errorExploitationError, MDCKeys.errorField, MDCKeys.errorMessage, MDCKeys.errorMessageDetail, MDCKeys.errorRetryable, MDCKeys.errorRollback, MDCKeys.errorStatus, MDCKeys.errorType, MDCKeys.errorUrl, MDCKeys.exceptionName, MDCKeys.errorDomain, MDCKeys.errorSubDomain, MDCKeys.partner, MDCKeys.partnerRequestCharset, MDCKeys.partnerResponseCharset, MDCKeys.partnerResponseDuration, MDCKeys.partnerResponseMessage, MDCKeys.partnerResponseStatus, MDCKeys.partnerService, MDCKeys.partnerSubService, MDCKeys.partnerType, MDCKeys.partnerUrl, MDCKeys.partnerVerb, MDCKeys.lifecycle, MDCKeys.duration);
         return this;
     }
 
