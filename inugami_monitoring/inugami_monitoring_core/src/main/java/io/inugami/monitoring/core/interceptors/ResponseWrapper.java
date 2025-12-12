@@ -46,7 +46,6 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     private final       List<ResponseListener>    responseListeners;
 
 
-
     // =================================================================================================================
     // CONSTRUCTORS
     // =================================================================================================================
@@ -55,13 +54,29 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
                            final Map<String, List<String>> localHeaders,
                            final List<ResponseListener> responseListeners) {
         this.response = response;
-        this.localHeaders = localHeaders;
+        this.localHeaders = initLocalHeaders(localHeaders);
         this.responseListeners = responseListeners;
         try {
             this.outputWrapper = new OutputWriterWrapper(response.getOutputStream());
         } catch (final IOException e) {
             throw new FatalException(e.getMessage(), e);
         }
+    }
+
+    private Map<String, List<String>> initLocalHeaders(final Map<String, List<String>> localHeaders) {
+        Map<String, List<String>> result = new LinkedHashMap<>();
+        if (localHeaders == null) {
+            return result;
+        }
+        final List<String> keys = new ArrayList<>(localHeaders.keySet());
+        Collections.sort(keys);
+        for (String key : keys) {
+            final var values = localHeaders.get(key);
+            result.put(key, values == null
+                    ? new ArrayList<>()
+                    : new ArrayList<>(values));
+        }
+        return result;
     }
 
     // =================================================================================================================
@@ -213,6 +228,9 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
         List<String> currentHeader = localHeaders.get(name);
         if (currentHeader == null) {
             currentHeader = new ArrayList<>();
+            localHeaders.put(name, currentHeader);
+        } else if (!(currentHeader instanceof ArrayList<String>)) {
+            currentHeader = new ArrayList<>(currentHeader);
             localHeaders.put(name, currentHeader);
         }
         currentHeader.add(value);
