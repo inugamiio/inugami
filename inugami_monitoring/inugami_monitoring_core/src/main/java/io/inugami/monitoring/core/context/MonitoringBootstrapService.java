@@ -23,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
+
 /**
  * MonitoringBootstrap
  *
@@ -56,10 +58,7 @@ public class MonitoringBootstrapService {
 
 
     public void shutdown() {
-        final var context = getContext();
-        if (context != null) {
-            context.shutdown(null);
-        }
+        applyIfNotNull(getContext(), ctx -> ctx.shutdown(null));
     }
 
 

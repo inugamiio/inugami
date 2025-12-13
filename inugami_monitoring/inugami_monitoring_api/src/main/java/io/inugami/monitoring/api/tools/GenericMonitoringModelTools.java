@@ -19,8 +19,9 @@ package io.inugami.monitoring.api.tools;
 
 import io.inugami.framework.api.monitoring.RequestContext;
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
-import io.inugami.framework.interfaces.metrics.dto.*;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModelDTO;
 import io.inugami.framework.interfaces.tools.CalendarTools;
+import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -32,21 +33,16 @@ import java.util.List;
  * @author patrickguillerm
  * @since Jan 18, 2019
  */
+@UtilityClass
 public final class GenericMonitoringModelTools {
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    private GenericMonitoringModelTools() {
-    }
 
     // =========================================================================
     // METHODS
     // =========================================================================
-    public static GenericMonitoringModelDto initResultBuilder() {
+    public static GenericMonitoringModelDTO initResultBuilder() {
         final RequestData infos = RequestContext.getInstance();
 
-        final var data = GenericMonitoringModelDto.builder();
+        final var data = GenericMonitoringModelDTO.builder();
         data.environment(infos.getEnv());
         data.asset(infos.getAsset());
         data.instanceName(infos.getInstanceName());
@@ -58,8 +54,8 @@ public final class GenericMonitoringModelTools {
         return data.build();
     }
 
-    public static List<GenericMonitoringModelDto> buildSingleResult(final GenericMonitoringModelDto value) {
-        final List<GenericMonitoringModelDto> result = new ArrayList<>();
+    public static List<GenericMonitoringModelDTO> buildSingleResult(final GenericMonitoringModelDTO value) {
+        final List<GenericMonitoringModelDTO> result = new ArrayList<>();
         if (value != null) {
             result.add(value);
         }

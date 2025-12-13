@@ -16,11 +16,10 @@
  */
 package io.inugami.monitoring.core.sensors.aggregators;
 
+import io.inugami.framework.api.metrics.MetricsUtils;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
-import io.inugami.framework.interfaces.metrics.dto.GenericMonitoringModelDto;
-import io.inugami.framework.interfaces.models.number.GraphiteNumber;
-import io.inugami.framework.interfaces.models.number.LongNumber;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModelDTO;
 import io.inugami.framework.interfaces.spi.SpiPriority;
 import io.inugami.monitoring.core.sensors.ServiceValueTypes;
 import io.inugami.framework.interfaces.monitoring.ServicesSensorAggregator;
@@ -48,13 +47,13 @@ public class ServicesSensorAggregatorHits implements ServicesSensorAggregator {
 
     @Override
     public List<GenericMonitoringModel> compute(final GenericMonitoringModel data,
-                                                final List<GraphiteNumber> values,
+                                                final List<Object> values,
                                                 final ConfigHandler<String, String> configuration) {
 
 
         final String timeUnit = configuration.grabOrDefault("timeUnit", "min");
-        final var builder = GenericMonitoringModelDto.builder()
-                                                                                                            .init(data);
+        final var builder = GenericMonitoringModelDTO.builder()
+                                                     .from(data);
 
         builder.timeUnit(timeUnit);
         builder.valueType("count");
@@ -66,11 +65,12 @@ public class ServicesSensorAggregatorHits implements ServicesSensorAggregator {
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================
-    private GraphiteNumber sum(final List<GraphiteNumber> values) {
+    private Long sum(final List<Object> values) {
         long result = 0;
-        for (final GraphiteNumber value : Optional.ofNullable(values).orElse(new ArrayList<>())) {
-            result += value.toLong();
+
+        for (final Long value : MetricsUtils.convertToLong(values)) {
+            result += value.longValue();
         }
-        return new LongNumber(result);
+        return result;
     }
 }

@@ -20,7 +20,7 @@ import io.inugami.framework.interfaces.models.ClonableObject;
 
 import java.io.Serializable;
 
-
+@Deprecated
 public interface Dto<T extends Dto<T>> extends Serializable, ClonableObject<T> {
 
 }

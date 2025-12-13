@@ -18,7 +18,6 @@ package io.inugami.framework.interfaces.monitoring;
 
 
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
-import io.inugami.framework.interfaces.models.number.GraphiteNumber;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 
 import java.util.List;
@@ -32,6 +31,6 @@ import java.util.List;
 public interface ServicesSensorAggregator {
     boolean accept(GenericMonitoringModel data, ConfigHandler<String, String> configuration);
 
-    List<GenericMonitoringModel> compute(GenericMonitoringModel data, List<GraphiteNumber> values,
+    List<GenericMonitoringModel> compute(GenericMonitoringModel data, List<Object> values,
                                          ConfigHandler<String, String> configuration);
 }

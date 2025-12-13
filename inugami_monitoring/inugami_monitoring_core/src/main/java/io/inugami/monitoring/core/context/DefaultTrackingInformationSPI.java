@@ -28,9 +28,7 @@ public class DefaultTrackingInformationSPI implements TrackingInformationSPI {
         applyIfNotNull(MdcService.getInstance().getMdc(MDCKeys.conversation_id),
                        value -> result.put(Headers.X_CONVERSATION_ID, value));
 
-
-        String traceId = MdcService.getInstance().traceId();
-        MdcService.getInstance().getMdc(MDCKeys.traceId);
+        MdcService.getInstance().traceId();
 
         return result;
     }

@@ -277,7 +277,13 @@
             **/*DTO.java,
             **/*Dto.java,
             **/*Entity.java,
-            **/api/**/I*.java
+            **/api/**/I*.java,
+            **/AnnotationTools.java,
+            **/StringComparator.java,
+            **/MethodSerializer.java,
+            **/FieldSerializer.java,
+            **/YamlMarshaller.java,
+            **/SimpleEvent.java
         </sonar.cpd.exclusions>
         <sonar.issue.ignore.multicriteria>e1,e2,e3</sonar.issue.ignore.multicriteria>
         <sonar.issue.ignore.multicriteria.e1.ruleKey>java:S1192</sonar.issue.ignore.multicriteria.e1.ruleKey>

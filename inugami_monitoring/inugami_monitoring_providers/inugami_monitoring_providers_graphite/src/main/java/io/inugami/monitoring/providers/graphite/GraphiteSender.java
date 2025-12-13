@@ -18,6 +18,7 @@ package io.inugami.monitoring.providers.graphite;
 
 
 import com.codahale.metrics.graphite.PickledGraphite;
+import io.inugami.framework.api.metrics.MetricsUtils;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.exceptions.FatalException;
 import io.inugami.framework.interfaces.functionnals.ApplyIfNotNull;
@@ -151,8 +152,18 @@ public class GraphiteSender implements MonitoringSender, ApplyIfNotNull {
             applyIfNotNull(data.getTimeUnit(), parts::add);
 
             final String target = prefix + String.join(".", parts);
-            graphite.send(target, data.getValue().rendering(), data.getTime() / 1000);
+            graphite.send(target, renderDataValue(data.getValue()), data.getTime() / 1000);
         }
+    }
+
+    private String renderDataValue(final Object value) {
+        Object result = null;
+        if (MetricsUtils.isDouble(value)) {
+            result = MetricsUtils.convertToDouble(value);
+        } else {
+            result = MetricsUtils.convertToLong(value);
+        }
+        return result == null ? "0" : String.valueOf(result);
     }
 
     private String cleanDeviceName(final String device) {

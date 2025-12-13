@@ -17,7 +17,7 @@
 package io.inugami.monitoring.core.spi;
 
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
-import io.inugami.framework.interfaces.metrics.dto.GenericMonitoringModelDto;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModelDTO;
 import io.inugami.framework.interfaces.models.number.LongNumber;
 import io.inugami.framework.interfaces.monitoring.ErrorResult;
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
@@ -27,7 +27,6 @@ import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 import io.inugami.monitoring.core.sensors.ServiceValueTypes;
 import io.inugami.monitoring.core.sensors.ServicesSensor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -91,7 +90,7 @@ public class ServiceCounterInterceptor implements MonitoringFilterInterceptor {
                                                final ErrorResult error) {
         if (enabled) {
             try {
-                final List<GenericMonitoringModelDto> result = new ArrayList<>();
+                final List<GenericMonitoringModelDTO> result = new ArrayList<>();
 
                 final var builder = GenericMonitoringModelTools.initResultBuilder().toBuilder();
                 final ServiceValueTypes doneType =
