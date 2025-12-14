@@ -64,8 +64,8 @@ public class Gav implements Serializable {
     public boolean equalsWithoutVersion(final Object obj) {
         boolean result = this == obj;
 
-        if (!result && (obj != null) && (obj instanceof Gav)) {
-            final Gav other = (Gav) obj;
+        if (!result && (obj != null) && (obj instanceof Gav gav)) {
+            final Gav other = gav;
             result = groupId.equals(other.getGroupId()) && artifactId.equals(other.getArtifactId());
         }
         return result;

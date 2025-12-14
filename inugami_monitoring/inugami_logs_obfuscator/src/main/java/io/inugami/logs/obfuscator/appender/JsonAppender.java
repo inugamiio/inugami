@@ -8,22 +8,21 @@ import io.inugami.logs.obfuscator.appender.writer.FileWriter;
 import io.inugami.logs.obfuscator.appender.writer.LogstashWriter;
 import io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder;
 
-import java.io.IOException;
 import java.util.List;
+
+import static io.inugami.framework.api.tools.RunSafeUtils.runSafeVoid;
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
+
 
 @SuppressWarnings({"java:S108", "java:S1117", "java:S108", "java:S1181"})
 public class JsonAppender extends ConsoleAppender<ILoggingEvent> {
-    private AppenderConfiguration configuration;
-
+    private       AppenderConfiguration        configuration;
     private final List<AppenderWriterStrategy> writers = List.of(
             new FileWriter(),
             new LogstashWriter(),
             new ElasticSearchWriter(),
-            this::superWriteOut
-    );
-
-
-    private AppenderWriterStrategy writer = null;
+            this::superWriteOut);
+    private       AppenderWriterStrategy       writer  = null;
 
     @Override
     public void start() {
@@ -42,20 +41,14 @@ public class JsonAppender extends ConsoleAppender<ILoggingEvent> {
 
     @Override
     public void stop() {
-        if (writer != null) {
-            writer.stop();
-        }
+        applyIfNotNull(writer, AppenderWriterStrategy::stop);
     }
 
 
     @Override
     protected void append(final ILoggingEvent iLoggingEvent) {
-
         if (this.isStarted()) {
-            try {
-                writer.write(iLoggingEvent);
-            } catch (final Throwable e) {
-            }
+            runSafeVoid(() -> writer.write(iLoggingEvent));
         }
     }
 
@@ -72,10 +65,7 @@ public class JsonAppender extends ConsoleAppender<ILoggingEvent> {
     }
 
     private void superWriteOut(final ILoggingEvent event) {
-        try {
-            this.writeOut(event);
-        } catch (final IOException e) {
-        }
+        runSafeVoid(() -> writeOut(event));
     }
 
     public AppenderConfiguration getConfiguration() {

@@ -27,6 +27,7 @@ import io.inugami.framework.commons.cron.CronResolver;
 import io.inugami.framework.commons.threads.ThreadsExecutorService;
 import io.inugami.framework.configuration.models.EventConfig;
 import io.inugami.framework.configuration.models.plugins.Plugin;
+import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
 import io.inugami.framework.interfaces.exceptions.TechnicalException;
 import io.inugami.framework.interfaces.models.engine.Status;
 import io.inugami.framework.interfaces.models.event.Event;
@@ -44,6 +45,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.Callable;
+
 @SuppressWarnings({"java:S2153"})
 @Slf4j
 public class EnginePluginService implements IEnginePluginService {
@@ -89,7 +91,7 @@ public class EnginePluginService implements IEnginePluginService {
 
 
     protected void initializeEvents() {
-        if (!plugin.getConfig().getEnable()) {
+        if (!isEnabled()) {
             return;
         }
         for (EventConfig eventConfig : Optional.ofNullable(plugin.getEvents()).orElse(List.of())) {
@@ -113,6 +115,13 @@ public class EnginePluginService implements IEnginePluginService {
                                           .build());
             }
         }
+    }
+
+    protected boolean isEnabled() {
+        return Optional.ofNullable(plugin)
+                       .map(Plugin::getConfig)
+                       .map(PluginConfiguration::getEnable)
+                       .orElse(false);
     }
 
     // =================================================================================================================
@@ -146,10 +155,7 @@ public class EnginePluginService implements IEnginePluginService {
                                                         .toList();
 
         if (eventsToRun.isEmpty()) {
-            return EnginePluginResultDTO.builder()
-                                        .gav(plugin.getGav())
-                                        .status(Status.SUCCESS)
-                                        .build();
+            return EnginePluginResultDTO.builder().gav(plugin.getGav()).status(Status.SUCCESS).build();
         }
 
         final List<Callable<EnginePluginEventResultDTO>> tasks = new ArrayList<>();
@@ -169,10 +175,7 @@ public class EnginePluginService implements IEnginePluginService {
             log.error(e.getMessage(), e);
         }
 
-        return EnginePluginResultDTO.builder()
-                                    .gav(plugin.getGav())
-                                    .status(Status.SUCCESS)
-                                    .build();
+        return EnginePluginResultDTO.builder().gav(plugin.getGav()).status(Status.SUCCESS).build();
     }
 
 
@@ -245,13 +248,12 @@ public class EnginePluginService implements IEnginePluginService {
     // =================================================================================================================
     protected Optional<Provider> getProvider(final String providerName) {
         final var name = providerName == null ? EMPTY : providerName;
-        return providers.stream()
-                        .filter(provider -> name.equalsIgnoreCase(provider.getName()))
-                        .findFirst();
+        return providers.stream().filter(provider -> name.equalsIgnoreCase(provider.getName())).findFirst();
     }
 
     protected List<Processor> getProcessors(final List<ProcessorModel> processorNames) {
-        final List<String> names = Optional.ofNullable(processorNames).orElse(List.of())
+        final List<String> names = Optional.ofNullable(processorNames)
+                                           .orElse(List.of())
                                            .stream()
                                            .map(ProcessorModel::getName)
                                            .filter(Objects::nonNull)

@@ -121,6 +121,7 @@ public class MockGenerator {
         return runSafe(() -> JsonMarshaller.getInstance().getIndentedObjectMapper().readValue(file, MockContext.class));
     }
 
+    @SuppressWarnings({"java:S3824"})
     public static @NonNull Map<String, List<MockContext>> readMocks(@NonNull final Collection<File> files) {
         final Map<String, List<MockContext>> result = new LinkedHashMap<>();
 

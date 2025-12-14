@@ -1598,8 +1598,8 @@ public class Asserts {
                                               final ErrorCode errorCode,
                                               final ErrorCodeResolver resolver) {
         if (errorCode == null) {
-            if (exception instanceof ExceptionWithErrorCode) {
-                return ((ExceptionWithErrorCode) exception).getErrorCode();
+            if (exception instanceof ExceptionWithErrorCode exceptionWithErrorCode) {
+                return exceptionWithErrorCode.getErrorCode();
             } else if (resolver != null) {
                 final ErrorCode error = resolver.resolve(exception);
                 return error == null ? DefaultErrorCode.buildUndefineError() : error;

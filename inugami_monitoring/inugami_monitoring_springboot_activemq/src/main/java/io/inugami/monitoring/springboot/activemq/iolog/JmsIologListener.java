@@ -82,8 +82,8 @@ public class JmsIologListener extends DefaultMessageListenerContainer {
                                           .build();
 
         final var mdc = MdcService.getInstance()
-                                         .ioinfoIoLog(result)
-                                         .callType(JMS);
+                                  .ioinfoIoLog(result)
+                                  .callType(JMS);
 
         applyIfNotNull(extractProperty(APPLICATION, message), mdc::callFrom);
         applyIfNotNull(extractProperty(MDCKeys.messageId, message), mdc::messageId);
@@ -144,9 +144,9 @@ public class JmsIologListener extends DefaultMessageListenerContainer {
 
     private String readPayload(final Message message) {
         String result = null;
-        if (message instanceof TextMessage) {
+        if (message instanceof TextMessage textMessage) {
             try {
-                result = ((TextMessage) message).getText();
+                result = textMessage.getText();
             } catch (final JMSException e) {
                 return null;
             }
@@ -193,8 +193,8 @@ public class JmsIologListener extends DefaultMessageListenerContainer {
     private ErrorCode resolveErrorCode(final Throwable exception) {
         if (errorCodeResolvers == null) {
             return DefaultErrorCode.buildUndefineError();
-        } else if (exception instanceof ExceptionWithErrorCode) {
-            return ((ExceptionWithErrorCode) exception).getErrorCode();
+        } else if (exception instanceof ExceptionWithErrorCode exceptionWithErrorCode) {
+            return exceptionWithErrorCode.getErrorCode();
         } else {
             return DefaultErrorCode.buildUndefineError();
         }

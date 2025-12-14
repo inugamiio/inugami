@@ -29,6 +29,7 @@ import java.util.*;
 
 import static io.inugami.framework.api.marshalling.GenericEventSerializer.*;
 
+@SuppressWarnings({"java:S1130"})
 public class GenericEventDeserializer extends StdDeserializer<GenericEvent> {
 
     // =================================================================================================================

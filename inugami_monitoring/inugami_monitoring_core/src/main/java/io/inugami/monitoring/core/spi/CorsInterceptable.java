@@ -3,11 +3,11 @@ package io.inugami.monitoring.core.spi;
 import io.inugami.framework.api.configurtation.ConfigurationSpiFactory;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.monitoring.core.CorsHeadersSpi;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.framework.interfaces.spi.SpiLoader;
-import lombok.NoArgsConstructor;
-import io.inugami.framework.interfaces.monitoring.data.RequestData;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -20,8 +20,8 @@ public class CorsInterceptable implements MonitoringFilterInterceptor {
     // ATTRIBUTES
     // =========================================================================
     private              ConfigHandler<String, String> configuration;
-    private List<CorsHeadersSpi> corsHeaders;
-    private Boolean              enabled;
+    private              List<CorsHeadersSpi>          corsHeaders;
+    private              Boolean                       enabled;
 
     // =========================================================================
     // CONSTRUCTOR
@@ -30,10 +30,13 @@ public class CorsInterceptable implements MonitoringFilterInterceptor {
     public MonitoringFilterInterceptor buildInstance(final ConfigHandler<String, String> configuration) {
         return new CorsInterceptable(configuration);
     }
+
     public CorsInterceptable() {
-        enabled=true;
+        enabled = true;
     }
+
     public CorsInterceptable(final ConfigHandler<String, String> configuration) {
+        this.configuration = configuration;
     }
 
     // =========================================================================
@@ -42,11 +45,11 @@ public class CorsInterceptable implements MonitoringFilterInterceptor {
     @Override
     public List<GenericMonitoringModel> onBegin(final RequestData request) {
         if (enabled == null) {
-            corsHeaders = SpiLoader.getInstance().loadSpiServicesByPriority(CorsHeadersSpi.class);
+            initCorsHeaders();
             enabled = ConfigurationSpiFactory.INSTANCE.getBooleanProperty("inugami.monitoring.cors.enabled", true);
         }
 
-        if (enabled) {
+        if (enabled.booleanValue()) {
             final List<String> currentHeaders = resolveHeaders(request);
             final String       headerStr      = String.join(SEP, currentHeaders);
 
@@ -60,12 +63,18 @@ public class CorsInterceptable implements MonitoringFilterInterceptor {
         return null;
     }
 
+    private void initCorsHeaders() {
+        if (corsHeaders == null) {
+            corsHeaders = SpiLoader.getInstance().loadSpiServicesByPriority(CorsHeadersSpi.class);
+        }
+    }
+
     private List<String> resolveHeaders(final RequestData request) {
         final Set<String> result = new LinkedHashSet<>();
 
         if (corsHeaders != null && request.getHeaders() != null) {
             for (final CorsHeadersSpi resolver : corsHeaders) {
-                final List<String> resultSet = resolver.buildCorsHeaders(request,  configuration);
+                final List<String> resultSet = resolver.buildCorsHeaders(request, configuration);
                 if (resultSet != null) {
                     result.addAll(resultSet);
                 }

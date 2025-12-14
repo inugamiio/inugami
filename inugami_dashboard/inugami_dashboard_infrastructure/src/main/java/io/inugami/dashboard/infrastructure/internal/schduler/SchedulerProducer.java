@@ -46,7 +46,7 @@ public class SchedulerProducer implements ApplicationListener<ApplicationEvent> 
     @Override
     public void onApplicationEvent(final ApplicationEvent event) {
         if (event instanceof ApplicationStartedEvent) {
-            executor.scheduleAtFixedRate(() -> run(), computeDelay(), 1000, TimeUnit.MILLISECONDS);
+            executor.scheduleAtFixedRate(this::run, computeDelay(), 1000, TimeUnit.MILLISECONDS);
         }
     }
 

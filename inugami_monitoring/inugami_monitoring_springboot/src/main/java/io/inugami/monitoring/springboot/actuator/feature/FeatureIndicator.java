@@ -26,7 +26,6 @@ import org.springframework.boot.actuate.health.Status;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Builder
 @RequiredArgsConstructor
@@ -58,7 +57,7 @@ public class FeatureIndicator implements HealthIndicator {
                                                      .monitored(feature.isMonitored())
                                                      .enabledByDefault(feature.isEnabledByDefault())
                                                      .build())
-                       .collect(Collectors.toList());
+                       .toList();
     }
 
     private Status resolveStatus(final List<FeatureContext> features) {

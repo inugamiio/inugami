@@ -22,10 +22,11 @@ import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModelDTO;
 import io.inugami.framework.interfaces.tools.CalendarTools;
 import lombok.experimental.UtilityClass;
+import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
 /**
  * GenericMonitoringModelTools
@@ -36,13 +37,13 @@ import java.util.List;
 @UtilityClass
 public final class GenericMonitoringModelTools {
 
-    // =========================================================================
+    // =================================================================================================================
     // METHODS
-    // =========================================================================
+    // =================================================================================================================
     public static GenericMonitoringModelDTO initResultBuilder() {
         final RequestData infos = RequestContext.getInstance();
+        final var         data  = GenericMonitoringModelDTO.builder();
 
-        final var data = GenericMonitoringModelDTO.builder();
         data.environment(infos.getEnv());
         data.asset(infos.getAsset());
         data.instanceName(infos.getInstanceName());
@@ -54,37 +55,37 @@ public final class GenericMonitoringModelTools {
         return data.build();
     }
 
-    public static List<GenericMonitoringModelDTO> buildSingleResult(final GenericMonitoringModelDTO value) {
+    public static List<GenericMonitoringModelDTO> buildSingleResult(@Nullable final GenericMonitoringModelDTO value) {
         final List<GenericMonitoringModelDTO> result = new ArrayList<>();
-        if (value != null) {
-            result.add(value);
-        }
+        applyIfNotNull(value, result::add);
         return result;
     }
 
-    public static Long getPercentilValues(final List<Long> data, final double percentil) {
-        return getPercentilValues(data, percentil, null);
+    public static @Nullable Long getPercentilValues(final List<Long> data, final double percentil) {
+        final List<Long> values = new ArrayList<>(Optional.ofNullable(data).orElse(List.of()));
+        Collections.sort(values);
+        return getPercentilValues(values, percentil, null);
     }
 
-    public static <T> T getPercentilValues(final List<T> values, final double percentil,
-                                           final Comparator<T> comparator) {
-        T result = null;
-        if ((values != null) && !values.isEmpty() && (percentil >= 0) && (percentil <= 1)) {
-            final int size = values.size();
-            if (comparator != null) {
-                values.sort(comparator);
-            }
+    public static <T> @Nullable T getPercentilValues(final List<T> values, final double percentil,
+                                                     final Comparator<T> comparator) {
 
-            int index = (int) (values.size() * percentil);
-            if (index < 0) {
-                index = 0;
-            }
-            if (index >= size) {
-                index = size - 1;
-            }
-            result = values.get(index);
+        if (values == null || values.isEmpty() || percentil < 0 || percentil > 1) {
+            return null;
         }
-        return result;
+
+        T         result = null;
+        final int size   = values.size();
+        applyIfNotNull(comparator, c -> values.sort(c));
+
+        int index = (int) (values.size() * percentil);
+        if (index < 0) {
+            index = 0;
+        }
+        if (index >= size) {
+            index = size - 1;
+        }
+        return values.get(index);
     }
 
     public static String buildTimeUnit(final String timeUnit, final long interval) {

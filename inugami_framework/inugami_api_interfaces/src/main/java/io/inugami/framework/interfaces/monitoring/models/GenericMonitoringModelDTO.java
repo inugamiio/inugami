@@ -31,6 +31,7 @@ import java.util.List;
  * @author patrick_guillerm
  * @since 27 déc. 2018
  */
+@SuppressWarnings({"java:S1948"})
 @Slf4j
 @ToString(onlyExplicitlyIncluded = true)
 @Builder(toBuilder = true)

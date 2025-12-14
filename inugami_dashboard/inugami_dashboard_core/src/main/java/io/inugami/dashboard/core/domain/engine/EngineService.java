@@ -60,7 +60,7 @@ public class EngineService implements IEngineService, EngineListener {
     public static final String                            TIMEOUT              = "timeout";
     public static final int                               DEFAULT_TIMEOUT      = 60_000;
     public static final int                               MIN_TIMEOUT          = 1000;
-    private final       BlockingQueue<EventDoneDTO>       EVENTS_DONE          = new BlockingQueue<>();
+    private final       BlockingQueue<EventDoneDTO>       eventsDone           = new BlockingQueue<>();
     private final       Map<String, IEnginePluginService> enginePluginServices = new LinkedHashMap<>();
     private final       List<Provider>                    providers            = new ArrayList<>();
     private final       List<Processor>                   processors           = new ArrayList<>();
@@ -113,11 +113,11 @@ public class EngineService implements IEngineService, EngineListener {
     //==================================================================================================================
     @Override
     public void run() {
-        final List<EventDoneDTO> previousEventsDone = EVENTS_DONE.pollAll();
+        final List<EventDoneDTO> previousEventsDone = eventsDone.pollAll();
         if (!previousEventsDone.isEmpty()) {
             threadsExecutorInternal.submit(UUID.randomUUID().toString(), () -> sendEvents(previousEventsDone));
         }
-        threadsExecutorInternal.submit(UUID.randomUUID().toString(), () -> processRun());
+        threadsExecutorInternal.submit(UUID.randomUUID().toString(), this::processRun);
     }
 
 
@@ -232,13 +232,14 @@ public class EngineService implements IEngineService, EngineListener {
         listeners.forEach(listener -> listener.onDone(engineResult));
     }
 
+    @Override
     public void onEventDone(final Plugin plugin, final GenericEvent<?> event, final EnginePluginEventResultDTO data) {
-        EVENTS_DONE.add(EventDoneDTO.builder()
-                                    .plugin(plugin)
-                                    .event(event)
-                                    .data(data)
-                                    .date(LocalDateTime.now(clock))
-                                    .build());
+        eventsDone.add(EventDoneDTO.builder()
+                                   .plugin(plugin)
+                                   .event(event)
+                                   .data(data)
+                                   .date(LocalDateTime.now(clock))
+                                   .build());
     }
 
     protected Object sendEvents(final List<EventDoneDTO> previousEventsDone) {

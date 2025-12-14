@@ -69,7 +69,7 @@ public class SpiLoader {
     }
 
     @SuppressWarnings({"java:S2583"})
-    private synchronized static SpiLoader initSpiLoader() {
+    private static synchronized SpiLoader initSpiLoader() {
         if (INSTANCE == null) {
             return new SpiLoader();
         }
@@ -84,14 +84,14 @@ public class SpiLoader {
     // =========================================================================
     public synchronized <T> List<T> loadSpiService(final Class<?> type) {
         List<T> result = getLoaderService().loadServices(type);
-        if(result==null){
+        if (result == null) {
             return new ArrayList<>();
         }
-        try{
+        try {
             if (result.isEmpty() && log.isDebugEnabled()) {
                 log.warn("no SPI implementation of {} found! please check your dependencies!", type.getName());
             }
-        }catch (Throwable e){
+        } catch (Throwable e) {
             //noting to do
         }
 
@@ -164,7 +164,7 @@ public class SpiLoader {
 
             if (serviceClass.getName().equals(name)) {
                 result = service;
-            } else if ((service instanceof NamedSpi) && name.equals(((NamedSpi) service).getName())) {
+            } else if ((service instanceof NamedSpi namedSpi) && name.equals(namedSpi.getName())) {
                 result = service;
             } else if (classHasNamedAnnotation(serviceClass)) {
                 result = service;
@@ -221,6 +221,7 @@ public class SpiLoader {
         return result;
     }
 
+    @SuppressWarnings({"java:S3011"})
     public static <T> T invoke(final Method method, final Object object, final Object... params) {
         T result = null;
         if ((method != null) && (object != null)) {

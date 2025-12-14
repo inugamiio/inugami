@@ -3,3 +3,4 @@ io.inugami.framework.api.tools.FieldGetterSetterTest
 io.inugami.framework.api.tools.PathUtilsTest
 io.inugami.framework.api.tools.PortGeneratorTest
 io.inugami.framework.api.tools.ReflectionUtilsTest
+io.inugami.framework.api.tools.RunSafeUtilsTest

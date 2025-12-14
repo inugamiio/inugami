@@ -57,7 +57,7 @@ import java.util.function.Consumer;
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
 
-@SuppressWarnings({"java:S1450"})
+@SuppressWarnings({"java:S1450","java:S2209"})
 @Import({
         IoLogFilter.class,
         SpringRestMethodResolver.class,

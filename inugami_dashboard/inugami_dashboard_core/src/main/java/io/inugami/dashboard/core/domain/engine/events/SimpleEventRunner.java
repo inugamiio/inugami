@@ -41,7 +41,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import static io.inugami.dashboard.core.domain.engine.events.EventRunnerUtils.selectProcessor;
-
+@SuppressWarnings({"java:S112"})
 @Slf4j
 @Builder
 @RequiredArgsConstructor

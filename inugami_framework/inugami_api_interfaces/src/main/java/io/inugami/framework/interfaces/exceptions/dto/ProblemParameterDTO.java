@@ -18,7 +18,6 @@ package io.inugami.framework.interfaces.exceptions.dto;
 
 import lombok.*;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
 

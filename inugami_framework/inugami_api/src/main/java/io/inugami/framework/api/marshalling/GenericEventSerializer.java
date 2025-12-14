@@ -62,13 +62,12 @@ public class GenericEventSerializer extends StdSerializer<GenericEvent> {
         if (value == null) {
             json.writeNull();
         } else {
-            renderAsJson(value, json, provider);
+            renderAsJson(value, json);
         }
     }
 
     private void renderAsJson(final GenericEvent value,
-                              final JsonGenerator json,
-                              final SerializerProvider provider) throws IOException {
+                              final JsonGenerator json) throws IOException {
         if (value instanceof SimpleEvent simpleEvent) {
             writeSimpleEvent(simpleEvent, json);
         } else if (value instanceof TargetConfig targetConfig) {

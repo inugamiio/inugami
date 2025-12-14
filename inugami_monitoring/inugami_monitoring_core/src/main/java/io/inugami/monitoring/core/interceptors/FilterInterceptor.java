@@ -64,7 +64,7 @@ import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.apply
  * @author patrick_guillerm
  * @since 28 déc. 2018
  */
-@SuppressWarnings({"java:S112", "java:S1181", "java:S108"})
+@SuppressWarnings({"java:S112", "java:S1181", "java:S108", "java:S2589"})
 @Slf4j
 @RequiredArgsConstructor
 @WebFilter(urlPatterns = "*", asyncSupported = true)
@@ -107,7 +107,8 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     }
 
     public void initAttributes() {
-        final var spi = SpiLoader.getInstance();
+        //init SPI
+        SpiLoader.getInstance();
 
         resolveSpi(JavaRestMethodResolver.class, JAVA_REST_METHOD_RESOLVERS);
         resolveSpi(JavaRestMethodTracker.class, JAVA_REST_METHOD_TRACKERS);
@@ -326,8 +327,8 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         MdcService.getInstance().correlationId(requestInfo.getCorrelationId()).traceId(requestInfo.getTraceId());
 
         HttpServletRequest httpServletRequest = null;
-        if (request instanceof HttpServletRequest) {
-            httpServletRequest = (HttpServletRequest) request;
+        if (request instanceof HttpServletRequest httpRequest) {
+            httpServletRequest = httpRequest;
         }
 
         if (httpServletRequest != null) {
@@ -545,6 +546,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
                EXCEPTION_RESOLVER == null;
     }
 
+    @SuppressWarnings({"java:S3012"})
     private <U, T extends U> void resolveSpi(final Class<U> spiClass,
                                              final List<T> values,
                                              final T... defaultValues) {

@@ -1,10 +1,9 @@
 package io.inugami.framework.api.monitoring.cors;
 
+import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.monitoring.core.CorsHeadersSpi;
-
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.models.Headers;
-import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,7 @@ public class DefaultCorsHeadersSpi implements CorsHeadersSpi {
     @Override
     public List<String> buildCorsHeaders(final RequestData request,
                                          final ConfigHandler<String, String> configuration) {
-        final List<String> result = new ArrayList<>(List.of(
+        return new ArrayList<>(List.of(
                 Headers.X_DEVICE_IDENTIFIER,
                 Headers.X_CORRELATION_ID,
                 Headers.X_B_3_TRACEID,
@@ -91,7 +90,5 @@ public class DefaultCorsHeadersSpi implements CorsHeadersSpi {
                 "content-type",
                 "authorization"
         ));
-
-        return result;
     }
 }

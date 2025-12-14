@@ -18,24 +18,14 @@ public class SpringDefaultErrorCodeResolver implements ErrorCodeResolver {
     public static final  String               CONNECTION        = "connection";
     public static final  String               DATABASE          = "database";
     public static final  String               SECURITY          = "security";
-    private static final Map<Pattern, String> CATEGORY_MATCHERS = Map.ofEntries(
-            Map.entry(Pattern.compile(".*hibernate.*", Pattern.CASE_INSENSITIVE), DATABASE),
-            Map.entry(Pattern.compile(".*jpa.*", Pattern.CASE_INSENSITIVE), DATABASE),
-            Map.entry(Pattern.compile(".*feign.*", Pattern.CASE_INSENSITIVE), "webservice_rest"),
-            Map.entry(Pattern.compile(".*security.*", Pattern.CASE_INSENSITIVE), SECURITY),
-            Map.entry(Pattern.compile(".*cors.*", Pattern.CASE_INSENSITIVE), SECURITY),
-            Map.entry(Pattern.compile(".*certificate.*", Pattern.CASE_INSENSITIVE), "connection_security"),
-            Map.entry(Pattern.compile(".*socket.*", Pattern.CASE_INSENSITIVE), CONNECTION),
-            Map.entry(Pattern.compile(".*connect.*", Pattern.CASE_INSENSITIVE), CONNECTION),
-            Map.entry(Pattern.compile(".*timeout.*", Pattern.CASE_INSENSITIVE), CONNECTION)
-    );
+    private static final Map<Pattern, String> CATEGORY_MATCHERS = Map.ofEntries(Map.entry(Pattern.compile(".*hibernate.*", Pattern.CASE_INSENSITIVE), DATABASE), Map.entry(Pattern.compile(".*jpa.*", Pattern.CASE_INSENSITIVE), DATABASE), Map.entry(Pattern.compile(".*feign.*", Pattern.CASE_INSENSITIVE), "webservice_rest"), Map.entry(Pattern.compile(".*security.*", Pattern.CASE_INSENSITIVE), SECURITY), Map.entry(Pattern.compile(".*cors.*", Pattern.CASE_INSENSITIVE), SECURITY), Map.entry(Pattern.compile(".*certificate.*", Pattern.CASE_INSENSITIVE), "connection_security"), Map.entry(Pattern.compile(".*socket.*", Pattern.CASE_INSENSITIVE), CONNECTION), Map.entry(Pattern.compile(".*connect.*", Pattern.CASE_INSENSITIVE), CONNECTION), Map.entry(Pattern.compile(".*timeout.*", Pattern.CASE_INSENSITIVE), CONNECTION));
     public static final  String               UNDEFINED_ERROR   = "undefined error";
 
     @Override
     public ErrorCode resolve(final Throwable exception) {
         ErrorCode result = null;
-        if (exception instanceof ExceptionWithErrorCode) {
-            result = ((ExceptionWithErrorCode) exception).getErrorCode();
+        if (exception instanceof ExceptionWithErrorCode exceptionWithErrorCode) {
+            result = exceptionWithErrorCode.getErrorCode();
         } else {
             final String errorMessage = exception.getMessage() == null ? UNDEFINED_ERROR : exception.getMessage();
             result = DefaultErrorCode.builder()

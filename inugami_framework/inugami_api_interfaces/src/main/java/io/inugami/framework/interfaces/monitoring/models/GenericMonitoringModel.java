@@ -18,7 +18,6 @@ package io.inugami.framework.interfaces.monitoring.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public interface GenericMonitoringModel extends Serializable {
     String getUid();

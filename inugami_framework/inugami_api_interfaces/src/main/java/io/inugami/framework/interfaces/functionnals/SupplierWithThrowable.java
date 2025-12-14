@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.framework.interfaces.functionnals;
-
+@SuppressWarnings({"java:S112"})
 @FunctionalInterface
 public interface SupplierWithThrowable<T> {
     T get() throws Throwable;

@@ -69,6 +69,7 @@ public class MdcService implements MdcServiceSpi {
         initialize();
     }
 
+    @SuppressWarnings({"java:S1172"})
     public void onContextRefreshed(final Object event) {
         mdcMappers = SpiLoader.getInstance().loadSpiServicesByPriority(LoggerMdcMappingSPI.class);
     }
@@ -160,14 +161,14 @@ public class MdcService implements MdcServiceSpi {
             return this;
         }
 
-        if (value instanceof Date) {
-            MDC.put(key, new SimpleDateFormat(ISO_DATE).format((Date) value));
-        } else if (value instanceof Calendar) {
-            MDC.put(key, new SimpleDateFormat(ISO_DATE).format(((Calendar) value).getTime()));
-        } else if (value instanceof LocalDateTime) {
-            MDC.put(key, ((LocalDateTime) value).format(DateTimeFormatter.ISO_DATE_TIME));
-        } else if (value instanceof LocalDate) {
-            MDC.put(key, ((LocalDate) value).format(DateTimeFormatter.ISO_DATE));
+        if (value instanceof Date date) {
+            MDC.put(key, new SimpleDateFormat(ISO_DATE).format(date));
+        } else if (value instanceof Calendar calendar) {
+            MDC.put(key, new SimpleDateFormat(ISO_DATE).format(calendar.getTime()));
+        } else if (value instanceof LocalDateTime dateTime) {
+            MDC.put(key, dateTime.format(DateTimeFormatter.ISO_DATE_TIME));
+        } else if (value instanceof LocalDate date) {
+            MDC.put(key, date.format(DateTimeFormatter.ISO_DATE));
         } else {
             MDC.put(key, String.valueOf(value));
         }

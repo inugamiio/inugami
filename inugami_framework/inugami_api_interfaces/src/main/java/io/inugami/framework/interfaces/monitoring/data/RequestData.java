@@ -30,6 +30,7 @@ import java.util.Map;
  * @author patrick_guillerm
  * @since 28 déc. 2018
  */
+@SuppressWarnings({"java:S1948"})
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @ToString

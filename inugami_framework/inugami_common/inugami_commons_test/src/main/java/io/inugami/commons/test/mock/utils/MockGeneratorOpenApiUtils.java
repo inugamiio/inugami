@@ -37,6 +37,7 @@ import java.util.function.Function;
 import static io.inugami.commons.test.mock.utils.MockGeneratorUtils.resolvePackageName;
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
+@SuppressWarnings({"java:S1172", "java:S2386", "java:S2737"})
 @UtilityClass
 public class MockGeneratorOpenApiUtils {
 
@@ -563,13 +564,6 @@ public class MockGeneratorOpenApiUtils {
         writer.append("}");
     }
 
-    private static void openParam(final @NonNull Writer writer) throws IOException {
-        writer.append("(");
-    }
-
-    private static void closeParam(final @NonNull Writer writer) throws IOException {
-        writer.append(")");
-    }
 
     private static String indent(final String value, final int tabs) {
         final String[]    parts  = Optional.ofNullable(value).orElse(EMPTY).split(LINE);

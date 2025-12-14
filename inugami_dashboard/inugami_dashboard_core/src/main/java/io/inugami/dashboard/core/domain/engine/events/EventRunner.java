@@ -49,7 +49,7 @@ import java.util.concurrent.TimeUnit;
 import static io.inugami.dashboard.core.domain.engine.events.EventRunnerUtils.resolveErrorCode;
 import static io.inugami.dashboard.core.domain.engine.events.EventRunnerUtils.selectProcessor;
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
-
+@SuppressWarnings({"java:S1172"})
 @Slf4j
 @Builder
 @RequiredArgsConstructor

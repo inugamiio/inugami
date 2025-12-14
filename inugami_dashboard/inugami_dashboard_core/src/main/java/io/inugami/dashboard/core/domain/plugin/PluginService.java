@@ -206,24 +206,19 @@ public class PluginService implements IPluginService {
 
     protected Plugin createPlugin(final PluginConfiguration config,
                                   final Map<String, String> globalProperties) throws TechnicalException {
-        final Optional<List<EventConfig>> eventsOpt = configurationResolver.resolvePluginEventConfig(config);
-        final List<EventConfig>           events    = eventsOpt.isPresent() ? visiteEventFile(eventsOpt.get()) : List.of();
-        final ManifestInfo                manifest  = configurationResolver.resolvePluginManifest(config);
 
+        final Optional<List<EventConfig>>      eventsOpt   = configurationResolver.resolvePluginEventConfig(config);
+        final List<EventConfig>                events      = eventsOpt.isPresent() ? visiteEventFile(eventsOpt.get()) : List.of();
+        final ManifestInfo                     manifest    = configurationResolver.resolvePluginManifest(config);
+        final Map<String, Map<String, String>> properties  = new LinkedHashMap<>();
+        final var                              frontConfig = registerFrontProperties(config);
+        final List<AlertingProvider>           alertings   = pluginLoaderService.loadAlertings(config.getAlertings(), globalProperties, manifest);
+        final List<EngineListener>             listeners   = pluginLoaderService.loadListeners(config.getListeners(), globalProperties, manifest);
+        final List<Processor>                  processors  = pluginLoaderService.loadProcessors(config.getProcessors(), globalProperties, manifest);
+        final List<Provider>                   providers   = pluginLoaderService.loadProviders(config.getProviders(), globalProperties, manifest);
+        final List<Handler>                    handlers    = pluginLoaderService.loadHandlers(config.getHandlers(), globalProperties, manifest);
 
-        Map<String, Map<String, String>> properties  = new LinkedHashMap<>();
-        final var                        frontConfig = registerFrontProperties(config);
-        final List<AlertingProvider>     alertings   = pluginLoaderService.loadAlertings(config.getAlertings(), globalProperties, manifest);
-        final List<EngineListener>       listeners   = pluginLoaderService.loadListeners(config.getListeners(), globalProperties, manifest);
-        final List<Processor>            processors  = pluginLoaderService.loadProcessors(config.getProcessors(), globalProperties, manifest);
-        final List<Provider>             providers   = pluginLoaderService.loadProviders(config.getProviders(), globalProperties, manifest);
-        final List<Handler>              handlers    = pluginLoaderService.loadHandlers(config.getHandlers(), globalProperties, manifest);
-
-
-        if (properties != null) {
-            MessagesServices.register(properties);
-        }
-
+        MessagesServices.register(properties);
         return Plugin.builder()
                      .config(config)
                      .events(events)
@@ -251,7 +246,9 @@ public class PluginService implements IPluginService {
     }
 
     private List<EventConfig> visiteEventFile(final List<EventConfig> config) {
-        return config.stream().map(this::visiteEventFile).collect(Collectors.toList());
+        return config.stream()
+                     .map(this::visiteEventFile)
+                     .toList();
     }
 
     private EventConfig visiteEventFile(final EventConfig eventFileConfig) {

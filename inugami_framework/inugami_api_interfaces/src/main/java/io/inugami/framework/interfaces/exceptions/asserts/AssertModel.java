@@ -29,8 +29,8 @@ public final class AssertModel {
                     function.process();
                 } catch (final Exception e) {
 
-                    if (e instanceof ExceptionWithErrorCode) {
-                        result.add(((ExceptionWithErrorCode) e).getErrorCode());
+                    if (e instanceof ExceptionWithErrorCode exceptionWithErrorCode) {
+                        result.add(exceptionWithErrorCode.getErrorCode());
                     } else {
                         result.add(DefaultErrorCode.fromErrorCode(DefaultErrorCode.buildUndefineError())
                                                    .message(e.getMessage())

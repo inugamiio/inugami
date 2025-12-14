@@ -1,7 +1,6 @@
 package io.inugami.monitoring.springboot.exception;
 
 import feign.FeignException;
-
 import io.inugami.framework.interfaces.monitoring.spring.feign.FeignErrorCodeBuilderSpi;
 import io.inugami.framework.interfaces.spi.SpiPriority;
 
@@ -19,7 +18,7 @@ public class DefaultFeignErrorCodeBuilderSpi implements FeignErrorCodeBuilderSpi
 
     @Override
     public String buildErrorCode(final String partner, final Exception exception) {
-        return partner == null ? UNDEFINED : partner + SEPARATOR + getStatus((FeignException) exception);
+        return partner == null ? UNDEFINED : partner + SEPARATOR + getStatus(exception);
     }
 
     private static int getStatus(final Exception exception) {

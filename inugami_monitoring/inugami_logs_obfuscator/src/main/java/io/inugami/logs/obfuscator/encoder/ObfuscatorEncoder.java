@@ -30,12 +30,12 @@ import io.inugami.framework.api.listeners.DefaultApplicationLifecycleSPI;
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
 import io.inugami.framework.interfaces.models.JsonBuilder;
+import io.inugami.framework.interfaces.monitoring.logger.LogEventDto;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
+import io.inugami.framework.interfaces.monitoring.logger.ObfuscatorSpi;
 import io.inugami.framework.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI;
 import io.inugami.framework.interfaces.monitoring.logger.mapper.MdcDynamicFieldSPI;
 import io.inugami.framework.interfaces.spi.SpiLoader;
-import io.inugami.framework.interfaces.monitoring.logger.LogEventDto;
-import io.inugami.framework.interfaces.monitoring.logger.ObfuscatorSpi;
 import io.inugami.logs.obfuscator.appender.AppenderConfiguration;
 
 import java.io.Serializable;
@@ -51,7 +51,16 @@ import java.util.function.Function;
 
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
-@SuppressWarnings({"java:S1181", "java:S108", "java:S1185", "java:S1185", "java:S1874", "java:S1125"})
+@SuppressWarnings({
+        "java:S1181",
+        "java:S108",
+        "java:S1185",
+        "java:S1185",
+        "java:S1874",
+        "java:S1125",
+        "java:S2387",
+        "java:S1450"
+})
 public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> implements ContextAware, ApplicationLifecycleSPI {
 
     // =========================================================================
@@ -75,6 +84,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     private static final String                    TIMESTAMP      = "timestamp";
     private static final String                    DATE           = "date";
     private static final String                    STACKTRACE     = "stacktrace";
+    private              ObjectMapper              marshaller;
     private              AppenderConfiguration     configuration;
 
     private Function<ILoggingEvent, String> messageEncoder = null;
@@ -87,15 +97,17 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     public ObfuscatorEncoder() {
         onContextRefreshed(null);
         DefaultApplicationLifecycleSPI.register(this);
+        marshaller = JsonMarshaller.getInstance().getDefaultObjectMapper();
     }
 
 
     public ObfuscatorEncoder(final AppenderConfiguration configuration) {
         this.configuration = configuration;
+        marshaller = JsonMarshaller.getInstance().getDefaultObjectMapper();
         onContextRefreshed(null);
-        forceNewLine = this.configuration.getForceNewLine() == null
-                ? true
-                : Boolean.parseBoolean(this.configuration.getForceNewLine());
+        forceNewLine = this.configuration.getForceNewLine() ==
+                       null ? true : Boolean.parseBoolean(this.configuration.getForceNewLine());
+
 
     }
 
@@ -104,6 +116,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
         obfuscators = SpiLoader.getInstance().loadSpiServicesByPriority(ObfuscatorSpi.class);
         mdcMappers = SpiLoader.getInstance().loadSpiServicesByPriority(LoggerMdcMappingSPI.class);
         mdcDynamicFields = SpiLoader.getInstance().loadSpiServicesByPriority(MdcDynamicFieldSPI.class);
+        marshaller = JsonMarshaller.getInstance().getDefaultObjectMapper();
     }
 
     @Override
@@ -259,10 +272,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
 
     private Object convertToData(final String message) {
         try {
-            final Object result = JsonMarshaller.getInstance()
-                                                .getDefaultObjectMapper()
-                                                .readValue(message, Object.class);
-            return result;
+            return JsonMarshaller.getInstance().getDefaultObjectMapper().readValue(message, Object.class);
         } catch (JsonProcessingException e) {
             return null;
         }
@@ -359,7 +369,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     }
 
     private synchronized void initAdditonnalFieldDate() {
-        final ObjectMapper marshaller = JsonMarshaller.getInstance().getDefaultObjectMapper();
+
 
         Map<String, Serializable> result = null;
         try {
@@ -374,15 +384,15 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
 
     private void initMessageEncoder() {
         if (layout != null) {
-            messageEncoder = (event) -> getLayout().doLayout(event);
+            messageEncoder = event -> getLayout().doLayout(event);
         } else if (pattern != null && !(NO_FORMATTER.equals(pattern))) {
             patternLayout = new PatternLayout();
             patternLayout.setPattern(pattern);
             patternLayout.setContext(this.getContext());
             patternLayout.start();
-            messageEncoder = (event) -> patternLayout.doLayout(event);
+            messageEncoder = event -> patternLayout.doLayout(event);
         } else {
-            messageEncoder = (event) -> event.getFormattedMessage();
+            messageEncoder = ILoggingEvent::getFormattedMessage;
         }
     }
     // =========================================================================

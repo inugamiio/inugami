@@ -16,5 +16,5 @@
  */
 package io.inugami.framework.interfaces.connectors;
 
-public class CredentialsProvider {
+public interface CredentialsProvider {
 }

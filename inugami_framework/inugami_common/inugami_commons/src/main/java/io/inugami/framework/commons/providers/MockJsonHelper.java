@@ -189,10 +189,9 @@ public class MockJsonHelper {
     public String getDataRandom(final String name) {
         manageLatency();
         String result = "";
-        // @formatter:off
-        final List<String> values = keys.stream().filter(key -> matchNameWithIndex(name, key))
-                                        .collect(Collectors.toList());
-        // @formatter:on
+        final List<String> values = keys.stream()
+                                        .filter(key -> matchNameWithIndex(name, key))
+                                        .toList();
 
         if (!values.isEmpty()) {
             final int currentIndex = random ? grabRandomIndex(values.size()) : grabFileIndex(name, values.size());

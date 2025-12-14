@@ -17,11 +17,10 @@
 package io.inugami.monitoring.core.sensors;
 
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.models.Tuple;
+import io.inugami.framework.interfaces.monitoring.ServicesSensorAggregator;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModelDTO;
-import io.inugami.framework.interfaces.models.Tuple;
-import io.inugami.framework.interfaces.models.number.GraphiteNumber;
-import io.inugami.framework.interfaces.monitoring.ServicesSensorAggregator;
 import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.tools.BlockingQueue;
@@ -124,8 +123,8 @@ public class ServicesSensor implements MonitoringSensor {
     }
 
     protected List<GenericMonitoringModel> processAggregation(final ServicesSensorAggregator currentAggregator,
-                                                            final GenericMonitoringModel data,
-                                                            final List<Object> values) {
+                                                              final GenericMonitoringModel data,
+                                                              final List<Object> values) {
         List<GenericMonitoringModel> result = new ArrayList<>();
         if (currentAggregator != null) {
             final List<GenericMonitoringModel> aggregated = currentAggregator.compute(data, values, configuration);

@@ -8,8 +8,8 @@ import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.exceptions.ErrorCodeResolver;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
-import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.monitoring.spring.feign.FeignErrorCodeBuilderSpi;
+import io.inugami.framework.interfaces.spi.SpiLoader;
 
 import java.util.List;
 
@@ -35,8 +35,8 @@ public class FeignErrorCodeResolver implements ErrorCodeResolver, ApplicationLif
     @Override
     public ErrorCode resolve(final Throwable exception) {
         ErrorCode result = null;
-        if (exception instanceof FeignException) {
-            result = buildError((FeignException) exception);
+        if (exception instanceof FeignException feignException) {
+            result = buildError(feignException);
         }
         return result;
     }
