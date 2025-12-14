@@ -14,22 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.monitoring.core.interceptors;
+package io.inugami.monitoring.springboot.spring;
 
+import io.inugami.framework.api.tools.PortGenerator;
+import io.restassured.RestAssured;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 
-import io.inugami.framework.interfaces.monitoring.FilterInterceptorCachePurgeStrategy;
-import org.jspecify.annotations.Nullable;
-
-import java.util.Map;
-import java.util.Optional;
-
-public class DefaultFilterInterceptorCachePurgeStrategy implements FilterInterceptorCachePurgeStrategy {
-
-    public static final int MAX_ITEMS = 20000;
+@Slf4j
+public class InugamiInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+    public static final int SERVER_PORT = PortGenerator.generateFor("server.port");
 
     @Override
-    public boolean shouldPurge(@Nullable final Map<String, Boolean> values) {
-        final var size = Optional.ofNullable(values).map(Map::size).orElse(0);
-        return size >= MAX_ITEMS;
+    public void initialize(final ConfigurableApplicationContext applicationContext) {
+        System.setProperty("server.port", String.valueOf(SERVER_PORT));
+        RestAssured.baseURI = "http://localhost";
+        RestAssured.port    = SERVER_PORT;
     }
 }

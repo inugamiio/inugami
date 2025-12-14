@@ -14,22 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.monitoring.core.interceptors;
+package io.inugami.monitoring.springboot.spring;
 
+import io.inugami.framework.commons.spring.configuration.ConfigConfiguration;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
-import io.inugami.framework.interfaces.monitoring.FilterInterceptorCachePurgeStrategy;
-import org.jspecify.annotations.Nullable;
-
-import java.util.Map;
-import java.util.Optional;
-
-public class DefaultFilterInterceptorCachePurgeStrategy implements FilterInterceptorCachePurgeStrategy {
-
-    public static final int MAX_ITEMS = 20000;
-
-    @Override
-    public boolean shouldPurge(@Nullable final Map<String, Boolean> values) {
-        final var size = Optional.ofNullable(values).map(Map::size).orElse(0);
-        return size >= MAX_ITEMS;
+@ComponentScan(basePackages={
+        ConfigConfiguration.INUGAMI
+})
+@EnableAutoConfiguration
+@SpringBootApplication
+public class SpringbootApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(SpringbootApplication.class, args);
     }
 }

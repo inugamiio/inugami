@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.1</version>
+        <version>3.5.8</version>
         <relativePath/>
     </parent>
 
@@ -209,7 +209,7 @@
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: DEPENDENCIES VERSIONS
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-        <ch.qos.logback.version>1.4.14</ch.qos.logback.version>
+        <ch.qos.logback.version>1.5.12</ch.qos.logback.version>
         <com.hazelcast.version>5.6.0</com.hazelcast.version>
         <com.jackson.version>2.18.2</com.jackson.version>
         <io.dropwizard.metrics.version>4.0.5</io.dropwizard.metrics.version>
@@ -270,6 +270,7 @@
             **/generated-sources/**/*,
             **/generated-test-sources/**/*,
             **/FeatureInterceptor,
+            **/config/models/*.java,
             **/*Application.java
             ${custom.sonar.coverage.exclusions}
         </sonar.coverage.exclusions>
@@ -541,6 +542,11 @@
                 <groupId>cglib</groupId>
                 <artifactId>cglib</artifactId>
                 <version>3.3.0</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${ch.qos.logback.version}</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>

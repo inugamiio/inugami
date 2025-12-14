@@ -14,22 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.monitoring.core.interceptors;
+package io.inugami.monitoring.springboot.spring;
 
 
-import io.inugami.framework.interfaces.monitoring.FilterInterceptorCachePurgeStrategy;
-import org.jspecify.annotations.Nullable;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
-import java.util.Map;
-import java.util.Optional;
+@ActiveProfiles("test")
+@ContextConfiguration(
+        initializers = {
+                InugamiInitializer.class
+        })
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
+        classes = {
+                SpringbootApplication.class
+        })
+public abstract class SpringBootIntegrationTest {
 
-public class DefaultFilterInterceptorCachePurgeStrategy implements FilterInterceptorCachePurgeStrategy {
-
-    public static final int MAX_ITEMS = 20000;
-
-    @Override
-    public boolean shouldPurge(@Nullable final Map<String, Boolean> values) {
-        final var size = Optional.ofNullable(values).map(Map::size).orElse(0);
-        return size >= MAX_ITEMS;
-    }
 }

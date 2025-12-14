@@ -23,6 +23,7 @@ open module io.inugami.monitoring.core {
     requires lombok;
     requires org.slf4j;
     requires spring.webmvc;
+    requires org.jspecify;
 
     exports io.inugami.monitoring.core.context.sensors;
     exports io.inugami.monitoring.core.context;
@@ -50,12 +51,12 @@ open module io.inugami.monitoring.core {
 
     provides io.inugami.framework.interfaces.exceptions.ExceptionHandlerMapper with io.inugami.monitoring.core.interceptors.exceptions.DefaultExceptionMapper;
     provides io.inugami.framework.interfaces.exceptions.WarningTracker with io.inugami.monitoring.core.spi.DefaultWarningTracker;
-    provides io.inugami.framework.interfaces.monitoring.Interceptable with io.inugami.monitoring.core.spi.H2Interceptable,io.inugami.monitoring.core.interceptable.DefaultInterceptableIdentifier;
+    provides io.inugami.framework.interfaces.monitoring.Interceptable with io.inugami.monitoring.core.spi.H2Interceptable, io.inugami.monitoring.core.interceptable.DefaultInterceptableIdentifier;
     provides io.inugami.framework.interfaces.monitoring.IoLogContentDisplayResolverSPI with io.inugami.monitoring.core.spi.DefaultIoLogContentDisplayResolverSPI;
     provides io.inugami.framework.interfaces.monitoring.JavaRestMethodTracker with io.inugami.monitoring.core.spi.DefaultJavaRestMethodTracker;
     provides io.inugami.framework.interfaces.monitoring.MdcCleanerSPI with io.inugami.monitoring.core.interceptors.mdc.DefaultMdcCleaner;
     provides io.inugami.framework.interfaces.monitoring.Obfuscator with io.inugami.monitoring.core.obfuscators.AuthorizationObfuscator, io.inugami.monitoring.core.obfuscators.TokenObfuscator, io.inugami.monitoring.core.obfuscators.PasswordObfuscator;
     provides io.inugami.framework.interfaces.monitoring.ResponseListener with io.inugami.monitoring.core.interceptors.WarningResponseListener;
     provides io.inugami.framework.interfaces.monitoring.TrackingInformationSPI with io.inugami.monitoring.core.context.DefaultTrackingInformationSPI;
-    provides io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor with io.inugami.monitoring.core.spi.IoLogInterceptor,io.inugami.monitoring.core.spi.ServiceCounterInterceptor,io.inugami.monitoring.core.spi.MdcInterceptor,io.inugami.monitoring.core.spi.CorsInterceptable;
+    provides io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor with io.inugami.monitoring.core.spi.IoLogInterceptor, io.inugami.monitoring.core.spi.ServiceCounterInterceptor, io.inugami.monitoring.core.spi.MdcInterceptor, io.inugami.monitoring.core.spi.CorsInterceptable;
 }
