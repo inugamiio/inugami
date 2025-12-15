@@ -34,6 +34,10 @@ public final class DefaultErrorCode implements Serializable, ErrorCode {
     // ATTRIBUTES
     // =========================================================================
     private static final long serialVersionUID = -3438361352478852714L;
+    public static final String TECHNICAL = "technical";
+    public static final String FUNCTIONAL = "functional";
+    public static final String CONFIGURATION = "configuration";
+    public static final String SECURITY = "security";
 
     private final int    statusCode;
     @EqualsAndHashCode.Include
@@ -95,22 +99,22 @@ public final class DefaultErrorCode implements Serializable, ErrorCode {
     public static class DefaultErrorCodeBuilder {
 
         public DefaultErrorCodeBuilder errorTypeTechnical() {
-            this.errorType = "technical";
+            this.errorType = TECHNICAL;
             return this;
         }
 
         public DefaultErrorCodeBuilder errorTypeFunctional() {
-            this.errorType = "functional";
+            this.errorType = FUNCTIONAL;
             return this;
         }
 
         public DefaultErrorCodeBuilder errorTypeConfiguration() {
-            this.errorType = "configuration";
+            this.errorType = CONFIGURATION;
             return this;
         }
 
         public DefaultErrorCodeBuilder errorTypeSecurity() {
-            this.errorType = "security";
+            this.errorType = SECURITY;
             return this;
         }
 

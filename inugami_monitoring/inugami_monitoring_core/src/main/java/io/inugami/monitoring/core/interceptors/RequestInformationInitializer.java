@@ -21,11 +21,13 @@ import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.logger.MDCKeys;
 import io.inugami.framework.interfaces.monitoring.models.Headers;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.experimental.UtilityClass;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static io.inugami.framework.api.loggers.mdc.mapper.MdcMapperUtils.convertToDouble;
 
@@ -86,7 +88,7 @@ public class RequestInformationInitializer {
         mdc.conversationId(httpRequest.getHeader(Headers.X_CONVERSATION_ID));
         builder.traceId(mdc.conversationId());
 
-        mdc.sessionId(httpRequest.getSession() == null ? null : httpRequest.getSession().getId());
+        mdc.sessionId(Optional.ofNullable(httpRequest.getSession()).map(HttpSession::getId).orElse(null));
         builder.sessionId(mdc.sessionId());
 
         builder.token(httpRequest.getHeader(Headers.X_AUTHORIZATION_TOKEN));

@@ -27,6 +27,12 @@
     <name>${project.groupId}:${project.artifactId}</name>
     <url>http://inugami.io/inugami/inugami_logs_obfuscator</url>
 
+    <properties>
+        <custom.sonar.coverage.exclusions>
+            ,**/ResponseWrapper.java
+            ,**/OutputWriterWrapper.java
+        </custom.sonar.coverage.exclusions>
+    </properties>
     <!-- ======================================================================= 
     = DEPENDENCIES
     ======================================================================== -->

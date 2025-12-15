@@ -19,27 +19,21 @@ package io.inugami.monitoring.core.interceptors;
 import io.inugami.framework.api.monitoring.MdcService;
 import io.inugami.framework.api.monitoring.RequestContext;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
-import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
-import io.inugami.framework.interfaces.exceptions.ErrorCode;
-import io.inugami.framework.interfaces.exceptions.ExceptionResolver;
-import io.inugami.framework.interfaces.exceptions.UncheckedException;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
 import io.inugami.framework.interfaces.models.tools.Chrono;
-import io.inugami.framework.interfaces.monitoring.*;
+import io.inugami.framework.interfaces.monitoring.ErrorResult;
+import io.inugami.framework.interfaces.monitoring.FilterInterceptorCachePurgeStrategy;
+import io.inugami.framework.interfaces.monitoring.Interceptable;
+import io.inugami.framework.interfaces.monitoring.JavaRestMethodDTO;
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.data.ResponseData;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
-import io.inugami.framework.interfaces.monitoring.logger.MDCKeys;
-import io.inugami.framework.interfaces.monitoring.models.Headers;
-import io.inugami.framework.interfaces.rest.RestService;
-import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
-import io.inugami.framework.interfaces.tools.CalendarTools;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
-import io.inugami.monitoring.core.context.MonitoringBootstrapService;
-import io.inugami.monitoring.core.interceptors.mdc.DefaultMdcCleaner;
-import io.inugami.monitoring.core.interceptors.mdc.MdcCleaner;
+import io.inugami.monitoring.core.interceptors.internal.FilterInterceptorContext;
+import io.inugami.monitoring.core.interceptors.internal.FilterInterceptorErrorsUtils;
+import io.inugami.monitoring.core.interceptors.internal.FilterInterceptorIOUtils;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,15 +41,18 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Proxy;
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
+import static io.inugami.monitoring.core.interceptors.internal.FilterInterceptorErrorsUtils.defineStatusAndDuration;
+import static io.inugami.monitoring.core.interceptors.internal.FilterInterceptorErrorsUtils.resolveError;
+import static io.inugami.monitoring.core.interceptors.internal.FilterInterceptorIOUtils.convertToResponseData;
+import static io.inugami.monitoring.core.interceptors.internal.FilterInterceptorTrackingMdcUtils.*;
 
 
 /**
@@ -71,29 +68,19 @@ import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.apply
 public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    public static final  String                            DEFAULT_ERROR_CODE             = "ERR-0000";
-    private static final AtomicBoolean                     INITIALIZED                    = new AtomicBoolean();
-    private static final List<JavaRestMethodResolver>      JAVA_REST_METHOD_RESOLVERS     = new ArrayList<>();
-    private static final List<JavaRestMethodTracker>       JAVA_REST_METHOD_TRACKERS      = new ArrayList<>();
-    private static final List<Interceptable>               INTERCEPTABLE_RESOLVER         = new ArrayList<>();
-    private static final List<ExceptionResolver>           EXCEPTION_RESOLVER             = new ArrayList<>();
-    private static final List<ResponseListener>            RESPONSE_LISTENERS             = new ArrayList<>();
-    private static final List<MonitoringFilterInterceptor> MONITORING_FILTER_INTERCEPTORS = new ArrayList<>();
+    // =================================================================================================================
+    public static final String DEFAULT_ERROR_CODE = FilterInterceptorErrorsUtils.DEFAULT_ERROR_CODE;
 
+    protected static final AtomicReference<FilterInterceptorContext> FILTER_INTERCEPTOR_CONTEXT =
+            new AtomicReference<>();
+    public static final    String                                    EMPTY                      = "";
 
-    private static final AtomicReference<FilterInterceptorCachePurgeStrategy> PURGECACHE_STRATEGY        =
-            new AtomicReference<>();
-    private static final AtomicReference<MdcCleaner>                          MDC_CLEANER                =
-            new AtomicReference<>();
-    public static final  String                                               SERVICE_SEPARATOR          = "_";
-    private final        SpiLoaderServiceSPI                                  spiLoaderServiceSPI;
-    private              ConfigHandler<String, String>                        configuration;
-    private static final Map<String, Boolean>                                 INTERCEPTABLE_URI_RESOLVED =
-            new ConcurrentHashMap<>();
-    private static final int                                                  KILO                       = 1024;
+    private final        SpiLoaderServiceSPI           spiLoaderServiceSPI;
+    private              ConfigHandler<String, String> configuration;
+    private static final Map<String, Boolean>          INTERCEPTABLE_URI_RESOLVED = new ConcurrentHashMap<>();
+
 
     // =================================================================================================================
     // LIFECYCLE
@@ -111,52 +98,14 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     }
 
     public void initAttributes() {
-        //init SPI
-        SpiLoader.getInstance();
-
-        resolveSpi(JavaRestMethodResolver.class, JAVA_REST_METHOD_RESOLVERS);
-        resolveSpi(JavaRestMethodTracker.class, JAVA_REST_METHOD_TRACKERS);
-        resolveSpi(Interceptable.class, INTERCEPTABLE_RESOLVER);
-        resolveSpi(ResponseListener.class, RESPONSE_LISTENERS);
-        resolveSpi(ExceptionResolver.class, EXCEPTION_RESOLVER, new FilterInterceptorErrorResolver());
-        List<FilterInterceptorCachePurgeStrategy> cachePurgeStrategies = new ArrayList<>();
-        resolveSpi(FilterInterceptorCachePurgeStrategy.class, cachePurgeStrategies, new DefaultFilterInterceptorCachePurgeStrategy());
-
-        PURGECACHE_STRATEGY.set(cachePurgeStrategies.stream().findFirst().orElse(values -> false));
-
-        MDC_CLEANER.set(new MdcCleaner(SpiLoader.getInstance()
-                                                .loadSpiServicesWithDefault(MdcCleanerSPI.class, new DefaultMdcCleaner())));
-
-        final List<MonitoringFilterInterceptor> monitoringFilterInterceptorsBuffer = new ArrayList<>();
-        for (final MonitoringFilterInterceptor interceptor : MonitoringBootstrapService.getContext()
-                                                                                       .getInterceptors()) {
-            MONITORING_FILTER_INTERCEPTORS.add(interceptor);
+        if (FILTER_INTERCEPTOR_CONTEXT.get() == null) {
+            FILTER_INTERCEPTOR_CONTEXT.set(FilterInterceptorContext.builder()
+                                                                   .spiLoaderServiceSPI(spiLoaderServiceSPI)
+                                                                   .initSpi()
+                                                                   .build());
         }
-
-        final List<MonitoringFilterInterceptor> monitoringFilterInterceptorsSpi = SpiLoader.getInstance()
-                                                                                           .loadSpiServicesByPriority(MonitoringFilterInterceptor.class);
-        for (final MonitoringFilterInterceptor interceptor : monitoringFilterInterceptorsSpi) {
-            if (isNotContains(interceptor, MonitoringBootstrapService.getContext().getInterceptors())) {
-                MONITORING_FILTER_INTERCEPTORS.add(interceptor);
-            }
-        }
-        MONITORING_FILTER_INTERCEPTORS.addAll(monitoringFilterInterceptorsBuffer);
     }
 
-
-    private boolean isNotContains(final MonitoringFilterInterceptor interceptor,
-                                  final List<MonitoringFilterInterceptor> monitoringFilterInterceptors) {
-        final boolean result = true;
-        if (monitoringFilterInterceptors == null) {
-            return result;
-        }
-        for (final MonitoringFilterInterceptor monitoringInterceptor : monitoringFilterInterceptors) {
-            if (interceptor.getClass() == monitoringInterceptor.getClass()) {
-                return false;
-            }
-        }
-        return result;
-    }
 
     // =================================================================================================================
     // DO FILTER
@@ -167,7 +116,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
                          final FilterChain chain) throws IOException, ServletException {
         MdcService.getInstance().clear();
 
-        if (isAttributesNotInitialized()) {
+        if (FILTER_INTERCEPTOR_CONTEXT.get() == null) {
             initAttributes();
         }
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
@@ -200,10 +149,11 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
                                        final FilterChain chain,
                                        final HttpServletRequest httpRequest,
                                        final RequestData requestData) throws Exception {
-        byte[] data    = null;
-        String content = null;
+        final var ctx     = FILTER_INTERCEPTOR_CONTEXT.get();
+        byte[]    data    = null;
+        String    content = null;
         try {
-            data    = readInput(httpRequest.getInputStream());
+            data    = FilterInterceptorIOUtils.readInput(httpRequest.getInputStream());
             content = data == null ? null : ObfuscatorTools.applyObfuscators(new String(data));
         } catch (final IOException e) {
             Loggers.DEBUG.error(e.getMessage(), e);
@@ -211,15 +161,14 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         }
         requestData.setContent(content);
 
-
         initCorrelationIdAndTraceId(requestData, request);
-        final JavaRestMethodDTO javaRestMethod = resolveJavaRestMethod(request);
-        addTrackingInformation(response, javaRestMethod);
+        final JavaRestMethodDTO javaRestMethod = resolveJavaRestMethod(request, ctx.getJavaRestMethodResolvers());
+        addTrackingInformation(response, javaRestMethod, ctx.getJavaRestMethodTrackers());
 
-        Exception error = null;
-        final ResponseWrapper responseWrapper =
-                new ResponseWrapper(response, extractHeaders(httpRequest), RESPONSE_LISTENERS);
-        final HttpServletRequest currentRequest = buildRequestProxy((HttpServletRequest) request, data);
+        Exception                error           = null;
+        final var                headers         = extractHeaders(httpRequest);
+        final ResponseWrapper    responseWrapper = new ResponseWrapper(response, headers, ctx.getResponseListeners());
+        final HttpServletRequest currentRequest  = buildRequestProxy((HttpServletRequest) request, data);
         requestData.setRequest(currentRequest);
         requestData.setResponse(responseWrapper);
         requestData.setService(resolveServiceName(javaRestMethod));
@@ -234,45 +183,22 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             throw e;
         } finally {
             chrono.stop();
-            final ErrorResult errorResult = resolveError(error, responseWrapper);
+            final ErrorResult errorResult = resolveError(error, responseWrapper, ctx.getExceptionResolvers());
             onEnd(currentRequest, responseWrapper, errorResult, chrono.getDuration(), requestData);
         }
     }
 
-    protected String resolveServiceName(final JavaRestMethodDTO javaRestMethod) {
-        if (javaRestMethod == null) {
-            return null;
-        }
 
-        final List<String> values = new ArrayList<>();
-
-        if (javaRestMethod.getRestMethod() != null) {
-            final var annotation = javaRestMethod.getRestClass().getAnnotation(RestService.class);
-            String className = annotation == null
-                               ? javaRestMethod.getRestClass().getSimpleName()
-                               : annotation.value();
-            applyIfNotNull(className, values::add);
-        }
-        if (javaRestMethod.getRestMethod() != null) {
-            final var annotation = javaRestMethod.getRestMethod().getAnnotation(RestService.class);
-            String methodName = annotation == null
-                                ? javaRestMethod.getRestMethod().getName()
-                                : annotation.value();
-            applyIfNotNull(methodName, values::add);
-        }
-
-        return String.join(SERVICE_SEPARATOR, values);
-    }
-
-    // =========================================================================
+    // =================================================================================================================
     // LIFECYCLE
-    // =========================================================================
+    // =================================================================================================================
     protected void onBegin(final HttpServletRequest httpRequest,
                            final RequestData requestData) {
 
         onBeginInitMdcFields(requestData, httpRequest);
 
-        for (final MonitoringFilterInterceptor interceptor : MONITORING_FILTER_INTERCEPTORS) {
+        for (final MonitoringFilterInterceptor interceptor : FILTER_INTERCEPTOR_CONTEXT.get()
+                                                                                       .getMonitoringFilterInterceptors()) {
             try {
                 interceptor.onBegin(requestData);
             } catch (final Throwable e) {
@@ -289,17 +215,11 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
                          final RequestData requestData) {
         RequestContext.getInstance();
         onEndInitMdcFields(error, duration, httpResponse);
-        MdcService.getInstance().duration(duration).status(httpResponse.getStatus());
-
-        if (httpResponse.getStatus() >= 400) {
-            MdcService.getInstance().globalStatusError();
-        } else {
-            MdcService.getInstance().globalStatusSuccess();
-        }
-
+        defineStatusAndDuration(httpResponse, duration);
         final ResponseData responseData = convertToResponseData(httpRequest, httpResponse, duration);
 
-        for (final MonitoringFilterInterceptor interceptor : MONITORING_FILTER_INTERCEPTORS) {
+        for (final MonitoringFilterInterceptor interceptor : FILTER_INTERCEPTOR_CONTEXT.get()
+                                                                                       .getMonitoringFilterInterceptors()) {
             try {
                 interceptor.onDone(requestData, responseData, error);
             } catch (final Throwable e) {
@@ -310,65 +230,6 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         }
     }
 
-    protected Map<String, List<String>> extractHeaders(final HttpServletRequest httpRequest) {
-        Map<String, List<String>> result = new LinkedHashMap<>();
-        if (httpRequest == null) {
-            return result;
-        }
-        final Iterator<String> names = httpRequest.getHeaderNames().asIterator();
-        while (names.hasNext()) {
-            final var name = names.next();
-            result.put(name, List.of(httpRequest.getHeader(name)));
-        }
-        return result;
-    }
-
-    protected void initCorrelationIdAndTraceId(final RequestData requestInfo, final ServletRequest request) {
-        MdcService.getInstance().correlationId(requestInfo.getCorrelationId()).traceId(requestInfo.getTraceId());
-
-        HttpServletRequest httpServletRequest = null;
-        if (request instanceof HttpServletRequest httpRequest) {
-            httpServletRequest = httpRequest;
-        }
-
-        if (httpServletRequest != null) {
-            try {
-                MdcService.getInstance().verb(httpServletRequest.getMethod()).url(httpServletRequest.getRequestURI());
-            } catch (final Throwable e) {
-            }
-        }
-    }
-
-    protected JavaRestMethodDTO resolveJavaRestMethod(final ServletRequest request) {
-        JavaRestMethodDTO        result      = null;
-        final HttpServletRequest httpRequest = (HttpServletRequest) request;
-        for (final JavaRestMethodResolver resolver : JAVA_REST_METHOD_RESOLVERS) {
-            try {
-                result = resolver.resolve(httpRequest);
-                if (result != null) {
-                    break;
-                }
-            } catch (final Throwable e) {
-                log.error(e.getMessage(), e);
-            }
-        }
-        return result;
-    }
-
-
-    protected void addTrackingInformation(final HttpServletResponse response,
-                                          final JavaRestMethodDTO javaRestMethod) {
-        if (javaRestMethod != null) {
-            for (final JavaRestMethodTracker tracker : JAVA_REST_METHOD_TRACKERS) {
-                if (tracker.accept(javaRestMethod)) {
-                    tracker.track(javaRestMethod);
-                }
-            }
-        }
-        final var mdc = MdcService.getInstance();
-        response.setHeader(Headers.X_CORRELATION_ID, mdc.correlationId());
-        response.setHeader(Headers.X_B_3_TRACEID, mdc.traceId());
-    }
 
     protected HttpServletRequest buildRequestProxy(final HttpServletRequest request, final byte[] content) {
         final Class<?>[] types = {ServletRequest.class, HttpServletRequest.class};
@@ -378,9 +239,9 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
 
     protected boolean mustIntercept(final RequestData requestData) {
-        Boolean result = INTERCEPTABLE_URI_RESOLVED.get(requestData.getUri());
+        Boolean result = INTERCEPTABLE_URI_RESOLVED.get(Optional.ofNullable(requestData).map(RequestData::getUri).orElse(EMPTY));
         if (result == null) {
-            for (final Interceptable resolver : INTERCEPTABLE_RESOLVER) {
+            for (final Interceptable resolver : FILTER_INTERCEPTOR_CONTEXT.get().getInterceptableResolvers()) {
                 result = resolver.isInterceptable(requestData);
                 if (!result) {
                     break;
@@ -394,171 +255,17 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     }
 
 
+    // =================================================================================================================
+    // PURGE CACHE
+    // =================================================================================================================
     protected void purgeCacheIfRequired() {
-        if (PURGECACHE_STRATEGY.get().shouldPurge(INTERCEPTABLE_URI_RESOLVED)) {
-            INTERCEPTABLE_URI_RESOLVED.clear();
-        }
-    }
-
-
-    // =========================================================================
-    // MDC
-    // =========================================================================
-    protected void onBeginInitMdcFields(final RequestData requestData, final HttpServletRequest httpRequest) {
-        final MdcService mdc = MdcService.getInstance();
-        try {
-            mdc.setMdc(MDCKeys.callType, MdcService.CALL_TYPE_REST);
-            mdc.setMdc(MDCKeys.uri, requestData.getUri());
-            mdc.setMdc(MDCKeys.verb, httpRequest.getMethod());
-            mdc.setMdc(MDCKeys.authProtocol, httpRequest.getAuthType());
-
-            if (httpRequest.getUserPrincipal() != null) {
-                mdc.setMdc(MDCKeys.principal, httpRequest.getUserPrincipal().getName());
-            }
-            mdc.setMdc(MDCKeys.url, httpRequest.getRequestURL().toString());
-        } catch (final Throwable e) {
-        }
-
-    }
-
-    protected void onEndInitMdcFields(final ErrorResult error,
-                                      final long duration,
-                                      final ResponseWrapper httpResponse) {
-        final MdcService mdc = MdcService.getInstance();
-        try {
-            mdc.duration(duration);
-            mdc.setMdc(MDCKeys.httpStatus, httpResponse.getStatus());
-
-            if (error != null && error.getCurrentErrorCode() != null) {
-                mdc.errorCode(error.getCurrentErrorCode());
-            }
-        } catch (final Throwable e) {
-        }
-    }
-
-
-    // =========================================================================
-    // CONVERTERS
-    // =========================================================================
-    protected byte[] readInput(final ServletInputStream inputStream) {
-        final ByteArrayOutputStream out = new ByteArrayOutputStream(64 * KILO);
-
-        final int    bufferSize = 16 * KILO;
-        final byte[] buffer     = new byte[bufferSize];
-
-        int bytesLeft;
-        try {
-            while (-1 != (bytesLeft = inputStream.read(buffer))) {
-                out.write(buffer, 0, bytesLeft);
-            }
-        } catch (final IOException e) {
-            Loggers.DEBUG.error(e.getMessage(), e);
-        }
-
-        return out.toByteArray();
-    }
-
-    protected ResponseData convertToResponseData(final HttpServletRequest httpRequest,
-                                                 final ResponseWrapper httpResponse,
-                                                 final long duration) {
-        final String content = ObfuscatorTools.applyObfuscators(httpResponse.getData());
-
-        final Map<String, String> hearders = new LinkedHashMap<>();
-
-        final Collection<String> headerNames = httpResponse.getHeaderNames();
-        for (final String key : headerNames) {
-            hearders.put(key, httpResponse.getHeader(key));
-        }
-        return ResponseData.builder()
-                           .httpRequest(httpRequest)
-                           .httpResponse(httpResponse)
-                           .code(httpResponse.getStatus())
-                           .content(content)
-                           .contentType(httpResponse.getContentType())
-                           .duration(duration)
-                           .datetime(CalendarTools.buildCalendar().getTimeInMillis())
-                           .hearder(hearders)
-                           .build();
-    }
-
-    // =========================================================================
-    // ERROR RESOLVER
-    // =========================================================================
-    protected ErrorResult resolveError(final Exception currentError, final ResponseWrapper responseWrapper) {
-        Exception error            = currentError;
-        ErrorCode currentErrorCode = MdcService.getInstance().errorCode();
-
-        if (error == null && currentErrorCode != null) {
-            error = new UncheckedException(buildDefaultErrorCode(responseWrapper));
-        } else if (error == null) {
-            return null;
-        }
-
-        ErrorResult.ErrorResultBuilder result = null;
-
-        ErrorResult resolvedError = null;
-        for (final ExceptionResolver resolver : EXCEPTION_RESOLVER) {
-            try {
-                resolvedError = resolver.resolve(error);
-                if (resolvedError != null) {
-                    break;
-                }
-            } catch (final Throwable e) {
-                log.error(e.getMessage(), e);
+        for (FilterInterceptorCachePurgeStrategy cachePurgeStrategy : FILTER_INTERCEPTOR_CONTEXT.get()
+                                                                                                .getCachePurgeStrategies()) {
+            if (cachePurgeStrategy.shouldPurge(INTERCEPTABLE_URI_RESOLVED)) {
+                INTERCEPTABLE_URI_RESOLVED.clear();
+                break;
             }
         }
-
-        if (resolvedError != null) {
-            result = resolvedError.toBuilder();
-        }
-
-
-        if (currentErrorCode != null) {
-            result = ErrorResult.builder()
-                                .httpCode(currentErrorCode.getStatusCode())
-                                .errorCode(currentErrorCode.getErrorCode())
-                                .errorType(currentErrorCode.getErrorType())
-                                .message(currentErrorCode.getMessage())
-                                .exploitationError(currentErrorCode.isExploitationError())
-                                .currentErrorCode(currentErrorCode);
-        }
-
-        if (result == null) {
-            result = ErrorResult.builder().currentErrorCode(buildDefaultErrorCode(responseWrapper));
-        }
-
-        return result.exception(error).build();
     }
 
-    protected static DefaultErrorCode buildDefaultErrorCode(final ResponseWrapper responseWrapper) {
-        return DefaultErrorCode.buildUndefineErrorCode()
-                               .errorCode(DEFAULT_ERROR_CODE)
-                               .statusCode(responseWrapper == null ? 500 : responseWrapper.getStatus())
-                               .errorTypeTechnical()
-                               .build();
-    }
-
-    // =================================================================================================================
-    // TOOLS
-    // =================================================================================================================
-    protected boolean isAttributesNotInitialized() {
-        return JAVA_REST_METHOD_RESOLVERS == null || JAVA_REST_METHOD_TRACKERS == null ||
-               INTERCEPTABLE_RESOLVER == null ||
-               EXCEPTION_RESOLVER == null;
-    }
-
-    @SuppressWarnings({"java:S3012"})
-    private <U, T extends U> void resolveSpi(final Class<U> spiClass,
-                                             final List<T> values,
-                                             final T... defaultValues) {
-
-
-        List<U> instances = spiLoaderServiceSPI.loadSpiServicesByPriority(spiClass);
-        for (U instance : Optional.ofNullable(instances).orElse(List.of())) {
-            values.add((T) instance);
-        }
-        for (T instance : defaultValues) {
-            values.add(instance);
-        }
-    }
 }

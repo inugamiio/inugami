@@ -67,6 +67,7 @@ public final class GenericMonitoringModelTools {
         return getPercentilValues(values, percentil, null);
     }
 
+    @SuppressWarnings({"java:S1612"})
     public static <T> @Nullable T getPercentilValues(final List<T> values, final double percentil,
                                                      final Comparator<T> comparator) {
 
@@ -74,8 +75,7 @@ public final class GenericMonitoringModelTools {
             return null;
         }
 
-        T         result = null;
-        final int size   = values.size();
+        final int size = values.size();
         applyIfNotNull(comparator, c -> values.sort(c));
 
         int index = (int) (values.size() * percentil);
