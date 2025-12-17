@@ -14,23 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.monitoring.springboot.spring;
+package io.inugami.logs.obfuscator.encoder;
 
+import io.inugami.framework.interfaces.monitoring.logger.ObfuscatorSpi;
+import io.inugami.framework.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI;
+import io.inugami.framework.interfaces.monitoring.logger.mapper.MdcDynamicFieldSPI;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import java.util.List;
 
-@ActiveProfiles("test")
-@ContextConfiguration(
-        initializers = {
-                InugamiInitializer.class
-        })
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = {
-                SpringbootApplication.class
-        })
-public abstract class SpringBootIntegrationTest {
-
-
+@Getter
+@AllArgsConstructor
+@Builder
+public class ObfuscatorEncoderContext {
+    private List<ObfuscatorSpi>       obfuscators;
+    private List<LoggerMdcMappingSPI> mdcMappers;
+    private List<MdcDynamicFieldSPI>  mdcDynamicFields;
 }

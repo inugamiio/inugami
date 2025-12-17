@@ -18,7 +18,9 @@ package io.inugami.dashboard.core.domain.alerting;
 
 import io.inugami.commons.test.UnitTestData;
 import io.inugami.dashboard.api.domain.alerting.IAlertingDao;
+import io.inugami.dashboard.api.domain.alerting.dto.AlertingSearchRequestDTO;
 import io.inugami.framework.interfaces.models.event.AlertingModel;
+import io.inugami.framework.interfaces.models.search.SearchResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -54,7 +56,7 @@ class AlertingServiceTest {
               "uid" : "bb895294-efe7-484b-b670-14d004eaf461"
             } ]
             """;
-    
+
     @Mock
     private IAlertingDao alertingDao;
 
@@ -108,6 +110,41 @@ class AlertingServiceTest {
     void contains_nominal() {
         when(alertingDao.contains(any())).thenReturn(true);
         assertThat(service.contains(List.of(UnitTestData.UID))).isTrue();
+    }
+
+    @Test
+    void search_nominal() {
+        when(alertingDao.search(any(), any())).thenReturn(SearchResponse.<AlertingModel>builder()
+                                                                        .page(0)
+                                                                        .pageSize(1)
+                                                                        .next(false)
+                                                                        .previous(false)
+                                                                        .nbFoundItems(1L)
+                                                                        .totalPages(1)
+                                                                        .data(List.of(buildAlertingModel()))
+                                                                        .build());
+
+        assertText(service.search(AlertingSearchRequestDTO.builder().build()),
+                   """
+                           {
+                             "data" : [ {
+                               "condition" : "error > 5",
+                               "description" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+                               "function" : "simpleFunction",
+                               "level" : "ERROR",
+                               "message" : "too many errors",
+                               "name" : "alert",
+                               "provider" : "alertProvider",
+                               "uid" : "bb895294-efe7-484b-b670-14d004eaf461"
+                             } ],
+                             "nbFoundItems" : 1,
+                             "next" : false,
+                             "page" : 0,
+                             "pageSize" : 1,
+                             "previous" : false,
+                             "totalPages" : 1
+                           }
+                           """);
     }
 
     // =================================================================================================================

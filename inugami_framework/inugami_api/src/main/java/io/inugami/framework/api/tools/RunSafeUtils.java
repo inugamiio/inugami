@@ -25,6 +25,9 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.Objects;
+import java.util.function.Consumer;
+
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
 @Slf4j
 @UtilityClass
@@ -52,6 +55,7 @@ public class RunSafeUtils {
         }
     }
 
+
     public static <T> T runSafe(@NonNull final GenericActionWithException<T> action) {
         return runSafe(action, log);
     }
@@ -70,6 +74,24 @@ public class RunSafeUtils {
     public static void traceError(final Throwable e, final Logger logger) {
         if (logger.isDebugEnabled()) {
             logger.error(e.getMessage(), e);
+        }
+    }
+
+
+    public static void onVoidError(@NonNull final VoidFunctionWithException action, final Consumer<Throwable> error) {
+        try {
+            action.process();
+        } catch (Throwable exception) {
+            applyIfNotNull(error, e -> e.accept(exception));
+        }
+    }
+
+    public static <T> T onError(@NonNull final GenericActionWithException<T> action, final Consumer<Throwable> error) {
+        try {
+            return action.process();
+        } catch (Throwable exception) {
+            applyIfNotNull(error, e -> e.accept(exception));
+            return null;
         }
     }
 }

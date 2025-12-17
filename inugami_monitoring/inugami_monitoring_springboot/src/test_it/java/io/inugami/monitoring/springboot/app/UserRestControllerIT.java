@@ -3,6 +3,7 @@ package io.inugami.monitoring.springboot.app;
 import io.inugami.commons.test.UnitTestData;
 import io.inugami.commons.test.api.SkipLineMatcher;
 import io.inugami.commons.test.logs.LogTestAppender;
+import io.inugami.commons.test.obfuscator.DefaultITObfuscator;
 import io.inugami.framework.interfaces.monitoring.logger.BasicLogEvent;
 import io.inugami.framework.interfaces.monitoring.logger.LogListener;
 import io.inugami.monitoring.springboot.spring.SpringBootIntegrationTest;
@@ -19,8 +20,20 @@ import static io.restassured.RestAssured.with;
 class UserRestControllerIT extends SpringBootIntegrationTest {
 
 
-    public static final String CONTENT_TYPE                   = "Content-Type";
-    public static final String APPLICATION_JSON_CHARSET_UTF_8 = "application/json; charset=UTF-8";
+    public static final  String       CONTENT_TYPE                   = "Content-Type";
+    public static final  String       APPLICATION_JSON_CHARSET_UTF_8 = "application/json; charset=UTF-8";
+    private static final List<String> BAN_HEADERS                    = List.of(
+            "deviceNetworkSpeedDown",
+            "host",
+            "connection",
+            "remoteAddress",
+            "userAgent",
+            "sessionId",
+            "deviceNetworkSpeedLatency",
+            "accept",
+            "deviceNetworkSpeedUp",
+            "accept-encoding",
+            "user-agent");
 
     @Test
     void crud() {
@@ -84,10 +97,29 @@ class UserRestControllerIT extends SpringBootIntegrationTest {
                            ]
                            """);
         LogTestAppender.removeListener(listener);
-        assertTextIntegration(logs,
-                              "io/inugami/monitoring/springboot/app/userRestControllerIT/crud.logs.json",
-                              SkipLineMatcher.of(6, 7, 18, 19, 27, 34, 35, 46, 47, 55, 64, 68, 73, 74, 81, 87,
-                                                 92, 98, 106, 107, 118, 119, 128, 136, 137, 148, 149, 158, 168, 172,
-                                                 178, 179, 186, 192, 197, 203));
+        assertTextIntegration(DefaultITObfuscator.renderLogs(logs.stream()
+                                                                 .map(this::cleanLogs)
+                                                                 .toList()),
+                              "io/inugami/monitoring/springboot/app/userRestControllerIT/crud.logs.txt",
+                              SkipLineMatcher.of(8,19,
+                                                 37,48,
+                                                 66,80,
+                                                 125,165,
+                                                 178,198,
+                                                 211,231,
+                                                 247,
+                                                 295));
+    }
+
+
+    private BasicLogEvent cleanLogs(BasicLogEvent basicLogEvent) {
+        final var mdc = basicLogEvent.getMdc();
+        for (String headerToRemove : BAN_HEADERS) {
+            mdc.remove(headerToRemove);
+        }
+
+        mdc.put("correlation_id", "XXXX");
+        mdc.put("duration", "0");
+        return basicLogEvent;
     }
 }

@@ -30,9 +30,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.*;
 
+import static io.inugami.framework.api.tools.RunSafeUtils.runSafeVoid;
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
 /**
@@ -69,15 +73,16 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
     // =========================================================================
     public SensorsIntervalManagerTask(final int maxTheads, final long interval, final List<MonitoringSender> senders) {
         this.maxTheads = maxTheads;
-        this.interval = interval;
-        timeout = (long) (interval * 0.9);
-        executor = Executors.newSingleThreadScheduledExecutor(new MonitoredThreadFactory(getClass().getSimpleName(),
-                                                                                         false));
+        this.interval  = interval;
+        timeout        = (long) (interval * 0.9);
+        executor       =
+                Executors.newSingleThreadScheduledExecutor(new MonitoredThreadFactory(getClass().getSimpleName(),
+                                                                                      false));
         final String name = String.join("_", SensorsIntervalManagerTask.class.getSimpleName(),
                                         String.valueOf(interval) + "ms");
         this.nameSensor = name + "_sensor";
         this.nameSender = name + "_sender";
-        this.senders = senders;
+        this.senders    = senders;
     }
 
     // =========================================================================
@@ -92,11 +97,7 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
     public void shutdown(final MonitoringContext ctx) {
         executor.shutdown();
         if (!executor.isShutdown()) {
-            try {
-                executor.awaitTermination(0, TimeUnit.MILLISECONDS);
-            } catch (final Throwable e) {
-                log.error(e.getMessage(), e);
-            }
+            runSafeVoid(() -> executor.awaitTermination(0, TimeUnit.MILLISECONDS), log);
         }
     }
 

@@ -43,10 +43,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
@@ -72,20 +70,19 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     public static final  String NO_FORMATTER = "%m";
     public static final  String DATA         = "data";
 
-    private              List<ObfuscatorSpi>       obfuscators;
-    private              List<LoggerMdcMappingSPI> mdcMappers;
-    private              List<MdcDynamicFieldSPI>  mdcDynamicFields;
-    public static final  String                    EMPTY_STR      = "";
-    private static final byte[]                    EMPTY          = EMPTY_STR.getBytes(StandardCharsets.UTF_8);
-    private static final String                    THREAD_NAME    = "threadName";
-    private static final String                    LOGGER_NAME    = "loggerName";
-    private static final String                    LEVEL          = "level";
-    private static final String                    LEVEL_PRIORITY = "levelPriority";
-    private static final String                    TIMESTAMP      = "timestamp";
-    private static final String                    DATE           = "date";
-    private static final String                    STACKTRACE     = "stacktrace";
-    private              ObjectMapper              marshaller;
-    private              AppenderConfiguration     configuration;
+    public static final  String                                    EMPTY_STR      = "";
+    private static final byte[]                                    EMPTY          =
+            EMPTY_STR.getBytes(StandardCharsets.UTF_8);
+    private static final String                                    THREAD_NAME    = "threadName";
+    private static final String                                    LOGGER_NAME    = "loggerName";
+    private static final String                                    LEVEL          = "level";
+    private static final String                                    LEVEL_PRIORITY = "levelPriority";
+    private static final String                                    TIMESTAMP      = "timestamp";
+    private static final String                                    DATE           = "date";
+    private static final String                                    STACKTRACE     = "stacktrace";
+    private static final AtomicReference<ObfuscatorEncoderContext> CONTEXT        = new AtomicReference<>();
+    private              ObjectMapper                              marshaller;
+    private              AppenderConfiguration                     configuration;
 
     private Function<ILoggingEvent, String> messageEncoder = null;
     private PatternLayout                   patternLayout  = null;
@@ -103,7 +100,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
 
     public ObfuscatorEncoder(final AppenderConfiguration configuration) {
         this.configuration = configuration;
-        marshaller = JsonMarshaller.getInstance().getDefaultObjectMapper();
+        marshaller         = JsonMarshaller.getInstance().getDefaultObjectMapper();
         onContextRefreshed(null);
         forceNewLine = this.configuration.getForceNewLine() ==
                        null ? true : Boolean.parseBoolean(this.configuration.getForceNewLine());
@@ -112,10 +109,20 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     }
 
     @Override
+    public void onApplicationContextInitialized(Object event) {
+        onContextRefreshed(event);
+    }
+
+    @Override
     public void onContextRefreshed(final Object event) {
-        obfuscators = SpiLoader.getInstance().loadSpiServicesByPriority(ObfuscatorSpi.class);
-        mdcMappers = SpiLoader.getInstance().loadSpiServicesByPriority(LoggerMdcMappingSPI.class);
-        mdcDynamicFields = SpiLoader.getInstance().loadSpiServicesByPriority(MdcDynamicFieldSPI.class);
+        CONTEXT.set(ObfuscatorEncoderContext.builder()
+                                            .obfuscators(SpiLoader.getInstance()
+                                                                  .loadSpiServicesByPriority(ObfuscatorSpi.class))
+                                            .mdcMappers(SpiLoader.getInstance()
+                                                                 .loadSpiServicesByPriority(LoggerMdcMappingSPI.class))
+                                            .mdcDynamicFields(SpiLoader.getInstance()
+                                                                       .loadSpiServicesByPriority(MdcDynamicFieldSPI.class))
+                                            .build());
         marshaller = JsonMarshaller.getInstance().getDefaultObjectMapper();
     }
 
@@ -208,7 +215,8 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
         final LogEventDto.LogEventDtoBuilder builder = event.toBuilder();
 
         String result = event.getMessage();
-        for (final ObfuscatorSpi obfuscator : obfuscators) {
+
+        for (final ObfuscatorSpi obfuscator : CONTEXT.get().getObfuscators()) {
             final LogEventDto currentEvent = builder.build();
             if (obfuscator.isEnabled() && obfuscator.accept(currentEvent)) {
                 result = obfuscator.obfuscate(currentEvent);
@@ -324,10 +332,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
 
     private Map<String, Serializable> extractMdcDynamicFieldsSpiData() {
         final Map<String, Serializable> result = new LinkedHashMap<>();
-        if (mdcDynamicFields == null) {
-            return result;
-        }
-        for (final MdcDynamicFieldSPI mdcDynamicField : mdcDynamicFields) {
+        for (final MdcDynamicFieldSPI mdcDynamicField : Optional.ofNullable(CONTEXT.get().getMdcDynamicFields()).orElse(List.of())) {
             try {
                 final Map<String, Serializable> data = mdcDynamicField.generate();
                 applyIfNotNull(data, result::putAll);
@@ -358,7 +363,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     private Serializable convertMdcValue(final String key, final String value) {
         LoggerMdcMappingSPI strategy = null;
 
-        for (final LoggerMdcMappingSPI registredStrategy : mdcMappers) {
+        for (final LoggerMdcMappingSPI registredStrategy : CONTEXT.get().getMdcMappers()) {
             if (registredStrategy.accept(key)) {
                 strategy = registredStrategy;
                 break;
@@ -373,8 +378,9 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
 
         Map<String, Serializable> result = null;
         try {
-            result = marshaller.readValue(this.configuration.getAdditionalFields(), new TypeReference<Map<String, Serializable>>() {
-            });
+            result =
+                    marshaller.readValue(this.configuration.getAdditionalFields(), new TypeReference<Map<String, Serializable>>() {
+                    });
         } catch (final Throwable e) {
             Loggers.DEBUG.error(e.getMessage(), e);
         }

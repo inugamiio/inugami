@@ -1,66 +1,71 @@
 /* --------------------------------------------------------------------
- *  Inugami  
+ *  Inugami
  * --------------------------------------------------------------------
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.monitoring.core.obfuscators;
 
 import io.inugami.framework.interfaces.monitoring.Obfuscator;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.regex.Pattern;
 
 /**
  * TokenObfuscator
- * 
+ *
  * @author patrickguillerm
  * @since Jan 8, 2019
  */
 
 public class TokenObfuscator implements Obfuscator {
-    
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final Pattern  EMPTY              = ObfuscatorTools.buildJsonFieldPattern("(token|TOKEN)",
-                                                                                             "\"\\s*\"");
-    
-    private static final Pattern  DEFAULT            = ObfuscatorTools.buildJsonFieldPattern("(token|TOKEN)");
-    
-    private static final String[] ACTIVATED_ELEMENTS = { "token", "TOKEN" };
-    
+    private static final Pattern EMPTY = ObfuscatorTools.buildJsonFieldPattern("(token|TOKEN)",
+                                                                               "\"\\s*\"");
+
+    private static final Pattern DEFAULT = ObfuscatorTools.buildJsonFieldPattern("(token|TOKEN)");
+
+    private static final String[] ACTIVATED_ELEMENTS = {"token", "TOKEN"};
+
     // =========================================================================
     // METHODS
     // =========================================================================
     @Override
-    public boolean accept(final String data) {
+    public boolean accept(@Nullable final String data) {
+        if (data == null) {
+            return false;
+        }
+
         boolean found = false;
-        
+
         for (final String element : ACTIVATED_ELEMENTS) {
             found = data.contains(element);
             if (found) {
                 break;
             }
         }
-        
+
         return found;
     }
-    
+
     @Override
-    public String clean(final String data) {
+    public String clean(@NonNull final String data) {
         final String result = replaceAll(DEFAULT, data, "\"token\":\"xxxxx\"");
-        
         return replaceAll(EMPTY, result, "\"token\":\"empty\"");
     }
 }

@@ -18,15 +18,13 @@ package io.inugami.monitoring.core.sensors.aggregators;
 
 import io.inugami.framework.api.metrics.MetricsUtils;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.monitoring.ServicesSensorAggregator;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModelDTO;
 import io.inugami.framework.interfaces.spi.SpiPriority;
 import io.inugami.monitoring.core.sensors.ServiceValueTypes;
-import io.inugami.framework.interfaces.monitoring.ServicesSensorAggregator;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * ServicesSensorAggregatorHits

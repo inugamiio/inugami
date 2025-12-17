@@ -47,7 +47,7 @@ import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
 @Setter
 @Getter
 @SuppressWarnings({"java:S3655", "java:S107"})
-public final class Plugin implements Serializable {
+public class Plugin implements Serializable {
 
     // =================================================================================================================
     // ATTRIBUTES

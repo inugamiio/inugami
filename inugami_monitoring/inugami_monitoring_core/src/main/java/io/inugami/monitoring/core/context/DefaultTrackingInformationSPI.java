@@ -16,19 +16,18 @@ public class DefaultTrackingInformationSPI implements TrackingInformationSPI {
 
     @Override
     public Map<String, String> getInformation() {
-        Map<String, String> result = new LinkedHashMap<>();
+        final Map<String, String> result = new LinkedHashMap<>();
+        final var                 mdc    = MdcService.getInstance();
 
-
-        applyIfNotNull(MdcService.getInstance().getMdc(MDCKeys.deviceIdentifier),
+        applyIfNotNull(mdc.getMdc(MDCKeys.deviceIdentifier),
                        value -> result.put(Headers.X_DEVICE_IDENTIFIER, value));
 
-        applyIfNotNull(MdcService.getInstance().getMdc(MDCKeys.correlation_id),
-                       value -> result.put(Headers.X_CORRELATION_ID, value));
+        result.put(Headers.X_CORRELATION_ID, mdc.correlationId());
 
-        applyIfNotNull(MdcService.getInstance().getMdc(MDCKeys.conversation_id),
+        applyIfNotNull(mdc.getMdc(MDCKeys.conversation_id),
                        value -> result.put(Headers.X_CONVERSATION_ID, value));
 
-        MdcService.getInstance().traceId();
+        result.put(Headers.X_B_3_TRACEID, mdc.traceId());
 
         return result;
     }

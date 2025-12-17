@@ -16,9 +16,9 @@
  */
 package io.inugami.monitoring.core.interceptable;
 
+import io.inugami.framework.interfaces.monitoring.Interceptable;
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.spi.SpiPriority;
-import io.inugami.framework.interfaces.monitoring.Interceptable;
 
 /**
  * DefaultResourceIdentifier
@@ -33,7 +33,7 @@ public class DefaultInterceptableIdentifier implements Interceptable {
     // ATTRIBUTES
     // =================================================================================================================
     //@formatter:off
-    private static final  String[] RESOURCES_EXT = {".js", ".ts",
+    protected static final  String[] RESOURCES_EXT = {".js", ".ts",
             ".jpg", ".png", ".gif", ".svg", ".ico",
             ".ttf", ".otf", ".eot", ".woff", ".woff2",
             ".css", ".map",
@@ -66,10 +66,6 @@ public class DefaultInterceptableIdentifier implements Interceptable {
                 }
             }
         }
-
         return result;
     }
-
-
-
 }

@@ -38,7 +38,11 @@ public abstract class AbstractTermObfuscator implements ObfuscatorSpi {
     }
 
     public static Pattern buildRegex(final String term) {
-        return RunSafeUtils.runSafe(() -> buildRegexFullLine(term, DEFAULT_DELIMITERS), log);
+        return buildRegex(term, DEFAULT_DELIMITERS);
+    }
+
+    public static Pattern buildRegex(final String term, String delimiter) {
+        return RunSafeUtils.runSafe(() -> buildRegexFullLine(term, delimiter), log);
     }
 
     // =========================================================================

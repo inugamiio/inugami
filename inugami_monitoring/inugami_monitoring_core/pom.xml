@@ -30,7 +30,8 @@
     <properties>
         <custom.sonar.coverage.exclusions>
             ,**/ResponseWrapper.java
-            ,**/OutputWriterWrapper.java
+            ,**/OutputWriterWrapper.java,
+            ,**/RequestCallBackInterceptor.java
         </custom.sonar.coverage.exclusions>
     </properties>
     <!-- ======================================================================= 

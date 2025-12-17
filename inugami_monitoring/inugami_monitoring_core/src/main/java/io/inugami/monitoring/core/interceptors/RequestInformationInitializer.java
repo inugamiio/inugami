@@ -24,34 +24,33 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.experimental.UtilityClass;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static io.inugami.framework.api.loggers.mdc.mapper.MdcMapperUtils.convertToDouble;
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
 @UtilityClass
 public class RequestInformationInitializer {
-    public static final List<String> HEADERS = List.of(Headers.X_CORRELATION_ID,
-                                                       Headers.X_B_3_TRACEID,
-                                                       Headers.X_CONVERSATION_ID,
-                                                       Headers.X_AUTHORIZATION_TOKEN,
-                                                       Headers.X_FRONT_VERSION,
-                                                       Headers.X_DEVICE_IDENTIFIER,
-                                                       Headers.X_DEVICE_TYPE,
-                                                       Headers.X_DEVICE_CLASS,
-                                                       Headers.X_DEVICE_CLASS,
-                                                       Headers.X_DEVICE_OS_VERSION,
-                                                       Headers.X_DEVICE_NETWORK_TYPE,
-                                                       Headers.X_DEVICE_NETWORK_SPEED_DOWN,
-                                                       Headers.X_DEVICE_NETWORK_SPEED_DOWN,
-                                                       Headers.X_DEVICE_NETWORK_SPEED_LATENCY,
-                                                       Headers.CLIENT_IP,
-                                                       Headers.USER_AGENT,
-                                                       Headers.ACCEPT_LANGUAGE,
-                                                       Headers.COUNTRY
-    );
+    public static final List<String> HEADERS          = List.of(Headers.X_CORRELATION_ID,
+                                                                Headers.X_B_3_TRACEID,
+                                                                Headers.X_CONVERSATION_ID,
+                                                                Headers.X_AUTHORIZATION_TOKEN,
+                                                                Headers.X_FRONT_VERSION,
+                                                                Headers.X_DEVICE_IDENTIFIER,
+                                                                Headers.X_DEVICE_TYPE,
+                                                                Headers.X_DEVICE_CLASS,
+                                                                Headers.X_DEVICE_CLASS,
+                                                                Headers.X_DEVICE_OS_VERSION,
+                                                                Headers.X_DEVICE_NETWORK_TYPE,
+                                                                Headers.X_DEVICE_NETWORK_SPEED_DOWN,
+                                                                Headers.X_DEVICE_NETWORK_SPEED_DOWN,
+                                                                Headers.X_DEVICE_NETWORK_SPEED_LATENCY,
+                                                                Headers.CLIENT_IP,
+                                                                Headers.USER_AGENT,
+                                                                Headers.ACCEPT_LANGUAGE,
+                                                                Headers.COUNTRY
+                                                               );
+    public static final String       APPLICATION_JSON = "application/json";
 
 
     public static RequestData buildRequestInformation(final HttpServletRequest httpRequest) {
@@ -73,7 +72,7 @@ public class RequestInformationInitializer {
         builder.uri(httpRequest.getRequestURI());
         builder.contextPath(httpRequest.getContextPath());
         builder.method(httpRequest.getMethod());
-        builder.contentType(httpRequest.getContentType() == null ? "application/json" : httpRequest.getContentType());
+        builder.contentType(Optional.ofNullable(httpRequest.getContentType()).orElse(APPLICATION_JSON));
         builder.characterEncoding(httpRequest.getCharacterEncoding());
         builder.options(httpRequest.getParameterMap());
 
@@ -153,17 +152,25 @@ public class RequestInformationInitializer {
                 .build();
     }
 
-    private static Map<String, String> extractOtherHeaders(final HttpServletRequest httpRequest) {
+    protected static Map<String, String> extractOtherHeaders(final HttpServletRequest httpRequest) {
         final Map<String, String> result = new LinkedHashMap<>();
         final var                 names  = httpRequest.getHeaderNames().asIterator();
+
+        final List<String> headerNames = new ArrayList<>();
         while (names.hasNext()) {
             final var name = names.next();
             if (HEADERS.contains(name)) {
                 continue;
             }
-            final String value = httpRequest.getHeader(name);
-            result.put(name, value);
+            headerNames.add(name);
         }
+
+        Collections.sort(headerNames);
+        for (String name : headerNames) {
+            final String value = httpRequest.getHeader(name);
+            applyIfNotNull(value, v -> result.put(name, v));
+        }
+
         return result;
     }
 }

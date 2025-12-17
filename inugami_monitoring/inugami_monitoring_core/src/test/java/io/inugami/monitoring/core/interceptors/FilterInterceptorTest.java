@@ -11,11 +11,11 @@ import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterI
 import io.inugami.framework.interfaces.monitoring.models.Headers;
 import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
 import io.inugami.monitoring.core.interceptors.internal.FilterInterceptorContext;
+import io.inugami.monitoring.core.tools.dto.EnumerationMap;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +25,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import static io.inugami.commons.test.UnitTestHelper.assertText;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -247,23 +249,5 @@ class FilterInterceptorTest {
         return result;
     }
 
-    @RequiredArgsConstructor
-    private static class EnumerationMap implements Enumeration<String> {
-        private final Map<String, String> values;
 
-        @Override
-        public boolean hasMoreElements() {
-            return false;
-        }
-
-        @Override
-        public String nextElement() {
-            return EMPTY;
-        }
-
-        @Override
-        public Iterator<String> asIterator() {
-            return values.keySet().iterator();
-        }
-    }
 }

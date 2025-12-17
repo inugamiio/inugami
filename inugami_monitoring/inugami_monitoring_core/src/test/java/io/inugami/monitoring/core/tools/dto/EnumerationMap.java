@@ -14,23 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.monitoring.springboot.spring;
+package io.inugami.monitoring.core.tools.dto;
 
+import lombok.RequiredArgsConstructor;
 
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Map;
+@RequiredArgsConstructor
+public class EnumerationMap implements Enumeration<String> {
+    private final Map<String, String> values;
 
-@ActiveProfiles("test")
-@ContextConfiguration(
-        initializers = {
-                InugamiInitializer.class
-        })
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = {
-                SpringbootApplication.class
-        })
-public abstract class SpringBootIntegrationTest {
+    @Override
+    public boolean hasMoreElements() {
+        return false;
+    }
 
+    @Override
+    public String nextElement() {
+        return "";
+    }
 
+    @Override
+    public Iterator<String> asIterator() {
+        return values.keySet().iterator();
+    }
 }

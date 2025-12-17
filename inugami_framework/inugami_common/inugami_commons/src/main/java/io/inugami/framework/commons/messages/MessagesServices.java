@@ -50,6 +50,10 @@ public final class MessagesServices {
     private static final ObjectMapper                     OBJECT_MAPPER  = JsonMarshaller.getInstance()
                                                                                          .getDefaultObjectMapper();
 
+    public static synchronized void clean() {
+        MESSAGES.clear();
+    }
+
     // =================================================================================================================
     // GET MESSAGE
     // =================================================================================================================

@@ -20,8 +20,6 @@ package io.inugami.monitoring.core.sensors.aggregators;
 import io.inugami.framework.api.metrics.MetricsUtils;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.models.number.FloatNumber;
-import io.inugami.framework.interfaces.models.number.GraphiteNumber;
-import io.inugami.framework.interfaces.models.number.LongNumber;
 import io.inugami.framework.interfaces.monitoring.ServicesSensorAggregator;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModelDTO;
@@ -30,7 +28,6 @@ import io.inugami.monitoring.core.sensors.ServiceValueTypes;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * ServicesSensorAggregatorResponseTime
@@ -41,15 +38,18 @@ import java.util.Optional;
 @SpiPriority(0)
 public class ServicesSensorAggregatorResponseTime implements ServicesSensorAggregator {
 
-    // =========================================================================
-    // OVERRIDES
-    // =========================================================================
+    // =================================================================================================================
+    // ACCEPT
+    // =================================================================================================================
     @Override
     public boolean accept(final GenericMonitoringModel data, final ConfigHandler<String, String> configuration) {
         return ServiceValueTypes.RESPONSE_TIME.getKeywork().equals(data.getCounterType());
     }
 
 
+    // =================================================================================================================
+    // COMPUTE
+    // =================================================================================================================
     @Override
     public List<GenericMonitoringModel> compute(final GenericMonitoringModel data,
                                                 final List<Object> values,
@@ -60,55 +60,55 @@ public class ServicesSensorAggregatorResponseTime implements ServicesSensorAggre
                                                      .from(data);
 
         final List<Long> sortedValues = sortsValues(values);
-
-        if (!sortedValues.isEmpty()) {
-            final int size = sortedValues.size();
-            builder.timeUnit(timeUnit);
-
-            builder.valueType("min");
-            builder.value(values.get(percentil(0, size)));
-            result.add(builder.build());
-
-            builder.valueType("max");
-            builder.value(values.get(percentil(1, size)));
-            result.add(builder.build());
-
-            builder.valueType("p99");
-            builder.value(values.get(percentil(0.99, size)));
-            result.add(builder.build());
-
-            builder.valueType("p95");
-            builder.value(values.get(percentil(0.95, size)));
-            result.add(builder.build());
-
-            builder.valueType("p90");
-            builder.value(values.get(percentil(0.90, size)));
-            result.add(builder.build());
-
-            builder.valueType("p75");
-            builder.value(values.get(percentil(0.75, size)));
-            result.add(builder.build());
-
-            builder.valueType("p50");
-            builder.value(values.get(percentil(0.5, size)));
-            result.add(builder.build());
-
-            builder.valueType("avg");
-            builder.value(FloatNumber.of(average(sortedValues)));
-            result.add(builder.build());
+        if (sortedValues.isEmpty()) {
+            return new ArrayList<>();
         }
+        
+        final int size = sortedValues.size();
+        builder.timeUnit(timeUnit);
 
+        builder.valueType("min");
+        builder.value(values.get(percentil(0, size)));
+        result.add(builder.build());
+
+        builder.valueType("max");
+        builder.value(values.get(percentil(1, size)));
+        result.add(builder.build());
+
+        builder.valueType("p99");
+        builder.value(values.get(percentil(0.99, size)));
+        result.add(builder.build());
+
+        builder.valueType("p95");
+        builder.value(values.get(percentil(0.95, size)));
+        result.add(builder.build());
+
+        builder.valueType("p90");
+        builder.value(values.get(percentil(0.90, size)));
+        result.add(builder.build());
+
+        builder.valueType("p75");
+        builder.value(values.get(percentil(0.75, size)));
+        result.add(builder.build());
+
+        builder.valueType("p50");
+        builder.value(values.get(percentil(0.5, size)));
+        result.add(builder.build());
+
+        builder.valueType("avg");
+        builder.value(FloatNumber.of(average(sortedValues)));
+        result.add(builder.build());
         return result;
     }
 
     @SuppressWarnings({"java:S2153"})
-    private List<Long> sortsValues(final List<Object> values) {
+    protected List<Long> sortsValues(final List<Object> values) {
         final List<Long> result = MetricsUtils.convertToLong(values);
         result.sort((ref, value) -> Long.valueOf(ref).compareTo(value));
         return result;
     }
 
-    private int percentil(final double percentil, final int size) {
+    protected int percentil(final double percentil, final int size) {
         int result = 0;
         if (percentil < 0.000001) {
             result = 0;
@@ -124,7 +124,7 @@ public class ServicesSensorAggregatorResponseTime implements ServicesSensorAggre
         return result;
     }
 
-    private double average(final List<Long> sortedValues) {
+    protected double average(final List<Long> sortedValues) {
         long sumValues = 0;
         for (final Long item : sortedValues) {
             sumValues += item;

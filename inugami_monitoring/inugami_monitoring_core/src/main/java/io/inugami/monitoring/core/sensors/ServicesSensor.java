@@ -25,10 +25,7 @@ import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.tools.BlockingQueue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
@@ -40,21 +37,22 @@ import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.apply
  */
 public class ServicesSensor implements MonitoringSensor {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
+    // =================================================================================================================
     protected static final BlockingQueue<GenericMonitoringModel> BUFFER = new BlockingQueue<>();
 
-    protected static final List<ServicesSensorAggregator> AGGREGATORS = SpiLoader.getInstance()
-                                                                                 .loadSpiServicesByPriority(ServicesSensorAggregator.class);
+    protected static final List<ServicesSensorAggregator> AGGREGATORS     = SpiLoader.getInstance()
+                                                                                     .loadSpiServicesByPriority(ServicesSensorAggregator.class);
+    public static final    String                         SERVICES_SENSOR = "servicesSensor";
 
     protected static long interval;
 
     protected ConfigHandler<String, String> configuration;
 
-    // =========================================================================
+    // =================================================================================================================
     // CONSTRUCTORS
-    // =========================================================================
+    // =================================================================================================================
     @Override
     public MonitoringSensor buildInstance(final long interval, final String query,
                                           final ConfigHandler<String, String> configuration) {
@@ -63,11 +61,14 @@ public class ServicesSensor implements MonitoringSensor {
         return this;
     }
 
+    protected static void clean() {
+        BUFFER.clear();
+    }
+
     protected synchronized void defineInterval(final long value) {
         interval = value;
     }
 
-    //
     @Override
     public long getInterval() {
         return interval;
@@ -75,12 +76,12 @@ public class ServicesSensor implements MonitoringSensor {
 
     @Override
     public String getName() {
-        return "servicesSensor";
+        return SERVICES_SENSOR;
     }
 
-    // =========================================================================
+    // =================================================================================================================
     // OVERRIDES
-    // =========================================================================
+    // =================================================================================================================
     @Override
     public List<GenericMonitoringModel> process() {
         final List<GenericMonitoringModel>              result        = new ArrayList<>();
@@ -119,22 +120,21 @@ public class ServicesSensor implements MonitoringSensor {
     protected List<GenericMonitoringModel> computeValue(final GenericMonitoringModel data,
                                                         final List<Object> values) {
         final ServicesSensorAggregator currentAggregator = chooseAggregator(data);
-        return processAggregation(currentAggregator, data, values);
+        return Optional.ofNullable(currentAggregator)
+                       .map(aggregator -> processAggregation(aggregator, data, values))
+                       .orElse(List.of());
     }
 
     protected List<GenericMonitoringModel> processAggregation(final ServicesSensorAggregator currentAggregator,
                                                               final GenericMonitoringModel data,
                                                               final List<Object> values) {
-        List<GenericMonitoringModel> result = new ArrayList<>();
-        if (currentAggregator != null) {
-            final List<GenericMonitoringModel> aggregated = currentAggregator.compute(data, values, configuration);
-            applyIfNotNull(aggregated, result::addAll);
-        }
+        List<GenericMonitoringModel>       result     = new ArrayList<>();
+        final List<GenericMonitoringModel> aggregated = currentAggregator.compute(data, values, configuration);
+        applyIfNotNull(aggregated, result::addAll);
         return result;
     }
 
     protected ServicesSensorAggregator chooseAggregator(final GenericMonitoringModel data) {
-
         for (final ServicesSensorAggregator aggregator : AGGREGATORS) {
             if (aggregator.accept(data, configuration)) {
                 return aggregator;
@@ -143,13 +143,11 @@ public class ServicesSensor implements MonitoringSensor {
         return null;
     }
 
-    // =========================================================================
+    // =================================================================================================================
     // ADD DATA
-    // =========================================================================
+    // =================================================================================================================
     public static synchronized void addData(final List<GenericMonitoringModelDTO> data) {
-        if (data != null) {
-            BUFFER.addAll(data);
-        }
+        applyIfNotNull(data, BUFFER::addAll);
     }
 
 }

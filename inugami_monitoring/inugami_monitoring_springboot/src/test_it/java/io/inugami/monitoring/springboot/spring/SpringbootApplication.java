@@ -16,10 +16,12 @@
  */
 package io.inugami.monitoring.springboot.spring;
 
+import io.inugami.commons.test.obfuscator.DefaultITObfuscator;
 import io.inugami.framework.commons.spring.configuration.ConfigConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackages={
@@ -31,4 +33,10 @@ public class SpringbootApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringbootApplication.class, args);
     }
+
+    @Bean
+    public DefaultITObfuscator defaultITObfuscator(){
+        return new DefaultITObfuscator();
+    }
+
 }
