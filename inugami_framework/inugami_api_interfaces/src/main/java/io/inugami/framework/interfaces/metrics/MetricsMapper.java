@@ -17,7 +17,6 @@
 package io.inugami.framework.interfaces.metrics;
 
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
-import io.inugami.framework.interfaces.models.basic.Dto;
 import io.inugami.framework.interfaces.spi.SpiConfigurable;
 
 import java.util.List;
@@ -30,8 +29,8 @@ import java.util.List;
  */
 public interface MetricsMapper extends SpiConfigurable {
 
-    boolean accept(Class<? extends Dto<?>> clazz);
+    boolean accept(Class<?> clazz);
 
-    List<MetricsData> process(final Dto<?> data, final ConfigHandler<String, String> config);
+    List<MetricsData> process(final Object data, final ConfigHandler<String, String> config);
 
 }

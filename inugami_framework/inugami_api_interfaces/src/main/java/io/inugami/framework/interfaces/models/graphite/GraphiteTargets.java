@@ -16,11 +16,10 @@
  */
 package io.inugami.framework.interfaces.models.graphite;
 
-import io.inugami.framework.interfaces.models.basic.Dto;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * GraphiteTargets
@@ -35,23 +34,8 @@ import java.util.Optional;
 @NoArgsConstructor
 @Setter
 @Getter
-public class GraphiteTargets implements Dto<GraphiteTargets> {
+public class GraphiteTargets implements Serializable {
 
-    private static final long serialVersionUID = -732597415422973512L;
-
-    private List<GraphiteTarget> targets;
-
-
-    @Override
-    public GraphiteTargets cloneObj() {
-        final var builder = toBuilder();
-
-        builder.targets(Optional.ofNullable(targets)
-                                .orElse(List.of())
-                                .stream()
-                                .map(GraphiteTarget::cloneObj)
-                                .toList());
-
-        return builder.build();
-    }
+    private static final long                 serialVersionUID = -732597415422973512L;
+    private              List<GraphiteTarget> targets;
 }

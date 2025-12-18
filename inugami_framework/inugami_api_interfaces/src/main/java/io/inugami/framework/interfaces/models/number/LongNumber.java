@@ -97,8 +97,4 @@ public class LongNumber implements GraphiteNumber {
         return new BigDecimal(value);
     }
 
-    @Override
-    public GraphiteNumber cloneObj() {
-        return new LongNumber(value);
-    }
 }

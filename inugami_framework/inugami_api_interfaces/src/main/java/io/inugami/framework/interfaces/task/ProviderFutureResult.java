@@ -17,13 +17,11 @@
 package io.inugami.framework.interfaces.task;
 
 import io.inugami.framework.interfaces.alertings.AlertingResult;
-import io.inugami.framework.interfaces.models.basic.Dto;
 import io.inugami.framework.interfaces.models.event.GenericEvent;
 import lombok.*;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * ProviderFutureResultModel
@@ -38,8 +36,7 @@ import java.util.Optional;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProviderFutureResult implements Dto<ProviderFutureResult> {
-
+public class ProviderFutureResult implements Serializable {
     private static final long   serialVersionUID = -3593233046062751124L;
     public static final  String DATA_FIELD       = "data";
 
@@ -47,7 +44,7 @@ public class ProviderFutureResult implements Dto<ProviderFutureResult> {
     private Exception            exception;
     private String               scheduler;
     @Singular("data")
-    private List<Dto<?>>         data;
+    private List<Serializable>   data;
     @ToString.Include
     @EqualsAndHashCode.Include
     private GenericEvent         event;
@@ -58,23 +55,4 @@ public class ProviderFutureResult implements Dto<ProviderFutureResult> {
     private String               fieldData;
     @Singular("alerts")
     private List<AlertingResult> alerts;
-
-    @Override
-    public ProviderFutureResult cloneObj() {
-        final var builder = toBuilder();
-        builder.alerts(Optional.ofNullable(alerts)
-                               .orElse(List.of())
-                               .stream()
-                               .map(AlertingResult::cloneObj)
-                               .toList());
-
-        final List<Dto<?>> newData = new ArrayList<>();
-        if (data != null) {
-            for (Dto<?> item : data) {
-                newData.add(item.cloneObj());
-            }
-        }
-
-        return builder.build();
-    }
 }

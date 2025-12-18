@@ -16,9 +16,10 @@
  */
 package io.inugami.framework.interfaces.models.graphite;
 
-import io.inugami.framework.interfaces.models.basic.Dto;
 import io.inugami.framework.interfaces.models.number.GraphiteNumber;
 import lombok.*;
+
+import java.io.Serializable;
 
 /**
  * TimeValue
@@ -33,16 +34,9 @@ import lombok.*;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class TimeValue implements Dto<TimeValue> {
-
-    private static final long serialVersionUID = -4766022961962855510L;
-
-    private String         path;
-    private GraphiteNumber value;
-    private long           time;
-
-    @Override
-    public TimeValue cloneObj() {
-        return null;
-    }
+public class TimeValue implements Serializable {
+    private static final long           serialVersionUID = -4766022961962855510L;
+    private              String         path;
+    private              GraphiteNumber value;
+    private              long           time;
 }

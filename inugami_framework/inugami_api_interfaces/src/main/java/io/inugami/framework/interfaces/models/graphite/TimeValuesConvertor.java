@@ -1,14 +1,9 @@
 package io.inugami.framework.interfaces.models.graphite;
 
-import io.inugami.framework.interfaces.models.basic.Dto;
-import io.inugami.framework.interfaces.models.basic.JsonObjects;
 import io.inugami.framework.interfaces.models.number.DataPoint;
 import io.inugami.framework.interfaces.models.number.FloatNumber;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public final class TimeValuesConvertor {
 
@@ -23,24 +18,24 @@ public final class TimeValuesConvertor {
     // =========================================================================
     // METHODS
     // =========================================================================
-    public static List<TimeValue> convert(final Dto<?> value) {
-        List<TimeValue> result = null;
+    public static List<TimeValue> convert(final Object value) {
+        List<TimeValue> result = new ArrayList<>();
 
         final GraphiteType type = GraphiteType.getType(value);
         if (type != null) {
             result = new ArrayList<>();
 
-            //@formatter:off
+
             switch (type) {
                 case DATA_POINT:
                     final DataPoint data = (DataPoint) value;
                     result.add(new TimeValue(UNDEFINE, new FloatNumber(data.getValue()), data.getTimestamp()));
                     break;
-                    
+
                 case GRAPHITE_TARGET:
                     result.addAll(convertFromGraphiteTarget((GraphiteTarget) value));
                     break;
-                    
+
                 case GRAPHITE_TARGETS:
                     final GraphiteTargets targets = (GraphiteTargets) value;
                     Optional.ofNullable(targets.getTargets())
@@ -48,32 +43,32 @@ public final class TimeValuesConvertor {
                             .stream()
                             .map(TimeValuesConvertor::convertFromGraphiteTarget)
                             .forEach(result::addAll);
-                    
+
                     break;
-                    
+
                 case LIST_GRAPHITE_TARGET:
-                    final JsonObjects<GraphiteTarget> listTarget = (JsonObjects<GraphiteTarget>) value;
-                    Optional.ofNullable(listTarget.getData())
-                            .orElse(Collections.emptyList())
+                    final var currentData = ((Collection) value)
                             .stream()
-                            .map(TimeValuesConvertor::convertFromGraphiteTarget)
-                            .forEach(result::addAll);
+                            .map(v -> TimeValuesConvertor.convertFromGraphiteTarget((GraphiteTarget) v))
+                            .toList();
+                    result.addAll(currentData);
                     break;
-                    
+
                 case TIME_VALUE:
                     final TimeValue timeValue = (TimeValue) value;
                     result.add(timeValue);
                     break;
-                    
+
                 case LIST_TIME_VALUE:
-                    final JsonObjects<TimeValue> timeValues = (JsonObjects<TimeValue>) value;
-                    result.addAll(Optional.ofNullable(timeValues.getData()).orElse(Collections.emptyList()));
+                    final var timeValues = ((Collection) value)
+                            .stream()
+                            .map(v -> (TimeValue) v)
+                            .toList();
+                    result.addAll(timeValues);
                     break;
                 default:
                     break;
             }
-            
-            //@formatter:on
 
         }
         return result;

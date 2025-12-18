@@ -35,18 +35,13 @@ public class EventRunnerUtils {
     public static @NonNull Collection<Processor> selectProcessor(@Nullable final List<ProcessorModel> eventProcessors,
                                                                  @Nullable final List<Processor> processors) {
         final List<Processor> result = new ArrayList<>();
-        if (processors == null || processors.isEmpty()) {
-            return result;
-        }
-
-        for (ProcessorModel processModel : eventProcessors) {
+        for (ProcessorModel processModel : Optional.ofNullable(eventProcessors).orElse(List.of())) {
             chooseProcessor(processModel, processors).ifPresent(result::add);
         }
-
         return result;
     }
 
-    private static @NonNull Optional<Processor> chooseProcessor(final @NonNull ProcessorModel processModel,
+    protected static @NonNull Optional<Processor> chooseProcessor(final @NonNull ProcessorModel processModel,
                                                                 final @NonNull List<Processor> processors) {
         return processors.stream()
                          .filter(p -> p.getName().equalsIgnoreCase(processModel.getName()) ||
@@ -60,6 +55,6 @@ public class EventRunnerUtils {
         if (error instanceof ExceptionWithErrorCode e) {
             result = e.getErrorCode();
         }
-        return result == null ? EventErrors.UNDEFINED : result;
+        return Optional.ofNullable(result).orElse(EventErrors.UNDEFINED);
     }
 }

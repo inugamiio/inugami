@@ -16,7 +16,6 @@
  */
 package io.inugami.framework.interfaces.providers;
 
-import io.inugami.framework.interfaces.models.basic.Dto;
 
 /**
  * The <strong>ProviderWriter</strong> is designed to create writer providers.
@@ -26,5 +25,5 @@ import io.inugami.framework.interfaces.models.basic.Dto;
  * @since 28 mai 2018
  */
 public interface ProviderWriter {
-    void write(Dto<?> data);
+    void write(final Object data);
 }

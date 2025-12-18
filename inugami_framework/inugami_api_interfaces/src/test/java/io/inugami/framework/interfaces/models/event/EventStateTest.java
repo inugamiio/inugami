@@ -41,7 +41,7 @@ class EventStateTest {
                          .start(1764643637482L)
                          .end(1764643637632L)
                          .running(true)
-                         .delais(150L)
+                         .delay(150L)
                          .build()
                          .toBuilder()
                          .build();

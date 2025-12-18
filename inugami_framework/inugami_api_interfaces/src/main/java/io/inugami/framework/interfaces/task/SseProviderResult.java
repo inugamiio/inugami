@@ -18,12 +18,10 @@ package io.inugami.framework.interfaces.task;
 
 
 import io.inugami.framework.interfaces.alertings.AlertingResult;
-import io.inugami.framework.interfaces.models.basic.Dto;
 import lombok.*;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * SseProviderResult
@@ -39,7 +37,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuppressWarnings({"java:S3655", "java:S107"})
-public class SseProviderResult implements Dto<SseProviderResult> {
+public class SseProviderResult implements Serializable {
 
     // =========================================================================
     // ATTRIBUTES
@@ -56,27 +54,6 @@ public class SseProviderResult implements Dto<SseProviderResult> {
     @Singular("alerts")
     private List<AlertingResult> alerts;
     private boolean              error;
-    private List<Dto<?>>         values;
+    private List<Serializable>   values;
     private String               scheduler;
-
-
-    @Override
-    public SseProviderResult cloneObj() {
-        final var builder = toBuilder();
-        builder.alerts(Optional.ofNullable(alerts)
-                               .orElse(List.of())
-                               .stream()
-                               .map(AlertingResult::cloneObj)
-                               .toList());
-
-        final List<Dto<?>> newValues = new ArrayList<>();
-        if (values != null) {
-            for (Dto<?> item : values) {
-                newValues.add(item.cloneObj());
-            }
-        }
-
-        return builder.build();
-    }
-
 }

@@ -16,12 +16,11 @@
  */
 package io.inugami.framework.interfaces.models.graphite;
 
-import io.inugami.framework.interfaces.models.basic.Dto;
 import io.inugami.framework.interfaces.models.number.DataPoint;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * GraphiteValues
@@ -36,7 +35,7 @@ import java.util.Optional;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class GraphiteTarget implements Dto<GraphiteTarget> {
+public class GraphiteTarget implements Serializable {
 
     // =========================================================================
     // ATTRIBUTES
@@ -50,17 +49,4 @@ public class GraphiteTarget implements Dto<GraphiteTarget> {
     private              String          target;
     private              List<DataPoint> datapoints;
 
-
-    @Override
-    public GraphiteTarget cloneObj() {
-        final var builder = toBuilder();
-
-        builder.datapoints(Optional.ofNullable(datapoints)
-                                   .orElse(List.of())
-                                   .stream()
-                                   .map(DataPoint::cloneObj)
-                                   .toList());
-
-        return builder.build();
-    }
 }

@@ -1,5 +1,5 @@
 {
-  "delais" : 150,
+  "delay" : 150,
   "end" : 1764643637632,
   "eventName" : "value",
   "running" : true,

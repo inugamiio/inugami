@@ -95,9 +95,4 @@ public class FloatNumber implements GraphiteNumber {
     public BigDecimal toBigDecimal() {
         return BigDecimal.valueOf(value);
     }
-
-    @Override
-    public GraphiteNumber cloneObj() {
-        return new FloatNumber(value);
-    }
 }
