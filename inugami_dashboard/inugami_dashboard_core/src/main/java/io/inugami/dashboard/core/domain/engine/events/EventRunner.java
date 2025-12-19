@@ -18,14 +18,9 @@ package io.inugami.dashboard.core.domain.engine.events;
 
 import io.inugami.dashboard.api.domain.engine.EngineListener;
 import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
-import io.inugami.dashboard.api.domain.event.EventErrors;
-import io.inugami.dashboard.api.domain.sender.ISSESender;
 import io.inugami.framework.commons.threads.ThreadsExecutorService;
 import io.inugami.framework.configuration.models.plugins.Plugin;
 import io.inugami.framework.interfaces.concurrent.FutureData;
-import io.inugami.framework.interfaces.exceptions.ErrorCode;
-import io.inugami.framework.interfaces.exceptions.ExceptionWithErrorCode;
-import io.inugami.framework.interfaces.exceptions.TechnicalException;
 import io.inugami.framework.interfaces.exceptions.services.ProviderException;
 import io.inugami.framework.interfaces.models.engine.Status;
 import io.inugami.framework.interfaces.models.event.Event;
@@ -49,23 +44,25 @@ import java.util.concurrent.TimeUnit;
 import static io.inugami.dashboard.core.domain.engine.events.EventRunnerUtils.resolveErrorCode;
 import static io.inugami.dashboard.core.domain.engine.events.EventRunnerUtils.selectProcessor;
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
+
 @SuppressWarnings({"java:S1172"})
 @Slf4j
 @Builder
 @RequiredArgsConstructor
 public class EventRunner {
+    public static final String                     UNDEFINED = "undefined";
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
-    private final Event                      event;
-    private final LocalDateTime              now;
-    private final Plugin                     plugin;
-    private final List<Provider>             providers;
-    private final List<Processor>            processors;
-    private final ZoneOffset                 zoneOffset;
-    private final long                       timeout;
-    private final ThreadsExecutorService     threadsExecutorService;
-    private final Collection<EngineListener> listeners;
+    private final       Event                      event;
+    private final       LocalDateTime              now;
+    private final       Plugin                     plugin;
+    private final       List<Provider>             providers;
+    private final       List<Processor>            processors;
+    private final       ZoneOffset                 zoneOffset;
+    private final       long                       timeout;
+    private final       ThreadsExecutorService     threadsExecutorService;
+    private final       Collection<EngineListener> listeners;
 
     // =================================================================================================================
     // RUN EVENTS
@@ -75,8 +72,13 @@ public class EventRunner {
     }
 
     protected EnginePluginEventResultDTO runEvent() {
-        if (event.getTargets() == null || event.getTargets().isEmpty()) {
-            return EnginePluginEventResultDTO.builder().name(event.getName()).status(Status.NOTHING_TO_DO).build();
+        if (event == null || Optional.ofNullable(event.getTargets()).orElse(List.of()).isEmpty()) {
+            return EnginePluginEventResultDTO.builder()
+                                             .name(Optional.ofNullable(event)
+                                                           .map(Event::getName)
+                                                           .orElse(UNDEFINED))
+                                             .status(Status.NOTHING_TO_DO)
+                                             .build();
         }
         return processRunEvent();
     }
@@ -89,7 +91,7 @@ public class EventRunner {
         final List<Callable<EnginePluginEventResultDTO>> tasks = new ArrayList<>();
 
         for (final TargetConfig target : event.getTargets()) {
-            final var provider = selectProvider(event.getProvider(), providers, mainProvider);
+            final var provider = selectProvider(target.getProvider(), providers, mainProvider);
             if (mainProvider == null && provider != null) {
                 mainProvider = provider;
             }
@@ -146,7 +148,7 @@ public class EventRunner {
                                                          .build();
             callListeners(result);
             return result;
-        } catch (ProviderException e) {
+        } catch (Throwable e) {
             final var result = EnginePluginEventResultDTO.builder()
                                                          .name(event.getName())
                                                          .message(e.getMessage())
@@ -163,10 +165,11 @@ public class EventRunner {
                                                           final Provider provider,
                                                           final LocalDateTime now) {
         try {
-            final FutureData<ProviderFutureResult> future = provider.callEvent(buildEvent(target), plugin.getGav(), this.now);
-            ProviderFutureResult                   result = future.getFuture().get(timeout, TimeUnit.MILLISECONDS);
+            final FutureData<ProviderFutureResult> future =
+                    provider.callEvent(buildEvent(target), plugin.getGav(), this.now);
+            ProviderFutureResult result = future.getFuture().get(timeout, TimeUnit.MILLISECONDS);
 
-            for (Processor processor : selectProcessor(event.getProcessors(), processors)) {
+            for (Processor processor : selectProcessor(target.getProcessors(), processors)) {
                 result = processor.process(event, result);
             }
 
@@ -213,11 +216,13 @@ public class EventRunner {
     protected @Nullable Provider selectProvider(final String provider,
                                                 final List<Provider> providers,
                                                 final Provider defaultProvider) {
-        return providers.stream()
-                        .filter(p -> p.getName().equalsIgnoreCase(provider) ||
-                                     p.getClass().getName().equalsIgnoreCase(provider))
-                        .findFirst()
-                        .orElse(defaultProvider);
+        return Optional.ofNullable(providers)
+                       .orElse(List.of())
+                       .stream()
+                       .filter(p -> p.getName().equalsIgnoreCase(provider) ||
+                                    p.getClass().getName().equalsIgnoreCase(provider))
+                       .findFirst()
+                       .orElse(defaultProvider);
     }
 
     protected @NonNull SimpleEvent buildEvent(final TargetConfig target) {

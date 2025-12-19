@@ -3,19 +3,10 @@ package io.inugami.dashboard.core.domain.engine.events;
 import io.inugami.commons.test.UnitTestData;
 import io.inugami.dashboard.api.domain.engine.EngineListener;
 import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
-import io.inugami.framework.configuration.models.plugins.Plugin;
-import io.inugami.framework.interfaces.concurrent.FutureData;
-import io.inugami.framework.interfaces.concurrent.FutureDataModel;
-import io.inugami.framework.interfaces.concurrent.ImmediateFutureData;
 import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
 import io.inugami.framework.interfaces.exceptions.UncheckedException;
-import io.inugami.framework.interfaces.models.event.SimpleEvent;
-import io.inugami.framework.interfaces.models.maven.Gav;
-import io.inugami.framework.interfaces.models.number.DataPoint;
 import io.inugami.framework.interfaces.processors.Processor;
-import io.inugami.framework.interfaces.processors.ProcessorModel;
 import io.inugami.framework.interfaces.providers.Provider;
-import io.inugami.framework.interfaces.task.ProviderFutureResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,11 +15,11 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
 import static io.inugami.commons.test.UnitTestHelper.assertText;
+import static io.inugami.dashboard.core.domain.tools.DataUtils.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -38,7 +29,7 @@ class SimpleEventRunnerTest {
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
-    public static final String                                     PROCESSOR_NAME = "processor_name";
+
     @Mock
     private             Provider                                   provider;
     @Mock
@@ -219,7 +210,7 @@ class SimpleEventRunnerTest {
     // =================================================================================================================
     SimpleEventRunner runner() {
         return SimpleEventRunner.builder()
-                                .event(buildEvent())
+                                .event(buildSimpleEvent())
                                 .now(UnitTestData.DATE_TIME)
                                 .plugin(buildPlugin())
                                 .provider(provider)
@@ -231,44 +222,4 @@ class SimpleEventRunnerTest {
     }
 
 
-    private SimpleEvent buildEvent() {
-        return SimpleEvent.builder()
-                          .name("event-name")
-                          .fromFirstTime("-10min")
-                          .from("-5min")
-                          .processors(List.of(ProcessorModel.builder()
-                                                            .name(PROCESSOR_NAME)
-                                                            .className("foo.bar.Processor")
-                                                            .build()))
-                          .query("query")
-                          .scheduler("scheduler")
-                          .mapper("mapper")
-                          .provider("provider")
-                          .build();
-    }
-
-    private Plugin buildPlugin() {
-        return Plugin.builder()
-                     .gav(Gav.builder()
-                             .groupId("io.inugami")
-                             .artifactId("inugami_api")
-                             .version("3.3.0")
-                             .qualifier("jar")
-                             .build())
-                     .build();
-    }
-
-    private FutureData<ProviderFutureResult> buildProviderFutureResult(final LocalDateTime date) {
-        return FutureDataModel.<ProviderFutureResult>builder()
-                              .future(ImmediateFutureData.<ProviderFutureResult>builder()
-                                                         .data(ProviderFutureResult.builder()
-                                                                                   .channel("SSE_inugami")
-                                                                                   .data(DataPoint.builder()
-                                                                                                  .timestamp(1766064662604L)
-                                                                                                  .value(15.5)
-                                                                                                  .build())
-                                                                                   .build())
-                                                         .build())
-                              .build();
-    }
 }
