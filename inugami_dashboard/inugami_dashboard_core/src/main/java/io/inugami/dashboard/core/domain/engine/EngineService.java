@@ -26,6 +26,7 @@ import io.inugami.dashboard.api.domain.engine.dto.EventDoneDTO;
 import io.inugami.dashboard.api.domain.event.IEventDataDao;
 import io.inugami.dashboard.api.domain.sender.ISSESender;
 import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.api.tools.RunSafeUtils;
 import io.inugami.framework.commons.threads.ThreadsExecutorService;
 import io.inugami.framework.configuration.models.plugins.Plugin;
 import io.inugami.framework.interfaces.exceptions.TechnicalException;
@@ -34,6 +35,7 @@ import io.inugami.framework.interfaces.models.event.GenericEvent;
 import io.inugami.framework.interfaces.processors.Processor;
 import io.inugami.framework.interfaces.providers.Provider;
 import io.inugami.framework.interfaces.tools.BlockingQueue;
+import io.inugami.framework.interfaces.tools.MapUtils;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,8 +60,9 @@ public class EngineService implements IEngineService, EngineListener {
     //==================================================================================================================
     public static final String                            MAX_THREADS          = "maxThreads";
     public static final String                            TIMEOUT              = "timeout";
-    public static final int                               DEFAULT_TIMEOUT      = 60_000;
+    public static final long                              DEFAULT_TIMEOUT      = 60_000L;
     public static final int                               MIN_TIMEOUT          = 1000;
+    public static final int                               DEFAULT_NB_THREADS   = 20;
     private final       BlockingQueue<EventDoneDTO>       eventsDone           = new BlockingQueue<>();
     private final       Map<String, IEnginePluginService> enginePluginServices = new LinkedHashMap<>();
     private final       List<Provider>                    providers            = new ArrayList<>();
@@ -124,26 +127,11 @@ public class EngineService implements IEngineService, EngineListener {
     protected EngineResultDTO processRun() {
         final var mdc = MdcService.getInstance();
         mdc.processId(UUID.randomUUID().toString());
-        final Collection<EngineListener>            currentListeners = getListeners();
-        final List<Callable<EnginePluginResultDTO>> tasks            = new ArrayList<>();
-        final Map<String, EnginePluginResultDTO>    pluginStatus     = new ConcurrentHashMap<>();
-        final LocalDateTime                         now              = LocalDateTime.now(clock);
+        final Collection<EngineListener>         currentListeners = getListeners();
+        final Map<String, EnginePluginResultDTO> pluginStatus     = new ConcurrentHashMap<>();
+        final LocalDateTime                      now              = LocalDateTime.now(clock);
 
-        for (Plugin plugin : getPlugins()) {
-            final IEnginePluginService enginePluginService = getPluginEngine(plugin);
-            if (enginePluginService.hasEventsToRun(now)) {
-                tasks.add(PluginCallable.builder()
-                                        .plugin(plugin)
-                                        .callable(() -> enginePluginService.run(currentListeners, now))
-                                        .build());
-
-                pluginStatus.put(plugin.getGav().getHash(),
-                                 EnginePluginResultDTO.builder()
-                                                      .gav(plugin.getGav())
-                                                      .status(Status.RUNNING)
-                                                      .build());
-            }
-        }
+        final List<Callable<EnginePluginResultDTO>> tasks = buildPluginTasks(now, currentListeners, pluginStatus);
 
         if (tasks.isEmpty()) {
             log.trace("no task to run");
@@ -161,18 +149,46 @@ public class EngineService implements IEngineService, EngineListener {
         }
 
         log.debug("computing status");
-        final var builder = EngineResultDTO.builder()
-                                           .traceId(mdc.traceId())
-                                           .processId(mdc.processId())
-                                           .start(LocalDateTime.now(clock));
-
-
-        builder.end(LocalDateTime.now(clock));
-        builder.status(computStatus(pluginStatus));
-
-        final var result = builder.build();
+        final var result = EngineResultDTO.builder()
+                                          .traceId(mdc.traceId())
+                                          .processId(mdc.processId())
+                                          .start(now)
+                                          .end(LocalDateTime.now(clock))
+                                          .status(computStatus(pluginStatus))
+                                          .plugins(extractPluginResults(pluginStatus))
+                                          .build();
         sendOnDone(result);
         return result;
+    }
+
+    private Collection<EnginePluginResultDTO> extractPluginResults(final Map<String, EnginePluginResultDTO> pluginStatus) {
+        return MapUtils.initMapAndSort(pluginStatus)
+                       .entrySet()
+                       .stream()
+                       .map(Map.Entry::getValue)
+                       .toList();
+    }
+
+    private List<Callable<EnginePluginResultDTO>> buildPluginTasks(final LocalDateTime now,
+                                                                   final Collection<EngineListener> currentListeners,
+                                                                   final Map<String, EnginePluginResultDTO> pluginStatus) {
+        final List<Callable<EnginePluginResultDTO>> tasks = new ArrayList<>();
+        for (Plugin plugin : getPlugins()) {
+            final IEnginePluginService enginePluginService = getPluginEngine(plugin);
+            if (enginePluginService.hasEventsToRun(now)) {
+                tasks.add(PluginCallable.builder()
+                                        .plugin(plugin)
+                                        .callable(() -> enginePluginService.run(currentListeners, now))
+                                        .build());
+
+                pluginStatus.put(plugin.getGav().getHash(),
+                                 EnginePluginResultDTO.builder()
+                                                      .gav(plugin.getGav())
+                                                      .status(Status.RUNNING)
+                                                      .build());
+            }
+        }
+        return tasks;
     }
 
     protected Status computStatus(final Map<String, EnginePluginResultDTO> pluginStatus) {
@@ -229,7 +245,9 @@ public class EngineService implements IEngineService, EngineListener {
     }
 
     protected void sendOnDone(@NonNull final EngineResultDTO engineResult) {
-        listeners.forEach(listener -> listener.onDone(engineResult));
+        for (final EngineListener listener : listeners) {
+            RunSafeUtils.runSafeVoid(() -> listener.onDone(engineResult), log);
+        }
     }
 
     @Override
@@ -266,13 +284,13 @@ public class EngineService implements IEngineService, EngineListener {
 
     protected long getPluginTimeout(@Nullable final Map<String, String> properties) {
         final String timeoutStr = Optional.ofNullable(properties).orElse(Map.of()).get(TIMEOUT);
-        final var    timeout    = timeoutStr == null ? DEFAULT_TIMEOUT : Long.parseLong(timeoutStr);
+        final var    timeout    = Optional.ofNullable(timeoutStr).map(Long::parseLong).orElse(DEFAULT_TIMEOUT);
         return timeout < MIN_TIMEOUT ? DEFAULT_TIMEOUT : timeout;
     }
 
     protected int getPluginMaxThread(@Nullable final Map<String, String> properties) {
         final String maxThreads = Optional.ofNullable(properties).orElse(Map.of()).get(MAX_THREADS);
-        return maxThreads == null ? 20 : Integer.parseInt(maxThreads);
+        return Optional.ofNullable(maxThreads).map(Integer::parseInt).orElse(DEFAULT_NB_THREADS);
     }
 
     protected @NonNull IEnginePluginService getPluginEngine(@NonNull final Plugin plugin) {

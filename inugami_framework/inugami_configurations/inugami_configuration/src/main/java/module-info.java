@@ -20,6 +20,7 @@ open module io.inugami.framework.configurations.configuration {
     requires io.inugami.framework.interfaces;
     requires lombok;
     requires org.slf4j;
+    requires com.fasterxml.jackson.annotation;
 
     exports io.inugami.framework.configuration.exceptions;
     exports io.inugami.framework.configuration.models.app;

@@ -27,10 +27,12 @@ import java.util.Collection;
 
 @RequestMapping(path = "plugin")
 public interface PluginRestClient {
-
+    @PluginRestClientDOC.DocFindAllPlugin
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     Collection<Plugin> findAllPlugin();
 
+
+    @PluginRestClientDOC.DocFindPluginDataByGav
     @GetMapping(path = "{groupId}/{artifactId}/data", produces = MediaType.APPLICATION_JSON_VALUE)
     PluginDataAPI findPluginDataByGav(@PathVariable(required = true) final String groupId,
                                       @PathVariable(required = true) final String artifactId);

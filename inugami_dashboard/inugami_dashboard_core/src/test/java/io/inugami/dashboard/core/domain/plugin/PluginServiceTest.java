@@ -144,153 +144,143 @@ class PluginServiceTest {
         assertText(cleanPlugin(plugin),
                    """
                            {
-                              "alertingProviders" : [ ],
-                              "config" : {
-                                "alertings" : [ ],
-                                "components" : [ ],
-                                "dependencies" : [ ],
-                                "eventsFiles" : [ ],
-                                "frontConfig" : {
-                                  "commonsCss" : "inu_test.css",
-                                  "menuLinks" : [ ],
-                                  "pluginBaseName" : "inu_test",
-                                  "router" : [ ]
-                                },
-                                "frontProperties" : [ ],
-                                "gav" : {
-                                  "artifactId" : "inu-test",
-                                  "groupId" : "io.inugami",
-                                  "hash" : "io.inugami:inu-test:4.3.0",
-                                  "version" : "4.3.0"
-                                },
-                                "handlers" : [ ],
-                                "listeners" : [ ],
-                                "processors" : [ ],
-                                "properties" : {
-                                  "debug" : "true",
-                                  "timeout" : "60000"
-                                },
-                                "providers" : [ ],
-                                "resources" : [ ],
-                                "security" : [ ]
-                              },
-                              "enabled" : false,
-                              "eventConfigPresent" : true,
-                              "events" : [ {
-                                "events" : [ {
-                                  "type" : "Event",
-                                  "name" : "composite-event",
-                                  "fromFirstTime" : null,
-                                  "until" : null,
-                                  "provider" : null,
-                                  "mapper" : null,
-                                  "processors" : [ ],
-                                  "alertings" : [ ],
-                                  "scheduler" : "0 * * * * ?",
-                                  "targets" : [ {
-                                    "name" : "target",
-                                    "fromFirstTime" : null,
-                                    "until" : null,
-                                    "provider" : "ela",
-                                    "mapper" : null,
-                                    "processors" : [ ],
-                                    "alertings" : [ ],
-                                    "query" : "ummarize(asPercent(sumSeries(org.foo.bar.jmx.gravida.sessions),sumSeries(org.foo.bar.jmx.*.session)), \\"24h\\", \\"avg\\",true)",
-                                    "parent" : null,
-                                    "scheduler" : "0 0 * * * ?"
-                                  } ]
-                                } ],
-                                "gav" : {
-                                  "artifactId" : "inu-test",
-                                  "groupId" : "io.inugami",
-                                  "hash" : "io.inugami:inu-test:4.3.0",
-                                  "version" : "4.3.0"
-                                },
-                                "name" : "inu-events",
-                                "scheduler" : "0 * * * * ?",
-                                "simpleEvents" : [ {
-                                  "type" : "SimpleEvent",
-                                  "name" : "simple-event",
-                                  "fromFirstTime" : null,
-                                  "until" : null,
-                                  "provider" : "graphite",
-                                  "mapper" : null,
-                                  "processors" : [ ],
-                                  "alertings" : [ ],
-                                  "query" : "ummarize(asPercent(sumSeries(org.foo.bar.jmx.gravida.sessions),sumSeries(org.foo.bar.jmx.*.session)), \\"24h\\", \\"avg\\",true)",
-                                  "parent" : null,
-                                  "scheduler" : "0 0/5 * * * ?"
-                                } ]
-                              } ],
-                              "frontConfig" : {
-                                "menuLinks" : [ ],
-                                "router" : [ ]
-                              },
-                              "gav" : {
-                                "artifactId" : "inu-test",
-                                "groupId" : "io.inugami",
-                                "hash" : "io.inugami:inu-test:4.3.0",
-                                "version" : "4.3.0"
-                              },
-                              "handlers" : [ ],
-                              "listeners" : [ ],
-                              "manifest" : {
-                                "workspace" : "/home/me/dev/inugami"
-                              },
-                              "processors" : [ ],
-                              "properties" : { },
-                              "providers" : [ ]
-                            }
+                               "config" : {
+                                 "alertings" : [ ],
+                                 "components" : [ ],
+                                 "dependencies" : [ ],
+                                 "eventsFiles" : [ ],
+                                 "frontConfig" : {
+                                   "commonsCss" : "inu_test.css",
+                                   "menuLinks" : [ ],
+                                   "pluginBaseName" : "inu_test",
+                                   "router" : [ ]
+                                 },
+                                 "frontProperties" : [ ],
+                                 "gav" : {
+                                   "artifactId" : "inu-test",
+                                   "groupId" : "io.inugami",
+                                   "hash" : "io.inugami:inu-test:4.3.0",
+                                   "version" : "4.3.0"
+                                 },
+                                 "handlers" : [ ],
+                                 "listeners" : [ ],
+                                 "processors" : [ ],
+                                 "properties" : {
+                                   "debug" : "true",
+                                   "timeout" : "60000"
+                                 },
+                                 "providers" : [ ],
+                                 "resources" : [ ],
+                                 "security" : [ ]
+                               },
+                               "enabled" : false,
+                               "eventConfigPresent" : true,
+                               "events" : [ {
+                                 "events" : [ {
+                                   "type" : "Event",
+                                   "name" : "composite-event",
+                                   "fromFirstTime" : null,
+                                   "until" : null,
+                                   "provider" : null,
+                                   "mapper" : null,
+                                   "processors" : [ ],
+                                   "alertings" : [ ],
+                                   "scheduler" : "0 * * * * ?",
+                                   "targets" : [ {
+                                     "name" : "target",
+                                     "fromFirstTime" : null,
+                                     "until" : null,
+                                     "provider" : "ela",
+                                     "mapper" : null,
+                                     "processors" : [ ],
+                                     "alertings" : [ ],
+                                     "query" : "ummarize(asPercent(sumSeries(org.foo.bar.jmx.gravida.sessions),sumSeries(org.foo.bar.jmx.*.session)), \\"24h\\", \\"avg\\",true)",
+                                     "parent" : null,
+                                     "scheduler" : "0 0 * * * ?"
+                                   } ]
+                                 } ],
+                                 "gav" : {
+                                   "artifactId" : "inu-test",
+                                   "groupId" : "io.inugami",
+                                   "hash" : "io.inugami:inu-test:4.3.0",
+                                   "version" : "4.3.0"
+                                 },
+                                 "name" : "inu-events",
+                                 "scheduler" : "0 * * * * ?",
+                                 "simpleEvents" : [ {
+                                   "type" : "SimpleEvent",
+                                   "name" : "simple-event",
+                                   "fromFirstTime" : null,
+                                   "until" : null,
+                                   "provider" : "graphite",
+                                   "mapper" : null,
+                                   "processors" : [ ],
+                                   "alertings" : [ ],
+                                   "query" : "ummarize(asPercent(sumSeries(org.foo.bar.jmx.gravida.sessions),sumSeries(org.foo.bar.jmx.*.session)), \\"24h\\", \\"avg\\",true)",
+                                   "parent" : null,
+                                   "scheduler" : "0 0/5 * * * ?"
+                                 } ]
+                               } ],
+                               "frontConfig" : {
+                                 "menuLinks" : [ ],
+                                 "router" : [ ]
+                               },
+                               "gav" : {
+                                 "artifactId" : "inu-test",
+                                 "groupId" : "io.inugami",
+                                 "hash" : "io.inugami:inu-test:4.3.0",
+                                 "version" : "4.3.0"
+                               },
+                               "manifest" : {
+                                 "workspace" : "/home/me/dev/inugami"
+                               },
+                               "properties" : { }
+                             }
                            """);
         assertText(service.findAllPlugin().stream().map(this::cleanPlugin).toList(),
                    """
                            [ {
-                                "alertingProviders" : [ ],
-                                "enabled" : false,
-                                "eventConfigPresent" : false,
-                                "events" : [ {
-                                  "events" : [ {
-                                    "type" : "Event",
-                                    "name" : "composite-event",
-                                    "fromFirstTime" : null,
-                                    "until" : null,
-                                    "provider" : null,
-                                    "mapper" : null,
-                                    "processors" : [ ],
-                                    "alertings" : [ ],
-                                    "scheduler" : "0 * * * * ?",
-                                    "targets" : [ ]
-                                  } ],
-                                  "name" : "inu-events",
-                                  "simpleEvents" : [ {
-                                    "type" : "SimpleEvent",
-                                    "name" : "simple-event",
-                                    "fromFirstTime" : null,
-                                    "until" : null,
-                                    "provider" : null,
-                                    "mapper" : null,
-                                    "processors" : [ ],
-                                    "alertings" : [ ],
-                                    "query" : null,
-                                    "parent" : null,
-                                    "scheduler" : "0 0/5 * * * ?"
-                                  } ]
-                                } ],
-                                "frontConfig" : {
-                                  "menuLinks" : [ ],
-                                  "router" : [ ]
-                                },
-                                "gav" : {
-                                  "artifactId" : "inu-test",
-                                  "groupId" : "io.inugami",
-                                  "hash" : "io.inugami:inu-test:4.3.0",
-                                  "version" : "4.3.0"
-                                },
-                                "handlers" : [ ],
-                                "listeners" : [ ],
-                                "processors" : [ ],
-                                "providers" : [ ]
-                              } ]
+                             "enabled" : false,
+                             "eventConfigPresent" : false,
+                             "events" : [ {
+                               "events" : [ {
+                                 "type" : "Event",
+                                 "name" : "composite-event",
+                                 "fromFirstTime" : null,
+                                 "until" : null,
+                                 "provider" : null,
+                                 "mapper" : null,
+                                 "processors" : [ ],
+                                 "alertings" : [ ],
+                                 "scheduler" : "0 * * * * ?",
+                                 "targets" : [ ]
+                               } ],
+                               "name" : "inu-events",
+                               "simpleEvents" : [ {
+                                 "type" : "SimpleEvent",
+                                 "name" : "simple-event",
+                                 "fromFirstTime" : null,
+                                 "until" : null,
+                                 "provider" : null,
+                                 "mapper" : null,
+                                 "processors" : [ ],
+                                 "alertings" : [ ],
+                                 "query" : null,
+                                 "parent" : null,
+                                 "scheduler" : "0 0/5 * * * ?"
+                               } ]
+                             } ],
+                             "frontConfig" : {
+                               "menuLinks" : [ ],
+                               "router" : [ ]
+                             },
+                             "gav" : {
+                               "artifactId" : "inu-test",
+                               "groupId" : "io.inugami",
+                               "hash" : "io.inugami:inu-test:4.3.0",
+                               "version" : "4.3.0"
+                             }
+                           } ]
                            """);
 
     }

@@ -18,7 +18,13 @@ package io.inugami.dashboard.interfaces.core.domain.event;
 
 import io.inugami.dashboard.interfaces.domain.event.EventRestClient;
 import io.inugami.framework.interfaces.models.event.Event;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
+@Builder
+@RestController
 public class EventRestController implements EventRestClient {
     //==================================================================================================================
     // CREATE

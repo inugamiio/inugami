@@ -31,7 +31,6 @@ import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
 import io.inugami.framework.interfaces.exceptions.TechnicalException;
 import io.inugami.framework.interfaces.models.engine.Status;
 import io.inugami.framework.interfaces.models.event.Event;
-import io.inugami.framework.interfaces.models.event.GenericEvent;
 import io.inugami.framework.interfaces.models.event.SimpleEvent;
 import io.inugami.framework.interfaces.models.event.TargetConfig;
 import io.inugami.framework.interfaces.processors.Processor;
@@ -46,6 +45,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.Callable;
+
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
 @SuppressWarnings({"java:S2153"})
 @Slf4j
@@ -148,19 +149,10 @@ public class EnginePluginService implements IEnginePluginService {
     public EnginePluginResultDTO run(final @NonNull Collection<EngineListener> inputListeners,
                                      final @NonNull LocalDateTime now) {
 
-        final List<EnginePluginEventResultDTO> eventsDone       = new ArrayList<>();
+
         final List<EngineListener>             currentListeners = new ArrayList<>();
         currentListeners.addAll(Optional.ofNullable(listeners).orElse(List.of()));
         currentListeners.addAll(Optional.ofNullable(inputListeners).orElse(List.of()));
-        currentListeners.add(new EngineListener() {
-            @Override
-            public void onEventDone(final Plugin plugin,
-                                    final GenericEvent<?> event,
-                                    final EnginePluginEventResultDTO data) {
-                eventsDone.add(data);
-            }
-        });
-
 
         final List<PluginEventCron> eventsToRun = events.stream()
                                                         .filter(eventCron -> eventCron.getCron()
@@ -180,19 +172,20 @@ public class EnginePluginService implements IEnginePluginService {
                 tasks.add(runEvent(eventCron.getEvent(), now, currentListeners));
             }
         }
-
+        final List<EnginePluginEventResultDTO> result = new ArrayList<>();
         try {
             log.debug("executing plugin event");
-            threadsExecutorService.runAndGrab(tasks, timeout);
+            final List<EnginePluginEventResultDTO> data = threadsExecutorService.runAndGrab(tasks, timeout);
+            applyIfNotNull(data, result::addAll);
         } catch (TechnicalException e) {
             log.error(e.getMessage(), e);
         }
 
-        Collections.sort(eventsDone);
+        Collections.sort(result);
         return EnginePluginResultDTO.builder()
                                     .gav(plugin.getGav())
-                                    .status(resolveStatus(eventsDone))
-                                    .events(eventsDone)
+                                    .status(resolveStatus(result))
+                                    .events(result)
                                     .build();
     }
 

@@ -16,6 +16,7 @@
  */
 package io.inugami.framework.configuration.models.plugins;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.inugami.framework.configuration.models.EventConfig;
 import io.inugami.framework.configuration.models.front.PluginFrontConfig;
 import io.inugami.framework.interfaces.alertings.AlertingProvider;
@@ -46,6 +47,7 @@ import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
 @NoArgsConstructor
 @Setter
 @Getter
+@JsonIgnoreProperties(value = {"listeners", "processors", "providers", "handlers", "alertingProviders"})
 @SuppressWarnings({"java:S3655", "java:S107"})
 public class Plugin implements Serializable {
 

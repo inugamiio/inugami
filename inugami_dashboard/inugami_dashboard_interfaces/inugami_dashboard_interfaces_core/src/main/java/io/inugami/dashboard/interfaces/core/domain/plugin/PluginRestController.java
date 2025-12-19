@@ -23,12 +23,14 @@ import io.inugami.dashboard.interfaces.domain.plugin.PluginRestClient;
 import io.inugami.dashboard.interfaces.domain.plugin.dto.PluginDataAPI;
 import io.inugami.framework.configuration.models.plugins.Plugin;
 import io.inugami.framework.interfaces.models.maven.Gav;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.Map;
 
+@Builder
 @RequiredArgsConstructor
 @RestController
 public class PluginRestController implements PluginRestClient {
@@ -48,7 +50,8 @@ public class PluginRestController implements PluginRestClient {
 
     @Override
     public PluginDataAPI findPluginDataByGav(final String groupId, final String artifactId) {
-        final Map<String, EnginePluginEventResultDTO> resultset = pluginService.findPluginDataByGav(groupId, artifactId);
+        final Map<String, EnginePluginEventResultDTO> resultset =
+                pluginService.findPluginDataByGav(groupId, artifactId);
 
         return PluginDataAPI.builder()
                             .gav(Gav.builder()

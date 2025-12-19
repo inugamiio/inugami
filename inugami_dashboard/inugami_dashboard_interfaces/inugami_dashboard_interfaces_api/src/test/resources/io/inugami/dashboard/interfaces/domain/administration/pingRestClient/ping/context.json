@@ -2,14 +2,14 @@
   "contentType" : "application/json",
   "encoding" : "UTF-8",
   "requestHeaders" : {
-    "x-device-identifier" : "73d9e3ad-341a-47ba-bc9f-dee4f3fcbff3",
-    "x-correlation-id" : "d64a5f8a-765e-419e-ab06-f6b108d438da"
+    "x-device-identifier" : "f95c6b03-202d-4b43-affd-0db870f85e0d",
+    "x-correlation-id" : "2c52cf77-c97d-4d2f-9eb7-4d15af7f721a"
   },
   "response" : "{\n  \"applicationName\" : \"inugami\",\n  \"now\" : \"2023-06-01T12:00:00\"\n}",
   "responseHeaders" : {
-    "x-device-identifier" : "73d9e3ad-341a-47ba-bc9f-dee4f3fcbff3",
-    "x-correlation-id" : "d64a5f8a-765e-419e-ab06-f6b108d438da",
-    "x-b3-traceid" : "caaaad21-ac5d-416c-a3ec-3bee35e4e979"
+    "x-device-identifier" : "f95c6b03-202d-4b43-affd-0db870f85e0d",
+    "x-correlation-id" : "2c52cf77-c97d-4d2f-9eb7-4d15af7f721a",
+    "x-b3-traceid" : "3f0b2c00-1dd7-4985-acd1-cb7e9d351407"
   },
   "status" : 200,
   "url" : "/administration/ping",

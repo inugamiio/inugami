@@ -2,14 +2,14 @@
   "contentType" : "application/json",
   "encoding" : "UTF-8",
   "requestHeaders" : {
-    "x-device-identifier" : "61e7a4b6-8b43-4ae5-959d-1a9640595d0f",
-    "x-correlation-id" : "efa26ef2-a676-4680-86b8-d2b5e429ec1f"
+    "x-device-identifier" : "0d305c37-ea5c-4bf9-9856-58db8deb3e90",
+    "x-correlation-id" : "1da9eec1-6c70-434d-a45c-e3fee49b90d2"
   },
   "response" : "{\n  \"data\" : [ {\n    \"condition\" : \"value > 5\",\n    \"description\" : \"lorem ipsum\",\n    \"function\" : \"handlerFunction\",\n    \"message\" : \"sorry\",\n    \"name\" : \"simple-alert\",\n    \"provider\" : \"graphite\",\n    \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n  } ],\n  \"nbFoundItems\" : 1,\n  \"next\" : false,\n  \"page\" : 0,\n  \"pageSize\" : 10,\n  \"previous\" : false,\n  \"totalPages\" : 1\n}",
   "responseHeaders" : {
-    "x-device-identifier" : "61e7a4b6-8b43-4ae5-959d-1a9640595d0f",
-    "x-correlation-id" : "efa26ef2-a676-4680-86b8-d2b5e429ec1f",
-    "x-b3-traceid" : "71716e28-3507-427b-822f-b17261528990"
+    "x-device-identifier" : "0d305c37-ea5c-4bf9-9856-58db8deb3e90",
+    "x-correlation-id" : "1da9eec1-6c70-434d-a45c-e3fee49b90d2",
+    "x-b3-traceid" : "ac064de6-2031-40d0-b258-103b7feeb2d3"
   },
   "status" : 200,
   "url" : "/alerting",
