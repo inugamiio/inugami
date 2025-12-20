@@ -83,7 +83,11 @@ public class EventDataDao implements IEventDataDao {
     @Override
     public Map<String, EnginePluginEventResultDTO> findPluginDataByGav(@NonNull final Gav gav) {
         final Map<String, EnginePluginEventResultDTO> result = new LinkedHashMap<>();
-        final var                                     cache  = hazelcast.getMap(gav.getHash());
+        final var cache = hazelcast.getMap(Gav.builder()
+                                              .groupId(gav.getGroupId())
+                                              .artifactId(gav.getArtifactId())
+                                              .build()
+                                              .getHash());
 
         final List<String> keys = new ArrayList<>();
         cache.keySet().forEach(item -> keys.add(String.valueOf(item)));

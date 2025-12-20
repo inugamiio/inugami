@@ -1,0 +1,7 @@
+inugami:
+  infrastructure:
+    internal:
+      hazelcast:
+        cluster: "inugami"
+        port: 5701
+        auto: true

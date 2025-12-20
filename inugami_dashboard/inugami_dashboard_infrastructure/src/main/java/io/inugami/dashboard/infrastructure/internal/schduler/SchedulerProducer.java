@@ -24,7 +24,10 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
+import java.sql.Timestamp;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -38,11 +41,11 @@ public class SchedulerProducer implements ApplicationListener<ApplicationEvent> 
     //==================================================================================================================
     private final ScheduledThreadPoolExecutor executor;
     private final IEngineService              engineService;
+    private final Clock                       clock;
 
     //==================================================================================================================
     // LIGECYCLE
     //==================================================================================================================
-
     @Override
     public void onApplicationEvent(final ApplicationEvent event) {
         if (event instanceof ApplicationStartedEvent) {
@@ -62,11 +65,12 @@ public class SchedulerProducer implements ApplicationListener<ApplicationEvent> 
     // TOOLS
     //==================================================================================================================
     protected long computeDelay() {
-        final var now      = Calendar.getInstance().getTimeInMillis();
-        final var calendar = Calendar.getInstance();
-        calendar.set(Calendar.MILLISECOND, 0);
-        final long future = calendar.getTimeInMillis() + 1000;
-        return future - now;
+        final Timestamp now = Timestamp.from(LocalDateTime.now(clock).toInstant(ZoneOffset.UTC));
+        final Timestamp future = Timestamp.from(LocalDateTime.now(clock)
+                                                             .withNano(0)
+                                                             .plusSeconds(1L)
+                                                             .toInstant(ZoneOffset.UTC));
+        return future.getTime() - now.getTime();
     }
 
 
