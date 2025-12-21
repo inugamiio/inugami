@@ -43,6 +43,15 @@ public final class FunctionalUtils {
     }
 
     // =================================================================================================================
+    // IF NOT NULL
+    // =================================================================================================================
+    public static <T, R> R ifNotNull(final T value, final Function<T, R> processor) {
+        return Optional.ofNullable(value)
+                       .map(processor::apply)
+                       .orElse(null);
+    }
+
+    // =================================================================================================================
     // APPLY IF NOT NULL
     // =================================================================================================================
     public static <T> boolean applyIfNotNull(final T data, final Consumer<T> consumer) {

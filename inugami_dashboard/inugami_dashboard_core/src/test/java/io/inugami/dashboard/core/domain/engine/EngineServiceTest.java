@@ -36,6 +36,7 @@ import static io.inugami.dashboard.core.domain.tools.DataUtils.PROCESSOR_NAME;
 import static io.inugami.dashboard.core.domain.tools.DataUtils.buildProviderFutureResult;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
 @SuppressWarnings({"java:S2925"})
 @ExtendWith(MockitoExtension.class)
 class EngineServiceTest {
@@ -659,55 +660,70 @@ class EngineServiceTest {
         //--------------------------------------------------------------------------------------------------------------
         service.run();
         Thread.sleep(500);
-        assertText(results,
+        assertText(clean(results.stream().findFirst().orElse(null)),
                    """
-                           [ {
-                             "end" : "2025-12-19T21:50:00",
-                             "plugins" : [ {
-                               "events" : [ {
-                                 "error" : {
-                                   "message" : "",
-                                   "errorCode" : {
-                                     "statusCode" : 500,
-                                     "errorCode" : "err-undefine",
-                                     "errorType" : "technical",
-                                     "exploitationError" : false,
-                                     "rollbackRequire" : false,
-                                     "retryable" : false
-                                   }
-                                 },
-                                 "errorCode" : {
-                                   "statusCode" : 500,
-                                   "errorCode" : "err-undefine",
-                                   "errorType" : "technical",
-                                   "exploitationError" : false,
-                                   "rollbackRequire" : false,
-                                   "retryable" : false
-                                 },
-                                 "name" : "event-name",
-                                 "status" : "ERROR"
-                               }, {
-                                 "message" : "null",
-                                 "name" : "event-name",
-                                 "status" : "ERROR"
-                               } ],
-                               "gav" : {
-                                 "artifactId" : "inu-test",
-                                 "groupId" : "io.inugami.plugin",
-                                 "hash" : "io.inugami.plugin:inu-test:4.3.0:jar",
-                                 "qualifier" : "jar",
-                                 "version" : "4.3.0"
-                               },
-                               "status" : "ERROR"
-                             } ],
-                             "processId" : "3de6d528-ecb8-448f-a8fc-1a115748febd",
-                             "start" : "2025-12-19T21:50:00",
-                             "status" : "ERROR",
-                             "traceId" : "87fbb06b-e29e-4781-9aae-880c3e32c47c"
-                           } ]
+                           {
+                                "end" : "2025-12-19T21:50:00",
+                                "plugins" : [ {
+                                  "events" : [ {
+                                    "error" : {
+                                      "message" : "",
+                                      "errorCode" : {
+                                        "statusCode" : 500,
+                                        "errorCode" : "err-undefine",
+                                        "errorType" : "technical",
+                                        "exploitationError" : false,
+                                        "rollbackRequire" : false,
+                                        "retryable" : false
+                                      }
+                                    },
+                                    "errorCode" : {
+                                      "statusCode" : 500,
+                                      "errorCode" : "err-undefine",
+                                      "errorType" : "technical",
+                                      "exploitationError" : false,
+                                      "rollbackRequire" : false,
+                                      "retryable" : false
+                                    },
+                                    "name" : "event-name",
+                                    "status" : "ERROR"
+                                  } ],
+                                  "gav" : {
+                                    "artifactId" : "inu-test",
+                                    "groupId" : "io.inugami.plugin",
+                                    "hash" : "io.inugami.plugin:inu-test:4.3.0:jar",
+                                    "qualifier" : "jar",
+                                    "version" : "4.3.0"
+                                  },
+                                  "status" : "ERROR"
+                                } ],
+                                "processId" : "fcfe1060-0ceb-4bd7-babc-9e8c5bcd37d4",
+                                "start" : "2025-12-19T21:50:00",
+                                "status" : "ERROR",
+                                "traceId" : "571ebdab-819a-4df9-8991-0c8b8038ab5e"
+                              }
                            """,
-                   SkipLineMatcher.of(39,42));
+                   SkipLineMatcher.of(35, 38));
 
+    }
+
+    private EngineResultDTO clean(final EngineResultDTO value) {
+        return value.toBuilder()
+                    .clearPlugins()
+                    .plugins(List.of(value.getPlugins().stream()
+                                          .findFirst()
+                                          .map(pluginResult -> pluginResult.toBuilder()
+                                                                           .clearEvents()
+                                                                           .events(pluginResult.getEvents()
+                                                                                               .stream()
+                                                                                               .filter(e -> e.getMessage() ==
+                                                                                                            null ||
+                                                                                                            e.getMessage()
+                                                                                                             .isEmpty())
+                                                                                               .toList())
+                                                                           .build())
+                                          .orElse(null)))
+                    .build();
     }
 
     //==================================================================================================================

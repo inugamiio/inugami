@@ -13,7 +13,7 @@ import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.apply
 
 @SuppressWarnings({"java:S1172"})
 @UtilityClass
-final class MonitoringContextUtils {
+public class MonitoringContextUtils {
     private static final List<TrackingInformationSPI> TRACKERS = SpiLoader.getInstance()
                                                                           .loadSpiServicesByPriority(TrackingInformationSPI.class);
 
