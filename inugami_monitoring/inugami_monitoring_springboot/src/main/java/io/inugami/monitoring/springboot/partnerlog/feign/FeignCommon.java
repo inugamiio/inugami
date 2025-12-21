@@ -3,6 +3,7 @@ package io.inugami.monitoring.springboot.partnerlog.feign;
 import feign.Request;
 import feign.RequestTemplate;
 import feign.Response;
+import io.inugami.framework.api.tools.RunSafeUtils;
 import io.inugami.framework.interfaces.monitoring.models.IoInfoDTO;
 import io.inugami.framework.interfaces.monitoring.partner.Partner;
 import lombok.AccessLevel;
@@ -10,7 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 import static io.inugami.framework.api.tools.ReflectionUtils.getAnnotation;
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.orNull;
@@ -63,7 +65,7 @@ public class FeignCommon {
         }
 
         if (rootPartner != null) {
-            partnerName = orNull(rootPartner.name());
+            partnerName    = orNull(rootPartner.name());
             partnerService = orNull(rootPartner.service());
 
         }
@@ -92,24 +94,21 @@ public class FeignCommon {
     }
 
     public static long resolveCallDate(final Response response) {
-        final Collection<String> xDate =
-                response.request() == null || response.request().headers() == null ? null : response.request()
-                                                                                                    .headers()
-                                                                                                    .get(FeignCommon.X_DATE);
-        String xDateValue = null;
-        if (xDate != null && !xDate.isEmpty()) {
-            xDateValue = xDate.toArray(new String[]{})[0];
-        }
+        final String xDateValue = Optional.ofNullable(response)
+                                          .map(Response::request)
+                                          .map(Request::headers)
+                                          .map(headers -> headers.get(FeignCommon.X_DATE))
+                                          .orElse(List.of())
+                                          .stream()
+                                          .findFirst()
+                                          .orElse(null);
+
         if (xDateValue == null) {
             return 0;
         } else {
-            try {
-                return Long.parseLong(xDateValue);
-            } catch (final Exception e) {
-                return 0;
-            }
+            final var currentDate = xDateValue;
+            return Optional.ofNullable(RunSafeUtils.runSafe(() -> Long.parseLong(currentDate))).orElse(0L);
         }
-
     }
 
     public static IoInfoDTO buildInfo(final Response wrappedResponse, final long duration) {

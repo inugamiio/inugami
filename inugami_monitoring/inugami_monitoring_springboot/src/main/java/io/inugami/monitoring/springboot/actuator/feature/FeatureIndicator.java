@@ -60,12 +60,16 @@ public class FeatureIndicator implements HealthIndicator {
                        .toList();
     }
 
-    private Status resolveStatus(final List<FeatureContext> features) {
-        FeatureContext.Status status = FeatureContext.Status.UNKNOWN;
+    protected Status resolveStatus(final List<FeatureContext> features) {
+        final var currentFeatures = Optional.ofNullable(features).orElse(List.of());
+        FeatureContext.Status status = Optional.of(currentFeatures)
+                                               .filter(List::isEmpty)
+                                               .map(i -> FeatureContext.Status.UP)
+                                               .orElse(FeatureContext.Status.UNKNOWN);
 
-        for (FeatureContext feature : Optional.ofNullable(features).orElse(List.of())) {
-            final FeatureContext.Status currentStatus =
-                    feature.getStatus() == null ? FeatureContext.Status.UNKNOWN : feature.getStatus();
+        for (FeatureContext feature : currentFeatures) {
+            final FeatureContext.Status currentStatus = Optional.ofNullable(feature.getStatus())
+                                                                .orElse(FeatureContext.Status.UNKNOWN);
             if (currentStatus.ordinal() > status.ordinal()) {
                 status = currentStatus;
             }

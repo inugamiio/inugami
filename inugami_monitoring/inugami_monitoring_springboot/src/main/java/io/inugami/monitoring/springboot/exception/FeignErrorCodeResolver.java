@@ -1,3 +1,19 @@
+/* --------------------------------------------------------------------
+ *  Inugami
+ * --------------------------------------------------------------------
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package io.inugami.monitoring.springboot.exception;
 
 import feign.FeignException;
@@ -7,16 +23,23 @@ import io.inugami.framework.api.monitoring.MdcService;
 import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.exceptions.ErrorCodeResolver;
+import io.inugami.framework.interfaces.exceptions.ExceptionWithErrorCode;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
 import io.inugami.framework.interfaces.monitoring.spring.feign.FeignErrorCodeBuilderSpi;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 
 import java.util.List;
-
+import java.util.Optional;
 
 public class FeignErrorCodeResolver implements ErrorCodeResolver, ApplicationLifecycleSPI {
+    // =================================================================================================================
+    // ATTRIBUTES
+    // =================================================================================================================
     private List<FeignErrorCodeBuilderSpi> feignErrorCodeBuilderSpi;
 
+    // =================================================================================================================
+    // CONSTRUCTOR
+    // =================================================================================================================
     public FeignErrorCodeResolver() {
         initErrorCodeBuilder();
         DefaultApplicationLifecycleSPI.register(this);
@@ -32,11 +55,16 @@ public class FeignErrorCodeResolver implements ErrorCodeResolver, ApplicationLif
     }
 
 
+    // =================================================================================================================
+    // RESOLVE
+    // =================================================================================================================
     @Override
     public ErrorCode resolve(final Throwable exception) {
         ErrorCode result = null;
         if (exception instanceof FeignException feignException) {
             result = buildError(feignException);
+        } else if (exception instanceof ExceptionWithErrorCode exceptionErrorCode) {
+            result = exceptionErrorCode.getErrorCode();
         }
         return result;
     }
@@ -52,7 +80,7 @@ public class FeignErrorCodeResolver implements ErrorCodeResolver, ApplicationLif
         error.errorCode(errorBuilder.buildErrorCode(partner, exception))
              .statusCode(status)
              .message(exception.getMessage())
-             .messageDetail(cause == null ? null : cause.getMessage());
+             .messageDetail(Optional.ofNullable(cause).map(Throwable::getMessage).orElse(null));
 
         return error.build();
     }
