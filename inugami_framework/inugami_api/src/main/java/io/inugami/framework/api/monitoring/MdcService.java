@@ -76,9 +76,6 @@ public class MdcService implements MdcServiceSpi {
 
 
     // =========================================================================
-    // ATTRIBUTES
-    // =========================================================================
-    // =========================================================================
     // METHODS
     // =========================================================================
     public void initialize() {
@@ -357,7 +354,7 @@ public class MdcService implements MdcServiceSpi {
     public MdcServiceSpi remove(final MDCKeys... keys) {
         if (keys != null) {
             for (final MDCKeys key : keys) {
-                MDC.remove(key.name());
+                MDC.remove(Optional.ofNullable(key.getCurrentName()).orElse(key.name()));
             }
         }
         return this;

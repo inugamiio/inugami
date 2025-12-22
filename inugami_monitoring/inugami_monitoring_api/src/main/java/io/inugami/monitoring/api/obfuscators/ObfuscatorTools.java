@@ -19,6 +19,7 @@ package io.inugami.monitoring.api.obfuscators;
 
 import io.inugami.framework.interfaces.monitoring.Obfuscator;
 import io.inugami.framework.interfaces.spi.SpiLoader;
+import lombok.experimental.UtilityClass;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -29,6 +30,7 @@ import java.util.regex.Pattern;
  * @author patrickguillerm
  * @since Jan 10, 2019
  */
+@UtilityClass
 public final class ObfuscatorTools {
 
     // =========================================================================
@@ -36,12 +38,6 @@ public final class ObfuscatorTools {
     // =========================================================================
     private static final List<Obfuscator> OBFUSCATORS = SpiLoader.getInstance()
                                                                  .loadSpiServicesByPriority(Obfuscator.class);
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    private ObfuscatorTools() {
-    }
 
     // =========================================================================
     // METHODS

@@ -20,11 +20,11 @@ import io.inugami.framework.interfaces.exceptions.CheckedException;
 import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.exceptions.UncheckedException;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 /**
@@ -33,13 +33,16 @@ import java.util.function.BiFunction;
  * @author patrick_guillerm
  * @since 22 juil. 2016
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class Checks {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final BiFunction<ErrorCode, String, CheckedException> EXCEPTION_BUILDER            = CheckedException::new;
-    public static final  String                                          THIS_EXPRESSION_MUST_BE_TRUE = "this expression must be true";
+    private static final BiFunction<ErrorCode, String, CheckedException> EXCEPTION_BUILDER            =
+            CheckedException::new;
+    public static final  String                                          THIS_EXPRESSION_MUST_BE_TRUE =
+            "this expression must be true";
+    public static final  String                                          EMPTY                        = "";
 
 
     // -------------------------------------------------------------------------
@@ -146,6 +149,9 @@ public final class Checks {
 
     public static void isNull(final String message,
                               final Object... values) throws CheckedException {
+        if (values == null) {
+            return;
+        }
         for (final Object item : values) {
             if (item != null) {
                 throwException(message, EXCEPTION_BUILDER);
@@ -279,20 +285,8 @@ public final class Checks {
 
     @SuppressWarnings({"java:S1125"})
     public static boolean checkIsBlank(final String value) {
-
-        boolean result = (value == null) || (value.length() == 0);
-
-        if (!result) {
-            final int length = value.length();
-            for (int i = 0; i < length; i++) {
-                if (Character.isWhitespace(value.charAt(i)) == false) {
-                    result = false;
-                    break;
-                }
-            }
-        }
-
-        return result;
+        final String currentValue = Optional.ofNullable(value).orElse(EMPTY);
+        return currentValue.trim().isEmpty();
     }
 
     public static <E extends CheckedException> void notEmpty(final String message,
