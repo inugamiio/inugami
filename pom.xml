@@ -353,6 +353,7 @@
         <module>inugami_framework</module>
         <module>inugami_monitoring</module>
         <module>inugami_dashboard</module>
+        <module>inugami_maven</module>
     </modules>
 
     <!--================================================================================================================

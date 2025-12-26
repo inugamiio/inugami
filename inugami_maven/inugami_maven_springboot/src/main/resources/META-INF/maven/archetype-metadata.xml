@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor
+        xmlns="https://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0"
+        xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0 https://maven.apache.org/xsd/archetype-descriptor-1.1.0.xsd"
+        name="inugami_maven_springboot">
+
+
+    <requiredProperties>
+        <requiredProperty key="inugamiVersion">
+            <defaultValue>@project.version@</defaultValue>
+        </requiredProperty>
+
+    </requiredProperties>
+
+
+    <modules>
+        <module id="module-api" dir="__artifactId__-api" name="module-api">
+            <fileSets>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/main/java</directory>
+                    <includes>
+                        <include>module-info.java</include>
+                    </includes>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/main/java</directory>
+                    <excludes>
+                        <exclude>module-info.java</exclude>
+                    </excludes>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/main/resources</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/test/java</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/test/resources</directory>
+                </fileSet>
+            </fileSets>
+        </module>
+    </modules>
+</archetype-descriptor>
