@@ -1,0 +1,14 @@
+{
+  "getCreatedBy" : [ "system" ],
+  "getCreatedDate" : [ "2023-05-27T12:00:00" ],
+  "getEmail" : [ "john.smith@mock.org" ],
+  "getFirstName" : [ "John" ],
+  "getLastModifiedBy" : [ "system2" ],
+  "getLastModifiedDate" : [ "2023-06-01T12:00:00" ],
+  "getLastName" : [ "Smith" ],
+  "getPage" : 0,
+  "getPageSize" : 10,
+  "getSortFields" : "name",
+  "getSortOrder" : "ASC",
+  "getUid" : [ "bb895294-efe7-484b-b670-14d004eaf461" ]
+}

@@ -7,15 +7,48 @@
 
 
     <requiredProperties>
-        <requiredProperty key="inugamiVersion">
-            <defaultValue>@project.version@</defaultValue>
-        </requiredProperty>
-
+        <requiredProperty key="assertjVersion"><defaultValue>@org.assertj.version@</defaultValue></requiredProperty>
+        <requiredProperty key="cglibVersion"><defaultValue>@cglib.version@</defaultValue></requiredProperty>
+        <requiredProperty key="codehausVersion"><defaultValue>@plugins.org-codehaus-mojo.cobertura-maven-plugin@</defaultValue></requiredProperty>
+        <requiredProperty key="commonsCodecVersion"><defaultValue>@org.apache.commons.codec.version@</defaultValue></requiredProperty>
+        <requiredProperty key="commonsIoVersion"><defaultValue>@org.apache.commons.io.version@</defaultValue></requiredProperty>
+        <requiredProperty key="commonsLangVersion"><defaultValue>@commons-lang.version@</defaultValue></requiredProperty>
+        <requiredProperty key="compilerVersion"><defaultValue>@org.apache.maven.plugins.compiler.version@</defaultValue></requiredProperty>
+        <requiredProperty key="failsafeVersion"><defaultValue>@plugins.org-apache-maven-plugins.maven-failsafe-plugin@</defaultValue></requiredProperty>
+        <requiredProperty key="hazelcastVersion"><defaultValue>@com.hazelcast.version@</defaultValue></requiredProperty>
+        <requiredProperty key="inugamiVersion"><defaultValue>@project.version@</defaultValue></requiredProperty>
+        <requiredProperty key="jacksonVersion"><defaultValue>@com.jackson.version@</defaultValue></requiredProperty>
+        <requiredProperty key="jacocoVersion"><defaultValue>@jacoco.version@</defaultValue></requiredProperty>
+        <requiredProperty key="jakartaServletVersion"><defaultValue>@jakarta.servlet.version@</defaultValue></requiredProperty>
+        <requiredProperty key="jakartaXmlVersion"><defaultValue>@jakarta.xml.bind.version@</defaultValue></requiredProperty>
+        <requiredProperty key="javaDocVersion"><defaultValue>@plugins.org-apache-maven-plugins.maven-javadoc-plugin@</defaultValue></requiredProperty>
+        <requiredProperty key="jspecifyVersion"><defaultValue>@org.jspecify.version@</defaultValue></requiredProperty>
+        <requiredProperty key="junitPlatformVersion"><defaultValue>@org.junit.platform.version@</defaultValue></requiredProperty>
+        <requiredProperty key="junitVersion"><defaultValue>@org.junit.jupiter@</defaultValue></requiredProperty>
+        <requiredProperty key="logbackVersion"><defaultValue>@ch.qos.logback.version@</defaultValue></requiredProperty>
+        <requiredProperty key="mapstructVersion"><defaultValue>@org.mapstruct.version@</defaultValue></requiredProperty>
+        <requiredProperty key="mavenJarVersion"><defaultValue>@plugins.org-apache-maven-plugins.maven-jar-plugin@</defaultValue></requiredProperty>
+        <requiredProperty key="metricsVersion"><defaultValue>@io.dropwizard.metrics.version@</defaultValue></requiredProperty>
+        <requiredProperty key="mockitoJunitVersion"><defaultValue>@org.mockito.junit.version@</defaultValue></requiredProperty>
+        <requiredProperty key="mockitoVersion"><defaultValue>@org-mockito.mockito-core@</defaultValue></requiredProperty>
+        <requiredProperty key="mojoVersion"><defaultValue>@org.codehaus.mojo.version@</defaultValue></requiredProperty>
+        <requiredProperty key="okhttp3Version"><defaultValue>@com.squareup.okhttp3.version@</defaultValue></requiredProperty>
+        <requiredProperty key="openfeignVersion"><defaultValue>@io.github.openfeign.version@</defaultValue></requiredProperty>
+        <requiredProperty key="projectlombokMapstructVersion"><defaultValue>@org.projectlombok.lombok-mapstruct-binding.version@</defaultValue></requiredProperty>
+        <requiredProperty key="projectlombokVersion"><defaultValue>@org.projectlombok.version@</defaultValue></requiredProperty>
+        <requiredProperty key="quartzVersion"><defaultValue>@org.quartz.version@</defaultValue></requiredProperty>
+        <requiredProperty key="slf4jVersion"><defaultValue>@org.slf4j.version@</defaultValue></requiredProperty>
+        <requiredProperty key="springbootVersion"><defaultValue>@spring-boot.version@</defaultValue></requiredProperty>
+        <requiredProperty key="springcloudVersion"><defaultValue>@spring-cloud-starter-openfeign.version@</defaultValue></requiredProperty>
+        <requiredProperty key="springdocVersion"><defaultValue>@org.springdoc.version@</defaultValue></requiredProperty>
+        <requiredProperty key="sunXmlVersion"><defaultValue>@com.sun.xml.bind.version@</defaultValue></requiredProperty>
+        <requiredProperty key="surefireVersion"><defaultValue>@plugins.org-apache-maven-plugins.maven-surefire-plugin@</defaultValue></requiredProperty>
+        <requiredProperty key="swaggerVersion"><defaultValue>@io.swagger.core.v3.version@</defaultValue></requiredProperty>
     </requiredProperties>
 
 
     <modules>
-        <module id="module-api" dir="__artifactId__-api" name="module-api">
+        <module id="${rootArtifactId}" dir="__artifactId__-api" name="${rootArtifactId}-api">
             <fileSets>
                 <fileSet filtered="true" packaged="false">
                     <directory>src/main/java</directory>
