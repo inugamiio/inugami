@@ -18,10 +18,7 @@ package io.inugami.framework.interfaces.exceptions;
 
 
 import io.inugami.framework.interfaces.exceptions.asserts.*;
-import io.inugami.framework.interfaces.functionnals.ActionWithException;
-import io.inugami.framework.interfaces.functionnals.IsEmptyFacet;
-import io.inugami.framework.interfaces.functionnals.VoidFunction;
-import io.inugami.framework.interfaces.functionnals.VoidFunctionWithException;
+import io.inugami.framework.interfaces.functionnals.*;
 import lombok.experimental.UtilityClass;
 
 import java.io.File;
@@ -48,7 +45,8 @@ public class Asserts {
     // ========================================================================
     // ATTRIBUTES
     // ========================================================================
-
+    public static final Pattern UID_REGEX = Pattern.compile("([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})");
+    public static final Pattern EMAIL_REGEX = Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
 
     // -------------------------------------------------------------------------
     // IS TRUE
@@ -1285,6 +1283,15 @@ public class Asserts {
 
     public static void assertModel(final List<VoidFunctionWithException> assertions) {
         AssertModel.INSTANCE.assertModel(assertions);
+    }
+
+    public static <T> void assertModel(final Collection<T> models,
+                                       final BiConsumerWithException<T, Integer>... validations) {
+        AssertModel.INSTANCE.assertModel(models,validations);
+    }
+    public static <T> Map<Integer,List<ErrorCode>>  checkModel(final Collection<T> models,
+                                      final BiConsumerWithException<T, Integer>... validations) {
+       return AssertModel.INSTANCE.checkModel(models,validations);
     }
 
 

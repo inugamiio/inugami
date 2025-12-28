@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AssertCommons {
@@ -17,7 +18,7 @@ public final class AssertCommons {
 
     public void throwException(final ErrorCode errorCode) {
         throw new UncheckedException(errorCode,
-                                     errorCode == null ? null : errorCode.getMessage());
+                                     Optional.ofNullable(errorCode).map(ErrorCode::getMessage).orElse("undefined"));
     }
 
     public void throwException(final ErrorCode errorCode,

@@ -14,26 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.interfaces.models.basic;
+package io.inugami.framework.interfaces.functionnals;
 
-import lombok.*;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
-@ToString(onlyExplicitlyIncluded = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Setter
-@Getter
-@Builder(toBuilder = true)
-@AllArgsConstructor
-@NoArgsConstructor
-public class AuditDTO implements Serializable {
-    private static final long serialVersionUID = -3155038656082853446L;
-
-    private String        createdBy;
-    private LocalDateTime createdDate;
-    private String        lastModifiedBy;
-    private LocalDateTime lastModifiedDate;
-    private Long          version;
+/**
+ * @author patrick_guillerm
+ * @since 2025-12-28
+ */
+@SuppressWarnings({"java:S112"})
+@FunctionalInterface
+public interface BiConsumerWithException<T,V> {
+    void process(final T value, final V secondValue) throws Exception;
 }

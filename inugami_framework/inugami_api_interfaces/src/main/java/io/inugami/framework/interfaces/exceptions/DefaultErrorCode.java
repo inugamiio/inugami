@@ -146,6 +146,11 @@ public final class DefaultErrorCode implements Serializable, ErrorCode {
             return this;
         }
 
+        public DefaultErrorCodeBuilder addField(final String fieldName, final int index ) {
+            this.field =MessagesFormatter.format(fieldName,index);
+            return this;
+        }
+
     }
 
 

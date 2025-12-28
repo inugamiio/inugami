@@ -45,10 +45,44 @@
         <requiredProperty key="surefireVersion"><defaultValue>@plugins.org-apache-maven-plugins.maven-surefire-plugin@</defaultValue></requiredProperty>
         <requiredProperty key="swaggerVersion"><defaultValue>@io.swagger.core.v3.version@</defaultValue></requiredProperty>
     </requiredProperties>
-
+    <fileSets>
+        <fileSet encoding="UTF-8">
+            <directory></directory>
+            <includes>
+                <include>lombok.config</include>
+                <include>.gitignore</include>
+            </includes>
+        </fileSet>
+    </fileSets>
 
     <modules>
         <module id="${rootArtifactId}" dir="__artifactId__-api" name="${rootArtifactId}-api">
+            <fileSets>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/main/java</directory>
+                    <includes>
+                        <include>module-info.java</include>
+                    </includes>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/main/java</directory>
+                    <excludes>
+                        <exclude>module-info.java</exclude>
+                    </excludes>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/main/resources</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/test/java</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/test/resources</directory>
+                </fileSet>
+            </fileSets>
+        </module>
+
+        <module id="${rootArtifactId}" dir="__artifactId__-core" name="${rootArtifactId}-core">
             <fileSets>
                 <fileSet filtered="true" packaged="false">
                     <directory>src/main/java</directory>

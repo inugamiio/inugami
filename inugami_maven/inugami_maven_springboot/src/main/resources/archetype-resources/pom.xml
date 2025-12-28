@@ -46,6 +46,40 @@
             --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
         </failsafe-custom-args>
 
+        <jacoco.report.aggregate.enabled>false</jacoco.report.aggregate.enabled>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <jacoco.report.path.relative>../</jacoco.report.path.relative>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/${jacoco.report.path.relative}/target/</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.language>java</sonar.language>
+
+        <custom.sonar.coverage.exclusions></custom.sonar.coverage.exclusions>
+        <sonar.exclusions>
+            **/js/vendors.js,
+            **/*Exception*,
+            **/vendors/**/*,
+            **/test/*,
+            **/test_it/*,
+            **/*Configuration.java
+        </sonar.exclusions>
+        <sonar.coverage.exclusions>
+            **/test/*,
+            **/test_it/*,
+            **/js/vendors.js,
+            **/generated-sources/**/*,
+            **/generated-test-sources/**/*,
+            **/*Context.java,
+            **/*Application.java
+            ${custom.sonar.coverage.exclusions}
+        </sonar.coverage.exclusions>
+        <sonar.cpd.exclusions>
+            **/*DTO.java,
+            **/*API.java,
+            **/*Entity.java,
+            **/api/**/I*.java
+        </sonar.cpd.exclusions>
+
+        <maven-owasp.enabled>false</maven-owasp.enabled>
         <!--+++ versions ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
         <cglib.version>${cglibVersion}</cglib.version>
         <ch.qos.logback.version>${logbackVersion}</ch.qos.logback.version>
@@ -72,6 +106,7 @@
         <org.junit.platform.version>${junitPlatformVersion}</org.junit.platform.version>
         <org.mapstruct.version>${mapstructVersion}</org.mapstruct.version>
         <org.mockito.junit.version>${mockitoJunitVersion}</org.mockito.junit.version>
+        <org.owasp.version>8.1.2</org.owasp.version>
         <org.projectlombok.lombok-mapstruct-binding.version>${projectlombokMapstructVersion}</org.projectlombok.lombok-mapstruct-binding.version>
         <org.projectlombok.version>${projectlombokVersion}</org.projectlombok.version>
         <org.quartz.version>${quartzVersion}</org.quartz.version>
@@ -82,6 +117,7 @@
         <plugins.org-apache-maven-plugins.maven-javadoc-plugin>${javaDocVersion}</plugins.org-apache-maven-plugins.maven-javadoc-plugin>
         <plugins.org-apache-maven-plugins.maven-surefire-plugin>${surefireVersion}</plugins.org-apache-maven-plugins.maven-surefire-plugin>
         <plugins.org-codehaus-mojo.cobertura-maven-plugin>${codehausVersion}</plugins.org-codehaus-mojo.cobertura-maven-plugin>
+        <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <spring-boot.version>${springbootVersion}</spring-boot.version>
         <spring-cloud-starter-openfeign.version>${springcloudVersion}</spring-cloud-starter-openfeign.version>
     </properties>
@@ -779,9 +815,64 @@
                     <additionalparam>-Xdoclint:none</additionalparam>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>${org.owasp.version}</version>
+                <configuration>
+                    <failBuildOnCVSS>4</failBuildOnCVSS>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>${maven-owasp.enabled}verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
 
     </build>
+
+    <!--================================================================================================================
+    = PROFILES
+    =================================================================================================================-->
+    <profiles>
+        <profile>
+            <id>sonarScan</id>
+            <properties>
+                <sonar.host.url>http://localhost:9001</sonar.host.url>
+                <sonar.login>maven</sonar.login>
+                <sonar.password>password</sonar.password>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonarsource.scanner.maven</groupId>
+                        <artifactId>sonar-maven-plugin</artifactId>
+                        <version>${sonar-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>scan</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>sonar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>owasp</id>
+            <properties>
+                <maven-owasp.enabled/>
+            </properties>
+        </profile>
+    </profiles>
 
     <!--================================================================================================================
     = MODULES

@@ -246,7 +246,6 @@
         :: PLUGINS CONFIGURATION
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <jacoco.version>0.8.14</jacoco.version>
-
         <jacoco.report.aggregate.enabled>false</jacoco.report.aggregate.enabled>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>

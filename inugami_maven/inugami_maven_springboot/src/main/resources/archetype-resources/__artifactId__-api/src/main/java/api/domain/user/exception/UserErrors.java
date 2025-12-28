@@ -24,6 +24,30 @@ public enum UserErrors implements ErrorCode {
                                     .statusCode(400)
                                     .errorTypeFunctional()),
 
+    CREATE_UID_FORBIDDEN(newBuilder().errorCode("USER-1_1")
+                                     .message("uid is forbidden for user creation")
+                                     .domain(Constants.USER)
+                                     .statusCode(400)
+                                     .errorTypeFunctional()),
+
+    CREATE_FIRSTNAME_INVALID(newBuilder().errorCode("USER-1_2")
+                                         .message("invalid firstname")
+                                         .domain(Constants.USER)
+                                         .statusCode(400)
+                                         .errorTypeFunctional()),
+
+    CREATE_LASTNAME_INVALID(newBuilder().errorCode("USER-1_3")
+                                        .message("invalid lastname")
+                                        .domain(Constants.USER)
+                                        .statusCode(400)
+                                        .errorTypeFunctional()),
+
+    CREATE_EMAIL_INVALID(newBuilder().errorCode("USER-1_4")
+                                     .message("invalid email")
+                                     .domain(Constants.USER)
+                                     .statusCode(400)
+                                     .errorTypeFunctional()),
+
     //==================================================================================================================
     // 2 - READ
     //==================================================================================================================
@@ -45,6 +69,35 @@ public enum UserErrors implements ErrorCode {
                                     .domain(Constants.USER)
                                     .statusCode(400)
                                     .errorTypeFunctional()),
+    UPDATE_USERS_NOT_FOUND(newBuilder().errorCode("USER-3_1")
+                                       .message("users not found")
+                                       .domain(Constants.USER)
+                                       .statusCode(404)
+                                       .errorTypeFunctional()),
+
+    UPDATE_UID_REQUIRED(newBuilder().errorCode("USER-3_2")
+                                    .message("uid is required for user modification")
+                                    .domain(Constants.USER)
+                                    .statusCode(400)
+                                    .errorTypeFunctional()),
+
+    UPDATE_FIRSTNAME_INVALID(newBuilder().errorCode("USER-3_3")
+                                         .message("invalid firstname")
+                                         .domain(Constants.USER)
+                                         .statusCode(400)
+                                         .errorTypeFunctional()),
+
+    UPDATE_LASTNAME_INVALID(newBuilder().errorCode("USER-3_4")
+                                        .message("invalid lastname")
+                                        .domain(Constants.USER)
+                                        .statusCode(400)
+                                        .errorTypeFunctional()),
+
+    UPDATE_EMAIL_INVALID(newBuilder().errorCode("USER-3_5")
+                                     .message("invalid email")
+                                     .domain(Constants.USER)
+                                     .statusCode(400)
+                                     .errorTypeFunctional()),
     //==================================================================================================================
     // 4 - DELETE
     //==================================================================================================================
@@ -52,7 +105,12 @@ public enum UserErrors implements ErrorCode {
                                          .message("uid required to delete users")
                                          .domain(Constants.USER)
                                          .statusCode(400)
-                                         .errorTypeFunctional())
+                                         .errorTypeFunctional()),
+    DELETE_USERS_NOT_FOUND(newBuilder().errorCode("USER-4_1")
+                                       .message("users not found")
+                                       .domain(Constants.USER)
+                                       .statusCode(404)
+                                       .errorTypeFunctional())
     ;
 
 
