@@ -99,6 +99,9 @@ public class DefaultXmlJaxbMarshallerSpi implements XmlJaxbMarshallerSpi, Applic
     // TOOLS
     // ========================================================================
     private Marshaller buildMarshaller() throws JAXBException {
+        if(context==null){
+            onContextRefreshed(null);
+        }
         final Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         return marshaller;

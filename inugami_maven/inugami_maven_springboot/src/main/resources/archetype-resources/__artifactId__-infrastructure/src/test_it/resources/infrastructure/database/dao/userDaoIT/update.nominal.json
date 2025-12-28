@@ -1,0 +1,13 @@
+{
+  "audit" : {
+    "createdBy" : "system",
+    "createdDate" : "2025-12-28T14:57:09.834115",
+    "lastModifiedBy" : "system",
+    "lastModifiedDate" : "2025-12-28T14:57:10.203971",
+    "version" : 2
+  },
+  "email" : "emilie.lalonde@mock.org",
+  "firstName" : "Émilie",
+  "lastName" : "Lalonde",
+  "uid" : "efc4910d-0095-4dbe-bf64-02486df3c0b8"
+}

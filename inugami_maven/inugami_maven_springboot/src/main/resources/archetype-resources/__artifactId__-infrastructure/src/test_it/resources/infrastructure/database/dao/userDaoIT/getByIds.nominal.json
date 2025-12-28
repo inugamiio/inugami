@@ -1,0 +1,11 @@
+[ {
+  "audit" : {
+    "createdBy" : "system",
+    "createdDate" : "2025-12-28T15:54:33.953035",
+    "version" : 1
+  },
+  "email" : "john.smith@mock.org",
+  "firstName" : "John",
+  "lastName" : "Smith",
+  "uid" : "fe915ff3-7d9e-4524-8031-3281f1a7aac7"
+} ]

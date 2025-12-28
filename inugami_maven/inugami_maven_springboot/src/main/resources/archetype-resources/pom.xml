@@ -120,6 +120,7 @@
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <spring-boot.version>${springbootVersion}</spring-boot.version>
         <spring-cloud-starter-openfeign.version>${springcloudVersion}</spring-cloud-starter-openfeign.version>
+        <junit-bom.version>5.11.4</junit-bom.version>
     </properties>
 
     <!--================================================================================================================
@@ -127,35 +128,54 @@
     =================================================================================================================-->
     <dependencyManagement>
         <dependencies>
+            <!--+++ bom +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!--+++ project +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
             <dependency>
-                <groupId>${groupId}</groupId>
-                <artifactId>${artifactId}-api</artifactId>
+                <groupId>com.my.project</groupId>
+                <artifactId>demo-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.my.project</groupId>
+                <artifactId>demo-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.my.project</groupId>
+                <artifactId>demo-infrastructure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!--+++ inugami_framework +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
             <dependency>
                 <groupId>io.inugami.framework</groupId>
                 <artifactId>inugami_api</artifactId>
                 <version>${io.inugami.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>io.inugami.framework</groupId>
                 <artifactId>inugami_api_interfaces</artifactId>
                 <version>${io.inugami.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>io.inugami.framework.commons</groupId>
                 <artifactId>inugami_commons</artifactId>
                 <version>${io.inugami.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>io.inugami.framework.commons</groupId>
                 <artifactId>inugami_commons_spring</artifactId>
+                <version>${io.inugami.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.inugami.framework.commons</groupId>
+                <artifactId>inugami_commons_spring_data</artifactId>
                 <version>${io.inugami.version}</version>
             </dependency>
 
@@ -164,32 +184,26 @@
                 <artifactId>inugami_logs_obfuscator</artifactId>
                 <version>${io.inugami.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>io.inugami.monitoring</groupId>
                 <artifactId>inugami_monitoring_api</artifactId>
                 <version>${io.inugami.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>io.inugami.monitoring</groupId>
                 <artifactId>inugami_monitoring_core</artifactId>
                 <version>${io.inugami.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>io.inugami.monitoring</groupId>
                 <artifactId>inugami_monitoring_springboot</artifactId>
                 <version>${io.inugami.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>io.inugami.framework.commons</groupId>
                 <artifactId>inugami_commons_test</artifactId>
                 <version>${io.inugami.version}</version>
             </dependency>
-
-
             <dependency>
                 <groupId>cglib</groupId>
                 <artifactId>cglib</artifactId>
@@ -220,7 +234,6 @@
                 <artifactId>jackson-databind</artifactId>
                 <version>${com.jackson.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.fasterxml.jackson.dataformat</groupId>
                 <artifactId>jackson-dataformat-yaml</artifactId>
@@ -261,13 +274,11 @@
                 <artifactId>okhttp</artifactId>
                 <version>${com.squareup.okhttp3.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.hazelcast</groupId>
                 <artifactId>hazelcast-spring</artifactId>
                 <version>${com.hazelcast.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -278,19 +289,16 @@
                 <artifactId>feign-core</artifactId>
                 <version>${io.github.openfeign.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>io.github.openfeign</groupId>
                 <artifactId>feign-jackson</artifactId>
                 <version>${io.github.openfeign.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>io.github.openfeign</groupId>
                 <artifactId>feign-okhttp</artifactId>
                 <version>${io.github.openfeign.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-graphite</artifactId>
@@ -302,31 +310,26 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <dependency>
                 <groupId>jakarta.servlet</groupId>
                 <artifactId>jakarta.servlet-api</artifactId>
                 <version>${jakarta.servlet.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>jakarta.xml.bind</groupId>
                 <artifactId>jakarta.xml.bind-api</artifactId>
                 <version>${jakarta.xml.bind.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
                 <version>${com.sun.xml.bind.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
                 <version>${org.assertj.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.apache.maven.surefire</groupId>
                 <artifactId>common-java5</artifactId>
@@ -339,33 +342,15 @@
             </dependency>
 
             <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-engine</artifactId>
-                <version>${org.junit.jupiter}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>${org.junit.jupiter}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter</artifactId>
-                <version>${org.junit.jupiter}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-engine</artifactId>
                 <version>${org.junit.platform.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-commons</artifactId>
                 <version>${org.junit.platform.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
@@ -408,58 +393,51 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <dependency>
                 <groupId>io.swagger.core.v3</groupId>
                 <artifactId>swagger-annotations</artifactId>
                 <version>${io.swagger.core.v3.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
                 <version>${org.springdoc.version}</version>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
-
     <!--================================================================================================================
-    = DEPENDENCIES
-    =================================================================================================================-->
+      = DEPENDENCIES
+      =================================================================================================================-->
     <dependencies>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
         </dependency>
-
         <dependency>
             <groupId>io.inugami.framework</groupId>
             <artifactId>inugami_api_interfaces</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
     </dependencies>
-
     <!--================================================================================================================
-    = BUILD
-    =================================================================================================================-->
+      = BUILD
+      =================================================================================================================-->
     <build>
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-         :: RESOURCES
-         ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+             :: RESOURCES
+             ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -476,7 +454,6 @@
                 </includes>
             </resource>
         </resources>
-
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>
@@ -487,13 +464,11 @@
                 <filtering>true</filtering>
             </testResource>
         </testResources>
-
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-         :: PLUGIN MANAGEMENT
-         ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+             :: PLUGIN MANAGEMENT
+             ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <pluginManagement>
             <plugins>
-
                 <plugin>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>${plugins.org-apache-maven-plugins.maven-javadoc-plugin}</version>
@@ -510,7 +485,6 @@
                         <additionalparam>-Xdoclint:none</additionalparam>
                     </configuration>
                 </plugin>
-
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${plugins.org-apache-maven-plugins.maven-jar-plugin}</version>
@@ -522,12 +496,10 @@
                                 <addClasspath>true</addClasspath>
                                 <classpathLayoutType>repository</classpathLayoutType>
                             </manifest>
-
                             <manifestEntries>
                                 <Implementation-Group>${project.groupId}</Implementation-Group>
                                 <Implementation-Module>${project.artifactId}</Implementation-Module>
                                 <Implementation-Encoding>${project.build.sourceEncoding}</Implementation-Encoding>
-
                                 <!-- Source info generated by git-commit-id-plugin -->
                                 <Implementation-Sources-Tags>${git.tags}</Implementation-Sources-Tags>
                                 <Implementation-Sources-Commit-Id>${git.commit.id}</Implementation-Sources-Commit-Id>
@@ -541,7 +513,6 @@
                                 <Implementation-Sources-Branch>${git.branch}</Implementation-Sources-Branch>
                                 <Implementation-Sources-Describe>${git.commit.id.describe-short}
                                 </Implementation-Sources-Describe>
-
                                 <Built-On-OS>${os.name} (${os.version} /
                                     ${os.arch})
                                 </Built-On-OS>
@@ -553,7 +524,6 @@
                                 <Build-Job-Date>${env.BUILD_ID}</Build-Job-Date>
                                 <Build-Job-Node>${env.NODE_NAME}</Build-Job-Node>
                                 <Build-Job-User>${env.BUILD_USER_ID}</Build-Job-User>
-
                                 <!-- Timestamp generated by buildnumber-maven-plugin -->
                                 <Build-Date>${timestamp}</Build-Date>
                                 <ArtifactType>${super.artifact.type}</ArtifactType>
@@ -561,7 +531,6 @@
                         </archive>
                     </configuration>
                 </plugin>
-
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>cobertura-maven-plugin</artifactId>
@@ -573,8 +542,6 @@
                         </formats>
                     </configuration>
                 </plugin>
-
-
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
@@ -589,9 +556,18 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${plugins.org-apache-maven-plugins.maven-surefire-plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${plugins.org-apache-maven-plugins.maven-failsafe-plugin}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
-
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
          :: PLUGIN MANAGEMENT
          ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -600,7 +576,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>${org.codehaus.mojo.version}</version>
-
                 <executions>
                     <execution>
                         <id>add-integration-test-source</id>
@@ -616,7 +591,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -646,56 +620,49 @@
                             <artifactId>lombok-mapstruct-binding</artifactId>
                             <version>${org.projectlombok.lombok-mapstruct-binding.version}</version>
                         </path>
+
+                        <path>
+                            <groupId>com.querydsl</groupId>
+                            <artifactId>querydsl-apt</artifactId>
+                            <version>${querydsl.version}</version>
+                            <classifier>jakarta</classifier>
+                        </path>
+
+                        <path>
+                            <groupId>jakarta.persistence</groupId>
+                            <artifactId>jakarta.persistence-api</artifactId>
+                            <version>${jakarta-persistence.version}</version>
+                        </path>
                     </annotationProcessorPaths>
+                    <annotationProcessors>
+                        <annotationProcessor>com.querydsl.apt.jpa.JPAAnnotationProcessor</annotationProcessor>
+                        <annotationProcessor>lombok.launch.AnnotationProcessorHider$AnnotationProcessor
+                        </annotationProcessor>
+                        <annotationProcessor>org.mapstruct.ap.MappingProcessor</annotationProcessor>
+                    </annotationProcessors>
                 </configuration>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${plugins.org-apache-maven-plugins.maven-surefire-plugin}</version>
                 <configuration>
-                    <argLine>
-                        -Xmx1024M -Dfile.encoding=${encoding} ${maven.plugins.surfire.argLine} --add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
-                    </argLine>
+                    <argLine>-Xmx1024M -Dfile.encoding=${encoding} ${maven.plugins.surfire.argLine}</argLine>
                     <systemPropertyVariables>
                         <mock.generator.path>${mock.generator.path}</mock.generator.path>
                     </systemPropertyVariables>
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
-
                     <excludes>
                         <exclude>**/*IT.java</exclude>
                     </excludes>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>maven-surefire-common</artifactId>
-                        <version>${plugins.org-apache-maven-plugins.maven-surefire-plugin}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>common-java5</artifactId>
-                        <version>${plugins.org-apache-maven-plugins.maven-surefire-plugin}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.junit.platform</groupId>
-                        <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>1.3.2</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.junit.jupiter</groupId>
-                        <artifactId>junit-jupiter-engine</artifactId>
-                        <version>${org.junit.jupiter}</version>
-                    </dependency>
-                </dependencies>
+
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${plugins.org-apache-maven-plugins.maven-failsafe-plugin}</version>
                 <executions>
                     <execution>
                         <phase>integration-test</phase>
@@ -711,7 +678,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <argLine>-Dfile.encoding=${encoding} ${failsafe-custom-args} ${maven.plugins.failsafe.argLine}</argLine>
+                    <argLine>-Dfile.encoding=${encoding} ${failsafe-custom-args} ${maven.plugins.failsafe.argLine}
+                    </argLine>
                     <includes>
                         <include>**/*IT.java</include>
                     </includes>
@@ -728,7 +696,7 @@
                     </formats>
                     <excludes>
                         <exclude>**/*DTOBuilder*</exclude>
-                        <exclude>**/*Q*Entity</exclude>
+                        <exclude>**/*Entity</exclude>
                         <exclude>**/*EntityBuilder*</exclude>
                         <exclude>**/*Properties</exclude>
                         <exclude>**org/jboss/resteasy/logging/*</exclude>
@@ -759,8 +727,6 @@
                             <propertyName>maven.plugins.failsafe.argLine</propertyName>
                         </configuration>
                     </execution>
-
-
                     <execution>
                         <id>report</id>
                         <goals>
@@ -777,7 +743,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -815,7 +780,6 @@
                     <additionalparam>-Xdoclint:none</additionalparam>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
@@ -833,12 +797,10 @@
                 </executions>
             </plugin>
         </plugins>
-
     </build>
-
     <!--================================================================================================================
-    = PROFILES
-    =================================================================================================================-->
+      = PROFILES
+      =================================================================================================================-->
     <profiles>
         <profile>
             <id>sonarScan</id>
