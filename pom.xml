@@ -1251,6 +1251,12 @@
     =================================================================================================================-->
     <profiles>
         <profile>
+        <id>skipTest</id>
+        <properties>
+            <maven.test.skip>true</maven.test.skip>
+        </properties>
+        </profile>
+        <profile>
             <id>local</id>
             <properties>
                 <maven-gpg-plugin.enabled>false</maven-gpg-plugin.enabled>
