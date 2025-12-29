@@ -17,18 +17,33 @@
 package io.inugami.dashboard.infrastructure.internal;
 
 import com.hazelcast.client.config.ClientConfig;
+import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Optional;
+
 @EnableConfigurationProperties(InugamiInfrastructureInternalProperties.class)
 @Configuration
 public class InugamiInfrastructureInternalConfiguration {
+
     @Bean
-    public HazelcastInstance hazelcastInstance() {
-        HazelcastInstance instance = Hazelcast.newHazelcastInstance();
+    public Config hazelcastConfig(final InugamiInfrastructureInternalProperties properties) {
+        Config config = new Config();
+        config.getNetworkConfig()
+              .setPort(properties.getHazelcast().getPort())
+              .setPortAutoIncrement(Optional.ofNullable(properties.getHazelcast().getAuto())
+                                            .orElse(Boolean.TRUE)
+                                            .booleanValue());
+        return config;
+    }
+
+    @Bean
+    public HazelcastInstance hazelcastInstance(final Config config) {
+        HazelcastInstance instance = Hazelcast.newHazelcastInstance(config);
         return instance;
     }
 

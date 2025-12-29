@@ -1,10 +1,8 @@
 package io.inugami.framework.interfaces.models.graphite;
 
-import io.inugami.framework.interfaces.models.basic.Dto;
-import io.inugami.framework.interfaces.models.basic.JsonObjects;
 import io.inugami.framework.interfaces.models.number.DataPoint;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.function.Function;
 
 @SuppressWarnings({"java:S5411"})
@@ -19,36 +17,34 @@ public enum GraphiteType {
     LIST_TIME_VALUE;
     //@formatter:on
 
-    private Function<Dto, Boolean> checkType;
+    private Function<Object, Boolean> checkType;
 
     private GraphiteType() {
         checkType = null;
     }
 
-    private GraphiteType(final Function<Dto, Boolean> checkType) {
+    private GraphiteType(final Function<Object, Boolean> checkType) {
         this.checkType = checkType;
     }
 
-    public static synchronized GraphiteType getType(final Dto<?> value) {
-        GraphiteType result      = null;
-        Dto<?>       dataToCheck = value;
-        boolean      isList      = false;
+    public static synchronized GraphiteType getType(final Object value) {
+        GraphiteType result = null;
+        boolean      isList = false;
+        if (value == null) {
+            return null;
+        }
+        Object dataToCheck = value;
 
-        if (value != null) {
-            isList = dataToCheck instanceof JsonObjects<?>;
-            if (isList) {
+        if (value instanceof Collection values) {
+            dataToCheck = values.stream()
+                                .findFirst()
+                                .orElse(null);
+        }
 
-                final List<Dto<?>> localList = ((JsonObjects<Dto<?>>) value).getData();
-                if ((localList != null) && !localList.isEmpty()) {
-                    dataToCheck = localList.get(0);
-                }
-            }
-
-            for (final GraphiteType item : GraphiteType.values()) {
-                if ((item.checkType != null) && item.checkType.apply(dataToCheck)) {
-                    result = item;
-                    break;
-                }
+        for (final GraphiteType item : GraphiteType.values()) {
+            if ((item.checkType != null) && item.checkType.apply(dataToCheck)) {
+                result = item;
+                break;
             }
         }
 

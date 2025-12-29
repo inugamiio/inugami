@@ -1,5 +1,3 @@
-import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
-
 /* --------------------------------------------------------------------
  *  Inugami
  * --------------------------------------------------------------------
@@ -23,6 +21,7 @@ open module io.inugami.framework.commons.spring {
     requires io.inugami.framework.commons;
     requires io.inugami.framework.configurations.configuration;
     requires io.inugami.framework.interfaces;
+    requires io.inugami.logs.obfuscator;
     requires jakarta.annotation;
     requires jakarta.servlet;
     requires lombok;

@@ -3,17 +3,19 @@ package io.inugami.monitoring.springboot.partnerlog.feign;
 import feign.Request;
 import feign.RequestTemplate;
 import feign.Response;
+import io.inugami.framework.api.tools.RunSafeUtils;
 import io.inugami.framework.interfaces.monitoring.models.IoInfoDTO;
 import io.inugami.framework.interfaces.monitoring.partner.Partner;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 import static io.inugami.framework.api.tools.ReflectionUtils.getAnnotation;
-import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.orNull;
+import static io.inugami.framework.api.tools.RunSafeUtils.runSafeOrElse;
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.*;
 
 
 @SuppressWarnings({"java:S1181", "java:S108"})
@@ -28,42 +30,29 @@ public class FeignCommon {
         if (request == null) {
             return builder.build();
         }
-        try {
+        RunSafeUtils.runSafeVoid(() -> {
             builder.url(request.url());
             builder.headers(request.headers());
             builder.method(request.method());
-
-            if (request.body() != null) {
-                builder.payload(request.body());
-            }
-
+            applyIfNotNull(request.body(), builder::payload);
             resolvePartnerInformation(request, builder);
-
-        } catch (final Throwable e) {
-        }
+        }, log);
 
         return builder.build();
     }
 
-    private static void resolvePartnerInformation(final RequestTemplate request,
+    protected static void resolvePartnerInformation(final RequestTemplate request,
                                                   final IoInfoDTO.IoInfoDTOBuilder builder) {
-        Partner rootPartner = null;
-        Partner partner     = null;
+
+        Partner rootPartner = ifNotNull(request.feignTarget(), t -> getAnnotation(t.type(), Partner.class));
+        Partner partner     = ifNotNull(request.methodMetadata(), m -> getAnnotation(m.method(), Partner.class));
 
         String partnerName       = null;
         String partnerService    = null;
         String partnerSubService = null;
 
-        if (request.feignTarget() != null) {
-            rootPartner = getAnnotation(request.feignTarget().type(), Partner.class);
-        }
-
-        if (request.methodMetadata() != null) {
-            partner = getAnnotation(request.methodMetadata().method(), Partner.class);
-        }
-
         if (rootPartner != null) {
-            partnerName = orNull(rootPartner.name());
+            partnerName    = orNull(rootPartner.name());
             partnerService = orNull(rootPartner.service());
 
         }
@@ -92,24 +81,21 @@ public class FeignCommon {
     }
 
     public static long resolveCallDate(final Response response) {
-        final Collection<String> xDate =
-                response.request() == null || response.request().headers() == null ? null : response.request()
-                                                                                                    .headers()
-                                                                                                    .get(FeignCommon.X_DATE);
-        String xDateValue = null;
-        if (xDate != null && !xDate.isEmpty()) {
-            xDateValue = xDate.toArray(new String[]{})[0];
-        }
+        final String xDateValue = Optional.ofNullable(response)
+                                          .map(Response::request)
+                                          .map(Request::headers)
+                                          .map(headers -> headers.get(FeignCommon.X_DATE))
+                                          .orElse(List.of())
+                                          .stream()
+                                          .findFirst()
+                                          .orElse(null);
+
         if (xDateValue == null) {
             return 0;
         } else {
-            try {
-                return Long.parseLong(xDateValue);
-            } catch (final Exception e) {
-                return 0;
-            }
+            final var currentDate = xDateValue;
+            return Optional.ofNullable(RunSafeUtils.runSafe(() -> Long.parseLong(currentDate))).orElse(0L);
         }
-
     }
 
     public static IoInfoDTO buildInfo(final Response wrappedResponse, final long duration) {
@@ -124,30 +110,25 @@ public class FeignCommon {
                .message(wrappedResponse.reason())
                .headers(wrappedResponse.request().headers())
                .responseHeaders(wrappedResponse.headers());
-        if (wrappedResponse.body() != null) {
-            byte[] body = new byte[0];
-            try {
-                body = wrappedResponse.body().asInputStream().readAllBytes();
-            } catch (final IOException e) {
-            }
-            builder.responsePayload(body);
-        }
+
+        applyIfNotNull(wrappedResponse.body(),
+                       body -> builder.responsePayload(runSafeOrElse(() -> wrappedResponse.body()
+                                                                                          .asInputStream()
+                                                                                          .readAllBytes(),
+                                                                     new byte[0]))
+                      );
 
         if (wrappedResponse.request() != null) {
             final Request request = wrappedResponse.request();
             builder.url(request.url());
             builder.headers(request.headers());
 
-            if (request.httpMethod() != null) {
-                builder.method(request.httpMethod().name());
-            }
-            if (request.body() != null) {
-                builder.payload(request.body());
-            }
-            if (request.requestTemplate() != null && request.requestTemplate().feignTarget() != null) {
-                builder.partnerName(request.requestTemplate().feignTarget().name());
-            }
-
+            applyIfNotNull(request.httpMethod(), httpMethod -> builder.method(httpMethod.name()));
+            applyIfNotNull(request.body(), builder::payload);
+            applyIfNotNull(Optional.ofNullable(request.requestTemplate())
+                                   .map(RequestTemplate::feignTarget)
+                                   .orElse(null),
+                           feignTarget -> builder.partnerName(feignTarget.name()));
         }
         return builder.build();
     }
@@ -164,12 +145,8 @@ public class FeignCommon {
     }
 
     public static byte[] readResponseBody(final Response.Body body) {
-        try {
-            return body.asInputStream().readAllBytes();
-        } catch (final IOException e) {
-            log.error(e.getMessage(), e);
-            return new byte[]{};
-        }
+        return Optional.ofNullable(RunSafeUtils.runSafe(() -> body.asInputStream().readAllBytes(), log))
+                       .orElse(new byte[]{});
     }
 
 }

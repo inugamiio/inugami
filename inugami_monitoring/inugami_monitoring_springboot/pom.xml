@@ -15,7 +15,7 @@
     <parent>
         <groupId>io.inugami.monitoring</groupId>
         <artifactId>inugami_monitoring</artifactId>
-        <version>4.2.1-SNAPSHOT</version>
+        <version>4.2.2-SNAPSHOT</version>
     </parent>
 
 
@@ -25,6 +25,11 @@
     <artifactId>inugami_monitoring_springboot</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
 
+    <properties>
+        <custom.sonar.coverage.exclusions>
+            , **/SpringDefaultRequestPath.java
+        </custom.sonar.coverage.exclusions>
+    </properties>
     <!-- ======================================================================= 
     = DEPENDENCIES
     ======================================================================== -->
@@ -45,6 +50,10 @@
             <artifactId>inugami_monitoring_core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.inugami.monitoring</groupId>
+            <artifactId>inugami_logs_obfuscator</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
@@ -94,6 +103,30 @@
         <dependency>
             <groupId>io.inugami.framework.commons</groupId>
             <artifactId>inugami_commons_test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.skyscreamer</groupId>
+                    <artifactId>jsonassert</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>5.5.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

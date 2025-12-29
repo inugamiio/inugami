@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+@SuppressWarnings({"java:S1948", "java:S1125"})
 @ToString(onlyExplicitlyIncluded = true)
 @Setter
 @Getter

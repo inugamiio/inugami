@@ -31,7 +31,7 @@ import static io.inugami.framework.interfaces.database.NodeUtils.sortProperties;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public final class Node implements  Comparable<Node>, Serializable {
+public final class Node implements Comparable<Node>, Serializable {
 
     private static final long                      serialVersionUID = 7519867544798392684L;
     @EqualsAndHashCode.Include
@@ -87,12 +87,13 @@ public final class Node implements  Comparable<Node>, Serializable {
             return this;
         }
     }
+
     public static int compareTo(final String value, final String ref) {
         if (value == null && ref != null) {
             return 1;
         } else if (value != null && ref == null) {
             return -1;
-        } else if (value == null && ref == null) {
+        } else if (value == null) {
             return 0;
         } else {
             return convertCompareToResult(value.compareTo(ref));

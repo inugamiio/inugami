@@ -19,6 +19,7 @@ open module io.inugami.monitoring.api {
     requires io.inugami.framework.interfaces;
     requires lombok;
     requires org.slf4j;
+    requires org.jspecify;
 
     exports io.inugami.monitoring.api.obfuscators;
     exports io.inugami.monitoring.api.resolvers;

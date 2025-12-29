@@ -18,8 +18,7 @@ package io.inugami.framework.interfaces.monitoring.logger;
 
 
 import io.inugami.framework.interfaces.tools.Rgb;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -34,7 +33,7 @@ import java.util.function.Supplier;
  * @author patrick_guillerm
  * @since 5 janv. 2017
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class Loggers {
     // =========================================================================
     // ATTRIBUTES

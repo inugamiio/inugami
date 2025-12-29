@@ -1,17 +1,17 @@
 /* --------------------------------------------------------------------
- *  Inugami  
+ *  Inugami
  * --------------------------------------------------------------------
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package io.inugami.framework.interfaces.functionnals;
@@ -21,10 +21,12 @@ import java.util.function.Function;
 
 /**
  * Same as <strong>ApplyIfNotNull</strong> but it will check also the data type.
- * @see ApplyIfNotNull
+ *
  * @author patrick_guillerm
+ * @see ApplyIfNotNull
  * @since 15 janv. 2018
  */
+@SuppressWarnings({"java:S6201"})
 public interface ApplyIfNotNullAndSameType {
     default <T, R> void ifNotNullAndSameType(final T data, final Function<? super T, ? extends R> mapper,
                                              final Consumer<R> consumer) {
@@ -35,7 +37,7 @@ public interface ApplyIfNotNullAndSameType {
             }
         }
     }
-    
+
     default Function<Object, String> buildStringMapper() {
         return v -> v instanceof String ? (String) v : null;
     }

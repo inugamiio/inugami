@@ -33,7 +33,7 @@ import java.util.*;
 
 import static io.inugami.commons.test.mock.MockGeneratorError.*;
 import static io.inugami.commons.test.mock.utils.MockGeneratorUtils.*;
-import static io.inugami.framework.api.tools.ReflectionUtils.runSafe;
+import static io.inugami.framework.api.tools.RunSafeUtils.runSafe;
 import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
 import static io.inugami.framework.interfaces.exceptions.Asserts.assertTrue;
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
@@ -81,16 +81,14 @@ public class MockGenerator {
                                                         .getIndentedObjectMapper()
                                                         .writeValueAsString(cleanContext(mockContext)));
 
-        if (json != null) {
-            try {
-                log.info("write mock file : {}", filePath);
-                FileUtils.write(filePath, json, StandardCharsets.UTF_8);
-                return filePath;
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
-            }
+        if (json == null) {
+            return null;
         }
-        return null;
+        return runSafe(() -> {
+            log.info("write mock file : {}", filePath);
+            FileUtils.write(filePath, json, StandardCharsets.UTF_8);
+            return filePath;
+        }, log);
     }
 
     private static MockContext cleanContext(final @NotNull MockContext mockContext) {
@@ -102,12 +100,9 @@ public class MockGenerator {
         builder.requestHeaders(requestHeaders);
         builder.responseHeaders(responseHeaders);
 
-        if (requestHeaders.containsKey(Headers.X_DEVICE_IDENTIFIER)) {
-            responseHeaders.put(Headers.X_DEVICE_IDENTIFIER, requestHeaders.get(Headers.X_DEVICE_IDENTIFIER));
-        }
-        if (requestHeaders.containsKey(Headers.X_CORRELATION_ID)) {
-            responseHeaders.put(Headers.X_CORRELATION_ID, requestHeaders.get(Headers.X_CORRELATION_ID));
-        }
+        applyIfNotNull(requestHeaders.get(Headers.X_DEVICE_IDENTIFIER), v -> responseHeaders.put(Headers.X_DEVICE_IDENTIFIER, v));
+        applyIfNotNull(requestHeaders.get(Headers.X_CORRELATION_ID), v -> responseHeaders.put(Headers.X_CORRELATION_ID, v));
+
         return builder.build();
     }
 
@@ -118,9 +113,11 @@ public class MockGenerator {
         if (!file.exists() || !file.canRead()) {
             return null;
         }
-        return runSafe(() -> JsonMarshaller.getInstance().getIndentedObjectMapper().readValue(file, MockContext.class));
+        return runSafe(() -> JsonMarshaller.getInstance().getIndentedObjectMapper().readValue(file, MockContext.class),
+                       log);
     }
 
+    @SuppressWarnings({"java:S3824"})
     public static @NonNull Map<String, List<MockContext>> readMocks(@NonNull final Collection<File> files) {
         final Map<String, List<MockContext>> result = new LinkedHashMap<>();
 
@@ -196,7 +193,7 @@ public class MockGenerator {
         final Set<String> currentFolders = new LinkedHashSet<>(folders);
         for (String currentFolder : currentFolders) {
             final File folder = buildMockFileFolder(mockFolder, currentFolder);
-            if (folder == null || folder.listFiles()==null) {
+            if (folder == null || folder.listFiles() == null) {
                 continue;
             }
             files.addAll(ListUtils.toList(folder.listFiles()));

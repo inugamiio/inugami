@@ -18,6 +18,7 @@ package io.inugami.framework.interfaces.models.basic;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @ToString(onlyExplicitlyIncluded = true)
@@ -27,7 +28,9 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuditDTO {
+public class AuditDTO implements Serializable {
+    private static final long serialVersionUID = -3155038656082853446L;
+
     private String        createdBy;
     private LocalDateTime createdDate;
     private String        lastModifiedBy;

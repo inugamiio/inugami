@@ -23,6 +23,7 @@ open module io.inugami.monitoring.springboot {
     requires io.inugami.framework.commons.spring;
     requires io.inugami.framework.interfaces;
     requires io.inugami.monitoring.core;
+    requires io.inugami.logs.obfuscator;
     requires jakarta.annotation;
     requires jakarta.servlet;
     requires org.mapstruct;

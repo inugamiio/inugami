@@ -17,17 +17,20 @@
 package io.inugami.framework.commons.threads;
 
 
+import io.inugami.framework.api.tools.RunSafeUtils;
 import io.inugami.framework.interfaces.concurrent.LifecycleBootstrap;
 import io.inugami.framework.interfaces.exceptions.Asserts;
 import io.inugami.framework.interfaces.exceptions.TechnicalException;
 import io.inugami.framework.interfaces.listeners.TaskFinishListener;
 import io.inugami.framework.interfaces.listeners.TaskStartListener;
-import io.inugami.framework.interfaces.models.tools.Chrono;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.LockSupport;
 import java.util.function.BiConsumer;
 
 /**
@@ -64,7 +67,7 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
     public ThreadsExecutorService(final String name, final int maxThreads, final boolean deamon, final Long timeout) {
         this.name = name == null ? "ThreadsExecutor" : name;
         final MonitoredThreadFactory threadFactory = new MonitoredThreadFactory(this.name, deamon);
-        executor = Executors.newFixedThreadPool(maxThreads, threadFactory);
+        executor            = Executors.newFixedThreadPool(maxThreads, threadFactory);
         executorCompletable = Executors.newFixedThreadPool(maxThreads, threadFactory);
 
         this.timeout = timeout == null ? 30000L : timeout.longValue();
@@ -146,26 +149,31 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
             log.debug("empty or null futures");
             return;
         }
+
+        final long parkDuration = TimeUnit.MILLISECONDS.toNanos(10);
         final List<CompletableFuture<T>> currentFutures = new ArrayList<>(futures);
-        final long                       now            = System.currentTimeMillis();
-        final long                       doneMax        = now + timeout;
-        long                             delta          = doneMax - now;
-
-
-        for (CompletableFuture<T> future : new ArrayList<>(currentFutures)) {
-            try {
-                final long start = System.currentTimeMillis();
-                future.get(delta, TimeUnit.MILLISECONDS);
-                final long done = System.currentTimeMillis();
-                delta = delta - (done - start);
-                if (delta <= 0) {
-                    break;
+        final boolean[]                  done           = new boolean[futures.size()];
+        final long                       start          = System.currentTimeMillis();
+        while (!isAllDone(done) && (System.currentTimeMillis() - start) <= timeout) {
+            for (int i = 0; i < done.length; i++) {
+                if (done[i]) {
+                    continue;
                 }
-
-            } catch (final InterruptedException | ExecutionException | TimeoutException e) {
-                Loggers.PLUGINS.error(e.getMessage());
+                done[i] = currentFutures.get(i).isDone();
+            }
+            if (!isAllDone(done)) {
+                RunSafeUtils.runSafeVoid(() -> LockSupport.parkNanos(parkDuration));
             }
         }
+    }
+
+    private boolean isAllDone(final boolean[] done) {
+        for (boolean itemDone : done) {
+            if (!itemDone) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -279,9 +287,9 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
                                    final TaskFinishListener finishListner) {
             Asserts.assertNotNull(NAME_MUSTN_T_BE_NULL, name);
             Asserts.assertNotNull(NAME_MUSTN_T_BE_NULL, task);
-            this.name = name;
-            this.task = task;
-            this.startListner = startListner;
+            this.name          = name;
+            this.task          = task;
+            this.startListner  = startListner;
             this.finishListner = finishListner;
 
         }

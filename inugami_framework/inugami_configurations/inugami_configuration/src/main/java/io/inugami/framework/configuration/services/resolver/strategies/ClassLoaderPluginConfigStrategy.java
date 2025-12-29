@@ -36,7 +36,7 @@ import java.util.*;
  * @author patrick_guillerm
  * @since 27 déc. 2016
  */
-@SuppressWarnings({"java:S1068"})
+@SuppressWarnings({"java:S1068","java:S2112"})
 @Slf4j
 public class ClassLoaderPluginConfigStrategy implements PluginConfigResolverStrategy {
 
@@ -144,22 +144,21 @@ public class ClassLoaderPluginConfigStrategy implements PluginConfigResolverStra
         return processResolveFile(CONFIG_FILE_NAME);
     }
 
+
     private List<URL> processResolveFile(final String fileName) throws ConfigurationResolverException {
         final List<URL> result      = new ArrayList<>();
         int             step        = 1;
         ClassLoader     classLoader = this.getClass().getClassLoader();
 
-        //@formatter:off
+
         while ((step < MAX_CLASSLOADER_PARENT)
-                && (classLoader != null)
-                && !classLoader.equals(System.class.getClassLoader())) {
-            //@formatter:on
+               && (classLoader != null)
+               && !classLoader.equals(System.class.getClassLoader())) {
+
 
             final Set<URL> urls = resolveUrls(classLoader, fileName);
-            if (urls != null) {
-                result.addAll(urls);
-                urls.forEach(url -> log.debug("found configuration : {}", url));
-            }
+            result.addAll(urls);
+            urls.forEach(url -> log.debug("found configuration : {}", url));
 
             classLoader = classLoader.getParent();
             step++;

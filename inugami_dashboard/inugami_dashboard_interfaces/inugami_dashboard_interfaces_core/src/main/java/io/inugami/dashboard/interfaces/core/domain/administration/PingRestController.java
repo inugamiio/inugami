@@ -17,15 +17,12 @@
 package io.inugami.dashboard.interfaces.core.domain.administration;
 
 import io.inugami.dashboard.api.domain.administration.IPingService;
-import io.inugami.dashboard.api.domain.administration.exception.AdministrationErrors;
+import io.inugami.dashboard.interfaces.core.domain.administration.mapper.PingDTORestMapper;
 import io.inugami.dashboard.interfaces.domain.administration.PingRestClient;
 import io.inugami.dashboard.interfaces.domain.administration.dto.PingDTO;
-import io.inugami.dashboard.interfaces.core.domain.administration.mapper.PingDTORestMapper;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
-
-import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
 
 @RequiredArgsConstructor
 @Builder

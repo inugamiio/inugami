@@ -190,6 +190,7 @@ public class PluginConfigurationLoader {
         return new FatalConfigurationException(errorMessage);
     }
 
+    @SuppressWarnings({"java:S1172"})
     public Optional<EventConfig> loadEventConfigFromUrl(final URL url,
                                                         final Gav gav,
                                                         final String eventFile) {

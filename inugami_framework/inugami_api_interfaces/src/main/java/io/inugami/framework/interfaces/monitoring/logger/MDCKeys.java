@@ -20,7 +20,8 @@ import lombok.Getter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-@SuppressWarnings({"java:S115"})
+
+@SuppressWarnings({"java:S115", "java:S2386"})
 @Getter
 public enum MDCKeys {
     appClass,

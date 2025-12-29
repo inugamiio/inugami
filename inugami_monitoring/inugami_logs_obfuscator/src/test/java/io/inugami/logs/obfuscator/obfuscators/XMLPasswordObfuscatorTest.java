@@ -19,4 +19,10 @@ class XMLPasswordObfuscatorTest implements ObfuscatorTestUtils {
         assertThat(obfuscator.obfuscate(buildEvent("<password type=\"basic\">qwertzui</password>"))).isEqualTo("<password type=\"basic\">xxxxx<password>");
         assertThat(obfuscator.obfuscate(buildEvent("<password>qwertzui</password>"))).isEqualTo("<password>xxxxx<password>");
     }
+
+    @Test
+    void isEnabled_nominal() {
+        ObfuscatorSpi obfuscator = new XMLPasswordObfuscator();
+        assertThat(obfuscator.enabled()).isTrue();
+    }
 }

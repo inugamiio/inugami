@@ -1,0 +1,17 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "requestHeaders" : {
+    "x-device-identifier" : "4aede0ea-c278-4ec1-b6cc-3fd25654185e",
+    "x-correlation-id" : "d026cd9e-6a9d-4d65-825f-2ed65cc22e23"
+  },
+  "response" : "[ {\n  \"config\" : {\n    \"alertings\" : [ ],\n    \"components\" : [ ],\n    \"dependencies\" : [ ],\n    \"enable\" : true,\n    \"eventsFiles\" : [ ],\n    \"frontProperties\" : [ ],\n    \"handlers\" : [ ],\n    \"listeners\" : [ ],\n    \"processors\" : [ ],\n    \"properties\" : { },\n    \"providers\" : [ ],\n    \"resources\" : [ ],\n    \"security\" : [ ]\n  },\n  \"enabled\" : false,\n  \"eventConfigPresent\" : false,\n  \"events\" : [ {\n    \"enable\" : true,\n    \"events\" : [ {\n      \"type\" : \"Event\",\n      \"name\" : \"event-name\",\n      \"fromFirstTime\" : \"-10min\",\n      \"until\" : null,\n      \"provider\" : \"provider\",\n      \"mapper\" : \"mapper\",\n      \"processors\" : [ {\n        \"configs\" : { },\n        \"name\" : \"processor_name\"\n      } ],\n      \"alertings\" : [ ],\n      \"scheduler\" : \"0 0/5 * * * ?\",\n      \"targets\" : [ {\n        \"name\" : null,\n        \"fromFirstTime\" : null,\n        \"until\" : null,\n        \"provider\" : null,\n        \"mapper\" : null,\n        \"processors\" : [ ],\n        \"alertings\" : [ ],\n        \"query\" : null,\n        \"parent\" : null,\n        \"scheduler\" : null\n      } ]\n    } ],\n    \"gav\" : {\n      \"artifactId\" : \"inu-test\",\n      \"groupId\" : \"io.inugami.plugin\",\n      \"hash\" : \"io.inugami.plugin:inu-test:4.3.0:jar\",\n      \"qualifier\" : \"jar\",\n      \"version\" : \"4.3.0\"\n    },\n    \"name\" : \"events\",\n    \"simpleEvents\" : [ {\n      \"type\" : \"SimpleEvent\",\n      \"name\" : \"event-name\",\n      \"fromFirstTime\" : \"-10min\",\n      \"until\" : null,\n      \"provider\" : \"provider\",\n      \"mapper\" : \"mapper\",\n      \"processors\" : [ {\n        \"configs\" : { },\n        \"name\" : \"processor_name\"\n      } ],\n      \"alertings\" : [ ],\n      \"query\" : \"query\",\n      \"parent\" : null,\n      \"scheduler\" : \"0 0/5 * * * ?\"\n    } ]\n  } ],\n  \"gav\" : {\n    \"artifactId\" : \"inu-test\",\n    \"groupId\" : \"io.inugami.plugin\",\n    \"hash\" : \"io.inugami.plugin:inu-test:4.3.0:jar\",\n    \"qualifier\" : \"jar\",\n    \"version\" : \"4.3.0\"\n  }\n} ]",
+  "responseHeaders" : {
+    "x-device-identifier" : "4aede0ea-c278-4ec1-b6cc-3fd25654185e",
+    "x-correlation-id" : "d026cd9e-6a9d-4d65-825f-2ed65cc22e23",
+    "x-b3-traceid" : "a77f1854-8a37-4fc9-ae59-a21ce4a62ef0"
+  },
+  "status" : 200,
+  "url" : "/",
+  "verb" : "GET"
+}

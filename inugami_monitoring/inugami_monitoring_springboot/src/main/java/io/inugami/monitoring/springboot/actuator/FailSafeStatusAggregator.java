@@ -3,10 +3,7 @@ package io.inugami.monitoring.springboot.actuator;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.actuate.health.StatusAggregator;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class FailSafeStatusAggregator implements StatusAggregator {
     public static final  Status               DEGRADED      = new Status("DEGRADED");
@@ -15,7 +12,7 @@ public class FailSafeStatusAggregator implements StatusAggregator {
             Map.entry(Status.UP, 1),
             Map.entry(Status.DOWN, 2),
             Map.entry(Status.OUT_OF_SERVICE, 3)
-    );
+                                                                           );
 
     @Override
     public Status getAggregateStatus(final Status... statuses) {
@@ -26,12 +23,11 @@ public class FailSafeStatusAggregator implements StatusAggregator {
     public Status getAggregateStatus(final Set<Status> statuses) {
         int currentLevel = -1;
 
-        if (statuses != null) {
-            for (final Status status : statuses) {
-                final Integer statusLevel = STATUS_LEVELS.get(status);
-                if (statusLevel != null && statusLevel > currentLevel) {
-                    currentLevel = statusLevel;
-                }
+
+        for (final Status status : Optional.ofNullable(statuses).orElse(Set.of())) {
+            final Integer statusLevel = STATUS_LEVELS.get(status);
+            if (statusLevel != null && statusLevel > currentLevel) {
+                currentLevel = statusLevel;
             }
         }
 

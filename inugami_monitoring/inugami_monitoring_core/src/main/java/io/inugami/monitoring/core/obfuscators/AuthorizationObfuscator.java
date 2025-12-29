@@ -19,6 +19,8 @@ package io.inugami.monitoring.core.obfuscators;
 import io.inugami.framework.interfaces.monitoring.Obfuscator;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
 import lombok.NoArgsConstructor;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.regex.Pattern;
 
@@ -31,22 +33,23 @@ import java.util.regex.Pattern;
 @NoArgsConstructor
 public class AuthorizationObfuscator implements Obfuscator {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    private static final Pattern EMPTY   = ObfuscatorTools.buildJsonFieldPattern("(AUTHORIZATION|authorization)", "\"\\s*\"");
+    // =================================================================================================================
+    private static final Pattern EMPTY   =
+            ObfuscatorTools.buildJsonFieldPattern("(AUTHORIZATION|authorization)", "\"\\s*\"");
     private static final Pattern DEFAULT = ObfuscatorTools.buildJsonFieldPattern("(AUTHORIZATION|authorization)");
 
-    // =========================================================================
+    // =================================================================================================================
     // METHODS
-    // =========================================================================
+    // =================================================================================================================
     @Override
-    public boolean accept(String data) {
-        return data.contains("authorization") || data.contains("AUTHORIZATION");
+    public boolean accept(@Nullable String data) {
+        return data != null && (data.contains("authorization") || data.contains("AUTHORIZATION"));
     }
 
     @Override
-    public String clean(String data) {
+    public String clean(@NonNull String data) {
         String result = replaceAll(DEFAULT, data, "\"authorization\":\"xxxxx\"");
         return replaceAll(EMPTY, result, "\"authorization\":\"empty\"");
     }

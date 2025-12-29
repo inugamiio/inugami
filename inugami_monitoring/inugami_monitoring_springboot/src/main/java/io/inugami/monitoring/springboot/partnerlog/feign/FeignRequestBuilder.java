@@ -40,17 +40,14 @@ public class FeignRequestBuilder {
         }
 
         public Request buildFeignRequest() {
-
-            return Request.create(httpMethod == null ? Request.HttpMethod.GET : httpMethod,
-                                  url == null ? "http://mock" : url,
-                                  headers != null ? headers : new LinkedHashMap<>(),
+            return Request.create(Optional.ofNullable(httpMethod).orElse(Request.HttpMethod.GET),
+                                  Optional.ofNullable(url).orElse("http://mock"),
+                                  new LinkedHashMap<>(Optional.ofNullable(headers).orElse(Map.of())),
                                   body,
-                                  charset == null ? StandardCharsets.UTF_8 : charset,
-                                  requestTemplate != null
-                                          ? requestTemplate
-                                          : RequestTemplateBuilder.builder()
-                                                                  .buildFeignRequestTemplate()
-            );
+                                  Optional.ofNullable(charset).orElse(StandardCharsets.UTF_8),
+                                  Optional.ofNullable(requestTemplate).orElse(RequestTemplateBuilder.builder()
+                                                                                                    .buildFeignRequestTemplate())
+                                 );
         }
     }
 }

@@ -22,6 +22,7 @@ import io.inugami.framework.interfaces.monitoring.MdcServiceSpiFactory;
 import io.inugami.framework.interfaces.monitoring.threads.MonitoredCallableListener;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+@Slf4j
 @RequiredArgsConstructor
 @Builder
 public class MonitoredCallable<T> implements Callable<T> {
@@ -74,10 +76,12 @@ public class MonitoredCallable<T> implements Callable<T> {
                 try {
                     listener.start(this);
                 } catch (Throwable e) {
+                    traceError(e);
                 }
             }
         }
     }
+
 
     private void invokeListenerOnDone(final T currentResult, final Chrono chrono, final Throwable error) {
         if (listeners != null) {
@@ -85,6 +89,7 @@ public class MonitoredCallable<T> implements Callable<T> {
                 try {
                     listener.done(this, currentResult, chrono, error);
                 } catch (Throwable e) {
+                    traceError(e);
                 }
             }
         }
@@ -103,6 +108,7 @@ public class MonitoredCallable<T> implements Callable<T> {
                     try {
                         listener.created(result, System.currentTimeMillis());
                     } catch (Throwable e) {
+                        traceError(e);
                     }
                 }
             }
@@ -119,4 +125,12 @@ public class MonitoredCallable<T> implements Callable<T> {
             return this;
         }
     }
+
+    private static void traceError(final Throwable error) {
+        if (log.isDebugEnabled()) {
+            log.error(error.getMessage(), error);
+        }
+    }
 }
+
+

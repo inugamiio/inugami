@@ -16,7 +16,6 @@
  */
 package io.inugami.framework.interfaces.models.sse;
 
-import io.inugami.framework.interfaces.models.basic.Dto;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -43,10 +42,10 @@ public final class ClientSendData {
     @ToString.Include
     @EqualsAndHashCode.Include
     private Long         time;
-    private List<Dto<?>> targets = new ArrayList<>();
+    private List<Object> targets = new ArrayList<>();
 
 
-    public void addTarget(final Dto<?> target) {
+    public void addTarget(final Object target) {
         targets.add(target);
     }
 

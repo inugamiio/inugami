@@ -10,7 +10,7 @@
     <parent>
         <artifactId>inugami_common</artifactId>
         <groupId>io.inugami.framework.commons</groupId>
-        <version>4.2.1-SNAPSHOT</version>
+        <version>4.2.2-SNAPSHOT</version>
     </parent>
 
     <!--================================================================================================================
@@ -57,6 +57,10 @@
             <artifactId>inugami_api_interfaces</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.inugami.monitoring</groupId>
+            <artifactId>inugami_logs_obfuscator</artifactId>
+        </dependency>
+        <dependency>
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
@@ -92,6 +96,8 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
         </dependency>
+
+
         <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         + TEST
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->

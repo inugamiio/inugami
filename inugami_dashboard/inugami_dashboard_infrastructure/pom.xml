@@ -16,7 +16,7 @@
     <parent>
         <artifactId>inugami_dashboard</artifactId>
         <groupId>io.inugami.dashboard</groupId>
-        <version>4.2.1-SNAPSHOT</version>
+        <version>4.2.2-SNAPSHOT</version>
     </parent>
 
 
@@ -54,6 +54,10 @@
             <groupId>io.inugami.framework.commons</groupId>
             <artifactId>inugami_commons</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.inugami.framework.commons</groupId>
+            <artifactId>inugami_commons_spring</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>io.inugami.framework.commons</groupId>
@@ -64,15 +68,27 @@
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>io.inugami.framework.commons</groupId>
             <artifactId>inugami_commons_test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.skyscreamer</groupId>
+                    <artifactId>jsonassert</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

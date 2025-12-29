@@ -17,12 +17,11 @@
 package io.inugami.framework.interfaces.task;
 
 import io.inugami.framework.interfaces.alertings.AlertingResult;
-import io.inugami.framework.interfaces.models.basic.Dto;
 import io.inugami.framework.interfaces.models.event.GenericEvent;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * ProviderFutureResultFront
@@ -37,7 +36,7 @@ import java.util.Optional;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProviderFutureResultFront implements Dto<ProviderFutureResultFront> {
+public class ProviderFutureResultFront implements Serializable {
 
     private static final long serialVersionUID = 7227934237939401748L;
 
@@ -49,17 +48,4 @@ public class ProviderFutureResultFront implements Dto<ProviderFutureResultFront>
     private String               data;
     @Singular("alerts")
     private List<AlertingResult> alerts;
-
-
-    @Override
-    public ProviderFutureResultFront cloneObj() {
-        final var builder = toBuilder();
-
-        if (event != null) {
-            builder.event((GenericEvent<?>) event.cloneObj());
-        }
-
-        builder.alerts(Optional.ofNullable(alerts).orElse(List.of()).stream().map(AlertingResult::cloneObj).toList());
-        return builder.build();
-    }
 }

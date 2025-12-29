@@ -18,6 +18,7 @@ package io.inugami.framework.api.exceptions;
 
 
 import lombok.experimental.UtilityClass;
+import org.jspecify.annotations.NonNull;
 
 @SuppressWarnings({"java:S5164"})
 @UtilityClass
@@ -31,7 +32,7 @@ public class WarningContext {
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    public static synchronized CurrentWarningContext getInstance() {
+    public static synchronized @NonNull CurrentWarningContext getInstance() {
         CurrentWarningContext instance = INSTANCE.get();
         if (instance == null) {
             instance = new CurrentWarningContext();

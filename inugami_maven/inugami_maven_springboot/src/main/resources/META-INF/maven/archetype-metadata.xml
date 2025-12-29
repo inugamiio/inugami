@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor
+        xmlns="https://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0"
+        xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0 https://maven.apache.org/xsd/archetype-descriptor-1.1.0.xsd"
+        name="inugami_maven_springboot">
+
+
+    <requiredProperties>
+        <requiredProperty key="assertjVersion"><defaultValue>@org.assertj.version@</defaultValue></requiredProperty>
+        <requiredProperty key="cglibVersion"><defaultValue>@cglib.version@</defaultValue></requiredProperty>
+        <requiredProperty key="codehausVersion"><defaultValue>@plugins.org-codehaus-mojo.cobertura-maven-plugin@</defaultValue></requiredProperty>
+        <requiredProperty key="commonsCodecVersion"><defaultValue>@org.apache.commons.codec.version@</defaultValue></requiredProperty>
+        <requiredProperty key="commonsIoVersion"><defaultValue>@org.apache.commons.io.version@</defaultValue></requiredProperty>
+        <requiredProperty key="commonsLangVersion"><defaultValue>@commons-lang.version@</defaultValue></requiredProperty>
+        <requiredProperty key="compilerVersion"><defaultValue>@org.apache.maven.plugins.compiler.version@</defaultValue></requiredProperty>
+        <requiredProperty key="failsafeVersion"><defaultValue>@plugins.org-apache-maven-plugins.maven-failsafe-plugin@</defaultValue></requiredProperty>
+        <requiredProperty key="hazelcastVersion"><defaultValue>@com.hazelcast.version@</defaultValue></requiredProperty>
+        <requiredProperty key="inugamiVersion"><defaultValue>@project.version@</defaultValue></requiredProperty>
+        <requiredProperty key="jacksonVersion"><defaultValue>@com.jackson.version@</defaultValue></requiredProperty>
+        <requiredProperty key="jacocoVersion"><defaultValue>@jacoco.version@</defaultValue></requiredProperty>
+        <requiredProperty key="jakartaServletVersion"><defaultValue>@jakarta.servlet.version@</defaultValue></requiredProperty>
+        <requiredProperty key="jakartaXmlVersion"><defaultValue>@jakarta.xml.bind.version@</defaultValue></requiredProperty>
+        <requiredProperty key="javaDocVersion"><defaultValue>@plugins.org-apache-maven-plugins.maven-javadoc-plugin@</defaultValue></requiredProperty>
+        <requiredProperty key="jspecifyVersion"><defaultValue>@org.jspecify.version@</defaultValue></requiredProperty>
+        <requiredProperty key="junitPlatformVersion"><defaultValue>@org.junit.platform.version@</defaultValue></requiredProperty>
+        <requiredProperty key="junitVersion"><defaultValue>@org.junit.jupiter@</defaultValue></requiredProperty>
+        <requiredProperty key="logbackVersion"><defaultValue>@ch.qos.logback.version@</defaultValue></requiredProperty>
+        <requiredProperty key="mapstructVersion"><defaultValue>@org.mapstruct.version@</defaultValue></requiredProperty>
+        <requiredProperty key="mavenJarVersion"><defaultValue>@plugins.org-apache-maven-plugins.maven-jar-plugin@</defaultValue></requiredProperty>
+        <requiredProperty key="metricsVersion"><defaultValue>@io.dropwizard.metrics.version@</defaultValue></requiredProperty>
+        <requiredProperty key="mockitoJunitVersion"><defaultValue>@org.mockito.junit.version@</defaultValue></requiredProperty>
+        <requiredProperty key="mockitoVersion"><defaultValue>@org-mockito.mockito-core@</defaultValue></requiredProperty>
+        <requiredProperty key="mojoVersion"><defaultValue>@org.codehaus.mojo.version@</defaultValue></requiredProperty>
+        <requiredProperty key="okhttp3Version"><defaultValue>@com.squareup.okhttp3.version@</defaultValue></requiredProperty>
+        <requiredProperty key="openfeignVersion"><defaultValue>@io.github.openfeign.version@</defaultValue></requiredProperty>
+        <requiredProperty key="projectlombokMapstructVersion"><defaultValue>@org.projectlombok.lombok-mapstruct-binding.version@</defaultValue></requiredProperty>
+        <requiredProperty key="projectlombokVersion"><defaultValue>@org.projectlombok.version@</defaultValue></requiredProperty>
+        <requiredProperty key="quartzVersion"><defaultValue>@org.quartz.version@</defaultValue></requiredProperty>
+        <requiredProperty key="slf4jVersion"><defaultValue>@org.slf4j.version@</defaultValue></requiredProperty>
+        <requiredProperty key="springbootVersion"><defaultValue>@spring-boot.version@</defaultValue></requiredProperty>
+        <requiredProperty key="springcloudVersion"><defaultValue>@spring-cloud-starter-openfeign.version@</defaultValue></requiredProperty>
+        <requiredProperty key="springdocVersion"><defaultValue>@org.springdoc.version@</defaultValue></requiredProperty>
+        <requiredProperty key="sunXmlVersion"><defaultValue>@com.sun.xml.bind.version@</defaultValue></requiredProperty>
+        <requiredProperty key="surefireVersion"><defaultValue>@plugins.org-apache-maven-plugins.maven-surefire-plugin@</defaultValue></requiredProperty>
+        <requiredProperty key="swaggerVersion"><defaultValue>@io.swagger.core.v3.version@</defaultValue></requiredProperty>
+        <requiredProperty key="symbol_dollar"><defaultValue>$</defaultValue></requiredProperty>
+    </requiredProperties>
+    <fileSets>
+        <fileSet encoding="UTF-8">
+            <directory></directory>
+            <includes>
+                <include>lombok.config</include>
+                <include>.gitignore</include>
+            </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+            <directory>local-integration-test</directory>
+            <includes>
+                <include>inugami.demo.postman_collection.json</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+
+    <modules>
+        <module id="${rootArtifactId}" dir="__artifactId__-api" name="${rootArtifactId}-api">
+            <fileSets>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/main/java</directory>
+                    <includes>
+                        <include>module-info.java</include>
+                    </includes>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/main/java</directory>
+                    <excludes>
+                        <exclude>module-info.java</exclude>
+                    </excludes>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/main/resources</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/test/java</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/test/resources</directory>
+                </fileSet>
+            </fileSets>
+        </module>
+
+        <module id="${rootArtifactId}" dir="__artifactId__-core" name="${rootArtifactId}-core">
+            <fileSets>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/main/java</directory>
+                    <includes>
+                        <include>module-info.java</include>
+                    </includes>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/main/java</directory>
+                    <excludes>
+                        <exclude>module-info.java</exclude>
+                    </excludes>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/main/resources</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/test/java</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/test/resources</directory>
+                </fileSet>
+            </fileSets>
+        </module>
+
+        <module id="${rootArtifactId}" dir="__artifactId__-infrastructure" name="${rootArtifactId}-infrastructure">
+            <fileSets>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/main/java</directory>
+                    <includes>
+                        <include>module-info.java</include>
+                    </includes>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/main/java</directory>
+                    <excludes>
+                        <exclude>module-info.java</exclude>
+                    </excludes>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/main/resources</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/test/java</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/test_it/java</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/test/resources</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/test_it/resources</directory>
+                </fileSet>
+            </fileSets>
+        </module>
+
+        <module id="${rootArtifactId}" dir="__artifactId__-webapp" name="${rootArtifactId}-webapp">
+            <fileSets>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/main/java</directory>
+                    <includes>
+                        <include>module-info.java</include>
+                    </includes>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/main/java</directory>
+                    <excludes>
+                        <exclude>module-info.java</exclude>
+                    </excludes>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/main/resources</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/test/java</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/test_it/java</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/test/resources</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/test_it/resources</directory>
+                </fileSet>
+            </fileSets>
+        </module>
+
+        <module id="${rootArtifactId}" dir="__artifactId__-interfaces" name="${rootArtifactId}-interfaces">
+            <modules>
+                <module id="${rootArtifactId}" dir="__artifactId__-interfaces-api" name="${rootArtifactId}-interfaces-api">
+                    <fileSets>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/main/java</directory>
+                            <includes>
+                                <include>module-info.java</include>
+                            </includes>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/main/java</directory>
+                            <excludes>
+                                <exclude>module-info.java</exclude>
+                            </excludes>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/main/resources</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/test/java</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/test_it/java</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/test/resources</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/test_it/resources</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/assembly</directory>
+                        </fileSet>
+                    </fileSets>
+                </module>
+
+                <module id="${rootArtifactId}" dir="__artifactId__-interfaces-core" name="${rootArtifactId}-interfaces-core">
+                    <fileSets>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/main/java</directory>
+                            <includes>
+                                <include>module-info.java</include>
+                            </includes>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/main/java</directory>
+                            <excludes>
+                                <exclude>module-info.java</exclude>
+                            </excludes>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/main/resources</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/test/java</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/test_it/java</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/test/resources</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/test_it/resources</directory>
+                        </fileSet>
+                    </fileSets>
+                </module>
+
+                <module id="${rootArtifactId}" dir="__artifactId__-interfaces-feign" name="${rootArtifactId}-interfaces-feign">
+                    <fileSets>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/main/java</directory>
+                            <includes>
+                                <include>module-info.java</include>
+                            </includes>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/main/java</directory>
+                            <excludes>
+                                <exclude>module-info.java</exclude>
+                            </excludes>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/main/resources</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/test/java</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/test_it/java</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/test/resources</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/test_it/resources</directory>
+                        </fileSet>
+                    </fileSets>
+                </module>
+            </modules>
+
+
+        </module>
+    </modules>
+</archetype-descriptor>

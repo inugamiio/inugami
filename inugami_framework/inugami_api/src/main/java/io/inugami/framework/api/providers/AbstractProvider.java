@@ -79,6 +79,7 @@ public abstract class AbstractProvider {
     // =========================================================================
     // RUN TASK
     // =========================================================================
+    @SuppressWarnings({"java:S1172"})
     protected FutureData<ProviderFutureResult> runTask(final ProviderTask task, final SimpleEvent event,
                                                        final FutureData<ProviderFutureResult> future) {
         return FutureDataModel.<ProviderFutureResult>builder().

@@ -19,6 +19,8 @@ package io.inugami.framework.interfaces.dependency.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Builder(toBuilder = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
@@ -26,17 +28,19 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 @Getter
-public class DependencyRule {
+public class DependencyRule implements Serializable {
+
+    private static final long         serialVersionUID = -6175357745336307762L;
     @ToString.Include
     @EqualsAndHashCode.Include
-    private String       groupId;
+    private              String       groupId;
     @ToString.Include
     @EqualsAndHashCode.Include
-    private String       artifactId;
+    private              String       artifactId;
     @ToString.Include
     @EqualsAndHashCode.Include
-    private VersionRules rules;
-    private String       comment;
-    private String       link;
-    private Level        level;
+    private              VersionRules rules;
+    private              String       comment;
+    private              String       link;
+    private              Level        level;
 }

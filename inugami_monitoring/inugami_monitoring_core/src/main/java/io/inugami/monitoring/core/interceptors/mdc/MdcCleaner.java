@@ -16,6 +16,7 @@
  */
 package io.inugami.monitoring.core.interceptors.mdc;
 
+import io.inugami.framework.api.tools.RunSafeUtils;
 import io.inugami.framework.interfaces.monitoring.MdcCleanerSPI;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -29,17 +30,11 @@ import java.util.Optional;
 @Builder
 @RequiredArgsConstructor
 public class MdcCleaner {
-
     private final List<MdcCleanerSPI> cleaners;
 
     public synchronized void cleanMdc() {
-        try {
-            for (MdcCleanerSPI cleaner : Optional.ofNullable(cleaners).orElse(List.of())) {
-                cleaner.clean();
-            }
-        } catch (Throwable e) {
-            log.error(e.getMessage(), e);
+        for (MdcCleanerSPI cleaner : Optional.ofNullable(cleaners).orElse(List.of())) {
+            RunSafeUtils.runSafeVoid(cleaner::clean, log);
         }
     }
-
 }

@@ -1,0 +1,1 @@
+UserDTO(uid=bb895294-efe7-484b-b670-14d004eaf461, firstName=John, lastName=Smith, email=john.smith@mock.org)

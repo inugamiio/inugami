@@ -19,7 +19,6 @@ package io.inugami.dashboard.core.domain.engine.events;
 import io.inugami.dashboard.api.domain.engine.EngineListener;
 import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
 import io.inugami.dashboard.api.domain.event.EventErrors;
-import io.inugami.dashboard.api.domain.sender.ISSESender;
 import io.inugami.framework.configuration.models.plugins.Plugin;
 import io.inugami.framework.interfaces.concurrent.FutureData;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
@@ -41,7 +40,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import static io.inugami.dashboard.core.domain.engine.events.EventRunnerUtils.selectProcessor;
-
+@SuppressWarnings({"java:S112"})
 @Slf4j
 @Builder
 @RequiredArgsConstructor
@@ -68,9 +67,10 @@ public class SimpleEventRunner {
 
     protected EnginePluginEventResultDTO runEvent() {
         try {
+            final var data = processRunEvent();
             final var result = EnginePluginEventResultDTO.builder()
                                                          .name(event.getName())
-                                                         .data(processRunEvent())
+                                                         .data(data)
                                                          .status(Status.SUCCESS)
                                                          .build();
             callListeners(result);

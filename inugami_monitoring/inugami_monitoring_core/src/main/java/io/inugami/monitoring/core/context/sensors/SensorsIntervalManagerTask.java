@@ -25,17 +25,19 @@ import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
 import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
-import io.inugami.framework.interfaces.tools.CalendarTools;
 import io.inugami.monitoring.core.context.MonitoringContext;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.*;
+
+import static io.inugami.framework.api.tools.RunSafeUtils.runSafeVoid;
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
 /**
  * SensorsIntervalManagerTask
@@ -70,17 +72,17 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
     // CONSTRUCTORS
     // =========================================================================
     public SensorsIntervalManagerTask(final int maxTheads, final long interval, final List<MonitoringSender> senders) {
-        super();
         this.maxTheads = maxTheads;
-        this.interval = interval;
-        timeout = (long) (interval * 0.9);
-        executor = Executors.newSingleThreadScheduledExecutor(new MonitoredThreadFactory(getClass().getSimpleName(),
-                                                                                         false));
+        this.interval  = interval;
+        timeout        = (long) (interval * 0.9);
+        executor       =
+                Executors.newSingleThreadScheduledExecutor(new MonitoredThreadFactory(getClass().getSimpleName(),
+                                                                                      false));
         final String name = String.join("_", SensorsIntervalManagerTask.class.getSimpleName(),
                                         String.valueOf(interval) + "ms");
         this.nameSensor = name + "_sensor";
         this.nameSender = name + "_sender";
-        this.senders = senders;
+        this.senders    = senders;
     }
 
     // =========================================================================
@@ -88,31 +90,28 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
     // =========================================================================
     @Override
     public void initialize(final MonitoringContext ctx) {
-        final Calendar calendar = CalendarTools.buildCalendarByMin();
-        calendar.add(Calendar.MINUTE, 1);
-
-        final long now     = CalendarTools.buildCalendar().getTimeInMillis();
-        final long nextMin = calendar.getTimeInMillis();
-        executor.scheduleAtFixedRate(new SensorsIntervalTask(), nextMin - now, interval, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(new SensorsIntervalTask(), 0, interval, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void shutdown(final MonitoringContext ctx) {
         executor.shutdown();
         if (!executor.isShutdown()) {
-            try {
-                executor.awaitTermination(0, TimeUnit.MILLISECONDS);
-            } catch (final Throwable e) {
-                log.error(e.getMessage(), e);
-            }
+            runSafeVoid(() -> executor.awaitTermination(0, TimeUnit.MILLISECONDS), log);
         }
     }
 
     // =========================================================================
     // GETTERS & SETTERS
     // =========================================================================
-    public void add(final MonitoringSensor sensor) {
-        this.tasks.add(new SensorTask(sensor));
+    public CompletableFuture<List<GenericMonitoringModel>> add(final MonitoringSensor sensor) {
+        final CompletableFuture<List<GenericMonitoringModel>> future = new CompletableFuture<>();
+        this.tasks.add(SensorsIntervalTask.SensorTask.builder()
+                                                     .mdc(MdcService.getInstance().getAllMdc())
+                                                     .sensor(sensor)
+                                                     .future(future)
+                                                     .build());
+        return future;
     }
 
     // =========================================================================
@@ -133,17 +132,17 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
             sensorThreads.forceShutdown();
             chrono.stop();
             final List<GenericMonitoringModel> data = new ArrayList<>();
-
-            if (rawData != null) {
-                rawData.forEach(data::addAll);
-            }
+            applyIfNotNull(rawData, v -> v.forEach(data::addAll));
 
             final List<Callable<Void>> senderTasks = new ArrayList<>();
-            if (!data.isEmpty() && (senders != null)) {
-                for (final MonitoringSender sender : senders) {
-                    senderTasks.add(new SenderTask(sender, data));
-                }
-
+            if (data.isEmpty()) {
+                return;
+            }
+            for (final MonitoringSender sender : Optional.ofNullable(senders).orElse(List.of())) {
+                senderTasks.add(SenderTask.builder()
+                                          .sender(sender)
+                                          .data(data)
+                                          .build());
             }
 
             if (!senderTasks.isEmpty()) {
@@ -160,37 +159,36 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
                 sendersThreads.forceShutdown();
             }
         }
+
+        @Builder
+        @AllArgsConstructor
+        public static class SensorTask implements Callable<List<GenericMonitoringModel>> {
+            private final MonitoringSensor                                sensor;
+            private final Map<String, String>                             mdc;
+            private final CompletableFuture<List<GenericMonitoringModel>> future;
+
+            @Override
+            public List<GenericMonitoringModel> call() throws Exception {
+                final var result = sensor.process();
+                future.complete(result);
+                return result;
+            }
+        }
+
+        @Builder
+        @AllArgsConstructor
+        public static class SenderTask implements Callable<Void> {
+            private final MonitoringSender             sender;
+            private final List<GenericMonitoringModel> data;
+
+
+            @Override
+            public Void call() throws Exception {
+                sender.process(data);
+                return null;
+            }
+
+        }
+
     }
-
-    private class SensorTask implements Callable<List<GenericMonitoringModel>> {
-        private final MonitoringSensor sensor;
-
-        public SensorTask(final MonitoringSensor sensor) {
-            this.sensor = sensor;
-        }
-
-        @Override
-        public List<GenericMonitoringModel> call() throws Exception {
-            return sensor.process();
-        }
-    }
-
-    private class SenderTask implements Callable<Void> {
-        private final MonitoringSender sender;
-
-        private final List<GenericMonitoringModel> data;
-
-        public SenderTask(final MonitoringSender sender, final List<GenericMonitoringModel> data) {
-            this.sender = sender;
-            this.data = data;
-        }
-
-        @Override
-        public Void call() throws Exception {
-            sender.process(data);
-            return null;
-        }
-
-    }
-
 }

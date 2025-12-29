@@ -1,0 +1,29 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 400,
+    "domain" : "USER",
+    "errorCode" : "USER-2_0",
+    "errorType" : "functional",
+    "message" : "uid required to find user",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "requestHeaders" : {
+    "x-device-identifier" : "a4120130-6cb3-47dd-98f5-3939ea91bc6c",
+    "x-correlation-id" : "642133e4-f46f-42ea-8450-c32e55bd22e0"
+  },
+  "requestParams" : {
+    "id" : "bb895294-efe7-484b-b670-14d004eaf461"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "a4120130-6cb3-47dd-98f5-3939ea91bc6c",
+    "x-correlation-id" : "642133e4-f46f-42ea-8450-c32e55bd22e0",
+    "x-b3-traceid" : "185d434a-ab97-4dae-aa6d-f988e06a8761"
+  },
+  "status" : 400,
+  "url" : "/user/{id}",
+  "verb" : "GET"
+}

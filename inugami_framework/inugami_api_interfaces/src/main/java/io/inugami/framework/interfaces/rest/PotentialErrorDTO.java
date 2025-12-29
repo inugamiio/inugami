@@ -37,7 +37,7 @@ public class PotentialErrorDTO implements Comparable<PotentialErrorDTO>, Seriali
             return 1;
         } else if (value != null && ref == null) {
             return -1;
-        } else if (value == null && ref == null) {
+        } else if (value == null ) {
             return 0;
         } else {
             return convertCompareToResult(value.compareTo(ref));

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ======================================================================= 
+    = MAVEN
+    ======================================================================== -->
+    <prerequisites>
+        <maven>3.2.3</maven>
+    </prerequisites>
+
+    <!-- ======================================================================= 
+    = PARENT
+    ======================================================================== -->
+    <parent>
+        <artifactId>inugami_maven</artifactId>
+        <groupId>io.inugami.maven</groupId>
+        <version>4.2.2-SNAPSHOT</version>
+    </parent>
+
+
+    <!-- ======================================================================= 
+    = PROJECT
+    ======================================================================== -->
+    <artifactId>inugami_maven_springboot</artifactId>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <packaging>maven-archetype</packaging>
+    <url>http://inugami.io/framework</url>
+
+    <properties>
+        <propertiesEncoding>UTF-8</propertiesEncoding>
+
+    </properties>
+    <!-- ======================================================================= 
+    = DEPENDENCIES
+    ======================================================================== -->
+    <dependencies>
+        <dependency>
+            <groupId>io.inugami.framework</groupId>
+            <artifactId>inugami_api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.inugami.framework</groupId>
+            <artifactId>inugami_api_interfaces</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.inugami.monitoring</groupId>
+            <artifactId>inugami_logs_obfuscator</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <!-- =======================================================================
+    = BUILD
+    ======================================================================== -->
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>META-INF/maven/archetype-metadata.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>META-INF/maven/archetype-metadata.xml</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.archetype</groupId>
+                <artifactId>archetype-packaging</artifactId>
+                <version>3.4.1</version>
+
+            </extension>
+        </extensions>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <propertiesEncoding>UTF-8</propertiesEncoding>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>pom</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

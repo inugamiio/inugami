@@ -29,6 +29,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
+
 @SuppressWarnings({"java:S1186"})
 @Slf4j
 @Component
@@ -36,15 +39,18 @@ public class DefaultEngineListener implements EngineListener {
     //==================================================================================================================
     // ATTRIBUTES
     //==================================================================================================================
-    public static final String EVENT  = "event";
-    public static final String STATUS = "status";
+    public static final String EVENT      = "event";
+    public static final String STATUS     = "status";
+    public static final String MESSAGE    = "message";
+    public static final String ERROR      = "error";
+    public static final String ERROR_CODE = "errorCode";
+    public static final String EMPTY      = "";
 
     //==================================================================================================================
     // ON DONE
     //==================================================================================================================
     @Override
     public void onDone(final EngineResultDTO engineResult) {
-
         if (Status.SUCCESS == engineResult.getStatus()) {
             log.info("successful engine running (starting:{} |finish : {})", engineResult.getStart(), engineResult.getEnd());
         } else {
@@ -52,11 +58,16 @@ public class DefaultEngineListener implements EngineListener {
             log.error("error on engine running (starting:{} |finish : {}) \n{}", engineResult.getStart(), engineResult.getEnd(), info);
         }
     }
-    @Override
-    public void onEventDone(final Plugin plugin,
-                            final GenericEvent<?> event,
-                            final EnginePluginEventResultDTO data) {
 
+    @Override
+    public void onEventDone(final Plugin plugin, final GenericEvent<?> event, final EnginePluginEventResultDTO data) {
+        if (Status.SUCCESS == data.getStatus()) {
+            log.debug("successful event running ({}:{})", plugin.getGav().getHash(), event.getName());
+        } else {
+
+            log.debug("error on event running (starting:{} |finish : {}) \n{}", plugin.getGav()
+                                                                                      .getHash(), event.getName(), buildEventErrorInfo(data));
+        }
     }
 
 
@@ -71,14 +82,24 @@ public class DefaultEngineListener implements EngineListener {
             for (final var event : Optional.ofNullable(plugin.getEvents()).orElse(List.of())) {
                 final var eventResult = LogInfoDTO.builder();
                 eventResult.with(STATUS, event.getStatus());
-                if (event.getErrorCode() != null) {
-                    eventResult.with("errorCode", event.getErrorCode().getErrorCode());
-                }
-
+                applyIfNotNull(event.getErrorCode(), errorCode -> eventResult.with(ERROR_CODE, errorCode.getErrorCode()));
                 pluginResult.with(event.getName(), eventResult.build());
             }
             result.with(plugin.getGav().getHash(), pluginResult.build());
         }
+        return result.build();
+    }
+
+    protected static LogInfoDTO buildEventErrorInfo(final EnginePluginEventResultDTO eventData) {
+        final var result = LogInfoDTO.builder();
+        result.with(STATUS, eventData.getStatus());
+        result.with(MESSAGE, eventData.getMessage());
+        applyIfNotNull(eventData.getErrorCode(), errorCode -> result.with(ERROR_CODE, errorCode.getErrorCode()));
+        result.with(ERROR, Optional.ofNullable(eventData)
+                                   .map(EnginePluginEventResultDTO::getError)
+                                   .map(Throwable::getMessage)
+                                   .orElse(EMPTY));
+
         return result.build();
     }
 }

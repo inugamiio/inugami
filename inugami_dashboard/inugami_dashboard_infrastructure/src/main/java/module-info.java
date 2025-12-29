@@ -23,6 +23,7 @@ open module io.inugami.dashboard.infrastructure {
     requires io.inugami.dashboard.api;
     requires io.inugami.framework.commons.components;
     requires io.inugami.framework.commons;
+    requires io.inugami.framework.commons.spring;
     requires io.inugami.framework.configurations.configuration;
     requires io.inugami.framework.interfaces;
     requires jakarta.annotation;

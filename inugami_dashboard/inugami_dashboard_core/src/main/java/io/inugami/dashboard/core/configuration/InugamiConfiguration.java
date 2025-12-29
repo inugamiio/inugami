@@ -23,6 +23,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * @since 2025-12-13
+ */
 @Getter
 @Setter
 @Builder(toBuilder = true)

@@ -36,10 +36,7 @@ import org.springframework.context.annotation.Configuration;
 import java.io.File;
 import java.time.Clock;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static io.inugami.dashboard.api.domain.engine.exception.EngineErrors.*;
 import static io.inugami.framework.interfaces.exceptions.Asserts.assertNotNull;
@@ -53,8 +50,10 @@ public class InugamiCoreConfiguration {
     //==================================================================================================================
     // ATTRIBUTES
     //==================================================================================================================
-    public static final  String                       ENGINE_THREADS_EXECUTOR_SERVICE          = "engineThreadsExecutorService";
-    public static final  String                       ENGINE_THREADS_EXECUTOR_SERVICE_INTERNAL = "engineThreadsExecutorServiceInternal";
+    public static final  String                       ENGINE_THREADS_EXECUTOR_SERVICE          =
+            "engineThreadsExecutorService";
+    public static final  String                       ENGINE_THREADS_EXECUTOR_SERVICE_INTERNAL =
+            "engineThreadsExecutorServiceInternal";
     private static final List<ThreadsExecutorService> THREAD_POOLS                             = new ArrayList<>();
 
 
@@ -139,7 +138,7 @@ public class InugamiCoreConfiguration {
                                         .clock(clock)
                                         .eventDataDao(eventDataDao)
                                         .listeners(new ArrayList<>(listeners))
-                                        .plugins(plugins)
+                                        .plugins(new ArrayList<>(Optional.ofNullable(plugins).orElse(List.of())))
                                         .sseSender(sseSender)
                                         .threadsExecutor(engineThreadsExecutorService)
                                         .threadsExecutorInternal(internalThreadPool)

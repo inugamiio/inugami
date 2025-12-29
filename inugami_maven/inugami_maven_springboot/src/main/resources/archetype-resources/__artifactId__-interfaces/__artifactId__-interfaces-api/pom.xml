@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--================================================================================================================
+    = MAVEN
+    =================================================================================================================-->
+    <prerequisites>
+        <maven>3.2.3</maven>
+    </prerequisites>
+
+    <!--================================================================================================================
+    = PARENT
+    =================================================================================================================-->
+    <parent>
+        <groupId>${groupId}</groupId>
+        <artifactId>${rootArtifactId}-interfaces</artifactId>
+        <version>${version}</version>
+    </parent>
+
+
+    <!--================================================================================================================
+    = PROJECT
+    =================================================================================================================-->
+    <artifactId>${rootArtifactId}-interfaces-api</artifactId>
+
+
+    <!--================================================================================================================
+    = DEPENDENCIES
+    =================================================================================================================-->
+    <dependencies>
+        <dependency>
+            <groupId>io.inugami.framework</groupId>
+            <artifactId>inugami_api_interfaces</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.inugami.framework.commons</groupId>
+            <artifactId>inugami_commons_test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!--================================================================================================================
+    = BUILD
+    =================================================================================================================-->
+    <build>
+        <plugins>
+            <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            + GENERATE OPEN API CONTRACTS
+            +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+            <plugin>
+                <groupId>io.github.kbuntrock</groupId>
+                <artifactId>openapi-maven-plugin</artifactId>
+                <version>0.0.28</version>
+                <executions>
+                    <execution>
+                        <id>documentation-global</id>
+                        <goals>
+                            <goal>documentation</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <apiConfiguration>
+                                <library>SPRING_MVC</library>
+                                <tagAnnotations>
+                                    <annotation>RequestMapping</annotation>
+                                </tagAnnotations>
+                            </apiConfiguration>
+                            <apis>
+                                <api>
+                                    <locations>
+                                        <location>${package}.interfaces.api.domain</location>
+                                    </locations>
+                                </api>
+                            </apis>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            + GENERATE OPEN API CONTRACTS
+            +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>mocks</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/assembly/assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -17,16 +17,14 @@
 package io.inugami.monitoring.core.interceptors;
 
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import io.inugami.framework.interfaces.exceptions.ExceptionHandlerMapper;
+import io.inugami.framework.interfaces.exceptions.ExceptionResolver;
 import io.inugami.framework.interfaces.monitoring.ErrorResult;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.spi.SpiLoader;
-import io.inugami.framework.interfaces.exceptions.ExceptionHandlerMapper;
-import io.inugami.framework.interfaces.exceptions.ExceptionResolver;
+import org.jspecify.annotations.NonNull;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,7 +71,7 @@ public class FilterInterceptorErrorResolver implements ExceptionResolver {
     // METHODS
     // =========================================================================
     @Override
-    public ErrorResult resolve(final Exception error) {
+    public ErrorResult resolve(@NonNull final Exception error) {
         ErrorCode errorType = DEFAULT_ERROR;
         for (final Pattern pattern : KEYS_SET) {
             final Matcher matcher = pattern.matcher(error.getClass().getName());
@@ -95,7 +93,9 @@ public class FilterInterceptorErrorResolver implements ExceptionResolver {
     }
 
     private String buildCause(final Exception error) {
-        return error.getCause() == null ? null : error.getCause().getMessage();
+        return Optional.of(Optional.ofNullable(error.getCause()).orElse(error))
+                       .map(Throwable::getMessage)
+                       .orElse(null);
     }
 
 }

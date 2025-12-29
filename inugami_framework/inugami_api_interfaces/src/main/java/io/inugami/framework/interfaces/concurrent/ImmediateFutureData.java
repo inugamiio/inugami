@@ -16,6 +16,9 @@
  */
 package io.inugami.framework.interfaces.concurrent;
 
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -27,20 +30,14 @@ import java.util.concurrent.TimeoutException;
  * @author patrick_guillerm
  * @since 9 août 2017
  */
+@RequiredArgsConstructor
+@Builder
 public class ImmediateFutureData<T> implements Future<T> {
 
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
     private final T data;
-
-    // =========================================================================
-    // CONSTRUCTORS
-    // =========================================================================
-    public ImmediateFutureData(final T data) {
-        super();
-        this.data = data;
-    }
 
     // =========================================================================
     // GET

@@ -20,14 +20,14 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 import static io.inugami.framework.interfaces.tools.PathUtils.toUnixPath;
 
-@SuppressWarnings({"java:S119", "java:S3011", "java:S1452", "java:S1181", "java:S1123", "java:S2326", "java:S1133", "java:S5042", "java:S5361"})
+
+@SuppressWarnings({"java:S119", "java:S3011", "java:S1452", "java:S1181", "java:S1123", "java:S2326", "java:S1133", "java:S5042", "java:S5361", "java:S2589"})
 @Slf4j
 @UtilityClass
 public final class ReflectionUtils {
@@ -124,7 +124,7 @@ public final class ReflectionUtils {
                 classes.addAll(scanAllFiles(currentFile, bases));
             }
         }
-        return classes.stream().filter(className -> className.startsWith(basePackage)).collect(Collectors.toList());
+        return classes.stream().filter(className -> className.startsWith(basePackage)).toList();
     }
 
     protected static List<String> scanJar(final URL url) throws URISyntaxException, IOException {
@@ -393,10 +393,10 @@ public final class ReflectionUtils {
     public static <A extends Annotation, AE extends AnnotatedElement> A searchAnnotationInInterface(final AE annotatedElement,
                                                                                                     final Class<A> annotation) {
 
-        if (annotatedElement instanceof Method) {
-            return searchAnnotationInInterfaceFromMethod((Method) annotatedElement, annotation);
-        } else if (annotatedElement instanceof Class<?>) {
-            return searchAnnotationInInterfaceFromClass((Class<?>) annotatedElement, annotation);
+        if (annotatedElement instanceof Method method) {
+            return searchAnnotationInInterfaceFromMethod(method, annotation);
+        } else if (annotatedElement instanceof Class<?> clazz) {
+            return searchAnnotationInInterfaceFromClass(clazz, annotation);
         }
         return null;
     }
@@ -458,6 +458,7 @@ public final class ReflectionUtils {
         }
         return null;
     }
+
 
     private static boolean isSameParameters(final Parameter[] refParameters, final Parameter[] parameters) {
         if (refParameters == null && parameters == null) {
@@ -783,8 +784,8 @@ public final class ReflectionUtils {
 
     public static Class<?> getGenericType(final Type type) {
         Class<?> result = null;
-        if (type instanceof ParameterizedType) {
-            final ParameterizedType paramType = (ParameterizedType) type;
+        if (type instanceof ParameterizedType parameterizedType) {
+            final ParameterizedType paramType = parameterizedType;
             final Type[]            argTypes  = paramType.getActualTypeArguments();
             if (argTypes.length > 0) {
                 result = argTypes[0].getClass();
@@ -800,8 +801,8 @@ public final class ReflectionUtils {
     public static Class<?> extractGenericType(final Type genericType, final int typeIndex) {
         Class<?> result = null;
         if (genericType != null) {
-            if (genericType instanceof ParameterizedType) {
-                final String className = ((ParameterizedType) genericType).getActualTypeArguments()[typeIndex].getTypeName();
+            if (genericType instanceof ParameterizedType parameterizedType) {
+                final String className = parameterizedType.getActualTypeArguments()[typeIndex].getTypeName();
                 try {
                     result = getClassloader().loadClass(className);
                 } catch (final ClassNotFoundException e) {
@@ -823,29 +824,24 @@ public final class ReflectionUtils {
     // API CONVERTORS
     // =========================================================================
     public static int parseInt(final Object value) {
-        int result = 500;
-        try {
-            result = (int) value;
-        } catch (final Throwable e) {
-            traceError(e, log);
-        }
-        return result;
+        return RunSafeUtils.runSafeOrElse(() -> (int) value, 500);
     }
 
     // =========================================================================
     // ERRORS
     // =========================================================================
-    public static <T> T runSafe(final GenericActionWithException<T> action) {
-        if (action == null) {
-            return null;
-        }
 
-        try {
-            return action.process();
-        } catch (final Throwable e) {
-            traceError(e, log);
-            return null;
-        }
+    /**
+     * Allows to process some action with potential error without throws any exception
+     *
+     * @param action
+     * @param <T>
+     * @return
+     * @see io.inugami.framework.api.tools.RunSafeUtils#runSafe
+     */
+    @Deprecated
+    public static <T> T runSafe(final GenericActionWithException<T> action) {
+        return RunSafeUtils.runSafe(action, log);
     }
 
     public static void traceError(final Throwable e, final Logger logger) {

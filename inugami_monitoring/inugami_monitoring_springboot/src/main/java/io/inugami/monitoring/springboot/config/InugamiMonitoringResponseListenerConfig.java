@@ -17,7 +17,6 @@
 package io.inugami.monitoring.springboot.config;
 
 import io.inugami.monitoring.core.interceptors.WarningResponseListener;
-import io.inugami.monitoring.springboot.request.SpringRestMethodTracker;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 public class InugamiMonitoringResponseListenerConfig {
     @ConditionalOnMissingBean
     @Bean
-    public WarningResponseListener warningResponseListener(){
+    public WarningResponseListener warningResponseListener() {
         return new WarningResponseListener();
     }
 

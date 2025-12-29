@@ -16,12 +16,10 @@
  */
 package io.inugami.framework.interfaces.monitoring.models;
 
-import io.inugami.framework.interfaces.models.basic.Dto;
-import io.inugami.framework.interfaces.models.number.GraphiteNumber;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
-import java.util.Date;
-
-public interface GenericMonitoringModel extends Dto {
+public interface GenericMonitoringModel extends Serializable {
     String getUid();
 
     String getAsset();
@@ -46,7 +44,7 @@ public interface GenericMonitoringModel extends Dto {
 
     String getTimeUnit();
 
-    Date getDate();
+    LocalDateTime getDate();
 
     long getTime();
 
@@ -56,7 +54,7 @@ public interface GenericMonitoringModel extends Dto {
 
     String getErrorType();
 
-    GraphiteNumber getValue();
+    Object getValue();
 
     String getPath();
 

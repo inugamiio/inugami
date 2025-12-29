@@ -41,6 +41,7 @@ open module io.inugami.framework.api {
     exports io.inugami.framework.api.loggers.mdc.initializer;
     exports io.inugami.framework.api.loggers.mdc.mapper;
     exports io.inugami.framework.api.marshalling;
+    exports io.inugami.framework.api.metrics;
     exports io.inugami.framework.api.models.data;
     exports io.inugami.framework.api.monitoring.cors;
     exports io.inugami.framework.api.monitoring.logs;

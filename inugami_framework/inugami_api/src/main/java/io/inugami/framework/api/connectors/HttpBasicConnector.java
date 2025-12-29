@@ -48,7 +48,7 @@ import static io.inugami.framework.interfaces.connectors.exceptions.HttpError.RE
  * @author patrick_guillerm
  * @since 26 oct. 2016
  */
-@SuppressWarnings({"java:S3776","java:S1186"})
+@SuppressWarnings({"java:S3776", "java:S1186"})
 @Slf4j
 public class HttpBasicConnector implements IHttpBasicConnector {
     // =================================================================================================================
@@ -238,12 +238,10 @@ public class HttpBasicConnector implements IHttpBasicConnector {
             }
         }
 
-        if (response.headers() != null) {
-            final Set<String> headers = response.headers().names();
 
-            for (final String header : headers) {
-                builder.addResponseHeader(header, String.join(";", response.headers().get(header)));
-            }
+        final Set<String> headers = response.headers().names();
+        for (final String header : headers) {
+            builder.addResponseHeader(header, String.join(";", response.headers().get(header)));
         }
 
         return builder.build();
@@ -350,14 +348,6 @@ public class HttpBasicConnector implements IHttpBasicConnector {
         }
         invokeVoidListener(listeners, l -> l.onError(stepResult));
     }
-
-    private void callListenerOnError(final List<ConnectorListener> listeners, final ConnectorException error) {
-        for (final ConnectorListener listenerSpi : getListeners()) {
-            invokeVoidListener(listenerSpi, l -> l.onError(error));
-        }
-        invokeVoidListener(listeners, l -> l.onError(error));
-    }
-
 
     // =========================================================================
     // CLOSE

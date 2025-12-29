@@ -17,7 +17,6 @@
 package io.inugami.monitoring.springboot.config;
 
 import io.inugami.monitoring.core.interceptors.DefaultFilterInterceptorCachePurgeStrategy;
-import io.inugami.monitoring.core.interceptors.WarningResponseListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 public class InugamiMonitoringPurgeStrategyConfig {
     @ConditionalOnMissingBean
     @Bean
-    public DefaultFilterInterceptorCachePurgeStrategy defaultFilterInterceptorCachePurgeStrategy(){
+    public DefaultFilterInterceptorCachePurgeStrategy defaultFilterInterceptorCachePurgeStrategy() {
         return new DefaultFilterInterceptorCachePurgeStrategy();
     }
 

@@ -12,13 +12,13 @@
   },
   "request" : "[ {\n  \"condition\" : \"value > 5\",\n  \"description\" : \"lorem ipsum\",\n  \"function\" : \"handlerFunction\",\n  \"message\" : \"sorry\",\n  \"name\" : \"simple-alert\",\n  \"provider\" : \"graphite\"\n} ]",
   "requestHeaders" : {
-    "x-device-identifier" : "e832daad-a65a-4c39-93ad-0c8312cfb10c",
-    "x-correlation-id" : "40cfdf6e-aaf7-42c6-90e8-86a7d6a6283f"
+    "x-device-identifier" : "b0186f1d-dc09-4e47-870a-d4c12c7b3eff",
+    "x-correlation-id" : "6a63f6d6-ba35-49ed-b939-8d878a27cd40"
   },
   "responseHeaders" : {
-    "x-device-identifier" : "e832daad-a65a-4c39-93ad-0c8312cfb10c",
-    "x-correlation-id" : "40cfdf6e-aaf7-42c6-90e8-86a7d6a6283f",
-    "x-b3-traceid" : "1cb1ec20-979d-48b5-9af4-213d582283b9"
+    "x-device-identifier" : "b0186f1d-dc09-4e47-870a-d4c12c7b3eff",
+    "x-correlation-id" : "6a63f6d6-ba35-49ed-b939-8d878a27cd40",
+    "x-b3-traceid" : "2f0cc428-51fe-4930-a861-320de4eee949"
   },
   "status" : 400,
   "url" : "/alerting",

@@ -35,7 +35,6 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * FileUtils
@@ -408,11 +407,9 @@ public class FilesUtils {
         final String[]     names      = filter == null ? folder.list() : folder.list(filter);
         final List<String> filesNames = Arrays.asList(Optional.ofNullable(names).orElse(new String[0]));
 
-        //@formatter:off
         return filesNames.stream()
                          .map(name -> buildFile(folder, name))
-                         .collect(Collectors.toList());
-        //@formatter:on
+                         .toList();
     }
 
     public static List<File> scanFilesystem(final File path, final FilenameFilter filter) {
@@ -547,9 +544,10 @@ public class FilesUtils {
         return content == null ? null : new String(content, StandardCharsets.UTF_8);
     }
 
+    @SuppressWarnings({"java:S1197"})
     public static byte[] readBytes(final URL url) throws IOException {
         if (url == null) {
-            return null;
+            return new byte[]{};
         }
 
         final ByteArrayOutputStream output = new ByteArrayOutputStream();

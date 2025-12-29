@@ -1,0 +1,27 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 404,
+    "domain" : "USER",
+    "errorCode" : "USER-3_1",
+    "errorType" : "functional",
+    "message" : "users not found",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "request" : "[ {\n  \"email\" : \"john.smith@mock.org\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\",\n  \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n} ]",
+  "requestHeaders" : {
+    "x-device-identifier" : "62c85f53-3c12-4bfe-92d6-53c8367797d6",
+    "x-correlation-id" : "44648856-a088-41a9-98c2-6c7852f40dd7"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "62c85f53-3c12-4bfe-92d6-53c8367797d6",
+    "x-correlation-id" : "44648856-a088-41a9-98c2-6c7852f40dd7",
+    "x-b3-traceid" : "5420f0c8-677f-4065-aad0-ed536a239e1a"
+  },
+  "status" : 404,
+  "url" : "/user",
+  "verb" : "PUT"
+}

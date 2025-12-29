@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Supplier;
-
+@SuppressWarnings({"java:S1168"})
 @UtilityClass
 public class SearchFiltersUtils {
     public static final String CREATED_BY         = "createdBy";
@@ -55,6 +55,7 @@ public class SearchFiltersUtils {
                           .build()
     );
 
+    @SuppressWarnings({"java:S1452"})
     public static List<QueryFilterDTO<?>> buildFilters(final QueryFilterDTO<?>... filters) {
         final List<QueryFilterDTO<?>> result = new ArrayList<>();
         if (filters.length > 0) {
@@ -101,7 +102,7 @@ public class SearchFiltersUtils {
     }
 
     public static LocalDateTime convertToLocalDateTimeSingle(final Object dto,
-                                                     final Supplier<String> supplier) {
+                                                             final Supplier<String> supplier) {
         if (dto == null || supplier == null) {
             return null;
         }

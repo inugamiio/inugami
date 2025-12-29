@@ -1,0 +1,19 @@
+{
+  "data" : [ {
+    "audit" : {
+      "createdBy" : "system",
+      "createdDate" : "2025-12-28T16:55:16.547618",
+      "version" : 1
+    },
+    "email" : "john.smith@mock.org",
+    "firstName" : "John",
+    "lastName" : "Smith",
+    "uid" : "b6576ff3-f752-46cf-a4f2-d07fc7e52442"
+  } ],
+  "nbFoundItems" : 1,
+  "next" : false,
+  "page" : 0,
+  "pageSize" : 20,
+  "previous" : false,
+  "totalPages" : 1
+}

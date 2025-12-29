@@ -10,7 +10,7 @@
     <parent>
         <artifactId>inugami_common</artifactId>
         <groupId>io.inugami.framework.commons</groupId>
-        <version>4.2.1-SNAPSHOT</version>
+        <version>4.2.2-SNAPSHOT</version>
     </parent>
 
     <!--================================================================================================================
@@ -77,10 +77,7 @@
             <artifactId>jakarta.xml.bind-api</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-        </dependency>
+
 
         <dependency>
             <groupId>org.yaml</groupId>
@@ -101,6 +98,11 @@
         <dependency>
             <groupId>io.inugami.framework.commons</groupId>
             <artifactId>inugami_commons_test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

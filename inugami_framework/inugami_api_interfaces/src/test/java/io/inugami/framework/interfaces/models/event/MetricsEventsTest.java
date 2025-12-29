@@ -38,11 +38,11 @@ class MetricsEventsTest {
         MetricsEvents.onStart(buildGav(), EVENT);
         assertText(MetricsEvents.getStates(), """
                 [ {
-                  "delais" : 0,
+                  "delay" : 0,
                   "end" : 0,
                   "eventName" : "io.inugami:inugami_api:3.3.0:jar_event",
                   "running" : true,
-                  "start" : 1764644167123
+                  "start" : 1766063834495
                 } ]
                 """, SkipLineMatcher.of(5));
 
@@ -58,18 +58,18 @@ class MetricsEventsTest {
         //
         assertText(MetricsEvents.getStates(), """
                 [ {
-                     "delais" : 0,
-                     "end" : 1764644330312,
-                     "eventName" : "io.inugami:inugami_api:3.3.0:jar_event",
-                     "running" : false,
-                     "start" : 1764644330312
-                   }, {
-                     "delais" : 0,
-                     "end" : 1764644330312,
-                     "eventName" : "io.inugami:inugami_api:3.3.0:jar_other",
-                     "running" : false,
-                     "start" : 1764644330312
-                   } ]
+                  "delay" : 0,
+                  "end" : 1766063834482,
+                  "eventName" : "io.inugami:inugami_api:3.3.0:jar_event",
+                  "running" : false,
+                  "start" : 1766063834482
+                }, {
+                  "delay" : 0,
+                  "end" : 1766063834482,
+                  "eventName" : "io.inugami:inugami_api:3.3.0:jar_other",
+                  "running" : false,
+                  "start" : 1766063834482
+                } ]
                 """, SkipLineMatcher.of(2,5,8,11));
 
         MetricsEvents.onStop(buildGav(), EVENT);

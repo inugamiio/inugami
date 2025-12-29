@@ -1,0 +1,29 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 404,
+    "domain" : "USER",
+    "errorCode" : "USER-2_1",
+    "errorType" : "functional",
+    "message" : "user not found",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "requestHeaders" : {
+    "x-device-identifier" : "3e76cbc1-26fc-4077-8de3-bcb2aef42d67",
+    "x-correlation-id" : "d3cb32ff-0bee-4255-8cfd-8af21f1df52c"
+  },
+  "requestParams" : {
+    "id" : "bb895294-efe7-484b-b670-14d004eaf461"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "3e76cbc1-26fc-4077-8de3-bcb2aef42d67",
+    "x-correlation-id" : "d3cb32ff-0bee-4255-8cfd-8af21f1df52c",
+    "x-b3-traceid" : "108f08d6-9154-4446-a036-65c9358af8e2"
+  },
+  "status" : 404,
+  "url" : "/user/{id}",
+  "verb" : "GET"
+}

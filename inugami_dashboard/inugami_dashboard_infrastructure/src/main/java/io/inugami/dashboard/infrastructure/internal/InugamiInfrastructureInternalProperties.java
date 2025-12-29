@@ -24,7 +24,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@ConfigurationProperties(prefix ="inugami.infrastructure.internal")
+@ConfigurationProperties(prefix = "inugami.infrastructure.internal")
 public class InugamiInfrastructureInternalProperties {
     @Builder.Default
     private InugamiHazelCastProperties hazelcast = InugamiHazelCastProperties.builder().build();
@@ -34,8 +34,12 @@ public class InugamiInfrastructureInternalProperties {
     @Builder(toBuilder = true)
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class InugamiHazelCastProperties{
+    public static class InugamiHazelCastProperties {
         @Builder.Default
-        private String cluster ="inugami";
+        private String  cluster = "inugami";
+        @Builder.Default
+        private Integer port    = 5701;
+        @Builder.Default
+        private Boolean auto    = Boolean.TRUE;
     }
 }

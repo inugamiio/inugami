@@ -88,6 +88,7 @@ public class PortGenerator {
         }
     }
 
+    @SuppressWarnings({"java:S108"})
     private static void close(final ServerSocket socket) {
         if (socket != null) {
             try {

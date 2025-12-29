@@ -10,12 +10,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class DefaultWarningTracker implements WarningTracker {
     @Override
     public void track(final List<Warning> warning) {
-        final List<String> codes = new ArrayList<>(warning.stream().map(Warning::getWarningCode).collect(Collectors.toList()));
+        final List<String> codes = new ArrayList<>(warning.stream()
+                                                          .map(Warning::getWarningCode)
+                                                          .toList());
         Collections.sort(codes);
 
         final String     warningCode = String.join("_", codes);

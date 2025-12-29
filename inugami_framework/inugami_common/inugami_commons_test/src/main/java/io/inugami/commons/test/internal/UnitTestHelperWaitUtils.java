@@ -33,8 +33,7 @@ public class UnitTestHelperWaitUtils {
         }
 
         try {
-            T result = (T) context.getOnDone().get(context.getTimeout(), TimeUnit.MILLISECONDS);
-            return result;
+            return (T) context.getOnDone().get(context.getTimeout(), TimeUnit.MILLISECONDS);
         } catch (Throwable e) {
             throw new TimeoutException(e.getMessage());
         }

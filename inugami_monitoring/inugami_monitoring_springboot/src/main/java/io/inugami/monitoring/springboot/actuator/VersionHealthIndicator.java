@@ -6,15 +6,23 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 
+import java.util.Optional;
+
 @Builder
 @RequiredArgsConstructor
 public class VersionHealthIndicator implements HealthIndicator {
-    private static final String UNDEFINED = "undefined";
-    private final        String groupId;
-    private final        String artifactId;
-    private final        String version;
-    private final        String commitId;
-    private final        String commitDate;
+    private static final String UNDEFINED   = "undefined";
+    public static final  String GROUP_ID    = "groupId";
+    public static final  String ARTIFACT_ID = "artifactId";
+    public static final  String VERSION     = "version";
+    public static final  String COMMIT_ID   = "commitId";
+    public static final  String COMMIT_DATE = "commitDate";
+
+    private final String groupId;
+    private final String artifactId;
+    private final String version;
+    private final String commitId;
+    private final String commitDate;
 
 
     @Override
@@ -26,11 +34,11 @@ public class VersionHealthIndicator implements HealthIndicator {
     public Health getHealth(final boolean includeDetails) {
         return new Health.Builder()
                 .status(Status.UP)
-                .withDetail("groupId", groupId == null ? UNDEFINED : groupId)
-                .withDetail("artifactId", artifactId == null ? UNDEFINED : artifactId)
-                .withDetail("version", version == null ? UNDEFINED : version)
-                .withDetail("commitId", commitId == null ? UNDEFINED : commitId)
-                .withDetail("commitDate", commitDate == null ? UNDEFINED : commitDate)
+                .withDetail(GROUP_ID, Optional.ofNullable(groupId).orElse(UNDEFINED))
+                .withDetail(ARTIFACT_ID, Optional.ofNullable(artifactId).orElse(UNDEFINED))
+                .withDetail(VERSION, Optional.ofNullable(version).orElse(UNDEFINED))
+                .withDetail(COMMIT_ID, Optional.ofNullable(commitId).orElse(UNDEFINED))
+                .withDetail(COMMIT_DATE, Optional.ofNullable(commitDate).orElse(UNDEFINED))
                 .build();
     }
 

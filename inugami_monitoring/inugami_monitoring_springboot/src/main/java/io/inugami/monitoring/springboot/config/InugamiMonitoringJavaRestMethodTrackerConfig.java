@@ -16,8 +16,6 @@
  */
 package io.inugami.monitoring.springboot.config;
 
-import io.inugami.monitoring.core.interceptable.DefaultInterceptableIdentifier;
-import io.inugami.monitoring.core.spi.H2Interceptable;
 import io.inugami.monitoring.springboot.request.SpringRestMethodTracker;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 public class InugamiMonitoringJavaRestMethodTrackerConfig {
     @ConditionalOnMissingBean
     @Bean
-    public SpringRestMethodTracker springRestMethodTracker(){
+    public SpringRestMethodTracker springRestMethodTracker() {
         return new SpringRestMethodTracker();
     }
 

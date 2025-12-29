@@ -35,7 +35,7 @@ import java.util.*;
  * @since Jan 8, 2019
  */
 @SuppressWarnings({"java:S6355", "java:S1123", "java:S3824", "java:S1133", "java:S1133"})
-final class ResponseWrapper implements ServletResponse, HttpServletResponse {
+public class ResponseWrapper implements ServletResponse, HttpServletResponse {
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
@@ -82,7 +82,7 @@ final class ResponseWrapper implements ServletResponse, HttpServletResponse {
     // =================================================================================================================
     // METHODS
     // =================================================================================================================
-    String getData() {
+    public String getData() {
         return outputWrapper.getData();
     }
 

@@ -21,6 +21,8 @@ import io.inugami.dashboard.api.domain.alerting.dto.AlertingSearchRequestDTO;
 import io.inugami.framework.interfaces.models.event.AlertingModel;
 import io.inugami.framework.interfaces.models.search.QueryFilterDTO;
 import io.inugami.framework.interfaces.models.search.SearchResponse;
+import lombok.Builder;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -28,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
+@Builder
 @Service
 public class AlertingDao implements IAlertingDao {
     // =================================================================================================================
@@ -114,18 +117,14 @@ public class AlertingDao implements IAlertingDao {
     // UPDATE
     // =================================================================================================================
     @Override
-    public Collection<AlertingModel> update(final Collection<AlertingModel> values) {
+    public Collection<AlertingModel> update(@NonNull final Collection<AlertingModel> values) {
         final List<AlertingModel> result = new ArrayList<>();
-        if (values == null) {
-            return result;
-        }
 
         for (AlertingModel value : values) {
-            if (value.getUid() == null) {
-                continue;
-            }
-            MOCK.put(value.getUid(), value);
-            result.add(value);
+            applyIfNotNull(value.getUid(), v -> {
+                MOCK.put(value.getUid(), value);
+                result.add(value);
+            });
         }
 
         return result;
@@ -135,10 +134,7 @@ public class AlertingDao implements IAlertingDao {
     // DELETE
     // =================================================================================================================
     @Override
-    public void delete(final Collection<String> ids) {
-        if (ids == null) {
-            return;
-        }
+    public void delete(@NonNull final Collection<String> ids) {
         for (String id : ids) {
             MOCK.remove(id);
         }

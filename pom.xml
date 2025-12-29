@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.1</version>
+        <version>3.5.8</version>
         <relativePath/>
     </parent>
 
@@ -22,7 +22,7 @@
     =================================================================================================================-->
     <groupId>io.inugami</groupId>
     <artifactId>inugami</artifactId>
-    <version>4.2.1-SNAPSHOT</version>
+    <version>4.2.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Specifics maven lifecycle to package and run inugami project</description>
@@ -71,7 +71,7 @@
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PROJECT
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-        <spring-boot.version>3.4.1</spring-boot.version>
+        <spring-boot.version>3.5.8</spring-boot.version>
         <super.jdk>21</super.jdk>
         <java.version>${super.jdk}</java.version>
         <super.jdk.arg>-parameters</super.jdk.arg>
@@ -150,7 +150,7 @@
         <com.sun.el.version>1.0</com.sun.el.version>
         <de.odysseus.juel.version>2.2.7</de.odysseus.juel.version>
         <com.squareup.okhttp3.version>4.12.0</com.squareup.okhttp3.version>
-
+        <cglib.version>3.3.0</cglib.version>
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PLUGINS VERSIONS
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -209,18 +209,22 @@
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: DEPENDENCIES VERSIONS
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-        <ch.qos.logback.version>1.4.14</ch.qos.logback.version>
+        <ch.qos.logback.version>1.5.12</ch.qos.logback.version>
         <com.hazelcast.version>5.6.0</com.hazelcast.version>
         <com.jackson.version>2.18.2</com.jackson.version>
+        <com.sun.xml.bind.version>4.0.5</com.sun.xml.bind.version>
+        <commons-lang.version>2.6</commons-lang.version>
         <io.dropwizard.metrics.version>4.0.5</io.dropwizard.metrics.version>
         <io.github.openfeign.version>13.6</io.github.openfeign.version>
-        <spring-cloud-starter-openfeign.version>4.3.0</spring-cloud-starter-openfeign.version>
         <io.swagger.core.v3.version>2.2.41</io.swagger.core.v3.version>
-        <org-mockito.mockito-core>2.0.31-beta</org-mockito.mockito-core>
+        <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
+        <jakarta.xml.bind.version>4.0.2</jakarta.xml.bind.version>
+        <org-mockito.mockito-core>2.21.0</org-mockito.mockito-core>
         <org.apache.commons.cli.version>1.4</org.apache.commons.cli.version>
         <org.apache.commons.codec.version>1.16.0</org.apache.commons.codec.version>
         <org.apache.commons.io.version>2.18.0</org.apache.commons.io.version>
         <org.apache.httpcomponents.version>4.5.13</org.apache.httpcomponents.version>
+        <org.assertj.version>3.17.1</org.assertj.version>
         <org.ehcache.version>3.3.1</org.ehcache.version>
         <org.jboss.async-http-servlet.version>3.1.0.Beta2</org.jboss.async-http-servlet.version>
         <org.jsoup.version>1.15.3</org.jsoup.version>
@@ -228,19 +232,21 @@
         <org.junit.jupiter>5.11.4</org.junit.jupiter>
         <org.junit.platform.version>1.11.4</org.junit.platform.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+        <org.mockito.junit.version>2.23.0</org.mockito.junit.version>
         <org.projectlombok.lombok-mapstruct-binding.version>0.2.0</org.projectlombok.lombok-mapstruct-binding.version>
         <org.projectlombok.version>1.18.30</org.projectlombok.version>
         <org.quartz.version>2.5.1</org.quartz.version>
         <org.slf4j.version>2.0.9</org.slf4j.version>
         <org.springdoc.version>2.8.13</org.springdoc.version>
         <org.yaml.version>2.2</org.yaml.version>
+        <spring-cloud-starter-openfeign.version>4.3.0</spring-cloud-starter-openfeign.version>
         <swagger-jaxrs2.version>2.0.0</swagger-jaxrs2.version>
-
+        <junit-platform-surefire-provider.version>1.3.2</junit-platform-surefire-provider.version>
+        <querydsl.version>5.1.0</querydsl.version>
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PLUGINS CONFIGURATION
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <jacoco.version>0.8.14</jacoco.version>
-
         <jacoco.report.aggregate.enabled>false</jacoco.report.aggregate.enabled>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -270,6 +276,8 @@
             **/generated-sources/**/*,
             **/generated-test-sources/**/*,
             **/FeatureInterceptor,
+            **/config/models/*.java,
+            **/*Context.java,
             **/*Application.java
             ${custom.sonar.coverage.exclusions}
         </sonar.coverage.exclusions>
@@ -277,9 +285,16 @@
             **/*DTO.java,
             **/*Dto.java,
             **/*Entity.java,
-            **/api/**/I*.java
+            **/api/**/I*.java,
+            **/UnitTestHelper*.java,
+            **/AnnotationTools.java,
+            **/StringComparator.java,
+            **/MethodSerializer.java,
+            **/FieldSerializer.java,
+            **/YamlMarshaller.java,
+            **/SimpleEvent.java
         </sonar.cpd.exclusions>
-        <sonar.issue.ignore.multicriteria>e1,e2,e3</sonar.issue.ignore.multicriteria>
+        <sonar.issue.ignore.multicriteria>e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15,e16,e17</sonar.issue.ignore.multicriteria>
         <sonar.issue.ignore.multicriteria.e1.ruleKey>java:S1192</sonar.issue.ignore.multicriteria.e1.ruleKey>
         <sonar.issue.ignore.multicriteria.e1.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
 
@@ -288,6 +303,52 @@
 
         <sonar.issue.ignore.multicriteria.e3.ruleKey>java:S1845</sonar.issue.ignore.multicriteria.e3.ruleKey>
         <sonar.issue.ignore.multicriteria.e3.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e3.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e4.ruleKey>java:S1117</sonar.issue.ignore.multicriteria.e4.ruleKey>
+        <sonar.issue.ignore.multicriteria.e4.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e4.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e5.ruleKey>java:S112</sonar.issue.ignore.multicriteria.e5.ruleKey>
+        <sonar.issue.ignore.multicriteria.e5.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e5.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e5.ruleKey>java:S3740</sonar.issue.ignore.multicriteria.e5.ruleKey>
+        <sonar.issue.ignore.multicriteria.e5.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e5.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e6.ruleKey>java:S1181</sonar.issue.ignore.multicriteria.e6.ruleKey>
+        <sonar.issue.ignore.multicriteria.e6.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e6.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e7.ruleKey>java:S6355</sonar.issue.ignore.multicriteria.e7.ruleKey>
+        <sonar.issue.ignore.multicriteria.e7.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e7.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e8.ruleKey>java:S1123</sonar.issue.ignore.multicriteria.e8.ruleKey>
+        <sonar.issue.ignore.multicriteria.e8.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e8.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e9.ruleKey>java:S3824</sonar.issue.ignore.multicriteria.e9.ruleKey>
+        <sonar.issue.ignore.multicriteria.e9.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e9.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e10.ruleKey>java:S5838</sonar.issue.ignore.multicriteria.e10.ruleKey>
+        <sonar.issue.ignore.multicriteria.e10.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e10.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e11.ruleKey>java:S1710</sonar.issue.ignore.multicriteria.e11.ruleKey>
+        <sonar.issue.ignore.multicriteria.e11.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e11.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e12.ruleKey>java:S5853</sonar.issue.ignore.multicriteria.e12.ruleKey>
+        <sonar.issue.ignore.multicriteria.e12.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e12.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e13.ruleKey>java:S119</sonar.issue.ignore.multicriteria.e13.ruleKey>
+        <sonar.issue.ignore.multicriteria.e13.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e13.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e14.ruleKey>java:S1135</sonar.issue.ignore.multicriteria.e14.ruleKey>
+        <sonar.issue.ignore.multicriteria.e14.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e14.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e15.ruleKey>java:S1133</sonar.issue.ignore.multicriteria.e15.ruleKey>
+        <sonar.issue.ignore.multicriteria.e15.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e15.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e16.ruleKey>java:S5976</sonar.issue.ignore.multicriteria.e16.ruleKey>
+        <sonar.issue.ignore.multicriteria.e16.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e16.resourceKey>
+
+        <sonar.issue.ignore.multicriteria.e17.ruleKey> java:S1128</sonar.issue.ignore.multicriteria.e17.ruleKey>
+        <sonar.issue.ignore.multicriteria.e17.resourceKey>**/*DOC.java</sonar.issue.ignore.multicriteria.e17.resourceKey>
+
 
     </properties>
 
@@ -298,6 +359,7 @@
         <module>inugami_framework</module>
         <module>inugami_monitoring</module>
         <module>inugami_dashboard</module>
+        <module>inugami_maven</module>
     </modules>
 
     <!--================================================================================================================
@@ -368,6 +430,11 @@
             <dependency>
                 <groupId>io.inugami.framework.commons</groupId>
                 <artifactId>inugami_commons_spring</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.inugami.framework.commons</groupId>
+                <artifactId>inugami_commons_spring_data</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -488,14 +555,21 @@
                 <artifactId>inugami_dashboard_webapp</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             + OTHER
             +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
             <dependency>
                 <groupId>cglib</groupId>
                 <artifactId>cglib</artifactId>
-                <version>3.3.0</version>
+                <version>${cglib.version}</version>
             </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${ch.qos.logback.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
@@ -543,6 +617,13 @@
                 <version>2.35.0</version>
             </dependency>
             <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-jpa</artifactId>
+                <classifier>jakarta</classifier>
+                <version>${querydsl.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>${org.apache.commons.codec.version}</version>
@@ -560,8 +641,9 @@
             <dependency>
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
-                <version>2.6</version>
+                <version>${commons-lang.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
@@ -610,25 +692,25 @@
             <dependency>
                 <groupId>jakarta.servlet</groupId>
                 <artifactId>jakarta.servlet-api</artifactId>
-                <version>6.0.0</version>
+                <version>${jakarta.servlet.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>jakarta.xml.bind</groupId>
                 <artifactId>jakarta.xml.bind-api</artifactId>
-                <version>4.0.2</version>
+                <version>${jakarta.xml.bind.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
-                <version>4.0.5</version>
+                <version>${com.sun.xml.bind.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
-                <version>3.17.1</version>
+                <version>${org.assertj.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.ehcache</groupId>
@@ -683,12 +765,14 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>2.21.0</version>
+                <version>${org-mockito.mockito-core}</version>
             </dependency>
+
+
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
-                <version>2.23.0</version>
+                <version>${org.mockito.junit.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -989,7 +1073,7 @@
                     <dependency>
                         <groupId>org.junit.platform</groupId>
                         <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>1.3.2</version>
+                        <version>${junit-platform-surefire-provider.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.junit.jupiter</groupId>
@@ -998,6 +1082,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>

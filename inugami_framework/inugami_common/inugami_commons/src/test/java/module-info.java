@@ -16,7 +16,7 @@ import io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-module io.inugami.framework.commons.testing {
+open module io.inugami.framework.commons.testing {
 
     requires io.inugami.framework.interfaces;
     requires io.inugami.framework.api;
@@ -45,13 +45,13 @@ module io.inugami.framework.commons.testing {
     requires ch.qos.logback.classic;
     requires net.bytebuddy;
 
-
+/*
     opens io.inugami.framework.commons.testing.data;
     opens io.inugami.framework.commons.testing.marshaling;
     opens io.inugami.framework.commons.testing.providers;
     opens io.inugami.framework.commons.testing.security;
     opens io.inugami.framework.commons.testing.threads;
-
+*/
     uses io.inugami.framework.interfaces.marshalling.jaxb.JaxbClassRegister;
     provides JaxbClassRegister with io.inugami.framework.commons.testing.marshaling.TestJaxbClassRegister;
 }

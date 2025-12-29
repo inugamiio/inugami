@@ -1,0 +1,39 @@
+application:
+  groupId: "@project.groupId@"
+  artifactId: "@project.artifactId@"
+  version: "@project.version@"
+  commitId: "@commitId@"
+  commitDate: "@commitDate@"
+inugami:
+  monitoring:
+    interceptor:
+      url:
+        skip: .*api-docs.*;.*swagger-ui.*
+
+jpa:
+  database-platform: org.hibernate.dialect.H2Dialect
+  hibernate:
+    ddl-auto: update
+  show-sql: true
+  properties:
+    hibernate:
+      format_sql: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+spring:
+  datasource:
+    url: jdbc:h2:mem:inugami_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+springdoc:
+  api-docs:
+    path: /api-docs
