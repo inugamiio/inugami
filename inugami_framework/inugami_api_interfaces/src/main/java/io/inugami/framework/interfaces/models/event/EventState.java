@@ -16,8 +16,9 @@
  */
 package io.inugami.framework.interfaces.models.event;
 
-import io.inugami.framework.interfaces.models.basic.Dto;
 import lombok.*;
+
+import java.io.Serializable;
 
 /**
  * EventState
@@ -32,7 +33,7 @@ import lombok.*;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventState implements Dto<EventState> {
+public class EventState implements Serializable {
     private static final long    serialVersionUID = -5004046074596299588L;
     @ToString.Include
     @EqualsAndHashCode.Include
@@ -42,11 +43,5 @@ public class EventState implements Dto<EventState> {
     @ToString.Include
     private              long    end;
     private              boolean running;
-    private              long    delais;
-
-
-    @Override
-    public EventState cloneObj() {
-        return toBuilder().build();
-    }
+    private              long    delay;
 }

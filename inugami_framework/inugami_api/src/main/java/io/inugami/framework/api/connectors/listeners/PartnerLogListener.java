@@ -89,8 +89,8 @@ public class PartnerLogListener implements ConnectorListener {
     public void onError(final ConnectorException exception) {
 
         HttpConnectorResult result = null;
-        if (exception.getResult() instanceof HttpConnectorResult) {
-            result = (HttpConnectorResult) exception.getResult();
+        if (exception.getResult() instanceof HttpConnectorResult httpResult) {
+            result = httpResult;
             MdcServiceSpiFactory.getInstance().lifecycleOut();
             Loggers.PARTNERLOG.error(renderPartnerLog(result, exception), exception);
             MdcServiceSpiFactory.getInstance().lifecycleRemove();

@@ -16,8 +16,9 @@
  */
 package io.inugami.framework.interfaces.metrics;
 
-import io.inugami.framework.interfaces.models.basic.Dto;
 import lombok.*;
+
+import java.io.Serializable;
 
 /**
  * MetricsData
@@ -32,17 +33,11 @@ import lombok.*;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class MetricsData implements Dto<MetricsData> {
+public class MetricsData implements Serializable {
 
     private static final long serialVersionUID = 1097665514789847818L;
 
     private String          path;
     private Double          value;
     private MetricsDataType type;
-
-
-    @Override
-    public MetricsData cloneObj() {
-        return toBuilder().build();
-    }
 }

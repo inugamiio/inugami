@@ -29,6 +29,7 @@ import java.util.Optional;
 
 import static io.inugami.framework.interfaces.exceptions.Warning.*;
 
+@SuppressWarnings({"java:S1130"})
 public class WarningDeserializer extends StdDeserializer<Warning> {
 
 

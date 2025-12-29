@@ -9,16 +9,7 @@
     <prerequisites>
         <maven>3.2.3</maven>
     </prerequisites>
-    <dependencies>
-        <dependency>
-            <groupId>io.inugami.framework</groupId>
-            <artifactId>inugami_api_interfaces</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.inugami.monitoring</groupId>
-            <artifactId>inugami_monitoring_api</artifactId>
-        </dependency>
-    </dependencies>
+
 
     <!-- ======================================================================= 
     = PARENT
@@ -40,5 +31,20 @@
     <!-- ======================================================================= 
     = DEPENDENCIES
     ======================================================================== -->
+    <dependencies>
+        <dependency>
+            <groupId>io.inugami.framework</groupId>
+            <artifactId>inugami_api_interfaces</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.inugami.monitoring</groupId>
+            <artifactId>inugami_monitoring_api</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>io.inugami.framework.commons</groupId>
+            <artifactId>inugami_commons_test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

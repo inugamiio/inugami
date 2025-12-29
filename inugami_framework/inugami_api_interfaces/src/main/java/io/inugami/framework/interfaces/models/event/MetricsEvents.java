@@ -18,8 +18,6 @@ package io.inugami.framework.interfaces.models.event;
 
 import io.inugami.framework.interfaces.models.maven.Gav;
 import io.inugami.framework.interfaces.models.tools.Chrono;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
 import lombok.experimental.UtilityClass;
 
 import java.util.HashSet;
@@ -93,8 +91,7 @@ public final class MetricsEvents {
 
     private static EventState mapEventState(final Map.Entry<String, Chrono> item) {
         final Chrono chrono = item.getValue();
-        return new EventState(item.getKey(), chrono.getStartTimeMs(), chrono.getStopTimeMs(), chrono.isRunning(),
-                              chrono.getDuration());
+        return new EventState(item.getKey(), chrono.getStartTimeMs(), chrono.getStopTimeMs(), chrono.isRunning(), chrono.getDuration());
     }
 
     // =========================================================================

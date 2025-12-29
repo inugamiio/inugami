@@ -51,33 +51,28 @@ public class InugamiSpringApplicationListener implements ApplicationListener<App
         }
 
 
-        if (event instanceof ApplicationStartingEvent) {
-            onApplicationStarting(((ApplicationStartingEvent) event));
-        } else if (event instanceof ApplicationEnvironmentPreparedEvent) {
-            onEnvironmentPrepared((ApplicationEnvironmentPreparedEvent) event);
-        } else if (event instanceof ApplicationContextInitializedEvent) {
-            onApplicationContextInitialized(((ApplicationContextInitializedEvent) event));
-        } else if (event instanceof ApplicationPreparedEvent) {
-            onApplicationPrepared(((ApplicationPreparedEvent) event));
-        } else if (event instanceof WebServerInitializedEvent) {
-            onbWebServerInitialized(((WebServerInitializedEvent) event));
-        } else if (event instanceof ApplicationStartedEvent) {
-            onApplicationStarted(((ApplicationStartedEvent) event));
-        } else if (event instanceof ContextRefreshedEvent) {
-            onContextRefreshed(((ContextRefreshedEvent) event));
-        } else if (event instanceof AvailabilityChangeEvent) {
-            onAvailabilityChange(((AvailabilityChangeEvent) event));
-        } else if (event instanceof ApplicationReadyEvent) {
-            onApplicationReady(((ApplicationReadyEvent) event));
-        } else if (event instanceof ApplicationFailedEvent) {
-            onApplicationFail(((ApplicationFailedEvent) event));
+        if (event instanceof ApplicationStartingEvent applicationStartingEvent) {
+            onApplicationStarting(applicationStartingEvent);
+        } else if (event instanceof ApplicationEnvironmentPreparedEvent applicationEnvironmentPreparedEvent) {
+            onEnvironmentPrepared(applicationEnvironmentPreparedEvent);
+        } else if (event instanceof ApplicationContextInitializedEvent applicationContextInitializedEvent) {
+            onApplicationContextInitialized(applicationContextInitializedEvent);
+        } else if (event instanceof ApplicationPreparedEvent applicationPreparedEvent) {
+            onApplicationPrepared(applicationPreparedEvent);
+        } else if (event instanceof WebServerInitializedEvent webServerInitializedEvent) {
+            onbWebServerInitialized(webServerInitializedEvent);
+        } else if (event instanceof ApplicationStartedEvent applicationStartedEvent) {
+            onApplicationStarted(applicationStartedEvent);
+        } else if (event instanceof ContextRefreshedEvent contextRefreshedEvent) {
+            onContextRefreshed(contextRefreshedEvent);
+        } else if (event instanceof AvailabilityChangeEvent availabilityChangeEvent) {
+            onAvailabilityChange(availabilityChangeEvent);
+        } else if (event instanceof ApplicationReadyEvent applicationReadyEvent) {
+            onApplicationReady(applicationReadyEvent);
+        } else if (event instanceof ApplicationFailedEvent applicationFailedEvent) {
+            onApplicationFail(applicationFailedEvent);
         }
     }
-
-    private void initSpiLoader() {
-
-    }
-
 
     // =========================================================================
     // EVENTS

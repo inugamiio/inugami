@@ -1,0 +1,920 @@
+{
+	"info": {
+		"_postman_id": "2a1bafdc-c0b2-4e40-8597-c855b84bc90d",
+		"name": "Inugami demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6890148"
+	},
+	"item": [
+		{
+			"name": "initialization",
+			"item": [
+				{
+					"name": "local",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"baseUrl\", `http://localhost:8080`);\r",
+									"pm.environment.set(\"deviceIdentifier\", `2f411cae-e3b4-4465-b86a-e001c2b64d74`);\r",
+									"\r",
+									"// OpenAPI : http://localhost:8080/swagger-ui/index.html"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/actuator/health",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actuator",
+								"health"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "local",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/actuator/health",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"actuator",
+										"health"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/vnd.spring-boot.actuator.v3+json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Dec 2025 09:05:54 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"UP\",\n    \"components\": {\n        \"db\": {\n            \"status\": \"UP\",\n            \"details\": {\n                \"database\": \"H2\",\n                \"validationQuery\": \"isValid()\"\n            }\n        },\n        \"discoveryComposite\": {\n            \"status\": \"UNKNOWN\",\n            \"components\": {\n                \"discoveryClient\": {\n                    \"description\": \"Discovery Client not initialized\",\n                    \"status\": \"UNKNOWN\"\n                }\n            }\n        },\n        \"featureIndicator\": {\n            \"status\": \"UP\",\n            \"details\": {\n                \"features\": []\n            }\n        },\n        \"ping\": {\n            \"status\": \"UP\"\n        },\n        \"refreshScope\": {\n            \"status\": \"UP\"\n        },\n        \"ssl\": {\n            \"status\": \"UP\",\n            \"details\": {\n                \"validChains\": [],\n                \"invalidChains\": []\n            }\n        },\n        \"version\": {\n            \"status\": \"UP\",\n            \"details\": {\n                \"groupId\": \"com.my.project\",\n                \"artifactId\": \"demo-webapp\",\n                \"version\": \"1.0-SNAPSHOT\",\n                \"commitId\": \"@commitId@\",\n                \"commitDate\": \"@commitDate@\"\n            }\n        }\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "webservices",
+			"item": [
+				{
+					"name": "user",
+					"item": [
+						{
+							"name": "search_user",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"",
+											"const json = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", () => {",
+											"    pm.expect(pm.response.code).to.eql(200);",
+											"    console.log(pm.response.headers.get('x-correlation-id'))",
+											"    pm.environment.set(\"correlationId\",pm.response.headers.get('x-correlation-id'));",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-device-identifier",
+										"value": "{{deviceIdentifier}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/ws/user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ws",
+										"user"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "without data",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/ws/user",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"ws",
+												"user"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 29 Dec 2025 08:02:29 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": [],\n    \"nbFoundItems\": 0,\n    \"next\": false,\n    \"page\": 0,\n    \"pageSize\": 20,\n    \"previous\": false,\n    \"totalPages\": 0\n}"
+								}
+							]
+						},
+						{
+							"name": "create_user",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "{{correlationId}} ",
+										"type": "text"
+									},
+									{
+										"key": "x-device-identifier",
+										"value": "{{deviceIdentifier}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"firstName\":\"John\",\n        \"lastName\":\"Smith\",\n        \"email\":\"john.smith.mock@inugami.io\"\n    }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/ws/user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ws",
+										"user"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "nominal",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n    {\n        \"firstName\":\"John\",\n        \"lastName\":\"Smith\",\n        \"email\":\"john.smith.mock@inugami.io\"\n    }\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/ws/user",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"ws",
+												"user"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 29 Dec 2025 08:04:38 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"audit\": {\n            \"createdBy\": \"system\",\n            \"createdDate\": \"2025-12-29T08:04:38.14427822\",\n            \"version\": 1\n        },\n        \"email\": \"john.smith.mock@inugami.io\",\n        \"firstName\": \"John\",\n        \"lastName\": \"Smith\",\n        \"uid\": \"06d606d1-74ec-466b-9b5e-cb8948a2a6cd\"\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "search_user",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const json = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", () => {",
+											"    pm.expect(pm.response.code).to.eql(200);",
+											"    pm.environment.set(\"userUid\",json.data[0].uid);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "{{correlationId}} ",
+										"type": "text"
+									},
+									{
+										"key": "x-device-identifier",
+										"value": "{{deviceIdentifier}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/ws/user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ws",
+										"user"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "nominal",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/ws/user",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"ws",
+												"user"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 29 Dec 2025 08:05:15 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"audit\": {\n                \"createdBy\": \"system\",\n                \"createdDate\": \"2025-12-29T08:04:38.144278\",\n                \"version\": 1\n            },\n            \"email\": \"john.smith.mock@inugami.io\",\n            \"firstName\": \"John\",\n            \"lastName\": \"Smith\",\n            \"uid\": \"06d606d1-74ec-466b-9b5e-cb8948a2a6cd\"\n        }\n    ],\n    \"nbFoundItems\": 1,\n    \"next\": false,\n    \"page\": 0,\n    \"pageSize\": 20,\n    \"previous\": false,\n    \"totalPages\": 1\n}"
+								}
+							]
+						},
+						{
+							"name": "get_user",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const json = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", () => {",
+											"    pm.expect(pm.response.code).to.eql(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "{{correlationId}} ",
+										"type": "text"
+									},
+									{
+										"key": "x-device-identifier",
+										"value": "{{deviceIdentifier}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/ws/user/{{userUid}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ws",
+										"user",
+										"{{userUid}}"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "nominal",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/ws/user/{{userUid}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"ws",
+												"user",
+												"{{userUid}}"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 29 Dec 2025 08:07:47 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"audit\": {\n        \"createdBy\": \"system\",\n        \"createdDate\": \"2025-12-29T08:04:38.144278\",\n        \"version\": 1\n    },\n    \"email\": \"john.smith.mock@inugami.io\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Smith\",\n    \"uid\": \"06d606d1-74ec-466b-9b5e-cb8948a2a6cd\"\n}"
+								},
+								{
+									"name": "error-404",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/ws/user/f4f0f882-d015-41d4-9ec1-c8a8388bcdfc",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"ws",
+												"user",
+												"f4f0f882-d015-41d4-9ec1-c8a8388bcdfc"
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 29 Dec 2025 08:08:25 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"cause\": {\n        \"errors\": [],\n        \"message\": \"user not found\",\n        \"parameters\": []\n    },\n    \"detail\": \"\",\n    \"details\": {\n        \"errorCode\": \"USER-2_1\",\n        \"fields\": [],\n        \"errorType\": \"functional\",\n        \"rollback\": false,\n        \"retryable\": false,\n        \"errorDomain\": \"USER\"\n    },\n    \"errors\": [],\n    \"message\": \"user not found\",\n    \"parameters\": [],\n    \"reasonPhrase\": \"Not Found\",\n    \"status\": 404\n}"
+								},
+								{
+									"name": "error-400",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/ws/user/aaaaa",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"ws",
+												"user",
+												"aaaaa"
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 29 Dec 2025 08:09:03 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"cause\": {\n        \"errors\": [],\n        \"message\": \"uid required to find user\",\n        \"parameters\": []\n    },\n    \"detail\": \"\",\n    \"details\": {\n        \"errorCode\": \"USER-2_0\",\n        \"fields\": [],\n        \"errorType\": \"functional\",\n        \"rollback\": false,\n        \"retryable\": false,\n        \"errorDomain\": \"USER\"\n    },\n    \"errors\": [],\n    \"message\": \"uid required to find user\",\n    \"parameters\": [],\n    \"reasonPhrase\": \"Bad Request\",\n    \"status\": 400\n}"
+								}
+							]
+						},
+						{
+							"name": "update_force_user",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const json = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", () => {",
+											"    pm.expect(pm.response.code).to.eql(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "{{correlationId}} ",
+										"type": "text"
+									},
+									{
+										"key": "x-device-identifier",
+										"value": "{{deviceIdentifier}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"uid\":\"{{userUid}}\",\n        \"firstName\":\"William\",\n        \"lastName\":\"Swanson\",\n        \"email\":\"john.smith.mock-1@inugami.io\"\n    }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/ws/user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ws",
+										"user"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "nominal",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n    {\n        \"uid\":\"{{userUid}}\",\n        \"firstName\":\"William\",\n        \"lastName\":\"Swanson\",\n        \"email\":\"john.smith.mock-1@inugami.io\"\n    }\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/ws/user",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"ws",
+												"user"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 29 Dec 2025 08:12:21 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"audit\": {\n            \"createdBy\": \"system\",\n            \"createdDate\": \"2025-12-29T08:04:38.144278\",\n            \"version\": 1\n        },\n        \"email\": \"john.smith.mock-1@inugami.io\",\n        \"firstName\": \"William\",\n        \"lastName\": \"Swanson\",\n        \"uid\": \"06d606d1-74ec-466b-9b5e-cb8948a2a6cd\"\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "update_user",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const json = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", () => {",
+											"    pm.expect(pm.response.code).to.eql(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "{{correlationId}} ",
+										"type": "text"
+									},
+									{
+										"key": "x-device-identifier",
+										"value": "{{deviceIdentifier}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"uid\":\"{{userUid}}\",\n        \"firstName\":\"John\"\n    }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/ws/user",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ws",
+										"user"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "nominal",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n    {\n        \"uid\":\"{{userUid}}\",\n        \"firstName\":\"John\"\n    }\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/ws/user",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"ws",
+												"user"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 29 Dec 2025 08:13:14 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"audit\": {\n            \"createdBy\": \"system\",\n            \"createdDate\": \"2025-12-29T08:04:38.144278\",\n            \"lastModifiedBy\": \"system\",\n            \"lastModifiedDate\": \"2025-12-29T08:12:21.387318\",\n            \"version\": 2\n        },\n        \"email\": \"john.smith.mock-1@inugami.io\",\n        \"firstName\": \"John\",\n        \"lastName\": \"Swanson\",\n        \"uid\": \"06d606d1-74ec-466b-9b5e-cb8948a2a6cd\"\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "delete_user",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "{{correlationId}} ",
+										"type": "text"
+									},
+									{
+										"key": "x-device-identifier",
+										"value": "{{deviceIdentifier}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/ws/user?uid={{userUid}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ws",
+										"user"
+									],
+									"query": [
+										{
+											"key": "uid",
+											"value": "{{userUid}}"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "nominal",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/ws/user?uid={{userUid}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"ws",
+												"user"
+											],
+											"query": [
+												{
+													"key": "uid",
+													"value": "{{userUid}}"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "plain",
+									"header": [
+										{
+											"key": "Content-Length",
+											"value": "0"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 29 Dec 2025 08:14:14 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

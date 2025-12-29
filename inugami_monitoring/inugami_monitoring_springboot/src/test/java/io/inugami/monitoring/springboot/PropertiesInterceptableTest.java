@@ -13,11 +13,11 @@ class PropertiesInterceptableTest {
         assertThat(interceptable.isInterceptable(RequestData.builder()
                                                             .uri("/some/uri")
                                                             .build()))
-                .isTrue();
+                .isFalse();
         assertThat(interceptable.isInterceptable(RequestData.builder()
                                                             .uri("/other/uri")
                                                             .build()))
-                .isFalse();
+                .isTrue();
     }
 
     @Test

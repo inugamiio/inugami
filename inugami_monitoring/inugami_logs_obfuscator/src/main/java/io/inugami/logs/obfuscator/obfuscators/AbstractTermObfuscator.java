@@ -16,6 +16,7 @@
  */
 package io.inugami.logs.obfuscator.obfuscators;
 
+import io.inugami.framework.api.tools.RunSafeUtils;
 import io.inugami.framework.interfaces.monitoring.logger.LogEventDto;
 import io.inugami.framework.interfaces.monitoring.logger.ObfuscatorSpi;
 import lombok.extern.slf4j.Slf4j;
@@ -37,13 +38,11 @@ public abstract class AbstractTermObfuscator implements ObfuscatorSpi {
     }
 
     public static Pattern buildRegex(final String term) {
-        try {
-            return buildRegexFullLine(term, DEFAULT_DELIMITERS);
-        } catch (Throwable e) {
-            log.error(e.getMessage(), e);
-            throw e;
-        }
+        return buildRegex(term, DEFAULT_DELIMITERS);
+    }
 
+    public static Pattern buildRegex(final String term, String delimiter) {
+        return RunSafeUtils.runSafe(() -> buildRegexFullLine(term, delimiter), log);
     }
 
     // =========================================================================

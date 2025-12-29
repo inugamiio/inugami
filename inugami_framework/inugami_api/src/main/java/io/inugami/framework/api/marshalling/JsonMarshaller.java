@@ -17,14 +17,13 @@
 package io.inugami.framework.api.marshalling;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.exceptions.Warning;
 import io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
 import io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
-import io.inugami.framework.interfaces.models.basic.Dto;
 import io.inugami.framework.interfaces.models.event.GenericEvent;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import lombok.Getter;
@@ -33,7 +32,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @SuppressWarnings({"java:S1874"})
 @Getter
@@ -53,7 +51,7 @@ public class JsonMarshaller {
                             .map(ModuleRegisterSpi::extractModules)
                             .filter(Objects::nonNull)
                             .flatMap(List::stream)
-                            .collect(Collectors.toList());
+                            .toList();
     }
 
     private final ObjectMapper defaultObjectMapper;
@@ -136,14 +134,6 @@ public class JsonMarshaller {
             objectMapper.findAndRegisterModules();
             objectMapper.enable(SerializationFeature.INDENT_OUTPUT)
                         .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-
-            // TODO: refactor
-            /*
-            objectMapper.registerModule(new ParameterNamesModule())
-                        .registerModule(new Jdk8Module())
-                        .registerModule(new JavaTimeModule());
-
-             */
 
             for (Module module : EXTERNAL_MODULES) {
                 objectMapper.registerModule(module);

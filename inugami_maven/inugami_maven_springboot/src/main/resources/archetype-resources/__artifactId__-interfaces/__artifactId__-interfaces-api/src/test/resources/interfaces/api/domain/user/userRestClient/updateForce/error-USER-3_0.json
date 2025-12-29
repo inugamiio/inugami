@@ -1,0 +1,27 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 400,
+    "domain" : "USER",
+    "errorCode" : "USER-3_0",
+    "errorType" : "functional",
+    "message" : "invalid data for user modification",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "request" : "[ {\n  \"email\" : \"john.smith@mock.org\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\",\n  \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n} ]",
+  "requestHeaders" : {
+    "x-device-identifier" : "e68786a2-c536-4583-88f4-253fb96275d1",
+    "x-correlation-id" : "92b380be-906c-4987-9b10-fa95d6d1b05a"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "e68786a2-c536-4583-88f4-253fb96275d1",
+    "x-correlation-id" : "92b380be-906c-4987-9b10-fa95d6d1b05a",
+    "x-b3-traceid" : "366fc7c4-17f3-48f7-a93f-ee506bd3b9d8"
+  },
+  "status" : 400,
+  "url" : "/user",
+  "verb" : "PUT"
+}

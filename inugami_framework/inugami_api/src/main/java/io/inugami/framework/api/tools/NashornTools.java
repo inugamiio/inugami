@@ -28,7 +28,7 @@ import java.util.List;
  * @since 7 févr. 2018
  */
 // TODO: refactor
-@SuppressWarnings({"java:S6355", "java:S1123", "java:S1133"})
+@SuppressWarnings({"java:S6355", "java:S1123", "java:S1133", "java:S1172", "java:S125", "java:S108", "java:S1488"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Deprecated
 public final class NashornTools {

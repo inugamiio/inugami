@@ -28,9 +28,7 @@ import io.inugami.framework.interfaces.monitoring.models.Monitoring;
 import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
 import io.inugami.monitoring.core.context.MonitoringBootstrapService;
 import io.inugami.monitoring.core.context.MonitoringContext;
-import io.inugami.monitoring.core.interceptable.DefaultInterceptableIdentifier;
 import io.inugami.monitoring.core.interceptors.FilterInterceptor;
-import io.inugami.monitoring.core.spi.H2Interceptable;
 import io.inugami.monitoring.core.spi.IoLogInterceptor;
 import io.inugami.monitoring.core.spi.MdcInterceptor;
 import io.inugami.monitoring.springboot.actuator.FailSafeStatusAggregator;
@@ -39,12 +37,10 @@ import io.inugami.monitoring.springboot.actuator.feature.FeatureIndicator;
 import io.inugami.monitoring.springboot.exception.SpringDefaultErrorCodeResolver;
 import io.inugami.monitoring.springboot.filter.IoLogFilter;
 import io.inugami.monitoring.springboot.request.SpringRestMethodResolver;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.StatusAggregator;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -57,7 +53,7 @@ import java.util.function.Consumer;
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
 
-@SuppressWarnings({"java:S1450"})
+@SuppressWarnings({"java:S1450","java:S2209"})
 @Import({
         IoLogFilter.class,
         SpringRestMethodResolver.class,

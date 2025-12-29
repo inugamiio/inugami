@@ -18,7 +18,6 @@ package io.inugami.framework.interfaces.database.dto;
 
 import lombok.*;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 @SuppressWarnings({"java:S1700"})
@@ -30,6 +29,6 @@ import java.io.Serializable;
 @Setter
 @Getter
 public final class Include implements Serializable {
-    private static final long serialVersionUID = -2610172515146422255L;
-    private String include;
+    private static final long   serialVersionUID = -2610172515146422255L;
+    private              String include;
 }

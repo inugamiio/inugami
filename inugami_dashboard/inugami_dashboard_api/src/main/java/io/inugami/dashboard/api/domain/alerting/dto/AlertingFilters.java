@@ -23,6 +23,8 @@ import lombok.experimental.UtilityClass;
 import java.util.List;
 
 import static io.inugami.framework.interfaces.models.search.SearchFiltersUtils.buildFilters;
+
+@SuppressWarnings({"java:S2386"})
 @UtilityClass
 public class AlertingFilters {
 

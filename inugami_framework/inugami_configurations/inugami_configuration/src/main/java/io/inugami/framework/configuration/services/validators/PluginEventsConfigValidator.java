@@ -94,21 +94,6 @@ public class PluginEventsConfigValidator implements Validator {
             conditions.add(condition(
                     eventName + " provider attribute mustn't be empty!", isEmpty(event.getProvider())));
         }
-
-
-        final List aaa = event.getProcessors();
-        /*
-
-        for(final ProcessorModel processorModel : event.getProcessors()){
-
-        }
-        conditions.addAll(
-                                  .orElse(new ArrayList<ProcessorModel>())
-                                  .stream()
-                                  .map(this::buildConditionForClassBehavior)
-                                  .toList());
-
-*/
         return conditions;
     }
 
@@ -151,18 +136,6 @@ public class PluginEventsConfigValidator implements Validator {
     }
 
 
-    private List<Condition> buildConditionForClassBehavior(final ProcessorModel behavior) {
-        final List<Condition> conditions = new ArrayList<>();
-        Asserts.assertNotNull(behavior);
-
-        conditions.add(condition("behavior name mustn't be null!", isEmpty(behavior.getName())));
-        //@formatter:off
-        final String name = behavior.getName() == null ? "" : String.format("(behavior name = \"%s\")", behavior.getName());
-        conditions.add(condition("You can't redefine behavior className in event config file ! " + name, !isEmpty(behavior.getClassName())));
-        conditions.add(condition("You can't redefine behavior configurtion in event config file ! " + name, behavior.getConfigs() != null));
-        //@formatter:on
-        return conditions;
-    }
 
     private List<Condition> validateAlerting(final List<AlertingModel> alertings) {
         return validate(alertings, (data, result) -> {

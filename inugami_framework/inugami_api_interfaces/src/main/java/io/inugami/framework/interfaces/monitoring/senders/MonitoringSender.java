@@ -16,11 +16,11 @@
  */
 package io.inugami.framework.interfaces.monitoring.senders;
 
-import java.util.List;
-
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
-import io.inugami.framework.interfaces.spi.NamedSpi;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.spi.NamedSpi;
+
+import java.util.List;
 
 /**
  * MonitoringProvider

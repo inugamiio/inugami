@@ -20,10 +20,36 @@ import lombok.experimental.UtilityClass;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.*;
 
 @UtilityClass
 public final class FunctionalUtils {
+
+
+    // =================================================================================================================
+    // OR
+    // =================================================================================================================
+    public static <T> T or(T value, T ref) {
+        return Optional.ofNullable(value).orElse(ref);
+    }
+
+    public static <T> T or(T value, Supplier<T> ref) {
+        return Optional.ofNullable(value).orElse(ref.get());
+    }
+
+    public static <T> Optional<T> orOptional(T value, Supplier<T> supplier) {
+        return Optional.ofNullable(or(value, supplier));
+    }
+
+    // =================================================================================================================
+    // IF NOT NULL
+    // =================================================================================================================
+    public static <T, R> R ifNotNull(final T value, final Function<T, R> processor) {
+        return Optional.ofNullable(value)
+                       .map(processor::apply)
+                       .orElse(null);
+    }
 
     // =================================================================================================================
     // APPLY IF NOT NULL

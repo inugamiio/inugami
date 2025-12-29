@@ -17,8 +17,11 @@
 package io.inugami.monitoring.core.obfuscators;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static io.inugami.commons.test.UnitTestHelper.assertText;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * TokenObfuscatorTest
@@ -26,14 +29,38 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author patrickguillerm
  * @since Jan 8, 2019
  */
+@ExtendWith(MockitoExtension.class)
 class TokenObfuscatorTest {
-
-    // =========================================================================
-    // METHODS
-    // =========================================================================
+    // =================================================================================================================
+    // TEST
+    // =================================================================================================================
     @Test
-    void testClean() throws Exception {
-        final TokenObfuscator obfuscator = new TokenObfuscator();
-        assertEquals("\"token\":\"xxxxx\"", obfuscator.clean("\"token\":\"azerty12345\""));
+    void accept_nominal() {
+        final var obfuscator = buildObfuscator();
+        assertThat(obfuscator.accept(null)).isFalse();
+        assertThat(obfuscator.accept("")).isFalse();
+
+        assertThat(obfuscator.accept("TOKEN")).isTrue();
+        assertThat(obfuscator.accept("token")).isTrue();
     }
+
+
+    @Test
+    void clean_nominal() {
+        final var obfuscator = buildObfuscator();
+        assertText(obfuscator.clean("""
+                                            "token": "azerty12345"   
+                                            """),
+                   """
+                           "token":"xxxxx"
+                           """);
+    }
+
+    // =================================================================================================================
+    // TOOLS
+    // =================================================================================================================
+    TokenObfuscator buildObfuscator() {
+        return new TokenObfuscator();
+    }
+
 }

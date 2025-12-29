@@ -1,0 +1,145 @@
+[ {
+  "errorStatus" : 500,
+  "errorCode" : "USER-0_0",
+  "message" : "Undefined error occurs",
+  "errorType" : "technical",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "USER-1_0",
+  "message" : "invalid data for user creation",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "USER-1_1",
+  "message" : "uid is forbidden for user creation",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "USER-1_2",
+  "message" : "invalid firstname",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "USER-1_3",
+  "message" : "invalid lastname",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "USER-1_4",
+  "message" : "invalid email",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "USER-2_0",
+  "message" : "uid required to find user",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 404,
+  "errorCode" : "USER-2_1",
+  "message" : "user not found",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "USER-3_0",
+  "message" : "invalid data for user modification",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 404,
+  "errorCode" : "USER-3_1",
+  "message" : "users not found",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "USER-3_2",
+  "message" : "uid is required for user modification",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "USER-3_3",
+  "message" : "invalid firstname",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "USER-3_4",
+  "message" : "invalid lastname",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "USER-3_5",
+  "message" : "invalid email",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 400,
+  "errorCode" : "USER-4_0",
+  "message" : "uid required to delete users",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+}, {
+  "errorStatus" : 404,
+  "errorCode" : "USER-4_1",
+  "message" : "users not found",
+  "errorType" : "functional",
+  "errorDomain" : "USER",
+  "exploitationError" : false,
+  "rollback" : false,
+  "retryable" : false
+} ]

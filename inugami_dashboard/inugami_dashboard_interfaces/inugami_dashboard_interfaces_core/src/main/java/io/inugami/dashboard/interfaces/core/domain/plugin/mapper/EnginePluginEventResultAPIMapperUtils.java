@@ -19,13 +19,16 @@ package io.inugami.dashboard.interfaces.core.domain.plugin.mapper;
 import io.inugami.dashboard.api.domain.engine.dto.EnginePluginEventResultDTO;
 import lombok.experimental.UtilityClass;
 
+import java.util.Optional;
+
 @UtilityClass
 public class EnginePluginEventResultAPIMapperUtils {
 
     public static Throwable convertException(final EnginePluginEventResultDTO value) {
-        if (value == null || value.getError() == null) {
-            return null;
-        }
-        return new Exception(value.getError().getMessage());
+        return Optional.ofNullable(value)
+                       .map(EnginePluginEventResultDTO::getError)
+                       .map(Throwable::getMessage)
+                       .map(Exception::new)
+                       .orElse(null);
     }
 }

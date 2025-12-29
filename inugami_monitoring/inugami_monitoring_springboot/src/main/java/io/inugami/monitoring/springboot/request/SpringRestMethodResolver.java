@@ -22,7 +22,6 @@ import io.inugami.framework.interfaces.spi.SpiLoader;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.servlet.DispatcherType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.multipart.MultipartException;
@@ -70,7 +69,7 @@ public class SpringRestMethodResolver implements JavaRestMethodResolver {
 
     private HandlerMethod resolveHandler(final HandlerExecutionChain resolver) {
         final Object handler = resolver.getHandler();
-        return handler instanceof HandlerMethod ? (HandlerMethod) handler : null;
+        return handler instanceof HandlerMethod handlerMethod ? handlerMethod : null;
     }
 
 

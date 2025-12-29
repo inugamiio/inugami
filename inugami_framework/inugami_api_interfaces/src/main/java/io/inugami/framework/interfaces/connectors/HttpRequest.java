@@ -18,13 +18,13 @@ package io.inugami.framework.interfaces.connectors;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.inugami.framework.interfaces.tools.MapUtils;
 import lombok.*;
 
-import java.io.Serial;
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 @SuppressWarnings({"java:S1948"})
 @JsonIgnoreProperties(value = {"listener", "marshaller"})
 @NoArgsConstructor
@@ -65,10 +65,7 @@ public final class HttpRequest implements Serializable {
     public static class HttpRequestBuilder {
 
         public HttpRequestBuilder addHeader(final String key, final String value) {
-
-            if (headers == null) {
-                headers = new LinkedHashMap<>();
-            }
+            headers = MapUtils.initMapAndSort(headers);
             if (key != null && value != null) {
                 headers.put(key, value);
             }
@@ -76,9 +73,7 @@ public final class HttpRequest implements Serializable {
         }
 
         public HttpRequestBuilder addOption(final String key, final Serializable value) {
-            if (options == null) {
-                options = new LinkedHashMap<>();
-            }
+            options = MapUtils.initMapAndSort(options);
             if (key != null && value != null) {
                 options.put(key, String.valueOf(value));
             }

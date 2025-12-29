@@ -27,6 +27,7 @@ import java.util.Map;
 /**
  * https://datatracker.ietf.org/doc/rfc9457/
  */
+@SuppressWarnings({"java:S1948"})
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor

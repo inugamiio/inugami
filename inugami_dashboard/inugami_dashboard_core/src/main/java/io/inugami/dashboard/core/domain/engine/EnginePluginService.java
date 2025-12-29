@@ -27,6 +27,7 @@ import io.inugami.framework.commons.cron.CronResolver;
 import io.inugami.framework.commons.threads.ThreadsExecutorService;
 import io.inugami.framework.configuration.models.EventConfig;
 import io.inugami.framework.configuration.models.plugins.Plugin;
+import io.inugami.framework.configuration.models.plugins.PluginConfiguration;
 import io.inugami.framework.interfaces.exceptions.TechnicalException;
 import io.inugami.framework.interfaces.models.engine.Status;
 import io.inugami.framework.interfaces.models.event.Event;
@@ -44,6 +45,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.Callable;
+
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
+
 @SuppressWarnings({"java:S2153"})
 @Slf4j
 public class EnginePluginService implements IEnginePluginService {
@@ -52,10 +56,11 @@ public class EnginePluginService implements IEnginePluginService {
     // =================================================================================================================
     public static final String                               DEFAULT_CRON        = "0 * * * * ?";
     public static final String                               EMPTY               = "";
-    public static final Callable<EnginePluginEventResultDTO> NO_PROVIDER_DEFINED = () -> EnginePluginEventResultDTO.builder()
-                                                                                                                   .status(Status.ERROR)
-                                                                                                                   .message("no provider defined")
-                                                                                                                   .build();
+    public static final Callable<EnginePluginEventResultDTO> NO_PROVIDER_DEFINED =
+            () -> EnginePluginEventResultDTO.builder()
+                                            .status(Status.ERROR)
+                                            .message("no provider defined")
+                                            .build();
     private final       Plugin                               plugin;
     private final       ZoneOffset                           zoneOffset;
     @Getter
@@ -77,19 +82,21 @@ public class EnginePluginService implements IEnginePluginService {
                                final long timeout,
                                final ThreadsExecutorService threadsExecutorService,
                                final Collection<EngineListener> listeners) {
-        this.providers = providers;
-        this.processors = processors;
-        this.plugin = plugin;
-        this.zoneOffset = zoneOffset;
+        this.providers              = providers;
+        this.processors             = processors;
+        this.plugin                 = plugin;
+        this.zoneOffset             = zoneOffset;
         this.threadsExecutorService = threadsExecutorService;
-        this.timeout = timeout < 1000 ? Double.valueOf(EngineService.DEFAULT_TIMEOUT * 0.9).longValue() : timeout;
-        this.listeners = listeners;
+        this.timeout                = timeout < 1000
+                                      ? Double.valueOf(EngineService.DEFAULT_TIMEOUT * 0.9).longValue()
+                                      : timeout;
+        this.listeners              = listeners;
         initializeEvents();
     }
 
 
     protected void initializeEvents() {
-        if (!plugin.getConfig().getEnable()) {
+        if (!isEnabled()) {
             return;
         }
         for (EventConfig eventConfig : Optional.ofNullable(plugin.getEvents()).orElse(List.of())) {
@@ -115,16 +122,19 @@ public class EnginePluginService implements IEnginePluginService {
         }
     }
 
+    protected boolean isEnabled() {
+        return Optional.ofNullable(plugin)
+                       .map(Plugin::getConfig)
+                       .map(PluginConfiguration::getEnable)
+                       .orElse(false);
+    }
+
     // =================================================================================================================
     // ACCEPT
     // =================================================================================================================
     @Override
-    public boolean hasEventsToRun(final LocalDateTime now) {
-        if (events.isEmpty()) {
-            return false;
-        }
-
-        for (PluginEventCron event : events) {
+    public boolean hasEventsToRun(@NonNull final LocalDateTime now) {
+        for (PluginEventCron event : Optional.ofNullable(events).orElse(List.of())) {
             if (event.getCron().willFire(now, zoneOffset)) {
                 return true;
             }
@@ -136,9 +146,13 @@ public class EnginePluginService implements IEnginePluginService {
     // RUN
     // =================================================================================================================
     @Override
-    public EnginePluginResultDTO run(final @NonNull Collection<EngineListener> currentListeners,
+    public EnginePluginResultDTO run(final @NonNull Collection<EngineListener> inputListeners,
                                      final @NonNull LocalDateTime now) {
 
+
+        final List<EngineListener>             currentListeners = new ArrayList<>();
+        currentListeners.addAll(Optional.ofNullable(listeners).orElse(List.of()));
+        currentListeners.addAll(Optional.ofNullable(inputListeners).orElse(List.of()));
 
         final List<PluginEventCron> eventsToRun = events.stream()
                                                         .filter(eventCron -> eventCron.getCron()
@@ -146,33 +160,44 @@ public class EnginePluginService implements IEnginePluginService {
                                                         .toList();
 
         if (eventsToRun.isEmpty()) {
-            return EnginePluginResultDTO.builder()
-                                        .gav(plugin.getGav())
-                                        .status(Status.SUCCESS)
-                                        .build();
+            return EnginePluginResultDTO.builder().gav(plugin.getGav()).status(Status.SUCCESS).build();
         }
 
         final List<Callable<EnginePluginEventResultDTO>> tasks = new ArrayList<>();
         for (PluginEventCron eventCron : eventsToRun) {
             if (eventCron.getSimpleEvent() != null) {
-                tasks.add(runSimpleEvent(eventCron.getSimpleEvent(), now));
+                tasks.add(runSimpleEvent(eventCron.getSimpleEvent(), now, currentListeners));
             }
             if (eventCron.getEvent() != null) {
-                tasks.add(runEvent(eventCron.getEvent(), now));
+                tasks.add(runEvent(eventCron.getEvent(), now, currentListeners));
             }
         }
-
+        final List<EnginePluginEventResultDTO> result = new ArrayList<>();
         try {
             log.debug("executing plugin event");
-            threadsExecutorService.runAndGrab(tasks, timeout);
+            final List<EnginePluginEventResultDTO> data = threadsExecutorService.runAndGrab(tasks, timeout);
+            applyIfNotNull(data, result::addAll);
         } catch (TechnicalException e) {
             log.error(e.getMessage(), e);
         }
 
+        Collections.sort(result);
         return EnginePluginResultDTO.builder()
                                     .gav(plugin.getGav())
-                                    .status(Status.SUCCESS)
+                                    .status(resolveStatus(result))
+                                    .events(result)
                                     .build();
+    }
+
+    private Status resolveStatus(final List<EnginePluginEventResultDTO> eventsDone) {
+        Status result = Status.SUCCESS;
+        for (EnginePluginEventResultDTO eventDone : eventsDone) {
+            final Status itemStatus = Optional.ofNullable(eventDone.getStatus()).orElse(Status.SUCCESS);
+            if (itemStatus.ordinal() > result.ordinal()) {
+                result = itemStatus;
+            }
+        }
+        return result;
     }
 
 
@@ -180,11 +205,13 @@ public class EnginePluginService implements IEnginePluginService {
     // RUN EVENTS
     // =================================================================================================================
     protected Callable<EnginePluginEventResultDTO> runSimpleEvent(@NonNull final SimpleEvent simpleEvent,
-                                                                  @NonNull final LocalDateTime now) {
+                                                                  @NonNull final LocalDateTime now,
+                                                                  @NonNull final Collection<EngineListener> currentListeners) {
         final Optional<Provider> provider = getProvider(simpleEvent.getProvider());
         if (provider.isEmpty()) {
             return NO_PROVIDER_DEFINED;
         }
+
 
         return SimpleEventRunner.builder()
                                 .event(simpleEvent)
@@ -192,7 +219,7 @@ public class EnginePluginService implements IEnginePluginService {
                                 .plugin(plugin)
                                 .processors(getProcessors(simpleEvent.getProcessors()))
                                 .provider(provider.get())
-                                .listeners(listeners)
+                                .listeners(currentListeners)
                                 .timeout(Double.valueOf(timeout * 0.9).longValue())
                                 .zoneOffset(zoneOffset)
                                 .build()
@@ -200,7 +227,8 @@ public class EnginePluginService implements IEnginePluginService {
     }
 
     private Callable<EnginePluginEventResultDTO> runEvent(@NonNull final Event event,
-                                                          @NonNull final LocalDateTime now) {
+                                                          @NonNull final LocalDateTime now,
+                                                          @NonNull final Collection<EngineListener> currentListeners) {
         final Set<String>         providers  = new LinkedHashSet<>();
         final Set<ProcessorModel> processors = new LinkedHashSet<>();
 
@@ -224,7 +252,7 @@ public class EnginePluginService implements IEnginePluginService {
 
         return EventRunner.builder()
                           .event(event)
-                          .listeners(listeners)
+                          .listeners(currentListeners)
                           .now(now)
                           .timeout(Double.valueOf(timeout * 0.9).longValue())
                           .threadsExecutorService(threadsExecutorService)
@@ -245,13 +273,12 @@ public class EnginePluginService implements IEnginePluginService {
     // =================================================================================================================
     protected Optional<Provider> getProvider(final String providerName) {
         final var name = providerName == null ? EMPTY : providerName;
-        return providers.stream()
-                        .filter(provider -> name.equalsIgnoreCase(provider.getName()))
-                        .findFirst();
+        return providers.stream().filter(provider -> name.equalsIgnoreCase(provider.getName())).findFirst();
     }
 
     protected List<Processor> getProcessors(final List<ProcessorModel> processorNames) {
-        final List<String> names = Optional.ofNullable(processorNames).orElse(List.of())
+        final List<String> names = Optional.ofNullable(processorNames)
+                                           .orElse(List.of())
                                            .stream()
                                            .map(ProcessorModel::getName)
                                            .filter(Objects::nonNull)

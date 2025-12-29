@@ -27,6 +27,13 @@
     <name>${project.groupId}:${project.artifactId}</name>
     <url>http://inugami.io/inugami/inugami_logs_obfuscator</url>
 
+    <properties>
+        <custom.sonar.coverage.exclusions>
+            ,**/ResponseWrapper.java
+            ,**/OutputWriterWrapper.java,
+            ,**/RequestCallBackInterceptor.java
+        </custom.sonar.coverage.exclusions>
+    </properties>
     <!-- ======================================================================= 
     = DEPENDENCIES
     ======================================================================== -->
@@ -55,9 +62,15 @@
             <groupId>io.inugami.monitoring</groupId>
             <artifactId>inugami_monitoring_config</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.inugami.framework.commons</groupId>
             <artifactId>inugami_commons</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jspecify</groupId>
+            <artifactId>jspecify</artifactId>
         </dependency>
 
         <dependency>
@@ -65,6 +78,13 @@
             <artifactId>inugami_commons_test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>io.inugami.framework.commons</groupId>
+            <artifactId>inugami_commons_spring</artifactId>
+            <scope>test</scope>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

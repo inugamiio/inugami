@@ -18,21 +18,29 @@ package io.inugami.dashboard.core.domain.engine;
 
 import io.inugami.dashboard.api.domain.engine.dto.EnginePluginResultDTO;
 import io.inugami.framework.configuration.models.plugins.Plugin;
+import io.inugami.framework.interfaces.exceptions.UncheckedException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.Callable;
 
 @Getter
 @Builder
+@Slf4j
 @RequiredArgsConstructor
 public class PluginCallable implements Callable<EnginePluginResultDTO> {
     private final Callable<EnginePluginResultDTO> callable;
-    private final Plugin      plugin;
+    private final Plugin                          plugin;
 
     @Override
     public EnginePluginResultDTO call() throws Exception {
-        return callable.call();
+        try {
+            return callable.call();
+        } catch (Throwable e) {
+            log.error(e.getMessage(), e);
+            throw new UncheckedException(e);
+        }
     }
 }

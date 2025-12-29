@@ -11,16 +11,16 @@
     "retryable" : false
   },
   "requestHeaders" : {
-    "x-device-identifier" : "0d170c30-fb97-45a9-82a6-1fa3ec5a7be4",
-    "x-correlation-id" : "d95b4b41-2f68-437b-b8a8-d6bfd55d2fb5"
+    "x-device-identifier" : "36be39e7-f3bb-4f71-a43a-88ae2806d384",
+    "x-correlation-id" : "ec987a84-10ef-4a44-ac75-963c566789f5"
   },
   "requestParams" : {
     "id" : "bb895294-efe7-484b-b670-14d004eaf461"
   },
   "responseHeaders" : {
-    "x-device-identifier" : "0d170c30-fb97-45a9-82a6-1fa3ec5a7be4",
-    "x-correlation-id" : "d95b4b41-2f68-437b-b8a8-d6bfd55d2fb5",
-    "x-b3-traceid" : "b5d557a4-ba8c-4d0a-b714-b7ea41131418"
+    "x-device-identifier" : "36be39e7-f3bb-4f71-a43a-88ae2806d384",
+    "x-correlation-id" : "ec987a84-10ef-4a44-ac75-963c566789f5",
+    "x-b3-traceid" : "d14680d4-0e3e-4676-ba35-37f2eff5a3fa"
   },
   "status" : 404,
   "url" : "/alerting/{id}",

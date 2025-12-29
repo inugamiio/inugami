@@ -43,7 +43,6 @@
     "scheduler" : null
   },
   "plugin" : {
-    "alertingProviders" : [ ],
     "enabled" : false,
     "eventConfigPresent" : false,
     "events" : [ ],
@@ -53,10 +52,6 @@
       "hash" : "io.inugami:inugami_api:3.3.0:jar",
       "qualifier" : "jar",
       "version" : "3.3.0"
-    },
-    "handlers" : [ ],
-    "listeners" : [ ],
-    "processors" : [ ],
-    "providers" : [ ]
+    }
   }
 }

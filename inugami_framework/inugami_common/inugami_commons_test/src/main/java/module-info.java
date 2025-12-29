@@ -26,6 +26,7 @@ open module io.inugami.commons.test {
     requires com.fasterxml.jackson.module.paramnames;
     requires io.inugami.framework.api;
     requires io.inugami.framework.interfaces;
+    requires io.inugami.logs.obfuscator;
     requires lombok;
     requires net.bytebuddy;
     requires org.apache.commons.io;

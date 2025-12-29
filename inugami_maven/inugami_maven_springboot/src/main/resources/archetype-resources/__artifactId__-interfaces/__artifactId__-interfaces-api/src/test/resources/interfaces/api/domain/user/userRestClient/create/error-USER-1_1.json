@@ -1,0 +1,27 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 400,
+    "domain" : "USER",
+    "errorCode" : "USER-1_1",
+    "errorType" : "functional",
+    "message" : "uid is forbidden for user creation",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "request" : "[ {\n  \"email\" : \"john.smith@mock.org\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\"\n} ]",
+  "requestHeaders" : {
+    "x-device-identifier" : "67d794ca-3b67-4179-a709-8bcc728e7bf3",
+    "x-correlation-id" : "cdf9ed8c-71a6-494d-a9a9-2ce43bd760c9"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "67d794ca-3b67-4179-a709-8bcc728e7bf3",
+    "x-correlation-id" : "cdf9ed8c-71a6-494d-a9a9-2ce43bd760c9",
+    "x-b3-traceid" : "173a327b-a359-4d22-8f26-37ef96017f7f"
+  },
+  "status" : 400,
+  "url" : "/user",
+  "verb" : "POST"
+}

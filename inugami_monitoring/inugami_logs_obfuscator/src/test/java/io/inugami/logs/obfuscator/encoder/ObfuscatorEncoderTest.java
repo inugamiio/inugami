@@ -14,15 +14,11 @@ import java.util.Map;
 
 class ObfuscatorEncoderTest {
 
-
-    @Test
-    void initMessageEncoder_nominal() {
-        Loggers.APPLICATION.info("password = qwertz123456");
-    }
-
-
+    @SuppressWarnings({"java:S2699"})
     @Test
     void messageAsJson() throws JsonProcessingException {
+        Loggers.APPLICATION.info("password = qwertz123456");
+
         Map<String, Serializable> data = new LinkedHashMap<>();
         data.put("hits", 15);
         data.put("duration", 250L);

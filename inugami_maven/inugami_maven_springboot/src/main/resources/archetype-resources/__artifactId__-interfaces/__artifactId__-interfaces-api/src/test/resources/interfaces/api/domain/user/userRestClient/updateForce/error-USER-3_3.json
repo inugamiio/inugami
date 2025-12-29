@@ -1,0 +1,27 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 400,
+    "domain" : "USER",
+    "errorCode" : "USER-3_3",
+    "errorType" : "functional",
+    "message" : "invalid firstname",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "request" : "[ {\n  \"email\" : \"john.smith@mock.org\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\",\n  \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n} ]",
+  "requestHeaders" : {
+    "x-device-identifier" : "4cef80b2-6e8b-4bb7-8451-f974a78371f3",
+    "x-correlation-id" : "1afcfee7-f2bc-4d9f-8f1b-1df025b74bdb"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "4cef80b2-6e8b-4bb7-8451-f974a78371f3",
+    "x-correlation-id" : "1afcfee7-f2bc-4d9f-8f1b-1df025b74bdb",
+    "x-b3-traceid" : "5cc2b527-6e91-4355-bd8c-84087b8ab0f3"
+  },
+  "status" : 400,
+  "url" : "/user",
+  "verb" : "PUT"
+}

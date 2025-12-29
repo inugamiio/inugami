@@ -21,4 +21,10 @@ class BasicPasswordObfuscatorTest implements ObfuscatorTestUtils {
         assertThat(obfuscator.obfuscate(buildEvent("password=hello"))).isEqualTo("password=xxxxx");
         assertThat(obfuscator.obfuscate(buildEvent("password = hello"))).isEqualTo("password = xxxxx");
     }
+
+    @Test
+    void isEnabled_nominal() {
+        ObfuscatorSpi obfuscator = new BasicPasswordObfuscator();
+        assertThat(obfuscator.enabled()).isTrue();
+    }
 }

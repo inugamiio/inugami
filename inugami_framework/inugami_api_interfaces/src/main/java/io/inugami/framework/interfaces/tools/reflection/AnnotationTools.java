@@ -109,8 +109,8 @@ public final class AnnotationTools {
         }
 
         String result = null;
-        if (object instanceof NamedComponent) {
-            result = ((NamedComponent) object).getName();
+        if (object instanceof NamedComponent namedComponent) {
+            result = namedComponent.getName();
         } else {
             Class<?> clazz = object.getClass();
             if ("org.jboss.weld.proxy.WeldClientProxy".equals(clazz.getName())) {

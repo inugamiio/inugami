@@ -16,8 +16,7 @@
  */
 package io.inugami.framework.interfaces.models.number;
 
-import io.inugami.framework.interfaces.models.basic.Dto;
-
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -26,7 +25,7 @@ import java.math.BigDecimal;
  * @author patrick_guillerm
  * @since 17 août 2018
  */
-public interface GraphiteNumber extends Dto<GraphiteNumber> {
+public interface GraphiteNumber extends Serializable {
     GraphiteNumber add(GraphiteNumber number);
 
     GraphiteNumber sub(GraphiteNumber number);

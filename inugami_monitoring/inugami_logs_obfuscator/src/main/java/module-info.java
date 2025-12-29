@@ -43,5 +43,6 @@ open module io.inugami.logs.obfuscator {
     uses io.inugami.framework.interfaces.monitoring.logger.mapper.LoggerMdcMappingSPI;
     uses io.inugami.framework.interfaces.tools.TemplateProviderSPI;
 
+    provides io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI with io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder;
     provides io.inugami.framework.interfaces.monitoring.logger.ObfuscatorSpi with io.inugami.logs.obfuscator.obfuscators.JsonPasswordObfuscator, io.inugami.logs.obfuscator.obfuscators.BasicPasswordObfuscator, io.inugami.logs.obfuscator.obfuscators.XMLPasswordObfuscator, io.inugami.logs.obfuscator.obfuscators.JsonAuthorizationObfuscator, io.inugami.logs.obfuscator.obfuscators.BasicAuthorizationObfuscator, io.inugami.logs.obfuscator.obfuscators.AccessControlAllowHeaderObfuscator, io.inugami.logs.obfuscator.obfuscators.AccessControlExposedHeaderObfuscator, io.inugami.logs.obfuscator.obfuscators.CookieObfuscator;
 }

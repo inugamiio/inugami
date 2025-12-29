@@ -63,7 +63,6 @@ open module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.marshalling.jaxb;
     exports io.inugami.framework.interfaces.marshalling.serializers;
     exports io.inugami.framework.interfaces.marshalling;
-    exports io.inugami.framework.interfaces.metrics.dto;
     exports io.inugami.framework.interfaces.metrics;
     exports io.inugami.framework.interfaces.models.basic;
     exports io.inugami.framework.interfaces.models.crud;

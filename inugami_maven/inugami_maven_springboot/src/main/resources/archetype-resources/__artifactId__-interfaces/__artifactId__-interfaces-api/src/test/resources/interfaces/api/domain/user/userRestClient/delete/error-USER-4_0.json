@@ -1,0 +1,26 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 400,
+    "domain" : "USER",
+    "errorCode" : "USER-4_0",
+    "errorType" : "functional",
+    "message" : "uid required to delete users",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "requestHeaders" : {
+    "x-device-identifier" : "7df4a21d-0515-4e9e-aa41-97a0d5ba5203",
+    "x-correlation-id" : "194417fc-3ed5-486c-93ab-781b7d3bb1af"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "7df4a21d-0515-4e9e-aa41-97a0d5ba5203",
+    "x-correlation-id" : "194417fc-3ed5-486c-93ab-781b7d3bb1af",
+    "x-b3-traceid" : "a8f2faff-eba1-4fc5-924a-bca88375397f"
+  },
+  "status" : 400,
+  "url" : "/user",
+  "verb" : "DELETE"
+}

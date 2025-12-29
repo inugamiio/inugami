@@ -18,4 +18,10 @@ class JsonPasswordObfuscatorTest implements ObfuscatorTestUtils {
         ObfuscatorSpi obfuscator = new JsonPasswordObfuscator();
         assertThat(obfuscator.obfuscate(buildEvent(" \"password\":\"qwertz\""))).isEqualTo(" \"password\":\"xxxxx\"");
     }
+
+    @Test
+    void isEnabled_nominal() {
+        ObfuscatorSpi obfuscator = new JsonPasswordObfuscator();
+        assertThat(obfuscator.enabled()).isTrue();
+    }
 }

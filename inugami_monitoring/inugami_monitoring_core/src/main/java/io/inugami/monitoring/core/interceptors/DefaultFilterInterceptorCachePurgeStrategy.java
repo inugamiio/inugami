@@ -18,15 +18,18 @@ package io.inugami.monitoring.core.interceptors;
 
 
 import io.inugami.framework.interfaces.monitoring.FilterInterceptorCachePurgeStrategy;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class DefaultFilterInterceptorCachePurgeStrategy implements FilterInterceptorCachePurgeStrategy {
 
-    private static final int MAX_ITEMS = 20000;
+    public static final int MAX_ITEMS = 20000;
 
     @Override
-    public boolean shouldPurge(final Map<String, Boolean> values) {
-        return (values == null ? 0 : values.size()) >= MAX_ITEMS;
+    public boolean shouldPurge(@Nullable final Map<String, Boolean> values) {
+        final var size = Optional.ofNullable(values).map(Map::size).orElse(0);
+        return size >= MAX_ITEMS;
     }
 }

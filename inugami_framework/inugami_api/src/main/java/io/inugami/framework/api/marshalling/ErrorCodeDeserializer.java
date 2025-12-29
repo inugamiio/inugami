@@ -29,6 +29,7 @@ import java.util.Optional;
 
 import static io.inugami.framework.api.marshalling.ErrorCodeSerializer.*;
 
+@SuppressWarnings({"java:S1130"})
 public class ErrorCodeDeserializer extends StdDeserializer<ErrorCode> {
 
 
@@ -55,7 +56,9 @@ public class ErrorCodeDeserializer extends StdDeserializer<ErrorCode> {
         builder.payload(Optional.ofNullable(node.get(PAYLOAD)).map(JsonNode::asText).orElse(null));
         builder.subDomain(Optional.ofNullable(node.get(SUB_DOMAIN)).map(JsonNode::asText).orElse(null));
         builder.url(Optional.ofNullable(node.get(URL)).map(JsonNode::asText).orElse(null));
-        builder.exploitationError(Optional.ofNullable(node.get(EXPLOITATION_ERROR)).map(JsonNode::asBoolean).orElse(false));
+        builder.exploitationError(Optional.ofNullable(node.get(EXPLOITATION_ERROR))
+                                          .map(JsonNode::asBoolean)
+                                          .orElse(false));
         builder.rollback(Optional.ofNullable(node.get(ROLLBACK_REQUIRE)).map(JsonNode::asBoolean).orElse(false));
         builder.retryable(Optional.ofNullable(node.get(RETRYABLE)).map(JsonNode::asBoolean).orElse(false));
         return builder.build();

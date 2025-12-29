@@ -29,7 +29,7 @@ import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-
+@SuppressWarnings({"java:S108"})
 @Getter
 @Setter
 @Builder(toBuilder = true)

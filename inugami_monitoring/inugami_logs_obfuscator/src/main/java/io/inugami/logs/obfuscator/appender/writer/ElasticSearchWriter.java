@@ -7,9 +7,10 @@ import io.inugami.framework.interfaces.connectors.ConnectorConstants;
 import io.inugami.framework.interfaces.connectors.ConnectorListener;
 import io.inugami.framework.interfaces.connectors.HttpRequest;
 import io.inugami.framework.interfaces.connectors.config.HttpBasicConnectorConfiguration;
-import io.inugami.framework.interfaces.exceptions.services.ConnectorException;
 import io.inugami.framework.interfaces.models.JsonBuilder;
 import io.inugami.logs.obfuscator.appender.AppenderConfiguration;
+import lombok.AccessLevel;
+import lombok.Setter;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
+
+import static io.inugami.framework.api.tools.RunSafeUtils.runSafeVoid;
 
 @SuppressWarnings({"java:S108", "java:S1450"})
 public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorListener, Runnable {
@@ -31,7 +35,10 @@ public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorLis
 
     private       AppenderConfiguration          configuration = null;
     private       Encoder<ILoggingEvent>         encoder;
+    @Setter(AccessLevel.PACKAGE)
     private       HttpBasicConnector             connector;
+    @Setter(AccessLevel.PACKAGE)
+    private       Supplier<Date>                 dateGenerator;
     private       String                         baseUrl;
     private       Map<String, String>            headers;
     private       String                         index;
@@ -44,7 +51,6 @@ public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorLis
     public boolean accept(final AppenderConfiguration configuration) {
         if (ELASTIC_SEARCH.equalsIgnoreCase(configuration.getMode())) {
             this.configuration = configuration;
-
             return true;
         }
         return false;
@@ -56,23 +62,23 @@ public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorLis
 
         executor.scheduleAtFixedRate(this, 0, 500, TimeUnit.MILLISECONDS);
 
-        final int timeout = configuration.getTimeout() == null ? DEFAULT_TIMEOUT : configuration.getTimeout();
-
-        baseUrl = configuration.getHost() == null ? DEFAULT_HOST : configuration.getHost();
-        connector = new HttpBasicConnector(HttpBasicConnectorConfiguration.builder().timeoutReading(timeout).build());
-        headers = configuration.getHeadersMap() == null ? new HashMap<>() : configuration.getHeadersMap();
-        index = configuration.getIndex() == null ? DEFAULT_INDEX : this.configuration.getIndex();
-        indexPattern =
-                configuration.getIndexDatePattern() == null ? DEFAULT_DATE : this.configuration.getIndexDatePattern();
-
-        request = HttpRequest.builder()
-                             .verb(ConnectorConstants.HTTP_POST)
-                             .url(baseUrl)
-                             .headers(headers)
-                             .disableListener(true)
-                             .listener(this)
-                             .addHeader("ContentType", "application/json");
-
+        final int timeout = Optional.ofNullable(configuration.getTimeout()).orElse(DEFAULT_TIMEOUT);
+        baseUrl       = Optional.ofNullable(configuration.getHost()).orElse(DEFAULT_HOST);
+        connector     = Optional.ofNullable(connector)
+                                .orElse(new HttpBasicConnector(HttpBasicConnectorConfiguration.builder()
+                                                                                              .timeoutReading(timeout)
+                                                                                              .build()));
+        dateGenerator = Optional.ofNullable(dateGenerator).orElse(Date::new);
+        headers       = Optional.ofNullable(configuration.getHeadersMap()).orElse(new LinkedHashMap<>());
+        index         = Optional.ofNullable(configuration.getIndex()).orElse(DEFAULT_INDEX);
+        indexPattern  = Optional.ofNullable(configuration.getIndexDatePattern()).orElse(DEFAULT_DATE);
+        request       = HttpRequest.builder()
+                                   .verb(ConnectorConstants.HTTP_POST)
+                                   .url(baseUrl)
+                                   .headers(headers)
+                                   .disableListener(true)
+                                   .listener(this)
+                                   .addHeader("ContentType", "application/json");
     }
 
 
@@ -87,7 +93,7 @@ public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorLis
         final byte[] encoded = encoder.encode(iLoggingEvent);
         if (encoded != null) {
             values.add(new JsonBuilder().write("{ \"index\" : { \"_index\" : \"" + index + "-" +
-                                               new SimpleDateFormat(indexPattern).format(new Date()) + "\"} }")
+                                               new SimpleDateFormat(indexPattern).format(dateGenerator.get()) + "\"} }")
                                         .line()
                                         .write(new String(encoded, StandardCharsets.UTF_8))
                                         .toString());
@@ -107,11 +113,10 @@ public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorLis
             return;
         }
 
-        try {
+        runSafeVoid(() -> {
             final String payload = String.join(EMPTY, result);
             connector.post(request.body(payload).build());
-        } catch (final ConnectorException e) {
-        }
+        });
     }
 
 }

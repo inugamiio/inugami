@@ -312,7 +312,7 @@ public class ConfigurationResolver {
     // =========================================================================
     private List<PluginConfiguration> convertMapToList(final Map<Gav, PluginConfiguration> configs) {
         Asserts.assertNotNull(configs);
-        return configs.values().stream().collect(toList());
+        return configs.values().stream().toList();
     }
 
     /**

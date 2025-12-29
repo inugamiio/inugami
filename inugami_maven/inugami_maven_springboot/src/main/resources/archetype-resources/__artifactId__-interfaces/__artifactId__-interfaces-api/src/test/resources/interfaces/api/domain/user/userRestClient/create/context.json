@@ -1,0 +1,18 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "request" : "[ {\n  \"email\" : \"john.smith@mock.org\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\"\n} ]",
+  "requestHeaders" : {
+    "x-device-identifier" : "a3bb49a3-b408-469f-8598-2f51bb7d4d74",
+    "x-correlation-id" : "f525874d-dfe6-4ebf-b646-26996fe2625d"
+  },
+  "response" : "[ {\n  \"audit\" : {\n    \"createdBy\" : \"system\",\n    \"createdDate\" : \"2023-05-27T12:00:00\",\n    \"lastModifiedBy\" : \"user-1\",\n    \"lastModifiedDate\" : \"2023-06-01T12:00:00\",\n    \"version\" : 1\n  },\n  \"email\" : \"john.smith@mock.org\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\",\n  \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n} ]",
+  "responseHeaders" : {
+    "x-device-identifier" : "a3bb49a3-b408-469f-8598-2f51bb7d4d74",
+    "x-correlation-id" : "f525874d-dfe6-4ebf-b646-26996fe2625d",
+    "x-b3-traceid" : "c6a6c77e-3a39-49f5-9de1-5017ff0edacd"
+  },
+  "status" : 200,
+  "url" : "/user",
+  "verb" : "POST"
+}

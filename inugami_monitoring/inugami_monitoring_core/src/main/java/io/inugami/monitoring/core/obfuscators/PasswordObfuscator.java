@@ -18,6 +18,8 @@ package io.inugami.monitoring.core.obfuscators;
 
 import io.inugami.framework.interfaces.monitoring.Obfuscator;
 import io.inugami.monitoring.api.obfuscators.ObfuscatorTools;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.regex.Pattern;
 
@@ -29,22 +31,22 @@ import java.util.regex.Pattern;
  */
 public class PasswordObfuscator implements Obfuscator {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
+    // =================================================================================================================
     private static final Pattern EMPTY   = ObfuscatorTools.buildJsonFieldPattern("(password|PASSWORD)", "\"\\s*\"");
     private static final Pattern DEFAULT = ObfuscatorTools.buildJsonFieldPattern("(password|PASSWORD)");
 
-    // =========================================================================
+    // =================================================================================================================
     // METHODS
-    // =========================================================================
+    // =================================================================================================================
     @Override
-    public boolean accept(String data) {
-        return data.contains("password");
+    public boolean accept(@Nullable String data) {
+        return data!=null && (data.contains("password")||data.contains("PASSWORD"));
     }
 
     @Override
-    public String clean(String data) {
+    public String clean(@NonNull String data) {
         String result = replaceAll(DEFAULT, data, "\"password\":\"xxxxx\"");
         return replaceAll(EMPTY, result, "\"password\":\"empty\"");
     }

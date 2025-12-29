@@ -16,8 +16,9 @@
  */
 package io.inugami.framework.interfaces.models.number;
 
-import io.inugami.framework.interfaces.models.basic.Dto;
 import lombok.*;
+
+import java.io.Serializable;
 
 /**
  * DataPoint
@@ -32,15 +33,8 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 @Getter
-public final class DataPoint implements Dto<DataPoint> {
-
-    private static final long serialVersionUID = -6203322773055819499L;
-
-    private Double value;
-    private long   timestamp;
-
-    @Override
-    public DataPoint cloneObj() {
-        return toBuilder().build();
-    }
+public final class DataPoint implements Serializable {
+    private static final long   serialVersionUID = -6203322773055819499L;
+    private              Double value;
+    private              long   timestamp;
 }

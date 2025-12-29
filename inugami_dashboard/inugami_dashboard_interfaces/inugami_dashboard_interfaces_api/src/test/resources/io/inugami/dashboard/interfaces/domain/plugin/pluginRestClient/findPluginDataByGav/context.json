@@ -1,0 +1,21 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "requestHeaders" : {
+    "x-device-identifier" : "ea45cff1-3a68-4118-9485-ead1339cc4d6",
+    "x-correlation-id" : "cfedd830-1a5b-4970-a59c-b661780154bc"
+  },
+  "requestParams" : {
+    "groupId" : "io.inugami.plugin",
+    "artifactId" : "inu-test"
+  },
+  "response" : "{\n  \"events\" : [ {\n    \"data\" : {\n      \"alerts\" : [ ],\n      \"channel\" : \"SSE_inugami\",\n      \"data\" : [ {\n        \"timestamp\" : 1766064662604,\n        \"value\" : 15.5\n      } ]\n    },\n    \"errorCode\" : {\n      \"statusCode\" : 500,\n      \"errorCode\" : \"ENGINE-0_6\",\n      \"errorType\" : \"technical\",\n      \"message\" : \"error on read application configuration\",\n      \"exploitationError\" : false,\n      \"rollbackRequire\" : false,\n      \"retryable\" : false\n    },\n    \"name\" : \"simple-event\",\n    \"status\" : \"SUCCESS\"\n  } ],\n  \"gav\" : {\n    \"artifactId\" : \"inu-test\",\n    \"groupId\" : \"io.inugami.plugin\",\n    \"hash\" : \"io.inugami.plugin:inu-test:null\"\n  }\n}",
+  "responseHeaders" : {
+    "x-device-identifier" : "ea45cff1-3a68-4118-9485-ead1339cc4d6",
+    "x-correlation-id" : "cfedd830-1a5b-4970-a59c-b661780154bc",
+    "x-b3-traceid" : "0d5ceb65-b510-4387-a981-baef6a1c4bb6"
+  },
+  "status" : 200,
+  "url" : "/{groupId}/{artifactId}/data",
+  "verb" : "GET"
+}

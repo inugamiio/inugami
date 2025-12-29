@@ -30,7 +30,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+
+import static io.inugami.framework.api.tools.RunSafeUtils.runSafeVoid;
 
 @SuppressWarnings({"java:S1181"})
 @Slf4j
@@ -39,8 +42,7 @@ public class WarningResponseListener implements ResponseListener {
                                                                           .loadSpiServicesByPriority(WarningTracker.class);
     public static final  String               X_WARNINGS       = "x-warnings";
     public static final  String               HEADER_SEPARATOR = ",";
-
-    private static MdcCleaner mdcCleaner = null;
+    private static       MdcCleaner           mdcCleaner       = null;
 
     // =========================================================================
     // API
@@ -53,21 +55,21 @@ public class WarningResponseListener implements ResponseListener {
         }
 
 
-        final CurrentWarningContext warnings = WarningContext.getInstance();
-        if (warnings != null) {
-            final List<Warning> currentWarning = warnings.getWarnings();
-            final Set<String>   warningCodes   = new LinkedHashSet<>();
-            if (currentWarning != null && !currentWarning.isEmpty()) {
-                trackWarning(currentWarning);
-                for (Warning warning : currentWarning) {
-                    warningCodes.add(warning.getWarningCode());
-                    addWarningInResponse(warning, response);
-                }
+        final CurrentWarningContext warnings       = WarningContext.getInstance();
+        final List<Warning>         currentWarning = Optional.ofNullable(warnings.getWarnings()).orElse(List.of());
+        final Set<String>           warningCodes   = new LinkedHashSet<>();
 
-                response.setHeader(X_WARNINGS, String.join(HEADER_SEPARATOR, warningCodes));
+        if (!currentWarning.isEmpty()) {
+            trackWarning(currentWarning);
+            for (Warning warning : currentWarning) {
+                warningCodes.add(warning.getWarningCode());
+                addWarningInResponse(warning, response);
             }
+
+            response.setHeader(X_WARNINGS, String.join(HEADER_SEPARATOR, warningCodes));
         }
-        WarningContext.getInstance().setWarnings(List.of());
+
+        warnings.setWarnings(List.of());
     }
 
     private synchronized void initMdcCleaner() {
@@ -77,11 +79,7 @@ public class WarningResponseListener implements ResponseListener {
 
     private void trackWarning(final List<Warning> warnings) {
         for (WarningTracker warningTracker : WARNING_TRACKERS) {
-            try {
-                warningTracker.track(warnings);
-            } catch (Throwable e) {
-                log.error(e.getMessage(), e);
-            }
+            runSafeVoid(() -> warningTracker.track(warnings), log);
         }
     }
 

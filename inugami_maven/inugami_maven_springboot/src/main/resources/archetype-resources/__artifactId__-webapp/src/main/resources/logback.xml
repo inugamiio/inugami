@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{dd/MM HH:mm:ss}]|%logger|%-5level|%thread|%msg\n</pattern>
+        </encoder>
+    </appender>
+    <appender name="ASYNC_STDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="STDOUT" />
+    </appender>
+
+    <logger name="org.springframework">
+        <level value="INFO"/>
+    </logger>
+    <logger name="org.hibernate">
+        <level value="INFO"/>
+    </logger>
+    <logger name="logging.level.org.hibernate.SQL">
+        <level value="DEBUG"/>
+    </logger>
+
+    <logger name="io.inugami">
+        <level value="INFO"/>
+    </logger>
+    <logger name="com.zaxxer">
+        <level value="INFO"/>
+    </logger>
+
+
+
+    <root level="DEBUG">
+        <appender-ref ref="ASYNC_STDOUT"/>
+    </root>
+
+</configuration>

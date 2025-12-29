@@ -26,7 +26,6 @@ import io.inugami.framework.interfaces.exceptions.Asserts;
 import io.inugami.framework.interfaces.exceptions.FatalException;
 import io.inugami.framework.interfaces.exceptions.services.ProviderException;
 import io.inugami.framework.interfaces.models.JsonBuilder;
-import io.inugami.framework.interfaces.models.basic.Json;
 import io.inugami.framework.interfaces.models.event.SimpleEvent;
 import io.inugami.framework.interfaces.models.maven.ManifestInfo;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
@@ -38,7 +37,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * MockJsonProvider
@@ -189,10 +187,9 @@ public class MockJsonHelper {
     public String getDataRandom(final String name) {
         manageLatency();
         String result = "";
-        // @formatter:off
-        final List<String> values = keys.stream().filter(key -> matchNameWithIndex(name, key))
-                                        .collect(Collectors.toList());
-        // @formatter:on
+        final List<String> values = keys.stream()
+                                        .filter(key -> matchNameWithIndex(name, key))
+                                        .toList();
 
         if (!values.isEmpty()) {
             final int currentIndex = random ? grabRandomIndex(values.size()) : grabFileIndex(name, values.size());
@@ -263,7 +260,7 @@ public class MockJsonHelper {
     public static <T extends SimpleEvent> ProviderFutureResult buildStringResult(final T event, final String data) {
         final var result = ProviderFutureResult.builder();
 
-        String jsonData = "null";
+        String jsonData = null;
         if (data != null) {
             final String[]      lines  = data.split("\n");
             final StringBuilder buffer = new StringBuilder();
@@ -274,7 +271,7 @@ public class MockJsonHelper {
         }
 
         result.event(event);
-        result.data(new Json(jsonData));
+        result.data(jsonData);
         return result.build();
     }
 

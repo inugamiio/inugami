@@ -19,4 +19,10 @@ class JsonAuthorizationObfuscatorTest implements ObfuscatorTestUtils {
         assertThat(obfuscator.obfuscate(buildEvent(" \"Authorization\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\"")))
                 .isEqualTo(" \"Authorization\":\"xxxxxsw5c\"");
     }
+
+    @Test
+    void isEnabled_nominal() {
+        ObfuscatorSpi obfuscator = new JsonAuthorizationObfuscator();
+        assertThat(obfuscator.enabled()).isTrue();
+    }
 }

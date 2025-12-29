@@ -1,0 +1,17 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "requestHeaders" : {
+    "x-device-identifier" : "a7ce26d4-b3d5-43e3-b845-811eca457ba9",
+    "x-correlation-id" : "9105ff0f-5aaf-445c-afb2-f2337ca8f51d"
+  },
+  "response" : "[ {\n  \"audit\" : {\n    \"createdBy\" : \"system\",\n    \"createdDate\" : \"2023-05-27T12:00:00\",\n    \"lastModifiedBy\" : \"user-1\",\n    \"lastModifiedDate\" : \"2023-06-01T12:00:00\",\n    \"version\" : 1\n  },\n  \"email\" : \"john.smith@mock.org\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\",\n  \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n} ]",
+  "responseHeaders" : {
+    "x-device-identifier" : "a7ce26d4-b3d5-43e3-b845-811eca457ba9",
+    "x-correlation-id" : "9105ff0f-5aaf-445c-afb2-f2337ca8f51d",
+    "x-b3-traceid" : "aefb597a-9588-4d50-a637-c7beb079b5aa"
+  },
+  "status" : 200,
+  "url" : "/user",
+  "verb" : "PATCH"
+}

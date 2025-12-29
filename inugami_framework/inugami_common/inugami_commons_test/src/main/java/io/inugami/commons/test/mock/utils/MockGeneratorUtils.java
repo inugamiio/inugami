@@ -19,7 +19,6 @@ package io.inugami.commons.test.mock.utils;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.tools.StringTools;
 import lombok.experimental.UtilityClass;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -75,7 +74,7 @@ public class MockGeneratorUtils {
                                                    @Nullable final String folder,
                                                    @NonNull final String fileName) {
         final StringBuilder fullPath          = new StringBuilder();
-        final var           currentMockFolder = buildMockFileFolder(mockFolder, folder==null?"":folder);
+        final var           currentMockFolder = buildMockFileFolder(mockFolder, folder == null ? "" : folder);
         Objects.requireNonNull(currentMockFolder);
         fullPath.append(currentMockFolder.getAbsoluteFile());
         fullPath.append(File.separator);
@@ -84,8 +83,7 @@ public class MockGeneratorUtils {
         return MockGeneratorUtils.canonicalFile(new File(fullPath.toString()));
     }
 
-    public static @Nullable File buildMockFileFolder(@NonNull final File mockFolder,
-                                                     @Nullable final String folder) {
+    public static @Nullable File buildMockFileFolder(@NonNull final File mockFolder, @Nullable final String folder) {
         final StringBuilder fullPath = new StringBuilder();
         fullPath.append(mockFolder.getPath());
         fullPath.append(File.separator)

@@ -55,7 +55,7 @@ public class MonitoringContext implements BootstrapContext<Void> {
         if (config == null) {
             config = Monitoring.builder().build();
         }
-        config.setProperties(applyIfNull(config.getProperties(), () -> new DefaultConfigHandler()));
+        config.setProperties(applyIfNull(config.getProperties(), DefaultConfigHandler::new));
         config.setSenders(applyIfNull(config.getSenders(), () -> new ArrayList<>()));
         config.setSensors(applyIfNull(config.getSensors(), () -> new ArrayList<>()));
         config.setInterceptors(applyIfNull(config.getInterceptors(), () -> new ArrayList<>()));
@@ -121,6 +121,7 @@ public class MonitoringContext implements BootstrapContext<Void> {
     public Monitoring getConfig() {
         return config;
     }
+
     public List<MonitoringFilterInterceptor> getInterceptors() {
         return Optional.ofNullable(config.getInterceptors()).orElse(List.of());
     }

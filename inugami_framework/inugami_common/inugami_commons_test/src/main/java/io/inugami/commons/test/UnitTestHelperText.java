@@ -8,15 +8,16 @@ import io.inugami.framework.interfaces.exceptions.Asserts;
 import io.inugami.framework.interfaces.exceptions.UncheckedException;
 import io.inugami.framework.interfaces.models.JsonBuilder;
 import io.inugami.framework.interfaces.monitoring.logger.ConsoleColors;
-import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 @SuppressWarnings({"java:S2629", "java:S1168", "java:S1181", "java:S2737"})
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UnitTestHelperText {
 
@@ -63,7 +64,7 @@ public final class UnitTestHelperText {
 
         try {
             if (jsonValue.length != refLines.length) {
-                Loggers.DEBUG.error(renderDiff(jsonValue, refLines));
+                log.error(renderDiff(jsonValue, refLines));
             }
             Asserts.assertTrue(String.format("reference and json have not same size : %s,%s", jsonValue.length, refLines.length),
                                jsonValue.length == refLines.length);
@@ -83,7 +84,7 @@ public final class UnitTestHelperText {
 
 
             if (!matcher.match(i, valueLine, refLine)) {
-                Loggers.DEBUG.error(renderDiff(jsonValue, refLines));
+                log.error(renderDiff(jsonValue, refLines));
                 throw new AssertTextException(String.format("[%s][%s] %s != %s", matcher.getClass(),
                                                             i + 1, valueLine, refLine));
             }

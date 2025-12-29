@@ -17,8 +17,11 @@
 package io.inugami.dashboard.core.domain.event;
 
 import io.inugami.dashboard.api.domain.event.IEventService;
+import io.inugami.framework.interfaces.exceptions.NotYetImplementedException;
 import io.inugami.framework.interfaces.models.event.Event;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EventService implements IEventService {
 
     //==================================================================================================================
@@ -32,7 +35,7 @@ public class EventService implements IEventService {
     @Override
     public Event getEvent(final String uid) {
         //TODO: implement
-        return null;
+        throw new NotYetImplementedException();
     }
 
     //==================================================================================================================

@@ -20,6 +20,7 @@ import io.inugami.framework.interfaces.monitoring.MonitoringLoaderSpi;
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.models.Monitoring;
 import lombok.experimental.UtilityClass;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +65,7 @@ public final class RequestContext {
         return config;
     }
 
-    public static synchronized RequestData getInstance() {
+    public static synchronized @NonNull RequestData getInstance() {
         RequestData result = INSTANCE.get();
         if (result == null) {
             result = initializeTechnicalRequest();

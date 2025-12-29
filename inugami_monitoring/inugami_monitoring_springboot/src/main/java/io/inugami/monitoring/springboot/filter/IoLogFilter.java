@@ -17,9 +17,7 @@
 package io.inugami.monitoring.springboot.filter;
 
 import io.inugami.framework.api.exceptions.WarningContext;
-import io.inugami.framework.api.listeners.DefaultApplicationLifecycleSPI;
 import io.inugami.monitoring.core.interceptors.FilterInterceptor;
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;

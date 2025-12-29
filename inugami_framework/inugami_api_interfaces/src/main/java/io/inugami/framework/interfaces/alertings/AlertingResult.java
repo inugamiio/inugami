@@ -16,9 +16,9 @@
  */
 package io.inugami.framework.interfaces.alertings;
 
-import io.inugami.framework.interfaces.models.basic.Dto;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +35,7 @@ import java.util.List;
 @Setter
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public final class AlertingResult implements Dto<AlertingResult> {
+public final class AlertingResult implements Serializable {
 
     // =========================================================================
     // ATTRIBUTES
@@ -64,12 +64,6 @@ public final class AlertingResult implements Dto<AlertingResult> {
     // =========================================================================
     //  TOOLS
     // =========================================================================
-    @Override
-    public AlertingResult cloneObj() {
-        return toBuilder().build();
-    }
-
-
     public int getLevelNumber() {
         return levelType == null ? AlerteLevels.UNDEFINE.getLevel() : levelType.getLevel();
     }

@@ -21,7 +21,6 @@ import io.inugami.dashboard.api.domain.event.IEventDataDao;
 import io.inugami.dashboard.api.domain.plugin.IPluginLoaderService;
 import io.inugami.dashboard.api.domain.plugin.IPluginService;
 import io.inugami.framework.commons.messages.MessagesServices;
-import io.inugami.framework.configuration.exceptions.ConfigurationException;
 import io.inugami.framework.configuration.models.EventConfig;
 import io.inugami.framework.configuration.models.app.ApplicationConfig;
 import io.inugami.framework.configuration.models.front.PluginFrontConfig;
@@ -51,9 +50,11 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
+import static io.inugami.framework.api.tools.RunSafeUtils.onVoidError;
+import static io.inugami.framework.api.tools.RunSafeUtils.runSafe;
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.or;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -142,7 +143,7 @@ public class PluginService implements IPluginService {
                                                                                             .toList())
                                                                       .build())
                                              .toList()
-                             )
+                                    )
                              .build());
         }
         return result;
@@ -167,17 +168,14 @@ public class PluginService implements IPluginService {
     // VALIDATE
     //==================================================================================================================
     protected void validateConfiguration(final List<PluginConfiguration> configuration) {
-        final Map<PluginConfiguration, ConfigurationException> errors = new LinkedHashMap<>();
+        final Map<PluginConfiguration, Throwable> errors = new LinkedHashMap<>();
         for (PluginConfiguration config : configuration) {
-            try {
-                new PluginConfigurationValidator(config, config.getConfigFile()).validate();
-            } catch (ConfigurationException e) {
-                errors.put(config, e);
-            }
+            onVoidError(() -> new PluginConfigurationValidator(config, config.getConfigFile()).validate(),
+                        error -> errors.put(config, error));
         }
 
         if (!errors.isEmpty()) {
-            for (Map.Entry<PluginConfiguration, ConfigurationException> error : errors.entrySet()) {
+            for (Map.Entry<PluginConfiguration, Throwable> error : errors.entrySet()) {
                 log.error("[{}] invalid plugin configuration : {}", error.getKey().getConfigFile(), error.getValue()
                                                                                                          .getMessage());
             }
@@ -192,12 +190,7 @@ public class PluginService implements IPluginService {
         final List<Plugin>        result           = new ArrayList<>();
         final Map<String, String> globalProperties = buildGlobalProperties();
         for (PluginConfiguration config : configurations) {
-            Plugin plugin = null;
-            try {
-                plugin = createPlugin(config, globalProperties);
-            } catch (TechnicalException e) {
-                log.error(e.getMessage(), e);
-            }
+            Plugin plugin = runSafe(() -> createPlugin(config, globalProperties), log);
             applyIfNotNull(plugin, result::add);
         }
         return result;
@@ -206,24 +199,25 @@ public class PluginService implements IPluginService {
 
     protected Plugin createPlugin(final PluginConfiguration config,
                                   final Map<String, String> globalProperties) throws TechnicalException {
+
         final Optional<List<EventConfig>> eventsOpt = configurationResolver.resolvePluginEventConfig(config);
-        final List<EventConfig>           events    = eventsOpt.isPresent() ? visiteEventFile(eventsOpt.get()) : List.of();
-        final ManifestInfo                manifest  = configurationResolver.resolvePluginManifest(config);
+        final List<EventConfig> events =
+                eventsOpt.isPresent() ? visiteEventFile(eventsOpt.get()) : List.of();
+        final ManifestInfo                     manifest    = configurationResolver.resolvePluginManifest(config);
+        final Map<String, Map<String, String>> properties  = new LinkedHashMap<>();
+        final var                              frontConfig = registerFrontProperties(config);
+        final List<AlertingProvider> alertings =
+                pluginLoaderService.loadAlertings(config.getAlertings(), globalProperties, manifest);
+        final List<EngineListener> listeners =
+                pluginLoaderService.loadListeners(config.getListeners(), globalProperties, manifest);
+        final List<Processor> processors =
+                pluginLoaderService.loadProcessors(config.getProcessors(), globalProperties, manifest);
+        final List<Provider> providers =
+                pluginLoaderService.loadProviders(config.getProviders(), globalProperties, manifest);
+        final List<Handler> handlers =
+                pluginLoaderService.loadHandlers(config.getHandlers(), globalProperties, manifest);
 
-
-        Map<String, Map<String, String>> properties  = new LinkedHashMap<>();
-        final var                        frontConfig = registerFrontProperties(config);
-        final List<AlertingProvider>     alertings   = pluginLoaderService.loadAlertings(config.getAlertings(), globalProperties, manifest);
-        final List<EngineListener>       listeners   = pluginLoaderService.loadListeners(config.getListeners(), globalProperties, manifest);
-        final List<Processor>            processors  = pluginLoaderService.loadProcessors(config.getProcessors(), globalProperties, manifest);
-        final List<Provider>             providers   = pluginLoaderService.loadProviders(config.getProviders(), globalProperties, manifest);
-        final List<Handler>              handlers    = pluginLoaderService.loadHandlers(config.getHandlers(), globalProperties, manifest);
-
-
-        if (properties != null) {
-            MessagesServices.register(properties);
-        }
-
+        MessagesServices.register(properties);
         return Plugin.builder()
                      .config(config)
                      .events(events)
@@ -242,7 +236,7 @@ public class PluginService implements IPluginService {
 
     private PluginFrontConfig registerFrontProperties(final PluginConfiguration config) {
         final Map<String, String> frontProperties = new HashMap<>();
-        for (final PropertyModel property : orElse(config.getFrontProperties(), new ArrayList<PropertyModel>())) {
+        for (final PropertyModel property : or(config.getFrontProperties(), () -> new ArrayList<PropertyModel>())) {
             frontProperties.put(property.getKey(), property.getValue());
         }
         MessagesServices.registerConfig(frontProperties);
@@ -251,20 +245,21 @@ public class PluginService implements IPluginService {
     }
 
     private List<EventConfig> visiteEventFile(final List<EventConfig> config) {
-        return config.stream().map(this::visiteEventFile).collect(Collectors.toList());
+        return config.stream()
+                     .map(this::visiteEventFile)
+                     .toList();
     }
 
     private EventConfig visiteEventFile(final EventConfig eventFileConfig) {
-        eventFileConfig.setScheduler(orElse(eventFileConfig.getScheduler(), DEFAULT_SCHEDULER));
+        eventFileConfig.setScheduler(or(eventFileConfig.getScheduler(), DEFAULT_SCHEDULER));
 
         for (SimpleEvent event : Optional.ofNullable(eventFileConfig.getSimpleEvents()).orElse(List.of())) {
-            event.setScheduler(orElse(event.getScheduler(), DEFAULT_SCHEDULER));
+            event.setScheduler(or(event.getScheduler(), DEFAULT_SCHEDULER));
         }
 
         for (Event event : Optional.ofNullable(eventFileConfig.getEvents()).orElse(List.of())) {
-            event.setScheduler(orElse(event.getScheduler(), DEFAULT_SCHEDULER));
+            event.setScheduler(or(event.getScheduler(), DEFAULT_SCHEDULER));
         }
-
 
         return eventFileConfig;
     }
@@ -273,10 +268,6 @@ public class PluginService implements IPluginService {
     // =================================================================================================================
     // TOOLS
     // =================================================================================================================
-    private <T> T orElse(final T value, final T defaultValue) {
-        return value == null ? defaultValue : value;
-    }
-
     private int comparePropertiesProducer(final PropertiesProducerSpi ref, final PropertiesProducerSpi value) {
         final Priority refPriority   = ref == null ? null : ref.getClass().getAnnotation(Priority.class);
         final Priority valuePriority = value == null ? null : value.getClass().getAnnotation(Priority.class);
@@ -291,7 +282,7 @@ public class PluginService implements IPluginService {
     private Map<String, String> buildGlobalProperties() {
         final Map<String, String> result = new LinkedHashMap<>();
 
-        for (PropertyModel property : orElse(applicationConfig.getProperties(), new ArrayList<PropertyModel>())) {
+        for (PropertyModel property : or(applicationConfig.getProperties(), new ArrayList<PropertyModel>())) {
             result.put(property.getKey(), property.getValue());
         }
 

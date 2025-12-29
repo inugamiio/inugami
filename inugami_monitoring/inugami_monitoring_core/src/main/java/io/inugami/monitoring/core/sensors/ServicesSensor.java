@@ -17,19 +17,17 @@
 package io.inugami.monitoring.core.sensors;
 
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
-import io.inugami.framework.interfaces.metrics.dto.GenericMonitoringModelDto;
 import io.inugami.framework.interfaces.models.Tuple;
-import io.inugami.framework.interfaces.models.number.GraphiteNumber;
 import io.inugami.framework.interfaces.monitoring.ServicesSensorAggregator;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModelDTO;
 import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.tools.BlockingQueue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
 /**
  * ServicesSensor
@@ -39,21 +37,22 @@ import java.util.Map;
  */
 public class ServicesSensor implements MonitoringSensor {
 
-    // =========================================================================
+    // =================================================================================================================
     // ATTRIBUTES
-    // =========================================================================
-    private static final BlockingQueue<GenericMonitoringModel> BUFFER = new BlockingQueue<>();
+    // =================================================================================================================
+    protected static final BlockingQueue<GenericMonitoringModel> BUFFER = new BlockingQueue<>();
 
-    private static final List<ServicesSensorAggregator> AGGREGATORS = SpiLoader.getInstance()
-                                                                               .loadSpiServicesByPriority(ServicesSensorAggregator.class);
+    protected static final List<ServicesSensorAggregator> AGGREGATORS     = SpiLoader.getInstance()
+                                                                                     .loadSpiServicesByPriority(ServicesSensorAggregator.class);
+    public static final    String                         SERVICES_SENSOR = "servicesSensor";
 
-    private static long interval;
+    protected static long interval;
 
-    private ConfigHandler<String, String> configuration;
+    protected ConfigHandler<String, String> configuration;
 
-    // =========================================================================
+    // =================================================================================================================
     // CONSTRUCTORS
-    // =========================================================================
+    // =================================================================================================================
     @Override
     public MonitoringSensor buildInstance(final long interval, final String query,
                                           final ConfigHandler<String, String> configuration) {
@@ -62,11 +61,14 @@ public class ServicesSensor implements MonitoringSensor {
         return this;
     }
 
-    private synchronized void defineInterval(final long value) {
+    protected static void clean() {
+        BUFFER.clear();
+    }
+
+    protected synchronized void defineInterval(final long value) {
         interval = value;
     }
 
-    //
     @Override
     public long getInterval() {
         return interval;
@@ -74,32 +76,32 @@ public class ServicesSensor implements MonitoringSensor {
 
     @Override
     public String getName() {
-        return "servicesSensor";
+        return SERVICES_SENSOR;
     }
 
-    // =========================================================================
+    // =================================================================================================================
     // OVERRIDES
-    // =========================================================================
+    // =================================================================================================================
     @Override
     public List<GenericMonitoringModel> process() {
-        final List<GenericMonitoringModel>                      result        = new ArrayList<>();
-        final List<GenericMonitoringModel>                      data          = BUFFER.pollAll();
-        final Map<GenericMonitoringModel, List<GraphiteNumber>> reducedValues = reduceData(data);
+        final List<GenericMonitoringModel>              result        = new ArrayList<>();
+        final List<GenericMonitoringModel>              data          = BUFFER.pollAll();
+        final Map<GenericMonitoringModel, List<Object>> reducedValues = reduceData(data);
 
-        for (final Map.Entry<GenericMonitoringModel, List<GraphiteNumber>> entry : reducedValues.entrySet()) {
+        for (final Map.Entry<GenericMonitoringModel, List<Object>> entry : reducedValues.entrySet()) {
             result.addAll(computeValue(entry.getKey(), entry.getValue()));
         }
 
         return result;
     }
 
-    private Map<GenericMonitoringModel, List<GraphiteNumber>> reduceData(final List<GenericMonitoringModel> data) {
-        final Map<String, Tuple<GenericMonitoringModel, List<GraphiteNumber>>> localBuffer = new HashMap<>();
+    protected Map<GenericMonitoringModel, List<Object>> reduceData(final List<GenericMonitoringModel> data) {
+        final Map<String, Tuple<GenericMonitoringModel, List<Object>>> localBuffer = new HashMap<>();
 
         for (final GenericMonitoringModel item : data) {
-            Tuple<GenericMonitoringModel, List<GraphiteNumber>> saved = localBuffer.get(item.getNonTemporalHash());
+            Tuple<GenericMonitoringModel, List<Object>> saved = localBuffer.get(item.getNonTemporalHash());
             if (saved == null) {
-                final List<GraphiteNumber> values = new ArrayList<>();
+                final List<Object> values = new ArrayList<>();
                 values.add(item.getValue());
                 saved = new Tuple<>(item, values);
                 localBuffer.put(item.getNonTemporalHash(), saved);
@@ -108,34 +110,44 @@ public class ServicesSensor implements MonitoringSensor {
             }
         }
 
-        final Map<GenericMonitoringModel, List<GraphiteNumber>> result = new HashMap<>();
-        for (final Map.Entry<String, Tuple<GenericMonitoringModel, List<GraphiteNumber>>> entry : localBuffer.entrySet()) {
+        final Map<GenericMonitoringModel, List<Object>> result = new HashMap<>();
+        for (final Map.Entry<String, Tuple<GenericMonitoringModel, List<Object>>> entry : localBuffer.entrySet()) {
             result.put(entry.getValue().getKey(), entry.getValue().getValue());
         }
         return result;
     }
 
-    private List<GenericMonitoringModel> computeValue(final GenericMonitoringModel data,
-                                                      final List<GraphiteNumber> values) {
-        final List<GenericMonitoringModel> result = new ArrayList<>();
-        for (final ServicesSensorAggregator aggregator : AGGREGATORS) {
-            if (aggregator.accept(data, configuration)) {
-                final List<GenericMonitoringModel> aggregated = aggregator.compute(data, values, configuration);
-                if (aggregated != null) {
-                    result.addAll(aggregated);
-                }
-            }
-        }
+    protected List<GenericMonitoringModel> computeValue(final GenericMonitoringModel data,
+                                                        final List<Object> values) {
+        final ServicesSensorAggregator currentAggregator = chooseAggregator(data);
+        return Optional.ofNullable(currentAggregator)
+                       .map(aggregator -> processAggregation(aggregator, data, values))
+                       .orElse(List.of());
+    }
+
+    protected List<GenericMonitoringModel> processAggregation(final ServicesSensorAggregator currentAggregator,
+                                                              final GenericMonitoringModel data,
+                                                              final List<Object> values) {
+        List<GenericMonitoringModel>       result     = new ArrayList<>();
+        final List<GenericMonitoringModel> aggregated = currentAggregator.compute(data, values, configuration);
+        applyIfNotNull(aggregated, result::addAll);
         return result;
     }
 
-    // =========================================================================
-    // ADD DATA
-    // =========================================================================
-    public static synchronized void addData(final List<GenericMonitoringModelDto> data) {
-        if (data != null) {
-            BUFFER.addAll(data);
+    protected ServicesSensorAggregator chooseAggregator(final GenericMonitoringModel data) {
+        for (final ServicesSensorAggregator aggregator : AGGREGATORS) {
+            if (aggregator.accept(data, configuration)) {
+                return aggregator;
+            }
         }
+        return null;
+    }
+
+    // =================================================================================================================
+    // ADD DATA
+    // =================================================================================================================
+    public static synchronized void addData(final List<GenericMonitoringModelDTO> data) {
+        applyIfNotNull(data, BUFFER::addAll);
     }
 
 }
