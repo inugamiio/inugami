@@ -22,7 +22,7 @@
     <!--================================================================================================================
     = PROJECT
     =================================================================================================================-->
-    <artifactId>${rootArtifactId}-infrastructure</artifactId>
+    <artifactId>${rootArtifactId}-webapp</artifactId>
 
 
     <!--================================================================================================================
@@ -33,26 +33,21 @@
             <groupId>${groupId}</groupId>
             <artifactId>${rootArtifactId}-api</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-core</artifactId>
+            <groupId>${groupId}</groupId>
+            <artifactId>${rootArtifactId}-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-            <classifier>jakarta</classifier>
-            <version>${querydsl.version}</version>
+            <groupId>${groupId}</groupId>
+            <artifactId>${rootArtifactId}-infrastructure</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>io.inugami.framework</groupId>
-            <artifactId>inugami_api_interfaces</artifactId>
+            <groupId>${groupId}</groupId>
+            <artifactId>${rootArtifactId}-interfaces-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>${rootArtifactId}-interfaces-core</artifactId>
         </dependency>
 
         <dependency>
@@ -61,8 +56,8 @@
         </dependency>
 
         <dependency>
-            <groupId>io.inugami.framework.commons</groupId>
-            <artifactId>inugami_commons</artifactId>
+            <groupId>io.inugami.framework</groupId>
+            <artifactId>inugami_api_interfaces</artifactId>
         </dependency>
 
         <dependency>
@@ -71,38 +66,40 @@
         </dependency>
 
         <dependency>
-            <groupId>io.inugami.framework.commons</groupId>
-            <artifactId>inugami_commons_spring_data</artifactId>
+            <groupId>io.inugami.monitoring</groupId>
+            <artifactId>inugami_logs_obfuscator</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>jakarta.annotation</groupId>
-            <artifactId>jakarta.annotation-api</artifactId>
+            <groupId>io.inugami.monitoring</groupId>
+            <artifactId>inugami_monitoring_springboot</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>jakarta.persistence</groupId>
-            <artifactId>jakarta.persistence-api</artifactId>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.jspecify</groupId>
-            <artifactId>jspecify</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
 
         <dependency>
@@ -121,6 +118,16 @@
                     <artifactId>jsonassert</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

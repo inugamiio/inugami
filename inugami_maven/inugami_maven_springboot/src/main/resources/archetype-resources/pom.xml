@@ -78,6 +78,9 @@
             **/*Entity.java,
             **/api/**/I*.java
         </sonar.cpd.exclusions>
+        <sonar.issue.ignore.multicriteria>e1</sonar.issue.ignore.multicriteria>
+        <sonar.issue.ignore.multicriteria.e1.ruleKey>java:S1710</sonar.issue.ignore.multicriteria.e1.ruleKey>
+        <sonar.issue.ignore.multicriteria.e1.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
 
         <maven-owasp.enabled>false</maven-owasp.enabled>
         <!--+++ versions ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
@@ -92,6 +95,7 @@
         <io.github.openfeign.version>${openfeignVersion}</io.github.openfeign.version>
         <io.inugami.version>${inugamiVersion}</io.inugami.version>
         <io.swagger.core.v3.version>${swaggerVersion}</io.swagger.core.v3.version>
+        <io.rest-assured.version>5.5.0</io.rest-assured.version>
         <jacoco.version>${jacocoVersion}</jacoco.version>
         <jakarta.servlet.version>${jakartaServletVersion}</jakarta.servlet.version>
         <jakarta.xml.bind.version>${jakartaXmlVersion}</jakarta.xml.bind.version>
@@ -104,6 +108,7 @@
         <org.jspecify.version>${jspecifyVersion}</org.jspecify.version>
         <org.junit.jupiter>${junitVersion}</org.junit.jupiter>
         <org.junit.platform.version>${junitPlatformVersion}</org.junit.platform.version>
+        <org.hamcrest.version>2.1</org.hamcrest.version>
         <org.mapstruct.version>${mapstructVersion}</org.mapstruct.version>
         <org.mockito.junit.version>${mockitoJunitVersion}</org.mockito.junit.version>
         <org.owasp.version>8.1.2</org.owasp.version>
@@ -138,18 +143,28 @@
             </dependency>
             <!--+++ project +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
             <dependency>
-                <groupId>com.my.project</groupId>
-                <artifactId>demo-api</artifactId>
+                <groupId>${groupId}</groupId>
+                <artifactId>${rootArtifactId}-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.my.project</groupId>
-                <artifactId>demo-core</artifactId>
+                <groupId>${groupId}</groupId>
+                <artifactId>${rootArtifactId}-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.my.project</groupId>
-                <artifactId>demo-infrastructure</artifactId>
+                <groupId>${groupId}</groupId>
+                <artifactId>${rootArtifactId}-infrastructure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${groupId}</groupId>
+                <artifactId>${rootArtifactId}-interfaces-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${groupId}</groupId>
+                <artifactId>${rootArtifactId}-interfaces-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!--+++ inugami_framework +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
@@ -311,6 +326,11 @@
                 </exclusions>
             </dependency>
             <dependency>
+                <groupId>io.rest-assured</groupId>
+                <artifactId>rest-assured</artifactId>
+                <version>${io.rest-assured.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>jakarta.servlet</groupId>
                 <artifactId>jakarta.servlet-api</artifactId>
                 <version>${jakarta.servlet.version}</version>
@@ -340,7 +360,6 @@
                 <artifactId>jspecify</artifactId>
                 <version>${org.jspecify.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-engine</artifactId>
@@ -350,6 +369,11 @@
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-commons</artifactId>
                 <version>${org.junit.platform.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest</artifactId>
+                <version>${org.hamcrest.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mapstruct</groupId>

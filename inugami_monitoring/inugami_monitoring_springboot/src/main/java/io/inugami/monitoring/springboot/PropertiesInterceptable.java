@@ -55,7 +55,7 @@ public class PropertiesInterceptable implements Interceptable {
         }
         final String path = Optional.ofNullable(request.getUri()).orElse("");
         for (Pattern pattern : patterns) {
-            if (!pattern.matcher(path).matches()) {
+            if (pattern.matcher(path).matches()) {
                 return false;
             }
         }

@@ -1,4 +1,4 @@
-package ${package}.api.domain.user.dto;
+package ${package}.interfaces.api.domain.user.dto;
 
 import io.inugami.framework.interfaces.models.search.SearchRequest;
 import io.inugami.framework.interfaces.models.search.SortOrder;
@@ -8,14 +8,17 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+/**
+ * @since 2025-12-29
+ */
 @ToString
 @Setter
 @Getter
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTOSearchRequestDTO implements SearchRequest , Serializable {
-    private static final long         serialVersionUID = -6646958578723667636L;
+public class UserDTOSearchRequestAPI  implements SearchRequest, Serializable {
+    private static final long         serialVersionUID = 3619190152329801794L;
     // SearchRequest
     private Integer                   page;
     private Integer                   pageSize;

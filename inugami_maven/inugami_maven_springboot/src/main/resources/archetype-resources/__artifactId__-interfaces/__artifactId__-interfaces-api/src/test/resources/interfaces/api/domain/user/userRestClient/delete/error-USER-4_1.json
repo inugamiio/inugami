@@ -1,0 +1,26 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 404,
+    "domain" : "USER",
+    "errorCode" : "USER-4_1",
+    "errorType" : "functional",
+    "message" : "users not found",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "requestHeaders" : {
+    "x-device-identifier" : "f5f44184-1ed4-4168-9240-f1cc728a59b9",
+    "x-correlation-id" : "5651ec6d-c061-4f3b-bff2-4bea0987e36c"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "f5f44184-1ed4-4168-9240-f1cc728a59b9",
+    "x-correlation-id" : "5651ec6d-c061-4f3b-bff2-4bea0987e36c",
+    "x-b3-traceid" : "b23d213b-006e-4ff4-8ea0-6d2dbafefaaa"
+  },
+  "status" : 404,
+  "url" : "/user",
+  "verb" : "DELETE"
+}

@@ -44,6 +44,7 @@
         <requiredProperty key="sunXmlVersion"><defaultValue>@com.sun.xml.bind.version@</defaultValue></requiredProperty>
         <requiredProperty key="surefireVersion"><defaultValue>@plugins.org-apache-maven-plugins.maven-surefire-plugin@</defaultValue></requiredProperty>
         <requiredProperty key="swaggerVersion"><defaultValue>@io.swagger.core.v3.version@</defaultValue></requiredProperty>
+        <requiredProperty key="symbol_dollar"><defaultValue>$</defaultValue></requiredProperty>
     </requiredProperties>
     <fileSets>
         <fileSet encoding="UTF-8">
@@ -51,6 +52,12 @@
             <includes>
                 <include>lombok.config</include>
                 <include>.gitignore</include>
+            </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+            <directory>local-integration-test</directory>
+            <includes>
+                <include>inugami.demo.postman_collection.json</include>
             </includes>
         </fileSet>
     </fileSets>
@@ -138,6 +145,143 @@
                     <directory>src/test_it/resources</directory>
                 </fileSet>
             </fileSets>
+        </module>
+
+        <module id="${rootArtifactId}" dir="__artifactId__-webapp" name="${rootArtifactId}-webapp">
+            <fileSets>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/main/java</directory>
+                    <includes>
+                        <include>module-info.java</include>
+                    </includes>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/main/java</directory>
+                    <excludes>
+                        <exclude>module-info.java</exclude>
+                    </excludes>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/main/resources</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/test/java</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="true">
+                    <directory>src/test_it/java</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/test/resources</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="false">
+                    <directory>src/test_it/resources</directory>
+                </fileSet>
+            </fileSets>
+        </module>
+
+        <module id="${rootArtifactId}" dir="__artifactId__-interfaces" name="${rootArtifactId}-interfaces">
+            <modules>
+                <module id="${rootArtifactId}" dir="__artifactId__-interfaces-api" name="${rootArtifactId}-interfaces-api">
+                    <fileSets>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/main/java</directory>
+                            <includes>
+                                <include>module-info.java</include>
+                            </includes>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/main/java</directory>
+                            <excludes>
+                                <exclude>module-info.java</exclude>
+                            </excludes>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/main/resources</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/test/java</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/test_it/java</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/test/resources</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/test_it/resources</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/assembly</directory>
+                        </fileSet>
+                    </fileSets>
+                </module>
+
+                <module id="${rootArtifactId}" dir="__artifactId__-interfaces-core" name="${rootArtifactId}-interfaces-core">
+                    <fileSets>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/main/java</directory>
+                            <includes>
+                                <include>module-info.java</include>
+                            </includes>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/main/java</directory>
+                            <excludes>
+                                <exclude>module-info.java</exclude>
+                            </excludes>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/main/resources</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/test/java</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/test_it/java</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/test/resources</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/test_it/resources</directory>
+                        </fileSet>
+                    </fileSets>
+                </module>
+
+                <module id="${rootArtifactId}" dir="__artifactId__-interfaces-feign" name="${rootArtifactId}-interfaces-feign">
+                    <fileSets>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/main/java</directory>
+                            <includes>
+                                <include>module-info.java</include>
+                            </includes>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/main/java</directory>
+                            <excludes>
+                                <exclude>module-info.java</exclude>
+                            </excludes>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/main/resources</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/test/java</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="true">
+                            <directory>src/test_it/java</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/test/resources</directory>
+                        </fileSet>
+                        <fileSet filtered="true" packaged="false">
+                            <directory>src/test_it/resources</directory>
+                        </fileSet>
+                    </fileSets>
+                </module>
+            </modules>
+
+
         </module>
     </modules>
 </archetype-descriptor>

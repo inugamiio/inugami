@@ -1,0 +1,20 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "requestHeaders" : {
+    "x-device-identifier" : "c34b6de8-c45d-41d1-b45b-b8e9ac70db13",
+    "x-correlation-id" : "0ede304b-1eef-449d-b753-6d8002a8f5dd"
+  },
+  "requestParams" : {
+    "id" : "bb895294-efe7-484b-b670-14d004eaf461"
+  },
+  "response" : "{\n  \"audit\" : {\n    \"createdBy\" : \"system\",\n    \"createdDate\" : \"2023-05-27T12:00:00\",\n    \"lastModifiedBy\" : \"user-1\",\n    \"lastModifiedDate\" : \"2023-06-01T12:00:00\",\n    \"version\" : 1\n  },\n  \"email\" : \"john.smith@mock.org\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\",\n  \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n}",
+  "responseHeaders" : {
+    "x-device-identifier" : "c34b6de8-c45d-41d1-b45b-b8e9ac70db13",
+    "x-correlation-id" : "0ede304b-1eef-449d-b753-6d8002a8f5dd",
+    "x-b3-traceid" : "7ff9d74f-f920-453e-91a5-3901311efc32"
+  },
+  "status" : 200,
+  "url" : "/user/{id}",
+  "verb" : "GET"
+}

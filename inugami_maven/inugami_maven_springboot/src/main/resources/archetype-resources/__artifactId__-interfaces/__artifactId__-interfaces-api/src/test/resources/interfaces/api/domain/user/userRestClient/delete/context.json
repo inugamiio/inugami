@@ -1,0 +1,19 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "requestHeaders" : {
+    "x-device-identifier" : "a2353340-7847-450e-9f4c-72753ecb1e98",
+    "x-correlation-id" : "e31eb678-3dcd-4473-9172-b2891e1e15b1"
+  },
+  "requestOptions" : {
+    "uid" : [ "bb895294-efe7-484b-b670-14d004eaf461" ]
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "a2353340-7847-450e-9f4c-72753ecb1e98",
+    "x-correlation-id" : "e31eb678-3dcd-4473-9172-b2891e1e15b1",
+    "x-b3-traceid" : "8344b254-f97b-4eb1-9052-c1ba572f784e"
+  },
+  "status" : 200,
+  "url" : "/user",
+  "verb" : "DELETE"
+}

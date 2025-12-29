@@ -1,0 +1,27 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 400,
+    "domain" : "USER",
+    "errorCode" : "USER-3_5",
+    "errorType" : "functional",
+    "message" : "invalid email",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "request" : "[ {\n  \"email\" : \"john.smith@mock.org\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\",\n  \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n} ]",
+  "requestHeaders" : {
+    "x-device-identifier" : "a6da1490-c990-4bd3-812c-9770ef3af128",
+    "x-correlation-id" : "ba1dd816-9879-4f8f-a4ad-95b96cf9b1c4"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "a6da1490-c990-4bd3-812c-9770ef3af128",
+    "x-correlation-id" : "ba1dd816-9879-4f8f-a4ad-95b96cf9b1c4",
+    "x-b3-traceid" : "006d4084-9d31-4c41-88ce-cccbad61d00e"
+  },
+  "status" : 400,
+  "url" : "/user",
+  "verb" : "PUT"
+}

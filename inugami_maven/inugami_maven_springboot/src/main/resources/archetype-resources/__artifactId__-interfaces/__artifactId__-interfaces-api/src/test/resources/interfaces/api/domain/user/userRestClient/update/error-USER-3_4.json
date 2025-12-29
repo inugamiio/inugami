@@ -1,0 +1,27 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 400,
+    "domain" : "USER",
+    "errorCode" : "USER-3_4",
+    "errorType" : "functional",
+    "message" : "invalid lastname",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "request" : "[ {\n  \"email\" : \"john.smith@mock.org\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\",\n  \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n} ]",
+  "requestHeaders" : {
+    "x-device-identifier" : "45f624ff-40c4-48ca-b307-3f18a601592e",
+    "x-correlation-id" : "bdf9cfbf-c82e-4463-b026-d2c570a87bb7"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "45f624ff-40c4-48ca-b307-3f18a601592e",
+    "x-correlation-id" : "bdf9cfbf-c82e-4463-b026-d2c570a87bb7",
+    "x-b3-traceid" : "83ec1222-7d67-4050-a973-9ef63a38f388"
+  },
+  "status" : 400,
+  "url" : "/user",
+  "verb" : "PATCH"
+}

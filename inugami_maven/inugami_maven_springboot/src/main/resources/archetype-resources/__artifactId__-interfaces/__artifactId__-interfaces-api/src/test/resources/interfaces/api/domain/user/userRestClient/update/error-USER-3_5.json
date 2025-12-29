@@ -1,0 +1,27 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 400,
+    "domain" : "USER",
+    "errorCode" : "USER-3_5",
+    "errorType" : "functional",
+    "message" : "invalid email",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "request" : "[ {\n  \"email\" : \"john.smith@mock.org\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\",\n  \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n} ]",
+  "requestHeaders" : {
+    "x-device-identifier" : "1e8cd066-40b4-4816-85b2-1a9fa9c6b80a",
+    "x-correlation-id" : "e033a209-bf6b-41dd-88b4-9b11ed09fece"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "1e8cd066-40b4-4816-85b2-1a9fa9c6b80a",
+    "x-correlation-id" : "e033a209-bf6b-41dd-88b4-9b11ed09fece",
+    "x-b3-traceid" : "ff1ed6a3-b44d-432e-8b1a-d76c180d4d7b"
+  },
+  "status" : 400,
+  "url" : "/user",
+  "verb" : "PATCH"
+}

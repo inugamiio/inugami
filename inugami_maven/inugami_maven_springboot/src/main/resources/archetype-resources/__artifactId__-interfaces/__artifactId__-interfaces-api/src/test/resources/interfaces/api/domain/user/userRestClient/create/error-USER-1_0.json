@@ -1,0 +1,27 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 400,
+    "domain" : "USER",
+    "errorCode" : "USER-1_0",
+    "errorType" : "functional",
+    "message" : "invalid data for user creation",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "request" : "[ {\n  \"email\" : \"john.smith@mock.org\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\"\n} ]",
+  "requestHeaders" : {
+    "x-device-identifier" : "81abcb86-d210-457e-80a4-c94746c71d84",
+    "x-correlation-id" : "389115a9-867a-4866-9bf9-7063d175fc21"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "81abcb86-d210-457e-80a4-c94746c71d84",
+    "x-correlation-id" : "389115a9-867a-4866-9bf9-7063d175fc21",
+    "x-b3-traceid" : "70a9af7a-d6cb-4ed7-9773-682b37d733f7"
+  },
+  "status" : 400,
+  "url" : "/user",
+  "verb" : "POST"
+}

@@ -1,0 +1,27 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 404,
+    "domain" : "USER",
+    "errorCode" : "USER-3_1",
+    "errorType" : "functional",
+    "message" : "users not found",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "request" : "[ {\n  \"email\" : \"john.smith@mock.org\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\",\n  \"uid\" : \"bb895294-efe7-484b-b670-14d004eaf461\"\n} ]",
+  "requestHeaders" : {
+    "x-device-identifier" : "0505cf9e-8d4d-4204-bcd9-df9717a0af66",
+    "x-correlation-id" : "13ae9d25-ca33-460e-8782-21c1e5c9be49"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "0505cf9e-8d4d-4204-bcd9-df9717a0af66",
+    "x-correlation-id" : "13ae9d25-ca33-460e-8782-21c1e5c9be49",
+    "x-b3-traceid" : "0a43f39e-44d1-4b4b-a60e-0b166cc046ca"
+  },
+  "status" : 404,
+  "url" : "/user",
+  "verb" : "PATCH"
+}

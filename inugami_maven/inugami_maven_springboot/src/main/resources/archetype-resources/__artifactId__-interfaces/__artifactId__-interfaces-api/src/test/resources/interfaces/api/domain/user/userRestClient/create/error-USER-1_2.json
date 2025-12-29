@@ -1,0 +1,27 @@
+{
+  "contentType" : "application/json",
+  "encoding" : "UTF-8",
+  "errorCode" : {
+    "statusCode" : 400,
+    "domain" : "USER",
+    "errorCode" : "USER-1_2",
+    "errorType" : "functional",
+    "message" : "invalid firstname",
+    "exploitationError" : false,
+    "rollbackRequire" : false,
+    "retryable" : false
+  },
+  "request" : "[ {\n  \"email\" : \"john.smith@mock.org\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\"\n} ]",
+  "requestHeaders" : {
+    "x-device-identifier" : "82243ffa-a0da-47dd-a686-588c81589fc4",
+    "x-correlation-id" : "c8da5eda-3661-44a4-8edd-f76bda9f0d7c"
+  },
+  "responseHeaders" : {
+    "x-device-identifier" : "82243ffa-a0da-47dd-a686-588c81589fc4",
+    "x-correlation-id" : "c8da5eda-3661-44a4-8edd-f76bda9f0d7c",
+    "x-b3-traceid" : "93696dad-c0db-4897-a717-f329786f1406"
+  },
+  "status" : 400,
+  "url" : "/user",
+  "verb" : "POST"
+}

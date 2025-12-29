@@ -1,0 +1,14 @@
+{
+  "createdBy" : [ "system" ],
+  "createdDate" : [ "2023-05-27T12:00:00" ],
+  "email" : [ "john.smith@mock.org" ],
+  "firstName" : [ "John" ],
+  "lastModifiedBy" : [ "system2" ],
+  "lastModifiedDate" : [ "2023-06-01T12:00:00" ],
+  "lastName" : [ "Smith" ],
+  "page" : 0,
+  "pageSize" : 10,
+  "sortFields" : "name",
+  "sortOrder" : "ASC",
+  "uid" : [ "bb895294-efe7-484b-b670-14d004eaf461" ]
+}
