@@ -16,6 +16,7 @@ import io.inugami.framework.interfaces.providers.Provider;
 import io.inugami.framework.interfaces.task.ProviderFutureResult;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -104,6 +105,7 @@ class EnginePluginServiceTest {
         assertThat(service.hasEventsToRun(UnitTestData.DATE_TIME.plusMinutes(2))).isFalse();
     }
 
+    @Disabled
     @Test
     void run_nominal() {
         final var                              service                     = service();

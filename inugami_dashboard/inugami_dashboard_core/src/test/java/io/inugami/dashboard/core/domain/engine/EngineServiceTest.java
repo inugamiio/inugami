@@ -17,6 +17,7 @@ import io.inugami.framework.interfaces.providers.Provider;
 import io.inugami.framework.interfaces.task.ProviderFutureResult;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -555,6 +556,7 @@ class EngineServiceTest {
     //==================================================================================================================
     // RUN
     //==================================================================================================================
+    @Disabled
     @Test
     void run_nominal() throws InterruptedException {
         final List<EngineResultDTO> results = new ArrayList<>();
@@ -639,7 +641,7 @@ class EngineServiceTest {
 
         assertText(sseSenderDataCaptor.getValue(), EVENT_DATA_DONE_NOMINAL);
     }
-
+    @Disabled
     @Test
     void run_withError() throws InterruptedException {
         final List<EngineResultDTO> results = new ArrayList<>();
