@@ -16,7 +16,7 @@
     <parent>
         <artifactId>inugami_maven</artifactId>
         <groupId>io.inugami.maven</groupId>
-        <version>4.2.2-SNAPSHOT</version>
+        <version>4.2.3-SNAPSHOT</version>
     </parent>
 
 
