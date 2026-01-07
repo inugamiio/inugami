@@ -210,6 +210,16 @@
                 <version>${io.inugami.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.inugami.monitoring.sensors</groupId>
+                <artifactId>inugami_monitoring_sensors_default</artifactId>
+                <version>${io.inugami.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.inugami.monitoring.providers</groupId>
+                <artifactId>inugami_monitoring_providers_log</artifactId>
+                <version>${io.inugami.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>io.inugami.monitoring</groupId>
                 <artifactId>inugami_monitoring_springboot</artifactId>
                 <version>${io.inugami.version}</version>

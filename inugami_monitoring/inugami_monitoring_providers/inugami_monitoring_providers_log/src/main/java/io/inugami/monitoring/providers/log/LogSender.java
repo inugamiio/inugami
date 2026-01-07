@@ -36,20 +36,22 @@ import java.util.List;
 @SuppressWarnings({"java:S2629"})
 public class LogSender implements MonitoringSender {
 
+
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
+    public static final String METRICS_LOG_SENDER = "METRICS_LOG_SENDER";
     private final Logger logger;
 
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
     public LogSender() {
-        logger = LoggerFactory.getLogger(LogSender.class.getSimpleName());
+        logger = LoggerFactory.getLogger(METRICS_LOG_SENDER);
     }
 
     public LogSender(final ConfigHandler<String, String> configuration) {
-        logger = LoggerFactory.getLogger(configuration.grabOrDefault("logName", LogSender.class.getSimpleName()));
+        logger = LoggerFactory.getLogger(configuration.grabOrDefault("logName", METRICS_LOG_SENDER));
     }
 
     @Override

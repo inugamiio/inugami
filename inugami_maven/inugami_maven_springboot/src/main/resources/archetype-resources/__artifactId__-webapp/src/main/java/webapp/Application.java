@@ -1,6 +1,6 @@
 package ${package}.webapp;
 
-import io.inugami.framework.commons.spring.configuration.ConfigConfiguration;
+import io.inugami.framework.commons.spring.EnabledInugami;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

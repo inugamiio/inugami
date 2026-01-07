@@ -92,7 +92,7 @@ class SensorsIntervalManagerTaskTest {
     // TOOLS
     // =================================================================================================================
     private SensorsIntervalManagerTask buildSensorManager() {
-        final var result = new SensorsIntervalManagerTask(1, 500, List.of(sender));
+        final var result = new SensorsIntervalManagerTask(1, 500, List.of(sender), null);
         result.initialize(null);
         return result;
     }

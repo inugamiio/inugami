@@ -57,7 +57,9 @@
         <fileSet encoding="UTF-8">
             <directory>local-integration-test</directory>
             <includes>
+                <include>docker-compose.yaml</include>
                 <include>inugami.demo.postman_collection.json</include>
+                <include>kibana_export.ndjson</include>
             </includes>
         </fileSet>
     </fileSets>

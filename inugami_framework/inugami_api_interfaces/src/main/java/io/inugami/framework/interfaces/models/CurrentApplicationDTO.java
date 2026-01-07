@@ -14,16 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-open module io.inugami.monitoring.providers.logs {
-    requires com.fasterxml.jackson.databind;
-    requires io.inugami.framework.api;
-    requires io.inugami.framework.commons;
-    requires io.inugami.framework.interfaces;
-    requires io.inugami.monitoring.api;
-    requires org.slf4j;
-    requires static lombok;
+package io.inugami.framework.interfaces.models;
 
-    exports io.inugami.monitoring.providers.log;
+import lombok.*;
+import lombok.Builder;
 
-    provides io.inugami.framework.interfaces.monitoring.senders.MonitoringSender with io.inugami.monitoring.providers.log.LogSender;
+import java.io.Serializable;
+
+/**
+ * @since 2026-01-07
+ */
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Setter
+@Getter
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+public class CurrentApplicationDTO implements Serializable {
+    private static final long   serialVersionUID = 860434663268503615L;
+    private              String groupId;
+    private              String artifactId;
+    private              String version;
+    private              String commitId;
+    private              String commitDate;
 }

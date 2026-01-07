@@ -32,7 +32,6 @@ import io.inugami.monitoring.api.tools.IntervalValues;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.Callable;
 
@@ -51,8 +50,6 @@ public class ElsSender implements MonitoringSender, ProviderWithHttpConnector {
 
     private final int timeout;
 
-    private final String url;
-
     private final String elsType;
 
     private final String elsIndex;
@@ -69,37 +66,34 @@ public class ElsSender implements MonitoringSender, ProviderWithHttpConnector {
     // CONSTRUCTORS
     // =========================================================================
     public ElsSender() {
-        timeout = 10000;
-        httpConnector = null;
-        url = null;
-        intervalRunner = null;
-        elsType = "GenericServiceHitModel";
-        elsIndex = "system";
+        timeout                = 10000;
+        httpConnector          = null;
+        intervalRunner         = null;
+        elsType                = "GenericServiceHitModel";
+        elsIndex               = "system";
         enableIndexTimestamped = true;
-        indexTimestampFormat = "yyyy-MM";
-        maxThreads = 10;
+        indexTimestampFormat   = "yyyy-MM";
+        maxThreads             = 10;
     }
 
     public ElsSender(final ConfigHandler<String, String> config) {
-        //@formatter:off
-        timeout = getTimeout(config,       30000);
-        httpConnector =  new  HttpBasicConnector(HttpBasicConnectorConfiguration.builder()
-                                                         .timeoutConnecting(timeout)
-                                                                                .timeoutWriting(timeout)
-                                                                                .timeoutReading(timeout)
-                                                                                .build());
+        timeout       = getTimeout(config, 30000);
+        httpConnector = new HttpBasicConnector(HttpBasicConnectorConfiguration.builder()
+                                                                              .baseUrl(config.grab("url"))
+                                                                              .timeoutConnecting(timeout)
+                                                                              .timeoutWriting(timeout)
+                                                                              .timeoutReading(timeout)
+                                                                              .build());
 
-        //@formatter:on
-        url = config.grab("url");
-        elsType = config.grabOrDefault("elsType", "GenericServiceHitModel");
-        elsIndex = config.grabOrDefault("elsIndex", "system");
+        elsType                = config.grabOrDefault("elsType", "GenericServiceHitModel");
+        elsIndex               = config.grabOrDefault("elsIndex", "system");
         enableIndexTimestamped = config.grabBoolean("enableIndexTimestamped", true);
-        indexTimestampFormat = config.grabOrDefault("indexTimestampFormat", "yyyy-MM");
-        this.intervalRunner = IntervalValues.<GenericMonitoringModel>builder()
-                                            .consumer(this::sendToEls)
-                                            .interval(500L)
-                                            .build();
-        this.maxThreads = config.grabInt("maxThreads", 10);
+        indexTimestampFormat   = config.grabOrDefault("indexTimestampFormat", "yyyy-MM");
+        this.intervalRunner    = IntervalValues.<GenericMonitoringModel>builder()
+                                               .consumer(this::sendToEls)
+                                               .interval(500L)
+                                               .build();
+        this.maxThreads        = config.grabInt("maxThreads", 10);
     }
 
     @Override
@@ -151,7 +145,6 @@ public class ElsSender implements MonitoringSender, ProviderWithHttpConnector {
             }
             tasks.add(ElasticSearchWriterTask.builder()
                                              .httpConnector(httpConnector)
-                                             .url(url)
                                              .data(elsData)
                                              .values(values.subList(begin, end))
                                              .build());

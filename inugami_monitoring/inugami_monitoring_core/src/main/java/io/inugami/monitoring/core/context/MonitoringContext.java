@@ -18,12 +18,14 @@ package io.inugami.monitoring.core.context;
 
 import io.inugami.framework.api.processors.DefaultConfigHandler;
 import io.inugami.framework.interfaces.ctx.BootstrapContext;
+import io.inugami.framework.interfaces.models.CurrentApplicationDTO;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.framework.interfaces.monitoring.models.Monitoring;
 import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
 import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.monitoring.core.context.sensors.SensorsIntervalManagerTask;
 import lombok.Builder;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -44,6 +46,8 @@ public class MonitoringContext implements BootstrapContext<Void> {
     // ATTRIBUTES
     // =========================================================================
     private       Monitoring                            config;
+    @Setter
+    private       CurrentApplicationDTO                 currentApplication;
     @Builder.Default
     private final Map<Long, SensorsIntervalManagerTask> managersTasks = new HashMap<>();
 
@@ -100,7 +104,7 @@ public class MonitoringContext implements BootstrapContext<Void> {
             SensorsIntervalManagerTask task = result.get(sensor.getInterval());
             if (task == null) {
                 if (sensor.getInterval() > 100) {
-                    task = new SensorsIntervalManagerTask(config.getMaxSensorsTasksThreads(), sensor.getInterval(), config.getSenders());
+                    task = new SensorsIntervalManagerTask(config.getMaxSensorsTasksThreads(), sensor.getInterval(), config.getSenders(), currentApplication);
                     result.put(sensor.getInterval(), task);
                 } else {
                     log.error("sensor interval must be higher or equals than 100ms!({})", sensor.getName());

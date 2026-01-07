@@ -20,9 +20,7 @@ import io.inugami.framework.interfaces.dao.Identifiable;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -71,6 +69,11 @@ public class GenericMonitoringModelDTO implements GenericMonitoringModel, Identi
     private              String        path;
     private              String        data;
     private              long          timestamp;
+    private              String        groupId;
+    private              String        artifactId;
+    private              String        version;
+    private              String        commitId;
+    private              String        commitDate;
 
     // =========================================================================
     // GETTERS & SETTERS
@@ -93,7 +96,7 @@ public class GenericMonitoringModelDTO implements GenericMonitoringModel, Identi
                 orEmpty(subService),
                 orEmpty(valueType),
                 orEmpty(timeUnit)
-        ));
+                                             ));
     }
 
     private String orEmpty(final String inputValue) {
@@ -105,26 +108,26 @@ public class GenericMonitoringModelDTO implements GenericMonitoringModel, Identi
             if (value == null) {
                 return this;
             }
-            uid = other.getUid();
-            asset = other.getAsset();
-            environment = other.getEnvironment();
-            instanceName = other.getInstanceName();
+            uid            = other.getUid();
+            asset          = other.getAsset();
+            environment    = other.getEnvironment();
+            instanceName   = other.getInstanceName();
             instanceNumber = other.getInstanceNumber();
-            counterType = other.getCounterType();
-            device = other.getDevice();
-            callType = other.getCallType();
-            service = other.getService();
-            subService = other.getSubService();
-            valueType = other.getValueType();
-            timeUnit = other.getTimeUnit();
-            date = other.getDate();
-            time = other.getTime();
-            errorCode = other.getErrorCode();
-            errorType = other.getErrorType();
-            value = other.getValueType();
-            path = other.getPath();
-            data = other.getData();
-            timestamp = other.getTimestamp();
+            counterType    = other.getCounterType();
+            device         = other.getDevice();
+            callType       = other.getCallType();
+            service        = other.getService();
+            subService     = other.getSubService();
+            valueType      = other.getValueType();
+            timeUnit       = other.getTimeUnit();
+            date           = other.getDate();
+            time           = other.getTime();
+            errorCode      = other.getErrorCode();
+            errorType      = other.getErrorType();
+            value          = other.getValueType();
+            path           = other.getPath();
+            data           = other.getData();
+            timestamp      = other.getTimestamp();
             return this;
         }
     }

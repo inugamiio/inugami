@@ -9,6 +9,9 @@ open module ${package}.webapp {
     requires io.inugami.framework.commons.spring;
     requires io.inugami.framework.commons;
     requires io.inugami.framework.interfaces;
+    requires io.inugami.monitoring.springboot;
+    requires io.inugami.monitoring.sensors.defaults;
+    requires io.inugami.monitoring.providers.logs;
     requires lombok;
     requires org.mapstruct;
     requires org.slf4j;

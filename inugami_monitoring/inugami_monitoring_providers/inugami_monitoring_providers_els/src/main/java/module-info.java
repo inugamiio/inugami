@@ -22,4 +22,8 @@ open module io.inugami.monitoring.providers.els {
     requires io.inugami.monitoring.api;
     requires org.slf4j;
     requires static lombok;
+
+    exports  io.inugami.monitoring.providers.els;
+
+    provides  io.inugami.framework.interfaces.monitoring.senders.MonitoringSender with io.inugami.monitoring.providers.els.ElsSender;
 }
