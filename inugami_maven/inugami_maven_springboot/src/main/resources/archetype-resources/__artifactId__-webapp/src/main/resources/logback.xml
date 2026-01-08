@@ -25,8 +25,8 @@
                 <encodeAsJson>true</encodeAsJson>
                 <additionalFields>
                     {
-                    "groupId":"${groupId}",
-                    "artifactId":"${rootArtifactId}"
+                    "groupId":"com.my.project",
+                    "artifactId":"demo-webapp"
                     }
                 </additionalFields>
             </configuration>
@@ -47,8 +47,8 @@
                 <encodeAsJson>true</encodeAsJson>
                 <additionalFields>
                     {
-                    "groupId":"${groupId}",
-                    "artifactId":"${rootArtifactId}"
+                    "groupId":"com.my.project",
+                    "artifactId":"demo-webapp"
                     }
                 </additionalFields>
             </configuration>
@@ -69,8 +69,8 @@
                 <encodeAsJson>true</encodeAsJson>
                 <additionalFields>
                     {
-                    "groupId":"${groupId}",
-                    "artifactId":"${rootArtifactId}"
+                    "groupId":"com.my.project",
+                    "artifactId":"demo-webapp"
                     }
                 </additionalFields>
             </configuration>
@@ -91,8 +91,29 @@
                 <encodeAsJson>true</encodeAsJson>
                 <additionalFields>
                     {
-                    "groupId":"${groupId}",
-                    "artifactId":"${rootArtifactId}"
+                    "groupId":"com.my.project",
+                    "artifactId":"demo-webapp"
+                    }
+                </additionalFields>
+            </configuration>
+            <pattern>%m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="ELASTIC-METRICS" class="io.inugami.logs.obfuscator.appender.JsonAppender">
+        <configuration>
+            <mode>elasticSearch</mode>
+            <host>http://localhost:9200/_bulk</host>
+            <index>dev-demo-metrics</index>
+            <indexDatePattern>yyyy-MM-dd</indexDatePattern>
+        </configuration>
+        <encoder class="io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder">
+            <configuration>
+                <forceNewLine>true</forceNewLine>
+                <encodeAsJson>false</encodeAsJson>
+                <additionalFields>
+                    {
+                    "groupId":"com.my.project",
+                    "artifactId":"demo-webapp"
                     }
                 </additionalFields>
             </configuration>
@@ -119,23 +140,30 @@
         <level value="INFO"/>
     </logger>
 
-    <logger name="IOLOG">
+    <logger name="IOLOG" additivity="false">
         <level value="INFO"/>
         <appender-ref ref="ELASTIC-IOLOG" />
+        <appender-ref ref="ASYNC_STDOUT" />
+
     </logger>
 
-    <logger name="IOLOG">
+    <logger name="PARTNERLOG" additivity="false">
         <level value="INFO"/>
         <appender-ref ref="ELASTIC-PARTNERLOG" />
+        <appender-ref ref="ASYNC_STDOUT" />
     </logger>
 
 
-    <logger name="XLLOG">
+    <logger name="XLLOG" additivity="false">
         <level value="INFO"/>
         <appender-ref ref="ELASTIC-XLLOG" />
+        <appender-ref ref="ASYNC_STDOUT" />
     </logger>
 
-
+    <logger name="METRICS_LOG_SENDER" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="ELASTIC-METRICS" />
+    </logger>
 
     <!--================================================================================================================
     = ROOT

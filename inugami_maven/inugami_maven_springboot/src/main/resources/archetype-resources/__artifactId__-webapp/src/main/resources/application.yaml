@@ -16,6 +16,11 @@ inugami:
       detail:
         enabled: true
   monitoring:
+    interceptors:
+      kpi:
+        enabled: true
+    internal:
+      interval: 10000
     interceptor:
       url:
         skip: .*api-docs.*;.*swagger-ui.*
