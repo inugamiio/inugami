@@ -32,6 +32,7 @@ public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorLis
     public static final String DEFAULT_INDEX   = "application";
     public static final String DEFAULT_DATE    = "yyyy-MM-dd";
     public static final String EMPTY           = "";
+    public static final String LINE_BREAK = "\n";
 
     private       AppenderConfiguration          configuration = null;
     private       Encoder<ILoggingEvent>         encoder;
@@ -45,7 +46,7 @@ public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorLis
     private       String                         indexPattern;
     private       HttpRequest.HttpRequestBuilder request;
     private final ScheduledExecutorService       executor      = Executors.newSingleThreadScheduledExecutor();
-    private final Queue<String>                  values        = new LinkedBlockingQueue<>();
+    private final LinkedBlockingQueue<String>                  values        = new LinkedBlockingQueue<>();
 
     @Override
     public boolean accept(final AppenderConfiguration configuration) {
@@ -66,6 +67,7 @@ public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorLis
         baseUrl       = Optional.ofNullable(configuration.getHost()).orElse(DEFAULT_HOST);
         connector     = Optional.ofNullable(connector)
                                 .orElse(new HttpBasicConnector(HttpBasicConnectorConfiguration.builder()
+                                                                                              .baseUrl(baseUrl)
                                                                                               .timeoutReading(timeout)
                                                                                               .build()));
         dateGenerator = Optional.ofNullable(dateGenerator).orElse(Date::new);
@@ -74,11 +76,15 @@ public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorLis
         indexPattern  = Optional.ofNullable(configuration.getIndexDatePattern()).orElse(DEFAULT_DATE);
         request       = HttpRequest.builder()
                                    .verb(ConnectorConstants.HTTP_POST)
-                                   .url(baseUrl)
                                    .headers(headers)
                                    .disableListener(true)
+                                   .marshaller(this::marshallData)
                                    .listener(this)
-                                   .addHeader("ContentType", "application/json");
+                                   .addHeader("Content-Type", "application/json");
+    }
+
+    private String marshallData(Object value) {
+        return String.valueOf(value);
     }
 
 
@@ -102,19 +108,15 @@ public class ElasticSearchWriter implements AppenderWriterStrategy, ConnectorLis
 
     @Override
     public void run() {
-        final List<String>     result   = new ArrayList<>();
-        final Iterator<String> iterator = values.iterator();
-        while (iterator.hasNext()) {
-            result.add(iterator.next());
-            result.add("\n");
-        }
+        final List<String>     buffer   = new ArrayList<>();
+        values.drainTo(buffer);
 
-        if (result.isEmpty()) {
+        if (buffer.isEmpty()) {
             return;
         }
 
         runSafeVoid(() -> {
-            final String payload = String.join(EMPTY, result);
+            final String payload = String.join(LINE_BREAK, buffer);
             connector.post(request.body(payload).build());
         });
     }

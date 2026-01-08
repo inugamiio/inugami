@@ -16,10 +16,12 @@
  */
 package io.inugami.monitoring.core.interceptors;
 
+import io.inugami.framework.api.exceptions.WarningContext;
 import io.inugami.framework.api.monitoring.MdcService;
 import io.inugami.framework.api.monitoring.RequestContext;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
+import io.inugami.framework.interfaces.models.CurrentApplicationDTO;
 import io.inugami.framework.interfaces.models.tools.Chrono;
 import io.inugami.framework.interfaces.monitoring.ErrorResult;
 import io.inugami.framework.interfaces.monitoring.FilterInterceptorCachePurgeStrategy;
@@ -78,6 +80,7 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
     public static final    String                                    EMPTY                      = "";
 
     private final        SpiLoaderServiceSPI           spiLoaderServiceSPI;
+    private final        CurrentApplicationDTO         currentApplication;
     private              ConfigHandler<String, String> configuration;
     private static final Map<String, Boolean>          INTERCEPTABLE_URI_RESOLVED = new ConcurrentHashMap<>();
 
@@ -115,6 +118,8 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
                          final ServletResponse response,
                          final FilterChain chain) throws IOException, ServletException {
         MdcService.getInstance().clear();
+        initMDCCurrentApplication();
+        WarningContext.getInstance().clear();
 
         if (FILTER_INTERCEPTOR_CONTEXT.get() == null) {
             initAttributes();
@@ -138,6 +143,18 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
                 MdcService.getInstance().clear();
             }
         }
+    }
+
+    private void initMDCCurrentApplication() {
+        if (currentApplication == null) {
+            return;
+        }
+        MdcService.getInstance()
+                  .groupId(currentApplication.getGroupId())
+                  .artifactId(currentApplication.getArtifactId())
+                  .version(currentApplication.getVersion())
+                  .commitId(currentApplication.getCommitId())
+                  .commitDate(currentApplication.getCommitDate());
     }
 
 
@@ -239,7 +256,9 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
 
 
     protected boolean mustIntercept(final RequestData requestData) {
-        Boolean result = INTERCEPTABLE_URI_RESOLVED.get(Optional.ofNullable(requestData).map(RequestData::getUri).orElse(EMPTY));
+        Boolean result = INTERCEPTABLE_URI_RESOLVED.get(Optional.ofNullable(requestData)
+                                                                .map(RequestData::getUri)
+                                                                .orElse(EMPTY));
         if (result == null) {
             for (final Interceptable resolver : FILTER_INTERCEPTOR_CONTEXT.get().getInterceptableResolvers()) {
                 result = resolver.isInterceptable(requestData);

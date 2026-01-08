@@ -65,19 +65,22 @@ public class LogstashWriter implements AppenderWriterStrategy, ConnectorListener
         baseUrl = configuration.getHost() == null ? DEFAULT_HOST : configuration.getHost();
         connector = new HttpBasicConnector(HttpBasicConnectorConfiguration.builder()
                                                                           .timeoutReading(timeout)
+                                                   .baseUrl(baseUrl)
                                                                           .build());
         headers = configuration.getHeadersMap() == null ? new HashMap<>() : configuration.getHeadersMap();
 
         request = HttpRequest.builder()
                              .verb(ConnectorConstants.HTTP_POST)
-                             .url(baseUrl)
                              .headers(headers)
                              .disableListener(true)
+                             .marshaller(this::marshallData)
                              .listener(this)
-                             .addHeader("ContentType", "application/json");
+                             .addHeader("Content-Type", "application/json");
 
     }
-
+    private String marshallData(Object value) {
+        return String.valueOf(value);
+    }
     @Override
     public void stop() {
         connector.close();

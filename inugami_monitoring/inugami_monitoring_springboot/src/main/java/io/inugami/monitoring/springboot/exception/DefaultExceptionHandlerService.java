@@ -67,8 +67,10 @@ public class DefaultExceptionHandlerService implements IExceptionHandlerService 
     @PostConstruct
     public DefaultExceptionHandlerService init() {
         final var spi = SpiLoader.getInstance();
-        errorCodeResolvers = grabSafe(() -> spi.loadSpiServicesByPriority(ErrorCodeResolver.class), List.of());
-        problemAdditionalFieldBuilders = grabSafe(() -> spi.loadSpiServicesByPriority(ProblemAdditionalFieldBuilder.class), List.of());
+        errorCodeResolvers             =
+                grabSafe(() -> spi.loadSpiServicesByPriority(ErrorCodeResolver.class), List.of());
+        problemAdditionalFieldBuilders =
+                grabSafe(() -> spi.loadSpiServicesByPriority(ProblemAdditionalFieldBuilder.class), List.of());
 
         return this;
     }
@@ -93,13 +95,14 @@ public class DefaultExceptionHandlerService implements IExceptionHandlerService 
     }
 
 
-
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<ProblemDTO> manageException(final Throwable throwable) {
         final Throwable exception = throwable == null ? new UncheckedException("undefined error") : throwable;
         final ErrorCode errorCode = resolveErrorCode(exception);
 
-        MdcService.getInstance().errorCode(errorCode);
+        MdcService.getInstance().errorCode(errorCode)
+                  .errorMessage(errorCode.getMessage())
+                  .errorMessageDetail(errorCode.getMessageDetail());
 
         log.error(exception.getMessage(), exception);
         final var currentStatus = resolveStatus(errorCode);

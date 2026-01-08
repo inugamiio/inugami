@@ -4,6 +4,7 @@ import io.inugami.commons.test.api.SkipLineMatcher;
 import io.inugami.framework.api.monitoring.MdcService;
 import io.inugami.framework.api.monitoring.RequestContext;
 import io.inugami.framework.interfaces.exceptions.ExceptionResolver;
+import io.inugami.framework.interfaces.models.CurrentApplicationDTO;
 import io.inugami.framework.interfaces.monitoring.*;
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.data.ResponseData;
@@ -233,7 +234,13 @@ class FilterInterceptorTest {
     // TOOLS
     // =================================================================================================================
     FilterInterceptor interceptor() {
-        FilterInterceptor result = new FilterInterceptor(spiLoaderServiceSPI);
+        FilterInterceptor result = new FilterInterceptor(spiLoaderServiceSPI, CurrentApplicationDTO.builder()
+                                                                                                   .groupId("io.inugami")
+                                                                                                   .artifactId("test-app")
+                                                                                                   .version("1.0.0")
+                                                                                                   .commitId("6d0bd04a-ca20-4fec-b8fd-97b2991588b8")
+                                                                                                   .commitDate("2026-01-07T20:46:15")
+                                                                                                   .build());
         FilterInterceptor.FILTER_INTERCEPTOR_CONTEXT.set(FilterInterceptorContext.builder()
                                                                                  .initialized(true)
                                                                                  .spiLoaderServiceSPI(spiLoaderServiceSPI)

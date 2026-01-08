@@ -6,7 +6,7 @@ MDC :
 	appClassShortName : UserRestController
 	appMethod : search
 	appUri : /user
-	appUrl : http://localhost:6433/user
+	appUrl : http://localhost:13295/user
 	appVerb : GET
 	callType : REST
 	correlation_id : XXXX
@@ -14,10 +14,11 @@ MDC :
 	lifecycle : in
 	service : UserRestController_search
 	urlPattern : /user/
+	urlPatternVerb : GET_/user/
 
 MESSAGE :
 ---------
-16/12 14:22:02  INFO [IOLOG:98] - [GET] /user
+08/01 08:56:21  INFO [IOLOG:98] - [GET] /user
 headers :
 	accept: */*
 	accept-encoding: xxxxx
@@ -35,36 +36,7 @@ MDC :
 	appClassShortName : UserRestController
 	appMethod : search
 	appUri : /user
-	appUrl : http://localhost:6433/user
-	appVerb : GET
-	callType : REST
-	correlation_id : XXXX
-	duration : 0
-	lifecycle : in
-	service : UserRestController_search
-	urlPattern : /user/
-
-MESSAGE :
----------
-16/12 14:22:02  INFO [IOLOG:98] - [GET] /user
-headers :
-	accept: */*
-	accept-encoding: xxxxx
-	connection: xxxxx
-	host: xxxxx
-	user-agent: xxxxx
-payload :
-
-----------------------------------------
-================================================================================
-INFO | IOLOG
-MDC :
------
-	appClass : io.inugami.monitoring.springboot.app.UserRestController
-	appClassShortName : UserRestController
-	appMethod : search
-	appUri : /user
-	appUrl : http://localhost:6433/user
+	appUrl : http://localhost:13295/user
 	appVerb : GET
 	callType : REST
 	correlation_id : XXXX
@@ -75,10 +47,11 @@ MDC :
 	service : UserRestController_search
 	status : 200
 	urlPattern : /user/
+	urlPatternVerb : GET_/user/
 
 MESSAGE :
 ---------
-16/12 14:22:02  INFO [IOLOG:205] - [GET] /user
+08/01 08:56:21  INFO [IOLOG:205] - [GET] /user
 headers :
 	accept: */*
 	accept-encoding: xxxxx
@@ -114,56 +87,11 @@ response:
 INFO | IOLOG
 MDC :
 -----
-	correlation_id : XXXX
-	duration : 0
-	globalStatus : success
-	httpStatus : 200
-	lifecycle : out
-	status : 200
-
-MESSAGE :
----------
-16/12 14:22:02  INFO [IOLOG:205] - [GET] /user
-headers :
-	accept: */*
-	accept-encoding: xxxxx
-	connection: xxxxx
-	host: xxxxx
-	user-agent: xxxxx
-payload :
-
-response:
-	status:200
-	datetime:xxxxx
-	duration:xxxxx
-	contentType:application/json
-	headers:
-		Access-Control-Allow-Credentials: true
-		Access-Control-Allow-Headers:
-		xxxxx
-		Access-Control-Allow-Origin: *
-		Access-Control-Expose-Headers:
-		xxxxx
-		Set-Cookie: xxxxx
-		accept: */*
-		accept-encoding: xxxxx
-		connection: xxxxx
-		host: xxxxx
-		user-agent: xxxxx
-		x-b3-traceid: xxxxx
-		x-correlation-id: xxxxx
-	payload:
-
-----------------------------------------
-================================================================================
-INFO | IOLOG
-MDC :
------
 	appClass : io.inugami.monitoring.springboot.app.UserRestController
 	appClassShortName : UserRestController
 	appMethod : create
 	appUri : /user
-	appUrl : http://localhost:6433/user
+	appUrl : http://localhost:13295/user
 	appVerb : POST
 	callType : REST
 	content-length : 471
@@ -173,10 +101,11 @@ MDC :
 	lifecycle : in
 	service : UserRestController_create
 	urlPattern : /user/
+	urlPatternVerb : POST_/user/
 
 MESSAGE :
 ---------
-16/12 14:22:03  INFO [IOLOG:98] - [POST] /user
+08/01 08:56:22  INFO [IOLOG:98] - [POST] /user
 headers :
 	accept: */*
 	accept-encoding: xxxxx
@@ -196,40 +125,7 @@ MDC :
 	appClassShortName : UserRestController
 	appMethod : create
 	appUri : /user
-	appUrl : http://localhost:6433/user
-	appVerb : POST
-	callType : REST
-	content-length : 471
-	content-type : application/json; charset=UTF-8
-	correlation_id : XXXX
-	duration : 0
-	lifecycle : in
-	service : UserRestController_create
-	urlPattern : /user/
-
-MESSAGE :
----------
-16/12 14:22:03  INFO [IOLOG:98] - [POST] /user
-headers :
-	accept: */*
-	accept-encoding: xxxxx
-	connection: xxxxx
-	content-length: xxxxx
-	content-type: application/json; charset=UTF-8
-	host: xxxxx
-	user-agent: xxxxx
-payload :
-
-----------------------------------------
-================================================================================
-INFO | IOLOG
-MDC :
------
-	appClass : io.inugami.monitoring.springboot.app.UserRestController
-	appClassShortName : UserRestController
-	appMethod : create
-	appUri : /user
-	appUrl : http://localhost:6433/user
+	appUrl : http://localhost:13295/user
 	appVerb : POST
 	callType : REST
 	content-length : 471
@@ -242,58 +138,11 @@ MDC :
 	service : UserRestController_create
 	status : 200
 	urlPattern : /user/
+	urlPatternVerb : POST_/user/
 
 MESSAGE :
 ---------
-16/12 14:22:03  INFO [IOLOG:205] - [POST] /user
-headers :
-	accept: */*
-	accept-encoding: xxxxx
-	connection: xxxxx
-	content-length: xxxxx
-	content-type: application/json; charset=UTF-8
-	host: xxxxx
-	user-agent: xxxxx
-payload :
-
-response:
-	status:200
-	datetime:xxxxx
-	duration:xxxxx
-	contentType:application/json
-	headers:
-		Access-Control-Allow-Credentials: true
-		Access-Control-Allow-Headers:
-		xxxxx
-		Access-Control-Allow-Origin: *
-		Access-Control-Expose-Headers:
-		xxxxx
-		Set-Cookie: xxxxx
-		accept: */*
-		accept-encoding: xxxxx
-		connection: xxxxx
-		content-length: xxxxx
-		content-type: application/json; charset=UTF-8
-		host: xxxxx
-		user-agent: xxxxx
-		x-b3-traceid: xxxxx
-		x-correlation-id: xxxxx
-
-----------------------------------------
-================================================================================
-INFO | IOLOG
-MDC :
------
-	correlation_id : XXXX
-	duration : 0
-	globalStatus : success
-	httpStatus : 200
-	lifecycle : out
-	status : 200
-
-MESSAGE :
----------
-16/12 14:22:03  INFO [IOLOG:205] - [POST] /user
+08/01 08:56:22  INFO [IOLOG:205] - [POST] /user
 headers :
 	accept: */*
 	accept-encoding: xxxxx

@@ -47,6 +47,9 @@ public final class Loggers {
     public static final String ALERTS_EVENT_NAME = "ALERTS_EVENT";
     public static final Logger ALERTS_EVENT      = LoggerFactory.getLogger(ALERTS_EVENT_NAME);
 
+    public static final String BOOTSTRAP_NAME = "BOOTSTRAP";
+    public static final Logger BOOTSTRAP      = LoggerFactory.getLogger(BOOTSTRAP_NAME);
+
     public static final String JAVA_SCRIPT_NAME = "JAVA_SCRIPT";
     public static final Logger JAVA_SCRIPT      = LoggerFactory.getLogger(JAVA_SCRIPT_NAME);
 

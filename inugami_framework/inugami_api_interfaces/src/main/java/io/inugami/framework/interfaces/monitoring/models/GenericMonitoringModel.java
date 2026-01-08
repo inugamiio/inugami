@@ -60,5 +60,27 @@ public interface GenericMonitoringModel extends Serializable {
 
     String getData();
 
+    void setDate(final LocalDateTime value);
+
     String getNonTemporalHash();
+
+    String getGroupId();
+
+    String getArtifactId();
+
+    String getVersion();
+
+    String getCommitId();
+
+    String getCommitDate();
+
+    void setGroupId(final String value);
+
+    void setArtifactId(final String value);
+
+    void setVersion(final String value);
+
+    void setCommitId(final String value);
+
+    void setCommitDate(final String value);
 }

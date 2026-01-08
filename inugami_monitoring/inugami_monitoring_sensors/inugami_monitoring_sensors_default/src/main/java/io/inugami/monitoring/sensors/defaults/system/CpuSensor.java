@@ -16,6 +16,7 @@
  */
 package io.inugami.monitoring.sensors.defaults.system;
 
+import com.sun.management.OperatingSystemMXBean;
 import io.inugami.framework.api.tools.Comparators;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.models.number.FloatNumber;
@@ -26,9 +27,6 @@ import io.inugami.monitoring.api.tools.IntervalValues;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -52,41 +50,27 @@ public class CpuSensor implements MonitoringSensor {
 
     private final String timeUnit;
 
-    private final OperatingSystemMXBean jmx = ManagementFactory.getOperatingSystemMXBean();
-
-    private final Method getProcessCpuLoad;
+    private final OperatingSystemMXBean jmx = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
     public CpuSensor() {
-        interval = -1;
+        interval  = -1;
         percentil = -1;
-        values = null;
-        timeUnit = null;
-        getProcessCpuLoad = null;
+        values    = null;
+        timeUnit  = null;
     }
 
     public CpuSensor(final long interval, final String query, final ConfigHandler<String, String> configuration) {
         super();
-        this.interval = interval;
+        this.interval  = interval;
         this.percentil = configuration.grab("percentil", 0.95);
-        values = IntervalValues.<Double>builder()
-                               .handler(this::extractCpuUsage)
-                               .interval(configuration.grab("intervalValuesDelais", 1000))
-                               .build();
-        timeUnit = configuration.grabOrDefault("timeUnit", "");
-
-        Method cpuloadMethod = null;
-        for (final Method method : jmx.getClass().getDeclaredMethods()) {
-            if ("getProcessCpuLoad".equals(method.getName())) {
-                cpuloadMethod = method;
-                cpuloadMethod.setAccessible(true);
-                break;
-            }
-        }
-        getProcessCpuLoad = cpuloadMethod;
-
+        values         = IntervalValues.<Double>builder()
+                                       .handler(this::extractCpuUsage)
+                                       .interval(configuration.grab("intervalValuesDelais", 1000))
+                                       .build();
+        timeUnit       = configuration.grabOrDefault("timeUnit", "");
     }
 
     @Override
@@ -100,16 +84,8 @@ public class CpuSensor implements MonitoringSensor {
     // METHODS
     // =========================================================================
     private Double extractCpuUsage() {
-        Double result = null;
-        if (getProcessCpuLoad != null) {
-            try {
-                result = (Double) getProcessCpuLoad.invoke(jmx);
-            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                log.error(e.getMessage(), e);
-            }
-        }
-
-        if (result == null) {
+        Double result = jmx.getCpuLoad();
+        if (result < 0) {
             result = jmx.getSystemLoadAverage();
         }
         return result * 100;
@@ -118,7 +94,8 @@ public class CpuSensor implements MonitoringSensor {
     @Override
     public List<GenericMonitoringModel> process() {
         final List<Double> cpuValues   = values.poll();
-        final Double       resultValue = GenericMonitoringModelTools.getPercentilValues(cpuValues, percentil, Comparators.DOUBLE_COMPARATOR);
+        final Double       resultValue =
+                GenericMonitoringModelTools.getPercentilValues(cpuValues, percentil, Comparators.DOUBLE_COMPARATOR);
         return resultValue == null ? null : buildGenericMonitoringModel(resultValue);
     }
 

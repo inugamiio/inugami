@@ -32,6 +32,7 @@ open module io.inugami.framework.interfaces {
     requires spring.web;
     requires spring.webmvc;
     requires static lombok;
+    requires spring.beans;
 
     exports io.inugami.framework.interfaces.alertings;
     exports io.inugami.framework.interfaces.concurrent;
@@ -149,6 +150,8 @@ open module io.inugami.framework.interfaces {
     uses io.inugami.framework.interfaces.processors.Processor;
     uses io.inugami.framework.interfaces.providers.Provider;
     uses io.inugami.framework.interfaces.handlers.Handler;
+    uses io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
+    uses io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
 
     provides io.inugami.framework.interfaces.configurtation.ConfigurationSpi with io.inugami.framework.interfaces.monitoring.logger.DefaultConfigurationSpi;
 }

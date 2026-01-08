@@ -31,13 +31,13 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
 import java.util.List;
-
+@Deprecated
 @Order(Ordered.LOWEST_PRECEDENCE)
 @Component
 @RequiredArgsConstructor
 public class IoLogFilter extends GenericFilterBean {
 
-    @Value("${inugami.monitoring.iolog.enabled:true}")
+    @Value("${inugami.monitoring.iolog.enabled:false}")
     private       boolean           enabled;
     private final FilterInterceptor filter;
 

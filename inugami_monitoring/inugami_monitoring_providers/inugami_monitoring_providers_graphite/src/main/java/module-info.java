@@ -23,4 +23,8 @@ open module io.inugami.monitoring.providers.graphite {
     requires metrics.graphite;
     requires org.slf4j;
     requires static lombok;
+
+    exports  io.inugami.monitoring.providers.graphite;
+
+    provides  io.inugami.framework.interfaces.monitoring.senders.MonitoringSender with io.inugami.monitoring.providers.graphite.GraphiteSender;
 }

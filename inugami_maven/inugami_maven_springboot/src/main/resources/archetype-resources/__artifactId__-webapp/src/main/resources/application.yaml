@@ -1,10 +1,20 @@
+env: DEV
+
 application:
   groupId: "@project.groupId@"
   artifactId: "@project.artifactId@"
   version: "@project.version@"
   commitId: "@commitId@"
   commitDate: "@commitDate@"
+  name: "@project.artifactId@"
+  wiki: "https://inugami.io/mock/error/{0}/{1}"
+  instanceName: "inu"
+  instanceNumber: "001"
 inugami:
+  exception:
+    show:
+      detail:
+        enabled: true
   monitoring:
     interceptor:
       url:

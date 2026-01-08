@@ -37,6 +37,7 @@ import java.util.List;
 @SuppressWarnings({"java:S1172"})
 public class ThreadsSensor implements MonitoringSensor {
 
+    public static final int MINUTE = 60000;
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
@@ -60,7 +61,7 @@ public class ThreadsSensor implements MonitoringSensor {
 
     public ThreadsSensor(final long interval, final String query, final ConfigHandler<String, String> configuration) {
         super();
-        this.interval = interval;
+        this.interval = interval < MINUTE ? MINUTE : interval;
         timeUnit = configuration.grabOrDefault("timeUnit", "");
         enableThreadsDump = configuration.grabBoolean("enableThreadsDump", true);
         maxDepth = configuration.grabInt("maxDepth", 10);

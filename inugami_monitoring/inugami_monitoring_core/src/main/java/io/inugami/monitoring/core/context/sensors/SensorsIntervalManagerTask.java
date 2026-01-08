@@ -17,11 +17,12 @@
 package io.inugami.monitoring.core.context.sensors;
 
 import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.api.tools.RunSafeUtils;
 import io.inugami.framework.commons.threads.MonitoredThreadFactory;
-import io.inugami.framework.commons.threads.RunAndCloseService;
+import io.inugami.framework.commons.threads.ThreadsExecutorService;
 import io.inugami.framework.interfaces.ctx.BootstrapContext;
+import io.inugami.framework.interfaces.models.CurrentApplicationDTO;
 import io.inugami.framework.interfaces.models.tools.Chrono;
-import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
 import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
@@ -30,10 +31,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.concurrent.*;
 
 import static io.inugami.framework.api.tools.RunSafeUtils.runSafeVoid;
@@ -67,15 +67,21 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
     private final String nameSender;
 
     private final List<MonitoringSender> senders;
+    private final CurrentApplicationDTO  currentApplication;
 
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
-    public SensorsIntervalManagerTask(final int maxTheads, final long interval, final List<MonitoringSender> senders) {
-        this.maxTheads = maxTheads;
-        this.interval  = interval;
-        timeout        = (long) (interval * 0.9);
-        executor       =
+    @Builder
+    public SensorsIntervalManagerTask(final int maxTheads,
+                                      final long interval,
+                                      final List<MonitoringSender> senders,
+                                      final CurrentApplicationDTO currentApplication) {
+        this.currentApplication = currentApplication;
+        this.maxTheads          = maxTheads;
+        this.interval           = interval;
+        timeout                 = (long) (interval * 0.9);
+        executor                =
                 Executors.newSingleThreadScheduledExecutor(new MonitoredThreadFactory(getClass().getSimpleName(),
                                                                                       false));
         final String name = String.join("_", SensorsIntervalManagerTask.class.getSimpleName(),
@@ -108,6 +114,7 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
         final CompletableFuture<List<GenericMonitoringModel>> future = new CompletableFuture<>();
         this.tasks.add(SensorsIntervalTask.SensorTask.builder()
                                                      .mdc(MdcService.getInstance().getAllMdc())
+                                                     .currentApplication(currentApplication)
                                                      .sensor(sensor)
                                                      .future(future)
                                                      .build());
@@ -121,15 +128,27 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
 
         @Override
         public void run() {
+            RunSafeUtils.runSafeVoid(this::process);
+        }
+
+        private void process() {
             MdcService.getInstance().initialize();
-            final int nbThreads = tasks.size() < maxTheads ? tasks.size() : maxTheads;
-            final RunAndCloseService<List<GenericMonitoringModel>> sensorThreads = new RunAndCloseService<>(nameSensor,
-                                                                                                            timeout,
-                                                                                                            nbThreads,
-                                                                                                            tasks);
-            final Chrono                             chrono  = Chrono.startChrono();
-            final List<List<GenericMonitoringModel>> rawData = sensorThreads.run();
-            sensorThreads.forceShutdown();
+            int nbThreads = tasks.size() < maxTheads ? tasks.size() : maxTheads;
+            if (nbThreads < 1) {
+                nbThreads = 10;
+            }
+
+            final var engineThreadsExecutorService = new ThreadsExecutorService(
+                    "SensorsIntervalTask_" + UUID.randomUUID(),
+                    nbThreads,
+                    false,
+                    timeout);
+
+            final Chrono chrono = Chrono.startChrono();
+            final List<List<GenericMonitoringModel>> rawData =
+                    RunSafeUtils.runSafeOrElse(() -> engineThreadsExecutorService.runAndGrab(tasks), List.of());
+
+
             chrono.stop();
             final List<GenericMonitoringModel> data = new ArrayList<>();
             applyIfNotNull(rawData, v -> v.forEach(data::addAll));
@@ -146,18 +165,12 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
             }
 
             if (!senderTasks.isEmpty()) {
-                long timeoutSender = timeout - chrono.getDuration();
-                if (timeoutSender < 300) {
-                    Loggers.METRICS.warn("no enough time for processing metrics senders : {}ms", timeoutSender);
-                    timeoutSender = 300;
-                }
-                final int maxSenderThreads = senderTasks.size() < maxTheads ? senderTasks.size() : maxTheads;
-                final RunAndCloseService<Void> sendersThreads = new RunAndCloseService<>(nameSender, timeoutSender,
-                                                                                         maxSenderThreads, senderTasks);
-
-                sendersThreads.run();
-                sendersThreads.forceShutdown();
+                RunSafeUtils.runSafeVoid(() -> {
+                    engineThreadsExecutorService.runAndGrab(senderTasks);
+                });
             }
+
+            engineThreadsExecutorService.shutdown();
         }
 
         @Builder
@@ -166,10 +179,22 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
             private final MonitoringSensor                                sensor;
             private final Map<String, String>                             mdc;
             private final CompletableFuture<List<GenericMonitoringModel>> future;
+            private final CurrentApplicationDTO                           currentApplication;
 
             @Override
             public List<GenericMonitoringModel> call() throws Exception {
-                final var result = sensor.process();
+                final var result = Optional.ofNullable(sensor.process()).orElse(List.of());
+
+                for (GenericMonitoringModel data : result) {
+                    data.setDate(LocalDateTime.now(Clock.systemUTC()));
+                    if(currentApplication!=null){
+                        data.setGroupId(currentApplication.getGroupId());
+                        data.setArtifactId(currentApplication.getArtifactId());
+                        data.setVersion(currentApplication.getVersion());
+                        data.setCommitId(currentApplication.getCommitId());
+                        data.setCommitDate(currentApplication.getCommitDate());
+                    }
+                }
                 future.complete(result);
                 return result;
             }

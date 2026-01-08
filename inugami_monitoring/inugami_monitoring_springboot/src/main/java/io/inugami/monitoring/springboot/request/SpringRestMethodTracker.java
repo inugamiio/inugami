@@ -4,6 +4,7 @@ package io.inugami.monitoring.springboot.request;
 import io.inugami.framework.api.monitoring.MdcService;
 import io.inugami.framework.interfaces.monitoring.JavaRestMethodDTO;
 import io.inugami.framework.interfaces.monitoring.JavaRestMethodTracker;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.*;
 
 import static io.inugami.framework.api.tools.ReflectionUtils.getAnnotation;
@@ -13,6 +14,12 @@ import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.apply
 public class SpringRestMethodTracker implements JavaRestMethodTracker {
 
     private static final String SEPARATOR = "/";
+    public static final String VERB_SEPARATOR = "_";
+    public static final String GET    = "GET";
+    public static final String DELETE = "DELETE";
+    public static final String PATCH = "PATCH";
+    public static final String POST = "POST";
+    public static final String PUT = "PUT";
 
     @Override
     public boolean accept(final JavaRestMethodDTO data) {
@@ -26,12 +33,21 @@ public class SpringRestMethodTracker implements JavaRestMethodTracker {
     public void track(final JavaRestMethodDTO data) {
         final RequestMapping rootRequestMapping = getAnnotation(data.getRestClass(), RequestMapping.class);
 
-        applyIfNotNull(getAnnotation(data.getRestMethod(), DeleteMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data));
-        applyIfNotNull(getAnnotation(data.getRestMethod(), GetMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data));
-        applyIfNotNull(getAnnotation(data.getRestMethod(), PatchMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data));
-        applyIfNotNull(getAnnotation(data.getRestMethod(), PostMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data));
-        applyIfNotNull(getAnnotation(data.getRestMethod(), PutMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data));
-        applyIfNotNull(getAnnotation(data.getRestMethod(), RequestMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data));
+        applyIfNotNull(getAnnotation(data.getRestMethod(), DeleteMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data, DELETE));
+        applyIfNotNull(getAnnotation(data.getRestMethod(), GetMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data, GET));
+        applyIfNotNull(getAnnotation(data.getRestMethod(), PatchMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data, PATCH));
+        applyIfNotNull(getAnnotation(data.getRestMethod(), PostMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data, POST));
+        applyIfNotNull(getAnnotation(data.getRestMethod(), PutMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data, PUT));
+        applyIfNotNull(getAnnotation(data.getRestMethod(), RequestMapping.class), annotation -> addRequestMapping(annotation.path(), rootRequestMapping, data, extractVerb(annotation)));
+    }
+
+    @NotNull
+    private static String extractVerb(final RequestMapping annotation) {
+        final var methods =annotation.method();
+        if(methods.length==0){
+            return GET;
+        }
+        return annotation.method()[0].asHttpMethod().name();
     }
 
 
@@ -39,12 +55,15 @@ public class SpringRestMethodTracker implements JavaRestMethodTracker {
     // ADD Tracking
     // ========================================================================
     private void addRequestMapping(final String[] path,
-                                   final RequestMapping rootRequestMapping,
-                                   final JavaRestMethodDTO data) {
+                      final RequestMapping rootRequestMapping,
+                      final JavaRestMethodDTO data,
+                      final String verb) {
 
         final String parentPath   = resolveParentPath(rootRequestMapping);
         final String endpointPath = extractPath(path);
-        MdcService.getInstance().urlPattern(parentPath + endpointPath);
+        final var fullPattern = parentPath + endpointPath;
+        MdcService.getInstance().urlPattern(fullPattern);
+        MdcService.getInstance().urlPatternVerb(verb + VERB_SEPARATOR + fullPattern);
     }
 
     private String resolveParentPath(final RequestMapping rootRequestMapping) {

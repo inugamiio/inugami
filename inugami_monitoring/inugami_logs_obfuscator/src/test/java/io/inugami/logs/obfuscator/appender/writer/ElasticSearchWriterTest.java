@@ -102,10 +102,9 @@ class ElasticSearchWriterTest {
                                             "disableListener" : true,
                                             "headers" : {
                                               "token" : "123456a23132a",
-                                              "ContentType" : "application/json"
+                                              "Content-Type" : "application/json"
                                             },
                                             "throwable" : true,
-                                            "url" : "http://localhost/elasticsearch",
                                             "verb" : "POST"
                                           }
                                           """);

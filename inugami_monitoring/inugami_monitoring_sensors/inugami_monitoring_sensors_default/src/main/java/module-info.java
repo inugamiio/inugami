@@ -19,7 +19,9 @@ open module io.inugami.monitoring.sensors.defaults {
     requires io.inugami.framework.api;
     requires io.inugami.framework.interfaces;
     requires io.inugami.monitoring.api;
-    requires java.management;
     requires org.slf4j;
     requires static lombok;
+    requires jdk.management;
+
+    provides io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor with io.inugami.monitoring.sensors.defaults.system.MemorySensor, io.inugami.monitoring.sensors.defaults.system.ThreadsSensor, io.inugami.monitoring.sensors.defaults.system.CpuSensor;
 }

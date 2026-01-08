@@ -41,7 +41,7 @@ open module io.inugami.framework.commons.spring {
     requires feign.jackson;
     requires spring.cloud.openfeign.core;
 
-    exports io.inugami.framework.commons.spring to spring.core;
+    exports io.inugami.framework.commons.spring;
     exports io.inugami.framework.commons.spring.configuration;
     exports io.inugami.framework.commons.spring.feature.interceptors;
     exports io.inugami.framework.commons.spring.mapstruct;

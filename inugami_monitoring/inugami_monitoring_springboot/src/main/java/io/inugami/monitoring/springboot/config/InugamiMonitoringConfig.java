@@ -18,13 +18,18 @@ package io.inugami.monitoring.springboot.config;
 
 
 import io.inugami.framework.api.listeners.DefaultApplicationLifecycleSPI;
+import io.inugami.framework.api.tools.RunSafeUtils;
 import io.inugami.framework.commons.spring.configuration.ConfigConfiguration;
+import io.inugami.framework.configuration.services.ConfigHandlerHashMap;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.exceptions.ErrorCodeResolver;
 import io.inugami.framework.interfaces.feature.IFeatureService;
+import io.inugami.framework.interfaces.models.CurrentApplicationDTO;
 import io.inugami.framework.interfaces.monitoring.MonitoringLoaderSpi;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
 import io.inugami.framework.interfaces.monitoring.models.Monitoring;
+import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
+import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
 import io.inugami.monitoring.core.context.MonitoringBootstrapService;
 import io.inugami.monitoring.core.context.MonitoringContext;
@@ -42,18 +47,22 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.StatusAggregator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
 
 
-@SuppressWarnings({"java:S1450","java:S2209"})
+@SuppressWarnings({"java:S1450", "java:S2209"})
+@EnableConfigurationProperties({InugamiMonitoringProperties.class})
 @Import({
         IoLogFilter.class,
         SpringRestMethodResolver.class,
@@ -74,6 +83,9 @@ public class InugamiMonitoringConfig {
     // =================================================================================================================
     public static final String INUGAMI_MONITORING_CONFIG = "io.inugami.monitoring.springboot";
     public static final String INUGAMI                   = "io.inugami";
+    public static final int    SECONDS                   = 1000;
+    public static final String QUERY                     = "query";
+    public static final String EMPTY                     = "";
 
     // =================================================================================================================
     // BEANS
@@ -92,22 +104,91 @@ public class InugamiMonitoringConfig {
 
     @Bean
     public Monitoring initMonitoringContext(final ConfigHandler<String, String> springConfig,
-                                            final MonitoringBootstrapService monitoringBootstrapService) {
+                                            final MonitoringBootstrapService monitoringBootstrapService,
+                                            final SpiLoaderServiceSPI spiLoaderServiceSPI,
+                                            final InugamiMonitoringProperties monitoringProperties,
+                                            final CurrentApplicationDTO currentApplication) {
         final MonitoringContext             monitoringContext    = monitoringBootstrapService.getContext();
         final Monitoring                    config               = monitoringContext.getConfig();
+        config.setMaxSensorsTasksThreads(20);
+        monitoringContext.setCurrentApplication(currentApplication);
         final ConfigHandler<String, String> currentConfiguration = ConfigConfiguration.CONFIGURATION;
         applyIfNotNull(springConfig, currentConfiguration::putAll);
         config.setProperties(mergeProperties(config.getProperties(), currentConfiguration));
-        initializeInterceptors(monitoringContext,config);
-
+        initializeInterceptors(monitoringContext, config);
+        initializeSensors(config, spiLoaderServiceSPI, monitoringProperties, currentConfiguration);
+        initializeSenders(config, spiLoaderServiceSPI, monitoringProperties, currentConfiguration);
+        monitoringContext.initialize(null);
         return config;
+    }
+
+    private void initializeSensors(final Monitoring config,
+                                   final SpiLoaderServiceSPI spiLoaderServiceSPI,
+                                   final InugamiMonitoringProperties monitoringProperties,
+                                   final ConfigHandler<String, String> currentConfiguration) {
+        final List<MonitoringSensor> sensors =
+                RunSafeUtils.runSafeOrElse(() -> spiLoaderServiceSPI.loadServices(MonitoringSensor.class), List.of());
+        if (sensors.isEmpty()) {
+            return;
+        }
+        final Map<String, Map<String, String>> sensorConfig = monitoringProperties.getSenders();
+        for (MonitoringSensor sensor : sensors) {
+            final Map<String, String> senderConfig = sensorConfig.get(Optional.ofNullable(sensor.getName())
+                                                                              .orElse(EMPTY));
+
+            final Map<String, String> currentConfig = new LinkedHashMap<>();
+            applyIfNotNull(currentConfiguration, currentConfig::putAll);
+            applyIfNotNull(senderConfig, currentConfig::putAll);
+
+            config.getSensors().add(sensor.buildInstance(SECONDS, Optional.ofNullable(currentConfig.get(QUERY))
+                                                                          .orElse(EMPTY),
+                                                         new ConfigHandlerHashMap(currentConfig)));
+        }
+    }
+
+    private void initializeSenders(final Monitoring config,
+                                   final SpiLoaderServiceSPI spiLoaderServiceSPI,
+                                   final InugamiMonitoringProperties monitoringProperties,
+                                   final ConfigHandler<String, String> currentConfiguration) {
+        final List<MonitoringSender> senders =
+                RunSafeUtils.runSafeOrElse(() -> spiLoaderServiceSPI.loadServices(MonitoringSender.class), List.of());
+        if (senders.isEmpty()) {
+            return;
+        }
+        final Map<String, Map<String, String>> sendersConfig = monitoringProperties.getSenders();
+        for (MonitoringSender sender : senders) {
+            final Map<String, String> senderConfig = sendersConfig.get(Optional.ofNullable(sender.getName())
+                                                                               .orElse(EMPTY));
+            final Map<String, String> currentConfig = new LinkedHashMap<>();
+            applyIfNotNull(currentConfiguration, currentConfig::putAll);
+            applyIfNotNull(senderConfig, currentConfig::putAll);
+
+            config.getSenders().add(sender.buildInstance(new ConfigHandlerHashMap(currentConfig)));
+        }
+    }
+
+
+    @Bean
+    public CurrentApplicationDTO currentApplication(@Value("${application.groupId:#{null}}") final String groupId,
+                                                    @Value("${application.artifactId:#{null}}") final String artifactId,
+                                                    @Value("${application.version:#{null}}") final String version,
+                                                    @Value("${application.commitId:#{null}}") final String commitId,
+                                                    @Value("${application.commitDate:#{null}}") final String commitDate) {
+        return CurrentApplicationDTO.builder()
+                                    .groupId(groupId)
+                                    .artifactId(artifactId)
+                                    .version(version)
+                                    .commitId(commitId)
+                                    .commitDate(commitDate)
+                                    .build();
     }
 
     @Bean
     public FilterInterceptor filterInterceptor(final SpiLoaderServiceSPI spiLoaderServiceSPI,
-                                               final Monitoring monitoring){
+                                               final Monitoring monitoring,
+                                               final CurrentApplicationDTO currentApplication) {
         // monitoring must be initialized before FilterInterceptor
-        final FilterInterceptor filter = new FilterInterceptor(spiLoaderServiceSPI);
+        final FilterInterceptor filter = new FilterInterceptor(spiLoaderServiceSPI, currentApplication);
         DefaultApplicationLifecycleSPI.register(filter);
         filter.onApplicationStarted(null);
         return filter;
@@ -159,8 +240,6 @@ public class InugamiMonitoringConfig {
     public StatusAggregator failSafeStatusAggregator() {
         return new FailSafeStatusAggregator();
     }
-
-
 
 
     // =================================================================================================================

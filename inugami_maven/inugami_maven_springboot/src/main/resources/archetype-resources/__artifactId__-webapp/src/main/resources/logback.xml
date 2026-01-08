@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-
+    <!--================================================================================================================
+    = APPENDER
+    =================================================================================================================-->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>[%d{dd/MM HH:mm:ss}]|%logger|%-5level|%thread|%msg\n</pattern>
@@ -10,6 +12,96 @@
         <appender-ref ref="STDOUT" />
     </appender>
 
+    <appender name="ELASTIC-DEFAULT" class="io.inugami.logs.obfuscator.appender.JsonAppender">
+        <configuration>
+            <mode>elasticSearch</mode>
+            <host>http://localhost:9200/_bulk</host>
+            <index>dev-demo-logs</index>
+            <indexDatePattern>yyyy-MM-dd</indexDatePattern>
+        </configuration>
+        <encoder class="io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder">
+            <configuration>
+                <forceNewLine>true</forceNewLine>
+                <encodeAsJson>true</encodeAsJson>
+                <additionalFields>
+                    {
+                    "groupId":"${groupId}",
+                    "artifactId":"${rootArtifactId}"
+                    }
+                </additionalFields>
+            </configuration>
+            <pattern>%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ELASTIC-IOLOG" class="io.inugami.logs.obfuscator.appender.JsonAppender">
+        <configuration>
+            <mode>elasticSearch</mode>
+            <host>http://localhost:9200/_bulk</host>
+            <index>dev-demo-iologs</index>
+            <indexDatePattern>yyyy-MM-dd</indexDatePattern>
+        </configuration>
+        <encoder class="io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder">
+            <configuration>
+                <forceNewLine>true</forceNewLine>
+                <encodeAsJson>true</encodeAsJson>
+                <additionalFields>
+                    {
+                    "groupId":"${groupId}",
+                    "artifactId":"${rootArtifactId}"
+                    }
+                </additionalFields>
+            </configuration>
+            <pattern>%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ELASTIC-PARTNERLOG" class="io.inugami.logs.obfuscator.appender.JsonAppender">
+        <configuration>
+            <mode>elasticSearch</mode>
+            <host>http://localhost:9200/_bulk</host>
+            <index>dev-demo-partnerlog</index>
+            <indexDatePattern>yyyy-MM-dd</indexDatePattern>
+        </configuration>
+        <encoder class="io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder">
+            <configuration>
+                <forceNewLine>true</forceNewLine>
+                <encodeAsJson>true</encodeAsJson>
+                <additionalFields>
+                    {
+                    "groupId":"${groupId}",
+                    "artifactId":"${rootArtifactId}"
+                    }
+                </additionalFields>
+            </configuration>
+            <pattern>%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ELASTIC-XLLOG" class="io.inugami.logs.obfuscator.appender.JsonAppender">
+        <configuration>
+            <mode>elasticSearch</mode>
+            <host>http://localhost:9200/_bulk</host>
+            <index>dev-demo-xllog</index>
+            <indexDatePattern>yyyy-MM-dd</indexDatePattern>
+        </configuration>
+        <encoder class="io.inugami.logs.obfuscator.encoder.ObfuscatorEncoder">
+            <configuration>
+                <forceNewLine>true</forceNewLine>
+                <encodeAsJson>true</encodeAsJson>
+                <additionalFields>
+                    {
+                    "groupId":"${groupId}",
+                    "artifactId":"${rootArtifactId}"
+                    }
+                </additionalFields>
+            </configuration>
+            <pattern>%m%n</pattern>
+        </encoder>
+    </appender>
+    <!--================================================================================================================
+    = LOGGERS
+    =================================================================================================================-->
     <logger name="org.springframework">
         <level value="INFO"/>
     </logger>
@@ -27,10 +119,30 @@
         <level value="INFO"/>
     </logger>
 
+    <logger name="IOLOG">
+        <level value="INFO"/>
+        <appender-ref ref="ELASTIC-IOLOG" />
+    </logger>
+
+    <logger name="IOLOG">
+        <level value="INFO"/>
+        <appender-ref ref="ELASTIC-PARTNERLOG" />
+    </logger>
 
 
+    <logger name="XLLOG">
+        <level value="INFO"/>
+        <appender-ref ref="ELASTIC-XLLOG" />
+    </logger>
+
+
+
+    <!--================================================================================================================
+    = ROOT
+    =================================================================================================================-->
     <root level="DEBUG">
         <appender-ref ref="ASYNC_STDOUT"/>
+        <appender-ref ref="ELASTIC-DEFAULT"/>
     </root>
 
 </configuration>

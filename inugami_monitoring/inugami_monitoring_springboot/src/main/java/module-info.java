@@ -34,11 +34,12 @@ open module io.inugami.monitoring.springboot {
     requires spring.boot;
     requires spring.context;
     requires spring.core;
+    requires annotations;
+    requires spring.cloud.openfeign.core;
+    requires io.inugami.framework.configurations.configuration;
     requires spring.web;
     requires spring.webmvc;
     requires static lombok;
-    requires annotations;
-    requires spring.cloud.openfeign.core;
 
     exports io.inugami.monitoring.springboot.actuator.feature;
     exports io.inugami.monitoring.springboot.actuator;
@@ -53,6 +54,8 @@ open module io.inugami.monitoring.springboot {
     uses io.inugami.framework.interfaces.monitoring.spring.feign.FeignErrorCodeBuilderSpi;
     uses org.springframework.web.multipart.MultipartResolver;
     uses org.springframework.web.servlet.HandlerMapping;
+    uses io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
+    uses io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
 
     provides io.inugami.framework.interfaces.exceptions.ErrorCodeResolver with io.inugami.monitoring.springboot.exception.SpringDefaultErrorCodeResolver, io.inugami.monitoring.springboot.exception.FeignErrorCodeResolver;
     provides io.inugami.framework.interfaces.monitoring.JavaRestMethodTracker with io.inugami.monitoring.springboot.request.SpringRestMethodTracker;

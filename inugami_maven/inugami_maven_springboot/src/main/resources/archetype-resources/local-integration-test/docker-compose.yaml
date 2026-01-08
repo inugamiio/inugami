@@ -1,0 +1,43 @@
+version: "3"
+services:
+  sonar:
+    image: sonarqube:9.9.1-community
+    ports:
+      - "9001:9000"
+    expose:
+      - 9001
+    networks:
+      - elk-net
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.2.3
+    container_name: elasticsearch
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+    deploy:
+      resources:
+        limits:
+          memory: 1gb
+    networks:
+      - elk-net
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.2.3
+    container_name: kibana
+    environment:
+      - xpack.security.enabled=false
+    networks:
+      - elk-net
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+networks:
+  elk-net:
+    driver: bridge

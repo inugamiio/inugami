@@ -17,7 +17,10 @@
 package io.inugami.framework.api.listeners;
 
 import io.inugami.framework.api.loggers.mdc.initializer.MdcInitializer;
+import io.inugami.framework.api.monitoring.MdcService;
+import io.inugami.framework.api.tools.RunSafeUtils;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
+import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,6 +28,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DefaultApplicationLifecycleSPI implements ApplicationLifecycleSPI {
     private static final Map<Class<? extends ApplicationLifecycleSPI>, ApplicationLifecycleSPI> LISTENERS =
             new ConcurrentHashMap<>();
+    public static final  String                                                                 STARTING  = "STARTING";
+    public static final  String                                                                 UP        = "UP";
+    public static final  String                                                                 FAIL      = "FAIL";
 
     public static void register(ApplicationLifecycleSPI listener) {
         if (listener != null) {
@@ -38,9 +44,13 @@ public class DefaultApplicationLifecycleSPI implements ApplicationLifecycleSPI {
 
     @Override
     public void onApplicationStarting(final Object event) {
+        MdcService.getInstance().lifecycle(STARTING);
+        Loggers.BOOTSTRAP.info("application starting...");
+        MdcService.getInstance().lifecycleRemove();
         for (Map.Entry<Class<? extends ApplicationLifecycleSPI>, ApplicationLifecycleSPI> entry : LISTENERS.entrySet()) {
             entry.getValue().onApplicationStarting(event);
         }
+
     }
 
     @Override
@@ -84,6 +94,7 @@ public class DefaultApplicationLifecycleSPI implements ApplicationLifecycleSPI {
         for (Map.Entry<Class<? extends ApplicationLifecycleSPI>, ApplicationLifecycleSPI> entry : LISTENERS.entrySet()) {
             entry.getValue().onApplicationStarted(event);
         }
+
     }
 
     @Override
@@ -98,13 +109,20 @@ public class DefaultApplicationLifecycleSPI implements ApplicationLifecycleSPI {
         for (Map.Entry<Class<? extends ApplicationLifecycleSPI>, ApplicationLifecycleSPI> entry : LISTENERS.entrySet()) {
             entry.getValue().onApplicationReady(event);
         }
+        MdcService.getInstance().lifecycle(UP);
+        Loggers.BOOTSTRAP.info("application up");
+        MdcService.getInstance().lifecycleRemove();
     }
 
 
     @Override
     public void onApplicationFail(final Object event) {
         for (Map.Entry<Class<? extends ApplicationLifecycleSPI>, ApplicationLifecycleSPI> entry : LISTENERS.entrySet()) {
-            entry.getValue().onApplicationFail(event);
+            RunSafeUtils.runSafeVoid(() -> entry.getValue().onApplicationFail(event));
         }
+        MdcService.getInstance().lifecycle(FAIL);
+        Loggers.BOOTSTRAP.error("application fail");
+        MdcService.getInstance().lifecycleRemove();
+        RunSafeUtils.runSafeVoid(() -> Thread.sleep(1000));
     }
 }
