@@ -120,6 +120,7 @@ public enum MDCKeys {
     uri("xxxx", "appUri"),
     url("xxxx", "appUrl"),
     urlPattern,
+    urlPatternVerb,
     userAgent,
     userId,
     status,

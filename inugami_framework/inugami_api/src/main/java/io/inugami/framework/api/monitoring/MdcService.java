@@ -1441,6 +1441,16 @@ public class MdcService implements MdcServiceSpi {
     }
 
 
+    public MdcServiceSpi urlPatternVerb(final String value) {
+        setMdc(MDCKeys.urlPatternVerb, value);
+        return this;
+    }
+
+    public String urlPatternVerb() {
+        return getMdc(MDCKeys.urlPatternVerb);
+    }
+
+
     public MdcServiceSpi userAgent(final String value) {
         setMdc(MDCKeys.userAgent, value);
         return this;

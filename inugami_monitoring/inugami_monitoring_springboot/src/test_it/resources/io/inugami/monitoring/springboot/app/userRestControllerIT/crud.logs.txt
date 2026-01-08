@@ -6,7 +6,7 @@ MDC :
 	appClassShortName : UserRestController
 	appMethod : search
 	appUri : /user
-	appUrl : http://localhost:32757/user
+	appUrl : http://localhost:13295/user
 	appVerb : GET
 	callType : REST
 	correlation_id : XXXX
@@ -14,10 +14,11 @@ MDC :
 	lifecycle : in
 	service : UserRestController_search
 	urlPattern : /user/
+	urlPatternVerb : GET_/user/
 
 MESSAGE :
 ---------
-07/01 20:10:00  INFO [IOLOG:98] - [GET] /user
+08/01 08:56:21  INFO [IOLOG:98] - [GET] /user
 headers :
 	accept: */*
 	accept-encoding: xxxxx
@@ -35,7 +36,7 @@ MDC :
 	appClassShortName : UserRestController
 	appMethod : search
 	appUri : /user
-	appUrl : http://localhost:32757/user
+	appUrl : http://localhost:13295/user
 	appVerb : GET
 	callType : REST
 	correlation_id : XXXX
@@ -46,10 +47,11 @@ MDC :
 	service : UserRestController_search
 	status : 200
 	urlPattern : /user/
+	urlPatternVerb : GET_/user/
 
 MESSAGE :
 ---------
-07/01 20:10:01  INFO [IOLOG:205] - [GET] /user
+08/01 08:56:21  INFO [IOLOG:205] - [GET] /user
 headers :
 	accept: */*
 	accept-encoding: xxxxx
@@ -89,7 +91,7 @@ MDC :
 	appClassShortName : UserRestController
 	appMethod : create
 	appUri : /user
-	appUrl : http://localhost:32757/user
+	appUrl : http://localhost:13295/user
 	appVerb : POST
 	callType : REST
 	content-length : 471
@@ -99,10 +101,11 @@ MDC :
 	lifecycle : in
 	service : UserRestController_create
 	urlPattern : /user/
+	urlPatternVerb : POST_/user/
 
 MESSAGE :
 ---------
-07/01 20:10:01  INFO [IOLOG:98] - [POST] /user
+08/01 08:56:22  INFO [IOLOG:98] - [POST] /user
 headers :
 	accept: */*
 	accept-encoding: xxxxx
@@ -122,7 +125,7 @@ MDC :
 	appClassShortName : UserRestController
 	appMethod : create
 	appUri : /user
-	appUrl : http://localhost:32757/user
+	appUrl : http://localhost:13295/user
 	appVerb : POST
 	callType : REST
 	content-length : 471
@@ -135,10 +138,11 @@ MDC :
 	service : UserRestController_create
 	status : 200
 	urlPattern : /user/
+	urlPatternVerb : POST_/user/
 
 MESSAGE :
 ---------
-07/01 20:10:01  INFO [IOLOG:205] - [POST] /user
+08/01 08:56:22  INFO [IOLOG:205] - [POST] /user
 headers :
 	accept: */*
 	accept-encoding: xxxxx

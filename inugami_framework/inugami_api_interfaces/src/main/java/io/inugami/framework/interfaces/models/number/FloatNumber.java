@@ -19,6 +19,7 @@ package io.inugami.framework.interfaces.models.number;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 /**
  * FloatNumber
@@ -46,8 +47,17 @@ public class FloatNumber implements GraphiteNumber {
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
+    public static FloatNumber of(final long value) {
+        return new FloatNumber(value);
+    }
+    public static FloatNumber of(final Long value) {
+        return new FloatNumber(Optional.of(value).orElse(0L));
+    }
     public static FloatNumber of(final double value) {
         return new FloatNumber(value);
+    }
+    public static FloatNumber of(final Double value) {
+        return new FloatNumber(Optional.of(value).orElse(0.0));
     }
 
     // =========================================================================
