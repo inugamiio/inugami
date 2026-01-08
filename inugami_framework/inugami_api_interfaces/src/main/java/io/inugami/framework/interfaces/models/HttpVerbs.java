@@ -14,24 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.interfaces.monitoring.kpi;
+package io.inugami.framework.interfaces.models;
 
-import io.inugami.framework.interfaces.monitoring.data.RequestData;
-import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModelDTO;
+import lombok.experimental.UtilityClass;
 
-import java.util.List;
-
-public interface KpiExtractorSPI {
-
-
-    default boolean accept(final RequestData request){
-        return true;
-    }
-
-    default List<GenericMonitoringModelDTO> extractFromRequest(final KpiExtractorContext context){
-        return List.of();
-    }
-    default List<GenericMonitoringModelDTO> extractFromResponse(final KpiExtractorContext context){
-        return List.of();
-    }
+/**
+ * @since 2026-01-08
+ */
+@UtilityClass
+public class HttpVerbs {
+    public static final String GET     = "GET";
+    public static final String POST    = "POST";
+    public static final String PATCH   = "PATCH";
+    public static final String PUT     = "PUT";
+    public static final String DELETE  = "DELETE";
+    public static final String HEAD    = "HEAD";
+    public static final String CONNECT = "CONNECT";
+    public static final String OPTIONS = "OPTIONS";
+    public static final String TRACE   = "TRACE";
 }

@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inugami.framework.api.tools.RunSafeUtils;
 import io.inugami.framework.commons.threads.ThreadsExecutorService;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
+import io.inugami.framework.interfaces.models.HttpVerbs;
 import io.inugami.framework.interfaces.monitoring.ErrorResult;
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.data.ResponseData;
@@ -29,9 +30,11 @@ import io.inugami.framework.interfaces.monitoring.kpi.KpiExtractorContext;
 import io.inugami.framework.interfaces.monitoring.kpi.KpiExtractorSPI;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModelDTO;
-import io.inugami.framework.interfaces.spi.SpiLoader;
+import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
 import io.inugami.monitoring.core.sensors.ServicesSensor;
 import io.inugami.monitoring.springboot.config.InugamiMonitoringProperties;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -57,16 +60,13 @@ public class KpiInterceptor implements MonitoringFilterInterceptor {
     // ATTRIBUTES
     // =================================================================================================================
     public static final String APPLICATION_JSON = "application/json";
-    public static final String GET              = "GET";
-    public static final String POST             = "POST";
-    public static final String PATCH            = "PATCH";
-    public static final String PUT              = "PUT";
     public static final String THREAD_NAME      = "KpiInterceptor";
     public static final long   TIMEOUT          = 60000L;
 
     private final InugamiMonitoringProperties monitoringProperties;
     private final ObjectMapper                objectMapper;
     private final Clock                       clock;
+    private final SpiLoaderServiceSPI         spiLoaderServiceSPI;
 
     private final ThreadsExecutorService executor     = new ThreadsExecutorService(THREAD_NAME,
                                                                                    5,
@@ -79,11 +79,11 @@ public class KpiInterceptor implements MonitoringFilterInterceptor {
     // =================================================================================================================
     // BUILDER
     // =================================================================================================================
-    @Override
-    public MonitoringFilterInterceptor buildInstance(final ConfigHandler<String, String> configuration) {
-        final List<KpiExtractorSPI> providers = RunSafeUtils.runSafeOrElse(() -> SpiLoader.getInstance()
-                                                                                          .loadSpiService(KpiExtractorSPI.class), new ArrayList<>());
-        extractors.addAll(extractors);
+    @PostConstruct
+    public MonitoringFilterInterceptor buildInstance() {
+        final List<KpiExtractorSPI> providers =
+                RunSafeUtils.runSafeOrElse(() -> spiLoaderServiceSPI.loadServices(KpiExtractorSPI.class), new ArrayList<>());
+        extractors.addAll(providers);
 
         final var config = Optional.ofNullable(monitoringProperties)
                                    .map(InugamiMonitoringProperties::getInterceptors)
@@ -100,9 +100,19 @@ public class KpiInterceptor implements MonitoringFilterInterceptor {
         }
         return this;
     }
+
+    @PreDestroy
+    public void shutdown() {
+        RunSafeUtils.runSafeVoid(() -> executor.shutdown());
+    }
+
     // =================================================================================================================
     // BUILDER
     // =================================================================================================================
+    @Override
+    public MonitoringFilterInterceptor buildInstance(final ConfigHandler<String, String> configuration) {
+        return this;
+    }
 
     @Override
     public List<GenericMonitoringModel> onBegin(final RequestData request) {
@@ -142,10 +152,10 @@ public class KpiInterceptor implements MonitoringFilterInterceptor {
                                                                   .now(LocalDateTime.now(clock))
                                                                   .requestContent(extractRequestJsonNode(request))
                                                                   .response(response.toBuilder().build())
-                                                                  .responseContent(extractResponseJsonNode(response,request.getMethod()))
+                                                                  .responseContent(extractResponseJsonNode(response, request.getMethod()))
                                                                   .build();
         for (KpiExtractorSPI extractor : extractors) {
-            tasks.add(() -> extractor.extractFromRequest(kpiContext));
+            tasks.add(() -> extractor.extractFromResponse(kpiContext));
         }
 
         RunSafeUtils.runSafeVoid(() -> executor.run(tasks, this::onTaskDone));
@@ -202,16 +212,16 @@ public class KpiInterceptor implements MonitoringFilterInterceptor {
     }
 
     private boolean validRequestVerb(final String method) {
-        return POST.equalsIgnoreCase(method)
-               || PATCH.equalsIgnoreCase(method)
-               || PUT.equalsIgnoreCase(method);
+        return HttpVerbs.POST.equalsIgnoreCase(method)
+               || HttpVerbs.PATCH.equalsIgnoreCase(method)
+               || HttpVerbs.PUT.equalsIgnoreCase(method);
     }
 
     private boolean validResponseVerb(final String method) {
-        return GET.equalsIgnoreCase(method)
-               || POST.equalsIgnoreCase(method)
-               || PATCH.equalsIgnoreCase(method)
-               || PUT.equalsIgnoreCase(method);
+        return HttpVerbs.GET.equalsIgnoreCase(method)
+               || HttpVerbs.POST.equalsIgnoreCase(method)
+               || HttpVerbs.PATCH.equalsIgnoreCase(method)
+               || HttpVerbs.PUT.equalsIgnoreCase(method);
     }
 
     protected void onTaskDone(final List<GenericMonitoringModelDTO> data,

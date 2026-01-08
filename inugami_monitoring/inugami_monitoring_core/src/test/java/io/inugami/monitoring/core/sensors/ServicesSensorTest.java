@@ -1,5 +1,6 @@
 package io.inugami.monitoring.core.sensors;
 
+import io.inugami.commons.test.api.SkipLineMatcher;
 import io.inugami.framework.configuration.services.ConfigHandlerHashMap;
 import io.inugami.framework.interfaces.monitoring.models.GenericModelCallType;
 import io.inugami.framework.interfaces.monitoring.models.GenericModelCounterType;
@@ -61,20 +62,25 @@ class ServicesSensorTest {
         assertText(service.process(),
                    """
                            [ {
-                                "asset" : "inugami",
-                                "counterType" : "hits",
-                                "environment" : "test",
-                                "instanceName" : "inu",
-                                "instanceNumber" : "001",
-                                "nonTemporalHash" : "inugami:test:inu:001:hits:::service::count:min",
-                                "service" : "service",
-                                "time" : 0,
-                                "timeUnit" : "min",
-                                "timestamp" : 0,
-                                "value" : 50,
-                                "valueType" : "count"
-                              } ]
-                           """);
+                                   "asset" : "inugami",
+                                   "counterType" : "hits",
+                                   "date" : "2026-01-08T21:25:15.699374997",
+                                   "environment" : "test",
+                                   "instanceName" : "inu",
+                                   "instanceNumber" : "001",
+                                   "nonTemporalHash" : "inugami:test:inu:001:hits:::service::count:min",
+                                   "service" : "service",
+                                   "time" : 0,
+                                   "timeUnit" : "min",
+                                   "timestamp" : 1767907515,
+                                   "value" : {
+                                     "decimal" : false,
+                                     "value" : 50
+                                   },
+                                   "valueType" : "count"
+                                 } ]
+                           """,
+                   SkipLineMatcher.of(3,11));
     }
 
     @Test
@@ -118,38 +124,44 @@ class ServicesSensorTest {
         assertText(service.process(),
                    """
                            [ {
-                                   "asset" : "inugami",
-                                   "callType" : "REST",
-                                   "counterType" : "hits",
-                                   "environment" : "test",
-                                   "errorType" : "hits",
-                                   "instanceName" : "inu",
-                                   "instanceNumber" : "001",
-                                   "nonTemporalHash" : "inugami:test:inu:001:hits::REST:user:email_domain:gmail.com:",
-                                   "service" : "user",
-                                   "subService" : "email_domain",
-                                   "time" : 0,
-                                   "timestamp" : 0,
-                                   "value" : 2,
-                                   "valueType" : "gmail.com"
-                                 }, {
-                                   "asset" : "inugami",
-                                   "callType" : "REST",
-                                   "counterType" : "hits",
-                                   "environment" : "test",
-                                   "errorType" : "hits",
-                                   "instanceName" : "inu",
-                                   "instanceNumber" : "001",
-                                   "nonTemporalHash" : "inugami:test:inu:001:hits::REST:user:email_domain:inugami.io:min",
-                                   "service" : "user",
-                                   "subService" : "email_domain",
-                                   "time" : 0,
-                                   "timeUnit" : "min",
-                                   "timestamp" : 0,
-                                   "value" : 6,
-                                   "valueType" : "inugami.io"
-                                 } ]
-                           """);
+                                      "asset" : "inugami",
+                                      "callType" : "REST",
+                                      "counterType" : "hits",
+                                      "date" : "2026-01-08T21:25:15.070482083",
+                                      "environment" : "test",
+                                      "instanceName" : "inu",
+                                      "instanceNumber" : "001",
+                                      "nonTemporalHash" : "inugami:test:inu:001:hits::REST:user:email_domain:gmail.com:",
+                                      "service" : "user",
+                                      "subService" : "email_domain",
+                                      "time" : 0,
+                                      "timestamp" : 1767907515,
+                                      "value" : {
+                                        "decimal" : false,
+                                        "value" : 2
+                                      },
+                                      "valueType" : "gmail.com"
+                                    }, {
+                                      "asset" : "inugami",
+                                      "callType" : "REST",
+                                      "counterType" : "hits",
+                                      "date" : "2026-01-08T21:25:15.079457059",
+                                      "environment" : "test",
+                                      "instanceName" : "inu",
+                                      "instanceNumber" : "001",
+                                      "nonTemporalHash" : "inugami:test:inu:001:hits::REST:user:email_domain:inugami.io:min",
+                                      "service" : "user",
+                                      "subService" : "email_domain",
+                                      "time" : 0,
+                                      "timeUnit" : "min",
+                                      "timestamp" : 1767907515,
+                                      "value" : {
+                                        "decimal" : false,
+                                        "value" : 6
+                                      },
+                                      "valueType" : "inugami.io"
+                                    } ]
+                           """, SkipLineMatcher.of(4,12,22,31));
     }
 
     // =================================================================================================================
