@@ -18,16 +18,23 @@ package io.inugami.monitoring.core.sensors;
 
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.models.Tuple;
+import io.inugami.framework.interfaces.models.number.FloatNumber;
+import io.inugami.framework.interfaces.models.number.LongNumber;
 import io.inugami.framework.interfaces.monitoring.ServicesSensorAggregator;
+import io.inugami.framework.interfaces.monitoring.models.CurrentApplicationDTO;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModelDTO;
+import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
 import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.framework.interfaces.spi.SpiLoader;
-import io.inugami.framework.interfaces.tools.BlockingQueue;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNotNull;
+import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.applyIfNull;
 
 /**
  * ServicesSensor
@@ -40,24 +47,28 @@ public class ServicesSensor implements MonitoringSensor {
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
-    protected static final BlockingQueue<GenericMonitoringModel> BUFFER = new BlockingQueue<>();
+    protected static final LinkedBlockingQueue<GenericMonitoringModel> BUFFER = new LinkedBlockingQueue<>();
 
     protected static final List<ServicesSensorAggregator> AGGREGATORS     = SpiLoader.getInstance()
                                                                                      .loadSpiServicesByPriority(ServicesSensorAggregator.class);
     public static final    String                         SERVICES_SENSOR = "servicesSensor";
+    private                CurrentApplicationDTO          currentApplication;
 
-    protected static long interval;
-
-    protected ConfigHandler<String, String> configuration;
+    protected static long                          interval;
+    protected        MonitoringContextDTO          context;
+    protected        ConfigHandler<String, String> configuration;
 
     // =================================================================================================================
     // CONSTRUCTORS
     // =================================================================================================================
     @Override
-    public MonitoringSensor buildInstance(final long interval, final String query,
-                                          final ConfigHandler<String, String> configuration) {
+    public MonitoringSensor buildInstance(final long interval,
+                                          final String query,
+                                          final ConfigHandler<String, String> configuration,
+                                          final MonitoringContextDTO context) {
         defineInterval(interval);
         this.configuration = configuration;
+        this.context       = context;
         return this;
     }
 
@@ -84,41 +95,62 @@ public class ServicesSensor implements MonitoringSensor {
     // =================================================================================================================
     @Override
     public List<GenericMonitoringModel> process() {
-        final List<GenericMonitoringModel>              result        = new ArrayList<>();
-        final List<GenericMonitoringModel>              data          = BUFFER.pollAll();
-        final Map<GenericMonitoringModel, List<Object>> reducedValues = reduceData(data);
+        return processExtracting();
+    }
 
-        for (final Map.Entry<GenericMonitoringModel, List<Object>> entry : reducedValues.entrySet()) {
+    protected synchronized List<GenericMonitoringModel> processExtracting() {
+        final List<GenericMonitoringModel> result = new ArrayList<>();
+        final List<GenericMonitoringModel> data   = new ArrayList<>();
+        BUFFER.drainTo(data);
+
+        if (data.isEmpty()) {
+            return List.of();
+        }
+        final Map<GenericMonitoringModelDTO, List<Object>> reducedValues = reduceData(data);
+
+        for (final Map.Entry<GenericMonitoringModelDTO, List<Object>> entry : reducedValues.entrySet()) {
             result.addAll(computeValue(entry.getKey(), entry.getValue()));
         }
 
         return result;
     }
 
-    protected Map<GenericMonitoringModel, List<Object>> reduceData(final List<GenericMonitoringModel> data) {
-        final Map<String, Tuple<GenericMonitoringModel, List<Object>>> localBuffer = new HashMap<>();
+    protected Map<GenericMonitoringModelDTO, List<Object>> reduceData(final List<GenericMonitoringModel> data) {
+        final Map<String, Tuple<GenericMonitoringModelDTO, List<Object>>> localBuffer = new HashMap<>();
 
         for (final GenericMonitoringModel item : data) {
-            Tuple<GenericMonitoringModel, List<Object>> saved = localBuffer.get(item.getNonTemporalHash());
-            if (saved == null) {
-                final List<Object> values = new ArrayList<>();
-                values.add(item.getValue());
-                saved = new Tuple<>(item, values);
-                localBuffer.put(item.getNonTemporalHash(), saved);
-            } else if (item.getValue() != null) {
-                saved.getValue().add(item.getValue());
+            final var                                      id     = item.getNonTemporalHash();
+            Tuple<GenericMonitoringModelDTO, List<Object>> bucket = localBuffer.get(id);
+            if (bucket == null) {
+                bucket = Tuple.<GenericMonitoringModelDTO, List<Object>>builder()
+                              .key(GenericMonitoringModelDTO.builder().from(item).build())
+                              .value(new ArrayList<>())
+                              .build();
+                localBuffer.put(id, bucket);
             }
+            bucket.getValue().add(item.getValue());
         }
 
-        final Map<GenericMonitoringModel, List<Object>> result = new HashMap<>();
-        for (final Map.Entry<String, Tuple<GenericMonitoringModel, List<Object>>> entry : localBuffer.entrySet()) {
+        final Map<GenericMonitoringModelDTO, List<Object>> result = new HashMap<>();
+        for (final Map.Entry<String, Tuple<GenericMonitoringModelDTO, List<Object>>> entry : localBuffer.entrySet()) {
             result.put(entry.getValue().getKey(), entry.getValue().getValue());
         }
         return result;
     }
 
-    protected List<GenericMonitoringModel> computeValue(final GenericMonitoringModel data,
+    protected List<GenericMonitoringModel> computeValue(final GenericMonitoringModelDTO data,
                                                         final List<Object> values) {
+
+        if (values == null || values.isEmpty()) {
+            return List.of();
+        }
+        if (values.size() == 1) {
+            return List.of(processCleanValue(data.toBuilder()
+                                                 .value(values.getFirst())
+                                                 .build()));
+        }
+
+
         final ServicesSensorAggregator currentAggregator = chooseAggregator(data);
         return Optional.ofNullable(currentAggregator)
                        .map(aggregator -> processAggregation(aggregator, data, values))
@@ -130,8 +162,45 @@ public class ServicesSensor implements MonitoringSensor {
                                                               final List<Object> values) {
         List<GenericMonitoringModel>       result     = new ArrayList<>();
         final List<GenericMonitoringModel> aggregated = currentAggregator.compute(data, values, configuration);
-        applyIfNotNull(aggregated, result::addAll);
+        for (GenericMonitoringModel value : Optional.ofNullable(aggregated).orElse(List.of())) {
+            GenericMonitoringModelDTO cleanValue = processCleanValue(value);
+            applyIfNotNull(cleanValue, result::add);
+        }
         return result;
+    }
+
+    private GenericMonitoringModelDTO processCleanValue(final GenericMonitoringModel kpi) {
+        if(kpi.getValue()==null){
+            return null;
+        }
+        final var builder = GenericMonitoringModelDTO.builder().from(kpi);
+
+        applyIfNull(kpi.getEnvironment(), () -> builder.environment(context.getCurrentApplication().getEnv()));
+        applyIfNull(kpi.getAsset(), () -> builder.asset(context.getCurrentApplication().getAsset()));
+        applyIfNull(kpi.getInstanceName(), () -> builder.instanceName(context.getCurrentApplication()
+                                                                               .getInstanceName()));
+        applyIfNull(kpi.getInstanceNumber(), () -> builder.instanceNumber(context.getCurrentApplication()
+                                                                                   .getInstanceNumber()));
+        if(kpi.getDate() == null){
+            final LocalDateTime now = LocalDateTime.now(context.getClock());
+            builder.date(now);
+            builder.timestamp(now.toEpochSecond(ZoneOffset.UTC));
+        }
+
+        if(kpi.getValue() instanceof Integer v){
+            builder.value(LongNumber.of(v));
+        }
+        if(kpi.getValue() instanceof Long v){
+            builder.value(LongNumber.of(v));
+        }
+        if(kpi.getValue() instanceof Float v){
+            builder.value(FloatNumber.of(v));
+        }
+        if(kpi.getValue() instanceof Double v){
+            builder.value(FloatNumber.of(v));
+        }
+
+        return builder.build();
     }
 
     protected ServicesSensorAggregator chooseAggregator(final GenericMonitoringModel data) {

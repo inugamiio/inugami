@@ -16,12 +16,13 @@
  */
 package io.inugami.framework.interfaces.monitoring.models;
 
-import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
-import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
+import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
+import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +37,10 @@ import java.util.List;
 @ToString
 @Setter
 @Getter
-public class Monitoring {
+public class Monitoring implements Serializable {
+    private static final long serialVersionUID = -772837418019698246L;
     @Builder.Default
-    private boolean                           enable = true;
+    private boolean                           enable       = true;
     private String                            env;
     private String                            asset;
     private String                            hostname;
@@ -46,6 +48,7 @@ public class Monitoring {
     private String                            instanceNumber;
     private String                            applicationVersion;
     private int                               maxSensorsTasksThreads;
+    private CurrentApplicationDTO             currentApplication;
     private ConfigHandler<String, String>     properties;
     @Builder.Default
     private List<MonitoringSender>            senders      = new ArrayList<>();

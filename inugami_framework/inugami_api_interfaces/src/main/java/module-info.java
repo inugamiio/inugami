@@ -102,6 +102,7 @@ open module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.tools.reflection;
     exports io.inugami.framework.interfaces.tools.strategy;
     exports io.inugami.framework.interfaces.tools;
+    exports io.inugami.framework.interfaces.monitoring.kpi;
 
     uses io.inugami.framework.interfaces.configurtation.ConfigurationSpi;
     uses io.inugami.framework.interfaces.configurtation.ProviderAttributFunction;
@@ -152,6 +153,7 @@ open module io.inugami.framework.interfaces {
     uses io.inugami.framework.interfaces.handlers.Handler;
     uses io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
     uses io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
+    uses io.inugami.framework.interfaces.monitoring.kpi.KpiExtractorSPI;
 
     provides io.inugami.framework.interfaces.configurtation.ConfigurationSpi with io.inugami.framework.interfaces.monitoring.logger.DefaultConfigurationSpi;
 }

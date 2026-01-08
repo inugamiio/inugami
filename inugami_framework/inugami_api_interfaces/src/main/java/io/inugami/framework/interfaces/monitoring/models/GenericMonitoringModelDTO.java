@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * GenericMonitoringModel
@@ -48,16 +49,27 @@ public class GenericMonitoringModelDTO implements GenericMonitoringModel, Identi
     public static final  String        CALL_TYPE_REST   = "REST";
     public static final  String        CALL_TYPE_JMS    = "JMS";
     private              String        uid;
+    @EqualsAndHashCode.Include
     private              String        asset;
+    @EqualsAndHashCode.Include
     private              String        environment;
+    @EqualsAndHashCode.Include
     private              String        instanceName;
+    @EqualsAndHashCode.Include
     private              String        instanceNumber;
+    @EqualsAndHashCode.Include
     private              String        counterType;
+    @EqualsAndHashCode.Include
     private              String        device;
+    @EqualsAndHashCode.Include
     private              String        callType;
+    @EqualsAndHashCode.Include
     private              String        service;
+    @EqualsAndHashCode.Include
     private              String        subService;
+    @EqualsAndHashCode.Include
     private              String        valueType;
+    @EqualsAndHashCode.Include
     private              String        timeUnit;
     private              LocalDateTime date;
     private              long          time;
@@ -65,7 +77,6 @@ public class GenericMonitoringModelDTO implements GenericMonitoringModel, Identi
     private              String        errorType;
     private              Object        value;
     @ToString.Include
-    @EqualsAndHashCode.Include
     private              String        path;
     private              String        data;
     private              long          timestamp;
@@ -74,6 +85,7 @@ public class GenericMonitoringModelDTO implements GenericMonitoringModel, Identi
     private              String        version;
     private              String        commitId;
     private              String        commitDate;
+
 
     // =========================================================================
     // GETTERS & SETTERS
@@ -105,7 +117,7 @@ public class GenericMonitoringModelDTO implements GenericMonitoringModel, Identi
 
     public static class GenericMonitoringModelDTOBuilder {
         public GenericMonitoringModelDTOBuilder from(final GenericMonitoringModel other) {
-            if (value == null) {
+            if (other == null) {
                 return this;
             }
             uid            = other.getUid();
@@ -124,10 +136,27 @@ public class GenericMonitoringModelDTO implements GenericMonitoringModel, Identi
             time           = other.getTime();
             errorCode      = other.getErrorCode();
             errorType      = other.getErrorType();
-            value          = other.getValueType();
+            value          = other.getValue();
             path           = other.getPath();
             data           = other.getData();
             timestamp      = other.getTimestamp();
+            artifactId     = other.getArtifactId();
+            groupId        = other.getGroupId();
+            version        = other.getVersion();
+            commitId       = other.getCommitId();
+            commitDate     = other.getCommitDate();
+            date           = other.getDate();
+
+            return this;
+        }
+
+        public GenericMonitoringModelDTOBuilder addCallType(final GenericModelCallType value) {
+            callType = Optional.ofNullable(value).orElse(GenericModelCallType.REST).name();
+            return this;
+        }
+
+        public GenericMonitoringModelDTOBuilder addCounterType(final GenericModelCounterType value) {
+            valueType = Optional.ofNullable(value).orElse(GenericModelCounterType.HITS).getKeywork();
             return this;
         }
     }

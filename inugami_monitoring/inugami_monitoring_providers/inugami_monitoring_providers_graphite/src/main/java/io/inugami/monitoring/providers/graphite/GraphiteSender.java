@@ -24,6 +24,7 @@ import io.inugami.framework.interfaces.exceptions.FatalException;
 import io.inugami.framework.interfaces.functionnals.ApplyIfNotNull;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
 import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
 import io.inugami.framework.interfaces.monitoring.senders.MonitoringSenderException;
 
@@ -76,7 +77,8 @@ public class GraphiteSender implements MonitoringSender, ApplyIfNotNull {
     }
 
     @Override
-    public MonitoringSender buildInstance(final ConfigHandler<String, String> config) {
+    public MonitoringSender buildInstance(final ConfigHandler<String, String> config,
+                                          final MonitoringContextDTO context) {
         return new GraphiteSender(config);
     }
 

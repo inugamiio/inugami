@@ -54,7 +54,9 @@ public class ServicesSensorAggregatorHits implements ServicesSensorAggregator {
                                                      .from(data);
 
         builder.timeUnit(timeUnit);
-        builder.valueType("count");
+        if(data.getValueType()==null){
+            builder.valueType("count");
+        }
         builder.value(sum(values));
 
         return List.of(builder.build());

@@ -14,27 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.interfaces.monitoring.senders;
+package io.inugami.framework.interfaces.models;
 
-import io.inugami.framework.interfaces.configurtation.ConfigHandler;
-import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
-import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
-import io.inugami.framework.interfaces.spi.NamedSpi;
-
-import java.util.List;
+import lombok.experimental.UtilityClass;
 
 /**
- * MonitoringProvider
- *
- * @author patrick_guillerm
- * @since 27 déc. 2018
+ * @since 2026-01-08
  */
-public interface MonitoringSender extends NamedSpi {
-
-    MonitoringSender buildInstance(final ConfigHandler<String, String> configuration, final MonitoringContextDTO context);
-
-    void process(List<GenericMonitoringModel> data) throws MonitoringSenderException;
-
-    default void shutdown() {
-    }
+@UtilityClass
+public class HttpVerbs {
+    public static final String GET     = "GET";
+    public static final String POST    = "POST";
+    public static final String PATCH   = "PATCH";
+    public static final String PUT     = "PUT";
+    public static final String DELETE  = "DELETE";
+    public static final String HEAD    = "HEAD";
+    public static final String CONNECT = "CONNECT";
+    public static final String OPTIONS = "OPTIONS";
+    public static final String TRACE   = "TRACE";
 }

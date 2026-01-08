@@ -21,8 +21,8 @@ import io.inugami.framework.api.tools.RunSafeUtils;
 import io.inugami.framework.commons.threads.MonitoredThreadFactory;
 import io.inugami.framework.commons.threads.ThreadsExecutorService;
 import io.inugami.framework.interfaces.ctx.BootstrapContext;
-import io.inugami.framework.interfaces.models.CurrentApplicationDTO;
 import io.inugami.framework.interfaces.models.tools.Chrono;
+import io.inugami.framework.interfaces.monitoring.models.CurrentApplicationDTO;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
 import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
@@ -113,6 +113,7 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
     public CompletableFuture<List<GenericMonitoringModel>> add(final MonitoringSensor sensor) {
         final CompletableFuture<List<GenericMonitoringModel>> future = new CompletableFuture<>();
         this.tasks.add(SensorsIntervalTask.SensorTask.builder()
+                                                     .interval(this.interval)
                                                      .mdc(MdcService.getInstance().getAllMdc())
                                                      .currentApplication(currentApplication)
                                                      .sensor(sensor)
@@ -176,6 +177,7 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
         @Builder
         @AllArgsConstructor
         public static class SensorTask implements Callable<List<GenericMonitoringModel>> {
+            private final long                                            interval;
             private final MonitoringSensor                                sensor;
             private final Map<String, String>                             mdc;
             private final CompletableFuture<List<GenericMonitoringModel>> future;
@@ -187,7 +189,7 @@ public class SensorsIntervalManagerTask implements BootstrapContext<MonitoringCo
 
                 for (GenericMonitoringModel data : result) {
                     data.setDate(LocalDateTime.now(Clock.systemUTC()));
-                    if(currentApplication!=null){
+                    if (currentApplication != null) {
                         data.setGroupId(currentApplication.getGroupId());
                         data.setArtifactId(currentApplication.getArtifactId());
                         data.setVersion(currentApplication.getVersion());

@@ -18,6 +18,7 @@ package io.inugami.framework.interfaces.monitoring.sensors;
 
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
 import io.inugami.framework.interfaces.spi.NamedSpi;
 
 import java.util.List;
@@ -30,8 +31,11 @@ import java.util.List;
  */
 public interface MonitoringSensor extends NamedSpi {
 
-    MonitoringSensor buildInstance(final long interval, final String query,
-                                   ConfigHandler<String, String> configuration);
+    MonitoringSensor buildInstance(final long interval,
+                                   final String query,
+                                   final ConfigHandler<String, String> configuration,
+                                   final MonitoringContextDTO context);
+
 
     long getInterval();
 

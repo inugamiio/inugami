@@ -32,8 +32,42 @@ import java.util.Map;
 @Getter
 @ConfigurationProperties(prefix = "inugami.monitoring", ignoreInvalidFields = true, ignoreUnknownFields = true)
 public class InugamiMonitoringProperties {
+    private InugamiMonitoringPropertiesInternal     internal     = new InugamiMonitoringPropertiesInternal();
+    private InugamiMonitoringPropertiesInterceptors interceptors = new InugamiMonitoringPropertiesInterceptors();
     @Builder.Default
-    private Map<String, Map<String, String>> sensors = new LinkedHashMap<>();
+    private Map<String, Map<String, String>>        sensors      = new LinkedHashMap<>();
     @Builder.Default
-    private Map<String, Map<String, String>> senders = new LinkedHashMap<>();
+    private Map<String, Map<String, String>>        senders      = new LinkedHashMap<>();
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Setter
+    @Getter
+    public static class InugamiMonitoringPropertiesInternal {
+        @Builder.Default
+        private Long interval = 60000L;
+    }
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Setter
+    @Getter
+    public static class InugamiMonitoringPropertiesInterceptors {
+        @Builder.Default
+        private KpiInterceptors kpi = KpiInterceptors.builder().build();
+    }
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Setter
+    @Getter
+    public static class KpiInterceptors {
+        @Builder.Default
+        private boolean enabled = false;
+        private String  skipUrl;
+    }
+
 }

@@ -14,27 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.interfaces.monitoring.senders;
+package io.inugami.framework.interfaces.monitoring.kpi;
 
-import io.inugami.framework.interfaces.configurtation.ConfigHandler;
-import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
-import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
-import io.inugami.framework.interfaces.spi.NamedSpi;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
+import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModelDTO;
 
 import java.util.List;
 
-/**
- * MonitoringProvider
- *
- * @author patrick_guillerm
- * @since 27 déc. 2018
- */
-public interface MonitoringSender extends NamedSpi {
+public interface KpiExtractorSPI {
 
-    MonitoringSender buildInstance(final ConfigHandler<String, String> configuration, final MonitoringContextDTO context);
 
-    void process(List<GenericMonitoringModel> data) throws MonitoringSenderException;
+    default boolean accept(final RequestData request){
+        return true;
+    }
 
-    default void shutdown() {
+    default List<GenericMonitoringModelDTO> extractFromRequest(final KpiExtractorContext context){
+        return List.of();
+    }
+    default List<GenericMonitoringModelDTO> extractFromResponse(final KpiExtractorContext context){
+        return List.of();
     }
 }

@@ -14,27 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.interfaces.monitoring.senders;
+package io.inugami.framework.interfaces.monitoring.kpi;
 
-import io.inugami.framework.interfaces.configurtation.ConfigHandler;
-import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
-import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
-import io.inugami.framework.interfaces.spi.NamedSpi;
+import com.fasterxml.jackson.databind.JsonNode;
+import io.inugami.framework.interfaces.monitoring.data.RequestData;
+import io.inugami.framework.interfaces.monitoring.data.ResponseData;
+import lombok.*;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 /**
- * MonitoringProvider
- *
- * @author patrick_guillerm
- * @since 27 déc. 2018
+ * @since 2026-01-08
  */
-public interface MonitoringSender extends NamedSpi {
-
-    MonitoringSender buildInstance(final ConfigHandler<String, String> configuration, final MonitoringContextDTO context);
-
-    void process(List<GenericMonitoringModel> data) throws MonitoringSenderException;
-
-    default void shutdown() {
-    }
+@ToString(onlyExplicitlyIncluded = true)
+@Setter
+@Getter
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+public class KpiExtractorContext {
+    private RequestData   request;
+    private ResponseData  response;
+    private LocalDateTime now;
+    private JsonNode      requestContent;
+    private JsonNode      responseContent;
 }

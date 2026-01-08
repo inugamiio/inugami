@@ -51,13 +51,13 @@ public class FloatNumber implements GraphiteNumber {
         return new FloatNumber(value);
     }
     public static FloatNumber of(final Long value) {
-        return new FloatNumber(Optional.of(value).orElse(0L));
+        return new FloatNumber(Optional.ofNullable(value).orElse(0L));
     }
     public static FloatNumber of(final double value) {
         return new FloatNumber(value);
     }
     public static FloatNumber of(final Double value) {
-        return new FloatNumber(Optional.of(value).orElse(0.0));
+        return new FloatNumber(Optional.ofNullable(value).orElse(0.0));
     }
 
     // =========================================================================

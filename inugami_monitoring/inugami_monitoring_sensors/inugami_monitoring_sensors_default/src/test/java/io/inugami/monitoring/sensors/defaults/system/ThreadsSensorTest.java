@@ -2,6 +2,7 @@ package io.inugami.monitoring.sensors.defaults.system;
 
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +40,7 @@ class ThreadsSensorTest {
 
     @Test
     void should_build_instance_via_factory_method() {
-        var newInstance = sensor.buildInstance(2000L, "query", configHandler);
+        var newInstance = sensor.buildInstance(2000L, "query", configHandler, MonitoringContextDTO.builder().build());
         assertThat(newInstance).isInstanceOf(ThreadsSensor.class);
         assertThat(newInstance.getInterval()).isEqualTo(60000L);
     }

@@ -21,6 +21,7 @@ import io.inugami.framework.api.tools.Comparators;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.models.number.FloatNumber;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
 import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 import io.inugami.monitoring.api.tools.IntervalValues;
@@ -62,7 +63,9 @@ public class CpuSensor implements MonitoringSensor {
         timeUnit  = null;
     }
 
-    public CpuSensor(final long interval, final String query, final ConfigHandler<String, String> configuration) {
+    public CpuSensor(final long interval,
+                     final String query,
+                     final ConfigHandler<String, String> configuration) {
         super();
         this.interval  = interval;
         this.percentil = configuration.grab("percentil", 0.95);
@@ -76,7 +79,8 @@ public class CpuSensor implements MonitoringSensor {
     @Override
     public MonitoringSensor buildInstance(final long interval,
                                           final String query,
-                                          final ConfigHandler<String, String> configuration) {
+                                          final ConfigHandler<String, String> configuration,
+                                          final MonitoringContextDTO context) {
         return new CpuSensor(interval, query, configuration);
     }
 
@@ -93,8 +97,8 @@ public class CpuSensor implements MonitoringSensor {
 
     @Override
     public List<GenericMonitoringModel> process() {
-        final List<Double> cpuValues   = values.poll();
-        final Double       resultValue =
+        final List<Double> cpuValues = values.poll();
+        final Double resultValue =
                 GenericMonitoringModelTools.getPercentilValues(cpuValues, percentil, Comparators.DOUBLE_COMPARATOR);
         return resultValue == null ? null : buildGenericMonitoringModel(resultValue);
     }
