@@ -1,7 +1,10 @@
 package io.inugami.monitoring.core.sensors;
 
 import io.inugami.framework.configuration.services.ConfigHandlerHashMap;
+import io.inugami.framework.interfaces.monitoring.models.GenericModelCallType;
+import io.inugami.framework.interfaces.monitoring.models.GenericModelCounterType;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModelDTO;
+import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -58,13 +61,94 @@ class ServicesSensorTest {
         assertText(service.process(),
                    """
                            [ {
-                             "nonTemporalHash" : ":::::::::count:min",
-                             "time" : 0,
-                             "timeUnit" : "min",
-                             "timestamp" : 0,
-                             "value" : 50,
-                             "valueType" : "count"
-                           } ]
+                                "asset" : "inugami",
+                                "counterType" : "hits",
+                                "environment" : "test",
+                                "instanceName" : "inu",
+                                "instanceNumber" : "001",
+                                "nonTemporalHash" : "inugami:test:inu:001:hits:::service::count:min",
+                                "service" : "service",
+                                "time" : 0,
+                                "timeUnit" : "min",
+                                "timestamp" : 0,
+                                "value" : 50,
+                                "valueType" : "count"
+                              } ]
+                           """);
+    }
+
+    @Test
+    void process_withCustomKpi() {
+        final var service = buildService();
+        final var data = GenericMonitoringModelDTO.builder()
+                                                  .asset("inugami")
+                                                  .environment("test")
+                                                  .instanceName("inu")
+                                                  .instanceNumber("001")
+                                                  .callType("REST")
+                                                  .counterType(ServiceValueTypes.HITS.getKeywork())
+                                                  .service("service");
+
+        ServicesSensor.addData(List.of(
+                data
+                        .addCallType(GenericModelCallType.REST)
+                        .service("user")
+                        .subService("email_domain")
+                        .addCounterType(GenericModelCounterType.HITS)
+                        .valueType("inugami.io")
+                        .value(2)
+                        .build(),
+                data
+                        .addCallType(GenericModelCallType.REST)
+                        .service("user")
+                        .subService("email_domain")
+                        .addCounterType(GenericModelCounterType.HITS)
+                        .valueType("gmail.com")
+                        .value(2)
+                        .build(),
+                data
+                        .addCallType(GenericModelCallType.REST)
+                        .service("user")
+                        .subService("email_domain")
+                        .addCounterType(GenericModelCounterType.HITS)
+                        .valueType("inugami.io")
+                        .value(4)
+                        .build()));
+
+        assertText(service.process(),
+                   """
+                           [ {
+                                   "asset" : "inugami",
+                                   "callType" : "REST",
+                                   "counterType" : "hits",
+                                   "environment" : "test",
+                                   "errorType" : "hits",
+                                   "instanceName" : "inu",
+                                   "instanceNumber" : "001",
+                                   "nonTemporalHash" : "inugami:test:inu:001:hits::REST:user:email_domain:gmail.com:",
+                                   "service" : "user",
+                                   "subService" : "email_domain",
+                                   "time" : 0,
+                                   "timestamp" : 0,
+                                   "value" : 2,
+                                   "valueType" : "gmail.com"
+                                 }, {
+                                   "asset" : "inugami",
+                                   "callType" : "REST",
+                                   "counterType" : "hits",
+                                   "environment" : "test",
+                                   "errorType" : "hits",
+                                   "instanceName" : "inu",
+                                   "instanceNumber" : "001",
+                                   "nonTemporalHash" : "inugami:test:inu:001:hits::REST:user:email_domain:inugami.io:min",
+                                   "service" : "user",
+                                   "subService" : "email_domain",
+                                   "time" : 0,
+                                   "timeUnit" : "min",
+                                   "timestamp" : 0,
+                                   "value" : 6,
+                                   "valueType" : "inugami.io"
+                                 } ]
                            """);
     }
 
@@ -75,6 +159,7 @@ class ServicesSensorTest {
         final Map<String, String> configuration = new LinkedHashMap<>();
         return (ServicesSensor) new ServicesSensor().buildInstance(500,
                                                                    null,
-                                                                   new ConfigHandlerHashMap(configuration));
+                                                                   new ConfigHandlerHashMap(configuration),
+                                                                   MonitoringContextDTO.builder().build());
     }
 }

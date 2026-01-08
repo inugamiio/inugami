@@ -14,28 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.interfaces.models;
+package io.inugami.framework.interfaces.monitoring.models;
 
 import lombok.*;
-import lombok.Builder;
 
-import java.io.Serializable;
+import java.time.Clock;
 
 /**
- * @since 2026-01-07
+ * @since 2026-01-08
  */
 @ToString(onlyExplicitlyIncluded = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Setter
 @Getter
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class CurrentApplicationDTO implements Serializable {
-    private static final long   serialVersionUID = 860434663268503615L;
-    private              String groupId;
-    private              String artifactId;
-    private              String version;
-    private              String commitId;
-    private              String commitDate;
+public class MonitoringContextDTO {
+    @Builder.Default
+    @ToString.Include
+    private CurrentApplicationDTO currentApplication = CurrentApplicationDTO.builder().build();
+    @Builder.Default
+    private Clock                 clock = Clock.systemUTC();
 }

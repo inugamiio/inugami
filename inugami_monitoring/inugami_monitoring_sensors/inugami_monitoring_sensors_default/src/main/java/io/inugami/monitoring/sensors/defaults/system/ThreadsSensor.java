@@ -19,6 +19,7 @@ package io.inugami.monitoring.sensors.defaults.system;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.models.number.LongNumber;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
 import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 
@@ -68,8 +69,10 @@ public class ThreadsSensor implements MonitoringSensor {
     }
 
     @Override
-    public MonitoringSensor buildInstance(final long interval, final String query,
-                                          final ConfigHandler<String, String> configuration) {
+    public MonitoringSensor buildInstance(final long interval,
+                                          final String query,
+                                          final ConfigHandler<String, String> configuration,
+                                          final MonitoringContextDTO context) {
         return new ThreadsSensor(interval, query, configuration);
     }
 

@@ -24,9 +24,11 @@ import io.inugami.framework.commons.spring.feature.FeatureConfiguration;
 import io.inugami.framework.configuration.services.ConfigHandlerHashMap;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.marshalling.XmlJaxbMarshallerSpi;
+import io.inugami.framework.interfaces.monitoring.models.CurrentApplicationDTO;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -66,6 +68,30 @@ public class ConfigConfiguration {
         return CONFIGURATION;
     }
 
+    @Bean
+    public CurrentApplicationDTO currentApplication(@Value("${env:DEV}") final String env,
+                                                    @Value("${application.hostname:localhost}") final String hostname,
+                                                    @Value("${application.instanceName:#{null}}") final String instanceName,
+                                                    @Value("${application.instanceNumber:#{null}}") final String instanceNumber,
+                                                    @Value("${application.groupId:#{null}}") final String groupId,
+                                                    @Value("${application.name:#{null}}") final String asset,
+                                                    @Value("${application.artifactId:#{null}}") final String artifactId,
+                                                    @Value("${application.version:#{null}}") final String version,
+                                                    @Value("${application.commitId:#{null}}") final String commitId,
+                                                    @Value("${application.commitDate:#{null}}") final String commitDate) {
+        return CurrentApplicationDTO.builder()
+                                    .env(env)
+                                    .asset(asset)
+                                    .instanceName(instanceName)
+                                    .instanceNumber(instanceNumber)
+                                    .groupId(groupId)
+                                    .artifactId(artifactId)
+                                    .version(version)
+                                    .commitId(commitId)
+                                    .commitDate(commitDate)
+                                    .build();
+    }
+
     public static void initializeConfig(final ConfigurableEnvironment resolver) {
 
         initializeConfig(resolver,
@@ -94,15 +120,15 @@ public class ConfigConfiguration {
                                             .defaultValue("application")
                                             .build(),
                          SpringConfigBinding.builder()
-                                            .springKey("spring.application.hostname")
+                                            .springKey("application.hostname")
                                             .inugamiKey("hostname")
                                             .build(),
                          SpringConfigBinding.builder()
-                                            .springKey("spring.application.instanceName")
+                                            .springKey("application.instanceName")
                                             .inugamiKey("instanceName")
                                             .build(),
                          SpringConfigBinding.builder()
-                                            .springKey("spring.application.instanceNumber")
+                                            .springKey("application.instanceNumber")
                                             .inugamiKey("instanceNumber")
                                             .build(),
                          SpringConfigBinding.builder()
@@ -128,7 +154,7 @@ public class ConfigConfiguration {
                          SpringConfigBinding.fromKey("inugami.monitoring.headers.language", "Accept-Language"),
                          SpringConfigBinding.fromKey("inugami.monitoring.headers.country", "country"),
                          SpringConfigBinding.fromKey("inugami.monitoring.headers.specifics", "")
-        );
+                        );
     }
 
     static void initializeConfig(final ConfigurableEnvironment resolver,

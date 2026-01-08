@@ -23,6 +23,7 @@ import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.connectors.config.HttpBasicConnectorConfiguration;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
 import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
 import io.inugami.framework.interfaces.monitoring.senders.MonitoringSenderException;
 import io.inugami.framework.interfaces.providers.ProviderWithHttpConnector;
@@ -97,7 +98,8 @@ public class ElsSender implements MonitoringSender, ProviderWithHttpConnector {
     }
 
     @Override
-    public MonitoringSender buildInstance(final ConfigHandler<String, String> configuration) {
+    public MonitoringSender buildInstance(final ConfigHandler<String, String> configuration,
+                                          final MonitoringContextDTO context) {
         return new ElsSender(configuration);
     }
 

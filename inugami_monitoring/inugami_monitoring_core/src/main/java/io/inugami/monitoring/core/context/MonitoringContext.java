@@ -18,8 +18,8 @@ package io.inugami.monitoring.core.context;
 
 import io.inugami.framework.api.processors.DefaultConfigHandler;
 import io.inugami.framework.interfaces.ctx.BootstrapContext;
-import io.inugami.framework.interfaces.models.CurrentApplicationDTO;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
+import io.inugami.framework.interfaces.monitoring.models.CurrentApplicationDTO;
 import io.inugami.framework.interfaces.monitoring.models.Monitoring;
 import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
 import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;

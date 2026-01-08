@@ -37,6 +37,7 @@ open module io.inugami.monitoring.springboot {
     requires annotations;
     requires spring.cloud.openfeign.core;
     requires io.inugami.framework.configurations.configuration;
+    requires io.inugami.framework.commons;
     requires spring.web;
     requires spring.webmvc;
     requires static lombok;

@@ -14,27 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package io.inugami.framework.interfaces.monitoring.senders;
-
-import io.inugami.framework.interfaces.configurtation.ConfigHandler;
-import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
-import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
-import io.inugami.framework.interfaces.spi.NamedSpi;
-
-import java.util.List;
+package io.inugami.framework.interfaces.monitoring.models;
 
 /**
- * MonitoringProvider
- *
- * @author patrick_guillerm
- * @since 27 déc. 2018
+ * @since 2026-01-08
  */
-public interface MonitoringSender extends NamedSpi {
-
-    MonitoringSender buildInstance(final ConfigHandler<String, String> configuration, final MonitoringContextDTO context);
-
-    void process(List<GenericMonitoringModel> data) throws MonitoringSenderException;
-
-    default void shutdown() {
-    }
+public enum GenericModelCallType {
+    REST, JMS, SOAP, TCP;
 }

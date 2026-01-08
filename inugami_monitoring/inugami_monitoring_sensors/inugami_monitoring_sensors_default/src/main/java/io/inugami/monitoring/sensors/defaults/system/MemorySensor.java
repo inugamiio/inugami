@@ -20,6 +20,7 @@ import io.inugami.framework.api.tools.Comparators;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.models.number.FloatNumber;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
 import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 import io.inugami.monitoring.api.tools.IntervalValues;
@@ -65,8 +66,10 @@ public class MemorySensor implements MonitoringSensor {
     }
 
     @Override
-    public MonitoringSensor buildInstance(final long interval, final String query,
-                                          final ConfigHandler<String, String> configuration) {
+    public MonitoringSensor buildInstance(final long interval,
+                                          final String query,
+                                          final ConfigHandler<String, String> configuration,
+                                          final MonitoringContextDTO context) {
         return new MemorySensor(interval, query, configuration);
     }
 

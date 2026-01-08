@@ -20,8 +20,10 @@ package io.inugami.monitoring.providers.log;
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
 import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
 import io.inugami.framework.interfaces.monitoring.senders.MonitoringSenderException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +36,7 @@ import java.util.List;
  * @since Jan 17, 2019
  */
 @SuppressWarnings({"java:S2629"})
+@Slf4j
 public class LogSender implements MonitoringSender {
 
 
@@ -55,7 +58,8 @@ public class LogSender implements MonitoringSender {
     }
 
     @Override
-    public MonitoringSender buildInstance(final ConfigHandler<String, String> configuration) {
+    public MonitoringSender buildInstance(final ConfigHandler<String, String> configuration,
+                                          final MonitoringContextDTO contextDTO) {
         return new LogSender(configuration);
     }
     // =========================================================================
@@ -64,13 +68,16 @@ public class LogSender implements MonitoringSender {
 
     @Override
     public void process(final List<GenericMonitoringModel> data) throws MonitoringSenderException {
+        long counter = 0;
         for (final GenericMonitoringModel item : data) {
             final String json = convertToJson(item);
             if (json == null) {
                 continue;
             }
             logger.info(json);
+            counter++;
         }
+        log.info("send {} metrics", counter);
     }
 
     private String convertToJson(final GenericMonitoringModel value) {

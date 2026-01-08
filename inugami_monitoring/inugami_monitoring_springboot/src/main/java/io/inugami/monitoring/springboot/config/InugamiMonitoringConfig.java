@@ -24,10 +24,11 @@ import io.inugami.framework.configuration.services.ConfigHandlerHashMap;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
 import io.inugami.framework.interfaces.exceptions.ErrorCodeResolver;
 import io.inugami.framework.interfaces.feature.IFeatureService;
-import io.inugami.framework.interfaces.models.CurrentApplicationDTO;
 import io.inugami.framework.interfaces.monitoring.MonitoringLoaderSpi;
 import io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor;
+import io.inugami.framework.interfaces.monitoring.models.CurrentApplicationDTO;
 import io.inugami.framework.interfaces.monitoring.models.Monitoring;
+import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
 import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
 import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.framework.interfaces.spi.SpiLoaderServiceSPI;
@@ -52,6 +53,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import java.time.Clock;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +85,6 @@ public class InugamiMonitoringConfig {
     // =================================================================================================================
     public static final String INUGAMI_MONITORING_CONFIG = "io.inugami.monitoring.springboot";
     public static final String INUGAMI                   = "io.inugami";
-    public static final int    SECONDS                   = 1000;
     public static final String QUERY                     = "query";
     public static final String EMPTY                     = "";
 
@@ -103,29 +104,40 @@ public class InugamiMonitoringConfig {
     }
 
     @Bean
+    public MonitoringContextDTO monitoringContextDTO(final CurrentApplicationDTO currentApplication,
+                                                     final Clock clock) {
+        return MonitoringContextDTO.builder()
+                                   .currentApplication(currentApplication)
+                                   .clock(clock)
+                                   .build();
+    }
+
+    @Bean
     public Monitoring initMonitoringContext(final ConfigHandler<String, String> springConfig,
                                             final MonitoringBootstrapService monitoringBootstrapService,
                                             final SpiLoaderServiceSPI spiLoaderServiceSPI,
                                             final InugamiMonitoringProperties monitoringProperties,
-                                            final CurrentApplicationDTO currentApplication) {
-        final MonitoringContext             monitoringContext    = monitoringBootstrapService.getContext();
-        final Monitoring                    config               = monitoringContext.getConfig();
+                                            final MonitoringContextDTO monitoringContextDTO) {
+        final MonitoringContext monitoringContext = monitoringBootstrapService.getContext();
+        final Monitoring        config            = monitoringContext.getConfig();
         config.setMaxSensorsTasksThreads(20);
-        monitoringContext.setCurrentApplication(currentApplication);
+        monitoringContext.setCurrentApplication(monitoringContextDTO.getCurrentApplication());
         final ConfigHandler<String, String> currentConfiguration = ConfigConfiguration.CONFIGURATION;
         applyIfNotNull(springConfig, currentConfiguration::putAll);
         config.setProperties(mergeProperties(config.getProperties(), currentConfiguration));
         initializeInterceptors(monitoringContext, config);
-        initializeSensors(config, spiLoaderServiceSPI, monitoringProperties, currentConfiguration);
-        initializeSenders(config, spiLoaderServiceSPI, monitoringProperties, currentConfiguration);
+        initializeSensors(config, spiLoaderServiceSPI, monitoringProperties, currentConfiguration,monitoringContextDTO);
+        initializeSenders(config, spiLoaderServiceSPI, monitoringProperties, currentConfiguration,monitoringContextDTO);
         monitoringContext.initialize(null);
         return config;
     }
 
+
     private void initializeSensors(final Monitoring config,
                                    final SpiLoaderServiceSPI spiLoaderServiceSPI,
                                    final InugamiMonitoringProperties monitoringProperties,
-                                   final ConfigHandler<String, String> currentConfiguration) {
+                                   final ConfigHandler<String, String> currentConfiguration,
+                                   final MonitoringContextDTO monitoringContextDTO) {
         final List<MonitoringSensor> sensors =
                 RunSafeUtils.runSafeOrElse(() -> spiLoaderServiceSPI.loadServices(MonitoringSensor.class), List.of());
         if (sensors.isEmpty()) {
@@ -140,16 +152,18 @@ public class InugamiMonitoringConfig {
             applyIfNotNull(currentConfiguration, currentConfig::putAll);
             applyIfNotNull(senderConfig, currentConfig::putAll);
 
-            config.getSensors().add(sensor.buildInstance(SECONDS, Optional.ofNullable(currentConfig.get(QUERY))
-                                                                          .orElse(EMPTY),
-                                                         new ConfigHandlerHashMap(currentConfig)));
+            config.getSensors().add(sensor.buildInstance(monitoringProperties.getInternal().getInterval(),
+                                                         Optional.ofNullable(currentConfig.get(QUERY)).orElse(EMPTY),
+                                                         new ConfigHandlerHashMap(currentConfig),
+                                                         monitoringContextDTO));
         }
     }
 
     private void initializeSenders(final Monitoring config,
                                    final SpiLoaderServiceSPI spiLoaderServiceSPI,
                                    final InugamiMonitoringProperties monitoringProperties,
-                                   final ConfigHandler<String, String> currentConfiguration) {
+                                   final ConfigHandler<String, String> currentConfiguration,
+                                   final MonitoringContextDTO monitoringContextDTO) {
         final List<MonitoringSender> senders =
                 RunSafeUtils.runSafeOrElse(() -> spiLoaderServiceSPI.loadServices(MonitoringSender.class), List.of());
         if (senders.isEmpty()) {
@@ -163,25 +177,10 @@ public class InugamiMonitoringConfig {
             applyIfNotNull(currentConfiguration, currentConfig::putAll);
             applyIfNotNull(senderConfig, currentConfig::putAll);
 
-            config.getSenders().add(sender.buildInstance(new ConfigHandlerHashMap(currentConfig)));
+            config.getSenders().add(sender.buildInstance(new ConfigHandlerHashMap(currentConfig),monitoringContextDTO));
         }
     }
 
-
-    @Bean
-    public CurrentApplicationDTO currentApplication(@Value("${application.groupId:#{null}}") final String groupId,
-                                                    @Value("${application.artifactId:#{null}}") final String artifactId,
-                                                    @Value("${application.version:#{null}}") final String version,
-                                                    @Value("${application.commitId:#{null}}") final String commitId,
-                                                    @Value("${application.commitDate:#{null}}") final String commitDate) {
-        return CurrentApplicationDTO.builder()
-                                    .groupId(groupId)
-                                    .artifactId(artifactId)
-                                    .version(version)
-                                    .commitId(commitId)
-                                    .commitDate(commitDate)
-                                    .build();
-    }
 
     @Bean
     public FilterInterceptor filterInterceptor(final SpiLoaderServiceSPI spiLoaderServiceSPI,

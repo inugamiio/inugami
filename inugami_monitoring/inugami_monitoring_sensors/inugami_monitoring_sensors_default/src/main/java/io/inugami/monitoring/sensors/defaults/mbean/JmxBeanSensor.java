@@ -22,6 +22,7 @@ import io.inugami.framework.interfaces.models.number.FloatNumber;
 import io.inugami.framework.interfaces.models.number.LongNumber;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
+import io.inugami.framework.interfaces.monitoring.models.MonitoringContextDTO;
 import io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor;
 import io.inugami.monitoring.api.tools.GenericMonitoringModelTools;
 import lombok.extern.slf4j.Slf4j;
@@ -54,24 +55,25 @@ public class JmxBeanSensor implements MonitoringSensor {
     // =========================================================================
     public JmxBeanSensor() {
         super();
-        interval = 60000L;
-        query = null;
-        timeUnit = null;
+        interval      = 60000L;
+        query         = null;
+        timeUnit      = null;
         configuration = null;
     }
 
     public JmxBeanSensor(final long interval, final String query,
                          final ConfigHandler<String, String> configuration) {
-        this.interval = interval;
-        this.query = query;
-        this.timeUnit = null;
+        this.interval      = interval;
+        this.query         = query;
+        this.timeUnit      = null;
         this.configuration = configuration;
 
     }
 
     @Override
     public MonitoringSensor buildInstance(final long interval, final String query,
-                                          final ConfigHandler<String, String> configuration) {
+                                          final ConfigHandler<String, String> configuration,
+                                          final MonitoringContextDTO context) {
 
         return new JmxBeanSensor(interval, query, configuration);
     }
@@ -125,7 +127,7 @@ public class JmxBeanSensor implements MonitoringSensor {
         }
 
         return value == null ? new ArrayList<>()
-                : convertToMonitoringModel(normalizePath, value, queryData.getAttribute());
+                             : convertToMonitoringModel(normalizePath, value, queryData.getAttribute());
     }
 
     // =========================================================================
