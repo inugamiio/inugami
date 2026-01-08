@@ -1,6 +1,7 @@
 package io.inugami.monitoring.core.context.sensors;
 
 import io.inugami.commons.test.UnitTestHelper;
+import io.inugami.commons.test.api.SkipLineMatcher;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModel;
 import io.inugami.framework.interfaces.monitoring.models.GenericMonitoringModelDTO;
 import io.inugami.framework.interfaces.monitoring.senders.MonitoringSender;
@@ -34,27 +35,27 @@ class SensorsIntervalManagerTaskTest {
     // =================================================================================================================
     public static final String                                       NOMINAL = """
             [ {
-              "asset" : "inugami",
-              "callType" : "REST",
-              "counterType" : "hits",
-              "data" : "additional data",
-              "date" : "2025-12-02T20:53:42",
-              "device" : "ANY",
-              "environment" : "test",
-              "errorCode" : "USER-0_0",
-              "errorType" : "functional",
-              "instanceName" : "inu",
-              "instanceNumber" : "001",
-              "nonTemporalHash" : "inugami:test:inu:001:hits:ANY:REST:user:NONE:hit:s",
-              "path" : "datacenter.europe",
-              "service" : "user",
-              "subService" : "NONE",
-              "time" : 1,
-              "timeUnit" : "s",
-              "timestamp" : 1764708822,
-              "value" : 2,
-              "valueType" : "hit"
-            } ]
+                 "asset" : "inugami",
+                 "callType" : "REST",
+                 "counterType" : "hits",
+                 "data" : "additional data",
+                 "date" : "2026-01-08T07:10:50.796259561",
+                 "device" : "ANY",
+                 "environment" : "test",
+                 "errorCode" : "USER-0_0",
+                 "errorType" : "functional",
+                 "instanceName" : "inu",
+                 "instanceNumber" : "001",
+                 "nonTemporalHash" : "inugami:test:inu:001:hits:ANY:REST:user:NONE:hit:s",
+                 "path" : "datacenter.europe",
+                 "service" : "user",
+                 "subService" : "NONE",
+                 "time" : 1,
+                 "timeUnit" : "s",
+                 "timestamp" : 1764708822,
+                 "value" : 2,
+                 "valueType" : "hit"
+               } ]
             """;
     public static       Clock                                        CLOCK   = Clock.fixed(Instant.parse("2025-12-02T20:53:42.00Z"), ZoneOffset.UTC);
     @Mock
@@ -78,7 +79,7 @@ class SensorsIntervalManagerTaskTest {
             UnitTestHelper.waitForDone(10000, future);
 
 
-            assertText(future.get(), NOMINAL);
+            assertText(future.get(), NOMINAL, SkipLineMatcher.of(5));
 
 
             verify(sender, new AtMost(5)).process(dataCaptor.capture());

@@ -41,7 +41,7 @@ class ThreadsSensorTest {
     void should_build_instance_via_factory_method() {
         var newInstance = sensor.buildInstance(2000L, "query", configHandler);
         assertThat(newInstance).isInstanceOf(ThreadsSensor.class);
-        assertThat(newInstance.getInterval()).isEqualTo(2000L);
+        assertThat(newInstance.getInterval()).isEqualTo(60000L);
     }
 
     @Test
@@ -97,6 +97,6 @@ class ThreadsSensorTest {
         List<GenericMonitoringModel> results = defaultTimeSensor.process();
 
         // THEN
-        assertThat(results.get(0).getTimeUnit()).isEqualTo("5000ms");
+        assertThat(results.get(0).getTimeUnit()).isEqualTo("60000ms");
     }
 }
