@@ -58,7 +58,7 @@ open module io.inugami.monitoring.core {
     provides io.inugami.framework.interfaces.monitoring.Obfuscator with io.inugami.monitoring.core.obfuscators.AuthorizationObfuscator, io.inugami.monitoring.core.obfuscators.TokenObfuscator, io.inugami.monitoring.core.obfuscators.PasswordObfuscator;
     provides io.inugami.framework.interfaces.monitoring.ResponseListener with io.inugami.monitoring.core.interceptors.WarningResponseListener;
     provides io.inugami.framework.interfaces.monitoring.TrackingInformationSPI with io.inugami.monitoring.core.context.DefaultTrackingInformationSPI;
-    provides io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor with io.inugami.monitoring.core.spi.IoLogInterceptor, io.inugami.monitoring.core.spi.ServiceCounterInterceptor, io.inugami.monitoring.core.spi.MdcInterceptor, io.inugami.monitoring.core.spi.CorsInterceptable;
+    provides io.inugami.framework.interfaces.monitoring.interceptors.MonitoringFilterInterceptor with io.inugami.monitoring.core.spi.IoLogInterceptor, io.inugami.monitoring.core.spi.ServiceCounterInterceptor, io.inugami.monitoring.core.spi.CorsInterceptable;
     provides io.inugami.framework.interfaces.monitoring.ServicesSensorAggregator with io.inugami.monitoring.core.sensors.aggregators.ServicesSensorAggregatorHits, io.inugami.monitoring.core.sensors.aggregators.ServicesSensorAggregatorResponseTime;
     provides io.inugami.framework.interfaces.monitoring.sensors.MonitoringSensor with io.inugami.monitoring.core.sensors.ServicesSensor;
 

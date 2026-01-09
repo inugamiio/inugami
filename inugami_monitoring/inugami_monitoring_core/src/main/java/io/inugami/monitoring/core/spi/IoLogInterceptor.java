@@ -131,11 +131,11 @@ public class IoLogInterceptor implements MonitoringFilterInterceptor {
     private boolean shouldDisplayContent(final RequestData request) {
         for (final IoLogContentDisplayResolverSPI resolver : Optional.ofNullable(DISPLAY_RESOLVERS.get())
                                                                      .orElse(List.of())) {
-            if (!resolver.display(request)) {
-                return false;
+            if (resolver.display(request)) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     protected String resolveFullPath(final RequestData request) {

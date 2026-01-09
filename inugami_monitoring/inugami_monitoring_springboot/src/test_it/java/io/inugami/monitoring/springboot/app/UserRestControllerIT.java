@@ -101,7 +101,7 @@ class UserRestControllerIT extends SpringBootIntegrationTest {
                                                                  .map(this::cleanLogs)
                                                                  .toList()),
                               "io/inugami/monitoring/springboot/app/userRestControllerIT/crud.logs.txt",
-                              SkipLineMatcher.of(8,20,38,53,93,107,127,144));
+                              SkipLineMatcher.of(8,12,14,16,22,40,44,48,51,57,97,100,103,105,107,113,133,136,139,143,146,152));
     }
 
 

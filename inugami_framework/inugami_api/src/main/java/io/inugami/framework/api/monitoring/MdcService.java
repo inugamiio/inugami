@@ -86,11 +86,11 @@ public class MdcService implements MdcServiceSpi {
         setMdc(MDCKeys.hostname, requestContext.getHostname());
         setMdc(MDCKeys.instanceName, requestContext.getInstanceName());
         setMdc(MDCKeys.instanceNumber, requestContext.getInstanceNumber());
-        setMdc(MDCKeys.correlation_id, requestContext.getCorrelationId());
-        setMdc(MDCKeys.request_id, requestContext.getRequestId());
-        setMdc(MDCKeys.traceId, requestContext.getTraceId());
-        setMdc(MDCKeys.conversation_id, requestContext.getConversationId());
-        setMdc(MDCKeys.sessionId, requestContext.getSessionId());
+        correlationId(requestContext.getCorrelationId());
+        traceId(requestContext.getTraceId());
+        requestId();
+        conversationId(requestContext.getConversationId());
+        sessionId(requestContext.getSessionId());
         setMdc(MDCKeys.applicationVersion, requestContext.getApplicationVersion());
         setMdc(MDCKeys.callFrom, requestContext.getCallFrom());
         setMdc(MDCKeys.deviceIdentifier, requestContext.getDeviceIdentifier());
@@ -499,7 +499,7 @@ public class MdcService implements MdcServiceSpi {
     }
 
     public MdcServiceSpi correlationId(final String value) {
-        setMdc(MDCKeys.correlation_id, value);
+        setMdc(MDCKeys.correlation_id, Optional.ofNullable(value).orElse(UUID.randomUUID().toString()));
         return this;
     }
 
@@ -1382,7 +1382,7 @@ public class MdcService implements MdcServiceSpi {
     }
 
     public MdcServiceSpi traceId(final String value) {
-        setMdc(MDCKeys.traceId, value);
+        setMdc(MDCKeys.traceId, Optional.ofNullable(value).orElse(UUID.randomUUID().toString()));
         return this;
     }
 

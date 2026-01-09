@@ -1,6 +1,7 @@
 package io.inugami.monitoring.core.interceptors.internal;
 
 import io.inugami.commons.test.UnitTestHelper;
+import io.inugami.commons.test.api.SkipLineMatcher;
 import io.inugami.commons.test.dto.UserDataDTO;
 import io.inugami.framework.api.monitoring.MdcService;
 import io.inugami.framework.api.tools.ReflectionUtils;
@@ -120,9 +121,11 @@ class FilterInterceptorTrackingMdcUtilsTest {
                              "appUrl" : "http:://localhost/mock",
                              "appVerb" : "GET",
                              "correlation_id" : "230bc5e7-4dcd-4ca2-855a-619c001d378b",
+                             "request_id" : "484f9aa1-558e-4476-b99a-a96565ca2ce0",
                              "traceId" : "764597e2-8191-4ebd-b638-96531277a4d3"
                            }
-                           """);
+                           """,
+                   SkipLineMatcher.of(4));
     }
 
     @Test
@@ -135,9 +138,11 @@ class FilterInterceptorTrackingMdcUtilsTest {
                    """
                            {
                              "correlation_id" : "230bc5e7-4dcd-4ca2-855a-619c001d378b",
+                             "request_id" : "6da94e90-0ab7-4a17-bf8c-4e3f33c9aae2",
                              "traceId" : "764597e2-8191-4ebd-b638-96531277a4d3"
                            }
-                           """);
+                           """,
+                   SkipLineMatcher.of(2));
     }
 
     @Test
