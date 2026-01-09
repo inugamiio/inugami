@@ -9,7 +9,7 @@
     <parent>
         <artifactId>inugami_common</artifactId>
         <groupId>io.inugami.framework.commons</groupId>
-        <version>4.2.4-SNAPSHOT</version>
+        <version>4.2.4</version>
     </parent>
 
     <!--================================================================================================================
