@@ -25,6 +25,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import static io.inugami.framework.interfaces.exceptions.DefaultInugamiErrors.ZIP_BOMB;
+import static io.inugami.framework.interfaces.exceptions.DefaultInugamiErrors.ZIP_SLIP;
 
 /**
  * Unzip
@@ -111,7 +112,7 @@ public class Unzip {
         return bytesRead;
     }
 
-    private File buildFileEntry(final File server, final String fileName) {
+    private File buildFileEntry(final File server, final String fileName) throws IOException {
 
         final String path = new StringBuilder(server.getAbsolutePath())
                 .append(File.separator)
@@ -119,6 +120,12 @@ public class Unzip {
                 .toString();
 
         final File result = new File(path);
+
+        final String destDirPath = server.getCanonicalPath();
+        final String resultPath = result.getCanonicalPath();
+        if (!resultPath.startsWith(destDirPath + File.separator)) {
+            throw new UncheckedException(ZIP_SLIP);
+        }
 
         final File parent = result.getParentFile();
         if (!parent.exists()) {

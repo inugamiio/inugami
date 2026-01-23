@@ -25,6 +25,10 @@ public enum DefaultInugamiErrors implements ErrorCode {
 
     ZIP_BOMB(newBuilder().errorCode("ZIP-0_0")
                          .message("zip file is too big to be unzipped")
+                         .errorTypeSecurity()),
+
+    ZIP_SLIP(newBuilder().errorCode("ZIP-0_1")
+                         .message("zip slip detected")
                          .errorTypeSecurity());
 
 
