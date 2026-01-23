@@ -24,6 +24,8 @@ import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static io.inugami.framework.interfaces.exceptions.DefaultInugamiErrors.ZIP_BOMB;
+
 /**
  * Unzip
  *
@@ -63,7 +65,7 @@ public class Unzip {
                 entry = zip.getNextEntry();
                 size += entry.getSize();
                 if (size > MAX_SIZE) {
-                    throw new UncheckedException("zip file is too big to be unzipped");
+                    throw new UncheckedException(ZIP_BOMB);
                 }
                 if (entry != null) {
                     unzipFile(destination, zip, entry, verbose);
