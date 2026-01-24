@@ -44,7 +44,6 @@ public class DefaultExceptionHandlerService implements IExceptionHandlerService 
     // ATTRIBUTES
     // ========================================================================
     public static final  String APPLICATION    = "application";
-    public static final  String EMPTY          = "";
     public static final  String ERROR_CATEGORY = "errorCategory";
     public static final  String ERROR_CODE     = "errorCode";
     public static final  String ERROR_TYPE     = "errorType";
@@ -52,6 +51,7 @@ public class DefaultExceptionHandlerService implements IExceptionHandlerService 
     public static final  String VERSION        = "version";
     private static final String CONTENT_TYPE   = "Content-Type";
     public static final  String SERVICE        = "service";
+    public static final  String EMPTY          = "";
 
     @Value("${application.name:#{null}}")
     private String applicationName;
@@ -138,10 +138,12 @@ public class DefaultExceptionHandlerService implements IExceptionHandlerService 
 
 
         if (DefaultErrorCode.SECURITY.equalsIgnoreCase(errorCode.getErrorType())) {
-            Loggers.SECURITY.error("[{}] {} security error detected : {} ",
+            Loggers.SECURITY.error("[{}] {} security error detected : {} {}",
                                    Optional.ofNullable(mdc.deviceIp()).orElse(mdc.remoteAddress()),
-                    errorCode.getErrorCode(),
-                    errorCode.getMessage());
+                                   errorCode.getErrorCode(),
+                                   errorCode.getMessage(),
+                                   Optional.ofNullable(errorCode.getMessageDetail())
+                                           .orElse(DefaultExceptionHandlerService.EMPTY));
         }
         if (errorCode.isExploitationError()) {
             MdcService.getInstance().errorUrl(buildWikiPage(errorCode));

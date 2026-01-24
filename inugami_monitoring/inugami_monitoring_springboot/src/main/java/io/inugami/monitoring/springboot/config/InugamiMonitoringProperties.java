@@ -34,6 +34,7 @@ import java.util.Map;
 public class InugamiMonitoringProperties {
     private InugamiMonitoringPropertiesInternal     internal     = new InugamiMonitoringPropertiesInternal();
     private InugamiMonitoringPropertiesInterceptors interceptors = new InugamiMonitoringPropertiesInterceptors();
+    private InugamiMonitoringPropertiesFeign        feign        = InugamiMonitoringPropertiesFeign.builder().build();
     @Builder.Default
     private Map<String, Map<String, String>>        sensors      = new LinkedHashMap<>();
     @Builder.Default
@@ -70,4 +71,13 @@ public class InugamiMonitoringProperties {
         private String  skipUrl;
     }
 
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Setter
+    @Getter
+    public static class InugamiMonitoringPropertiesFeign {
+        @Builder.Default
+        private boolean ssrfEnabled = true;
+    }
 }

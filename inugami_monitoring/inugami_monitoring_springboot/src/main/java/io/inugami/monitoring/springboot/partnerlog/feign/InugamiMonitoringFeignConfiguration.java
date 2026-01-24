@@ -18,6 +18,8 @@ package io.inugami.monitoring.springboot.partnerlog.feign;
 
 import feign.codec.Encoder;
 import feign.okhttp.OkHttpClient;
+import io.inugami.monitoring.core.context.MonitoringContext;
+import io.inugami.monitoring.springboot.config.InugamiMonitoringProperties;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
@@ -36,7 +38,17 @@ public class InugamiMonitoringFeignConfiguration {
 
     @ConditionalOnMissingBean
     @Bean
-    public OkHttpClient client() {
-        return new OkHttpClient();
+    public OkHttpClient client(final InugamiMonitoringProperties properties) {
+        return new OkHttpClient(new okhttp3.OkHttpClient.Builder()
+                                        .addInterceptor(new OkClientAntiSsrfInterceptor(properties.getFeign()))
+                                        .followRedirects(false)
+                                        .build());
+    }
+
+
+    @ConditionalOnMissingBean
+    @Bean
+    public FeignPartnerRequestInterceptor feignPartnerRequestInterceptor(final MonitoringContext monitoringContext){
+        return new FeignPartnerRequestInterceptor(monitoringContext);
     }
 }

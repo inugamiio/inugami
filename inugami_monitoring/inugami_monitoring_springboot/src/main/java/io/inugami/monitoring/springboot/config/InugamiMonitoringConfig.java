@@ -112,12 +112,18 @@ public class InugamiMonitoringConfig {
     }
 
     @Bean
+    public MonitoringContext monitoringContext(final MonitoringBootstrapService monitoringBootstrapService,
+                                               final SpiLoaderServiceSPI spiLoaderServiceSPI){
+        return monitoringBootstrapService.getContext();
+    }
+
+
+    @Bean
     public Monitoring initMonitoringContext(final ConfigHandler<String, String> springConfig,
-                                            final MonitoringBootstrapService monitoringBootstrapService,
                                             final SpiLoaderServiceSPI spiLoaderServiceSPI,
+                                            final MonitoringContext monitoringContext,
                                             final InugamiMonitoringProperties monitoringProperties,
                                             final MonitoringContextDTO monitoringContextDTO) {
-        final MonitoringContext monitoringContext = monitoringBootstrapService.getContext();
         final Monitoring        config            = monitoringContext.getConfig();
         config.setMaxSensorsTasksThreads(20);
         monitoringContext.setCurrentApplication(monitoringContextDTO.getCurrentApplication());

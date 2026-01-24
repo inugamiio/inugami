@@ -29,6 +29,9 @@ public enum DefaultInugamiErrors implements ErrorCode {
 
     ZIP_SLIP(newBuilder().errorCode("ZIP-0_1")
                          .message("zip slip detected")
+                         .errorTypeSecurity()),
+    HTTP_SSRF(newBuilder().errorCode("HTTP-0_")
+                         .message("SSRF request detected")
                          .errorTypeSecurity());
 
 
