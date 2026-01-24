@@ -46,7 +46,7 @@ class FeignCommonTest {
         final var requestTemplate = RequestTemplateBuilder.builder()
                                                           .target("http://inugami.io/mock/user")
                                                           .method(Request.HttpMethod.GET)
-                                                          .feignTarget(new <MyFeignService>Target.HardCodedTarget(MyFeignService.class, "http://inugami.io/mock/user"))
+                                                          .feignTarget(new <MyFeignService>Target.HardCodedTarget(MyFeignService.class, "http://inugami.io/mock"))
                                                           .body(JsonMarshaller.getInstance()
                                                                               .getIndentedObjectMapper()
                                                                               .writeValueAsString(UnitTestData.USER_1))
