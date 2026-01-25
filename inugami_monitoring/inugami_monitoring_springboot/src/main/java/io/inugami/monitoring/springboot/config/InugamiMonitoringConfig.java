@@ -36,7 +36,6 @@ import io.inugami.monitoring.core.context.MonitoringBootstrapService;
 import io.inugami.monitoring.core.context.MonitoringContext;
 import io.inugami.monitoring.core.interceptors.FilterInterceptor;
 import io.inugami.monitoring.core.spi.IoLogInterceptor;
-import io.inugami.monitoring.core.spi.MdcInterceptor;
 import io.inugami.monitoring.springboot.actuator.FailSafeStatusAggregator;
 import io.inugami.monitoring.springboot.actuator.VersionHealthIndicator;
 import io.inugami.monitoring.springboot.actuator.feature.FeatureIndicator;
@@ -113,12 +112,18 @@ public class InugamiMonitoringConfig {
     }
 
     @Bean
+    public MonitoringContext monitoringContext(final MonitoringBootstrapService monitoringBootstrapService,
+                                               final SpiLoaderServiceSPI spiLoaderServiceSPI){
+        return monitoringBootstrapService.getContext();
+    }
+
+
+    @Bean
     public Monitoring initMonitoringContext(final ConfigHandler<String, String> springConfig,
-                                            final MonitoringBootstrapService monitoringBootstrapService,
                                             final SpiLoaderServiceSPI spiLoaderServiceSPI,
+                                            final MonitoringContext monitoringContext,
                                             final InugamiMonitoringProperties monitoringProperties,
                                             final MonitoringContextDTO monitoringContextDTO) {
-        final MonitoringContext monitoringContext = monitoringBootstrapService.getContext();
         final Monitoring        config            = monitoringContext.getConfig();
         config.setMaxSensorsTasksThreads(20);
         monitoringContext.setCurrentApplication(monitoringContextDTO.getCurrentApplication());
@@ -246,11 +251,6 @@ public class InugamiMonitoringConfig {
     // =================================================================================================================
     private void initializeInterceptors(final MonitoringContext monitoringContext,
                                         final Monitoring monitoring) {
-
-        addInterceptorIfNoPresent(MdcInterceptor.class,
-                                  ctx -> ctx.getInterceptors().add(new MdcInterceptor()),
-                                  monitoringContext,
-                                  monitoring);
 
         addInterceptorIfNoPresent(IoLogInterceptor.class,
                                   ctx -> ctx.getInterceptors()

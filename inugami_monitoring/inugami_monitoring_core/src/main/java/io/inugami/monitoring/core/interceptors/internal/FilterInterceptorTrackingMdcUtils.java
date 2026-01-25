@@ -56,10 +56,10 @@ public class FilterInterceptorTrackingMdcUtils {
         if (httpRequest == null) {
             return result;
         }
-        final List<String>     headerNames = new ArrayList<>();
-        final Iterator<String> names       = Optional.ofNullable(httpRequest.getHeaderNames())
-                                                     .map(Enumeration::asIterator)
-                                                     .orElse(new ArrayList<String>().iterator());
+        final List<String> headerNames = new ArrayList<>();
+        final Iterator<String> names = Optional.ofNullable(httpRequest.getHeaderNames())
+                                               .map(Enumeration::asIterator)
+                                               .orElse(new ArrayList<String>().iterator());
         while (names.hasNext()) {
             headerNames.add(names.next());
         }
@@ -77,7 +77,10 @@ public class FilterInterceptorTrackingMdcUtils {
     // =================================================================================================================
     public static void initCorrelationIdAndTraceId(@NonNull final RequestData requestInfo,
                                                    @Nullable final ServletRequest request) {
-        MdcService.getInstance().correlationId(requestInfo.getCorrelationId()).traceId(requestInfo.getTraceId());
+        MdcService.getInstance()
+                  .correlationId(requestInfo.getCorrelationId())
+                  .traceId(requestInfo.getTraceId())
+                  .requestId();
 
         HttpServletRequest httpServletRequest = null;
         if (request instanceof HttpServletRequest httpRequest) {

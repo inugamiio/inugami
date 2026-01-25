@@ -24,6 +24,9 @@ import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static io.inugami.framework.interfaces.exceptions.DefaultInugamiErrors.ZIP_BOMB;
+import static io.inugami.framework.interfaces.exceptions.DefaultInugamiErrors.ZIP_SLIP;
+
 /**
  * Unzip
  *
@@ -61,12 +64,12 @@ public class Unzip {
             ZipEntry entry;
             do {
                 entry = zip.getNextEntry();
-                size += entry.getSize();
+
                 if (size > MAX_SIZE) {
-                    throw new UncheckedException("zip file is too big to be unzipped");
+                    throw new UncheckedException(ZIP_BOMB);
                 }
                 if (entry != null) {
-                    unzipFile(destination, zip, entry, verbose);
+                    size += unzipFile(destination, zip, entry, verbose);
                 }
             }
             while (entry != null);
@@ -79,10 +82,11 @@ public class Unzip {
         }
     }
 
-    private void unzipFile(final File server,
+    private long unzipFile(final File server,
                            final ZipInputStream zip,
                            final ZipEntry entry,
                            final boolean verbose) throws IOException {
+        long bytesRead=0L;
         final byte[] buffer   = new byte[1024];
         final String fileName = entry.getName();
         final File   newFile  = buildFileEntry(server, fileName);
@@ -98,16 +102,17 @@ public class Unzip {
 
                 int len;
                 while ((len = zip.read(buffer)) > 0) {
+                    bytesRead+=len;
                     fos.write(buffer, 0, len);
                 }
             } finally {
                 close(zip::closeEntry);
             }
         }
-
+        return bytesRead;
     }
 
-    private File buildFileEntry(final File server, final String fileName) {
+    private File buildFileEntry(final File server, final String fileName) throws IOException {
 
         final String path = new StringBuilder(server.getAbsolutePath())
                 .append(File.separator)
@@ -115,6 +120,12 @@ public class Unzip {
                 .toString();
 
         final File result = new File(path);
+
+        final String destDirPath = server.getCanonicalPath();
+        final String resultPath = result.getCanonicalPath();
+        if (!resultPath.startsWith(destDirPath + File.separator)) {
+            throw new UncheckedException(ZIP_SLIP);
+        }
 
         final File parent = result.getParentFile();
         if (!parent.exists()) {

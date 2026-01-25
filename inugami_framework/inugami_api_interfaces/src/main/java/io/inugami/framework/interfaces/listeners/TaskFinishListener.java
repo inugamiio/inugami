@@ -27,5 +27,5 @@ package io.inugami.framework.interfaces.listeners;
  */
 @FunctionalInterface
 public interface TaskFinishListener {
-    void onFinish(final long time, final long delais, final String name, final Object result, final Exception error);
+    void onFinish(final long time, final long delay, final String name, final Object result, final Exception error);
 }

@@ -6,19 +6,21 @@ MDC :
 	appClassShortName : UserRestController
 	appMethod : search
 	appUri : /user
-	appUrl : http://localhost:13295/user
+	appUrl : xxxxx
 	appVerb : GET
 	callType : REST
 	correlation_id : XXXX
-	duration : 0
+	duration : xxxxx
 	lifecycle : in
+	request_id : ab681161-bed3-4617-8613-7bd2406a0916
 	service : UserRestController_search
+	traceId : fc2a5f81-5952-4a5d-95d9-841041d174f3
 	urlPattern : /user/
 	urlPatternVerb : GET_/user/
 
 MESSAGE :
 ---------
-08/01 08:56:21  INFO [IOLOG:98] - [GET] /user
+09/01 22:05:49  INFO [IOLOG:98] - [GET] /user
 headers :
 	accept: */*
 	accept-encoding: xxxxx
@@ -36,22 +38,24 @@ MDC :
 	appClassShortName : UserRestController
 	appMethod : search
 	appUri : /user
-	appUrl : http://localhost:13295/user
+	appUrl : xxxxx
 	appVerb : GET
 	callType : REST
 	correlation_id : XXXX
-	duration : 0
+	duration : xxxxx
 	globalStatus : success
 	httpStatus : 200
 	lifecycle : out
+	request_id : ab681161-bed3-4617-8613-7bd2406a0916
 	service : UserRestController_search
 	status : 200
+	traceId : fc2a5f81-5952-4a5d-95d9-841041d174f3
 	urlPattern : /user/
 	urlPatternVerb : GET_/user/
 
 MESSAGE :
 ---------
-08/01 08:56:21  INFO [IOLOG:205] - [GET] /user
+09/01 22:05:50  INFO [IOLOG:205] - [GET] /user
 headers :
 	accept: */*
 	accept-encoding: xxxxx
@@ -91,21 +95,23 @@ MDC :
 	appClassShortName : UserRestController
 	appMethod : create
 	appUri : /user
-	appUrl : http://localhost:13295/user
+	appUrl : xxxxx
 	appVerb : POST
 	callType : REST
-	content-length : 471
+	content-length : xxxxx
 	content-type : application/json; charset=UTF-8
 	correlation_id : XXXX
-	duration : 0
+	duration : xxxxx
 	lifecycle : in
+	request_id : 367a30a0-3c56-44db-b8cc-43718b49337c
 	service : UserRestController_create
+	traceId : 3f80e184-dec8-4aa4-a331-e94f0f5316a2
 	urlPattern : /user/
 	urlPatternVerb : POST_/user/
 
 MESSAGE :
 ---------
-08/01 08:56:22  INFO [IOLOG:98] - [POST] /user
+09/01 22:05:50  INFO [IOLOG:98] - [POST] /user
 headers :
 	accept: */*
 	accept-encoding: xxxxx
@@ -125,24 +131,26 @@ MDC :
 	appClassShortName : UserRestController
 	appMethod : create
 	appUri : /user
-	appUrl : http://localhost:13295/user
+	appUrl : xxxxx
 	appVerb : POST
 	callType : REST
-	content-length : 471
+	content-length : xxxxx
 	content-type : application/json; charset=UTF-8
 	correlation_id : XXXX
-	duration : 0
+	duration : xxxxx
 	globalStatus : success
 	httpStatus : 200
 	lifecycle : out
+	request_id : 367a30a0-3c56-44db-b8cc-43718b49337c
 	service : UserRestController_create
 	status : 200
+	traceId : 3f80e184-dec8-4aa4-a331-e94f0f5316a2
 	urlPattern : /user/
 	urlPatternVerb : POST_/user/
 
 MESSAGE :
 ---------
-08/01 08:56:22  INFO [IOLOG:205] - [POST] /user
+09/01 22:05:50  INFO [IOLOG:205] - [POST] /user
 headers :
 	accept: */*
 	accept-encoding: xxxxx

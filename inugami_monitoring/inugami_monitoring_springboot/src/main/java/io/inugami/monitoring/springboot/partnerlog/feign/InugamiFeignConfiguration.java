@@ -7,6 +7,7 @@ import feign.codec.Decoder;
 import feign.codec.ErrorDecoder;
 import feign.jackson.JacksonDecoder;
 import feign.okhttp.OkHttpClient;
+import io.inugami.monitoring.springboot.config.InugamiMonitoringProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -20,8 +21,11 @@ public class InugamiFeignConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public Client inugamiDefaultClient() {
-        return new OkHttpClient();
+    public Client inugamiDefaultClient(final InugamiMonitoringProperties properties) {
+        return new OkHttpClient(new okhttp3.OkHttpClient.Builder()
+                                        .addInterceptor(new OkClientAntiSsrfInterceptor(properties.getFeign()))
+                                        .followRedirects(false)
+                                        .build());
     }
 
     @Bean

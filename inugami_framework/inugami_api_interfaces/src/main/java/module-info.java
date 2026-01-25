@@ -103,6 +103,7 @@ open module io.inugami.framework.interfaces {
     exports io.inugami.framework.interfaces.tools.strategy;
     exports io.inugami.framework.interfaces.tools;
     exports io.inugami.framework.interfaces.monitoring.kpi;
+    exports io.inugami.framework.interfaces.models.referential;
 
     uses io.inugami.framework.interfaces.configurtation.ConfigurationSpi;
     uses io.inugami.framework.interfaces.configurtation.ProviderAttributFunction;

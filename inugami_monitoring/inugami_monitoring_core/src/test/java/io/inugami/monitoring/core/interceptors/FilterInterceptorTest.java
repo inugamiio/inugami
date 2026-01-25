@@ -37,12 +37,13 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class FilterInterceptorTest {
-    public static final String                              URL   =
-            "http://localhost/mock/user/56053af4-af5d-42f8-9539-3626f395cbe9";
-    public static final String                              EMPTY = "";
+
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
+    public static final String                              URL   =
+            "http://localhost/mock/user/56053af4-af5d-42f8-9539-3626f395cbe9";
+    public static final String                              EMPTY = "";
     @Mock
     private             SpiLoaderServiceSPI                 spiLoaderServiceSPI;
     @Mock
@@ -112,21 +113,23 @@ class FilterInterceptorTest {
                                  .build(),
                    """
                            {
-                             "applicationVersion" : "e5e2577c-cd40-48ab-b10f-18bed1b506fc",
-                             "characterEncoding" : "UTF-8",
-                             "content" : "",
-                             "contentType" : "application/json",
-                             "contextPath" : "/mock",
-                             "correlationId" : "902d3fce-f8fe-4a94-971f-37bd878833c8",
-                             "deviceNetworkSpeedDown" : 0.0,
-                             "deviceNetworkSpeedLatency" : 0.0,
-                             "deviceNetworkSpeedUp" : 0.0,
-                             "headers" : { },
-                             "method" : "GET",
-                             "options" : { },
-                             "uri" : "http://localhost/mock/user/56053af4-af5d-42f8-9539-3626f395cbe9"
-                           }
-                           """);
+                              "applicationVersion" : "e5e2577c-cd40-48ab-b10f-18bed1b506fc",
+                              "characterEncoding" : "UTF-8",
+                              "content" : "",
+                              "contentType" : "application/json",
+                              "contextPath" : "/mock",
+                              "correlationId" : "902d3fce-f8fe-4a94-971f-37bd878833c8",
+                              "deviceNetworkSpeedDown" : 0.0,
+                              "deviceNetworkSpeedLatency" : 0.0,
+                              "deviceNetworkSpeedUp" : 0.0,
+                              "headers" : { },
+                              "method" : "GET",
+                              "options" : { },
+                              "traceId" : "8ea68cd6-41c5-4cc5-b437-789c5d2e8d8d",
+                              "uri" : "http://localhost/mock/user/56053af4-af5d-42f8-9539-3626f395cbe9"
+                            }
+                           """,
+                   SkipLineMatcher.of(13));
 
         verify(chain).doFilter(any(), any());
         verify(monitoringFilterInterceptor).onDone(requestDataCaptor.capture(),
@@ -150,9 +153,11 @@ class FilterInterceptorTest {
                              "headers" : { },
                              "method" : "GET",
                              "options" : { },
+                             "traceId" : "841fbece-0405-4fea-baff-42fcfed54155",
                              "uri" : "http://localhost/mock/user/56053af4-af5d-42f8-9539-3626f395cbe9"
                            }
-                           """);
+                           """,
+                   SkipLineMatcher.of(13));
         assertText(responseDataCaptor.getValue().toBuilder()
                                      .httpRequest(null)
                                      .httpResponse(null)

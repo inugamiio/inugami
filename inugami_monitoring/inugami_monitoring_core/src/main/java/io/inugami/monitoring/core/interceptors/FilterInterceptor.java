@@ -177,8 +177,8 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
             Loggers.METRICS.error(e.getMessage());
         }
         requestData.setContent(content);
-
         initCorrelationIdAndTraceId(requestData, request);
+
         final JavaRestMethodDTO javaRestMethod = resolveJavaRestMethod(request, ctx.getJavaRestMethodResolvers());
         addTrackingInformation(response, javaRestMethod, ctx.getJavaRestMethodTrackers());
 
@@ -186,10 +186,14 @@ public class FilterInterceptor implements Filter, ApplicationLifecycleSPI {
         final var                headers         = extractHeaders(httpRequest);
         final ResponseWrapper    responseWrapper = new ResponseWrapper(response, headers, ctx.getResponseListeners());
         final HttpServletRequest currentRequest  = buildRequestProxy((HttpServletRequest) request, data);
+        final var                mdc             = MdcService.getInstance();
+        requestData.setCorrelationId(mdc.correlationId());
+        requestData.setTraceId(mdc.traceId());
         requestData.setRequest(currentRequest);
         requestData.setResponse(responseWrapper);
         requestData.setService(resolveServiceName(javaRestMethod));
         RequestContext.setInstance(requestData);
+        mdc.initialize();
 
         onBegin(currentRequest, requestData);
         final Chrono chrono = Chrono.startChrono();

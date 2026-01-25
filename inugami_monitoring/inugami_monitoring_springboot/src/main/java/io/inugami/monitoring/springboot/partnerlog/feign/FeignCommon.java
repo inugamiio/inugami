@@ -3,6 +3,7 @@ package io.inugami.monitoring.springboot.partnerlog.feign;
 import feign.Request;
 import feign.RequestTemplate;
 import feign.Response;
+import feign.Target;
 import io.inugami.framework.api.tools.RunSafeUtils;
 import io.inugami.framework.interfaces.monitoring.models.IoInfoDTO;
 import io.inugami.framework.interfaces.monitoring.partner.Partner;
@@ -23,7 +24,8 @@ import static io.inugami.framework.interfaces.functionnals.FunctionalUtils.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeignCommon {
 
-    public static final String X_DATE = "x-date";
+    public static final String X_DATE    = "x-date";
+    public static final String SEPARATOR = "/";
 
     public static IoInfoDTO buildInfo(final RequestTemplate request) {
         final IoInfoDTO.IoInfoDTOBuilder builder = IoInfoDTO.builder();
@@ -31,7 +33,7 @@ public class FeignCommon {
             return builder.build();
         }
         RunSafeUtils.runSafeVoid(() -> {
-            builder.url(request.url());
+            builder.url(resolveFullUrl(request));
             builder.headers(request.headers());
             builder.method(request.method());
             applyIfNotNull(request.body(), builder::payload);
@@ -41,8 +43,31 @@ public class FeignCommon {
         return builder.build();
     }
 
+    private static String resolveFullUrl(final RequestTemplate request) {
+        StringBuilder result = new StringBuilder();
+        if (request.url().startsWith("http")) {
+            return request.url();
+        }
+
+        final String baseUrl    = Optional.ofNullable(request.feignTarget()).map(Target::url).orElse("");
+        final String requestUrl = Optional.ofNullable(request.url()).orElse("");
+
+        result.append(baseUrl);
+        if (!baseUrl.endsWith(SEPARATOR)) {
+            result.append(SEPARATOR);
+        }
+        if (requestUrl.startsWith(SEPARATOR)) {
+            result.append(requestUrl.substring(1));
+        } else {
+            result.append(requestUrl);
+        }
+
+
+        return result.toString();
+    }
+
     protected static void resolvePartnerInformation(final RequestTemplate request,
-                                                  final IoInfoDTO.IoInfoDTOBuilder builder) {
+                                                    final IoInfoDTO.IoInfoDTOBuilder builder) {
 
         Partner rootPartner = ifNotNull(request.feignTarget(), t -> getAnnotation(t.type(), Partner.class));
         Partner partner     = ifNotNull(request.methodMetadata(), m -> getAnnotation(m.method(), Partner.class));

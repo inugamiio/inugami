@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static io.inugami.framework.interfaces.exceptions.ErrorCode.*;
 import static io.inugami.framework.interfaces.exceptions.SafeUtils.grabSafe;
@@ -43,7 +44,6 @@ public class DefaultExceptionHandlerService implements IExceptionHandlerService 
     // ATTRIBUTES
     // ========================================================================
     public static final  String APPLICATION    = "application";
-    public static final  String EMPTY          = "";
     public static final  String ERROR_CATEGORY = "errorCategory";
     public static final  String ERROR_CODE     = "errorCode";
     public static final  String ERROR_TYPE     = "errorType";
@@ -51,6 +51,7 @@ public class DefaultExceptionHandlerService implements IExceptionHandlerService 
     public static final  String VERSION        = "version";
     private static final String CONTENT_TYPE   = "Content-Type";
     public static final  String SERVICE        = "service";
+    public static final  String EMPTY          = "";
 
     @Value("${application.name:#{null}}")
     private String applicationName;
@@ -99,10 +100,11 @@ public class DefaultExceptionHandlerService implements IExceptionHandlerService 
     public ResponseEntity<ProblemDTO> manageException(final Throwable throwable) {
         final Throwable exception = throwable == null ? new UncheckedException("undefined error") : throwable;
         final ErrorCode errorCode = resolveErrorCode(exception);
+        final var       mdc       = MdcService.getInstance();
 
-        MdcService.getInstance().errorCode(errorCode)
-                  .errorMessage(errorCode.getMessage())
-                  .errorMessageDetail(errorCode.getMessageDetail());
+        mdc.errorCode(errorCode)
+           .errorMessage(errorCode.getMessage())
+           .errorMessageDetail(errorCode.getMessageDetail());
 
         log.error(exception.getMessage(), exception);
         final var currentStatus = resolveStatus(errorCode);
@@ -134,6 +136,15 @@ public class DefaultExceptionHandlerService implements IExceptionHandlerService 
             additionalBuilder.addInformation(problemBuilder, exception, errorCode);
         }
 
+
+        if (DefaultErrorCode.SECURITY.equalsIgnoreCase(errorCode.getErrorType())) {
+            Loggers.SECURITY.error("[{}] {} security error detected : {} {}",
+                                   Optional.ofNullable(mdc.deviceIp()).orElse(mdc.remoteAddress()),
+                                   errorCode.getErrorCode(),
+                                   errorCode.getMessage(),
+                                   Optional.ofNullable(errorCode.getMessageDetail())
+                                           .orElse(DefaultExceptionHandlerService.EMPTY));
+        }
         if (errorCode.isExploitationError()) {
             MdcService.getInstance().errorUrl(buildWikiPage(errorCode));
             if (errorCode.getMessageDetail() == null) {

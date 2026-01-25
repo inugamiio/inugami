@@ -18,7 +18,6 @@ package io.inugami.monitoring.springboot.config;
 
 import io.inugami.monitoring.core.spi.CorsInterceptable;
 import io.inugami.monitoring.core.spi.IoLogInterceptor;
-import io.inugami.monitoring.core.spi.MdcInterceptor;
 import io.inugami.monitoring.core.spi.ServiceCounterInterceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -30,12 +29,6 @@ public class InugamiMonitoringFilterInterceptorConfig {
     @Bean
     public ServiceCounterInterceptor serviceCounterInterceptor() {
         return new ServiceCounterInterceptor();
-    }
-
-    @ConditionalOnMissingBean
-    @Bean
-    public MdcInterceptor mdcInterceptor() {
-        return new MdcInterceptor();
     }
 
     @ConditionalOnMissingBean
