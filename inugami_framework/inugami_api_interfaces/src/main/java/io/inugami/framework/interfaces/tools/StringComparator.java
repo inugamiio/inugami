@@ -1,10 +1,9 @@
 package io.inugami.framework.interfaces.tools;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 @SuppressWarnings({"java:S2589"})
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class StringComparator {
 
     public static int compareTo(final String value, final String ref) {

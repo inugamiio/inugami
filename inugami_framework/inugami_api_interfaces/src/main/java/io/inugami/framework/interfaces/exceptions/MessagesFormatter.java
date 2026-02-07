@@ -16,8 +16,7 @@
  */
 package io.inugami.framework.interfaces.exceptions;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 import java.text.MessageFormat;
 import java.util.regex.Pattern;
@@ -30,7 +29,7 @@ import java.util.regex.Pattern;
  */
 
 @SuppressWarnings({"java:S2479", "java:S5361", "java:S6397", "java:S1124"})
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class MessagesFormatter {
 
     // =========================================================================
