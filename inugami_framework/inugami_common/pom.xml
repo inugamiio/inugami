@@ -15,7 +15,7 @@
     <parent>
         <groupId>io.inugami.framework</groupId>
         <artifactId>inugami_framework</artifactId>
-        <version>4.2.6-SNAPSHOT</version>
+        <version>4.2.6</version>
     </parent>
 
 
