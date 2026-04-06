@@ -15,7 +15,7 @@
     <parent>
         <groupId>io.inugami.dashboard.interfaces</groupId>
         <artifactId>inugami_dashboard_interfaces</artifactId>
-        <version>4.2.6-SNAPSHOT</version>
+        <version>4.2.7-SNAPSHOT</version>
     </parent>
 
 

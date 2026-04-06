@@ -15,7 +15,7 @@
     <parent>
         <groupId>io.inugami.monitoring</groupId>
         <artifactId>inugami_monitoring</artifactId>
-        <version>4.2.6-SNAPSHOT</version>
+        <version>4.2.7-SNAPSHOT</version>
     </parent>
 
 
