@@ -1,0 +1,11 @@
+<article class="user-card" [id]="user()?.uid!" (click)="goToUser()">
+  <header>
+    <div class="name">
+      <span class="firstname">{{ user()?.firstName! }}</span>
+      <span class="lastname">{{ user()?.lastName! }}</span>
+    </div>
+    <div class="email">
+      <span>{{ user()?.email! }}</span>
+    </div>
+  </header>
+</article>
