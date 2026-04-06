@@ -1,0 +1,38 @@
+<section class="page-content">
+  <header class="page-header">
+    <div class="page-header-info">
+      <inu-icon icon="people" [size]="2"></inu-icon>
+      <h2>Users</h2>
+    </div>
+    <div class="page-header-action">
+      <ul>
+        <li>
+          <inu-button icon="add" label="Add user" type="primary" (click)="addUser()"></inu-button>
+        </li>
+      </ul>
+    </div>
+  </header>
+  <inu-page-layout>
+    <ng-template name="menu">
+      <menu class="search-menu">
+        <inu-button icon="zoom" label="Search" type="primary" (click)="search()"></inu-button>
+      </menu>
+    </ng-template>
+
+
+    <main>
+      <ul class="users">
+        @if (usersSearchResponse().data) {
+          @for (user of usersSearchResponse().data; track user.uid) {
+            <li>
+              <user-card [user]="user"></user-card>
+            </li>
+          }
+        }
+      </ul>
+
+    </main>
+
+  </inu-page-layout>
+</section>
+

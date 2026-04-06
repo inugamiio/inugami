@@ -1,0 +1,48 @@
+<section class="page-content">
+  <header class="page-header">
+    <div class="page-header-info">
+      <inu-icon icon="user" [size]="2"></inu-icon>
+      <h2>Users</h2>
+    </div>
+    <div class="page-header-action">
+      <ul>
+        <li>
+          <inu-button icon="rollback" [label]="hasChanged()?'Cancel': 'Go back'" type="secondary" (click)="cancel()"></inu-button>
+        </li>
+        <li>
+          <inu-button icon="save" [label]="uid()?'Update user' : 'Save user'" type="primary"
+                      [disabled]="!valid() || !hasChanged()"
+                      [processing]="saving()"
+                      (click)="save()"></inu-button>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <div class="form-container">
+      <div class="form-row">
+        <div class="form-col">
+
+          <div class="form-cell w100">
+            <inu-input-text label="First name"
+                            [formField]="userForm.firstName"></inu-input-text>
+          </div>
+          <div class="form-cell w100">
+            <inu-input-text label="Last name"
+                            [formField]="userForm.lastName"></inu-input-text>
+          </div>
+          <div class="form-cell w100">
+            <inu-input-text label="Email"
+                            [formField]="userForm.email"></inu-input-text>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+
+</section>
+

@@ -67,8 +67,8 @@ public class ThreadsExecutorService implements LifecycleBootstrap {
     public ThreadsExecutorService(final String name, final int maxThreads, final boolean deamon, final Long timeout) {
         this.name = name == null ? "ThreadsExecutor" : name;
         final MonitoredThreadFactory threadFactory = new MonitoredThreadFactory(this.name, deamon);
-        executor            = Executors.newFixedThreadPool(maxThreads, threadFactory);
-        executorCompletable = Executors.newFixedThreadPool(maxThreads, threadFactory);
+        executor            = Executors.newThreadPerTaskExecutor( threadFactory);
+        executorCompletable = Executors.newThreadPerTaskExecutor( threadFactory);
 
         this.timeout = timeout == null ? 30000L : timeout.longValue();
 

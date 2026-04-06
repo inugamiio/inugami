@@ -1,0 +1,20 @@
+/**/
+.search-menu{
+  margin-top: 1rem;
+  padding: 0.25rem;
+  ::ng-deep{
+    inu-button{
+      button{
+        width: 100%;
+      }
+    }
+  }
+}
+
+.users{
+  margin: 0;
+  padding: 0;
+  li{
+    list-style: none;
+  }
+}

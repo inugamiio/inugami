@@ -1,5 +1,6 @@
 package io.inugami.framework.commons.threads;
 
+import io.inugami.framework.api.monitoring.MdcService;
 import io.inugami.framework.api.monitoring.RequestContext;
 import io.inugami.framework.interfaces.monitoring.MonitoringInitializer;
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
@@ -27,16 +28,24 @@ public class MonitoredThreadFactory implements ThreadFactory {
     // CONSTRUCTORS
     // =================================================================================================================
     private static List<MonitoringInitializer> initMonitoringInitializers() {
-        final List<MonitoringInitializer> spiServices = SpiLoader.getInstance()
-                                                                 .loadSpiService(MonitoringInitializer.class);
+        final List<MonitoringInitializer> spiServices = getSpiServices();
         return spiServices == null ? Collections.emptyList() : spiServices;
+    }
+
+    private static List<MonitoringInitializer> getSpiServices() {
+        try {
+            return SpiLoader.getInstance()
+                            .loadSpiService(MonitoringInitializer.class);
+        }catch (Throwable e){
+            return List.of();
+        }
     }
 
     public MonitoredThreadFactory(final String threadsName, final boolean deamon) {
         super();
-        this.threadsName = threadsName;
-        this.deamon = deamon;
-        threadGroup = Thread.currentThread().getThreadGroup();
+        this.threadsName    = threadsName;
+        this.deamon         = deamon;
+        threadGroup         = Thread.currentThread().getThreadGroup();
         this.requestContext = RequestContext.getInstance();
     }
 
@@ -46,14 +55,12 @@ public class MonitoredThreadFactory implements ThreadFactory {
     @Override
     public Thread newThread(final Runnable runnable) {
         final String name = String.join(".", threadsName, String.valueOf(threadIndex.getAndIncrement()));
-        final Thread result = new MonitoredThread(threadGroup,
-                                                  runnable,
-                                                  name,
-                                                  0,
-                                                  requestContext,
-                                                  monitoringInitializer);
-        result.setDaemon(deamon);
-        return result;
+        return Thread.ofVirtual().name(name).unstarted(() -> {
+            RequestContext.setInstance(requestContext);
+            MdcService.getInstance().initialize();
+            monitoringInitializer.forEach(MonitoringInitializer::initialize);
+            runnable.run();
+        });
     }
 
 }

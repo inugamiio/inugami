@@ -46,6 +46,7 @@ open module io.inugami.framework.commons.spring {
     exports io.inugami.framework.commons.spring.feature.interceptors;
     exports io.inugami.framework.commons.spring.mapstruct;
     exports io.inugami.framework.commons.spring.feign;
+    exports io.inugami.framework.commons.spring.configuration.external;
 
     uses io.inugami.framework.interfaces.configurtation.ProviderAttributFunction;
     uses io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;

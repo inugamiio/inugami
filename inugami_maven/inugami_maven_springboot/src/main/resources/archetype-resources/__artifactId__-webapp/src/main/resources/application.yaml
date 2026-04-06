@@ -43,6 +43,9 @@ management:
     health:
       show-details: always
 spring:
+  threads:
+    virtual:
+      enabled: true
   datasource:
     url: jdbc:h2:mem:inugami_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
