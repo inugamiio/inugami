@@ -223,7 +223,7 @@
         <org.apache.commons.codec.version>1.16.0</org.apache.commons.codec.version>
         <org.apache.commons.io.version>2.18.0</org.apache.commons.io.version>
         <org.apache.httpcomponents.version>4.5.13</org.apache.httpcomponents.version>
-        <org.assertj.version>3.17.1</org.assertj.version>
+        <org.assertj.version>3.27.7</org.assertj.version>
         <org.ehcache.version>3.3.1</org.ehcache.version>
         <org.jboss.async-http-servlet.version>3.1.0.Beta2</org.jboss.async-http-servlet.version>
         <org.jsoup.version>1.15.3</org.jsoup.version>
