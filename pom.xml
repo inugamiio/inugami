@@ -71,7 +71,7 @@
         :: PROJECT
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <spring-boot.version>3.5.8</spring-boot.version>
-        <super.jdk>21</super.jdk>
+        <super.jdk>25</super.jdk>
         <java.version>${super.jdk}</java.version>
         <super.jdk.arg>-parameters</super.jdk.arg>
         <maven-gpg-plugin.enabled />
@@ -154,7 +154,7 @@
         :: PLUGINS VERSIONS
         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
         <!--[ org.maven ]++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <org.apache.maven.plugins.compiler.version>3.8.1</org.apache.maven.plugins.compiler.version>
+        <org.apache.maven.plugins.compiler.version>3.16.0</org.apache.maven.plugins.compiler.version>
         <plugins.org-apache-maven-plugins.maven-javadoc-plugin>3.6.3
         </plugins.org-apache-maven-plugins.maven-javadoc-plugin>
         <plugins.org-apache-maven-plugins.maven-jar-plugin>3.3.0</plugins.org-apache-maven-plugins.maven-jar-plugin>
@@ -172,9 +172,9 @@
         <plugins.org-apache-maven-plugins.maven-enforcer-plugin>1.3
         </plugins.org-apache-maven-plugins.maven-enforcer-plugin>
         <plugins.org-apache-maven-plugins.maven-site-plugin>3.3</plugins.org-apache-maven-plugins.maven-site-plugin>
-        <plugins.org-apache-maven-plugins.maven-surefire-plugin>3.2.3
+        <plugins.org-apache-maven-plugins.maven-surefire-plugin>3.6.0
         </plugins.org-apache-maven-plugins.maven-surefire-plugin>
-        <plugins.org-apache-maven-plugins.maven-failsafe-plugin>3.2.3
+        <plugins.org-apache-maven-plugins.maven-failsafe-plugin>3.5.6
         </plugins.org-apache-maven-plugins.maven-failsafe-plugin>
         <plugins.org-codehaus-mojo.cobertura-maven-plugin>2.7</plugins.org-codehaus-mojo.cobertura-maven-plugin>
         <org.codehaus.mojo.version>3.3.0</org.codehaus.mojo.version>
@@ -233,7 +233,7 @@
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <org.mockito.junit.version>2.23.0</org.mockito.junit.version>
         <org.projectlombok.lombok-mapstruct-binding.version>0.2.0</org.projectlombok.lombok-mapstruct-binding.version>
-        <org.projectlombok.version>1.18.30</org.projectlombok.version>
+        <org.projectlombok.version>1.18.48</org.projectlombok.version>
         <org.quartz.version>2.5.1</org.quartz.version>
         <org.slf4j.version>2.0.9</org.slf4j.version>
         <org.springdoc.version>2.8.13</org.springdoc.version>
@@ -1051,7 +1051,11 @@
                 <version>${plugins.org-apache-maven-plugins.maven-surefire-plugin}</version>
                 <configuration>
                     <argLine>
-                        -Xmx1024M -Dfile.encoding=${encoding} ${maven.plugins.surfire.argLine} --add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
+                        -Xmx1024M
+                        --enable-preview
+                        -Dfile.encoding=${encoding}
+                        ${maven.plugins.surfire.argLine}
+                        --add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED --add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
                     </argLine>
                     <systemPropertyVariables>
                         <mock.generator.path>${mock.generator.path}</mock.generator.path>
@@ -1064,28 +1068,6 @@
                         <exclude>**/*IT.java</exclude>
                     </excludes>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>maven-surefire-common</artifactId>
-                        <version>${plugins.org-apache-maven-plugins.maven-surefire-plugin}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>common-java5</artifactId>
-                        <version>${plugins.org-apache-maven-plugins.maven-surefire-plugin}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.junit.platform</groupId>
-                        <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>${junit-platform-surefire-provider.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.junit.jupiter</groupId>
-                        <artifactId>junit-jupiter-engine</artifactId>
-                        <version>${org.junit.jupiter}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
 
             <plugin>
