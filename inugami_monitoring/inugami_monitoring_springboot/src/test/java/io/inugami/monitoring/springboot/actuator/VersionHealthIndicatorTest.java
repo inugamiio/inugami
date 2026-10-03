@@ -33,7 +33,6 @@ class VersionHealthIndicatorTest {
     void health_nominal() {
         final var indicator = indicator();
         assertText(indicator.health(), NOMINAL);
-        assertText(indicator.getHealth(true), NOMINAL);
     }
 
 

@@ -40,6 +40,7 @@ open module io.inugami.framework.commons.spring {
     requires feign.okhttp;
     requires feign.jackson;
     requires spring.cloud.openfeign.core;
+    requires spring.boot.web.server;
 
     exports io.inugami.framework.commons.spring;
     exports io.inugami.framework.commons.spring.configuration;

@@ -15,12 +15,8 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -81,7 +77,7 @@ public class DefaultExceptionHandlerService implements IExceptionHandlerService 
     // ========================================================================
     public void manageException(final Throwable throwable, final HttpServletResponse response) {
         final ResponseEntity<ProblemDTO> result = manageException(throwable);
-        response.setStatus(result.getStatusCodeValue());
+        response.setStatus(Optional.ofNullable(result.getStatusCode()).map(HttpStatusCode::value).orElse(500));
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         try {
             final PrintWriter writer = response.getWriter();
@@ -153,10 +149,10 @@ public class DefaultExceptionHandlerService implements IExceptionHandlerService 
                 Loggers.XLLOG.error("{} : {}", errorCode.getMessage(), errorCode.getMessageDetail());
             }
         }
-        final MultiValueMap<String, String> headers = new HttpHeaders();
+        final HttpHeaders headers = new HttpHeaders();
         headers.add(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
-        return new ResponseEntity<>(problemBuilder.build(),
+        return new ResponseEntity<ProblemDTO>(problemBuilder.build(),
                                     headers,
                                     HttpStatus.valueOf(currentStatus.value()));
     }

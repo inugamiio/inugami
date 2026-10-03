@@ -30,4 +30,5 @@ open module io.inugami.monitoring.springboot.activemq {
     requires spring.jms;
     requires spring.oxm;
     requires static lombok;
+    requires spring.boot.jms;
 }

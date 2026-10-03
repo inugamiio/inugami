@@ -42,6 +42,8 @@ open module io.inugami.monitoring.springboot {
     requires spring.webmvc;
     requires static lombok;
     requires okhttp3;
+    requires spring.boot.health;
+    requires spring.boot.http.converter;
 
     exports io.inugami.monitoring.springboot.actuator.feature;
     exports io.inugami.monitoring.springboot.actuator;

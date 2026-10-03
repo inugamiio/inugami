@@ -2,9 +2,9 @@ package io.inugami.monitoring.springboot.actuator;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.actuate.health.Status;
+import org.springframework.boot.health.contributor.Health;
+import org.springframework.boot.health.contributor.HealthIndicator;
+import org.springframework.boot.health.contributor.Status;
 
 import java.util.Optional;
 
@@ -27,11 +27,6 @@ public class VersionHealthIndicator implements HealthIndicator {
 
     @Override
     public Health health() {
-        return getHealth(false);
-    }
-
-    @Override
-    public Health getHealth(final boolean includeDetails) {
         return new Health.Builder()
                 .status(Status.UP)
                 .withDetail(GROUP_ID, Optional.ofNullable(groupId).orElse(UNDEFINED))
