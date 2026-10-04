@@ -17,9 +17,6 @@
 package io.inugami.framework.api.marshalling;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.exceptions.Warning;
 import io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
@@ -27,6 +24,10 @@ import io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
 import io.inugami.framework.interfaces.models.event.GenericEvent;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import lombok.Getter;
+import tools.jackson.databind.*;
+import tools.jackson.databind.cfg.DateTimeFeature;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -40,12 +41,11 @@ public class JsonMarshaller {
     // =========================================================================
     // ATTRIBUTES
     // =========================================================================
-    private static final SimpleModule INUGAMI_MODULE   = initInugamiModule();
-    private static final List<Module> EXTERNAL_MODULES = loadExternalModules();
+    private static final SimpleModule        INUGAMI_MODULE   = initInugamiModule();
+    private static final List<JacksonModule> EXTERNAL_MODULES = loadExternalModules();
 
-    private static List<Module> loadExternalModules() {
+    private static List<JacksonModule> loadExternalModules() {
         final List<ModuleRegisterSpi> moduleLoaders = SpiLoader.getInstance().loadSpiService(ModuleRegisterSpi.class);
-
 
         return moduleLoaders.stream()
                             .map(ModuleRegisterSpi::extractModules)
@@ -110,42 +110,33 @@ public class JsonMarshaller {
 
         @Override
         public ObjectMapper buildObjectMapper() {
-            final ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.findAndRegisterModules();
-            objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+            var builder = JsonMapper.builder()
+                                    .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+                                    .disable(MapperFeature.SORT_CREATOR_PROPERTIES_FIRST)
+                                    .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+                                    .changeDefaultPropertyInclusion(include -> include.withValueInclusion(JsonInclude.Include.NON_NULL)
+                                                                                      .withContentInclusion(JsonInclude.Include.NON_NULL)) // <-- Ajout du content inclusion
+                                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                                    .addModule(INUGAMI_MODULE);
 
-
-            for (Module module : EXTERNAL_MODULES) {
-                objectMapper.registerModule(module);
-            }
-
-            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            objectMapper.registerModule(INUGAMI_MODULE);
-
-            return objectMapper;
+            EXTERNAL_MODULES.forEach(builder::addModule);
+            return builder.build();
         }
 
         @Override
         public ObjectMapper buildIndentedObjectMapper() {
-            final ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-            objectMapper.findAndRegisterModules();
-            objectMapper.enable(SerializationFeature.INDENT_OUTPUT)
-                        .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+            var builder = JsonMapper.builder()
+                                    .enable(SerializationFeature.INDENT_OUTPUT)
+                                    .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+                                    .disable(MapperFeature.SORT_CREATOR_PROPERTIES_FIRST)
+                                    .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+                                    .changeDefaultPropertyInclusion(include -> include.withValueInclusion(JsonInclude.Include.NON_NULL)
+                                                                                      .withContentInclusion(JsonInclude.Include.NON_NULL)) // <-- Ajout du content inclusion
+                                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                                    .addModule(INUGAMI_MODULE);
 
-            for (Module module : EXTERNAL_MODULES) {
-                objectMapper.registerModule(module);
-            }
-
-            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            objectMapper.registerModule(INUGAMI_MODULE);
-
-            return objectMapper;
+            EXTERNAL_MODULES.forEach(builder::addModule);
+            return builder.build();
         }
     }
 }
-

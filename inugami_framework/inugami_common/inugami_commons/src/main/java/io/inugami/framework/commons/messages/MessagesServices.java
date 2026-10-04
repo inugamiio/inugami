@@ -17,13 +17,13 @@
 package io.inugami.framework.commons.messages;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.commons.files.FilesUtils;
 import io.inugami.framework.interfaces.exceptions.FatalException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,9 +46,9 @@ public final class MessagesServices {
     // =================================================================================================================
     private static final String                           DEFAULT_LOCALE = "default";
     private static final AtomicReference<String>          json           = new AtomicReference<>();
-    private static final Map<String, Map<String, String>> MESSAGES       = new ConcurrentHashMap<>();
-    private static final ObjectMapper                     OBJECT_MAPPER  = JsonMarshaller.getInstance()
-                                                                                         .getDefaultObjectMapper();
+    private static final Map<String, Map<String, String>> MESSAGES      = new ConcurrentHashMap<>();
+    private static final ObjectMapper                     OBJECT_MAPPER = JsonMarshaller.getInstance()
+                                                                                        .getDefaultObjectMapper();
 
     public static synchronized void clean() {
         MESSAGES.clear();
@@ -127,7 +127,7 @@ public final class MessagesServices {
     private static void updateJson() {
         try {
             json.set(OBJECT_MAPPER.writeValueAsString(MESSAGES));
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             log.error(e.getMessage(), e);
         }
     }

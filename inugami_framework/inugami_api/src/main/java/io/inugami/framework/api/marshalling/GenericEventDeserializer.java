@@ -16,15 +16,14 @@
  */
 package io.inugami.framework.api.marshalling;
 
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import io.inugami.framework.interfaces.models.event.*;
 import io.inugami.framework.interfaces.processors.ProcessorModel;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
-import java.io.IOException;
 import java.util.*;
 
 import static io.inugami.framework.api.marshalling.GenericEventSerializer.*;
@@ -56,8 +55,8 @@ public class GenericEventDeserializer extends StdDeserializer<GenericEvent> {
     // =================================================================================================================
     @Override
     public GenericEvent deserialize(final JsonParser json,
-                                    final DeserializationContext ctxt) throws IOException, JacksonException {
-        JsonNode     node = json.getCodec().readTree(json);
+                                    final DeserializationContext ctxt) throws JacksonException {
+        JsonNode     node = ctxt.readTree(json);
         final String type = Optional.ofNullable(node.get(TYPE)).map(JsonNode::asText).orElse(null);
         if (type == null) {
             return null;
@@ -119,32 +118,32 @@ public class GenericEventDeserializer extends StdDeserializer<GenericEvent> {
             return result;
         }
         node.forEach(child -> result.add(TargetConfig.builder()
-                                                     .name(Optional.ofNullable(node.get(NAME))
+                                                     .name(Optional.ofNullable(child.get(NAME))
                                                                    .map(JsonNode::asText)
                                                                    .orElse(null))
-                                                     .fromFirstTime(Optional.ofNullable(node.get(FROM_FIRST_TIME))
+                                                     .fromFirstTime(Optional.ofNullable(child.get(FROM_FIRST_TIME))
                                                                             .map(JsonNode::asText)
                                                                             .orElse(null))
-                                                     .until(Optional.ofNullable(node.get(UNTIL))
+                                                     .until(Optional.ofNullable(child.get(UNTIL))
                                                                     .map(JsonNode::asText)
                                                                     .orElse(null))
-                                                     .provider(Optional.ofNullable(node.get(PROVIDER))
+                                                     .provider(Optional.ofNullable(child.get(PROVIDER))
                                                                        .map(JsonNode::asText)
                                                                        .orElse(null))
-                                                     .mapper(Optional.ofNullable(node.get(MAPPER))
+                                                     .mapper(Optional.ofNullable(child.get(MAPPER))
                                                                      .map(JsonNode::asText)
                                                                      .orElse(null))
-                                                     .query(Optional.ofNullable(node.get(QUERY))
+                                                     .query(Optional.ofNullable(child.get(QUERY))
                                                                     .map(JsonNode::asText)
                                                                     .orElse(null))
-                                                     .parent(Optional.ofNullable(node.get(PARENT))
+                                                     .parent(Optional.ofNullable(child.get(PARENT))
                                                                      .map(JsonNode::asText)
                                                                      .orElse(null))
-                                                     .scheduler(Optional.ofNullable(node.get(SCHEDULER))
+                                                     .scheduler(Optional.ofNullable(child.get(SCHEDULER))
                                                                         .map(JsonNode::asText)
                                                                         .orElse(null))
-                                                     .processors(deserializeProcessor(node.get(PROCESSORS)))
-                                                     .alertings(deserializeAlertings(node.get(ALERTINGS)))
+                                                     .processors(deserializeProcessor(child.get(PROCESSORS)))
+                                                     .alertings(deserializeAlertings(child.get(ALERTINGS)))
                                                      .build()));
         return result;
     }
@@ -175,14 +174,10 @@ public class GenericEventDeserializer extends StdDeserializer<GenericEvent> {
         if (jsonNode == null) {
             return result;
         }
-        final Iterator<Map.Entry<String, JsonNode>> fields = jsonNode.fields();
-
-        while (fields.hasNext()) {
-            final Map.Entry<String, JsonNode> field = fields.next();
-            Optional.ofNullable(field.getValue())
+        for (var property : jsonNode.properties()) {
+            Optional.ofNullable(property.getValue())
                     .map(JsonNode::asText)
-                    .ifPresent(v -> result.put(field.getKey(), v));
-
+                    .ifPresent(v -> result.put(property.getKey(), v));
         }
         return result;
     }
@@ -221,6 +216,4 @@ public class GenericEventDeserializer extends StdDeserializer<GenericEvent> {
                                                       .build()));
         return result;
     }
-
 }
-

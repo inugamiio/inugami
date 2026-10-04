@@ -40,6 +40,15 @@
         <requiredProperty key="jacksonVersion">
             <defaultValue>@com.jackson.version@</defaultValue>
         </requiredProperty>
+        <requiredProperty key="toolsJacksonVersion">
+            <defaultValue>@tools.jackson.version@</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="toolsJacksonDatatypeVersion">
+            <defaultValue>@tools.jackson.datatype.version@</defaultValue>
+        </requiredProperty>
+
+
+
         <requiredProperty key="jacocoVersion">
             <defaultValue>@jacoco.version@</defaultValue>
         </requiredProperty>

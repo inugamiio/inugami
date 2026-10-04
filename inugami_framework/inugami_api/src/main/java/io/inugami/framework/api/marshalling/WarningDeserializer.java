@@ -16,15 +16,14 @@
  */
 package io.inugami.framework.api.marshalling;
 
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import io.inugami.framework.interfaces.exceptions.DefaultWarning;
 import io.inugami.framework.interfaces.exceptions.Warning;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import static io.inugami.framework.interfaces.exceptions.Warning.*;
@@ -32,17 +31,15 @@ import static io.inugami.framework.interfaces.exceptions.Warning.*;
 @SuppressWarnings({"java:S1130"})
 public class WarningDeserializer extends StdDeserializer<Warning> {
 
-
     public WarningDeserializer(final Class<Warning> t) {
         super(t);
     }
 
-
     @Override
     public Warning deserialize(final JsonParser json,
-                               final DeserializationContext ctxt) throws IOException, JacksonException {
+                               final DeserializationContext ctxt) throws JacksonException {
         final var builder = DefaultWarning.builder();
-        JsonNode  node    = json.getCodec().readTree(json);
+        JsonNode  node    = ctxt.readTree(json);
 
         builder.warningCode(Optional.ofNullable(node.get(WARNING_CODE)).map(JsonNode::asText).orElse(null));
         builder.message(Optional.ofNullable(node.get(WARNING_MESSAGE)).map(JsonNode::asText).orElse(null));

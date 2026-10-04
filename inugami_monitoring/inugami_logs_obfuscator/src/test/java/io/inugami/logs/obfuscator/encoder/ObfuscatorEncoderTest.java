@@ -1,9 +1,10 @@
 package io.inugami.logs.obfuscator.encoder;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ class ObfuscatorEncoderTest {
 
     @SuppressWarnings({"java:S2699"})
     @Test
-    void messageAsJson() throws JsonProcessingException {
+    void messageAsJson() throws JacksonException {
         Loggers.APPLICATION.info("password = qwertz123456");
 
         Map<String, Serializable> data = new LinkedHashMap<>();

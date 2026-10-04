@@ -17,17 +17,19 @@
 package io.inugami.framework.interfaces.testing.commons.marshaller;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import io.inugami.framework.interfaces.marshalling.JacksonMarshallerSpi;
 import io.inugami.framework.interfaces.marshalling.serializers.ClassSerializer;
 import io.inugami.framework.interfaces.marshalling.serializers.FieldSerializer;
 import io.inugami.framework.interfaces.marshalling.serializers.MethodSerializer;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import lombok.Getter;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.MapperFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.cfg.DateTimeFeature;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -76,35 +78,29 @@ public class JsonMarshaller {
 
         @Override
         public ObjectMapper buildObjectMapper() {
-            final ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.findAndRegisterModules();
-            objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-
-
-            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            objectMapper.registerModule(INUGAMI_MODULE);
-
-            return objectMapper;
+            return JsonMapper.builder()
+                             .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+                             .disable(MapperFeature.SORT_CREATOR_PROPERTIES_FIRST)
+                             .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+                             .changeDefaultPropertyInclusion(include -> include.withValueInclusion(JsonInclude.Include.NON_NULL)
+                                                                               .withContentInclusion(JsonInclude.Include.NON_NULL)) // <-- Ajout du content inclusion
+                             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                             .addModule(INUGAMI_MODULE)
+                             .build();
         }
 
         @Override
         public ObjectMapper buildIndentedObjectMapper() {
-            final ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-            objectMapper.findAndRegisterModules();
-            objectMapper.enable(SerializationFeature.INDENT_OUTPUT)
-                        .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-
-
-            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            objectMapper.registerModule(INUGAMI_MODULE);
-
-            return objectMapper;
+            return JsonMapper.builder()
+                             .enable(SerializationFeature.INDENT_OUTPUT)
+                             .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+                             .disable(MapperFeature.SORT_CREATOR_PROPERTIES_FIRST)
+                             .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+                             .changeDefaultPropertyInclusion(include -> include.withValueInclusion(JsonInclude.Include.NON_NULL)
+                                                                               .withContentInclusion(JsonInclude.Include.NON_NULL)) // <-- Ajout du content inclusion
+                             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                             .addModule(INUGAMI_MODULE)
+                             .build();
         }
     }
 }
-

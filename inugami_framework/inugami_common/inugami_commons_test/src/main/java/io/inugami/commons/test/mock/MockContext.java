@@ -16,7 +16,6 @@
  */
 package io.inugami.commons.test.mock;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.monitoring.models.Headers;
@@ -24,11 +23,13 @@ import io.inugami.framework.interfaces.tools.ListUtils;
 import lombok.*;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import tools.jackson.core.JacksonException;
 
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+
 @SuppressWarnings({"java:S108"})
 @Getter
 @Setter
@@ -86,55 +87,55 @@ public class MockContext implements Serializable {
 
         public MockContextBuilder get(@NonNull final String urlValue) {
             verb = GET;
-            url = urlValue;
+            url  = urlValue;
             return this;
         }
 
         public MockContextBuilder post(@NonNull final String urlValue) {
             verb = POST;
-            url = urlValue;
+            url  = urlValue;
             return this;
         }
 
         public MockContextBuilder put(@NonNull final String urlValue) {
             verb = PUT;
-            url = urlValue;
+            url  = urlValue;
             return this;
         }
 
         public MockContextBuilder patch(@NonNull final String urlValue) {
             verb = PATCH;
-            url = urlValue;
+            url  = urlValue;
             return this;
         }
 
         public MockContextBuilder delete(@NonNull final String urlValue) {
             verb = DELETE;
-            url = urlValue;
+            url  = urlValue;
             return this;
         }
 
         public MockContextBuilder options(@NonNull final String urlValue) {
             verb = OPTIONS;
-            url = urlValue;
+            url  = urlValue;
             return this;
         }
 
         public MockContextBuilder head(@NonNull final String urlValue) {
             verb = HEAD;
-            url = urlValue;
+            url  = urlValue;
             return this;
         }
 
         public MockContextBuilder connect(@NonNull final String urlValue) {
             verb = CONNECT;
-            url = urlValue;
+            url  = urlValue;
             return this;
         }
 
         public MockContextBuilder trace(@NonNull final String urlValue) {
             verb = TRACE;
-            url = urlValue;
+            url  = urlValue;
             return this;
         }
 
@@ -159,7 +160,7 @@ public class MockContext implements Serializable {
             } else {
                 try {
                     request = JsonMarshaller.getInstance().getIndentedObjectMapper().writeValueAsString(value);
-                } catch (JsonProcessingException e) {
+                } catch (JacksonException e) {
                 }
             }
             return this;
@@ -172,14 +173,14 @@ public class MockContext implements Serializable {
                 try {
 
                     response = JsonMarshaller.getInstance().getIndentedObjectMapper().writeValueAsString(value);
-                } catch (JsonProcessingException e) {
+                } catch (JacksonException e) {
                 }
             }
             return this;
         }
 
         public MockContextBuilder errorCode(@NonNull final ErrorCode value) {
-            status = Optional.ofNullable(value).map(ErrorCode::getStatusCode).orElse(200);
+            status    = Optional.ofNullable(value).map(ErrorCode::getStatusCode).orElse(200);
             errorCode = value;
             return this;
         }

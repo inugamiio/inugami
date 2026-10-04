@@ -1,11 +1,11 @@
 package io.inugami.commons.test;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import io.inugami.framework.api.marshalling.YamlMarshaller;
 import io.inugami.framework.interfaces.exceptions.Asserts;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UnitTestHelperYaml {

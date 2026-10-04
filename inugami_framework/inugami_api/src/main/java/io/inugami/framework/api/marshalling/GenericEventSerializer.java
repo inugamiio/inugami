@@ -16,15 +16,14 @@
  */
 package io.inugami.framework.api.marshalling;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import io.inugami.framework.interfaces.models.event.Event;
 import io.inugami.framework.interfaces.models.event.GenericEvent;
 import io.inugami.framework.interfaces.models.event.SimpleEvent;
 import io.inugami.framework.interfaces.models.event.TargetConfig;
-
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 public class GenericEventSerializer extends StdSerializer<GenericEvent> {
     //==================================================================================================================
@@ -57,17 +56,17 @@ public class GenericEventSerializer extends StdSerializer<GenericEvent> {
     //==================================================================================================================
     @Override
     public void serialize(final GenericEvent value,
-                          final JsonGenerator json,
-                          final SerializerProvider provider) throws IOException {
+                          final JsonGenerator gen,
+                          final SerializationContext ctxt) throws JacksonException {
         if (value == null) {
-            json.writeNull();
+            gen.writeNull();
         } else {
-            renderAsJson(value, json);
+            renderAsJson(value, gen);
         }
     }
 
     private void renderAsJson(final GenericEvent value,
-                              final JsonGenerator json) throws IOException {
+                              final JsonGenerator json) throws JacksonException {
         if (value instanceof SimpleEvent simpleEvent) {
             writeSimpleEvent(simpleEvent, json);
         } else if (value instanceof TargetConfig targetConfig) {
@@ -80,79 +79,79 @@ public class GenericEventSerializer extends StdSerializer<GenericEvent> {
     }
 
 
-    private void writeSimpleEvent(final SimpleEvent value, final JsonGenerator json) throws IOException {
+    private void writeSimpleEvent(final SimpleEvent value, final JsonGenerator json) throws JacksonException {
         json.writeStartObject();
-        json.writeFieldName(TYPE);
+        json.writeName(TYPE);
         json.writeString(SIMPLE_EVENT);
-        json.writeFieldName(NAME);
+        json.writeName(NAME);
         json.writeString(value.getName());
-        json.writeFieldName(FROM_FIRST_TIME);
+        json.writeName(FROM_FIRST_TIME);
         json.writeString(value.getFromFirstTime());
-        json.writeFieldName(UNTIL);
+        json.writeName(UNTIL);
         json.writeString(value.getUntil());
-        json.writeFieldName(PROVIDER);
+        json.writeName(PROVIDER);
         json.writeString(value.getProvider());
-        json.writeFieldName(MAPPER);
+        json.writeName(MAPPER);
         json.writeString(value.getMapper());
-        json.writeFieldName(PROCESSORS);
-        json.writeObject(value.getProcessors());
-        json.writeFieldName(ALERTINGS);
-        json.writeObject(value.getAlertings());
-        json.writeFieldName(QUERY);
+        json.writeName(PROCESSORS);
+        json.writePOJO(value.getProcessors());
+        json.writeName(ALERTINGS);
+        json.writePOJO(value.getAlertings());
+        json.writeName(QUERY);
         json.writeString(value.getQuery());
-        json.writeFieldName(PARENT);
+        json.writeName(PARENT);
         json.writeString(value.getParent());
-        json.writeFieldName(SCHEDULER);
+        json.writeName(SCHEDULER);
         json.writeString(value.getScheduler());
         json.writeEndObject();
     }
 
-    private void writeTargetConfig(final TargetConfig value, final JsonGenerator json) throws IOException {
+    private void writeTargetConfig(final TargetConfig value, final JsonGenerator json) throws JacksonException {
         json.writeStartObject();
-        json.writeFieldName(NAME);
+        json.writeName(NAME);
         json.writeString(value.getName());
-        json.writeFieldName(FROM_FIRST_TIME);
+        json.writeName(FROM_FIRST_TIME);
         json.writeString(value.getFromFirstTime());
-        json.writeFieldName(UNTIL);
+        json.writeName(UNTIL);
         json.writeString(value.getUntil());
-        json.writeFieldName(PROVIDER);
+        json.writeName(PROVIDER);
         json.writeString(value.getProvider());
-        json.writeFieldName(MAPPER);
+        json.writeName(MAPPER);
         json.writeString(value.getMapper());
-        json.writeFieldName(PROCESSORS);
-        json.writeObject(value.getProcessors());
-        json.writeFieldName(ALERTINGS);
-        json.writeObject(value.getAlertings());
-        json.writeFieldName(QUERY);
+        json.writeName(PROCESSORS);
+        json.writePOJO(value.getProcessors());
+        json.writeName(ALERTINGS);
+        json.writePOJO(value.getAlertings());
+        json.writeName(QUERY);
         json.writeString(value.getQuery());
-        json.writeFieldName(PARENT);
+        json.writeName(PARENT);
         json.writeString(value.getParent());
-        json.writeFieldName(SCHEDULER);
+        json.writeName(SCHEDULER);
         json.writeString(value.getScheduler());
         json.writeEndObject();
     }
 
-    private void writeEvent(final Event value, final JsonGenerator json) throws IOException {
+    private void writeEvent(final Event value, final JsonGenerator json) throws JacksonException {
         json.writeStartObject();
-        json.writeFieldName(TYPE);
+        json.writeName(TYPE);
         json.writeString(EVENT);
-        json.writeFieldName(NAME);
+        json.writeName(NAME);
         json.writeString(value.getName());
-        json.writeFieldName(FROM_FIRST_TIME);
+        json.writeName(FROM_FIRST_TIME);
         json.writeString(value.getFromFirstTime());
-        json.writeFieldName(UNTIL);
+        json.writeName(UNTIL);
         json.writeString(value.getUntil());
-        json.writeFieldName(PROVIDER);
+        json.writeName(PROVIDER);
         json.writeString(value.getProvider());
-        json.writeFieldName(MAPPER);
+        json.writeName(MAPPER);
         json.writeString(value.getMapper());
-        json.writeFieldName(PROCESSORS);
-        json.writeObject(value.getProcessors());
-        json.writeFieldName(ALERTINGS);
-        json.writeObject(value.getAlertings());
-        json.writeFieldName(SCHEDULER);
+        json.writeName(PROCESSORS);
+        json.writePOJO(value.getProcessors());
+        json.writeName(ALERTINGS);
+        json.writePOJO(value.getAlertings());
+        json.writeName(SCHEDULER);
         json.writeString(value.getScheduler());
-        json.writeFieldName(TARGETS);
+        json.writeName(TARGETS);
         if (value.getTargets() != null) {
             json.writeStartArray();
             for (var target : value.getTargets()) {

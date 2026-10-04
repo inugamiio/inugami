@@ -16,10 +16,11 @@
  */
 package io.inugami.framework.api.connectors;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.interfaces.connectors.HttpPayloadMarshaller;
 import io.inugami.framework.interfaces.exceptions.connector.ConnectorMarshallingException;
+import tools.jackson.core.JacksonException;
 
 public class JsonHttpPayloadMarshaller implements HttpPayloadMarshaller {
 
@@ -27,7 +28,7 @@ public class JsonHttpPayloadMarshaller implements HttpPayloadMarshaller {
     public String convertToPayload(final Object object) throws ConnectorMarshallingException {
         try {
             return JsonMarshaller.getInstance().getDefaultObjectMapper().writeValueAsString(object);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new ConnectorMarshallingException(e);
         }
     }

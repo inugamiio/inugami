@@ -16,12 +16,12 @@
  */
 package io.inugami.framework.api.marshalling;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import io.inugami.framework.interfaces.models.JsonBuilder;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 
 public class FieldSerializer extends StdSerializer<Field> {
@@ -31,13 +31,13 @@ public class FieldSerializer extends StdSerializer<Field> {
     }
 
     @Override
-    public void serialize(final Field field,
-                          final JsonGenerator jsonGenerator,
-                          final SerializerProvider serializerProvider) throws IOException {
-        if (field == null) {
-            jsonGenerator.writeNull();
+    public void serialize(final Field value,
+                          final JsonGenerator gen,
+                          final SerializationContext ctxt) throws JacksonException {
+        if (value == null) {
+            gen.writeNull();
         } else {
-            jsonGenerator.writeString(renderAsJson(field));
+            gen.writeString(renderAsJson(value));
         }
     }
 
@@ -52,4 +52,6 @@ public class FieldSerializer extends StdSerializer<Field> {
 
         return json.toString();
     }
+
+
 }

@@ -16,7 +16,8 @@
  */
 package io.inugami.framework.interfaces.marshalling;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import tools.jackson.databind.ObjectMapper;
 
 public interface JacksonMarshallerSpi {
     ObjectMapper buildObjectMapper();

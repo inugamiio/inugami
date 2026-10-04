@@ -18,12 +18,10 @@ open module io.inugami.commons.test {
     requires ch.qos.logback.classic;
     requires ch.qos.logback.core;
     requires com.fasterxml.jackson.annotation;
-    requires com.fasterxml.jackson.core;
-    requires com.fasterxml.jackson.databind;
-    requires com.fasterxml.jackson.dataformat.yaml;
-    requires com.fasterxml.jackson.datatype.jdk8;
-    requires com.fasterxml.jackson.datatype.jsr310;
-    requires com.fasterxml.jackson.module.paramnames;
+    requires tools.jackson.core;
+    requires tools.jackson.databind;
+    requires tools.jackson.dataformat.yaml;
+    requires tools.jackson.datatype.javatime;
     requires io.inugami.framework.api;
     requires io.inugami.framework.interfaces;
     requires io.inugami.logs.obfuscator;

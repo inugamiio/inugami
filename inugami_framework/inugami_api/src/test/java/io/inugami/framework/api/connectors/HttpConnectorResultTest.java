@@ -1,10 +1,12 @@
 package io.inugami.framework.api.connectors;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+
+
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.api.tools.unit.test.UnitTestData;
 import io.inugami.framework.api.tools.unit.test.dto.AssertDtoContext;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 
 import java.nio.charset.StandardCharsets;
 
@@ -66,7 +68,7 @@ class HttpConnectorResultTest {
     private String toJson(final Object value) {
         try {
             return JsonMarshaller.getInstance().getIndentedObjectMapper().writeValueAsString(value);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             return null;
         }
     }

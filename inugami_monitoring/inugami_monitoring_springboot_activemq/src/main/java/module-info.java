@@ -16,7 +16,10 @@
  */
 open module io.inugami.monitoring.springboot.activemq {
     requires activemq.client;
-    requires com.fasterxml.jackson.databind;
+    requires tools.jackson.core;
+    requires tools.jackson.databind;
+    requires tools.jackson.dataformat.yaml;
+    requires tools.jackson.datatype.javatime;
     requires io.inugami.framework.api;
     requires io.inugami.framework.interfaces;
     requires jakarta.messaging;

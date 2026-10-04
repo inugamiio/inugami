@@ -33,7 +33,7 @@
     =================================================================================================================-->
     <properties>
         <spring-boot.version>3.5.8</spring-boot.version>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
         <super.jdk.arg>-parameters</super.jdk.arg>
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
@@ -88,6 +88,8 @@
         <ch.qos.logback.version>${logbackVersion}</ch.qos.logback.version>
         <com.hazelcast.version>${hazelcastVersion}</com.hazelcast.version>
         <com.jackson.version>${jacksonVersion}</com.jackson.version>
+        <tools.jackson.version>${toolsJacksonVersion}</tools.jackson.version>
+        <tools.jackson.datatype.version>${toolsJacksonDatatypeVersion}</tools.jackson.datatype.version>
         <com.squareup.okhttp3.version>${okhttp3Version}</com.squareup.okhttp3.version>
         <com.sun.xml.bind.version>${sunXmlVersion}</com.sun.xml.bind.version>
         <commons-lang.version>${commonsLangVersion}</commons-lang.version>
@@ -260,25 +262,16 @@
                 <version>${com.jackson.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <groupId>tools.jackson.dataformat</groupId>
                 <artifactId>jackson-dataformat-yaml</artifactId>
-                <version>${com.jackson.version}</version>
+                <version>${tools.jackson.datatype.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
-                <artifactId>jackson-datatype-jdk8</artifactId>
-                <version>${com.jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <groupId>tools.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-jsr310</artifactId>
-                <version>${com.jackson.version}</version>
+                <version>${tools.jackson.datatype.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.module</groupId>
-                <artifactId>jackson-module-parameter-names</artifactId>
-                <version>${com.jackson.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>

@@ -1,6 +1,5 @@
 package io.inugami.framework.api.marshalling;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
 import io.inugami.framework.interfaces.exceptions.DefaultWarning;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
@@ -14,7 +13,7 @@ class JsonMarshallerTest {
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
-    public static final String NOMINAL = """
+    public static final String NOMINAL         = """
             {
               "statusCode" : 500,
               "category" : "configuration",
@@ -43,7 +42,7 @@ class JsonMarshallerTest {
             }""";
 
     @Test
-    void errorCode_serialize() throws JsonProcessingException {
+    void errorCode_serialize() {
         final ErrorCode errorCode = EngineErrors.WORKSPACE_UNDEFINED.getCurrentErrorCode();
         assertThat(JsonMarshaller.getInstance()
                                  .getIndentedObjectMapper()
@@ -52,7 +51,7 @@ class JsonMarshallerTest {
     }
 
     @Test
-    void errorCode_deserialize() throws JsonProcessingException {
+    void errorCode_deserialize() {
         final ErrorCode errorCode = JsonMarshaller.getInstance()
                                                   .getIndentedObjectMapper()
                                                   .readValue(NOMINAL, ErrorCode.class);
@@ -65,7 +64,7 @@ class JsonMarshallerTest {
 
 
     @Test
-    void warning_serialize() throws JsonProcessingException {
+    void warning_serialize() {
         final Warning value = EngineWarning.WORKSPACE_UNDEFINED.getCurrentWaring();
         assertThat(JsonMarshaller.getInstance()
                                  .getIndentedObjectMapper()
@@ -74,16 +73,17 @@ class JsonMarshallerTest {
     }
 
     @Test
-    void warning_deserialize() throws JsonProcessingException {
+    void warning_deserialize() {
         final Warning value = JsonMarshaller.getInstance()
-                                                  .getIndentedObjectMapper()
-                                                  .readValue(NOMINAL_WARNING, Warning.class);
+                                            .getIndentedObjectMapper()
+                                            .readValue(NOMINAL_WARNING, Warning.class);
         assertThat(JsonMarshaller.getInstance()
                                  .getIndentedObjectMapper()
                                  .writeValueAsString(value))
                 .isEqualTo(NOMINAL_WARNING);
 
     }
+
     // =================================================================================================================
     // TOOLS
     // =================================================================================================================

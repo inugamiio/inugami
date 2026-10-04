@@ -1,11 +1,11 @@
 package io.inugami.framework.interfaces.connectors;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.inugami.framework.interfaces.exceptions.connector.ConnectorMarshallingException;
 import io.inugami.framework.interfaces.testing.commons.AssertDtoContext;
 import io.inugami.framework.interfaces.testing.commons.UnitTestData;
 import io.inugami.framework.interfaces.testing.commons.marshaller.JsonMarshaller;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 
 import static io.inugami.framework.interfaces.testing.commons.UnitTestData.OTHER;
 import static io.inugami.framework.interfaces.testing.commons.UnitTestHelper.assertDto;
@@ -68,7 +68,7 @@ class HttpRequestTest {
             return JsonMarshaller.getInstance()
                                  .getIndentedObjectMapper()
                                  .writeValueAsString(value);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new ConnectorMarshallingException(e);
         }
     }

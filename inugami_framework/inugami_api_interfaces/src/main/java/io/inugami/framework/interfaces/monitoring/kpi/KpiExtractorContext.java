@@ -16,10 +16,11 @@
  */
 package io.inugami.framework.interfaces.monitoring.kpi;
 
-import com.fasterxml.jackson.databind.JsonNode;
+
 import io.inugami.framework.interfaces.monitoring.data.RequestData;
 import io.inugami.framework.interfaces.monitoring.data.ResponseData;
 import lombok.*;
+import tools.jackson.databind.JsonNode;
 
 import java.time.LocalDateTime;
 

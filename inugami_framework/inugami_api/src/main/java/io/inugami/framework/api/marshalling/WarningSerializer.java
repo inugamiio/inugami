@@ -16,17 +16,15 @@
  */
 package io.inugami.framework.api.marshalling;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import io.inugami.framework.interfaces.exceptions.Warning;
-
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 import static io.inugami.framework.interfaces.exceptions.Warning.*;
 
 public class WarningSerializer extends StdSerializer<Warning> {
-
 
     public WarningSerializer(final Class<Warning> errorCodeClass) {
         super(errorCodeClass);
@@ -35,7 +33,7 @@ public class WarningSerializer extends StdSerializer<Warning> {
     @Override
     public void serialize(final Warning value,
                           final JsonGenerator jsonGenerator,
-                          final SerializerProvider serializerProvider) throws IOException {
+                          final SerializationContext serializationContext) throws JacksonException {
         if (value == null) {
             jsonGenerator.writeNull();
         } else {
@@ -43,41 +41,41 @@ public class WarningSerializer extends StdSerializer<Warning> {
         }
     }
 
-    private void renderAsJson(final Warning value, final JsonGenerator json) throws IOException {
+    private void renderAsJson(final Warning value, final JsonGenerator json) throws JacksonException {
         json.writeStartObject();
 
         if (value.getWarningCode() != null) {
-            json.writeFieldName(WARNING_CODE);
+            json.writeName(WARNING_CODE);
             json.writeString(value.getWarningCode());
         }
 
         if (value.getMessage() != null) {
-            json.writeFieldName(WARNING_MESSAGE);
+            json.writeName(WARNING_MESSAGE);
             json.writeString(value.getMessage());
         }
 
         if (value.getMessageDetail() != null) {
-            json.writeFieldName(WARNING_MESSAGE_DETAIL);
+            json.writeName(WARNING_MESSAGE_DETAIL);
             json.writeString(value.getMessageDetail());
         }
 
         if (value.getWarningType() != null) {
-            json.writeFieldName(WARNING_TYPE);
+            json.writeName(WARNING_TYPE);
             json.writeString(value.getWarningType());
         }
 
         if (value.getCategory() != null) {
-            json.writeFieldName(WARNING_CATEGORY);
+            json.writeName(WARNING_CATEGORY);
             json.writeString(value.getCategory());
         }
 
         if (value.getDomain() != null) {
-            json.writeFieldName(WARNING_DOMAIN);
+            json.writeName(WARNING_DOMAIN);
             json.writeString(value.getDomain());
         }
 
         if (value.getSubDomain() != null) {
-            json.writeFieldName(WARNING_SUB_DOMAIN);
+            json.writeName(WARNING_SUB_DOMAIN);
             json.writeString(value.getSubDomain());
         }
 

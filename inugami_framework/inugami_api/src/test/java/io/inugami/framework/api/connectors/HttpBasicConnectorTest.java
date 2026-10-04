@@ -1,7 +1,6 @@
 package io.inugami.framework.api.connectors;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.interfaces.connectors.ConnectorListener;
 import io.inugami.framework.interfaces.connectors.HttpRequest;
@@ -18,6 +17,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.core.type.TypeReference;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Clock;
@@ -39,10 +39,10 @@ class HttpBasicConnectorTest {
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
-    private final static Clock                            CLOCK          = Clock.fixed(Instant.parse("2018-08-19T16:02:42.00Z"), ZoneId.of("UTC"));
-    private final static TypeReference<List<EndpointDTO>> TYPE           = new TypeReference<List<EndpointDTO>>() {
+    private final static Clock                            CLOCK    = Clock.fixed(Instant.parse("2018-08-19T16:02:42.00Z"), ZoneId.of("UTC"));
+    private final static TypeReference<List<EndpointDTO>> TYPE     = new TypeReference<List<EndpointDTO>>() {
     };
-    public static final  String                           FULL_URL       = "http://localhost:8080/mock/my/endpoint?full=true";
+    public static final  String                           FULL_URL = "http://localhost:8080/mock/my/endpoint?full=true";
     public static final  String                           HEADERS        = """
             [ {
               "first" : "trace",
@@ -446,7 +446,7 @@ class HttpBasicConnectorTest {
                                      .build();
     }
 
-    private Response buildListResponse(final Request request, final Object value) throws JsonProcessingException {
+    private Response buildListResponse(final Request request, final Object value) {
         return new Response.Builder().code(200)
                                      .request(request)
                                      .addHeader(Headers.X_CORRELATION_ID, CORRELATION_ID)
@@ -458,7 +458,7 @@ class HttpBasicConnectorTest {
                                      .build();
     }
 
-    private Response buildEmptyResponse(final Request request) throws JsonProcessingException {
+    private Response buildEmptyResponse(final Request request) {
         return new Response.Builder().code(200)
                                      .request(request)
                                      .addHeader(Headers.X_CORRELATION_ID, CORRELATION_ID)

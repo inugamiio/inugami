@@ -15,7 +15,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 open module io.inugami.monitoring.sensors.defaults {
-    requires com.fasterxml.jackson.databind;
+    requires tools.jackson.core;
+    requires tools.jackson.databind;
+    requires tools.jackson.dataformat.yaml;
+    requires tools.jackson.datatype.javatime;
     requires io.inugami.framework.api;
     requires io.inugami.framework.interfaces;
     requires io.inugami.monitoring.api;

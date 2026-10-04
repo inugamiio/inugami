@@ -16,12 +16,13 @@
  */
 package io.inugami.framework.interfaces.marshalling.serializers;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import io.inugami.framework.interfaces.models.JsonBuilder;
 
-import java.io.IOException;
+import io.inugami.framework.interfaces.models.JsonBuilder;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
@@ -34,7 +35,7 @@ public class MethodSerializer extends StdSerializer<Method> {
     @Override
     public void serialize(final Method method,
                           final JsonGenerator jsonGenerator,
-                          final SerializerProvider serializerProvider) throws IOException {
+                          final SerializationContext ctxt) throws JacksonException {
         if (method == null) {
             jsonGenerator.writeNull();
         } else {
@@ -61,4 +62,6 @@ public class MethodSerializer extends StdSerializer<Method> {
         json.closeTuple();
         return json.toString();
     }
+
+
 }

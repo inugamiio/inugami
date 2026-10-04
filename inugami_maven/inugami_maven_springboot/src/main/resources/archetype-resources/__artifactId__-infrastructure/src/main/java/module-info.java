@@ -25,7 +25,9 @@ open module ${package}.infrastructure {
     requires spring.context;
     requires spring.data.commons;
     requires spring.data.jpa;
+    requires spring.boot.persistence;
     requires spring.tx;
+    requires net.bytebuddy;
     //
     requires ${package}.api;
     //

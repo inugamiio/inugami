@@ -16,7 +16,6 @@
  */
 package io.inugami.commons.test.mock.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.inugami.commons.test.mock.MockContext;
 import io.inugami.commons.test.mock.MockOpenApiContext;
 import io.inugami.framework.api.marshalling.JsonMarshaller;
@@ -26,6 +25,7 @@ import io.inugami.framework.interfaces.models.JsonBuilder;
 import io.inugami.framework.interfaces.tools.ListUtils;
 import lombok.experimental.UtilityClass;
 import org.jspecify.annotations.NonNull;
+import tools.jackson.core.JacksonException;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -591,7 +591,7 @@ public class MockGeneratorOpenApiUtils {
     private static String renderJson(final Object value) {
         try {
             return JsonMarshaller.getInstance().getIndentedObjectMapper().writeValueAsString(value);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             return null;
         }
     }

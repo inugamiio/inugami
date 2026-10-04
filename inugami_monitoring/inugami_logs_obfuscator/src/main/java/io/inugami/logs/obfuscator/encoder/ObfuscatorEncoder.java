@@ -23,9 +23,6 @@ import ch.qos.logback.core.Context;
 import ch.qos.logback.core.Layout;
 import ch.qos.logback.core.pattern.PatternLayoutEncoderBase;
 import ch.qos.logback.core.spi.ContextAware;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inugami.framework.api.listeners.DefaultApplicationLifecycleSPI;
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.interfaces.listeners.ApplicationLifecycleSPI;
@@ -37,6 +34,9 @@ import io.inugami.framework.interfaces.monitoring.logger.mapper.LoggerMdcMapping
 import io.inugami.framework.interfaces.monitoring.logger.mapper.MdcDynamicFieldSPI;
 import io.inugami.framework.interfaces.spi.SpiLoader;
 import io.inugami.logs.obfuscator.appender.AppenderConfiguration;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -273,7 +273,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
 
         try {
             return JsonMarshaller.getInstance().getDefaultObjectMapper().writeValueAsString(result);
-        } catch (final JsonProcessingException e) {
+        } catch (final JacksonException e) {
             return EMPTY_STR;
         }
     }
@@ -281,7 +281,7 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
     private Object convertToData(final String message) {
         try {
             return JsonMarshaller.getInstance().getDefaultObjectMapper().readValue(message, Object.class);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             return null;
         }
     }
@@ -332,7 +332,8 @@ public class ObfuscatorEncoder extends PatternLayoutEncoderBase<ILoggingEvent> i
 
     private Map<String, Serializable> extractMdcDynamicFieldsSpiData() {
         final Map<String, Serializable> result = new LinkedHashMap<>();
-        for (final MdcDynamicFieldSPI mdcDynamicField : Optional.ofNullable(CONTEXT.get().getMdcDynamicFields()).orElse(List.of())) {
+        for (final MdcDynamicFieldSPI mdcDynamicField : Optional.ofNullable(CONTEXT.get().getMdcDynamicFields())
+                                                                .orElse(List.of())) {
             try {
                 final Map<String, Serializable> data = mdcDynamicField.generate();
                 applyIfNotNull(data, result::putAll);

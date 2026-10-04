@@ -16,8 +16,6 @@
  */
 package io.inugami.monitoring.springboot.interceptor;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inugami.framework.api.tools.RunSafeUtils;
 import io.inugami.framework.commons.threads.ThreadsExecutorService;
 import io.inugami.framework.interfaces.configurtation.ConfigHandler;
@@ -38,6 +36,8 @@ import jakarta.annotation.PreDestroy;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
