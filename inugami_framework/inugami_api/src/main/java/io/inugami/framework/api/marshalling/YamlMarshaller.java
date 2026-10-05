@@ -6,7 +6,10 @@ import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
 import io.inugami.framework.interfaces.exceptions.UncheckedException;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.*;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.MapperFeature;
+import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.cfg.DateTimeFeature;
 import tools.jackson.dataformat.yaml.YAMLFactory;
 import tools.jackson.dataformat.yaml.YAMLMapper;
@@ -26,9 +29,12 @@ public class YamlMarshaller {
         final YAMLFactory yf = YAMLFactory.builder().build();
         objectMapper = YAMLMapper.builder(yf)
                                  .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
-                                 .enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS)
+                                 .disable(MapperFeature.SORT_CREATOR_PROPERTIES_FIRST)
                                  .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
-                                 .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL))
+                                 .disable(tools.jackson.databind.cfg.EnumFeature.WRITE_ENUMS_USING_TO_STRING)
+                                 .disable(tools.jackson.databind.cfg.EnumFeature.READ_ENUMS_USING_TO_STRING)
+                                 .changeDefaultPropertyInclusion(include -> include.withValueInclusion(JsonInclude.Include.NON_NULL)
+                                                                                   .withContentInclusion(JsonInclude.Include.NON_NULL))
                                  .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                                  .build();
     }

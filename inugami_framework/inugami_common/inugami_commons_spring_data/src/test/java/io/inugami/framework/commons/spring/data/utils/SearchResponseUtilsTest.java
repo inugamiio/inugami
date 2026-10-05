@@ -22,15 +22,15 @@ class SearchResponseUtilsTest {
         assertText(SearchResponseUtils.buildPageRequest(null, "id"),
                    """
                            {
+                             "offset" : 0,
                              "pageNumber" : 0,
                              "pageSize" : 20,
+                             "paged" : true,
                              "sort" : {
                                "empty" : false,
                                "sorted" : true,
                                "unsorted" : false
                              },
-                             "offset" : 0,
-                             "paged" : true,
                              "unpaged" : false
                            }
                            """);
@@ -47,17 +47,17 @@ class SearchResponseUtilsTest {
         assertText(SearchResponseUtils.buildPageRequest(request, "id"),
                    """
                            {
-                             "pageNumber" : 2,
-                             "pageSize" : 50,
-                             "sort" : {
-                               "empty" : false,
-                               "sorted" : true,
-                               "unsorted" : false
-                             },
-                             "offset" : 100,
-                             "paged" : true,
-                             "unpaged" : false
-                           }
+                              "offset" : 100,
+                              "pageNumber" : 2,
+                              "pageSize" : 50,
+                              "paged" : true,
+                              "sort" : {
+                                "empty" : false,
+                                "sorted" : true,
+                                "unsorted" : false
+                              },
+                              "unpaged" : false
+                            }
                            """);
 
     }
@@ -68,33 +68,33 @@ class SearchResponseUtilsTest {
         assertText(SearchResponseUtils.buildEmptyPage(pr),
                    """
                            {
-                              "content" : [ ],
-                              "empty" : true,
-                              "first" : true,
-                              "last" : true,
-                              "number" : 0,
-                              "numberOfElements" : 0,
-                              "pageable" : {
-                                "pageNumber" : 0,
-                                "pageSize" : 10,
-                                "sort" : {
-                                  "empty" : true,
-                                  "sorted" : false,
-                                  "unsorted" : true
-                                },
-                                "offset" : 0,
-                                "paged" : true,
-                                "unpaged" : false
-                              },
-                              "size" : 10,
-                              "sort" : {
-                                "empty" : true,
-                                "sorted" : false,
-                                "unsorted" : true
-                              },
-                              "totalElements" : 0,
-                              "totalPages" : 0
-                            }
+                               "content" : [ ],
+                               "empty" : true,
+                               "first" : true,
+                               "last" : true,
+                               "number" : 0,
+                               "numberOfElements" : 0,
+                               "pageable" : {
+                                 "offset" : 0,
+                                 "pageNumber" : 0,
+                                 "pageSize" : 10,
+                                 "paged" : true,
+                                 "sort" : {
+                                   "empty" : true,
+                                   "sorted" : false,
+                                   "unsorted" : true
+                                 },
+                                 "unpaged" : false
+                               },
+                               "size" : 10,
+                               "sort" : {
+                                 "empty" : true,
+                                 "sorted" : false,
+                                 "unsorted" : true
+                               },
+                               "totalElements" : 0,
+                               "totalPages" : 0
+                             }
                            """);
     }
 

@@ -17,23 +17,23 @@ class YamlMarshallerTest {
     };
     public static final  String                     YAML_NOMINAL = """
 ---
-id: 1
-firstName: "Émilie"
-lastName: "Lalonde"
-email: "emilie.lalonde@mock.org"
-sex: "FEMALE"
-phoneNumber: "0615031522"
-old: 35
 birthday: "1988-04-12"
-socialId: "7564971247732"
+canton: "VD"
+city: "Cheseaux-sur-Lausanne"
+deviceIdentifier: "401f0498-c43f-43ad-a3f4-2888838332ad"
+email: "emilie.lalonde@mock.org"
+firstName: "Émilie"
+id: 1
+lastName: "Lalonde"
 nationality: "CH"
-streetNumber: "10"
+old: 35
+phoneNumber: "0615031522"
+sex: "FEMALE"
+socialId: "7564971247732"
 streetName: "du Château"
+streetNumber: "10"
 streetType: "Chem."
 zipCode: "1033"
-city: "Cheseaux-sur-Lausanne"
-canton: "VD"
-deviceIdentifier: "401f0498-c43f-43ad-a3f4-2888838332ad"
             """;
 
     public static final String NOMINAL = """
@@ -84,24 +84,24 @@ deviceIdentifier: "401f0498-c43f-43ad-a3f4-2888838332ad"
         assertText(YamlMarshaller.getInstance().convertFromYaml(YAML_NOMINAL),
                    """
                            {
-                             "id" : 1,
-                             "firstName" : "Émilie",
-                             "lastName" : "Lalonde",
-                             "email" : "emilie.lalonde@mock.org",
-                             "sex" : "FEMALE",
-                             "phoneNumber" : "0615031522",
-                             "old" : 35,
-                             "birthday" : "1988-04-12",
-                             "socialId" : "7564971247732",
-                             "nationality" : "CH",
-                             "streetNumber" : "10",
-                             "streetName" : "du Château",
-                             "streetType" : "Chem.",
-                             "zipCode" : "1033",
-                             "city" : "Cheseaux-sur-Lausanne",
-                             "canton" : "VD",
-                             "deviceIdentifier" : "401f0498-c43f-43ad-a3f4-2888838332ad"
-                           }
+                              "birthday" : "1988-04-12",
+                              "canton" : "VD",
+                              "city" : "Cheseaux-sur-Lausanne",
+                              "deviceIdentifier" : "401f0498-c43f-43ad-a3f4-2888838332ad",
+                              "email" : "emilie.lalonde@mock.org",
+                              "firstName" : "Émilie",
+                              "id" : 1,
+                              "lastName" : "Lalonde",
+                              "nationality" : "CH",
+                              "old" : 35,
+                              "phoneNumber" : "0615031522",
+                              "sex" : "FEMALE",
+                              "socialId" : "7564971247732",
+                              "streetName" : "du Château",
+                              "streetNumber" : "10",
+                              "streetType" : "Chem.",
+                              "zipCode" : "1033"
+                            }
                            """);
     }
     // =================================================================================================================

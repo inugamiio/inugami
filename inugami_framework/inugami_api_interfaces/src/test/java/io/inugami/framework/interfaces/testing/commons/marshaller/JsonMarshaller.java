@@ -82,8 +82,10 @@ public class JsonMarshaller {
                              .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
                              .disable(MapperFeature.SORT_CREATOR_PROPERTIES_FIRST)
                              .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+                             .disable(tools.jackson.databind.cfg.EnumFeature.WRITE_ENUMS_USING_TO_STRING)
+                             .disable(tools.jackson.databind.cfg.EnumFeature.READ_ENUMS_USING_TO_STRING)
                              .changeDefaultPropertyInclusion(include -> include.withValueInclusion(JsonInclude.Include.NON_NULL)
-                                                                               .withContentInclusion(JsonInclude.Include.NON_NULL)) // <-- Ajout du content inclusion
+                                                                               .withContentInclusion(JsonInclude.Include.NON_NULL))
                              .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                              .addModule(INUGAMI_MODULE)
                              .build();
@@ -94,10 +96,12 @@ public class JsonMarshaller {
             return JsonMapper.builder()
                              .enable(SerializationFeature.INDENT_OUTPUT)
                              .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+                             .disable(tools.jackson.databind.cfg.EnumFeature.WRITE_ENUMS_USING_TO_STRING)
+                             .disable(tools.jackson.databind.cfg.EnumFeature.READ_ENUMS_USING_TO_STRING)
                              .disable(MapperFeature.SORT_CREATOR_PROPERTIES_FIRST)
                              .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
                              .changeDefaultPropertyInclusion(include -> include.withValueInclusion(JsonInclude.Include.NON_NULL)
-                                                                               .withContentInclusion(JsonInclude.Include.NON_NULL)) // <-- Ajout du content inclusion
+                                                                               .withContentInclusion(JsonInclude.Include.NON_NULL))
                              .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                              .addModule(INUGAMI_MODULE)
                              .build();

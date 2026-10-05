@@ -34,6 +34,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.time.Clock;
 import java.time.ZoneOffset;
@@ -195,8 +196,14 @@ public class ConfigConfiguration {
 
     @ConditionalOnMissingBean
     @Bean
-    public JacksonJsonHttpMessageConverter mappingJackson2HttpMessageConverter(final ObjectMapper objectMapper) {
-        return new JacksonJsonHttpMessageConverter(objectMapper);
+    public JsonMapper jsonMapper() {
+        return (JsonMapper) JsonMarshaller.getInstance().getDefaultObjectMapper();
+    }
+
+    @ConditionalOnMissingBean
+    @Bean
+    public JacksonJsonHttpMessageConverter mappingJackson2HttpMessageConverter(final JsonMapper jsonMapper) {
+        return new JacksonJsonHttpMessageConverter(jsonMapper);
     }
 
     @ConditionalOnMissingBean
