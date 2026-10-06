@@ -113,11 +113,15 @@
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-jackson3</artifactId>
         </dependency>
+
+
         <dependency>
             <groupId>io.inugami.framework.commons</groupId>
             <artifactId>inugami_commons_test</artifactId>
             <scope>test</scope>
         </dependency>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -130,6 +134,7 @@
             </exclusions>
         </dependency>
 
+
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
@@ -140,6 +145,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

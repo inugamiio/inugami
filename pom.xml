@@ -148,7 +148,7 @@
         <org.eclipse.jdt.core.compiler.version>4.6.1</org.eclipse.jdt.core.compiler.version>
         <com.sun.el.version>1.0</com.sun.el.version>
         <de.odysseus.juel.version>2.2.7</de.odysseus.juel.version>
-        <com.squareup.okhttp3.version>4.12.0</com.squareup.okhttp3.version>
+        <com.squareup.okhttp3.version>5.5.0</com.squareup.okhttp3.version>
         <cglib.version>3.3.0</cglib.version>
         <!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         :: PLUGINS VERSIONS
@@ -562,6 +562,13 @@
             + OTHER
             +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
             <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.10.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>cglib</groupId>
                 <artifactId>cglib</artifactId>
                 <version>${cglib.version}</version>
@@ -642,6 +649,11 @@
                 <version>${com.squareup.okhttp3.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp-jvm</artifactId>
+                <version>${com.squareup.okhttp3.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.hazelcast</groupId>
                 <artifactId>hazelcast-spring</artifactId>

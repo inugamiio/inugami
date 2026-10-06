@@ -23,8 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.inugami.framework.api.tools.unit.test.UnitTestHelper.assertText;
@@ -39,18 +38,17 @@ class HttpBasicConnectorTest {
     // =================================================================================================================
     // ATTRIBUTES
     // =================================================================================================================
-    private final static Clock                            CLOCK    = Clock.fixed(Instant.parse("2018-08-19T16:02:42.00Z"), ZoneId.of("UTC"));
-    private final static TypeReference<List<EndpointDTO>> TYPE     = new TypeReference<List<EndpointDTO>>() {
+    private final static Clock                            CLOCK          =
+            Clock.fixed(Instant.parse("2018-08-19T16:02:42.00Z"), ZoneId.of("UTC"));
+    private final static TypeReference<List<EndpointDTO>> TYPE           = new TypeReference<List<EndpointDTO>>() {
     };
-    public static final  String                           FULL_URL = "http://localhost:8080/mock/my/endpoint?full=true";
+    public static final  String                           FULL_URL       =
+            "http://localhost:8080/mock/my/endpoint?full=true";
     public static final  String                           HEADERS        = """
-            [ {
-              "first" : "trace",
-              "second" : "91e0e458-93df-4d23-8653-3c6e5cd8794e"
-            }, {
-              "first" : "action",
-              "second" : "test"
-            } ]
+            {
+                 "action" : "test",
+                 "trace" : "91e0e458-93df-4d23-8653-3c6e5cd8794e"
+               }
             """;
     public static final  String                           ENDPOINT       = "my/endpoint";
     public static final  String                           RESPONSE_LIST  = """
@@ -98,7 +96,7 @@ class HttpBasicConnectorTest {
         assertThat(result).isNotNull();
         verify(client).newCall(requestCaptor.capture());
         assertThat(requestCaptor.getValue().url()).hasToString(FULL_URL);
-        assertText(requestCaptor.getValue().headers(), HEADERS);
+        assertText(renderHeader(requestCaptor.getValue().headers()), HEADERS);
         assertText(result, """
                  {
                         "bodyData" : "eyJzdGF0dXMiOiJzdWNjZXNzIn0K",
@@ -123,6 +121,22 @@ class HttpBasicConnectorTest {
                   "status" : "success"
                 }
                 """);
+    }
+
+    private Map<String, String> renderHeader(final okhttp3.Headers headers) {
+        final Map<String, String> result = new LinkedHashMap<>();
+        final Map<String, String> buffer = new HashMap<>();
+        if (headers != null) {
+            for (int i = 0; i < headers.size(); i++) {
+                buffer.put(headers.name(i), headers.value(i));
+            }
+        }
+        final List<String> keys = new ArrayList<>(buffer.keySet());
+        Collections.sort(keys);
+        for (String key : keys) {
+            result.put(key, buffer.get(key));
+        }
+        return result;
     }
 
 
@@ -154,7 +168,7 @@ class HttpBasicConnectorTest {
         assertThat(result).isNotNull();
         verify(client).newCall(requestCaptor.capture());
         assertThat(requestCaptor.getValue().url()).hasToString(FULL_URL);
-        assertText(requestCaptor.getValue().headers(), HEADERS);
+        assertText(renderHeader(requestCaptor.getValue().headers()), HEADERS);
         assertText(result, """
                 {
                                        "bodyData" : "WyB7CiAgInN0YXR1cyIgOiAic3VjY2VzcyIKfSBd",
@@ -208,7 +222,7 @@ class HttpBasicConnectorTest {
         assertThat(result).isNotNull();
         verify(client).newCall(requestCaptor.capture());
         assertThat(requestCaptor.getValue().url()).hasToString(FULL_URL);
-        assertText(requestCaptor.getValue().headers(), HEADERS);
+        assertText(renderHeader(requestCaptor.getValue().headers()), HEADERS);
         assertText(result, """
                 {
                    "bodyData" : "WyB7CiAgInN0YXR1cyIgOiAic3VjY2VzcyIKfSBd",
@@ -260,7 +274,7 @@ class HttpBasicConnectorTest {
         assertThat(result).isNotNull();
         verify(client).newCall(requestCaptor.capture());
         assertThat(requestCaptor.getValue().url()).hasToString(FULL_URL);
-        assertText(requestCaptor.getValue().headers(), HEADERS);
+        assertText(renderHeader(requestCaptor.getValue().headers()), HEADERS);
         assertText(result, """
                 {
                    "bodyData" : "WyB7CiAgInN0YXR1cyIgOiAic3VjY2VzcyIKfSBd",
@@ -310,25 +324,26 @@ class HttpBasicConnectorTest {
         assertThat(result).isNotNull();
         verify(client).newCall(requestCaptor.capture());
         assertThat(requestCaptor.getValue().url()).hasToString(FULL_URL);
-        assertText(requestCaptor.getValue().headers(), HEADERS);
+        assertText(renderHeader(requestCaptor.getValue().headers()), HEADERS);
         assertText(result,
                    """
                            {
-                             "charset" : "UTF-8",
-                             "delay" : 0,
-                             "encoding" : "UTF-8",
-                             "errorCode" : null,
-                             "hashHumanReadable" : "[DELETE]http://localhost:8080/mock/my/endpoint?full=true",
-                             "length" : 0,
-                             "message" : "success",
-                             "responseAt" : 1534694562,
-                             "responseHeaders" : {
-                               "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
-                             },
-                             "statusCode" : 200,
-                             "url" : "http://localhost:8080/mock/my/endpoint?full=true",
-                             "verb" : "DELETE"
-                           }        
+                                "bodyData" : "",
+                                "charset" : "UTF-8",
+                                "delay" : 0,
+                                "encoding" : "UTF-8",
+                                "errorCode" : null,
+                                "hashHumanReadable" : "[DELETE]http://localhost:8080/mock/my/endpoint?full=true",
+                                "length" : 0,
+                                "message" : "success",
+                                "responseAt" : 1534694562,
+                                "responseHeaders" : {
+                                  "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
+                                },
+                                "statusCode" : 200,
+                                "url" : "http://localhost:8080/mock/my/endpoint?full=true",
+                                "verb" : "DELETE"
+                              }      
                            """);
     }
 
@@ -357,25 +372,26 @@ class HttpBasicConnectorTest {
         assertThat(result).isNotNull();
         verify(client).newCall(requestCaptor.capture());
         assertThat(requestCaptor.getValue().url()).hasToString(FULL_URL);
-        assertText(requestCaptor.getValue().headers(), HEADERS);
+        assertText(renderHeader(requestCaptor.getValue().headers()), HEADERS);
         assertText(result,
                    """ 
                            {
-                             "charset" : "UTF-8",
-                             "delay" : 0,
-                             "encoding" : "UTF-8",
-                             "errorCode" : null,
-                             "hashHumanReadable" : "[OPTION]http://localhost:8080/mock/my/endpoint?full=true",
-                             "length" : 0,
-                             "message" : "success",
-                             "responseAt" : 1534694562,
-                             "responseHeaders" : {
-                               "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
-                             },
-                             "statusCode" : 200,
-                             "url" : "http://localhost:8080/mock/my/endpoint?full=true",
-                             "verb" : "OPTION"
-                           }   
+                                 "bodyData" : "",
+                                 "charset" : "UTF-8",
+                                 "delay" : 0,
+                                 "encoding" : "UTF-8",
+                                 "errorCode" : null,
+                                 "hashHumanReadable" : "[OPTION]http://localhost:8080/mock/my/endpoint?full=true",
+                                 "length" : 0,
+                                 "message" : "success",
+                                 "responseAt" : 1534694562,
+                                 "responseHeaders" : {
+                                   "x-correlation-id" : "06adc5f2-22b7-4e68-b436-05304f484ca4"
+                                 },
+                                 "statusCode" : 200,
+                                 "url" : "http://localhost:8080/mock/my/endpoint?full=true",
+                                 "verb" : "OPTION"
+                               }
                            """);
     }
 
