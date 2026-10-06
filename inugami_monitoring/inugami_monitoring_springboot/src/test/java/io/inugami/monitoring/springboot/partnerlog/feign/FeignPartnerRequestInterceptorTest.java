@@ -1,6 +1,5 @@
 package io.inugami.monitoring.springboot.partnerlog.feign;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import feign.Request;
 import feign.Target;
 import io.inugami.commons.test.UnitTestData;
@@ -44,7 +43,7 @@ class FeignPartnerRequestInterceptorTest {
     // apply
     // =================================================================================================================
     @Test
-    void apply_nominal() throws JsonProcessingException {
+    void apply_nominal() {
         MdcService.getInstance()
                   .deviceIdentifier("47991fbc-529a-42e3-9ac6-9d7992713250")
                   .correlationId("ba26cf88-a6ee-40e2-83cf-89ebf11eeb35")
@@ -54,7 +53,7 @@ class FeignPartnerRequestInterceptorTest {
         final var requestTemplate = RequestTemplateBuilder.builder()
                                                           .target("http://inugami.io/mock/user")
                                                           .method(Request.HttpMethod.POST)
-                                                          .feignTarget(new <FeignCommonTest.MyFeignService>Target.HardCodedTarget(FeignCommonTest.MyFeignService.class, "http://inugami.io/mock/user"))
+                                                          .feignTarget(new Target.HardCodedTarget(FeignCommonTest.MyFeignService.class, "http://inugami.io/mock/user"))
                                                           .body(JsonMarshaller.getInstance()
                                                                               .getIndentedObjectMapper()
                                                                               .writeValueAsString(UnitTestData.USER_1))
@@ -78,13 +77,13 @@ class FeignPartnerRequestInterceptorTest {
                                      "message":[
                                          "21/12 23:23:10  INFO [PARTNERLOG:42] - [POST] http://inugami.io/mock/user/",
                                          "request:",
-                                         "	headers:",
-                                         "		auth : token",
-                                         "		Content-Length : 480",
-                                         "		x-b3-traceid : 3d623248-5d0e-4be0-830f-d95593e6dcc7",
-                                         "		x-correlation-id : ba26cf88-a6ee-40e2-83cf-89ebf11eeb35",
-                                         "		x-device-identifier : 47991fbc-529a-42e3-9ac6-9d7992713250",
-                                         "	payload:",
+                                         "  headers:",
+                                         "     auth : token",
+                                         "     Content-Length : 480",
+                                         "     x-b3-traceid : 3d623248-5d0e-4be0-830f-d95593e6dcc7",
+                                         "     x-correlation-id : ba26cf88-a6ee-40e2-83cf-89ebf11eeb35",
+                                         "     x-device-identifier : 47991fbc-529a-42e3-9ac6-9d7992713250",
+                                         "  payload:",
                                          "{",
                                          "  \\"birthday\\" : \\"1988-04-12\\",",
                                          "  \\"canton\\" : \\"VD\\",",
