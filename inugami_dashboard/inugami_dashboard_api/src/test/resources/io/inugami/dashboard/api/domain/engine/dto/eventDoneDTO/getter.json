@@ -24,15 +24,15 @@
   "getEvent" : {
     "type" : "SimpleEvent",
     "name" : "simple-event",
-    "fromFirstTime" : "null",
-    "until" : "null",
-    "provider" : "null",
-    "mapper" : "null",
+    "fromFirstTime" : "",
+    "until" : "",
+    "provider" : "",
+    "mapper" : "",
     "processors" : [ ],
     "alertings" : [ ],
-    "query" : "null",
-    "parent" : "null",
-    "scheduler" : "null"
+    "query" : "",
+    "parent" : "",
+    "scheduler" : ""
   },
   "getPlugin" : {
     "enabled" : false,
