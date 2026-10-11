@@ -1,0 +1,85 @@
+info:
+  name: /user update soft
+  type: http
+  seq: 5
+
+http:
+  method: PATCH
+  url: "{{demoUrl}}/ws/user"
+  headers:
+    - name: x-device-identifier
+      value: "{{deviceIdentifier}}"
+    - name: x-correlation-id
+      value: "{{correlationId}}"
+  body:
+    type: json
+    data: |-
+      [
+        {
+          "uid":"{{userId}}",
+          "email": "john.smith10@inugami.io"
+        }
+      ]
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const responseBody = res.getBody();
+        bru.setEnvVar('userId',responseBody[0].uid);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: nominal
+    request:
+      url: "{{demoUrl}}/ws/user"
+      method: PATCH
+      headers:
+        - name: x-device-identifier
+          value: "{{deviceIdentifier}}"
+        - name: x-correlation-id
+          value: "{{correlationId}}"
+      body:
+        type: json
+        data: |-
+          [
+            {
+              "uid":"{{userId}}",
+              "email": "john.smith10@inugami.io"
+            }
+          ]
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: x-correlation-id
+          value: deb499bf-9c3a-4647-bf26-2dae2075975f
+        - name: x-b3-traceid
+          value: 701ae7ca-4ddf-4c8c-99d2-e76390928c9d
+        - name: access-control-allow-origin
+          value: "*"
+        - name: access-control-allow-methods
+          value: GET, POST, PUT, DELETE, PATCH, OPTIONS
+        - name: access-control-allow-headers
+          value: ""
+        - name: access-control-expose-headers
+          value: ""
+        - name: access-control-allow-credentials
+          value: "true"
+        - name: content-length
+          value: "279"
+        - name: date
+          value: Sun, 11 Oct 2026 11:37:12 GMT
+        - name: keep-alive
+          value: timeout=60
+        - name: connection
+          value: keep-alive
+      body:
+        type: text
+        data: '[{"audit":{"createdBy":"system","createdDate":"2026-10-11T11:32:35.534931","lastModifiedBy":"system","lastModifiedDate":"2026-10-11T11:36:24.51148","version":2},"email":"john.smith10@inugami.io","firstName":"John","lastName":"Smith","uid":"bf7d4fb7-bd33-46d4-a019-d2db10ce38b4"}]'

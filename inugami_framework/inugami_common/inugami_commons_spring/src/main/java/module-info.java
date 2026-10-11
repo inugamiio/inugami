@@ -41,7 +41,7 @@ open module io.inugami.framework.commons.spring {
     requires spring.web;
     requires feign.core;
     requires feign.okhttp;
-    requires feign.jackson;
+    requires feign.jackson3;
     requires spring.cloud.openfeign.core;
     requires spring.boot.web.server;
 

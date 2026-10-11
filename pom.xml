@@ -218,7 +218,7 @@
         <io.dropwizard.metrics.version>4.0.5</io.dropwizard.metrics.version>
         <io.github.openfeign.version>13.15</io.github.openfeign.version>
         <io.swagger.core.v3.version>2.2.41</io.swagger.core.v3.version>
-        <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
+        <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
         <jakarta.xml.bind.version>4.0.2</jakarta.xml.bind.version>
         <org-mockito.mockito-core>2.21.0</org-mockito.mockito-core>
         <org.apache.commons.cli.version>1.4</org.apache.commons.cli.version>
