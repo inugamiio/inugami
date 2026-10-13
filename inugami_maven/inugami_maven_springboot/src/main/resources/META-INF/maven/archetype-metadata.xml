@@ -145,6 +145,7 @@
                 <include>docker-compose.yaml</include>
                 <include>inugami.demo.postman_collection.json</include>
                 <include>kibana_export.ndjson</include>
+                <include>bruno/**/*</include>
             </includes>
         </fileSet>
     </fileSets>

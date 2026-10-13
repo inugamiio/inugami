@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
-@RequestMapping(path = "ws/user")
+@RequestMapping(path = "ws/user", produces = {MediaType.APPLICATION_JSON_VALUE})
 public interface UserRestClient {
     // =================================================================================================================
     // CREATE

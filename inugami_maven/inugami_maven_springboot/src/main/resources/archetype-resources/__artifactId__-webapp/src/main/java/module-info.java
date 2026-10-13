@@ -22,4 +22,5 @@ open module ${package}.webapp {
     requires spring.boot.starter.tomcat;
     requires spring.boot;
     requires spring.context;
+    requires jakarta.servlet;
 }

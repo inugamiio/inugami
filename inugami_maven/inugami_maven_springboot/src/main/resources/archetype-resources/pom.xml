@@ -304,12 +304,12 @@
             </dependency>
             <dependency>
                 <groupId>io.github.openfeign</groupId>
-                <artifactId>feign-core</artifactId>
+                <artifactId>feign-jackson3</artifactId>
                 <version>${io.github.openfeign.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.openfeign</groupId>
-                <artifactId>feign-jackson</artifactId>
+                <artifactId>feign-core</artifactId>
                 <version>${io.github.openfeign.version}</version>
             </dependency>
             <dependency>
