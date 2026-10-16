@@ -1,0 +1,73 @@
+info:
+  name: /user delete
+  type: http
+  seq: 6
+
+http:
+  method: DELETE
+  url: "{{demoUrl}}/ws/user?uid={{userId}}"
+  headers:
+    - name: x-device-identifier
+      value: "{{deviceIdentifier}}"
+    - name: x-correlation-id
+      value: "{{correlationId}}"
+  params:
+    - name: uid
+      value: "{{userId}}"
+      type: query
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: bru.setEnvVar('userId', '714896bf-f6bd-4101-a3af-9459e2ce482d');
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: nominal
+    request:
+      url: "{{demoUrl}}/ws/user?uid={{userId}}"
+      method: DELETE
+      headers:
+        - name: x-device-identifier
+          value: "{{deviceIdentifier}}"
+        - name: x-correlation-id
+          value: "{{correlationId}}"
+      params:
+        - name: uid
+          value: "{{userId}}"
+          type: query
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: x-correlation-id
+          value: deb499bf-9c3a-4647-bf26-2dae2075975f
+        - name: x-b3-traceid
+          value: 7ad704f3-7abf-44fd-8bd3-bbd33f0cf287
+        - name: access-control-allow-origin
+          value: "*"
+        - name: access-control-allow-methods
+          value: GET, POST, PUT, DELETE, PATCH, OPTIONS
+        - name: access-control-allow-headers
+          value: ""
+        - name: access-control-expose-headers
+          value: ""
+        - name: access-control-allow-credentials
+          value: "true"
+        - name: content-length
+          value: "0"
+        - name: date
+          value: Sun, 11 Oct 2026 11:31:19 GMT
+        - name: keep-alive
+          value: timeout=60
+        - name: connection
+          value: keep-alive
+      body:
+        type: text
+        data: ""

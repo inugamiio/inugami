@@ -1,0 +1,135 @@
+info:
+  name: /user/{uid}
+  type: http
+  seq: 3
+
+http:
+  method: GET
+  url: "{{demoUrl}}/ws/user/{{userId}}"
+  headers:
+    - name: x-device-identifier
+      value: "{{deviceIdentifier}}"
+    - name: x-correlation-id
+      value: "{{correlationId}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: nominal
+    request:
+      url: "{{demoUrl}}/ws/user/{{userId}}"
+      method: GET
+      headers:
+        - name: x-device-identifier
+          value: "{{deviceIdentifier}}"
+        - name: x-correlation-id
+          value: "{{correlationId}}"
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: x-correlation-id
+          value: deb499bf-9c3a-4647-bf26-2dae2075975f
+        - name: x-b3-traceid
+          value: 0a7546af-8952-4044-b613-c18fe6d95f13
+        - name: access-control-allow-origin
+          value: "*"
+        - name: access-control-allow-methods
+          value: GET, POST, PUT, DELETE, PATCH, OPTIONS
+        - name: access-control-allow-headers
+          value: ""
+        - name: access-control-expose-headers
+          value: ""
+        - name: access-control-allow-credentials
+          value: "true"
+        - name: content-type
+          value: application/json
+        - name: content-length
+          value: "203"
+        - name: date
+          value: Sun, 11 Oct 2026 11:34:25 GMT
+        - name: keep-alive
+          value: timeout=60
+        - name: connection
+          value: keep-alive
+      body:
+        type: json
+        data: |-
+          {
+            "audit": {
+              "createdBy": "system",
+              "createdDate": "2026-10-11T11:32:35.534931",
+              "version": 1
+            },
+            "email": "john.smith5@inugami.io",
+            "firstName": "john",
+            "lastName": "smith",
+            "uid": "bf7d4fb7-bd33-46d4-a019-d2db10ce38b4"
+          }
+  - name: bad_request
+    request:
+      url: "{{demoUrl}}/ws/user/{{userId}}aaa"
+      method: GET
+      headers:
+        - name: x-device-identifier
+          value: "{{deviceIdentifier}}"
+        - name: x-correlation-id
+          value: "{{correlationId}}"
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: x-correlation-id
+          value: deb499bf-9c3a-4647-bf26-2dae2075975f
+        - name: x-b3-traceid
+          value: 27f9ab07-5568-4081-9c0d-1a8df2a84bd3
+        - name: access-control-allow-origin
+          value: "*"
+        - name: access-control-allow-methods
+          value: GET, POST, PUT, DELETE, PATCH, OPTIONS
+        - name: access-control-allow-headers
+          value: ""
+        - name: access-control-expose-headers
+          value: ""
+        - name: access-control-allow-credentials
+          value: "true"
+        - name: content-type
+          value: application/json
+        - name: transfer-encoding
+          value: chunked
+        - name: date
+          value: Sun, 11 Oct 2026 11:34:37 GMT
+        - name: connection
+          value: close
+      body:
+        type: json
+        data: |-
+          {
+            "cause": {
+              "errors": [],
+              "message": "uid required to find user",
+              "parameters": []
+            },
+            "detail": "",
+            "details": {
+              "errorCode": "USER-2_0",
+              "fields": [],
+              "application": "demo-webapp",
+              "version": "1.0.0-SNAPSHOT",
+              "errorType": "functional",
+              "rollback": false,
+              "retryable": false,
+              "errorDomain": "USER",
+              "service": "UserRestController_getById"
+            },
+            "errors": [],
+            "message": "uid required to find user",
+            "parameters": [],
+            "reasonPhrase": "Bad Request",
+            "status": 400
+          }

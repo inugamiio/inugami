@@ -1,14 +1,14 @@
 package io.inugami.framework.api.tools.unit.test;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.interfaces.exceptions.Asserts;
 import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
 import io.inugami.framework.interfaces.exceptions.UncheckedException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -94,7 +94,7 @@ public final class UnitTestHelperJson {
             return json == null ? null : JsonMarshaller.getInstance()
                                                        .getDefaultObjectMapper()
                                                        .readValue(json, refObjectType);
-        } catch (final IOException e) {
+        } catch (final JacksonException e) {
             throw new UncheckedException(DefaultErrorCode.buildUndefineError(), e, e.getMessage());
         }
     }
@@ -104,7 +104,7 @@ public final class UnitTestHelperJson {
             return json == null ? null : JsonMarshaller.getInstance()
                                                        .getDefaultObjectMapper()
                                                        .readValue(json, objectType);
-        } catch (final IOException e) {
+        } catch (final JacksonException e) {
             throw new UncheckedException(DefaultErrorCode.buildUndefineError(), e, e.getMessage());
         }
     }

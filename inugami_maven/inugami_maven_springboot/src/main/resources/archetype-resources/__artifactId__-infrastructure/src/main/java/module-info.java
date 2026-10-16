@@ -20,12 +20,13 @@ open module ${package}.infrastructure {
     requires org.slf4j;
     requires spring.beans;
     requires spring.boot.autoconfigure;
-    requires spring.boot.starter.data.jpa;
     requires spring.boot;
     requires spring.context;
     requires spring.data.commons;
     requires spring.data.jpa;
+    requires spring.boot.persistence;
     requires spring.tx;
+    requires net.bytebuddy;
     //
     requires ${package}.api;
     //

@@ -16,15 +16,15 @@
  */
 package io.inugami.framework.api.connectors;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.api.marshalling.YamlMarshaller;
 import io.inugami.framework.interfaces.connectors.IHttpConnectorResult;
 import io.inugami.framework.interfaces.connectors.exceptions.HttpConntectorParsingException;
 import lombok.*;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.Serializable;
 import java.nio.charset.Charset;
@@ -54,29 +54,29 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
     /**
      * The Constant serialVersionUID.
      */
-    private static final long   serialVersionUID = -576629010706862497L;
-    public static final  int    HTTP_ERROR       = 400;
-    public static final  String PARAMETERS       = "parameters";
-    public static final  String ERROR_CODE       = "errorCode";
+    private static final long      serialVersionUID = -576629010706862497L;
+    public static final  int       HTTP_ERROR       = 400;
+    public static final  String    PARAMETERS       = "parameters";
+    public static final  String    ERROR_CODE       = "errorCode";
     @ToString.Include
-    private           String    verb;
+    private              String    verb;
     @ToString.Include
-    private           String    url;
+    private              String    url;
     @EqualsAndHashCode.Include
-    private           String    hashHumanReadable;
-    private           String    requestData;
+    private              String    hashHumanReadable;
+    private              String    requestData;
     @ToString.Include
-    private           int       statusCode;
-    private           String    message;
-    private           byte[]    data;
-    private           byte[]    bodyData;
-    private           int       length;
-    private           String    contentType;
-    private           long      responseAt;
-    private           long      delay;
-    private           String    encoding;
-    private           Exception error;
-    private transient Charset   charset;
+    private              int       statusCode;
+    private              String    message;
+    private              byte[]    data;
+    private              byte[]    bodyData;
+    private              int       length;
+    private              String    contentType;
+    private              long      responseAt;
+    private              long      delay;
+    private              String    encoding;
+    private              Exception error;
+    private transient    Charset   charset;
 
     private Map<String, String> requestHeaders;
     private Map<String, String> responseHeaders;
@@ -96,7 +96,7 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
                                                                  .append(this.url);
 
             this.encoding = encoding == null ? "UTF-8" : encoding;
-            this.length = data == null ? 0 : data.length;
+            this.length   = data == null ? 0 : data.length;
             if (requestData != null) {
                 hashBuilder.append("?data=").append(requestData.replaceAll("\\n", ""));
             }
@@ -140,7 +140,7 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
 
         try {
             return marshaller.readValue(currentData, objectClass);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new HttpConntectorParsingException(e);
         }
     }
@@ -155,7 +155,7 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
 
         try {
             return marshaller.readValue(currentData, refObjectType);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new HttpConntectorParsingException(e);
         }
     }
@@ -170,7 +170,7 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
 
         try {
             return marshaller.readValue(currentData, objectClass);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new HttpConntectorParsingException(e);
         }
     }
@@ -184,7 +184,7 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
 
         try {
             return marshaller.readValue(currentData, refObjectType);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new HttpConntectorParsingException(e);
         }
     }
@@ -198,7 +198,7 @@ public final class HttpConnectorResult implements Serializable, IHttpConnectorRe
 
         try {
             return marshaller.readValue(currentData, refObjectType);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new HttpConntectorParsingException(e);
         }
     }

@@ -16,6 +16,8 @@
  */
 package io.inugami.framework.configuration.models.app;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * ExpressionType
  *
@@ -23,5 +25,10 @@ package io.inugami.framework.configuration.models.app;
  * @since 15 déc. 2017
  */
 public enum ExpressionType {
-    EXACT, REGEX
+    EXACT, REGEX;
+
+    @JsonValue
+    public String toJson() {
+        return this.name();
+    }
 }

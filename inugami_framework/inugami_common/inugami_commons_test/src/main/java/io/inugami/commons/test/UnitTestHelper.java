@@ -16,8 +16,6 @@
  */
 package io.inugami.commons.test;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import io.inugami.commons.test.api.LineMatcher;
 import io.inugami.commons.test.dto.AssertDtoContext;
 import io.inugami.commons.test.dto.AssertLogContext;
@@ -29,6 +27,8 @@ import io.inugami.framework.interfaces.functionnals.VoidFunctionWithException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.mockito.invocation.InvocationOnMock;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
 
 import java.io.File;
 import java.util.List;

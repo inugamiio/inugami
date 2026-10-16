@@ -1,9 +1,10 @@
 package io.inugami.framework.commons.testing.marshaling;
 
-import com.fasterxml.jackson.databind.JsonNode;
+
 import io.inugami.framework.commons.files.FilesUtils;
 import io.inugami.framework.commons.marshaling.YamlMarshaller;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.JsonNode;
 
 import java.io.File;
 import java.io.IOException;

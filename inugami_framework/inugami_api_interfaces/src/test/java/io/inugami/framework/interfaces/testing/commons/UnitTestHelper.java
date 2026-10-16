@@ -16,13 +16,14 @@
  */
 package io.inugami.framework.interfaces.testing.commons;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
+
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.exceptions.Warning;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.mockito.invocation.InvocationOnMock;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
 
 import java.io.File;
 import java.util.List;

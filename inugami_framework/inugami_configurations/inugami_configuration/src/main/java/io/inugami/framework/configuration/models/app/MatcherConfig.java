@@ -45,6 +45,7 @@ public class MatcherConfig implements Serializable, PostProcessing<ConfigHandler
     private static final long serialVersionUID = -1051920675890974241L;
 
     private String         expr;
+    @Builder.Default
     private ExpressionType type = ExpressionType.EXACT;
 
 
@@ -57,4 +58,7 @@ public class MatcherConfig implements Serializable, PostProcessing<ConfigHandler
         expr = ctx.applyProperties(expr);
     }
 
+    public ExpressionType getType() {
+        return type != null ? type : ExpressionType.EXACT;
+    }
 }

@@ -53,8 +53,8 @@ public class ResponseWrapper implements ServletResponse, HttpServletResponse {
     public ResponseWrapper(final HttpServletResponse response,
                            final Map<String, List<String>> localHeaders,
                            final List<ResponseListener> responseListeners) {
-        this.response = response;
-        this.localHeaders = initLocalHeaders(localHeaders);
+        this.response          = response;
+        this.localHeaders      = initLocalHeaders(localHeaders);
         this.responseListeners = responseListeners;
         try {
             this.outputWrapper = new OutputWriterWrapper(response.getOutputStream());
@@ -73,8 +73,8 @@ public class ResponseWrapper implements ServletResponse, HttpServletResponse {
         for (String key : keys) {
             final var values = localHeaders.get(key);
             result.put(key, values == null
-                    ? new ArrayList<>()
-                    : new ArrayList<>(values));
+                            ? new ArrayList<>()
+                            : new ArrayList<>(values));
         }
         return result;
     }
@@ -204,6 +204,11 @@ public class ResponseWrapper implements ServletResponse, HttpServletResponse {
     @Override
     public void sendRedirect(final String location) throws IOException {
         response.sendRedirect(location);
+    }
+
+    @Override
+    public void sendRedirect(final String location, final int sc, final boolean clearBuffer) throws IOException {
+        response.sendRedirect(location, sc, clearBuffer);
     }
 
     @Override

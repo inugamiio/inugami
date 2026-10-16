@@ -40,6 +40,15 @@
         <requiredProperty key="jacksonVersion">
             <defaultValue>@com.jackson.version@</defaultValue>
         </requiredProperty>
+        <requiredProperty key="toolsJacksonVersion">
+            <defaultValue>@tools.jackson.version@</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="toolsJacksonDatatypeVersion">
+            <defaultValue>@tools.jackson.datatype.version@</defaultValue>
+        </requiredProperty>
+
+
+
         <requiredProperty key="jacocoVersion">
             <defaultValue>@jacoco.version@</defaultValue>
         </requiredProperty>
@@ -136,6 +145,7 @@
                 <include>docker-compose.yaml</include>
                 <include>inugami.demo.postman_collection.json</include>
                 <include>kibana_export.ndjson</include>
+                <include>bruno/**/*</include>
             </includes>
         </fileSet>
     </fileSets>

@@ -1,6 +1,5 @@
 package io.inugami.monitoring.springboot.partnerlog.feign;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import feign.Request;
 import feign.Response;
 import feign.Target;
@@ -41,7 +40,7 @@ class FeignCommonTest {
     }
 
     @Test
-    void buildInfo_nominal() throws JsonProcessingException {
+    void buildInfo_nominal() {
 
         final var requestTemplate = RequestTemplateBuilder.builder()
                                                           .target("http://inugami.io/mock/user")
@@ -75,7 +74,7 @@ class FeignCommonTest {
     // buildInfo response
     // =================================================================================================================
     @Test
-    void buildInfo_response_nominal() throws JsonProcessingException {
+    void buildInfo_response_nominal() {
         Response nullResponse = null;
         assertText(FeignCommon.buildInfo(nullResponse, 54L),
                    """
@@ -133,7 +132,7 @@ class FeignCommonTest {
     }
 
     @Test
-    void resolveCallDate_nominal() throws JsonProcessingException {
+    void resolveCallDate_nominal() {
 
 
         final Map<String, Collection<String>> headers = new LinkedHashMap<>();

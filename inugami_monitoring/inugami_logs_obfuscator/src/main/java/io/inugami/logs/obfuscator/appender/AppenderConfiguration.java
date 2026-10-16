@@ -1,8 +1,8 @@
 package io.inugami.logs.obfuscator.appender;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import lombok.*;
+import tools.jackson.core.JacksonException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,12 +39,12 @@ public class AppenderConfiguration {
 
 
     public AppenderConfiguration(final String encodeAsJson, final String additionalFields) {
-        this.encodeAsJson = Boolean.parseBoolean(encodeAsJson);
+        this.encodeAsJson     = Boolean.parseBoolean(encodeAsJson);
         this.additionalFields = additionalFields;
     }
 
     public AppenderConfiguration(final boolean encodeAsJson, final String additionalFields) {
-        this.encodeAsJson = encodeAsJson;
+        this.encodeAsJson     = encodeAsJson;
         this.additionalFields = additionalFields;
     }
 
@@ -52,7 +52,7 @@ public class AppenderConfiguration {
         if (headers != null) {
             try {
                 headersMap = JsonMarshaller.getInstance().getDefaultObjectMapper().readValue(headers, Map.class);
-            } catch (JsonProcessingException e) {
+            } catch (JacksonException e) {
                 headersMap = new HashMap<>();
             }
         }

@@ -16,15 +16,14 @@
  */
 package io.inugami.framework.api.marshalling;
 
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import static io.inugami.framework.api.marshalling.ErrorCodeSerializer.*;
@@ -40,9 +39,9 @@ public class ErrorCodeDeserializer extends StdDeserializer<ErrorCode> {
 
     @Override
     public ErrorCode deserialize(final JsonParser json,
-                                 final DeserializationContext ctxt) throws IOException, JacksonException {
+                                 final DeserializationContext ctxt) throws JacksonException {
         final var builder = DefaultErrorCode.builder();
-        JsonNode  node    = json.getCodec().readTree(json);
+        JsonNode  node    = ctxt.readTree(json);
 
 
         builder.statusCode(Optional.ofNullable(node.get(STATUS_CODE)).map(JsonNode::intValue).orElse(500));

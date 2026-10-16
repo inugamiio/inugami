@@ -1,8 +1,8 @@
 open module ${package}.interfaces.feign {
-    requires ${package}.interfaces.api;
     requires feign.core;
-    requires feign.jackson;
+    requires feign.jackson3;
     requires feign.okhttp;
+    requires ${package}.interfaces.api;
     requires io.inugami.framework.commons.spring;
     requires io.inugami.framework.interfaces;
     requires io.inugami.monitoring.springboot;
@@ -10,6 +10,5 @@ open module ${package}.interfaces.feign {
     requires spring.boot.autoconfigure;
     requires spring.cloud.openfeign.core;
     requires spring.context;
-
     exports ${package}.interfaces.feign;
 }

@@ -1,0 +1,165 @@
+info:
+  name: /user create
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{demoUrl}}/ws/user"
+  headers:
+    - name: x-device-identifier
+      value: "{{deviceIdentifier}}"
+    - name: x-correlation-id
+      value: "{{correlationId}}"
+  body:
+    type: json
+    data: |-
+      [
+        {
+          "firstName": "john",
+          "lastName": "smith",
+          "email": "john.smith5@inugami.io"
+        }
+      ]
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const responseBody = res.getBody();
+        bru.setEnvVar('userId',responseBody[0].uid);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: nominal
+    request:
+      url: "{{demoUrl}}/ws/user"
+      method: POST
+      headers:
+        - name: x-device-identifier
+          value: "{{deviceIdentifier}}"
+        - name: x-correlation-id
+          value: "{{correlationId}}"
+      body:
+        type: json
+        data: |-
+          [
+            {
+              "firstName": "john",
+              "lastName": "smith",
+              "email": "john.smith5@inugami.io"
+            }
+          ]
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: x-correlation-id
+          value: deb499bf-9c3a-4647-bf26-2dae2075975f
+        - name: x-b3-traceid
+          value: 8366470d-ceef-4128-bfa1-6510f63b6d30
+        - name: access-control-allow-origin
+          value: "*"
+        - name: access-control-allow-methods
+          value: GET, POST, PUT, DELETE, PATCH, OPTIONS
+        - name: access-control-allow-headers
+          value: ""
+        - name: access-control-expose-headers
+          value: ""
+        - name: access-control-allow-credentials
+          value: "true"
+        - name: content-length
+          value: "208"
+        - name: date
+          value: Sun, 11 Oct 2026 11:26:19 GMT
+        - name: keep-alive
+          value: timeout=60
+        - name: connection
+          value: keep-alive
+      body:
+        type: text
+        data: '[{"audit":{"createdBy":"system","createdDate":"2026-10-11T11:26:19.246509254","version":1},"email":"john.smith5@inugami.io","firstName":"john","lastName":"smith","uid":"7ced375a-6690-4e8b-a464-485ae558080e"}]'
+  - name: bad_request
+    request:
+      url: "{{demoUrl}}/ws/user"
+      method: POST
+      headers:
+        - name: x-device-identifier
+          value: "{{deviceIdentifier}}"
+        - name: x-correlation-id
+          value: "{{correlationId}}"
+      body:
+        type: json
+        data: |-
+          [
+            {
+              "lastName": "smith",
+              "email": "john.smith5@inugami.io"
+            }
+          ]
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: x-correlation-id
+          value: deb499bf-9c3a-4647-bf26-2dae2075975f
+        - name: x-b3-traceid
+          value: a1caf32c-fdaf-42ca-b4be-396fca547f1c
+        - name: access-control-allow-origin
+          value: "*"
+        - name: access-control-allow-methods
+          value: GET, POST, PUT, DELETE, PATCH, OPTIONS
+        - name: access-control-allow-headers
+          value: ""
+        - name: access-control-expose-headers
+          value: ""
+        - name: access-control-allow-credentials
+          value: "true"
+        - name: content-type
+          value: application/json
+        - name: transfer-encoding
+          value: chunked
+        - name: date
+          value: Sun, 11 Oct 2026 11:26:55 GMT
+        - name: connection
+          value: close
+      body:
+        type: json
+        data: |-
+          {
+            "cause": {
+              "errors": [],
+              "parameters": []
+            },
+            "detail": "",
+            "details": {
+              "errorCode": "USER-1_2",
+              "fields": [
+                {
+                  "errorCode": "USER-1_2",
+                  "errorType": "functional",
+                  "message": "invalid firstname",
+                  "name": "0.firstName"
+                }
+              ],
+              "application": "demo-webapp",
+              "version": "1.0.0-SNAPSHOT",
+              "errorType": "functional",
+              "rollback": false,
+              "retryable": false,
+              "field": "0.firstName",
+              "errorDomain": "USER",
+              "service": "UserRestController_create"
+            },
+            "errors": [],
+            "message": "invalid firstname",
+            "parameters": [],
+            "reasonPhrase": "Bad Request",
+            "status": 400
+          }

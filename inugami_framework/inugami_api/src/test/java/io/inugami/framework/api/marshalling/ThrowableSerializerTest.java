@@ -16,7 +16,7 @@
  */
 package io.inugami.framework.api.marshalling;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import io.inugami.framework.interfaces.exceptions.DefaultErrorCode;
 import io.inugami.framework.interfaces.exceptions.UncheckedException;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import static io.inugami.framework.api.tools.unit.test.UnitTestHelper.assertText
 
 class ThrowableSerializerTest {
     @Test
-    void throwable_serialize() throws JsonProcessingException {
+    void throwable_serialize() {
 
         assertText(new RuntimeException("sorry"),
                    """

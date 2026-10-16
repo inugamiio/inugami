@@ -1,7 +1,8 @@
 package io.inugami.monitoring.springboot.actuator;
 
-import org.springframework.boot.actuate.health.Status;
-import org.springframework.boot.actuate.health.StatusAggregator;
+
+import org.springframework.boot.health.actuate.endpoint.StatusAggregator;
+import org.springframework.boot.health.contributor.Status;
 
 import java.util.*;
 

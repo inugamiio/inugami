@@ -16,15 +16,15 @@
  */
 package io.inugami.framework.api.marshalling;
 
-import com.fasterxml.jackson.databind.Module;
 import io.inugami.framework.interfaces.marshalling.ModuleRegisterSpi;
+import tools.jackson.databind.JacksonModule;
 
 import java.util.List;
 
 public class DefaultModuleRegisterSpi implements ModuleRegisterSpi {
 
     @Override
-    public List<Module> extractModules() {
+    public List<JacksonModule> extractModules() {
         return List.of();
     }
 }

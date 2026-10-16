@@ -16,7 +16,6 @@
  */
 package io.inugami.framework.commons.spring.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.commons.marshaling.XmlJaxbMarshallerSpiFactory;
 import io.inugami.framework.commons.spring.SpringSpiLoaderServiceSPI;
@@ -33,7 +32,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.time.Clock;
 import java.time.ZoneOffset;
@@ -195,8 +196,14 @@ public class ConfigConfiguration {
 
     @ConditionalOnMissingBean
     @Bean
-    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(final ObjectMapper objectMapper) {
-        return new MappingJackson2HttpMessageConverter(objectMapper);
+    public JsonMapper jsonMapper() {
+        return (JsonMapper) JsonMarshaller.getInstance().getDefaultObjectMapper();
+    }
+
+    @ConditionalOnMissingBean
+    @Bean
+    public JacksonJsonHttpMessageConverter mappingJackson2HttpMessageConverter(final JsonMapper jsonMapper) {
+        return new JacksonJsonHttpMessageConverter(jsonMapper);
     }
 
     @ConditionalOnMissingBean

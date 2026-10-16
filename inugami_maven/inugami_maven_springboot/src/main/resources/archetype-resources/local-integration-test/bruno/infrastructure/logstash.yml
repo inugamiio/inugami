@@ -1,0 +1,28 @@
+info:
+  name: logstash
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:5054
+  body:
+    type: json
+    data: |-
+      {
+        "additionalField": "test",
+        "threadName": "main",
+        "loggerName": "io.inugami.springboot.demo.user.webapp.InugamiDemoUser",
+        "level": "INFO",
+        "levelPriority": 20000,
+        "timestamp": 1685696740530,
+        "date": "2023-06-02T09:05:40.853633033",
+        "message": "Starting InugamiDemoUser using Java 25 SpringBoot 4"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -16,9 +16,6 @@
  */
 package io.inugami.framework.commons.providers;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.inugami.framework.api.marshalling.JsonMarshaller;
 import io.inugami.framework.commons.files.FilesUtils;
 import io.inugami.framework.interfaces.concurrent.ThreadSleep;
@@ -31,6 +28,8 @@ import io.inugami.framework.interfaces.models.maven.ManifestInfo;
 import io.inugami.framework.interfaces.monitoring.logger.Loggers;
 import io.inugami.framework.interfaces.task.ProviderFutureResult;
 import lombok.extern.slf4j.Slf4j;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,8 +69,8 @@ public class MockJsonHelper {
     // =================================================================================================================
     public MockJsonHelper(final Map<String, String> data) {
         this.data = data;
-        keys = new ArrayList<>();
-        files = null;
+        keys      = new ArrayList<>();
+        files     = null;
         if (data != null) {
             data.forEach((key, value) -> keys.add(key));
         }
@@ -80,13 +79,13 @@ public class MockJsonHelper {
     public MockJsonHelper(final Map<String, String> data, final List<String> keys) {
         this.data = data;
         this.keys = keys;
-        files = null;
+        files     = null;
     }
 
     public MockJsonHelper() {
         super();
-        data = new HashMap<>();
-        keys = new ArrayList<>();
+        data  = new HashMap<>();
+        keys  = new ArrayList<>();
         files = null;
     }
 
@@ -250,7 +249,7 @@ public class MockJsonHelper {
         if (providerFutureResult != null && providerFutureResult.getData() != null) {
             try {
                 result = OBJECT_MAPPER.writeValueAsString(providerFutureResult.getData());
-            } catch (JsonProcessingException e) {
+            } catch (JacksonException e) {
                 log.error(e.getMessage(), e);
             }
         }
