@@ -44,11 +44,6 @@
         </dependency>
 
         <dependency>
-            <groupId>io.inugami.monitoring</groupId>
-            <artifactId>inugami_logs_obfuscator</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>io.inugami.dashboard</groupId>
             <artifactId>inugami_dashboard_api</artifactId>
         </dependency>
