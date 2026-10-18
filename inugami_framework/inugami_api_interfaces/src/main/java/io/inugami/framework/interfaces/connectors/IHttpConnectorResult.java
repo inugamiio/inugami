@@ -16,8 +16,9 @@
  */
 package io.inugami.framework.interfaces.connectors;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+
 import io.inugami.framework.interfaces.connectors.exceptions.HttpConntectorParsingException;
+import tools.jackson.core.type.TypeReference;
 
 import java.nio.charset.Charset;
 import java.util.Map;

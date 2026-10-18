@@ -1,0 +1,81 @@
+info:
+  name: actuator/health
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{demoUrl}}/actuator/health"
+  headers:
+    - name: Authorization
+      value: "{{tokenBeebole}}"
+    - name: Content-Type
+      value: application/json
+    - name: x-device-identifier
+      value: "{{deviceIdentifier}}"
+  body:
+    type: json
+    data: ""
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const { utils } = require('./commons_utils');
+        bru.setEnvVar('demoUrl', 'http://localhost:8080');
+        bru.setEnvVar('deviceIdentifier', utils.buildUid());
+    - type: after-response
+      code: |-
+        const contentType = res.getHeader('x-correlation-id');
+        bru.setEnvVar('correlationId', contentType);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: nominal
+    request:
+      url: "{{demoUrl}}/actuator/health"
+      method: GET
+      headers:
+        - name: Authorization
+          value: "{{tokenBeebole}}"
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: ""
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: set-cookie
+          value: JSESSIONID=081EFA79854B873B265567C01A1A5071; Path=/; HttpOnly
+        - name: x-correlation-id
+          value: 35c65f46-afa4-4763-bd19-be90f2a13276
+        - name: x-b3-traceid
+          value: 792f7acf-359b-47cb-a491-7e1bcca4fec1
+        - name: access-control-allow-origin
+          value: "*"
+        - name: access-control-allow-methods
+          value: GET, POST, PUT, DELETE, PATCH, OPTIONS
+        - name: access-control-allow-headers
+          value: ""
+        - name: access-control-expose-headers
+          value: ""
+        - name: access-control-allow-credentials
+          value: "true"
+        - name: transfer-encoding
+          value: chunked
+        - name: date
+          value: Sun, 11 Oct 2026 11:16:31 GMT
+        - name: keep-alive
+          value: timeout=60
+        - name: connection
+          value: keep-alive
+      body:
+        type: text
+        data: '{"components":{"db":{"details":{"database":"H2","validationQuery":"isValid()"},"status":"UP"},"discoveryComposite":{"components":{"discoveryClient":{"description":"Discovery Client not initialized","status":"UNKNOWN"}},"status":"UNKNOWN"},"diskSpace":{"details":{"total":441899679744,"free":215113531392,"threshold":10485760,"path":"/home/pguillerm/dev/workspaces/inugami/inugami/.","exists":true},"status":"UP"},"featureIndicator":{"details":{"features":[]},"status":"UP"},"livenessState":{"status":"UP"},"ping":{"status":"UP"},"readinessState":{"status":"UP"},"refreshScope":{"status":"UP"},"ssl":{"details":{"expiringChains":[],"invalidChains":[],"validChains":[]},"status":"UP"},"version":{"details":{"groupId":"com.my.project","artifactId":"demo-webapp","version":"1.0.0-SNAPSHOT","commitId":"@commitId@","commitDate":"@commitDate@"},"status":"UP"}},"groups":["liveness","readiness"],"status":"UP"}'

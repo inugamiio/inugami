@@ -1,7 +1,6 @@
 package io.inugami.logs.obfuscator.appender.writer;
 
 import ch.qos.logback.classic.encoder.JsonEncoder;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.inugami.framework.api.connectors.HttpBasicConnector;
 import io.inugami.framework.interfaces.connectors.HttpRequest;
 import io.inugami.framework.interfaces.exceptions.services.ConnectorException;
@@ -15,6 +14,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.internal.verification.AtMost;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.core.JacksonException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -70,7 +70,7 @@ class ElasticSearchWriterTest {
         }
     }
 
-    private void processStartNominal(final ElasticSearchWriter writer) throws InterruptedException, ConnectorException, JsonProcessingException {
+    private void processStartNominal(final ElasticSearchWriter writer) throws InterruptedException, ConnectorException, JacksonException {
         writer.accept(AppenderConfiguration.builder()
                                            .mode(ELASTIC_SEARCH)
                                            .timeout(15000)

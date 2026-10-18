@@ -1,5 +1,3 @@
-import io.inugami.framework.interfaces.monitoring.logger.DefaultConfigurationSpi;
-
 /* --------------------------------------------------------------------
  *  Inugami
  * --------------------------------------------------------------------
@@ -17,13 +15,7 @@ import io.inugami.framework.interfaces.monitoring.logger.DefaultConfigurationSpi
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 open module io.inugami.framework.api {
-    requires com.fasterxml.jackson.annotation;
-    requires com.fasterxml.jackson.core;
-    requires com.fasterxml.jackson.databind;
-    requires com.fasterxml.jackson.dataformat.yaml;
-    requires com.fasterxml.jackson.datatype.jdk8;
-    requires com.fasterxml.jackson.datatype.jsr310;
-    requires com.fasterxml.jackson.module.paramnames;
+
     requires io.inugami.framework.interfaces;
     requires jakarta.servlet;
     requires java.desktop;
@@ -32,8 +24,10 @@ open module io.inugami.framework.api {
     requires okhttp3;
     requires org.jspecify;
     requires org.slf4j;
-
-
+    requires tools.jackson.core;
+    requires tools.jackson.databind;
+    requires tools.jackson.dataformat.yaml;
+    requires tools.jackson.datatype.javatime;
     exports io.inugami.framework.api.configurtation;
     exports io.inugami.framework.api.connectors;
     exports io.inugami.framework.api.exceptions;

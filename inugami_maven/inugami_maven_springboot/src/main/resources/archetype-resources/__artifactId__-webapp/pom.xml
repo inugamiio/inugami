@@ -136,6 +136,11 @@
             <artifactId>hamcrest</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>io.inugami.framework.commons</groupId>
+            <artifactId>inugami_commons_spring_data</artifactId>
+        </dependency>
     </dependencies>
 
     <!--================================================================================================================

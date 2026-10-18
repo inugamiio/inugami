@@ -1,6 +1,5 @@
 package io.inugami.monitoring.springboot.partnerlog.feign;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import feign.Request;
 import feign.Response;
 import feign.Target;
@@ -61,7 +60,7 @@ class FeignPartnerErrorDecoderTest {
     // decode
     // =================================================================================================================
     @Test
-    void decode_nominal() throws JsonProcessingException {
+    void decode_nominal() {
 
         final var response = buildResponse();
 
@@ -132,7 +131,7 @@ class FeignPartnerErrorDecoderTest {
 
 
     @Test
-    void decode_withDefaultResolver() throws JsonProcessingException {
+    void decode_withDefaultResolver() {
         when(feignPartnerErrorResolver.accept(any(), any(), any())).thenReturn(false);
         final var response = buildResponse();
 
@@ -211,7 +210,7 @@ class FeignPartnerErrorDecoderTest {
                                        .build();
     }
 
-    private static Response buildResponse() throws JsonProcessingException {
+    private static Response buildResponse() {
         final var requestTemplate = RequestTemplateBuilder.builder()
                                                           .target("http://inugami.io/mock/user")
                                                           .method(Request.HttpMethod.GET)

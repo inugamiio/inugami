@@ -16,11 +16,10 @@
  */
 open module io.inugami.framework.interfaces {
     requires com.fasterxml.jackson.annotation;
-    requires com.fasterxml.jackson.core;
-    requires com.fasterxml.jackson.databind;
-    requires com.fasterxml.jackson.datatype.jdk8;
-    requires com.fasterxml.jackson.datatype.jsr310;
-    requires com.fasterxml.jackson.module.paramnames;
+    requires tools.jackson.core;
+    requires tools.jackson.databind;
+    requires tools.jackson.dataformat.yaml;
+    requires tools.jackson.datatype.javatime;
     requires io.swagger.v3.oas.annotations;
     requires jakarta.servlet;
     requires jakarta.xml.bind;

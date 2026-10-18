@@ -1,9 +1,10 @@
 package io.inugami.commons.test;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+
 import io.inugami.commons.test.dto.UserDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import tools.jackson.core.type.TypeReference;
 
 import java.io.File;
 

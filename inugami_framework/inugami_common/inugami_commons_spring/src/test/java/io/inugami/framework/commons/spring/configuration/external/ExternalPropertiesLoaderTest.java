@@ -45,10 +45,10 @@ class ExternalPropertiesLoaderTest {
                    """
                            {
                              "name" : "fake.properties",
+                             "propertyNames" : [ "some.value" ],
                              "source" : {
                                "some.value" : "hello"
-                             },
-                             "propertyNames" : [ "some.value" ]
+                             }
                            }
                            """);
     }

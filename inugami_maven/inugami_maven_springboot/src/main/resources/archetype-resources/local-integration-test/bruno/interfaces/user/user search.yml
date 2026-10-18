@@ -1,0 +1,83 @@
+info:
+  name: /user search
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{demoUrl}}/ws/user"
+  headers:
+    - name: x-device-identifier
+      value: "{{deviceIdentifier}}"
+    - name: x-correlation-id
+      value: "{{correlationId}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: nominal
+    request:
+      url: "{{demoUrl}}/ws/user"
+      method: GET
+      headers:
+        - name: x-device-identifier
+          value: "{{deviceIdentifier}}"
+        - name: x-correlation-id
+          value: "{{correlationId}}"
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: x-correlation-id
+          value: deb499bf-9c3a-4647-bf26-2dae2075975f
+        - name: x-b3-traceid
+          value: c97d4d03-068f-4041-9dde-9ac1fd1a4564
+        - name: access-control-allow-origin
+          value: "*"
+        - name: access-control-allow-methods
+          value: GET, POST, PUT, DELETE, PATCH, OPTIONS
+        - name: access-control-allow-headers
+          value: ""
+        - name: access-control-expose-headers
+          value: ""
+        - name: access-control-allow-credentials
+          value: "true"
+        - name: content-type
+          value: application/json
+        - name: content-length
+          value: "299"
+        - name: date
+          value: Sun, 11 Oct 2026 11:33:25 GMT
+        - name: keep-alive
+          value: timeout=60
+        - name: connection
+          value: keep-alive
+      body:
+        type: json
+        data: |-
+          {
+            "data": [
+              {
+                "audit": {
+                  "createdBy": "system",
+                  "createdDate": "2026-10-11T11:32:35.534931",
+                  "version": 1
+                },
+                "email": "john.smith5@inugami.io",
+                "firstName": "john",
+                "lastName": "smith",
+                "uid": "bf7d4fb7-bd33-46d4-a019-d2db10ce38b4"
+              }
+            ],
+            "nbFoundItems": 1,
+            "next": false,
+            "page": 0,
+            "pageSize": 20,
+            "previous": false,
+            "totalPages": 1
+          }

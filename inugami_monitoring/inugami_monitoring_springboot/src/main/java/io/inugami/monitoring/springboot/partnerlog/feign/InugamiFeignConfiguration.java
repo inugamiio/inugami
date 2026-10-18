@@ -1,17 +1,17 @@
 package io.inugami.monitoring.springboot.partnerlog.feign;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Client;
 import feign.Contract;
 import feign.codec.Decoder;
 import feign.codec.ErrorDecoder;
-import feign.jackson.JacksonDecoder;
+import feign.jackson3.Jackson3Decoder;
 import feign.okhttp.OkHttpClient;
 import io.inugami.monitoring.springboot.config.InugamiMonitoringProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -43,7 +43,9 @@ public class InugamiFeignConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public Decoder inugamiFeignDecoder(final ObjectMapper objectMapper) {
-        return FeignPartnerResponseDecoder.builder().decoder(new JacksonDecoder(objectMapper)).build();
+    public Decoder inugamiFeignDecoder(final JsonMapper objectMapper) {
+        return FeignPartnerResponseDecoder.builder()
+                                          .decoder(new Jackson3Decoder(objectMapper))
+                                          .build();
     }
 }

@@ -16,11 +16,11 @@
  */
 package io.inugami.framework.api.marshalling;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 @SuppressWarnings({"java:S3740"})
 public class ClassSerializer extends StdSerializer<Class> {
@@ -29,15 +29,15 @@ public class ClassSerializer extends StdSerializer<Class> {
         super(t);
     }
 
+
     @Override
-    public void serialize(final Class objClass,
-                          final JsonGenerator jsonGenerator,
-                          final SerializerProvider serializerProvider) throws IOException {
-        if (objClass == null) {
-            jsonGenerator.writeNull();
+    public void serialize(final Class value,
+                          final JsonGenerator gen,
+                          final SerializationContext ctxt) throws JacksonException {
+        if (value == null) {
+            gen.writeNull();
         } else {
-            jsonGenerator.writeString(objClass.getName());
+            gen.writeString(value.getName());
         }
     }
-
 }

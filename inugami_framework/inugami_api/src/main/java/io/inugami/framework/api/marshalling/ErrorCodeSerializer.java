@@ -16,12 +16,11 @@
  */
 package io.inugami.framework.api.marshalling;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
-
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 public class ErrorCodeSerializer extends StdSerializer<ErrorCode> {
 
@@ -46,65 +45,72 @@ public class ErrorCodeSerializer extends StdSerializer<ErrorCode> {
 
     @Override
     public void serialize(final ErrorCode value,
-                          final JsonGenerator jsonGenerator,
-                          final SerializerProvider serializerProvider) throws IOException {
+                          final JsonGenerator gen,
+                          final SerializationContext ctxt) throws JacksonException {
         if (value == null) {
-            jsonGenerator.writeNull();
+            gen.writeNull();
         } else {
-            renderAsJson(value, jsonGenerator);
+            renderAsJson(value, gen);
         }
     }
 
-    private void renderAsJson(final ErrorCode value, final JsonGenerator json) throws IOException {
+
+    private void renderAsJson(final ErrorCode value, final JsonGenerator json) throws JacksonException {
         json.writeStartObject();
-        json.writeFieldName(STATUS_CODE);
+        json.writeName(STATUS_CODE);
         json.writeNumber(value.getStatusCode());
 
         if (value.getCategory() != null) {
-            json.writeFieldName(CATEGORY);
+            json.writeName(CATEGORY);
             json.writeString(value.getCategory());
         }
 
         if (value.getDomain() != null) {
-            json.writeFieldName(DOMAIN);
+            json.writeName(DOMAIN);
             json.writeString(value.getDomain());
         }
         if (value.getErrorCode() != null) {
-            json.writeFieldName(ERROR_CODE);
+            json.writeName(ERROR_CODE);
             json.writeString(value.getErrorCode());
         }
         if (value.getErrorType() != null) {
-            json.writeFieldName(ERROR_TYPE);
+            json.writeName(ERROR_TYPE);
             json.writeString(value.getErrorType());
         }
         if (value.getField() != null) {
-            json.writeFieldName(FIELD);
+            json.writeName(FIELD);
             json.writeString(value.getField());
         }
         if (value.getMessage() != null) {
-            json.writeFieldName(MESSAGE);
+            json.writeName(MESSAGE);
             json.writeString(value.getMessage());
         }
         if (value.getMessageDetail() != null) {
-            json.writeFieldName(MESSAGE_DETAIL);
+            json.writeName(MESSAGE_DETAIL);
             json.writeString(value.getMessageDetail());
         }
         if (value.getPayload() != null) {
-            json.writeFieldName(PAYLOAD);
+            json.writeName(PAYLOAD);
             json.writeString(value.getPayload());
         }
         if (value.getSubDomain() != null) {
-            json.writeFieldName(SUB_DOMAIN);
+            json.writeName(SUB_DOMAIN);
             json.writeString(value.getSubDomain());
         }
         if (value.getUrl() != null) {
-            json.writeFieldName(URL);
+            json.writeName(URL);
             json.writeString(value.getUrl());
         }
 
-        json.writeBooleanField(EXPLOITATION_ERROR,value.isExploitationError());
-        json.writeBooleanField(ROLLBACK_REQUIRE,value.isRollbackRequire());
-        json.writeBooleanField(RETRYABLE,value.isRetryable());
+        // Remplacement de writeBooleanField par writeName + writeBoolean
+        json.writeName(EXPLOITATION_ERROR);
+        json.writeBoolean(value.isExploitationError());
+
+        json.writeName(ROLLBACK_REQUIRE);
+        json.writeBoolean(value.isRollbackRequire());
+
+        json.writeName(RETRYABLE);
+        json.writeBoolean(value.isRetryable());
 
         json.writeEndObject();
     }

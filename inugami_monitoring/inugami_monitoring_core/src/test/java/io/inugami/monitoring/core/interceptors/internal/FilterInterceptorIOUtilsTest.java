@@ -55,7 +55,7 @@ class FilterInterceptorIOUtilsTest {
     @Test
     void readInput_nominal() throws IOException {
         final var input = new ByteArrayInputStream("Hello the world".getBytes(StandardCharsets.UTF_8));
-        when(inputStream.read(any())).thenAnswer(answer -> input.read(answer.getArgument(0)));
+        when(inputStream.read(any(byte[].class))).thenAnswer(answer -> input.read(answer.getArgument(0)));
 
         final var result = new String(readInput(inputStream), StandardCharsets.UTF_8);
         assertText(result, "Hello the world");
@@ -65,7 +65,7 @@ class FilterInterceptorIOUtilsTest {
 
     @Test
     void readInput_withoutError() throws IOException {
-        when(inputStream.read(any())).thenThrow(new IOException("sorry"));
+        when(inputStream.read(any(byte[].class))).thenThrow(new IOException("sorry"));
 
         final var result = new String(readInput(inputStream), StandardCharsets.UTF_8);
         assertThat(result).isEmpty();

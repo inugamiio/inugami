@@ -16,13 +16,13 @@
  */
 package io.inugami.framework.api.marshalling;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import io.inugami.framework.interfaces.exceptions.ErrorCode;
 import io.inugami.framework.interfaces.exceptions.ExceptionWithErrorCode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
-import java.io.IOException;
 import java.util.Optional;
 
 public class ThrowableSerializer extends StdSerializer<Throwable> {
@@ -30,7 +30,7 @@ public class ThrowableSerializer extends StdSerializer<Throwable> {
     public static final  String              EMPTY                 = "";
     public static final  String              CAUSE                 = "cause";
     public static final  String              MESSAGE               = "message";
-    public static final String ERROR_CODE = "errorCode";
+    public static final  String              ERROR_CODE            = "errorCode";
 
     protected ThrowableSerializer(final Class<Throwable> type) {
         super(type);
@@ -38,35 +38,36 @@ public class ThrowableSerializer extends StdSerializer<Throwable> {
 
     @Override
     public void serialize(final Throwable value,
-                          final JsonGenerator json,
-                          final SerializerProvider provider) throws IOException {
+                          final JsonGenerator gen,
+                          final SerializationContext ctxt) throws JacksonException {
         if (value == null) {
-            json.writeNull();
+            gen.writeNull();
         } else {
-            renderAsJson(value, json, provider);
+            renderAsJson(value, gen, ctxt);
         }
     }
 
     private void renderAsJson(final Throwable value,
                               final JsonGenerator json,
-                              final SerializerProvider provider) throws IOException {
+                              final SerializationContext ctxt) throws JacksonException {
         json.writeStartObject();
-        json.writeFieldName(MESSAGE);
+        json.writeName(MESSAGE);
         json.writeString(Optional.ofNullable(value.getMessage()).orElse(EMPTY));
 
         if (value instanceof ExceptionWithErrorCode errorCode && errorCode.getErrorCode() != null) {
-            json.writeFieldName(ERROR_CODE);
-            ERROR_CODE_SERIALIZER.serialize(errorCode.getErrorCode(), json, provider);
+            json.writeName(ERROR_CODE);
+            ERROR_CODE_SERIALIZER.serialize(errorCode.getErrorCode(), json, ctxt);
         }
 
         if (value.getCause() != null) {
-            json.writeFieldName(CAUSE);
+            json.writeName(CAUSE);
             json.writeStartObject();
-            json.writeFieldName(MESSAGE);
+            json.writeName(MESSAGE);
             json.writeString(value.getCause().getMessage());
-            if (value.getCause() instanceof ExceptionWithErrorCode causeErrorCode && causeErrorCode.getErrorCode() != null) {
-                json.writeFieldName(ERROR_CODE);
-                ERROR_CODE_SERIALIZER.serialize(causeErrorCode.getErrorCode(), json, provider);
+            if (value.getCause() instanceof ExceptionWithErrorCode causeErrorCode &&
+                causeErrorCode.getErrorCode() != null) {
+                json.writeName(ERROR_CODE);
+                ERROR_CODE_SERIALIZER.serialize(causeErrorCode.getErrorCode(), json, ctxt);
             }
             json.writeEndObject();
 
@@ -74,5 +75,4 @@ public class ThrowableSerializer extends StdSerializer<Throwable> {
 
         json.writeEndObject();
     }
-
 }
