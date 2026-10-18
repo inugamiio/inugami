@@ -35,6 +35,7 @@
     ======================================================================== -->
     <modules>
         <module>inugami_maven_springboot</module>
+        <module>inugami_maven_bom</module>
     </modules>
 
 </project>
