@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
 
@@ -10,7 +9,7 @@
     <parent>
         <artifactId>inugami_maven</artifactId>
         <groupId>io.inugami.maven</groupId>
-        <version>5.0.0-SNAPSHOT</version>
+        <version>5.0.0</version>
     </parent>
 
 
@@ -31,132 +30,132 @@
             <dependency>
                 <groupId>io.inugami.dashboard.interfaces</groupId>
                 <artifactId>inugami_dashboard_interfaces_api</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.dashboard.interfaces</groupId>
                 <artifactId>inugami_dashboard_interfaces_core</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.dashboard.interfaces</groupId>
                 <artifactId>inugami_dashboard_interfaces_feign</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.dashboard</groupId>
                 <artifactId>inugami_dashboard_api</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.dashboard</groupId>
                 <artifactId>inugami_dashboard_core</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.dashboard</groupId>
                 <artifactId>inugami_dashboard_front</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.dashboard</groupId>
                 <artifactId>inugami_dashboard_infrastructure</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.dashboard</groupId>
                 <artifactId>inugami_dashboard_webapp</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.framework.commons</groupId>
                 <artifactId>inugami_common_components</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.framework.commons</groupId>
                 <artifactId>inugami_commons</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.framework.commons</groupId>
                 <artifactId>inugami_commons_spring</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.framework.commons</groupId>
                 <artifactId>inugami_commons_spring_data</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.framework.commons</groupId>
                 <artifactId>inugami_commons_test</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.framework.configuration</groupId>
                 <artifactId>inugami_configuration</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.framework</groupId>
                 <artifactId>inugami_api</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.framework</groupId>
                 <artifactId>inugami_api_interfaces</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring.providers</groupId>
                 <artifactId>inugami_monitoring_providers_els</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring.providers</groupId>
                 <artifactId>inugami_monitoring_providers_graphite</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring.providers</groupId>
                 <artifactId>inugami_monitoring_providers_log</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring.sensors</groupId>
                 <artifactId>inugami_monitoring_sensors_default</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring</groupId>
                 <artifactId>inugami_logs_obfuscator</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring</groupId>
                 <artifactId>inugami_monitoring_api</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring</groupId>
                 <artifactId>inugami_monitoring_config</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring</groupId>
                 <artifactId>inugami_monitoring_core</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring</groupId>
                 <artifactId>inugami_monitoring_springboot</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
             <dependency>
                 <groupId>io.inugami.monitoring</groupId>
                 <artifactId>inugami_monitoring_springboot_activemq</artifactId>
-                <version>5.0.0-SNAPSHOT</version>
+                <version>5.0.0</version>
             </dependency>
 
             <!--++[DEPENDENCIES]+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
